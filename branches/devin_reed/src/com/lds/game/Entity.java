@@ -58,6 +58,11 @@ public abstract class Entity
 		gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
 	}
 	
+	public boolean isColliding (Entity ent)
+	{
+		return false;
+	}
+	
 	/********
 	 * shit *
 	 ********
