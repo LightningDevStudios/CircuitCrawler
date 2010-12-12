@@ -60,6 +60,7 @@ public abstract class Entity
 	
 	public boolean isColliding (Entity ent)
 	{
+		
 		return true;
 	}
 	

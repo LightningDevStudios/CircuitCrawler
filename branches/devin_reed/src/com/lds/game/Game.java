@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class Game
 {
 	
-	public Level[][] GameLevels;
+	//public Level[][] GameLevels;
 	public ArrayList<Entity> entList;
 	public Player player1 = new Player();
 	public Player player2 = new Player();
