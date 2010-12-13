@@ -60,6 +60,17 @@ public abstract class Entity
 		gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
 	}
 	
+	public void move (float x, float y)
+	{
+		this.xPos = x;
+		this.yPos = y;
+	}
+	
+	
+	
+	
+	
+	
 	/********
 	 * shit *
 	 ********

@@ -9,9 +9,11 @@ import android.opengl.GLSurfaceView.Renderer;
 public class GameRenderer implements Renderer
 {
 	Game game;
+	int framescount;
 	public GameRenderer (float screenW, float screenH)
 	{
 		game = new Game(screenW, screenH);
+		framescount = 0;
 	}
 
 	public void onSurfaceCreated(GL10 gl, EGLConfig config)
@@ -26,19 +28,28 @@ public class GameRenderer implements Renderer
 	public void onDrawFrame(GL10 gl) 
 	{
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
-		
+		int renderedcount = 0;
 		for (Entity ent : game.entList)
 		{
 			if (ent.isRendered)
 			{
+				renderedcount++;
 				gl.glLoadIdentity();
 				gl.glTranslatef(ent.xPos, ent.yPos, 0.0f);
 				gl.glRotatef(ent.angle, 0.0f, 0.0f, 1.0f);
 				gl.glScalef(ent.xScl, ent.yScl, 1.0f);
 				ent.draw(gl);
+				if (framescount >= 100 && framescount <= 1500)
+				{
+					ent.xPos += 0.3f;
+					ent.yPos += 0.3f;
+					game.updateLocalEntities();
+				}	
 			}
+			framescount++;
+			
 		}
-		
+		System.out.println("Items rendered: " + renderedcount);
 	}
 
 	public void onSurfaceChanged(GL10 gl, int width, int height)
