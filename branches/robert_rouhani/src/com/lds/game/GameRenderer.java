@@ -9,9 +9,9 @@ import android.opengl.GLSurfaceView.Renderer;
 public class GameRenderer implements Renderer
 {
 	Game game;
-	public GameRenderer ()
+	public GameRenderer (float screenW, float screenH)
 	{
-		game = new Game();
+		game = new Game(screenW, screenH);
 	}
 
 	public void onSurfaceCreated(GL10 gl, EGLConfig config)
@@ -29,11 +29,14 @@ public class GameRenderer implements Renderer
 		
 		for (Entity ent : game.entList)
 		{
-			gl.glLoadIdentity();
-			gl.glTranslatef(ent.xPos, ent.yPos, 0.0f);
-			gl.glRotatef(ent.angle, 0.0f, 0.0f, 1.0f);
-			gl.glScalef(ent.xScl, ent.yScl, 1.0f);
-			ent.draw(gl);
+			if (ent.isRendered)
+			{
+				gl.glLoadIdentity();
+				gl.glTranslatef(ent.xPos, ent.yPos, 0.0f);
+				gl.glRotatef(ent.angle, 0.0f, 0.0f, 1.0f);
+				gl.glScalef(ent.xScl, ent.yScl, 1.0f);
+				ent.draw(gl);
+			}
 		}
 		
 	}

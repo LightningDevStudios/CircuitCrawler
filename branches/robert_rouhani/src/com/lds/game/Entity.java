@@ -31,10 +31,12 @@ public abstract class Entity
 		xScl = _xScl;
 		yScl = _yScl;
 		
-		float[] initVerts = {	0.0f, 0.0f,
-								0.0f, size,
-								size, 0.0f,
-								size, size };
+		//make it so x/yPos are in center of box - Robert
+		float halfSize = size / 2;
+		float[] initVerts = {	-halfSize, -halfSize,
+								-halfSize, halfSize,
+								halfSize, -halfSize,
+								halfSize, halfSize };
 		vertices = initVerts;
 		
 		ByteBuffer byteBuf = ByteBuffer.allocateDirect(vertices.length * 4);
