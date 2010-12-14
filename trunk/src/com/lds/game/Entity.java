@@ -2,6 +2,8 @@ package com.lds.game;
 
 import javax.microedition.khronos.opengles.GL10;
 
+import com.lds.Point;
+
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
@@ -20,10 +22,15 @@ public abstract class Entity
 	public boolean isRendered;
 	public static int entCount;
 	
+	//collision data
+	public Point colTL, colTR, colBR, colBL;
+	public double diagonal, rad;
+	
 	//used to initialize graphics data
 	//TODO possibly get this working under the constructor?
 	public void initialize (float _size, float _xPos, float _yPos, float _angle, float _xScl, float _yScl)
 	{
+		//initializes graphics variables
 		size = _size;
 		xPos = _xPos;
 		yPos = _yPos;
@@ -31,12 +38,25 @@ public abstract class Entity
 		xScl = _xScl;
 		yScl = _yScl;
 		
-		//make it so x/yPos are in center of box - Robert
 		float halfSize = size / 2;
-		float[] initVerts = {	-halfSize, -halfSize,
-								-halfSize, halfSize,
-								halfSize, -halfSize,
-								halfSize, halfSize };
+		
+		//initializes collision variables
+		rad = Math.toRadians((double)(angle + 90.0f));
+		diagonal = size * Math.sqrt(2);
+		
+		colTL = new Point(-halfSize, -halfSize);
+		colBL = new Point(-halfSize, halfSize);
+		colTR = new Point(halfSize, -halfSize);
+		colBR = new Point(halfSize, halfSize);
+		
+		//updateAbsolutePointLocations();	
+		
+		//make it so x/yPos are in center of box - Robert
+		float[] initVerts = {	-halfSize, -halfSize, //top left
+								-halfSize, halfSize, //bottom left
+								halfSize, -halfSize, //top right
+								halfSize, halfSize }; //bottom right
+
 		vertices = initVerts;
 		
 		ByteBuffer byteBuf = ByteBuffer.allocateDirect(vertices.length * 4);
@@ -60,7 +80,7 @@ public abstract class Entity
 		gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
 	}
 	
-	//TODO interpolate to position, per frame (ie a loop inside these methods won't work)
+	//TODO interpolate to position, per frame (ie. a loop inside these methods won't work)
 	public void move (float x, float y)
 	{
 		this.xPos = x;
@@ -78,11 +98,24 @@ public abstract class Entity
 		this.yScl = y;
 	}
 	
+	//used to get the absolute, not relative, positions of the entity's 4 points in the XY Plane
+	public void updateAbsolutePointLocations ()
+	{
+		colTL.setX((float)(Math.cos(rad + (Math.PI / 4)) * diagonal / 2) + xPos);
+		colTL.setY((float)(Math.sin(rad + (Math.PI / 4)) * diagonal / 2) + yPos);
+		colBL.setX((float)(Math.cos(rad + (3 * Math.PI / 4)) * diagonal / 2) + xPos);
+		colBL.setY((float)(Math.sin(rad + (3 * Math.PI / 4)) * diagonal / 2) + yPos);
+		colTR.setX((float)(Math.cos(rad - (Math.PI / 4)) * diagonal / 2) + xPos);
+		colTR.setY((float)(Math.sin(rad - (Math.PI / 4)) * diagonal / 2) + yPos);
+		colBR.setX((float)(Math.cos(rad - (3 * Math.PI / 4)) * diagonal / 2) + xPos);
+		colBR.setY((float)(Math.sin(rad - (3 * Math.PI / 4)) * diagonal / 2) + yPos);
+	}
+	
 	/********
 	 * shit *
 	 ********
 	 
-	public Point2D.Double  topLeft, bottomRight, center;
+	public Point2D.Double  colBR, bottomRight, center;
 	public double angle, height, width, diagonal, initialAngle;
 	public boolean isRendered;
 	
@@ -151,10 +184,10 @@ public abstract class Entity
 	{
 		angle += degrees;
 		double rad = Math.toRadians(angle);
-		topLeft.x = (Math.cos(rad) * diagonal / 2) + center.x;
-		topLeft.y = (Math.sin(rad) * diagonal / 2) + center.y;
-		bottomRight.x = (Math.cos(rad + Math.PI) * diagonal / 2) + center.x;
-		bottomRight.x = (Math.cos(rad + Math.PI) * diagonal / 2) + center.y;
+		topLeft.x = (Math.cos(rad) * diagonal / 2) + xPos;
+		topLeft.y = (Math.sin(rad) * diagonal / 2) + yPos;
+		bottomRight.x = (Math.cos(rad + Math.PI) * diagonal / 2) + xPos;
+		bottomRight.x = (Math.cos(rad + Math.PI) * diagonal / 2) + yPos;
 	}
 	 **********
 	 *end shit*
