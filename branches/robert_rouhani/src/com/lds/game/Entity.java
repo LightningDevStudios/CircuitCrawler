@@ -60,16 +60,23 @@ public abstract class Entity
 		gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
 	}
 	
+	//TODO interpolate to position, per frame (ie a loop inside these methods won't work)
 	public void move (float x, float y)
 	{
 		this.xPos = x;
 		this.yPos = y;
 	}
 	
+	public void rotate (float degrees)
+	{
+		this.angle = degrees;
+	}
 	
-	
-	
-	
+	public void scale (float x, float y)
+	{
+		this.xScl = x;
+		this.yScl = y;
+	}
 	
 	/********
 	 * shit *
