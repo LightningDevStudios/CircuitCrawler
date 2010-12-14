@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class Game
 {
 	
-	public Level[][] GameLevels;
+	//public Level[][] GameLevels;
 	public ArrayList<Entity> entList;
 	public float screenW, screenH, localPosX, localPosY;
 	//Testing data
