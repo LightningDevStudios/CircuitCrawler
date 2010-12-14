@@ -10,6 +10,8 @@ public class GameRenderer implements Renderer
 {
 	Game game;
 	int framescount;
+	
+	
 	public GameRenderer (float screenW, float screenH)
 	{
 		game = new Game(screenW, screenH);
@@ -41,12 +43,20 @@ public class GameRenderer implements Renderer
 				ent.draw(gl);
 				if (framescount >= 100 && framescount <= 1500)
 				{
-					ent.xPos += 0.3f;
-					ent.yPos += 0.3f;
+					game.camPosX -= 0.3f;
+					game.camPosY -= 0.3f;
 					game.updateLocalEntities();
 				}	
 			}
 			framescount++;
+			
+			//TODO NOT WORKING - shifting ever closer to (0,0). Maybe make it camPos +/- screensize
+			gl.glViewport((int)game.camPosX, (int)game.camPosY, (int)game.screenW, (int)game.screenH);
+			gl.glMatrixMode(GL10.GL_PROJECTION);
+			gl.glLoadIdentity();
+			GLU.gluOrtho2D(gl, (float)(-game.screenW/2) - game.camPosX, (float)(game.screenW/2) + game.camPosX, (float)(-game.screenH/2) - game.camPosY, (float)(game.screenH/2) + game.camPosY);
+			gl.glMatrixMode(GL10.GL_MODELVIEW);
+			gl.glLoadIdentity();
 			
 		}
 		System.out.println("Items rendered: " + renderedcount);
@@ -58,7 +68,7 @@ public class GameRenderer implements Renderer
 		gl.glMatrixMode(GL10.GL_PROJECTION);
 		gl.glLoadIdentity();
 		
-		GLU.gluOrtho2D(gl, (float)-width/2, (float)width/2, (float)height/2, (float)-height/2);
+		GLU.gluOrtho2D(gl, (float)(-width/2), (float)(width/2), (float)(-height/2), (float)(height/2));
 		
 		gl.glMatrixMode(GL10.GL_MODELVIEW);
 		gl.glLoadIdentity();
