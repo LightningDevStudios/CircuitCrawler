@@ -6,6 +6,8 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 
+import java.awt.geom.Point2D.Float;
+
 //Highest level abstract class in game
 
 public abstract class Entity 
@@ -20,10 +22,15 @@ public abstract class Entity
 	public boolean isRendered;
 	public static int entCount;
 	
+	//collision data
+	public Float colTL, colTR, colBR, colBL;
+	public double diagonal, rad;
+	
 	//used to initialize graphics data
 	//TODO possibly get this working under the constructor?
 	public void initialize (float _size, float _xPos, float _yPos, float _angle, float _xScl, float _yScl)
 	{
+		//initializes graphics variables
 		size = _size;
 		xPos = _xPos;
 		yPos = _yPos;
@@ -31,10 +38,18 @@ public abstract class Entity
 		xScl = _xScl;
 		yScl = _yScl;
 		
-		float[] initVerts = {	0.0f, 0.0f,
-								0.0f, size,
-								size, 0.0f,
-								size, size };
+		float halfSize = size / 2;
+		
+		//initializes collision variables
+		rad = Math.toRadians((double)(angle + 90.0f));
+		diagonal = size * Math.sqrt(2);
+		updateAbsolutePointLocations();
+		
+		//make it so x/yPos are in center of box - Robert
+		float[] initVerts = {	-halfSize, -halfSize, //top left
+								-halfSize, halfSize, //bottom left
+								halfSize, -halfSize, //top right
+								halfSize, halfSize }; //bottom right
 		vertices = initVerts;
 		
 		ByteBuffer byteBuf = ByteBuffer.allocateDirect(vertices.length * 4);
@@ -58,17 +73,35 @@ public abstract class Entity
 		gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
 	}
 	
-	public boolean isColliding (Entity ent)
+	public void move (float x, float y)
 	{
-		
-		return true;
+		this.xPos = x;
+		this.yPos = y;
 	}
+	
+	//used to get the absolute, not relative, positions of the entity's 4 points in the XY Plane
+	public void updateAbsolutePointLocations ()
+	{
+		colTL.x = (float)(Math.cos(rad + (Math.PI / 4)) * diagonal / 2) + xPos;
+		colTL.y = (float)(Math.sin(rad + (Math.PI / 4)) * diagonal / 2) + yPos;
+		colBL.x = (float)(Math.cos(rad + (3 * Math.PI / 4)) * diagonal / 2) + xPos;
+		colBL.y = (float)(Math.sin(rad + (3 * Math.PI / 4)) * diagonal / 2) + yPos;
+		colTR.x = (float)(Math.cos(rad - (Math.PI / 4)) * diagonal / 2) + xPos;
+		colTR.y = (float)(Math.sin(rad - (Math.PI / 4)) * diagonal / 2) + yPos;
+		colBR.x = (float)(Math.cos(rad - (3 * Math.PI / 4)) * diagonal / 2) + xPos;
+		colBR.y = (float)(Math.sin(rad - (3 * Math.PI / 4)) * diagonal / 2) + yPos;
+	}
+	
+	
+	
+	
+	
 	
 	/********
 	 * shit *
 	 ********
 	 
-	public Point2D.Double  topLeft, bottomRight, center;
+	public Point2D.Double  colBR, bottomRight, center;
 	public double angle, height, width, diagonal, initialAngle;
 	public boolean isRendered;
 	
@@ -137,10 +170,10 @@ public abstract class Entity
 	{
 		angle += degrees;
 		double rad = Math.toRadians(angle);
-		topLeft.x = (Math.cos(rad) * diagonal / 2) + center.x;
-		topLeft.y = (Math.sin(rad) * diagonal / 2) + center.y;
-		bottomRight.x = (Math.cos(rad + Math.PI) * diagonal / 2) + center.x;
-		bottomRight.x = (Math.cos(rad + Math.PI) * diagonal / 2) + center.y;
+		topLeft.x = (Math.cos(rad) * diagonal / 2) + xPos;
+		topLeft.y = (Math.sin(rad) * diagonal / 2) + yPos;
+		bottomRight.x = (Math.cos(rad + Math.PI) * diagonal / 2) + xPos;
+		bottomRight.x = (Math.cos(rad + Math.PI) * diagonal / 2) + yPos;
 	}
 	 **********
 	 *end shit*
