@@ -41,23 +41,18 @@ public class GameRenderer implements Renderer
 				gl.glRotatef(ent.angle, 0.0f, 0.0f, 1.0f);
 				gl.glScalef(ent.xScl, ent.yScl, 1.0f);
 				ent.draw(gl);
-				if (framescount >= 100 && framescount <= 1500)
-				{
-					game.camPosX -= 0.3f;
-					game.camPosY -= 0.3f;
-					game.updateLocalEntities();
-				}	
+				
 			}
+			if (framescount >= 100 && framescount <= 1500)
+			{
+				game.camPosX -= 0.3f;
+				game.camPosY -= 0.3f;
+				game.updateLocalEntities();
+			}	
 			framescount++;
 			
-			//TODO NOT WORKING - shifting ever closer to (0,0). Maybe make it camPos +/- screensize
-			gl.glViewport((int)game.camPosX, (int)game.camPosY, (int)game.screenW, (int)game.screenH);
-			gl.glMatrixMode(GL10.GL_PROJECTION);
-			gl.glLoadIdentity();
-			GLU.gluOrtho2D(gl, (float)(-game.screenW/2) - game.camPosX, (float)(game.screenW/2) + game.camPosX, (float)(-game.screenH/2) - game.camPosY, (float)(game.screenH/2) + game.camPosY);
-			gl.glMatrixMode(GL10.GL_MODELVIEW);
-			gl.glLoadIdentity();
-			
+			//TEMP, call onSufraceChanged each time, find new way through OpenGL...
+			this.onSurfaceChanged(gl, (int)game.screenW, (int)game.screenH);
 		}
 		System.out.println("Items rendered: " + renderedcount);
 	}
@@ -67,9 +62,7 @@ public class GameRenderer implements Renderer
 		gl.glViewport(0, 0, width, height);
 		gl.glMatrixMode(GL10.GL_PROJECTION);
 		gl.glLoadIdentity();
-		
-		GLU.gluOrtho2D(gl, (float)(-width/2), (float)(width/2), (float)(-height/2), (float)(height/2));
-		
+		GLU.gluOrtho2D(gl, game.camPosX - (float)(game.screenW/2), game.camPosX + (float)(game.screenW/2), game.camPosY - (float)(game.screenH/2), game.camPosY + (float)(game.screenH/2));
 		gl.glMatrixMode(GL10.GL_MODELVIEW);
 		gl.glLoadIdentity();
 	}
