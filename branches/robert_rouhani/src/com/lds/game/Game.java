@@ -28,6 +28,7 @@ public class Game
 		camPosY = 0.0f;
 		//call this every time the player moves.
 		//TODO take into account AI, perhaps render every time it chooses a new point to go to?
+		player2.move(30.0f, 50.0f);
 		updateLocalEntities();
 	}
 	
