@@ -10,6 +10,8 @@ public class GameRenderer implements Renderer
 {
 	Game game;
 	int framescount;
+	
+	
 	public GameRenderer (float screenW, float screenH)
 	{
 		game = new Game(screenW, screenH);
@@ -39,15 +41,18 @@ public class GameRenderer implements Renderer
 				gl.glRotatef(ent.angle, 0.0f, 0.0f, 1.0f);
 				gl.glScalef(ent.xScl, ent.yScl, 1.0f);
 				ent.draw(gl);
-				if (framescount >= 100 && framescount <= 1500)
-				{
-					ent.xPos += 0.3f;
-					ent.yPos += 0.3f;
-					game.updateLocalEntities();
-				}	
+				
 			}
+			if (framescount >= 100 && framescount <= 1500)
+			{
+				game.camPosX -= 0.3f;
+				game.camPosY -= 0.3f;
+				game.updateLocalEntities();
+			}	
 			framescount++;
 			
+			//TEMP, call onSufraceChanged each time, find new way through OpenGL...
+			this.onSurfaceChanged(gl, (int)game.screenW, (int)game.screenH);
 		}
 		System.out.println("Items rendered: " + renderedcount);
 	}
@@ -57,9 +62,7 @@ public class GameRenderer implements Renderer
 		gl.glViewport(0, 0, width, height);
 		gl.glMatrixMode(GL10.GL_PROJECTION);
 		gl.glLoadIdentity();
-		
-		GLU.gluOrtho2D(gl, (float)-width/2, (float)width/2, (float)height/2, (float)-height/2);
-		
+		GLU.gluOrtho2D(gl, game.camPosX - (float)(game.screenW/2), game.camPosX + (float)(game.screenW/2), game.camPosY - (float)(game.screenH/2), game.camPosY + (float)(game.screenH/2));
 		gl.glMatrixMode(GL10.GL_MODELVIEW);
 		gl.glLoadIdentity();
 	}

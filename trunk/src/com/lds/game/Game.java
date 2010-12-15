@@ -7,7 +7,7 @@ public class Game
 	
 	//public Level[][] GameLevels;
 	public ArrayList<Entity> entList;
-	public float screenW, screenH, localPosX, localPosY;
+	public float screenW, screenH, camPosX, camPosY;
 	//Testing data
 	public Player player1 = new Player();
 	public Player player2 = new Player();
@@ -24,7 +24,8 @@ public class Game
 		entList.add(player2);
 		player3.initialize(30.0f, -174.0f, -160.0f);
 		entList.add(player3);
-		
+		camPosX = 0.0f;
+		camPosY = 0.0f;
 		//call this every time the player moves.
 		//TODO take into account AI, perhaps render every time it chooses a new point to go to?
 		updateLocalEntities();
@@ -34,10 +35,10 @@ public class Game
 	{
 		//define current screen bounds
 		float minX, maxX, minY, maxY;
-		minX = localPosX - (screenW / 2);
-		maxX = localPosX + (screenW / 2);
-		minY = localPosY - (screenH / 2);
-		maxY = localPosY + (screenH / 2);
+		minX = camPosX - (screenW / 2);
+		maxX = camPosX + (screenW / 2);
+		minY = camPosY - (screenH / 2);
+		maxY = camPosY + (screenH / 2);
 		
 		for(Entity ent : entList)
 		{

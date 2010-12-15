@@ -44,18 +44,18 @@ public abstract class Entity
 		rad = Math.toRadians((double)(angle + 90.0f));
 		diagonal = size * Math.sqrt(2);
 		
-		colTL = new Point(-halfSize, -halfSize);
-		colBL = new Point(-halfSize, halfSize);
-		colTR = new Point(halfSize, -halfSize);
-		colBR = new Point(halfSize, halfSize);
+		colTL = new Point(halfSize, halfSize);
+		colBL = new Point(halfSize, -halfSize);
+		colTR = new Point(-halfSize, halfSize);
+		colBR = new Point(-halfSize, -halfSize);
 		
 		//updateAbsolutePointLocations();	
 		
 		//make it so x/yPos are in center of box - Robert
-		float[] initVerts = {	-halfSize, -halfSize, //top left
-								-halfSize, halfSize, //bottom left
-								halfSize, -halfSize, //top right
-								halfSize, halfSize }; //bottom right
+		float[] initVerts = {	halfSize, halfSize, //top left
+								halfSize, -halfSize, //bottom left
+								-halfSize, halfSize, //top right
+								-halfSize, -halfSize }; //bottom right
 
 		vertices = initVerts;
 		
