@@ -23,7 +23,8 @@ public abstract class Entity
 	public static int entCount;
 	
 	//collision data
-	public Point colTL, colTR, colBR, colBL;
+	public Point[] colPoints;
+	public float[] colSlopes;
 	public double diagonal, rad;
 	
 	//used to initialize graphics data
@@ -34,7 +35,7 @@ public abstract class Entity
 		size = _size;
 		xPos = _xPos;
 		yPos = _yPos;
-		angle = _angle;
+		angle = -_angle;
 		xScl = _xScl;
 		yScl = _yScl;
 		
@@ -43,19 +44,21 @@ public abstract class Entity
 		//initializes collision variables
 		rad = Math.toRadians((double)(angle + 90.0f));
 		diagonal = size * Math.sqrt(2);
+		colSlopes = new float[4];
 		
-		colTL = new Point(-halfSize, -halfSize);
-		colBL = new Point(-halfSize, halfSize);
-		colTR = new Point(halfSize, -halfSize);
-		colBR = new Point(halfSize, halfSize);
+		colPoints = new Point[4]; //0: top left, 1: bottom left, 2:top right, 3: borrom right
+		colPoints[0] = new Point(halfSize, halfSize);
+		colPoints[1] = new Point(halfSize, -halfSize);
+		colPoints[2] = new Point(-halfSize, halfSize);
+		colPoints[3] = new Point(-halfSize, -halfSize);
 		
-		//updateAbsolutePointLocations();	
+		updateAbsolutePointLocations();	
 		
 		//make it so x/yPos are in center of box - Robert
-		float[] initVerts = {	-halfSize, -halfSize, //top left
-								-halfSize, halfSize, //bottom left
-								halfSize, -halfSize, //top right
-								halfSize, halfSize }; //bottom right
+		float[] initVerts = {	halfSize, halfSize, //top left
+								halfSize, -halfSize, //bottom left
+								-halfSize, halfSize, //top right
+								-halfSize, -halfSize }; //bottom right
 
 		vertices = initVerts;
 		
@@ -64,6 +67,8 @@ public abstract class Entity
 		vertexBuffer = byteBuf.asFloatBuffer();
 		vertexBuffer.put(vertices);
 		vertexBuffer.position(0);
+		
+		Game.entList.add(this);
 	}
 	
 	public void initialize (float _size, float _xPos, float _yPos)
@@ -81,115 +86,142 @@ public abstract class Entity
 	}
 	
 	//TODO interpolate to position, per frame (ie. a loop inside these methods won't work)
-	public void move (float x, float y)
+	public void moveTo (float x, float y)
 	{
 		this.xPos = x;
 		this.yPos = y;
 	}
 	
-	public void rotate (float degrees)
+	public void rotateTo (float degrees)
 	{
-		this.angle = degrees;
+		this.angle = -degrees;
 	}
 	
-	public void scale (float x, float y)
+	public void scaleTo (float x, float y)
 	{
 		this.xScl = x;
 		this.yScl = y;
 	}
 	
+	public void move (float x, float y)
+	{
+		this.xPos += x;
+		this.yPos += y;
+	}
+	
+	public void rotate (float degrees)
+	{
+		this.angle -= degrees;
+	}
+	
+	public void scale (float x, float y)
+	{
+		this.xScl += x;
+		this.yScl += y;
+	}
+	
 	//used to get the absolute, not relative, positions of the entity's 4 points in the XY Plane
 	public void updateAbsolutePointLocations ()
 	{
-		colTL.setX((float)(Math.cos(rad + (Math.PI / 4)) * diagonal / 2) + xPos);
-		colTL.setY((float)(Math.sin(rad + (Math.PI / 4)) * diagonal / 2) + yPos);
-		colBL.setX((float)(Math.cos(rad + (3 * Math.PI / 4)) * diagonal / 2) + xPos);
-		colBL.setY((float)(Math.sin(rad + (3 * Math.PI / 4)) * diagonal / 2) + yPos);
-		colTR.setX((float)(Math.cos(rad - (Math.PI / 4)) * diagonal / 2) + xPos);
-		colTR.setY((float)(Math.sin(rad - (Math.PI / 4)) * diagonal / 2) + yPos);
-		colBR.setX((float)(Math.cos(rad - (3 * Math.PI / 4)) * diagonal / 2) + xPos);
-		colBR.setY((float)(Math.sin(rad - (3 * Math.PI / 4)) * diagonal / 2) + yPos);
+		//TODO: calculate in scaling
+		colPoints[0].setX((float)(Math.cos(this.rad + (Math.PI / 4)) * diagonal / 2) + xPos);
+		colPoints[0].setY((float)(Math.sin(this.rad + (Math.PI / 4)) * diagonal / 2) + yPos);
+		colPoints[1].setX((float)(Math.cos(this.rad + (3 * Math.PI / 4)) * diagonal / 2) + xPos);
+		colPoints[1].setY((float)(Math.sin(this.rad + (3 * Math.PI / 4)) * diagonal / 2) + yPos);
+		colPoints[2].setX((float)(Math.cos(this.rad - (Math.PI / 4)) * diagonal / 2) + xPos);
+		colPoints[2].setY((float)(Math.sin(this.rad - (Math.PI / 4)) * diagonal / 2) + yPos);
+		colPoints[3].setX((float)(Math.cos(this.rad - (3 * Math.PI / 4)) * diagonal / 2) + xPos);
+		colPoints[3].setY((float)(Math.sin(this.rad - (3 * Math.PI / 4)) * diagonal / 2) + yPos);
+		System.out.println(colPoints[0] + "\n" + colPoints[1] + "\n" + colPoints[2] + "\n" + colPoints[3]);
 	}
 	
-	/********
-	 * shit *
-	 ********
-	 
-	public Point2D.Double  colBR, bottomRight, center;
-	public double angle, height, width, diagonal, initialAngle;
-	public boolean isRendered;
-	
-	public void initialize ()
-	{
-		height = topLeft.y - bottomRight.y;
-		width = bottomRight.x - topLeft.x;
-		diagonal = Math.sqrt((Math.pow (width, 2)) + Math.pow(height, 2));
-		center.x = (width / 2) +  topLeft.x;
-		center.y = (height / 2) +  topLeft.y;
-		angle = 180 - Math.toDegrees(Math.atan(topLeft.y - center.y) / (center.x - topLeft.x)); //the angle is the angle between the center and the topLeft point
-		initialAngle = angle;	
-	}
-	
+	//This tests for collision between two entities (no shit) - Devin
 	public boolean isColliding (Entity ent)
 	{
-		if ((topLeft.x >= ent.topLeft.x && topLeft.x <= ent.bottomRight.x || bottomRight.x >= ent.topLeft.x && bottomRight.x <= ent.bottomRight.x) 
-				&& (topLeft.y <= ent.topLeft.y && topLeft.y >= ent.bottomRight.y || bottomRight.y <= ent.topLeft.y && bottomRight.y >= ent.bottomRight.y))
+		//used to determine the number of collisions with respect to the axes. if it is 4 after the check, method returns true
+		int colCount = 0;
+		//as if used as ent1.isColliding(ent2)
+		float ent1High = 0.0f;
+		float ent2High = 0.0f;
+		float ent1Low = 999999.0f;
+		float ent2Low = 999999.0f;
+		
+		//calculates 4 slopes to use with the SAT
+		colSlopes[0] = (float)(Math.tan(this.rad));
+		colSlopes[1] = -1 / colSlopes[0];
+		colSlopes[2] = (float)(Math.tan(ent.rad));
+		colSlopes[3] = -1 / colSlopes[2];
+		
+		//checks for collision on each of the 4 slopes
+		for (float slope : colSlopes)
+		{
+			ent1High = 0.0f;
+			ent2High = 0.0f;
+			ent1Low = 999999.0f;
+			ent2Low = 999999.0f;
+			System.out.println("Slope: " + slope);
+			//iterates through each point on ent1 to get high and low c values
+			for (Point point : this.colPoints)
+			{
+				//finds c (as in y = mx + c) for the line going through each point
+				if (slope < 1.0E-16f)
+				{
+					slope = 0;
+				}
+				point.setColC((point.getY() - slope * point.getX()));
+				System.out.println("C1: " + point.getColC());
+				if (ent1Low > point.getColC())
+				{
+					ent1Low = point.getColC();
+				}
+				if (ent1High < point.getColC())
+				{
+					ent1High = point.getColC();
+				}
+			}
+			System.out.println("ent1Low: " + ent1Low);
+			System.out.println("ent1High: " + ent1High);
+			
+			//same as above for ent2
+			for (Point point : ent.colPoints)
+			{
+				if (slope < 1.0E-16f)
+				{
+					slope = 0;
+				}
+				point.setColC(point.getY() - slope * point.getX());
+				System.out.println("C2: " + point.getColC());
+				if (ent2Low > point.getColC())
+				{
+					ent2Low = point.getColC();
+				}
+				if (ent2High < point.getColC())
+				{
+					ent2High = point.getColC();
+				}
+			}
+			System.out.println("ent2Low: " + ent2Low);
+			System.out.println("ent2High: " + ent2High);
+			
+			//checks for collision with respect to the current axis. adds one to colCount if the collision is true, and returns false if not
+			if ((ent1High >= ent2Low && ent1High <= ent2High) || (ent2High >= ent1Low && ent2High <= ent1High))
+			{
+				colCount++;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		
+		//if the objects are colliding with respect to all 4 axes, return true
+		if (colCount == 4)
 		{
 			return true;
 		}
 		else
+		{
 			return false;
-	}
-	
-	public void move (dir moveDir, double distance)
-	{
-		if (moveDir == dir.up)
-		{
-			topLeft.y += distance;
-			bottomRight.y += distance;
-		}
-		else if (moveDir == dir.down)
-		{
-			topLeft.y -= distance;
-			bottomRight.y -= distance;
-		}
-		else if (moveDir == dir.right)
-		{
-			topLeft.x += distance;
-			bottomRight.x += distance;
-		}
-		else
-		{
-			topLeft.x -= distance;
-			bottomRight.x -= distance;
 		}
 	}
-	
-	public void move (double distance)
-	{
-		double tempAngle = angle - initialAngle + 90; //this will be the operable direction. if the Entity has just been created, this will point straight up
-		double xShift = distance * Math.cos(Math.toRadians(tempAngle));
-		double yShift = distance * Math.sin(Math.toRadians(tempAngle));
-		double finalX = topLeft.x + xShift; //used in following while loop
-		while (topLeft.x != finalX) //slowly increments movement, so it appears smooth
-		{
-			topLeft.x++; //for now, just add one each time. later, variable speed will be added
-			bottomRight.x++;
-			topLeft.y += (yShift / xShift);
-			bottomRight.y += (yShift / xShift);
-		}
-	}
-	
-	public void rotate (double degrees) //positive degrees will rotate counterclockwise, negative degrees clockwise
-	{
-		angle += degrees;
-		double rad = Math.toRadians(angle);
-		topLeft.x = (Math.cos(rad) * diagonal / 2) + xPos;
-		topLeft.y = (Math.sin(rad) * diagonal / 2) + yPos;
-		bottomRight.x = (Math.cos(rad + Math.PI) * diagonal / 2) + xPos;
-		bottomRight.x = (Math.cos(rad + Math.PI) * diagonal / 2) + yPos;
-	}
-	 **********
-	 *end shit*
-	 **********/
 }

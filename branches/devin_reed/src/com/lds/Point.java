@@ -4,11 +4,14 @@ public class Point
 {
 	private float x;
 	private float y;
+	//used only for collision testing
+	private float colC;
 	
 	public Point (float _x, float _y)
 	{
 		x = _x;
 		y = _y;
+		colC = 0;
 	}
 	
 	public Point ()
@@ -26,6 +29,11 @@ public class Point
 		return y;
 	}
 	
+	public float getColC ()
+	{
+		return colC;
+	}
+	
 	public void setX (float _x)
 	{
 		x = _x;
@@ -34,5 +42,15 @@ public class Point
 	public void setY (float _y)
 	{
 		y = _y;
+	}
+	
+	public void setColC (float _colC)
+	{
+		colC = _colC;
+	}
+	
+	public String toString ()
+	{
+		return x + " " + y + " " + colC;
 	}
 }
