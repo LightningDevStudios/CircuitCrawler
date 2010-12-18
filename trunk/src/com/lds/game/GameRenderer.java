@@ -31,7 +31,7 @@ public class GameRenderer implements Renderer
 	{
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
 		int renderedcount = 0;
-		for (Entity ent : game.entList)
+		for (Entity ent : Game.entList)
 		{
 			if (ent.isRendered)
 			{
@@ -43,18 +43,18 @@ public class GameRenderer implements Renderer
 				ent.draw(gl);
 				
 			}
-			if (framescount >= 100 && framescount <= 1500)
+			/*if (framescount >= 100 && framescount <= 1500)
 			{
 				game.camPosX -= 0.3f;
 				game.camPosY -= 0.3f;
 				game.updateLocalEntities();
-			}	
+			}*/
 			framescount++;
 			
 			//TEMP, call onSufraceChanged each time, find new way through OpenGL...
 			this.onSurfaceChanged(gl, (int)game.screenW, (int)game.screenH);
 		}
-		System.out.println("Items rendered: " + renderedcount);
+		//System.out.println("Items rendered: " + renderedcount);
 	}
 
 	public void onSurfaceChanged(GL10 gl, int width, int height)
