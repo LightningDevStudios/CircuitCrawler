@@ -1,7 +1,5 @@
 package com.lds.game;
 
-import java.util.ConcurrentModificationException;
-
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
@@ -31,7 +29,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	{
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
 		int renderedcount = 0;
-		
+
 		//Render all entities
 		for (Entity ent : game.entList)
 		{
