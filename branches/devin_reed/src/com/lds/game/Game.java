@@ -18,8 +18,8 @@ public class Game
 	{
 		screenW = _screenW;
 		screenH = _screenH;
-		player1.initialize(30.0f, 67.0f, 78.0f, 29.0f, 1.0f, 1.0f);
-		player2.initialize(90.0f, 3.0f, 0.0f, -69.63f, 1.0f, 1.0f);
+		player1.initialize(23.0f, -43.0f, -58.0f, 32.0f, 10.5f, 2.1f);
+		player2.initialize(46.0f, 46.0f, 38.9f, -65.0f, 0.2f, 6.0f);
 		//player3.initialize(30.0f, 174.0f, 160.0f);
 		camPosX = 0.0f;
 		camPosY = 0.0f;
@@ -28,7 +28,7 @@ public class Game
 		updateLocalEntities();
 		if (player1.isColliding(player2))
 		{
-			player3.initialize(30.0f, 0.0f, -160.0f);
+			player3.initialize(30.0f, 0.0f, -100.0f);
 			updateLocalEntities();
 		}
 		//does some moving, rotating, scaling and collion check for testing - Devin
