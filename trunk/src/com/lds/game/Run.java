@@ -7,11 +7,11 @@ import android.util.DisplayMetrics;
 import android.view.Window;
 import android.view.WindowManager;
 
-
+import com.lds.Graphics;
 
 public class Run extends Activity
 {
-	public GLSurfaceView glSurface;
+	public Graphics glSurface;
 	private float screenX, screenY;
 	
 	
@@ -31,8 +31,7 @@ public class Run extends Activity
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		
 		//set up OpenGL rendering
-		glSurface = new GLSurfaceView(this);
-		glSurface.setRenderer(new GameRenderer(screenX, screenY));
+		glSurface = new Graphics(this, new GameRenderer(screenX, screenY));
 		setContentView(glSurface);
 	}
 	

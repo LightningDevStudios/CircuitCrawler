@@ -66,8 +66,6 @@ public abstract class Entity
 		vertexBuffer = byteBuf.asFloatBuffer();
 		vertexBuffer.put(vertices);
 		vertexBuffer.position(0);
-		
-		Game.entList.add(this);
 	}
 	
 	public void initialize (float _size, float _xPos, float _yPos)
