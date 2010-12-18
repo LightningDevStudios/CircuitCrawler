@@ -7,7 +7,10 @@ public class Game
 	
 	//public Level[][] GameLevels;
 	public ArrayList<Entity> entList;
+	
+	//Camera data
 	public float screenW, screenH, camPosX, camPosY;
+	
 	//Testing data
 	public Player player1 = new Player();
 	public Player player2 = new Player();
@@ -26,7 +29,7 @@ public class Game
 		entList.add(player3);
 		camPosX = 0.0f;
 		camPosY = 0.0f;
-		//call this every time the player moves.
+		
 		//TODO take into account AI, perhaps render every time it chooses a new point to go to?
 		player2.move(30.0f, 50.0f);
 		updateLocalEntities();
