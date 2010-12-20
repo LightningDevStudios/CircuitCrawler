@@ -12,10 +12,17 @@ import java.nio.FloatBuffer;
 
 public abstract class Entity 
 {
+	//behavior data
+	public boolean isStatic, isSolid;
+	
 	//graphics data
 	public float angle, size, xPos, yPos, xScl, yScl, halfSize;
 	public float[] vertices;
 	public FloatBuffer vertexBuffer;
+		
+	//interpolation data
+	public float interpSlope, interpSclRatio, endX, endY, endXScl, endYScl, endAngle;
+	public boolean posInterpMove, posInterpScl, posInterpRotate;
 	
 	//debug data
 	public int entID;
@@ -29,17 +36,27 @@ public abstract class Entity
 	
 	//used to initialize graphics data
 	//TODO possibly get this working under the constructor?
-	public void initialize (float _size, float _xPos, float _yPos, float _angle, float _xScl, float _yScl)
+	public void initialize (float _size, float _xPos, float _yPos, float _angle, float _xScl, float _yScl, boolean _isStatic, boolean _isSolid)
 	{
+		//initialize behavior variables
+		isStatic = _isStatic;
+		isSolid = _isSolid;
+		
 		//initializes graphics variables
 		size = _size;
 		xPos = _xPos;
 		yPos = _yPos;
-		angle = -_angle;
+		angle = _angle;
 		xScl = _xScl;
 		yScl = _yScl;
-		
 		halfSize = size / 2;
+		
+		//initialize interpolation variables
+		endX = xPos;
+		endY = yPos;
+		endXScl = xScl;
+		endYScl = yScl;
+		endAngle = angle;
 		
 		//initializes collision variables
 		rad = Math.toRadians((double)(angle + 90.0f));
@@ -53,7 +70,7 @@ public abstract class Entity
 		colPoints[2] = new Point();
 		colPoints[3] = new Point();
 		
-		//make it so x/yPos are in center of box - Robert
+		//makes it so x/yPos are in center of box - Robert
 		float[] initVerts = {	halfSize, halfSize, //top left
 								halfSize, -halfSize, //bottom left
 								-halfSize, halfSize, //top right
@@ -66,13 +83,11 @@ public abstract class Entity
 		vertexBuffer = byteBuf.asFloatBuffer();
 		vertexBuffer.put(vertices);
 		vertexBuffer.position(0);
-		
-		Game.entList.add(this);
 	}
 	
 	public void initialize (float _size, float _xPos, float _yPos)
 	{
-		initialize(_size, _xPos, _yPos, 0.0f, 1.0f, 1.0f);
+		initialize(_size, _xPos, _yPos, 0.0f, 1.0f, 1.0f, false, true);
 	}
 	
 	public void draw(GL10 gl)
@@ -87,36 +102,100 @@ public abstract class Entity
 	//TODO interpolate to position, per frame (ie. a loop inside these methods won't work)
 	public void moveTo (float x, float y)
 	{
-		this.xPos = x;
-		this.yPos = y;
+		if (!isStatic)
+		{
+			interpSlope = (y - yPos) / (x - xPos);
+			if (x - xPos > 0)
+				posInterpMove = true;
+			else
+				posInterpMove = false;
+			endX = x;
+			endY = y;
+		}
+		else
+		{
+			System.out.println("Error. Cannot move static object.");
+		}
 	}
 	
 	public void rotateTo (float degrees)
 	{
-		this.angle = -degrees;
+		endAngle = degrees;
+		if (degrees - angle > 0)
+		{
+			posInterpRotate = true;
+		}
+		else
+		{
+			posInterpRotate = false;
+		}
 	}
 	
 	public void scaleTo (float x, float y)
 	{
-		this.xScl = x;
-		this.yScl = y;
+		if (!isStatic)
+		{
+			interpSclRatio = (y - yScl) / (x - xScl);
+			if (x - xScl > 0)
+				posInterpScl = true;
+			else
+				posInterpScl = false;
+			endXScl = x;
+			endYScl = y;
+		}
+		else
+		{
+			System.out.println("Error. Cannot scale static object.");
+		}
 	}
 	
 	public void move (float x, float y)
 	{
-		this.xPos += x;
-		this.yPos += y;
+		if (!isStatic)
+		{
+			interpSlope = y / x;
+			if (x > 0)
+				posInterpMove = true;
+			else
+				posInterpMove = false;
+			endX = xPos + x;
+			endY = yPos + y;
+		}
+		else
+		{
+			System.out.println("Error. Cannot move static object.");
+		}
 	}
 	
 	public void rotate (float degrees)
 	{
-		this.angle -= degrees;
+		endAngle = angle + degrees;
+		if (degrees > 0)
+		{
+			posInterpRotate = true;
+		}
+		else
+		{
+			posInterpRotate = false;
+		}
 	}
 	
 	public void scale (float x, float y)
 	{
-		this.xScl += x;
-		this.yScl += y;
+		if (!isStatic)
+		{
+			interpSclRatio = y / x;
+			if (x > 0)
+				posInterpScl = true;
+			else
+				posInterpScl = false;
+			endXScl = xScl + x;
+			endYScl = yScl + y;
+		}
+		else
+		{
+			System.out.println("Error. Cannot scale static object.");
+		}
 	}
 	
 	//used to get the absolute, not relative, positions of the entity's 4 points in the XY Plane
@@ -134,18 +213,23 @@ public abstract class Entity
 	
 	//This tests for collision between two entities (no shit) - Devin
 	public boolean isColliding (Entity ent)
-	{
-		updateAbsolutePointLocations();
-		ent.updateAbsolutePointLocations();
-		//used to determine the number of collisions with respect to the axes. if it is 4 after the check, method returns true
-		int colCount = 0;
-		float ent1High, ent1Low, ent2High, ent2Low;
+	{	
+		//checks to see if either object is not solid
+		if (this.isSolid == false || ent.isSolid == false)
+		{
+			return false;
+		}
 		
 		//makes sure the entities are close enough so that collision testing is actually neccessary
 		if (Math.sqrt(Math.pow(xPos - ent.xPos, 2) + Math.pow(yPos - ent.yPos, 2)) > ((diagonal) + ent.diagonal))
 		{
 			return false;
 		}
+		updateAbsolutePointLocations();
+		ent.updateAbsolutePointLocations();
+		//used to determine the number of collisions with respect to the axes. if it is 4 after the check, method returns true
+		int colCount = 0;
+		float ent1High, ent1Low, ent2High, ent2Low;
 		
 		//calculates 4 slopes to use with the SAT
 		if (this.colPoints[0].getX() - this.colPoints[1].getX() == 0.0f)
