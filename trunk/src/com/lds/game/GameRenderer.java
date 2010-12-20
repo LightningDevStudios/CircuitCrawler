@@ -8,8 +8,8 @@ import android.opengl.GLU;
 public class GameRenderer implements com.lds.Graphics.Renderer
 {
 	public Game game;
-	int prevRenderCount;
-	
+	int prevRenderCount, framescount;
+	public static final float SPEED = 0.5f; //speed, in units per frame, of movement, rotation, and scaling of Entities
 	
 	public GameRenderer (float screenW, float screenH)
 	{
@@ -37,13 +37,87 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 			{
 				renderedcount++;
 				
+				//translation interpolation
+				if ((ent.xPos != ent.endX || ent.yPos != ent.endY))
+				{
+					if (ent.posInterpMove)
+					{
+						ent.xPos += SPEED;
+						ent.yPos += SPEED * ent.interpSlope;
+					}
+					else
+					{
+						ent.xPos -= SPEED;
+						ent.yPos -= SPEED * ent.interpSlope;
+					}
+					
+					if (ent.xPos <= ent.endX + SPEED && ent.xPos >= ent.endX - SPEED)
+					{
+						ent.xPos = ent.endX;
+					}
+					if (ent.yPos <= ent.endY + SPEED && ent.yPos >= ent.endY - SPEED)
+					{
+						ent.yPos = ent.endY;
+					}
+				}
 				gl.glTranslatef(ent.xPos, ent.yPos, 0.0f);
-				gl.glRotatef(ent.angle, 0.0f, 0.0f, 1.0f);
+				
+				//rotation interpolation
+				if (ent.angle != ent.endAngle)
+				{
+					if (ent.posInterpRotate)
+					{
+						ent.angle += SPEED / 2;
+					}
+					else
+					{
+						ent.angle -= SPEED / 2;
+					}
+					
+					if (ent.angle <= ent.endAngle + SPEED / 2 && ent.angle >= ent.endAngle - SPEED / 2)
+					{
+						ent.angle = ent.endAngle;
+					}
+				}
+				gl.glRotatef(-ent.angle, 0.0f, 0.0f, 1.0f);
+				
+				//scale interpolation
+				if ((ent.xScl != ent.endXScl) || (ent.yScl != ent.endYScl))
+				{
+					if (ent.posInterpScl)
+					{
+						ent.xScl += SPEED / 10;
+						ent.yScl += SPEED / 10 * ent.interpSclRatio;
+					}
+					else
+					{
+						ent.xScl -= SPEED / 10;
+						ent.yScl -= SPEED / 10 * ent.interpSclRatio;
+					}
+					
+					if (ent.xScl <= ent.endXScl + SPEED / 10 && ent.xScl >= ent.endXScl - SPEED / 10)
+					{
+						ent.xScl = ent.endXScl;
+					}
+					if (ent.yScl <= ent.endYScl + SPEED / 10 && ent.yScl >= ent.endYScl - SPEED / 10)
+					{
+						ent.yScl = ent.endYScl;
+					}
+				}
 				gl.glScalef(ent.xScl, ent.yScl, 1.0f);
+				
 				ent.draw(gl);
 				gl.glLoadIdentity();
-				
 			}
+			/*if (framescount >= 100 && framescount <= 1500)
+			{
+				game.camPosX -= 0.3f;
+				game.camPosY -= 0.3f;
+				game.updateLocalEntities();
+			}*/
+			framescount++;
+			//TEMP, call onSufraceChanged each time, find new way through OpenGL...
+			this.onSurfaceChanged(gl, (int)game.screenW, (int)game.screenH);
 		}
 		
 		//Update screen position and entities
