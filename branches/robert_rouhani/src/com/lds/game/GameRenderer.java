@@ -30,6 +30,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		gl.glHint(GL10.GL_PERSPECTIVE_CORRECTION_HINT, GL10.GL_NICEST);
 	}
 
+	//TODO move interpolation to another method, less clutter in main loop
 	public void onDrawFrame(GL10 gl) 
 	{
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
