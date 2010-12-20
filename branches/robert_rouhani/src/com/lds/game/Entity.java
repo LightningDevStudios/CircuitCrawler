@@ -15,7 +15,11 @@ public abstract class Entity
 	//graphics data
 	public float angle, size, xPos, yPos, xScl, yScl, halfSize;
 	public float[] vertices;
+	public float[] texture;
 	public FloatBuffer vertexBuffer;
+	public FloatBuffer textureBuffer;
+	
+	public int[] texturePtrs = new int[1];
 	
 	//debug data
 	public int entID;
@@ -54,18 +58,31 @@ public abstract class Entity
 		colPoints[3] = new Point();
 		
 		//make it so x/yPos are in center of box - Robert
-		float[] initVerts = {	halfSize, halfSize, //top left
-								halfSize, -halfSize, //bottom left
-								-halfSize, halfSize, //top right
+		float[] initVerts = {	halfSize, halfSize, 	//top left
+								halfSize, -halfSize, 	//bottom left
+								-halfSize, halfSize, 	//top right
 								-halfSize, -halfSize }; //bottom right
 
 		vertices = initVerts;
+		
+		float[] initTex = {		halfSize, halfSize, 	//top left
+								halfSize, -halfSize, 	//bottom left
+								-halfSize, halfSize,	//top right
+								-halfSize, -halfSize }; //bottom right
+		
+		texture = initTex;
 		
 		ByteBuffer byteBuf = ByteBuffer.allocateDirect(vertices.length * 4);
 		byteBuf.order(ByteOrder.nativeOrder());
 		vertexBuffer = byteBuf.asFloatBuffer();
 		vertexBuffer.put(vertices);
 		vertexBuffer.position(0);
+		
+		byteBuf = ByteBuffer.allocateDirect(texture.length * 4);
+		byteBuf.order(ByteOrder.nativeOrder());
+		textureBuffer = byteBuf.asFloatBuffer();
+		textureBuffer.put(texture);
+		textureBuffer.position(0);
 	}
 	
 	public void initialize (float _size, float _xPos, float _yPos)
@@ -75,11 +92,20 @@ public abstract class Entity
 	
 	public void draw(GL10 gl)
 	{
+		gl.glBindTexture(GL10.GL_TEXTURE_2D, texturePtrs[0]);
+		
 		gl.glFrontFace(GL10.GL_CW);
-		gl.glVertexPointer(2, GL10.GL_FLOAT, 0, vertexBuffer);
+		
 		gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
+		gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
+		
+		gl.glVertexPointer(2, GL10.GL_FLOAT, 0, vertexBuffer);
+		gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, textureBuffer);
+		
 		gl.glDrawArrays(GL10.GL_TRIANGLE_STRIP, 0, vertices.length / 2);
+		
 		gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
+		gl.glDisableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
 	}
 	
 	//TODO interpolate to position, per frame (ie. a loop inside these methods won't work)

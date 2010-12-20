@@ -55,10 +55,10 @@ public class Game
 		{
 			//define max square bounds
 			//TODO factor in scaling / rotation for calculating rendered items
-			float entMinX = ent.xPos - (ent.size / 2);
-			float entMaxX = ent.xPos + (ent.size / 2);
-			float entMinY = ent.yPos - (ent.size / 2);
-			float entMaxY = ent.yPos + (ent.size / 2);
+			float entMinX = ent.xPos - (ent.size * (float)Math.sqrt(2) / 2);
+			float entMaxX = ent.xPos + (ent.size * (float)Math.sqrt(2) / 2);
+			float entMinY = ent.yPos - (ent.size * (float)Math.sqrt(2) / 2);
+			float entMaxY = ent.yPos + (ent.size * (float)Math.sqrt(2) / 2);
 			
 			//values are opposite for entMin/Max because only the far tips have to be inside the screen (leftmost point on right border of screen)
 			if (entMinX <= maxX && entMaxX >= minX && entMinY <= maxY && entMaxY >= minY)
@@ -68,6 +68,11 @@ public class Game
 			else
 				ent.isRendered = false;
 		}
+	}
+	
+	public void updateLocalTileset()
+	{
+		
 	}
 	
 	//does some moving, rotating, scaling and collion check for testing
