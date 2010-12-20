@@ -6,9 +6,10 @@ public class Game
 {
 	
 	//public Level[][] GameLevels;
-	//update - made entList static, so each new entity can be added to the list when initialized - Devin
+	//Camera data
 	public ArrayList<Entity> entList = new ArrayList<Entity>();
 	public float screenW, screenH, camPosX, camPosY;
+	
 	//Testing data
 	public Player player1 = new Player();
 	public Player player2 = new Player();
@@ -23,14 +24,12 @@ public class Game
 		entList.add(player1);
 		player3.initialize(10.0f, -40.0f, -100.0f);
 		entList.add(player3);
-		//player4.initialize(20.0f, -69.0f, 106.4f);
-		//entList.add(player4);
 		camPosX = 0.0f;
 		camPosY = 0.0f;
-		//call this every time the player moves.
+		
 		//TODO take into account AI, perhaps render every time it chooses a new point to go to?
-		updateLocalEntities();
-		//player1.rotate(30.0f);
+		updateLocalEntities(); //is this still neccessary?
+		
 		player1.move(100.0f, 69.0f);
 		player3.moveTo(-60.0f, 43.8f);
 		player1.rotateTo(60.0f);
