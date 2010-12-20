@@ -2,22 +2,27 @@ package com.lds.game;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
-
 import android.opengl.GLU;
+
+import android.content.Context;
 
 public class GameRenderer implements com.lds.Graphics.Renderer
 {
 	public Game game;
+	public Context context;
 	int prevRenderCount;
 	
 	
-	public GameRenderer (float screenW, float screenH)
+	public GameRenderer (float screenW, float screenH, Context _context)
 	{
 		game = new Game(screenW, screenH);
+		this.context = _context;
 	}
 
 	public void onSurfaceCreated(GL10 gl, EGLConfig config)
 	{
+		game.player1.loadTexture(gl, context);
+		gl.glEnable(GL10.GL_TEXTURE_2D);
 		gl.glShadeModel(GL10.GL_SMOOTH);
 		gl.glClearColor(1.0f, 0.41f, 0.71f, 0.5f);
 		gl.glDisable(GL10.GL_DEPTH_TEST);
@@ -36,7 +41,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 			if (ent.isRendered)
 			{
 				renderedcount++;
-				
+				//ent.loadTexture(gl, this.context);
 				gl.glTranslatef(ent.xPos, ent.yPos, 0.0f);
 				gl.glRotatef(ent.angle, 0.0f, 0.0f, 1.0f);
 				gl.glScalef(ent.xScl, ent.yScl, 1.0f);
