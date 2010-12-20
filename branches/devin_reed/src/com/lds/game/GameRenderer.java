@@ -40,29 +40,49 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 				//translation interpolation
 				if ((ent.xPos != ent.endX || ent.yPos != ent.endY))
 				{
-					if (ent.posInterpMove)
+					//because slope is used to calculate movement, if the movement in x is zero it will produce errors
+					//this checks for that and fixes it
+					if (ent.xPos == ent.endX)
 					{
-						ent.xPos += SPEED;
-						ent.yPos += SPEED * ent.interpSlope;
+						if (ent.posInterpMove)
+						{
+							ent.yPos += SPEED;
+						}
+						else
+						{
+							ent.yPos -= SPEED;
+						}
+						//checks for error, i.e. makes sure the object doesn't miss its final destination and keep going forever
+						if (ent.yPos <= ent.endY + SPEED && ent.yPos >= ent.endY - SPEED)
+						{
+							ent.yPos = ent.endY;
+						}
 					}
 					else
 					{
-						ent.xPos -= SPEED;
-						ent.yPos -= SPEED * ent.interpSlope;
-					}
-					
-					if (ent.xPos <= ent.endX + SPEED && ent.xPos >= ent.endX - SPEED)
-					{
-						ent.xPos = ent.endX;
-					}
-					if (ent.yPos <= ent.endY + SPEED && ent.yPos >= ent.endY - SPEED)
-					{
-						ent.yPos = ent.endY;
+						//moves x and y along the slope line in the proper direction, incrementing each time
+						if (ent.posInterpMove)
+						{
+							ent.xPos += SPEED;
+							ent.yPos += SPEED * ent.interpSlope;
+						}
+						else
+						{
+							ent.xPos -= SPEED;
+							ent.yPos -= SPEED * ent.interpSlope;
+						}
+						//checks for error similarly to above
+						if (ent.xPos <= ent.endX + SPEED && ent.xPos >= ent.endX - SPEED)
+						{
+							ent.xPos = ent.endX;
+							ent.yPos = ent.endY;
+						}
 					}
 				}
 				gl.glTranslatef(ent.xPos, ent.yPos, 0.0f);
 				
 				//rotation interpolation
+				//fairly simple, for more detail check move interpolation comments ^^
 				if (ent.angle != ent.endAngle)
 				{
 					if (ent.posInterpRotate)
@@ -82,26 +102,42 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 				gl.glRotatef(-ent.angle, 0.0f, 0.0f, 1.0f);
 				
 				//scale interpolation
+				//see move interpolation comments, scaling works almost exactly the same way ^^
 				if ((ent.xScl != ent.endXScl) || (ent.yScl != ent.endYScl))
 				{
-					if (ent.posInterpScl)
+					if (ent.xScl == ent.endXScl)
 					{
-						ent.xScl += SPEED / 10;
-						ent.yScl += SPEED / 10 * ent.interpSclRatio;
+						if (ent.posInterpScl)
+						{
+							ent.yScl += SPEED / 10;
+						}
+						else
+						{
+							ent.yScl -= SPEED / 10;
+						}
+						//error checking
+						if (ent.yScl <= ent.endYScl + SPEED / 10 && ent.yScl >= ent.endYScl - SPEED / 10)
+						{
+							ent.yScl = ent.endYScl;
+						}
 					}
 					else
 					{
-						ent.xScl -= SPEED / 10;
-						ent.yScl -= SPEED / 10 * ent.interpSclRatio;
-					}
-					
-					if (ent.xScl <= ent.endXScl + SPEED / 10 && ent.xScl >= ent.endXScl - SPEED / 10)
-					{
-						ent.xScl = ent.endXScl;
-					}
-					if (ent.yScl <= ent.endYScl + SPEED / 10 && ent.yScl >= ent.endYScl - SPEED / 10)
-					{
-						ent.yScl = ent.endYScl;
+						if (ent.posInterpScl)
+						{
+							ent.xScl += SPEED / 10;
+							ent.yScl += SPEED / 10 * ent.interpSclRatio;
+						}
+						else
+						{
+							ent.xScl -= SPEED / 10;
+							ent.yScl -= SPEED / 10 * ent.interpSclRatio;
+						}
+						//error checking
+						if (ent.xScl <= ent.endXScl + SPEED / 10 && ent.xScl >= ent.endXScl - SPEED / 10)
+						{
+							ent.xScl = ent.endXScl;
+						}
 					}
 				}
 				gl.glScalef(ent.xScl, ent.yScl, 1.0f);
@@ -145,8 +181,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	@Override
 	public void onTouchInput(float xInput, float yInput) 
 	{
-		game.camPosX = xInput - (game.screenW / 2);
-		game.camPosY = -yInput + (game.screenH / 2);
+		game.player1.move((xInput - game.screenW / 2) - game.joystick.xPos, (-yInput + game.screenH / 2) - game.joystick.yPos);
 	}
 
 }
