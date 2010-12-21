@@ -20,6 +20,7 @@ public class Graphics extends GLSurfaceView
 	public boolean onTouchEvent(MotionEvent e)
 	{
 		//grab touch input, pass it through to the generic renderer (in this case, com.lds.GameRenderer
+		//test
 		//TODO pass e instead of e.getX() and e.getY()
 		renderer.onTouchInput( e.getX(), e.getY());
 		return true;
