@@ -196,5 +196,4 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 			}
 		}
 	}
-
 }
