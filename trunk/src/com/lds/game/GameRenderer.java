@@ -9,13 +9,14 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 {
 	public Game game;
 	int prevRenderCount, framescount;
-	public static final float SPEED = 0.5f; //speed, in units per frame, of movement, rotation, and scaling of Entities
+	public static final float SPEED = 0.01f; //speed, in units per frame, of translation of Entities
 	
 	public GameRenderer (float screenW, float screenH)
 	{
 		game = new Game(screenW, screenH);
 	}
-
+	
+	@Override
 	public void onSurfaceCreated(GL10 gl, EGLConfig config)
 	{
 		gl.glShadeModel(GL10.GL_SMOOTH);
@@ -24,7 +25,8 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		gl.glDisable(GL10.GL_DITHER);
 		gl.glHint(GL10.GL_PERSPECTIVE_CORRECTION_HINT, GL10.GL_NICEST);
 	}
-
+	
+	@Override
 	public void onDrawFrame(GL10 gl) 
 	{
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
@@ -33,77 +35,16 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		//Render all entities
 		for (Entity ent : game.entList)
 		{
+			moveInterpolate(gl, ent);
+			rotateInterpolate(gl, ent);
+			scaleInterpolate(gl, ent);
+			
 			if (ent.isRendered)
 			{
 				renderedcount++;
 				
-				//translation interpolation
-				if ((ent.xPos != ent.endX || ent.yPos != ent.endY))
-				{
-					if (ent.posInterpMove)
-					{
-						ent.xPos += SPEED;
-						ent.yPos += SPEED * ent.interpSlope;
-					}
-					else
-					{
-						ent.xPos -= SPEED;
-						ent.yPos -= SPEED * ent.interpSlope;
-					}
-					
-					if (ent.xPos <= ent.endX + SPEED && ent.xPos >= ent.endX - SPEED)
-					{
-						ent.xPos = ent.endX;
-					}
-					if (ent.yPos <= ent.endY + SPEED && ent.yPos >= ent.endY - SPEED)
-					{
-						ent.yPos = ent.endY;
-					}
-				}
 				gl.glTranslatef(ent.xPos, ent.yPos, 0.0f);
-				
-				//rotation interpolation
-				if (ent.angle != ent.endAngle)
-				{
-					if (ent.posInterpRotate)
-					{
-						ent.angle += SPEED / 2;
-					}
-					else
-					{
-						ent.angle -= SPEED / 2;
-					}
-					
-					if (ent.angle <= ent.endAngle + SPEED / 2 && ent.angle >= ent.endAngle - SPEED / 2)
-					{
-						ent.angle = ent.endAngle;
-					}
-				}
 				gl.glRotatef(-ent.angle, 0.0f, 0.0f, 1.0f);
-				
-				//scale interpolation
-				if ((ent.xScl != ent.endXScl) || (ent.yScl != ent.endYScl))
-				{
-					if (ent.posInterpScl)
-					{
-						ent.xScl += SPEED / 10;
-						ent.yScl += SPEED / 10 * ent.interpSclRatio;
-					}
-					else
-					{
-						ent.xScl -= SPEED / 10;
-						ent.yScl -= SPEED / 10 * ent.interpSclRatio;
-					}
-					
-					if (ent.xScl <= ent.endXScl + SPEED / 10 && ent.xScl >= ent.endXScl - SPEED / 10)
-					{
-						ent.xScl = ent.endXScl;
-					}
-					if (ent.yScl <= ent.endYScl + SPEED / 10 && ent.yScl >= ent.endYScl - SPEED / 10)
-					{
-						ent.yScl = ent.endYScl;
-					}
-				}
 				gl.glScalef(ent.xScl, ent.yScl, 1.0f);
 				
 				ent.draw(gl);
@@ -132,6 +73,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		}
 	}
 
+	@Override
 	public void onSurfaceChanged(GL10 gl, int width, int height)
 	{		
 		gl.glViewport(0, 0, width, height);
@@ -145,8 +87,113 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	@Override
 	public void onTouchInput(float xInput, float yInput) 
 	{
-		game.camPosX = xInput - (game.screenW / 2);
-		game.camPosY = -yInput + (game.screenH / 2);
+		if (xInput < 100 && yInput < 100)
+		{
+			game.player1.rotate(20.0f);
+		}
+		else
+		{
+			game.player1.moveTo(xInput - game.screenW / 2, -yInput + game.screenH / 2);
+		}
 	}
-
+	
+	/*************************
+	 * Interpolation Methods *
+	 *************************/
+	
+	//translation interpolation
+	public void moveInterpolate (GL10 gl, Entity ent)
+	{	
+		//if the object needs to be interpolated
+		if ((ent.xPos != ent.endX || ent.yPos != ent.endY))
+		{
+			//checks for collision with all other entities in entList
+			for (Entity colEnt : game.entList)
+			{
+				if (colEnt != ent && ent.isColliding(colEnt))
+				{
+					ent.xPos -= SPEED * ent.interpX;
+					ent.yPos -= SPEED * ent.interpY;
+					ent.endX = ent.xPos;
+					ent.endY = ent.yPos;
+					return;
+				}
+			}
+			
+			//increments movement
+			ent.xPos += SPEED * ent.interpX;
+			ent.yPos += SPEED * ent.interpY;
+			
+			//error check
+			if (ent.xPos <= ent.endX + SPEED / 2&& ent.xPos >= ent.endX - SPEED / 2)
+			{
+				ent.xPos = ent.endX;
+			}
+			if (ent.yPos <= ent.endY + SPEED / 2 && ent.yPos >= ent.endY - SPEED / 2)
+			{
+				ent.yPos = ent.endY;
+			}
+		}
+	}
+	
+	//rotation interpolation
+	public void rotateInterpolate (GL10 gl, Entity ent)
+	{
+		if (ent.angle != ent.endAngle)
+		{
+			//checks for collision with all other entities in entList
+			for (Entity colEnt : game.entList)
+			{
+				if (colEnt != ent && ent.isColliding(colEnt))
+				{
+					ent.angle -= SPEED * ent.interpAngle;
+					ent.endAngle = ent.angle;
+					return;
+				}
+			}
+			
+			//increments angle
+			ent.angle += SPEED * ent.interpAngle;
+			
+			//error check
+			if (ent.angle <= ent.endAngle + SPEED / 2 && ent.angle >= ent.endAngle - SPEED / 2)
+			{
+				ent.angle = ent.endAngle;
+			}
+		}
+	}
+	
+	//scale interpolation
+	public void scaleInterpolate (GL10 gl, Entity ent)
+	{
+		if ((ent.xScl != ent.endXScl) || (ent.yScl != ent.endYScl))
+		{
+			//checks for collision with all other entities in entList
+			for (Entity colEnt : game.entList)
+			{
+				if (colEnt != ent && ent.isColliding(colEnt))
+				{
+					ent.xScl -= SPEED * ent.interpXScl;
+					ent.yScl -= SPEED * ent.interpYScl;
+					ent.endXScl = ent.xScl;
+					ent.endYScl = ent.yScl;
+					return;
+				}
+			}
+			
+			//increments scaling
+			ent.xScl += SPEED * ent.interpXScl;
+			ent.yScl += SPEED * ent.interpYScl;
+			
+			//error check
+			if (ent.xScl <= ent.endXScl + SPEED / 2 && ent.xScl >= ent.endXScl - SPEED / 2)
+			{
+				ent.xScl = ent.endXScl;
+			}
+			if (ent.yScl <= ent.endYScl + SPEED / 2 && ent.yScl >= ent.endYScl - SPEED / 2)
+			{
+				ent.yScl = ent.endYScl;
+			}
+		}
+	}
 }
