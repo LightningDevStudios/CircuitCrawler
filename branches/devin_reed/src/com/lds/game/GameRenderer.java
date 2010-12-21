@@ -9,13 +9,14 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 {
 	public Game game;
 	int prevRenderCount, framescount;
-	public static final float SPEED = 0.5f; //speed, in units per frame, of movement, rotation, and scaling of Entities
+	public static final float SPEED = 0.05f; //speed, in units per frame, of translation of Entities
 	
 	public GameRenderer (float screenW, float screenH)
 	{
 		game = new Game(screenW, screenH);
 	}
-
+	
+	@Override
 	public void onSurfaceCreated(GL10 gl, EGLConfig config)
 	{
 		gl.glShadeModel(GL10.GL_SMOOTH);
@@ -24,7 +25,8 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		gl.glDisable(GL10.GL_DITHER);
 		gl.glHint(GL10.GL_PERSPECTIVE_CORRECTION_HINT, GL10.GL_NICEST);
 	}
-
+	
+	@Override
 	public void onDrawFrame(GL10 gl) 
 	{
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
@@ -37,110 +39,9 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 			{
 				renderedcount++;
 				
-				//translation interpolation
-				if ((ent.xPos != ent.endX || ent.yPos != ent.endY))
-				{
-					//because slope is used to calculate movement, if the movement in x is zero it will produce errors
-					//this checks for that and fixes it
-					if (ent.xPos == ent.endX)
-					{
-						if (ent.posInterpMove)
-						{
-							ent.yPos += SPEED;
-						}
-						else
-						{
-							ent.yPos -= SPEED;
-						}
-						//checks for error, i.e. makes sure the object doesn't miss its final destination and keep going forever
-						if (ent.yPos <= ent.endY + SPEED && ent.yPos >= ent.endY - SPEED)
-						{
-							ent.yPos = ent.endY;
-						}
-					}
-					else
-					{
-						//moves x and y along the slope line in the proper direction, incrementing each time
-						if (ent.posInterpMove)
-						{
-							ent.xPos += SPEED;
-							ent.yPos += SPEED * ent.interpSlope;
-						}
-						else
-						{
-							ent.xPos -= SPEED;
-							ent.yPos -= SPEED * ent.interpSlope;
-						}
-						//checks for error similarly to above
-						if (ent.xPos <= ent.endX + SPEED && ent.xPos >= ent.endX - SPEED)
-						{
-							ent.xPos = ent.endX;
-							ent.yPos = ent.endY;
-						}
-					}
-				}
-				gl.glTranslatef(ent.xPos, ent.yPos, 0.0f);
-				
-				//rotation interpolation
-				//fairly simple, for more detail check move interpolation comments ^^
-				if (ent.angle != ent.endAngle)
-				{
-					if (ent.posInterpRotate)
-					{
-						ent.angle += SPEED / 2;
-					}
-					else
-					{
-						ent.angle -= SPEED / 2;
-					}
-					
-					if (ent.angle <= ent.endAngle + SPEED / 2 && ent.angle >= ent.endAngle - SPEED / 2)
-					{
-						ent.angle = ent.endAngle;
-					}
-				}
-				gl.glRotatef(-ent.angle, 0.0f, 0.0f, 1.0f);
-				
-				//scale interpolation
-				//see move interpolation comments, scaling works almost exactly the same way ^^
-				if ((ent.xScl != ent.endXScl) || (ent.yScl != ent.endYScl))
-				{
-					if (ent.xScl == ent.endXScl)
-					{
-						if (ent.posInterpScl)
-						{
-							ent.yScl += SPEED / 10;
-						}
-						else
-						{
-							ent.yScl -= SPEED / 10;
-						}
-						//error checking
-						if (ent.yScl <= ent.endYScl + SPEED / 10 && ent.yScl >= ent.endYScl - SPEED / 10)
-						{
-							ent.yScl = ent.endYScl;
-						}
-					}
-					else
-					{
-						if (ent.posInterpScl)
-						{
-							ent.xScl += SPEED / 10;
-							ent.yScl += SPEED / 10 * ent.interpSclRatio;
-						}
-						else
-						{
-							ent.xScl -= SPEED / 10;
-							ent.yScl -= SPEED / 10 * ent.interpSclRatio;
-						}
-						//error checking
-						if (ent.xScl <= ent.endXScl + SPEED / 10 && ent.xScl >= ent.endXScl - SPEED / 10)
-						{
-							ent.xScl = ent.endXScl;
-						}
-					}
-				}
-				gl.glScalef(ent.xScl, ent.yScl, 1.0f);
+				moveInterpolate(gl, ent);
+				rotateInterpolate(gl, ent);
+				scaleInterpolate(gl, ent);
 				
 				ent.draw(gl);
 				gl.glLoadIdentity();
@@ -168,6 +69,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		}
 	}
 
+	@Override
 	public void onSurfaceChanged(GL10 gl, int width, int height)
 	{		
 		gl.glViewport(0, 0, width, height);
@@ -181,7 +83,71 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	@Override
 	public void onTouchInput(float xInput, float yInput) 
 	{
-		game.player1.move((xInput - game.screenW / 2) - game.joystick.xPos, (-yInput + game.screenH / 2) - game.joystick.yPos);
+		game.player1.moveTo(xInput - game.screenW / 2, -yInput + game.screenH / 2);
+	}
+	
+	/*************************
+	 * Interpolation Methods *
+	 *************************/
+	
+	//translation interpolation
+	public void moveInterpolate (GL10 gl, Entity ent)
+	{
+		if ((ent.xPos != ent.endX || ent.yPos != ent.endY))
+		{
+			ent.xPos += SPEED * ent.interpX;
+			ent.yPos += SPEED * ent.interpY;
+			
+			//error check
+			if (ent.xPos <= ent.endX + SPEED && ent.xPos >= ent.endX - SPEED)
+			{
+				ent.xPos = ent.endX;
+			}
+			if (ent.yPos <= ent.endY + SPEED && ent.yPos >= ent.endY - SPEED)
+			{
+				ent.yPos = ent.endY;
+			}
+		}
+		gl.glTranslatef(ent.xPos, ent.yPos, 0.0f);
+	}
+	
+	//rotation interpolation
+	//fairly simple, for more detail check move interpolation comments ^^
+	public void rotateInterpolate (GL10 gl, Entity ent)
+	{
+		if (ent.angle != ent.endAngle)
+		{
+			ent.angle += SPEED * ent.interpAngle;
+			
+			//error check
+			if (ent.angle <= ent.endAngle + SPEED / 2 && ent.angle >= ent.endAngle - SPEED / 2)
+			{
+				ent.angle = ent.endAngle;
+			}
+		}
+		gl.glRotatef(-ent.angle, 0.0f, 0.0f, 1.0f);
+	}
+	
+	//scale interpolation
+	//see move interpolation comments, scaling works almost exactly the same way ^^
+	public void scaleInterpolate (GL10 gl, Entity ent)
+	{
+		if ((ent.xScl != ent.endXScl) || (ent.yScl != ent.endYScl))
+		{
+			ent.xScl += SPEED * ent.interpXScl;
+			ent.yScl += SPEED * ent.interpYScl;
+			
+			//error check
+			if (ent.xScl <= ent.endXScl + SPEED && ent.xScl >= ent.endXScl - SPEED)
+			{
+				ent.xScl = ent.endXScl;
+			}
+			if (ent.yScl <= ent.endYScl + SPEED && ent.yScl >= ent.endYScl - SPEED)
+			{
+				ent.yScl = ent.endYScl;
+			}
+		}
+		gl.glScalef(ent.xScl, ent.yScl, 1.0f);
 	}
 
 }

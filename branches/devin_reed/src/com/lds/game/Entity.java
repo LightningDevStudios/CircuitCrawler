@@ -21,8 +21,7 @@ public abstract class Entity
 	public FloatBuffer vertexBuffer;
 		
 	//interpolation data
-	public float interpSlope, interpSclRatio, endX, endY, endXScl, endYScl, endAngle;
-	public boolean posInterpMove, posInterpScl, posInterpRotate;
+	public float interpX, interpY, interpXScl, interpYScl, interpAngle, endX, endY, endXScl, endYScl, endAngle;
 	
 	//debug data
 	public int entID;
@@ -137,28 +136,9 @@ public abstract class Entity
 	{
 		if (!isStatic)
 		{
-			//calculates slope of movement
-			interpSlope = (y - yPos) / (x - xPos);
-			//finds which direction along the slope line it needs to move
-			if (x - xPos > 0)
-			{
-				posInterpMove = true;
-			}
-			else if (x - xPos < 0)
-			{
-				posInterpMove = false;
-			}
-			else //if x == 0, normally this would produce errors
-			{
-				if (y - yPos > 0)
-				{
-					posInterpMove = true;
-				}
-				else
-				{
-					posInterpMove = false;
-				}
-			}
+			//calculates x and y distance of movement
+			interpX = (x - xPos);
+			interpY = (y - yPos);
 			endX = x;
 			endY = y;
 		}
@@ -172,14 +152,7 @@ public abstract class Entity
 	public void rotateTo (float degrees)
 	{
 		endAngle = degrees;
-		if (degrees - angle > 0)
-		{
-			posInterpRotate = true;
-		}
-		else
-		{
-			posInterpRotate = false;
-		}
+		interpAngle = degrees - angle;
 	}
 	
 	//sets scaling of an entity to a new value
@@ -188,26 +161,8 @@ public abstract class Entity
 	{
 		if (!isStatic)
 		{
-			interpSclRatio = (y - yScl) / (x - xScl);
-			if (x - xScl > 0)
-			{
-				posInterpScl = true;
-			}
-			else if (x - xScl < 0)
-			{
-				posInterpScl = false;
-			}
-			else
-			{
-				if (y - yScl > 0)
-				{
-					posInterpScl = true;
-				}
-				else
-				{
-					posInterpScl = false;
-				}
-			}
+			interpXScl = x - xScl;
+			interpYScl = y - yScl;
 			endXScl = x;
 			endYScl = y;
 		}
@@ -222,27 +177,8 @@ public abstract class Entity
 	{
 		if (!isStatic)
 		{
-			interpSlope = y / x;
-			if (x > 0)
-			{
-				posInterpMove = true;
-			}
-			else if (x < 0)
-			{
-				posInterpMove = false;
-			}
-			//checks, like moveTo, if movement in x is zero
-			else
-			{
-				if (y > 0)
-				{
-					posInterpMove = true;
-				}
-				else
-				{
-					posInterpMove = false;
-				}
-			}
+			interpX = x;
+			interpY = y;
 			endX = xPos + x;
 			endY = yPos + y;
 		}
@@ -257,14 +193,7 @@ public abstract class Entity
 	public void rotate (float degrees)
 	{
 		endAngle = angle + degrees;
-		if (degrees > 0)
-		{
-			posInterpRotate = true;
-		}
-		else
-		{
-			posInterpRotate = false;
-		}
+		interpAngle = degrees;
 	}
 	
 	//scales relative to current scaling
@@ -272,14 +201,11 @@ public abstract class Entity
 	public void scale (float x, float y)
 	{
 		if (!isStatic)
-		{
-			interpSclRatio = y / x;
-			if (x > 0)
-				posInterpScl = true;
-			else
-				posInterpScl = false;
+		{	
 			endXScl = xScl * x;
 			endYScl = yScl * y;
+			interpXScl = endXScl - xScl;
+			interpYScl = endYScl - yScl;
 		}
 		else
 		{
