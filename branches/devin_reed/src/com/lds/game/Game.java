@@ -12,13 +12,16 @@ public class Game
 	
 	//Testing data
 	public Player player1 = new Player();
+	public Player player2 = new Player();
 	
 	public Game (float _screenW, float _screenH)
 	{
 		screenW = _screenW;
 		screenH = _screenH;
-		player1.initialize(50.0f, 0.0f, 0.0f);
+		player1.initialize(50.0f, 0.0f, 100.0f);
 		entList.add(player1);
+		player2.initialize(10.0f, 10.0f, -100.0f);
+		entList.add(player2);
 		camPosX = 0.0f;
 		camPosY = 0.0f;
 	}

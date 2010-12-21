@@ -9,7 +9,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 {
 	public Game game;
 	int prevRenderCount, framescount;
-	public static final float SPEED = 0.05f; //speed, in units per frame, of translation of Entities
+	public static final float SPEED = 0.01f; //speed, in units per frame, of translation of Entities
 	
 	public GameRenderer (float screenW, float screenH)
 	{
@@ -35,13 +35,17 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		//Render all entities
 		for (Entity ent : game.entList)
 		{
+			moveInterpolate(gl, ent);
+			rotateInterpolate(gl, ent);
+			scaleInterpolate(gl, ent);
+			
 			if (ent.isRendered)
 			{
 				renderedcount++;
 				
-				moveInterpolate(gl, ent);
-				rotateInterpolate(gl, ent);
-				scaleInterpolate(gl, ent);
+				gl.glTranslatef(ent.xPos, ent.yPos, 0.0f);
+				gl.glRotatef(-ent.angle, 0.0f, 0.0f, 1.0f);
+				gl.glScalef(ent.xScl, ent.yScl, 1.0f);
 				
 				ent.draw(gl);
 				gl.glLoadIdentity();
@@ -83,7 +87,14 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	@Override
 	public void onTouchInput(float xInput, float yInput) 
 	{
-		game.player1.moveTo(xInput - game.screenW / 2, -yInput + game.screenH / 2);
+		if (xInput < 100 && yInput < 100)
+		{
+			game.player1.rotate(20.0f);
+		}
+		else
+		{
+			game.player1.moveTo(xInput - game.screenW / 2, -yInput + game.screenH / 2);
+		}
 	}
 	
 	/*************************
@@ -92,31 +103,56 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	
 	//translation interpolation
 	public void moveInterpolate (GL10 gl, Entity ent)
-	{
+	{	
+		//if the object needs to be interpolated
 		if ((ent.xPos != ent.endX || ent.yPos != ent.endY))
 		{
+			//checks for collision with all other entities in entList
+			for (Entity colEnt : game.entList)
+			{
+				if (colEnt != ent && ent.isColliding(colEnt))
+				{
+					ent.xPos -= SPEED * ent.interpX;
+					ent.yPos -= SPEED * ent.interpY;
+					ent.endX = ent.xPos;
+					ent.endY = ent.yPos;
+					return;
+				}
+			}
+			
+			//increments movement
 			ent.xPos += SPEED * ent.interpX;
 			ent.yPos += SPEED * ent.interpY;
 			
 			//error check
-			if (ent.xPos <= ent.endX + SPEED && ent.xPos >= ent.endX - SPEED)
+			if (ent.xPos <= ent.endX + SPEED / 2&& ent.xPos >= ent.endX - SPEED / 2)
 			{
 				ent.xPos = ent.endX;
 			}
-			if (ent.yPos <= ent.endY + SPEED && ent.yPos >= ent.endY - SPEED)
+			if (ent.yPos <= ent.endY + SPEED / 2 && ent.yPos >= ent.endY - SPEED / 2)
 			{
 				ent.yPos = ent.endY;
 			}
 		}
-		gl.glTranslatef(ent.xPos, ent.yPos, 0.0f);
 	}
 	
 	//rotation interpolation
-	//fairly simple, for more detail check move interpolation comments ^^
 	public void rotateInterpolate (GL10 gl, Entity ent)
 	{
 		if (ent.angle != ent.endAngle)
 		{
+			//checks for collision with all other entities in entList
+			for (Entity colEnt : game.entList)
+			{
+				if (colEnt != ent && ent.isColliding(colEnt))
+				{
+					ent.angle -= SPEED * ent.interpAngle;
+					ent.endAngle = ent.angle;
+					return;
+				}
+			}
+			
+			//increments angle
 			ent.angle += SPEED * ent.interpAngle;
 			
 			//error check
@@ -125,29 +161,40 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 				ent.angle = ent.endAngle;
 			}
 		}
-		gl.glRotatef(-ent.angle, 0.0f, 0.0f, 1.0f);
 	}
 	
 	//scale interpolation
-	//see move interpolation comments, scaling works almost exactly the same way ^^
 	public void scaleInterpolate (GL10 gl, Entity ent)
 	{
 		if ((ent.xScl != ent.endXScl) || (ent.yScl != ent.endYScl))
 		{
+			//checks for collision with all other entities in entList
+			for (Entity colEnt : game.entList)
+			{
+				if (colEnt != ent && ent.isColliding(colEnt))
+				{
+					ent.xScl -= SPEED * ent.interpXScl;
+					ent.yScl -= SPEED * ent.interpYScl;
+					ent.endXScl = ent.xScl;
+					ent.endYScl = ent.yScl;
+					return;
+				}
+			}
+			
+			//increments scaling
 			ent.xScl += SPEED * ent.interpXScl;
 			ent.yScl += SPEED * ent.interpYScl;
 			
 			//error check
-			if (ent.xScl <= ent.endXScl + SPEED && ent.xScl >= ent.endXScl - SPEED)
+			if (ent.xScl <= ent.endXScl + SPEED / 2 && ent.xScl >= ent.endXScl - SPEED / 2)
 			{
 				ent.xScl = ent.endXScl;
 			}
-			if (ent.yScl <= ent.endYScl + SPEED && ent.yScl >= ent.endYScl - SPEED)
+			if (ent.yScl <= ent.endYScl + SPEED / 2 && ent.yScl >= ent.endYScl - SPEED / 2)
 			{
 				ent.yScl = ent.endYScl;
 			}
 		}
-		gl.glScalef(ent.xScl, ent.yScl, 1.0f);
 	}
 
 }

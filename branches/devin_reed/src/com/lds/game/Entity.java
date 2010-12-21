@@ -60,7 +60,7 @@ public abstract class Entity
 		//initializes collision variables
 		rad = Math.toRadians((double)(angle + 90.0f));
 		diagonal = Math.sqrt(Math.pow(halfSize * xScl, 2) + Math.pow(halfSize * yScl, 2)); //distance from center to corner
-		diagAngle = Math.asin((size * xScl / 2) / diagonal); //angle between vertical line and diagonal to top left corner
+		diagAngle = Math.asin((halfSize * xScl) / diagonal); //angle between vertical line and diagonal to top left corner
 		colSlopes = new float[4];
 		
 		colPoints = new Point[4]; //0: top left, 1: bottom left, 2:top right, 3: borrom right
@@ -193,7 +193,7 @@ public abstract class Entity
 	public void rotate (float degrees)
 	{
 		endAngle = angle + degrees;
-		interpAngle = degrees;
+		interpAngle = degrees;	
 	}
 	
 	//scales relative to current scaling
@@ -223,12 +223,12 @@ public abstract class Entity
 		//keeps the angle not exactly 0, so slope is never undefined. Still works within unnoticeable margin of error
 		if (angle % 90 == 0.0f)
 		{
-			angle += 1.0f;
+			angle += 0.1f;
 		}
 		//reinitialize colllision variables
 		rad = Math.toRadians((double)(angle + 90.0f));
 		diagonal = Math.sqrt(Math.pow(halfSize * xScl, 2) + Math.pow(halfSize * yScl, 2));
-		diagAngle = Math.asin((size * xScl / 2) / diagonal);
+		diagAngle = Math.atan((halfSize * xScl) / (halfSize * yScl));
 		
 		colPoints[0].setX((float)(Math.cos(this.rad + diagAngle) * diagonal) + xPos);
 		colPoints[0].setY((float)(Math.sin(this.rad + diagAngle) * diagonal) + yPos);
@@ -249,13 +249,16 @@ public abstract class Entity
 			return false;
 		}
 		
+		//hurr durr
+		updateAbsolutePointLocations();
+		ent.updateAbsolutePointLocations();
+		
 		//makes sure the entities are close enough so that collision testing is actually neccessary
 		if (Math.sqrt(Math.pow(xPos - ent.xPos, 2) + Math.pow(yPos - ent.yPos, 2)) > ((diagonal) + ent.diagonal))
 		{
 			return false;
 		}
-		updateAbsolutePointLocations();
-		ent.updateAbsolutePointLocations();
+		
 		//used to determine the number of collisions with respect to the axes. if it is 4 after the check, method returns true
 		int colCount = 0;
 		float ent1High, ent1Low, ent2High, ent2Low;
