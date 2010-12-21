@@ -24,10 +24,11 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		game.player1.loadTexture(gl, context);
 		gl.glEnable(GL10.GL_TEXTURE_2D);
 		gl.glShadeModel(GL10.GL_SMOOTH);
-		gl.glClearColor(1.0f, 0.41f, 0.71f, 0.5f);
+		gl.glClearColor(0.39f, 0.58f, 0.93f, 0.5f);
 		gl.glDisable(GL10.GL_DEPTH_TEST);
-		gl.glDisable(GL10.GL_DITHER);
+		gl.glEnable(GL10.GL_DITHER);
 		gl.glHint(GL10.GL_PERSPECTIVE_CORRECTION_HINT, GL10.GL_NICEST);
+		//gl.glHint(GL10.GL_TEXTURE_C,GL10.GL_FASTEST);
 	}
 
 	//TODO move interpolation to another method, less clutter in main loop

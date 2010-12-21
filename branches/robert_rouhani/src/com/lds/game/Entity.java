@@ -61,7 +61,7 @@ public abstract class Entity
 		diagAngle = Math.asin((size * xScl / 2) / diagonal); //angle between vertical line and diagonal to top left corner
 		colSlopes = new float[4];
 		
-		colPoints = new Point[4]; //0: top left, 1: bottom left, 2:top right, 3: borrom right
+		colPoints = new Point[4]; //0: top left, 1: bottom left, 2:top right, 3: bottom right
 		colPoints[0] = new Point();
 		colPoints[1] = new Point();
 		colPoints[2] = new Point();
@@ -75,10 +75,11 @@ public abstract class Entity
 
 		vertices = initVerts;
 		
-		float[] initTex = {		1.0f, 0.0f, 	//top left
-								1.0f, 1.0f, 	//bottom left
+		/*float[] initTex = {		0.125f, 0.0f, 	//top left
+								0.125f, 0.125f, 	//bottom left
 								0.0f, 0.0f, 	//top right
-								0.0f, 1.0f }; //bottom right
+								0.0f, 0.125f }; //bottom right*/
+		float[] initTex = com.lds.TilesetHelper.getTextureVertices(2, 3, 0, 7);
 		
 		texture = initTex;
 		
@@ -120,7 +121,6 @@ public abstract class Entity
 		gl.glVertexPointer(2, GL10.GL_FLOAT, 0, vertexBuffer);
 		gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, textureBuffer);
 		
-		//gl.glDrawArrays(GL10.GL_TRIANGLE_STRIP, 0, (vertices.length / 2) - 1);
 		gl.glDrawElements(GL10.GL_TRIANGLE_STRIP, indices.length, GL10.GL_UNSIGNED_BYTE, indexBuffer);
 		
 		gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
@@ -151,7 +151,7 @@ public abstract class Entity
 		gl.glBindTexture(GL10.GL_TEXTURE_2D, texturePtrs[0]);
 		
 		gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MIN_FILTER, GL10.GL_NEAREST);
-		gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MAG_FILTER, GL10.GL_LINEAR);
+		gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MAG_FILTER, GL10.GL_NEAREST);
 		
 		gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_S, GL10.GL_REPEAT);
 		gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_T, GL10.GL_REPEAT);
@@ -310,4 +310,6 @@ public abstract class Entity
 			return false;
 		}
 	}
+	
+	
 }

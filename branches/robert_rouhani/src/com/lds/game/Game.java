@@ -23,6 +23,7 @@ public class Game
 		screenH = _screenH;
 		player1.initialize(256.0f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f);
 		entList.add(player1);
+		System.out.println(com.lds.TilesetHelper.getTilesetIndex(player1.texture, 0, 7));
 		//player2.initialize(25.0f, 30.0f, 30.0f, 0.0f, 1.0f, 1.0f);
 		//entList.add(player2);
 		//player3.initialize(30.0f, 174.0f, 160.0f);
@@ -68,6 +69,27 @@ public class Game
 			else
 				ent.isRendered = false;
 		}
+	}
+	
+	public void updateLocal(Entity ent)
+	{
+		float minX, maxX, minY, maxY;
+		minX = camPosX - (screenW / 2);
+		maxX = camPosX + (screenW / 2);
+		minY = camPosY - (screenH / 2);
+		maxY = camPosY + (screenH / 2);
+		float entMinX = ent.xPos - (ent.size * (float)Math.sqrt(2) / 2);
+		float entMaxX = ent.xPos + (ent.size * (float)Math.sqrt(2) / 2);
+		float entMinY = ent.yPos - (ent.size * (float)Math.sqrt(2) / 2);
+		float entMaxY = ent.yPos + (ent.size * (float)Math.sqrt(2) / 2);
+			
+			//values are opposite for entMin/Max because only the far tips have to be inside the screen (leftmost point on right border of screen)
+			if (entMinX <= maxX && entMaxX >= minX && entMinY <= maxY && entMaxY >= minY)
+			{
+				ent.isRendered = true;
+			}
+			else
+				ent.isRendered = false;
 	}
 	
 	public void updateLocalTileset()
