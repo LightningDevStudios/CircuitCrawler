@@ -23,13 +23,11 @@ public abstract class Entity
 	//graphics data
 	public float angle, size, xPos, yPos, xScl, yScl, halfSize;
 	public float[] vertices;
-	public float[] texture;
 	public byte[] indices;
 	public FloatBuffer vertexBuffer;
-	public FloatBuffer textureBuffer;
 	public ByteBuffer indexBuffer;
 	
-	public int[] texturePtrs = new int[1];
+	
 	
 	//debug data
 	public int entID;
@@ -79,9 +77,9 @@ public abstract class Entity
 								0.125f, 0.125f, 	//bottom left
 								0.0f, 0.0f, 	//top right
 								0.0f, 0.125f }; //bottom right*/
-		float[] initTex = com.lds.TilesetHelper.getTextureVertices(2, 3, 0, 7);
+		//float[] initTex = com.lds.TilesetHelper.getTextureVertices(2, 3, 0, 7);
 		
-		texture = initTex;
+		//texture = initTex;
 		
 		byte[] initIndices = {	0, 1, 2, 3 };
 		
@@ -93,11 +91,7 @@ public abstract class Entity
 		vertexBuffer.put(vertices);
 		vertexBuffer.position(0);
 		
-		byteBuf = ByteBuffer.allocateDirect(texture.length * 4);
-		byteBuf.order(ByteOrder.nativeOrder());
-		textureBuffer = byteBuf.asFloatBuffer();
-		textureBuffer.put(texture);
-		textureBuffer.position(0);
+		
 		
 		indexBuffer = ByteBuffer.allocateDirect(indices.length);
 		indexBuffer.put(indices);
@@ -109,58 +103,24 @@ public abstract class Entity
 		initialize(_size, _xPos, _yPos, 0.0f, 1.0f, 1.0f);
 	}
 	
-	public void draw(GL10 gl)
+	/*public void draw(GL10 gl)
 	{
-		gl.glBindTexture(GL10.GL_TEXTURE_2D, texturePtrs[0]);
+		//gl.glBindTexture(GL10.GL_TEXTURE_2D, texturePtrs[0]);
 		
 		gl.glFrontFace(GL10.GL_CW);
 		
 		gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
-		gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
+		//gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
 		
 		gl.glVertexPointer(2, GL10.GL_FLOAT, 0, vertexBuffer);
-		gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, textureBuffer);
+		//gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, textureBuffer);
 		
 		gl.glDrawElements(GL10.GL_TRIANGLE_STRIP, indices.length, GL10.GL_UNSIGNED_BYTE, indexBuffer);
 		
 		gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
-		gl.glDisableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
-	}
-	
-	public void loadTexture(GL10 gl, Context context)
-	{
-		InputStream input = context.getResources().openRawResource(R.drawable.tilesetcolors);
-		Bitmap bmp = null;
-		try
-		{
-			bmp = BitmapFactory.decodeStream(input);
-		}
-		finally
-		{
-			try
-			{
-				input.close();
-				input = null;
-			}
-			catch (IOException e)
-			{
-				e.printStackTrace();
-			}
-		}
-		gl.glGenTextures(1, texturePtrs, 0);
-		gl.glBindTexture(GL10.GL_TEXTURE_2D, texturePtrs[0]);
+		//gl.glDisableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
+	}*/
 		
-		gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MIN_FILTER, GL10.GL_NEAREST);
-		gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MAG_FILTER, GL10.GL_NEAREST);
-		
-		gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_S, GL10.GL_REPEAT);
-		gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_T, GL10.GL_REPEAT);
-		
-		GLUtils.texImage2D(GL10.GL_TEXTURE_2D, 0, bmp, 0);
-		
-		bmp.recycle();
-	}
-	
 	//TODO interpolate to position, per frame (ie. a loop inside these methods won't work)
 	public void moveTo (float x, float y)
 	{

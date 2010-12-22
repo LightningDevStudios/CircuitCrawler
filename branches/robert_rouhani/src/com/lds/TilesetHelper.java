@@ -9,7 +9,7 @@ public class TilesetHelper
 	
 	public static float[] getTextureVertices(int x, int y, int min, int max)
 	{
-		if (x >= 0 && x <= 7 && y >= 0 && y <= 7)
+		if (x >= min && x <= max && y >= min && y <= max)
 		{
 			float interval = 1.0f/(float)(max - min + 1);
 			
@@ -28,6 +28,14 @@ public class TilesetHelper
 		}
 		else 
 			return null;
+	}
+	
+	public static float[] getTextureVertices(int tileID)
+	{
+		int y = tileID / 8;
+		int x = tileID - (8 * y);
+		
+		return getTextureVertices(x, y, 0, 7);
 	}
 	
 	public static int getTilesetIndex(float[] vertices, int min, int max)

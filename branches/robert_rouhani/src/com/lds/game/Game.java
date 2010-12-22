@@ -7,7 +7,8 @@ public class Game
 	
 	//public Level[][] GameLevels;
 	//update - made entList static, so each new entity can be added to the list when initialized - Devin
-	public ArrayList<Entity> entList = new ArrayList<Entity>();
+	public ArrayList<Entity> entList;
+	public Tile[][] tileset = new Tile[10][10];
 	
 	//Camera data
 	public float screenW, screenH, camPosX, camPosY;
@@ -16,14 +17,27 @@ public class Game
 	public Player player1 = new Player();
 	public Player player2 = new Player();
 	public Player player3 = new Player();
+	public Tile tile1 = new Tile(3,2);
 	
 	public Game (float _screenW, float _screenH)
 	{
+		entList = new ArrayList<Entity>();
+		for (int i = 0; i < tileset.length; i++)
+		{
+			for (int j = 0; j < tileset[0].length; j++)
+			{
+				//tileset[i][j] = new Tile((int)Math.random() * 7, (int)Math.random() * 7);
+				tileset[i][j] = new Tile(3,4);
+				tileset[i][j].initialize(32.0f, (33 * j) - 300.0f, (33 * i) + 50.0f);
+			}
+		}
 		screenW = _screenW;
 		screenH = _screenH;
-		player1.initialize(256.0f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f);
-		entList.add(player1);
-		System.out.println(com.lds.TilesetHelper.getTilesetIndex(player1.texture, 0, 7));
+		tile1.initialize(256.0f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f);
+		entList.add(tile1);
+		
+		//entList.add(player1);
+		//System.out.println(com.lds.TilesetHelper.getTilesetIndex(player1.texture, 0, 7));
 		//player2.initialize(25.0f, 30.0f, 30.0f, 0.0f, 1.0f, 1.0f);
 		//entList.add(player2);
 		//player3.initialize(30.0f, 174.0f, 160.0f);
@@ -68,6 +82,24 @@ public class Game
 			}
 			else
 				ent.isRendered = false;
+		}
+		for (int i = 0; i < tileset.length; i++)
+		{
+			for (int j = 0; j < tileset[0].length; j++)
+			{
+				float entMinX = tileset[i][j].xPos - (tileset[i][j].size * (float)Math.sqrt(2) / 2);
+				float entMaxX = tileset[i][j].xPos + (tileset[i][j].size * (float)Math.sqrt(2) / 2);
+				float entMinY = tileset[i][j].yPos - (tileset[i][j].size * (float)Math.sqrt(2) / 2);
+				float entMaxY = tileset[i][j].yPos + (tileset[i][j].size * (float)Math.sqrt(2) / 2);
+				
+				//values are opposite for entMin/Max because only the far tips have to be inside the screen (leftmost point on right border of screen)
+				if (entMinX <= maxX && entMaxX >= minX && entMinY <= maxY && entMaxY >= minY)
+				{
+					tileset[i][j].isRendered = true;
+				}
+				else
+					tileset[i][j].isRendered = false;
+			}
 		}
 	}
 	
