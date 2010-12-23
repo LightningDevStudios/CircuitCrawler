@@ -31,7 +31,7 @@ public class Run extends Activity
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		
 		//set up OpenGL rendering
-		glSurface = new Graphics(this, new GameRenderer(screenX, screenY));
+		glSurface = new Graphics(this, new GameRenderer(screenX, screenY, this));
 		setContentView(glSurface);
 	}
 	
