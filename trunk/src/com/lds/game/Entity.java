@@ -2,7 +2,15 @@ package com.lds.game;
 
 import javax.microedition.khronos.opengles.GL10;
 
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.opengl.GLUtils;
+
 import com.lds.Point;
+
+import java.io.IOException;
+import java.io.InputStream;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -18,7 +26,9 @@ public abstract class Entity
 	//graphics data
 	public float angle, size, xPos, yPos, xScl, yScl, halfSize;
 	public float[] vertices;
+	public byte[] indices;
 	public FloatBuffer vertexBuffer;
+	public ByteBuffer indexBuffer;
 		
 	//interpolation data
 	public float interpX, interpY, interpXScl, interpYScl, interpAngle, endX, endY, endXScl, endYScl, endAngle;
@@ -63,25 +73,35 @@ public abstract class Entity
 		diagAngle = Math.asin((halfSize * xScl) / diagonal); //angle between vertical line and diagonal to top left corner
 		colSlopes = new float[4];
 		
-		colPoints = new Point[4]; //0: top left, 1: bottom left, 2:top right, 3: borrom right
+		colPoints = new Point[4]; //0: top left, 1: bottom left, 2:top right, 3: bottom right
 		colPoints[0] = new Point();
 		colPoints[1] = new Point();
 		colPoints[2] = new Point();
 		colPoints[3] = new Point();
 		
 		//makes it so x/yPos are in center of box - Robert
-		float[] initVerts = {	halfSize, halfSize, //top left
-								halfSize, -halfSize, //bottom left
-								-halfSize, halfSize, //top right
+		float[] initVerts = {	halfSize, halfSize, 	//top left
+								halfSize, -halfSize, 	//bottom left
+								-halfSize, halfSize, 	//top right
 								-halfSize, -halfSize }; //bottom right
 
 		vertices = initVerts;
+				
+		byte[] initIndices = {	0, 1, 2, 3 };
+		
+		indices = initIndices;
 		
 		ByteBuffer byteBuf = ByteBuffer.allocateDirect(vertices.length * 4);
 		byteBuf.order(ByteOrder.nativeOrder());
 		vertexBuffer = byteBuf.asFloatBuffer();
 		vertexBuffer.put(vertices);
 		vertexBuffer.position(0);
+		
+		
+		
+		indexBuffer = ByteBuffer.allocateDirect(indices.length);
+		indexBuffer.put(indices);
+		indexBuffer.position(0);
 	}
 	
 	public void initialize (float _size, float _xPos, float _yPos)
@@ -91,13 +111,22 @@ public abstract class Entity
 	
 	public void draw(GL10 gl)
 	{
+		//gl.glBindTexture(GL10.GL_TEXTURE_2D, texturePtrs[0]);
+		
 		gl.glFrontFace(GL10.GL_CW);
-		gl.glVertexPointer(2, GL10.GL_FLOAT, 0, vertexBuffer);
+		
 		gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
-		gl.glDrawArrays(GL10.GL_TRIANGLE_STRIP, 0, vertices.length / 2);
+		//gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
+		
+		gl.glVertexPointer(2, GL10.GL_FLOAT, 0, vertexBuffer);
+		//gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, textureBuffer);
+		
+		gl.glDrawElements(GL10.GL_TRIANGLE_STRIP, indices.length, GL10.GL_UNSIGNED_BYTE, indexBuffer);
+		
 		gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
+		//gl.glDisableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
 	}
-	
+		
 	/**********************************
 	 * Instant Transformation Methods *
 	 **********************************/
@@ -326,4 +355,6 @@ public abstract class Entity
 			return false;
 		}
 	}
+	
+	
 }
