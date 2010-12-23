@@ -12,15 +12,18 @@ public class Game
 	
 	//Testing data
 	public Player player1 = new Player();
+	public Button button1 = new Button();
 	public Player player2 = new Player();
 	
 	public Game (float _screenW, float _screenH)
 	{
 		screenW = _screenW;
 		screenH = _screenH;
-		player1.initialize(50.0f, 0.0f, 100.0f);
+		player1.initialize(30.0f, 0.0f, 100.0f);
 		entList.add(player1);
-		player2.initialize(10.0f, 10.0f, -100.0f);
+		button1.initialize(40.0f, 0.0f, 0.0f);
+		entList.add(button1);
+		player2.initialize(20.0f, 0.0f, -150.0f);
 		entList.add(player2);
 		camPosX = 0.0f;
 		camPosY = 0.0f;
@@ -50,7 +53,9 @@ public class Game
 				ent.isRendered = true;
 			}
 			else
+			{
 				ent.isRendered = false;
+			}
 		}
 	}
 }

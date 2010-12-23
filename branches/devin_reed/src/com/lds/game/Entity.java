@@ -8,6 +8,8 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 
+import java.util.ArrayList;
+
 //Highest level abstract class in game
 
 public abstract class Entity 
@@ -22,6 +24,7 @@ public abstract class Entity
 		
 	//interpolation data
 	public float interpX, interpY, interpXScl, interpYScl, interpAngle, endX, endY, endXScl, endYScl, endAngle;
+	public boolean shouldBreak;
 	
 	//debug data
 	public int entID;
@@ -32,6 +35,7 @@ public abstract class Entity
 	public Point[] colPoints;
 	public float[] colSlopes;
 	public double diagonal, rad, diagAngle;
+	public ArrayList<Entity> colList = new ArrayList<Entity>();
 	
 	//used to initialize graphics data
 	//TODO possibly get this working under the constructor?
@@ -56,6 +60,8 @@ public abstract class Entity
 		endXScl = xScl;
 		endYScl = yScl;
 		endAngle = angle;
+		shouldBreak = false;
+		
 		
 		//initializes collision variables
 		rad = Math.toRadians((double)(angle + 90.0f));
@@ -319,11 +325,58 @@ public abstract class Entity
 		//if the objects are colliding with respect to all 4 axes, return true
 		if (colCount == 4)
 		{
+			colList.add(ent);
 			return true;
 		}
 		else
 		{
 			return false;
+		}
+	}
+	
+	/*****************
+	 * Other Methods *
+	 *****************/
+	
+	//this is a blank method, to be overriden by subclasses
+	//it determines how each object interacts with other objects and performs the action
+	public void interact (Entity ent)
+	{
+		
+	}
+	
+	//this is a blank method ot be overriden similat to interact
+	//it performs the action to occur when an object stops colliding with another
+	public void uninteract (Entity ent)
+	{
+		
+	}
+	
+	public void stop ()
+	{
+		if ((xPos != endX || yPos != endY))
+		{
+			xPos -= GameRenderer.SPEED * interpX;
+			yPos -= GameRenderer.SPEED * interpY;
+			endX = xPos;
+			endY = yPos;
+			shouldBreak = true;
+		}
+		
+		if (angle != endAngle)
+		{
+			angle -= GameRenderer.SPEED * interpAngle;
+			endAngle = angle;
+			shouldBreak = true;
+		}
+		
+		if ((xScl != endXScl) || (yScl != endYScl))
+		{
+			xScl -= GameRenderer.SPEED * interpXScl;
+			yScl -= GameRenderer.SPEED * interpYScl;
+			endXScl = xScl;
+			endYScl = yScl;
+			shouldBreak = true;
 		}
 	}
 }
