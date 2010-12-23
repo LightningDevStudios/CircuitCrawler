@@ -11,14 +11,12 @@ public class Game
 	//update - made entList static, so each new entity can be added to the list when initialized - Devin
 	public ArrayList<Entity> entList;
 	public Tile[][] tileset = new Tile[8][8];
-	
 	//Camera data
 	public float screenW, screenH, camPosX, camPosY;
 	
 	//Testing data
 	public Player player1 = new Player();
 	public Player player2 = new Player();
-	public Player player3 = new Player();
 	public Tile tile1 = new Tile(3,2);
 	
 	public Game (float _screenW, float _screenH)
@@ -30,7 +28,7 @@ public class Game
 			{
 				tileset[i][j] = new Tile((int)(Math.random() * 3), (int)(Math.random() * 3));
 				//tileset[i][j] = new Tile(3,4);
-				tileset[i][j].initialize(Tile.TILE_SIZE_F, (Tile.TILE_SIZE * j) - 100.0f, (-Tile.TILE_SIZE * i) + 50.0f);
+				tileset[i][j].initialize(Tile.TILE_SIZE_F, ((Tile.TILE_SIZE + 1) * j) - 100.0f, ((-Tile.TILE_SIZE - 1) * i) + 50.0f);
 				System.out.print(TilesetHelper.getTilesetIndex(tileset[i][j].texture, 0, 7));
 				if (TilesetHelper.getTilesetIndex(tileset[i][j].texture, 0, 7) < 10)
 				{
@@ -42,8 +40,10 @@ public class Game
 		}
 		screenW = _screenW;
 		screenH = _screenH;
-		player1.initialize(48.0f, 0.0f, 0.0f, 30.0f, 1.0f, 1.0f);
+		player1.initialize(48.0f, 0.0f, 0.0f, 30.0f, 1.0f, 1.0f, true, false);
 		entList.add(player1);
+		player2.initialize(10.0f, 10.0f, -100.0f);
+		entList.add(player2);
 		camPosX = 0.0f;
 		camPosY = 0.0f;
 		
@@ -56,8 +56,6 @@ public class Game
 			entList.add(player3);
 			updateLocalEntities();
 		}*/
-		//does some moving, rotating, scaling and collion check for testing - Devin
-		testMove();
 	}
 	
 	public void updateLocalEntities()
@@ -130,11 +128,5 @@ public class Game
 	public void updateLocalTileset()
 	{
 		
-	}
-	
-	//does some moving, rotating, scaling and collion check for testing
-	public void testMove ()
-	{
-		//TODO: Fill out this class
 	}
 }

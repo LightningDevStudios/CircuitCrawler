@@ -20,14 +20,18 @@ import java.nio.FloatBuffer;
 
 public abstract class Entity 
 {
+	//behavior data
+	public boolean isStatic, isSolid;
+	
 	//graphics data
 	public float angle, size, xPos, yPos, xScl, yScl, halfSize;
 	public float[] vertices;
 	public byte[] indices;
 	public FloatBuffer vertexBuffer;
 	public ByteBuffer indexBuffer;
-	
-	
+		
+	//interpolation data
+	public float interpX, interpY, interpXScl, interpYScl, interpAngle, endX, endY, endXScl, endYScl, endAngle;
 	
 	//debug data
 	public int entID;
@@ -41,22 +45,32 @@ public abstract class Entity
 	
 	//used to initialize graphics data
 	//TODO possibly get this working under the constructor?
-	public void initialize (float _size, float _xPos, float _yPos, float _angle, float _xScl, float _yScl)
+	public void initialize (float _size, float _xPos, float _yPos, float _angle, float _xScl, float _yScl, boolean _isStatic, boolean _isSolid)
 	{
+		//initialize behavior variables
+		isStatic = _isStatic;
+		isSolid = _isSolid;
+		
 		//initializes graphics variables
 		size = _size;
 		xPos = _xPos;
 		yPos = _yPos;
-		angle = -_angle;
+		angle = _angle;
 		xScl = _xScl;
 		yScl = _yScl;
-		
 		halfSize = size / 2;
+		
+		//initialize interpolation variables
+		endX = xPos;
+		endY = yPos;
+		endXScl = xScl;
+		endYScl = yScl;
+		endAngle = angle;
 		
 		//initializes collision variables
 		rad = Math.toRadians((double)(angle + 90.0f));
 		diagonal = Math.sqrt(Math.pow(halfSize * xScl, 2) + Math.pow(halfSize * yScl, 2)); //distance from center to corner
-		diagAngle = Math.asin((size * xScl / 2) / diagonal); //angle between vertical line and diagonal to top left corner
+		diagAngle = Math.asin((halfSize * xScl) / diagonal); //angle between vertical line and diagonal to top left corner
 		colSlopes = new float[4];
 		
 		colPoints = new Point[4]; //0: top left, 1: bottom left, 2:top right, 3: bottom right
@@ -65,22 +79,14 @@ public abstract class Entity
 		colPoints[2] = new Point();
 		colPoints[3] = new Point();
 		
-		//make it so x/yPos are in center of box - Robert
+		//makes it so x/yPos are in center of box - Robert
 		float[] initVerts = {	halfSize, halfSize, 	//top left
 								halfSize, -halfSize, 	//bottom left
 								-halfSize, halfSize, 	//top right
 								-halfSize, -halfSize }; //bottom right
 
 		vertices = initVerts;
-		
-		/*float[] initTex = {		0.125f, 0.0f, 	//top left
-								0.125f, 0.125f, 	//bottom left
-								0.0f, 0.0f, 	//top right
-								0.0f, 0.125f }; //bottom right*/
-		//float[] initTex = com.lds.TilesetHelper.getTextureVertices(2, 3, 0, 7);
-		
-		//texture = initTex;
-		
+				
 		byte[] initIndices = {	0, 1, 2, 3 };
 		
 		indices = initIndices;
@@ -100,7 +106,7 @@ public abstract class Entity
 	
 	public void initialize (float _size, float _xPos, float _yPos)
 	{
-		initialize(_size, _xPos, _yPos, 0.0f, 1.0f, 1.0f);
+		initialize(_size, _xPos, _yPos, 0.0f, 1.0f, 1.0f, false, true);
 	}
 	
 	public void draw(GL10 gl)
@@ -121,44 +127,138 @@ public abstract class Entity
 		//gl.glDisableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
 	}
 		
-	//TODO interpolate to position, per frame (ie. a loop inside these methods won't work)
+	/**********************************
+	 * Instant Transformation Methods *
+	 **********************************/
+	
+	//mutator for position
+	public void setPos (float x, float y)
+	{
+		xPos = x;
+		yPos = y;
+		endX = x;
+		endY = y;
+	}
+	
+	//mutator for angle
+	public void setAngle (float degrees)
+	{
+		angle = degrees;
+		endAngle = degrees;
+	}
+	
+	//mutator for scale
+	public void setScale (float x, float y)
+	{
+		xScl = x;
+		yScl = y;
+		endXScl = x;
+		endYScl = y;
+	}
+	
+	/***************************************
+	 * Interpolated Transformation Methods *
+	 ***************************************/
+	
+	//sets position to to new x and y and interpolates
 	public void moveTo (float x, float y)
 	{
-		this.xPos = x;
-		this.yPos = y;
+		if (!isStatic)
+		{
+			//calculates x and y distance of movement
+			interpX = (x - xPos);
+			interpY = (y - yPos);
+			endX = x;
+			endY = y;
+		}
+		else
+		{
+			System.out.println("Error. Cannot move static object.");
+		}
 	}
 	
+	//sets angle of an entity to a new value
 	public void rotateTo (float degrees)
 	{
-		this.angle = -degrees;
+		endAngle = degrees;
+		interpAngle = degrees - angle;
 	}
 	
+	//sets scaling of an entity to a new value
+	//note, we will probably never scale to 0.0f (that will be infinitely small) or negative numbers (you can get the same results with positives)
 	public void scaleTo (float x, float y)
 	{
-		this.xScl = x;
-		this.yScl = y;
+		if (!isStatic)
+		{
+			interpXScl = x - xScl;
+			interpYScl = y - yScl;
+			endXScl = x;
+			endYScl = y;
+		}
+		else
+		{
+			System.out.println("Error. Cannot scale static object.");
+		}
 	}
 	
+	//much like moveTo, but instead of going to a specific point, move() moves relative to the current position
 	public void move (float x, float y)
 	{
-		this.xPos += x;
-		this.yPos += y;
+		if (!isStatic)
+		{
+			interpX = x;
+			interpY = y;
+			endX = xPos + x;
+			endY = yPos + y;
+		}
+		else
+		{
+			System.out.println("Error. Cannot move static object.");
+		}
 	}
 	
+	//much like rotateTo, but rotate() adds or subtracts the number of degrees from the current number
+	//i.e. ent1 is rotated 30 degrees, if you do ent1.rotate(30.0f) it will be at 60 degrees
 	public void rotate (float degrees)
 	{
-		this.angle -= degrees;
+		endAngle = angle + degrees;
+		interpAngle = degrees;	
 	}
 	
+	//scales relative to current scaling
+	//i.e. if ent1 is scaled (2.0f, 2.0f), if you do ent1.scale(3.0f, 3.0f) the final scaling will be (6.0f, 6.0f)
 	public void scale (float x, float y)
 	{
-		this.xScl += x;
-		this.yScl += y;
+		if (!isStatic)
+		{	
+			endXScl = xScl * x;
+			endYScl = yScl * y;
+			interpXScl = endXScl - xScl;
+			interpYScl = endYScl - yScl;
+		}
+		else
+		{
+			System.out.println("Error. Cannot scale static object.");
+		}
 	}
+	
+	/*********************
+	 * Collision Methods *
+	 *********************/
 	
 	//used to get the absolute, not relative, positions of the entity's 4 points in the XY Plane
 	public void updateAbsolutePointLocations ()
 	{
+		//keeps the angle not exactly 0, so slope is never undefined. Still works within unnoticeable margin of error
+		if (angle % 90 == 0.0f)
+		{
+			angle += 0.1f;
+		}
+		//reinitialize colllision variables
+		rad = Math.toRadians((double)(angle + 90.0f));
+		diagonal = Math.sqrt(Math.pow(halfSize * xScl, 2) + Math.pow(halfSize * yScl, 2));
+		diagAngle = Math.atan((halfSize * xScl) / (halfSize * yScl));
+		
 		colPoints[0].setX((float)(Math.cos(this.rad + diagAngle) * diagonal) + xPos);
 		colPoints[0].setY((float)(Math.sin(this.rad + diagAngle) * diagonal) + yPos);
 		colPoints[1].setX((float)(Math.cos(this.rad + Math.PI - diagAngle) * diagonal) + xPos);
@@ -171,12 +271,16 @@ public abstract class Entity
 	
 	//This tests for collision between two entities (no shit) - Devin
 	public boolean isColliding (Entity ent)
-	{
+	{	
+		//checks to see if either object is not solid
+		if (this.isSolid == false || ent.isSolid == false)
+		{
+			return false;
+		}
+		
+		//hurr durr
 		updateAbsolutePointLocations();
 		ent.updateAbsolutePointLocations();
-		//used to determine the number of collisions with respect to the axes. if it is 4 after the check, method returns true
-		int colCount = 0;
-		float ent1High, ent1Low, ent2High, ent2Low;
 		
 		//makes sure the entities are close enough so that collision testing is actually neccessary
 		if (Math.sqrt(Math.pow(xPos - ent.xPos, 2) + Math.pow(yPos - ent.yPos, 2)) > ((diagonal) + ent.diagonal))
@@ -184,35 +288,16 @@ public abstract class Entity
 			return false;
 		}
 		
-		//calculates 4 slopes to use with the SAT
-		if (this.colPoints[0].getX() - this.colPoints[1].getX() == 0.0f)
-		{
-			colSlopes[0] = 1.0E16f;
-		}
-		else if (this.colPoints[0].getY() - this.colPoints[1].getY() == 0.0f)
-		{
-			colSlopes[1] = 1.0E16f;
-		}
-		else
-		{
-			colSlopes[0] = ((this.colPoints[0].getY() - this.colPoints[1].getY()) / (this.colPoints[0].getX() - this.colPoints[1].getX()));
-			colSlopes[1] = -1 / colSlopes[0];
-		}
+		//used to determine the number of collisions with respect to the axes. if it is 4 after the check, method returns true
+		int colCount = 0;
+		float ent1High, ent1Low, ent2High, ent2Low;
 		
-		if (ent.colPoints[0].getX() - ent.colPoints[1].getX() == 0.0f)
-		{
-			colSlopes[2] = 1.0E16f;
-		}
-		else if (ent.colPoints[0].getY() - ent.colPoints[1].getY() == 0.0f)
-		{
-			colSlopes[3] = 1.0E16f;
-		}
-		else
-		{
-			colSlopes[2] = ((ent.colPoints[0].getY() - ent.colPoints[1].getY()) / (ent.colPoints[0].getX() - ent.colPoints[1].getX()));
-			colSlopes[3] = -1 / colSlopes[2];
-		}
-
+		//calculates 4 slopes to use with the SAT
+		colSlopes[0] = ((this.colPoints[0].getY() - this.colPoints[1].getY()) / (this.colPoints[0].getX() - this.colPoints[1].getX()));
+		colSlopes[1] = -1 / colSlopes[0];
+		colSlopes[2] = ((ent.colPoints[0].getY() - ent.colPoints[1].getY()) / (ent.colPoints[0].getX() - ent.colPoints[1].getX()));
+		colSlopes[3] = -1 / colSlopes[2];
+		
 		//checks for collision on each of the 4 slopes
 		for (float slope : colSlopes)
 		{
