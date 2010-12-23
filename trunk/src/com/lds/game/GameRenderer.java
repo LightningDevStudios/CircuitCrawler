@@ -12,7 +12,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	public Context context;
 	public boolean windowOutdated;
 	int prevRenderCount, framescount;
-	public static final float SPEED = 0.01f; //speed, in units per frame, of translation of Entities
+	public static final float SPEED = 0.05f; //speed, in units per frame, of translation of Entities
 	
 	public GameRenderer (float screenW, float screenH, Context _context)
 	{
@@ -62,9 +62,35 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		//Render all entities
 		for (Entity ent : game.entList)
 		{
-			moveInterpolate(gl, ent);
-			rotateInterpolate(gl, ent);
-			scaleInterpolate(gl, ent);
+			//checks for collision with all other entities in entList
+			for (Entity colEnt : game.entList)
+			{
+				if (ent != colEnt)
+				{
+					if (ent.isColliding(colEnt))
+					{
+						ent.interact(colEnt);
+					}
+					else if (ent.colList.contains(colEnt))
+					{
+						ent.uninteract(colEnt);
+						ent.colList.remove(colEnt);
+					}
+				}
+			}
+			
+			moveInterpolate(ent);
+			rotateInterpolate(ent);
+			scaleInterpolate(ent);
+			
+			if (game.button1.isActive())
+			{
+				game.player2.scaleTo(4.0f, 1.0f);
+			}
+			else
+			{
+				game.player2.scaleTo(1.0f, 1.0f);
+			}
 			
 			if (ent.isRendered)
 			{
@@ -83,11 +109,10 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 				game.camPosY -= 0.3f;
 				game.updateLocalEntities();
 			}*/
-			framescount++;
 			//TEMP, call onSufraceChanged each time, find new way through OpenGL...
 			this.onSurfaceChanged(gl, (int)game.screenW, (int)game.screenH);
 		}
-		
+		framescount++;
 		//Update screen position and entities
 		
 		game.updateLocalEntities();
@@ -135,22 +160,15 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	 *************************/
 	
 	//translation interpolation
-	public void moveInterpolate (GL10 gl, Entity ent)
+	public void moveInterpolate (Entity ent)
 	{	
 		//if the object needs to be interpolated
 		if ((ent.xPos != ent.endX || ent.yPos != ent.endY))
 		{
-			//checks for collision with all other entities in entList
-			for (Entity colEnt : game.entList)
+			if (ent.shouldBreak)
 			{
-				if (colEnt != ent && ent.isColliding(colEnt))
-				{
-					ent.xPos -= SPEED * ent.interpX;
-					ent.yPos -= SPEED * ent.interpY;
-					ent.endX = ent.xPos;
-					ent.endY = ent.yPos;
-					return;
-				}
+				ent.shouldBreak = false;
+				return;
 			}
 			
 			//increments movement
@@ -170,19 +188,14 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	}
 	
 	//rotation interpolation
-	public void rotateInterpolate (GL10 gl, Entity ent)
+	public void rotateInterpolate (Entity ent)
 	{
 		if (ent.angle != ent.endAngle)
 		{
-			//checks for collision with all other entities in entList
-			for (Entity colEnt : game.entList)
+			if (ent.shouldBreak)
 			{
-				if (colEnt != ent && ent.isColliding(colEnt))
-				{
-					ent.angle -= SPEED * ent.interpAngle;
-					ent.endAngle = ent.angle;
-					return;
-				}
+				ent.shouldBreak = false;
+				return;
 			}
 			
 			//increments angle
@@ -197,21 +210,14 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	}
 	
 	//scale interpolation
-	public void scaleInterpolate (GL10 gl, Entity ent)
+	public void scaleInterpolate (Entity ent)
 	{
 		if ((ent.xScl != ent.endXScl) || (ent.yScl != ent.endYScl))
-		{
-			//checks for collision with all other entities in entList
-			for (Entity colEnt : game.entList)
+		{	
+			if (ent.shouldBreak)
 			{
-				if (colEnt != ent && ent.isColliding(colEnt))
-				{
-					ent.xScl -= SPEED * ent.interpXScl;
-					ent.yScl -= SPEED * ent.interpYScl;
-					ent.endXScl = ent.xScl;
-					ent.endYScl = ent.yScl;
-					return;
-				}
+				ent.shouldBreak = false;
+				return;
 			}
 			
 			//increments scaling
