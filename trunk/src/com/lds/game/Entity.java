@@ -273,7 +273,6 @@ public abstract class Entity
 	public boolean isColliding (Entity ent)
 	{	
 		//checks to see if either object is not solid
-		//only UI and tilesets will not be solid
 		if (this.isSolid == false || ent.isSolid == false)
 		{
 			return false;
