@@ -2,8 +2,6 @@ package com.lds;
 
 import javax.microedition.khronos.opengles.*;
 
-import com.lds.game.R;
-
 import android.opengl.GLUtils;
 import android.content.Context;
 import android.graphics.Bitmap;

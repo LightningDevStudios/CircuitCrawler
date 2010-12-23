@@ -86,7 +86,6 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 			}*/
 			framescount++;
 			//TEMP, call onSufraceChanged each time, find new way through OpenGL...
-			this.onSurfaceChanged(gl, (int)game.screenW, (int)game.screenH);
 		}
 		
 		//Update screen position and entities
