@@ -103,7 +103,7 @@ public abstract class Entity
 		initialize(_size, _xPos, _yPos, 0.0f, 1.0f, 1.0f);
 	}
 	
-	/*public void draw(GL10 gl)
+	public void draw(GL10 gl)
 	{
 		//gl.glBindTexture(GL10.GL_TEXTURE_2D, texturePtrs[0]);
 		
@@ -119,7 +119,7 @@ public abstract class Entity
 		
 		gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
 		//gl.glDisableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
-	}*/
+	}
 		
 	//TODO interpolate to position, per frame (ie. a loop inside these methods won't work)
 	public void moveTo (float x, float y)

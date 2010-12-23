@@ -58,7 +58,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		}
 		
 		//Render all entities
-		/*for (Entity ent : game.entList)
+		for (Entity ent : game.entList)
 		{
 			if (ent.isRendered)
 			{
@@ -71,7 +71,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 				gl.glLoadIdentity();
 				
 			}
-		}*/
+		}
 		
 		//Update screen position and entities
 		

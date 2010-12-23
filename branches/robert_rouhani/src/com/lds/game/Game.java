@@ -2,13 +2,15 @@ package com.lds.game;
 
 import java.util.ArrayList;
 
+import com.lds.TilesetHelper;
+
 public class Game
 {
 	
 	//public Level[][] GameLevels;
 	//update - made entList static, so each new entity can be added to the list when initialized - Devin
 	public ArrayList<Entity> entList;
-	public Tile[][] tileset = new Tile[10][10];
+	public Tile[][] tileset = new Tile[8][8];
 	
 	//Camera data
 	public float screenW, screenH, camPosX, camPosY;
@@ -26,21 +28,22 @@ public class Game
 		{
 			for (int j = 0; j < tileset[0].length; j++)
 			{
-				//tileset[i][j] = new Tile((int)Math.random() * 7, (int)Math.random() * 7);
-				tileset[i][j] = new Tile(3,4);
-				tileset[i][j].initialize(32.0f, (33 * j) - 300.0f, (33 * i) + 50.0f);
+				tileset[i][j] = new Tile((int)(Math.random() * 3), (int)(Math.random() * 3));
+				//tileset[i][j] = new Tile(3,4);
+				tileset[i][j].initialize(Tile.TILE_SIZE_F, (Tile.TILE_SIZE * j) - 100.0f, (-Tile.TILE_SIZE * i) + 50.0f);
+				System.out.print(TilesetHelper.getTilesetIndex(tileset[i][j].texture, 0, 7));
+				if (TilesetHelper.getTilesetIndex(tileset[i][j].texture, 0, 7) < 10)
+				{
+					System.out.print(" ");
+				}
+				System.out.print("\t");
 			}
+			System.out.print("\n");
 		}
 		screenW = _screenW;
 		screenH = _screenH;
-		tile1.initialize(256.0f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f);
-		entList.add(tile1);
-		
-		//entList.add(player1);
-		//System.out.println(com.lds.TilesetHelper.getTilesetIndex(player1.texture, 0, 7));
-		//player2.initialize(25.0f, 30.0f, 30.0f, 0.0f, 1.0f, 1.0f);
-		//entList.add(player2);
-		//player3.initialize(30.0f, 174.0f, 160.0f);
+		player1.initialize(48.0f, 0.0f, 0.0f, 30.0f, 1.0f, 1.0f);
+		entList.add(player1);
 		camPosX = 0.0f;
 		camPosY = 0.0f;
 		

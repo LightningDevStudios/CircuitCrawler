@@ -15,11 +15,13 @@ import android.opengl.GLUtils;
 
 public class Tile extends Entity
 {
+	public static final int TILE_SIZE = 72;
+	public static final float TILE_SIZE_F = 72.0f;
+	
 	public int tileX, tileY, tileID;
 	public float[] texture;
 	public FloatBuffer textureBuffer;
-	public int[] texturePtrs = new int[1];
-	
+	public static int[] texturePtrs = new int[1];
 	public Tile(int x, int y)
 	{
 		tileX = x;
@@ -34,6 +36,7 @@ public class Tile extends Entity
 		textureBuffer.position(0);
 	}
 	
+	@Override
 	public void draw(GL10 gl)
 	{
 		gl.glBindTexture(GL10.GL_TEXTURE_2D, texturePtrs[0]);
@@ -54,7 +57,7 @@ public class Tile extends Entity
 	
 	public void loadTexture(GL10 gl, Context context)
 	{
-		InputStream input = context.getResources().openRawResource(R.drawable.tilesetcolors);
+		InputStream input = context.getResources().openRawResource(R.drawable.tilesetwire);
 		Bitmap bmp = null;
 		try
 		{
