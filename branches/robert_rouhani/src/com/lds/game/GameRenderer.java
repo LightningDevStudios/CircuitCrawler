@@ -16,6 +16,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	
 	public GameRenderer (float screenW, float screenH, Context _context)
 	{
+		//testing
 		game = new Game(screenW, screenH);
 		this.context = _context;
 		windowOutdated = false;
