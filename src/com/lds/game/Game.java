@@ -27,10 +27,12 @@ public class Game
 		{
 			for (int j = 0; j < tileset[0].length; j++)
 			{
-				tileset[i][j] = new Tile((int)(Math.random() * 3), (int)(Math.random() * 3));
+				tileset[i][j] = new Tile((int)(Math.random() * 8), (int)(Math.random() * 8));
 				
 				//REMOVE THE +/- 1 BY Tile.TILE_SIZE TO GET PERFECTLY ALIGNED TILESET. 1 PX OFF FOR TESTING
 				tileset[i][j].initialize(Tile.TILE_SIZE_F, ((Tile.TILE_SIZE + 1) * j) - 100.0f, ((-Tile.TILE_SIZE - 1) * i) + 50.0f);
+				
+				
 				System.out.print(TilesetHelper.getTilesetIndex(tileset[i][j].texture, 0, 7));
 				if (TilesetHelper.getTilesetIndex(tileset[i][j].texture, 0, 7) < 10)
 				{
@@ -43,11 +45,11 @@ public class Game
 		screenW = _screenW;
 		screenH = _screenH;
 		player1.initialize(30.0f, 0.0f, 100.0f);
-		entList.add(player1);
+		//entList.add(player1);
 		button1.initialize(40.0f, 0.0f, 0.0f);
-		entList.add(button1);
+		//entList.add(button1);
 		player2.initialize(20.0f, 0.0f, -150.0f);
-		entList.add(player2);
+		//entList.add(player2);
 		camPosX = 0.0f;
 		camPosY = 0.0f;
 		

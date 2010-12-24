@@ -2,6 +2,9 @@ package com.lds.game;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
+
+import com.lds.TextureLoader;
+
 import android.opengl.GLU;
 
 import android.content.Context;
@@ -13,6 +16,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	public boolean windowOutdated;
 	int prevRenderCount, framescount;
 	public static final float SPEED = 0.05f; //speed, in units per frame, of translation of Entities
+	TextureLoader tl;
 	
 	public GameRenderer (float screenW, float screenH, Context _context)
 	{
@@ -24,14 +28,30 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	@Override
 	public void onSurfaceCreated(GL10 gl, EGLConfig config)
 	{
-		game.tileset[3][4].loadTexture(gl, context);
+		//texture loading
+		tl = new TextureLoader(gl, context);
+		tl.load(R.drawable.tilesetcolors);
+		tl.load(R.drawable.tilesetwire);
+		
+		//tileset texture  initialization
+		/*for (int i = 0; i < game.tileset.length; i++)
+		{
+			for (int j = 0; j < game.tileset[0].length; j++)
+			{
+				tl.setTexture((int)Math.random() * 2);
+				game.tileset[i][j].setTexture(tl.getTexture());
+			}
+		}*/
+				
+		//openGL settings
 		gl.glEnable(GL10.GL_TEXTURE_2D);
-		gl.glShadeModel(GL10.GL_SMOOTH);
-		gl.glClearColor(0.39f, 0.58f, 0.93f, 0.5f);
-		gl.glDisable(GL10.GL_DEPTH_TEST);
 		gl.glEnable(GL10.GL_DITHER);
+		gl.glEnable(GL10.GL_BLEND);
+		gl.glDisable(GL10.GL_DEPTH_TEST);
+		gl.glShadeModel(GL10.GL_SMOOTH);
+		gl.glBlendFunc(GL10.GL_ONE, GL10.GL_SRC_COLOR);
+		gl.glClearColor(0.39f, 0.58f, 0.93f, 0.5f);
 		gl.glHint(GL10.GL_PERSPECTIVE_CORRECTION_HINT, GL10.GL_NICEST);
-		//gl.glHint(GL10.GL_TEXTURE_C,GL10.GL_FASTEST);
 		//TODO move method somewhere cleaner, Game or TextureLoader
 		
 	}
@@ -48,11 +68,20 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		{
 			for (int j = 0; j < game.tileset[0].length; j++)
 			{
+				if (j % 2 == 0)
+				{
+					tl.setTexture(0);
+				}
+				else
+				{
+					tl.setTexture(1);
+				}
 				if (game.tileset[i][j].isRendered)
 				{
 					gl.glTranslatef(game.tileset[i][j].xPos, game.tileset[i][j].yPos, 0.0f);
 					gl.glRotatef(game.tileset[i][j].angle, 0.0f, 0.0f, 1.0f);
 					gl.glScalef(game.tileset[i][j].xScl, game.tileset[i][j].yScl, 1.0f);
+					game.tileset[i][j].setTexture(tl.getTexture());
 					game.tileset[i][j].draw(gl);
 					gl.glLoadIdentity();
 				}

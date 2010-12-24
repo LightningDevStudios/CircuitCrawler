@@ -8,6 +8,8 @@ import java.nio.FloatBuffer;
 
 import javax.microedition.khronos.opengles.GL10;
 
+import com.lds.TextureLoader;
+
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -21,7 +23,7 @@ public class Tile extends Entity
 	public int tileX, tileY, tileID;
 	public float[] texture;
 	public FloatBuffer textureBuffer;
-	public static int[] texturePtrs = new int[1];
+	public int texturePtr;
 	public Tile(int x, int y)
 	{
 		tileX = x;
@@ -39,7 +41,7 @@ public class Tile extends Entity
 	@Override
 	public void draw(GL10 gl)
 	{
-		gl.glBindTexture(GL10.GL_TEXTURE_2D, texturePtrs[0]);
+		gl.glBindTexture(GL10.GL_TEXTURE_2D, texturePtr);
 		
 		gl.glFrontFace(GL10.GL_CW);
 		
@@ -55,7 +57,12 @@ public class Tile extends Entity
 		gl.glDisableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
 	}
 	
-	public void loadTexture(GL10 gl, Context context)
+	public void setTexture(int ptr)
+	{
+		texturePtr = ptr;
+	}
+	
+	/*public void loadTexture(GL10 gl, Context context)
 	{
 		InputStream input = context.getResources().openRawResource(R.drawable.tilesetwire);
 		Bitmap bmp = null;
@@ -87,5 +94,5 @@ public class Tile extends Entity
 		GLUtils.texImage2D(GL10.GL_TEXTURE_2D, 0, bmp, 0);
 		
 		bmp.recycle();
-	}
+	}*/
 }
