@@ -1,5 +1,8 @@
 package com.lds.game;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
@@ -33,6 +36,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		game.tl.load(R.drawable.tilesetwire);
 		
 		game.initializeTileset();
+		game.initializeSprites();
 		//openGL settings
 		gl.glEnable(GL10.GL_TEXTURE_2D);
 		gl.glEnable(GL10.GL_DITHER);
@@ -105,6 +109,11 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 			
 			if (ent.isRendered)
 			{
+				/*System.out.println(ent.getClass().getName());
+				if (ent.getClass().getName() == "com.lds.game.Sprite")
+				{*/
+					ent.renderNextFrame();
+				//}
 				renderedcount++;
 				gl.glTranslatef(ent.xPos, ent.yPos, 0.0f);
 				gl.glRotatef(-ent.angle, 0.0f, 0.0f, 1.0f);

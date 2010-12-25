@@ -3,7 +3,6 @@ package com.lds;
 import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.view.MotionEvent;
-import javax.microedition.khronos.opengles.GL10;
 
 public class Graphics extends GLSurfaceView
 {

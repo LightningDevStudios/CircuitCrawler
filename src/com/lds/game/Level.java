@@ -4,6 +4,5 @@ public class Level
 {
 	public Level()
 	{
-		int testing = 5;
 	}
 }

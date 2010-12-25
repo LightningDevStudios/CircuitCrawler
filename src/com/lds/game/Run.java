@@ -1,7 +1,6 @@
 package com.lds.game;
 
 import android.app.Activity;
-import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.Window;

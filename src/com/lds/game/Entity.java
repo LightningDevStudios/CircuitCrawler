@@ -2,15 +2,7 @@ package com.lds.game;
 
 import javax.microedition.khronos.opengles.GL10;
 
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.opengl.GLUtils;
-
 import com.lds.Point;
-
-import java.io.IOException;
-import java.io.InputStream;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -132,7 +124,11 @@ public abstract class Entity
 		gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
 		//gl.glDisableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
 	}
-		
+	
+	public void renderNextFrame()
+	{
+	}
+	
 	/**********************************
 	 * Instant Transformation Methods *
 	 **********************************/

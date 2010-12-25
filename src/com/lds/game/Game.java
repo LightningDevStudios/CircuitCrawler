@@ -2,10 +2,6 @@ package com.lds.game;
 
 import java.util.ArrayList;
 
-import javax.microedition.khronos.opengles.GL10;
-
-import android.content.Context;
-
 import com.lds.TextureLoader;
 import com.lds.TilesetHelper;
 
@@ -28,6 +24,7 @@ public class Game
 	public Button button1 = new Button();
 	public Player player2 = new Player();
 	public Tile tile1 = new Tile(3,2);
+	public Sprite spr1 = new Sprite(7,7);
 	
 	public Game (float _screenW, float _screenH)
 	{
@@ -41,6 +38,7 @@ public class Game
 		//entList.add(button1);
 		player2.initialize(20.0f, 0.0f, -150.0f);
 		//entList.add(player2);
+		
 		camPosX = 0.0f;
 		camPosY = 0.0f;
 		
@@ -53,6 +51,14 @@ public class Game
 			entList.add(player3);
 			updateLocalEntities();
 		}*/
+	}
+	
+	public void initializeSprites()
+	{
+		spr1.initialize(100.0f, 0.0f, 0.0f);
+		tl.setTexture(0);
+		spr1.setTexture(tl.getTexture());
+		entList.add(spr1);
 	}
 	
 	public void initializeTileset()
