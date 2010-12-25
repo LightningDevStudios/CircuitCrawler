@@ -2,15 +2,24 @@ package com.lds.game;
 
 import java.util.ArrayList;
 
+import javax.microedition.khronos.opengles.GL10;
+
+import android.content.Context;
+
+import com.lds.TextureLoader;
 import com.lds.TilesetHelper;
 
 public class Game
 {
 	
 	//public Level[][] GameLevels;
-	//update - made entList static, so each new entity can be added to the list when initialized - Devin
+	
 	public ArrayList<Entity> entList;
 	public Tile[][] tileset = new Tile[8][8];
+	public ArrayList<Entity> UIList;
+	
+	public TextureLoader tl;
+	
 	//Camera data
 	public float screenW, screenH, camPosX, camPosY;
 	
@@ -23,25 +32,7 @@ public class Game
 	public Game (float _screenW, float _screenH)
 	{
 		entList = new ArrayList<Entity>();
-		for (int i = 0; i < tileset.length; i++)
-		{
-			for (int j = 0; j < tileset[0].length; j++)
-			{
-				tileset[i][j] = new Tile((int)(Math.random() * 8), (int)(Math.random() * 8));
-				
-				//REMOVE THE +/- 1 BY Tile.TILE_SIZE TO GET PERFECTLY ALIGNED TILESET. 1 PX OFF FOR TESTING
-				tileset[i][j].initialize(Tile.TILE_SIZE_F, ((Tile.TILE_SIZE + 1) * j) - 100.0f, ((-Tile.TILE_SIZE - 1) * i) + 50.0f);
-				
-				
-				System.out.print(TilesetHelper.getTilesetIndex(tileset[i][j].texture, 0, 7));
-				if (TilesetHelper.getTilesetIndex(tileset[i][j].texture, 0, 7) < 10)
-				{
-					System.out.print(" ");
-				}
-				System.out.print("\t");
-			}
-			System.out.print("\n");
-		}
+		
 		screenW = _screenW;
 		screenH = _screenH;
 		player1.initialize(30.0f, 0.0f, 100.0f);
@@ -62,6 +53,39 @@ public class Game
 			entList.add(player3);
 			updateLocalEntities();
 		}*/
+	}
+	
+	public void initializeTileset()
+	{
+		for (int i = 0; i < tileset.length; i++)
+		{
+			for (int j = 0; j < tileset[0].length; j++)
+			{
+				tileset[i][j] = new Tile((int)(Math.random() * 8), (int)(Math.random() * 8));
+				
+				//REMOVE THE +/- 1 BY Tile.TILE_SIZE TO GET PERFECTLY ALIGNED TILESET. 1 PX OFF FOR TESTING
+				tileset[i][j].initialize(Tile.TILE_SIZE_F, ((Tile.TILE_SIZE + 1) * j) - 100.0f, ((-Tile.TILE_SIZE - 1) * i) + 50.0f);
+				if (j % 2 == 0)
+				{
+					tl.setTexture(0);
+				}
+				else
+				{
+					tl.setTexture(1);
+				}
+				tileset[i][j].setTexture(tl.getTexture());
+				
+				System.out.print(TilesetHelper.getTilesetIndex(tileset[i][j].texture, 0, 7));
+				if (TilesetHelper.getTilesetIndex(tileset[i][j].texture, 0, 7) < 10)
+				{
+					System.out.print(" ");
+				}
+				System.out.print("\t");
+			}
+			System.out.print("\n");
+		}
+		
+		updateLocalTileset();
 	}
 	
 	public void updateLocalEntities()
@@ -92,6 +116,15 @@ public class Game
 				ent.isRendered = false;
 			}
 		}
+	}
+	
+	public void updateLocalTileset()
+	{
+		float minX, maxX, minY, maxY;
+		minX = camPosX - (screenW / 2);
+		maxX = camPosX + (screenW / 2);
+		minY = camPosY - (screenH / 2);
+		maxY = camPosY + (screenH / 2);
 		for (int i = 0; i < tileset.length; i++)
 		{
 			for (int j = 0; j < tileset[0].length; j++)
@@ -131,10 +164,5 @@ public class Game
 			}
 			else
 				ent.isRendered = false;
-	}
-	
-	public void updateLocalTileset()
-	{
-		
 	}
 }

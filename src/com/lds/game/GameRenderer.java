@@ -16,12 +16,11 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	public boolean windowOutdated;
 	int prevRenderCount, framescount;
 	public static final float SPEED = 0.05f; //speed, in units per frame, of translation of Entities
-	TextureLoader tl;
 	
 	public GameRenderer (float screenW, float screenH, Context _context)
 	{
 		game = new Game(screenW, screenH);
-		this.context = _context;
+		context = _context;
 		windowOutdated = false;
 	}
 	
@@ -29,27 +28,18 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	public void onSurfaceCreated(GL10 gl, EGLConfig config)
 	{
 		//texture loading
-		tl = new TextureLoader(gl, context);
-		tl.load(R.drawable.tilesetcolors);
-		tl.load(R.drawable.tilesetwire);
+		game.tl = new TextureLoader(gl, context);
+		game.tl.load(R.drawable.tilesetcolors);
+		game.tl.load(R.drawable.tilesetwire);
 		
-		//tileset texture  initialization
-		/*for (int i = 0; i < game.tileset.length; i++)
-		{
-			for (int j = 0; j < game.tileset[0].length; j++)
-			{
-				tl.setTexture((int)Math.random() * 2);
-				game.tileset[i][j].setTexture(tl.getTexture());
-			}
-		}*/
-				
+		game.initializeTileset();
 		//openGL settings
 		gl.glEnable(GL10.GL_TEXTURE_2D);
 		gl.glEnable(GL10.GL_DITHER);
 		gl.glEnable(GL10.GL_BLEND);
 		gl.glDisable(GL10.GL_DEPTH_TEST);
 		gl.glShadeModel(GL10.GL_SMOOTH);
-		gl.glBlendFunc(GL10.GL_ONE, GL10.GL_SRC_COLOR);
+		gl.glBlendFunc(GL10.GL_ONE, GL10.GL_ONE_MINUS_SRC_ALPHA);
 		gl.glClearColor(0.39f, 0.58f, 0.93f, 0.5f);
 		gl.glHint(GL10.GL_PERSPECTIVE_CORRECTION_HINT, GL10.GL_NICEST);
 		//TODO move method somewhere cleaner, Game or TextureLoader
@@ -68,20 +58,12 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		{
 			for (int j = 0; j < game.tileset[0].length; j++)
 			{
-				if (j % 2 == 0)
-				{
-					tl.setTexture(0);
-				}
-				else
-				{
-					tl.setTexture(1);
-				}
 				if (game.tileset[i][j].isRendered)
 				{
 					gl.glTranslatef(game.tileset[i][j].xPos, game.tileset[i][j].yPos, 0.0f);
 					gl.glRotatef(game.tileset[i][j].angle, 0.0f, 0.0f, 1.0f);
 					gl.glScalef(game.tileset[i][j].xScl, game.tileset[i][j].yScl, 1.0f);
-					game.tileset[i][j].setTexture(tl.getTexture());
+					//game.tileset[i][j].setTexture(tl.getTexture());
 					game.tileset[i][j].draw(gl);
 					gl.glLoadIdentity();
 				}
@@ -124,7 +106,6 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 			if (ent.isRendered)
 			{
 				renderedcount++;
-				//ent.loadTexture(gl, this.context);
 				gl.glTranslatef(ent.xPos, ent.yPos, 0.0f);
 				gl.glRotatef(-ent.angle, 0.0f, 0.0f, 1.0f);
 				gl.glScalef(ent.xScl, ent.yScl, 1.0f);
@@ -132,22 +113,18 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 				ent.draw(gl);
 				gl.glLoadIdentity();
 			}
-			/*if (framescount >= 100 && framescount <= 1500)
-			{
-				game.camPosX -= 0.3f;
-				game.camPosY -= 0.3f;
-				game.updateLocalEntities();
-			}*/
 			//TEMP, call onSufraceChanged each time, find new way through OpenGL...
-			this.onSurfaceChanged(gl, (int)game.screenW, (int)game.screenH);
+			//this.onSurfaceChanged(gl, (int)game.screenW, (int)game.screenH);
 		}
 		framescount++;
-		//Update screen position and entities
 		
+		//Update screen position and entities
 		game.updateLocalEntities();
+		game.updateLocalTileset();
 		if (windowOutdated)
 		{
 			onSurfaceChanged(gl, (int)game.screenW, (int)game.screenH);
+			windowOutdated = false;
 		}
 		//Debugging info
 		if (renderedcount != prevRenderCount)

@@ -10,8 +10,8 @@ import android.graphics.BitmapFactory;
 public class TextureLoader 
 {
 	
-	private static int[] textureFiles;
-	private static int texture; //the current index of textureFiles.
+	private int[] textureFiles;
+	private int texture; //the current index of textureFiles.
 	
 	private GL10 gl;
 	private Context context;
@@ -61,13 +61,13 @@ public class TextureLoader
 	}
 	
 	//sets the textureFiles index. This does not set the actual values!
-	public static void setTexture(int id)
+	public void setTexture(int id)
 	{
 			texture = id;
 	}
 	
 	//returns the texture pointer value, so it can be fed into
-	public static int getTexture()
+	public int getTexture()
 	{
 		return textureFiles[texture];
 	}
