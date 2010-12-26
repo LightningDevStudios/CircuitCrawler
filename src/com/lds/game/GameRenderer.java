@@ -2,21 +2,17 @@ package com.lds.game;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
-
-import com.lds.TextureLoader;
-
 import android.opengl.GLU;
 
 import android.content.Context;
 
 public class GameRenderer implements com.lds.Graphics.Renderer
 {
-	public Game game;
+	//I made game static, so that its entList could be accessed from lower classes, such as Entity. this allows us to easily remove objects from the list
+	public static Game game;
 	public Context context;
 	public boolean windowOutdated;
 	int prevRenderCount, framescount;
-	public static final float SPEED = 0.05f; //speed, in units per frame, of translation of Entities
-	TextureLoader tl;
 	
 	public GameRenderer (float screenW, float screenH, Context _context)
 	{
@@ -28,36 +24,19 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	@Override
 	public void onSurfaceCreated(GL10 gl, EGLConfig config)
 	{
-		//texture loading
-		tl = new TextureLoader(gl, context);
-		tl.load(R.drawable.tilesetcolors);
-		tl.load(R.drawable.tilesetwire);
-		
-		//tileset texture  initialization
-		/*for (int i = 0; i < game.tileset.length; i++)
-		{
-			for (int j = 0; j < game.tileset[0].length; j++)
-			{
-				tl.setTexture((int)Math.random() * 2);
-				game.tileset[i][j].setTexture(tl.getTexture());
-			}
-		}*/
-				
-		//openGL settings
+		game.tileset[3][4].loadTexture(gl, context);
 		gl.glEnable(GL10.GL_TEXTURE_2D);
-		gl.glEnable(GL10.GL_DITHER);
-		gl.glEnable(GL10.GL_BLEND);
-		gl.glDisable(GL10.GL_DEPTH_TEST);
 		gl.glShadeModel(GL10.GL_SMOOTH);
-		gl.glBlendFunc(GL10.GL_ONE, GL10.GL_SRC_COLOR);
 		gl.glClearColor(0.39f, 0.58f, 0.93f, 0.5f);
+		gl.glDisable(GL10.GL_DEPTH_TEST);
+		gl.glEnable(GL10.GL_DITHER);
 		gl.glHint(GL10.GL_PERSPECTIVE_CORRECTION_HINT, GL10.GL_NICEST);
+		//gl.glHint(GL10.GL_TEXTURE_C,GL10.GL_FASTEST);
 		//TODO move method somewhere cleaner, Game or TextureLoader
 		
 	}
 	
 	@Override
-	//TODO move interpolation to another method, less clutter in main loop
 	public void onDrawFrame(GL10 gl) 
 	{
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
@@ -68,20 +47,11 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		{
 			for (int j = 0; j < game.tileset[0].length; j++)
 			{
-				if (j % 2 == 0)
-				{
-					tl.setTexture(0);
-				}
-				else
-				{
-					tl.setTexture(1);
-				}
 				if (game.tileset[i][j].isRendered)
 				{
 					gl.glTranslatef(game.tileset[i][j].xPos, game.tileset[i][j].yPos, 0.0f);
 					gl.glRotatef(game.tileset[i][j].angle, 0.0f, 0.0f, 1.0f);
 					gl.glScalef(game.tileset[i][j].xScl, game.tileset[i][j].yScl, 1.0f);
-					game.tileset[i][j].setTexture(tl.getTexture());
 					game.tileset[i][j].draw(gl);
 					gl.glLoadIdentity();
 				}
@@ -91,6 +61,9 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		//Render all entities
 		for (Entity ent : game.entList)
 		{
+			//scales up or down all PickupObj's
+			ent.pickupScale();
+			
 			//checks for collision with all other entities in entList
 			for (Entity colEnt : game.entList)
 			{
@@ -201,15 +174,15 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 			}
 			
 			//increments movement
-			ent.xPos += SPEED * ent.interpX;
-			ent.yPos += SPEED * ent.interpY;
+			ent.xPos += ent.speed * ent.interpX;
+			ent.yPos += ent.speed * ent.interpY;
 			
 			//error check
-			if (ent.xPos <= ent.endX + SPEED / 2&& ent.xPos >= ent.endX - SPEED / 2)
+			if (ent.xPos <= ent.endX + ent.speed / 2&& ent.xPos >= ent.endX - ent.speed / 2)
 			{
 				ent.xPos = ent.endX;
 			}
-			if (ent.yPos <= ent.endY + SPEED / 2 && ent.yPos >= ent.endY - SPEED / 2)
+			if (ent.yPos <= ent.endY + ent.speed / 2 && ent.yPos >= ent.endY - ent.speed / 2)
 			{
 				ent.yPos = ent.endY;
 			}
@@ -228,10 +201,10 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 			}
 			
 			//increments angle
-			ent.angle += SPEED * ent.interpAngle;
+			ent.angle += ent.speed * ent.interpAngle;
 			
 			//error check
-			if (ent.angle <= ent.endAngle + SPEED / 2 && ent.angle >= ent.endAngle - SPEED / 2)
+			if (ent.angle <= ent.endAngle + ent.speed / 2 && ent.angle >= ent.endAngle - ent.speed / 2)
 			{
 				ent.angle = ent.endAngle;
 			}
@@ -250,15 +223,15 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 			}
 			
 			//increments scaling
-			ent.xScl += SPEED * ent.interpXScl;
-			ent.yScl += SPEED * ent.interpYScl;
+			ent.xScl += ent.speed * ent.interpXScl;
+			ent.yScl += ent.speed * ent.interpYScl;
 			
 			//error check
-			if (ent.xScl <= ent.endXScl + SPEED / 2 && ent.xScl >= ent.endXScl - SPEED / 2)
+			if (ent.xScl <= ent.endXScl + ent.speed / 2 && ent.xScl >= ent.endXScl - ent.speed / 2)
 			{
 				ent.xScl = ent.endXScl;
 			}
-			if (ent.yScl <= ent.endYScl + SPEED / 2 && ent.yScl >= ent.endYScl - SPEED / 2)
+			if (ent.yScl <= ent.endYScl + ent.speed / 2 && ent.yScl >= ent.endYScl - ent.speed / 2)
 			{
 				ent.yScl = ent.endYScl;
 			}

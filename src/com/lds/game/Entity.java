@@ -22,11 +22,15 @@ import java.util.ArrayList;
 
 public abstract class Entity 
 {
+	//constants
+	public static final float DEFAULT_SIZE = 30.0f;
+	public static final float DEFAULT_SPEED = 0.05f;
+	
 	//behavior data
 	public boolean isStatic, isSolid;
 	
 	//graphics data
-	public float angle, size, xPos, yPos, xScl, yScl, halfSize;
+	public float angle, size, xPos, yPos, xScl, yScl, speed, halfSize;
 	public float[] vertices;
 	public byte[] indices;
 	public FloatBuffer vertexBuffer;
@@ -47,9 +51,7 @@ public abstract class Entity
 	public double diagonal, rad, diagAngle;
 	public ArrayList<Entity> colList = new ArrayList<Entity>();
 	
-	//used to initialize graphics data
-	//TODO possibly get this working under the constructor?
-	public void initialize (float _size, float _xPos, float _yPos, float _angle, float _xScl, float _yScl, boolean _isStatic, boolean _isSolid)
+	public  Entity (float _size, float _xPos, float _yPos, float _angle, float _xScl, float _yScl, boolean _isStatic, boolean _isSolid, float _speed)
 	{
 		//initialize behavior variables
 		isStatic = _isStatic;
@@ -62,6 +64,7 @@ public abstract class Entity
 		angle = _angle;
 		xScl = _xScl;
 		yScl = _yScl;
+		speed = _speed;
 		halfSize = size / 2;
 		
 		//initialize interpolation variables
@@ -110,9 +113,9 @@ public abstract class Entity
 		indexBuffer.position(0);
 	}
 	
-	public void initialize (float _size, float _xPos, float _yPos)
+	public Entity (float _size, float _xPos, float _yPos, float _speed)
 	{
-		initialize(_size, _xPos, _yPos, 0.0f, 1.0f, 1.0f, false, true);
+		this(_size, _xPos, _yPos, 0.0f, 1.0f, 1.0f, false, true, _speed);
 	}
 	
 	public void draw(GL10 gl)
@@ -367,6 +370,34 @@ public abstract class Entity
 	 * Other Methods *
 	 *****************/
 	
+	public void stop ()
+	{
+		if ((xPos != endX || yPos != endY))
+		{
+			xPos -= speed * interpX;
+			yPos -= speed * interpY;
+			endX = xPos;
+			endY = yPos;
+			shouldBreak = true;
+		}
+		
+		if (angle != endAngle)
+		{
+			angle -= speed * interpAngle;
+			endAngle = angle;
+			shouldBreak = true;
+		}
+		
+		if ((xScl != endXScl) || (yScl != endYScl))
+		{
+			xScl -= speed * interpXScl;
+			yScl -= speed * interpYScl;
+			endXScl = xScl;
+			endYScl = yScl;
+			shouldBreak = true;
+		}
+	}
+	
 	//this is a blank method, to be overriden by subclasses
 	//it determines how each object interacts with other objects and performs the action
 	public void interact (Entity ent)
@@ -381,31 +412,10 @@ public abstract class Entity
 		
 	}
 	
-	public void stop ()
+	//this is a blank method to be overriden by PickupObj
+	//TODO: get rid of this shell, run pickupScale directly from GameRenderer
+	public void pickupScale ()
 	{
-		if ((xPos != endX || yPos != endY))
-		{
-			xPos -= GameRenderer.SPEED * interpX;
-			yPos -= GameRenderer.SPEED * interpY;
-			endX = xPos;
-			endY = yPos;
-			shouldBreak = true;
-		}
 		
-		if (angle != endAngle)
-		{
-			angle -= GameRenderer.SPEED * interpAngle;
-			endAngle = angle;
-			shouldBreak = true;
-		}
-		
-		if ((xScl != endXScl) || (yScl != endYScl))
-		{
-			xScl -= GameRenderer.SPEED * interpXScl;
-			yScl -= GameRenderer.SPEED * interpYScl;
-			endXScl = xScl;
-			endYScl = yScl;
-			shouldBreak = true;
-		}
 	}
 }
