@@ -32,7 +32,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		//openGL settings
 		gl.glEnable(GL10.GL_TEXTURE_2D);
 		gl.glShadeModel(GL10.GL_SMOOTH);
-
+		gl.glEnable(GL10.GL_BLEND);
 		gl.glBlendFunc(GL10.GL_ONE, GL10.GL_ONE_MINUS_SRC_ALPHA);
 
 		gl.glClearColor(0.39f, 0.58f, 0.93f, 0.5f);
@@ -48,7 +48,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	@Override
 	public void onDrawFrame(GL10 gl) 
 	{
-		gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
+		gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		
 		int renderedcount = 0;
 		game.cleaner.clean(game.entList);
@@ -73,10 +73,10 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		for (Entity ent : game.entList)
 		{
 			//scales up or down all PickupObj's
-			//ent.pickupScale();
+			ent.pickupScale();
 			
 			//checks for collision with all other entities in entList
-			/*for (Entity colEnt : game.entList)
+			for (Entity colEnt : game.entList)
 			{
 				if (ent != colEnt)
 				{
@@ -90,7 +90,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 						ent.colList.remove(colEnt);
 					}
 				}
-			}*/
+			}
 			
 			moveInterpolate(ent);
 			rotateInterpolate(ent);
@@ -128,11 +128,11 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 			windowOutdated = false;
 		}
 		//Debugging info
-		if (renderedcount != prevRenderCount)
+		/*if (renderedcount != prevRenderCount)
 		{
 			System.out.println("Items rendered: " + renderedcount);
 			prevRenderCount = renderedcount;
-		}
+		}*/
 	}
 
 	@Override

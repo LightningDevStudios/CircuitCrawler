@@ -11,7 +11,8 @@ import com.lds.Graphics;
 public class Run extends Activity
 {
 	public Graphics glSurface;
-	private float screenX, screenY;
+	private float screenX;
+	private float screenY;
 	
 	
 	@Override

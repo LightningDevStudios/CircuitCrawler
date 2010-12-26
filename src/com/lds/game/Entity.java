@@ -20,7 +20,8 @@ public abstract class Entity
 	public static final float DEFAULT_SPEED = 0.05f;
 	
 	//behavior data
-	public boolean isStatic, isSolid;
+	public boolean isStatic;
+	public boolean isSolid;
 	
 	//graphics data
 	public float angle, size, xPos, yPos, xScl, yScl, speed, halfSize;
@@ -42,6 +43,7 @@ public abstract class Entity
 	public Point[] colPoints;
 	public float[] colSlopes;
 	public double diagonal, rad, diagAngle;
+	
 	public ArrayList<Entity> colList = new ArrayList<Entity>();
 	
 	public  Entity (float _size, float _xPos, float _yPos, float _angle, float _xScl, float _yScl, boolean _isStatic, boolean _isSolid, float _speed)

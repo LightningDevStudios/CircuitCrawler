@@ -24,13 +24,16 @@ public class Game
 	public EntityCleaner cleaner;
 	
 	//Camera data
-	public float screenW, screenH, camPosX, camPosY;
+	public float screenW;
+	public float screenH;
+	public float camPosX;
+	public float camPosY;
 	
 	//Testing data
 	//public Player player1 = new Player(100.0f, -50.0f, 0.0f);
 	//public Button button1 = new Button(-100.0f, 50.0f);
 	//public Player player2 = new Player(100.0f, 50.0f, 0.0f);
-	public Sprite spr1 = new Sprite(7,7, 96.0f, 0.0f, 0.0f, 0.0f);
+	public Sprite spr1;
 	
 	//Constructors
 	public Game (float _screenW, float _screenH, Context context, GL10 gl)
@@ -75,6 +78,9 @@ public class Game
 		//entList.add(player1);
 		//entList.add(button1);
 		//entList.add(player2);
+		spr1 = new Sprite(7,7, 96.0f, 0.0f, 0.0f, 0.0f);
+		tl.setTexture(0);
+		spr1.setTexture(tl.getTexture());
 		entList.add(spr1);
 
 		camPosX = 0.0f;

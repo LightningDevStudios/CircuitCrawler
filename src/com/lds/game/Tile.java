@@ -12,7 +12,8 @@ public class Tile extends Entity
 	public static final int TILE_SIZE = 72;
 	public static final float TILE_SIZE_F = 72.0f;
 	
-	public int tileX, tileY, tileID, texturePtr;
+	public int tileX, tileY, tileID;
+	public int texturePtr;
 	public float[] texture;
 	public FloatBuffer textureBuffer;
 	

@@ -2,8 +2,7 @@ package com.lds;
 
 public class Point 
 {
-	private float x;
-	private float y;
+	private float x, y;
 	//used only for collision testing
 	private float colC;
 	

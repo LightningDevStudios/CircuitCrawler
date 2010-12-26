@@ -29,6 +29,7 @@ public class Sprite extends Entity
 		textureBuffer.put(texture);
 		textureBuffer.position(0);
 	}
+	
 	@Override
 	public void renderNextFrame()
 	{
