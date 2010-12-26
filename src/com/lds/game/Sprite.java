@@ -13,8 +13,9 @@ public class Sprite extends Entity
 	public FloatBuffer textureBuffer;
 	public int texturePtr;
 	
-	public Sprite(int _maxX, int _maxY)
+	public Sprite(int _maxX, int _maxY, float _size, float _xPos, float _yPos, float _speed)
 	{
+		super(_size, _xPos, _yPos, _speed);
 		maxX = _maxX;
 		maxY = _maxY;
 		

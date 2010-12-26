@@ -1,15 +1,19 @@
 package com.lds.game;
 
+import java.util.ArrayList;
+
 public class Player extends Character //your character, protagonist
 {
-	private int energy;
+	protected int energy;
+	protected ArrayList<String> inventory = new ArrayList<String>(); //holds the name of each pickup object in the inventory
 	
-	public Player ()
+	public Player (float _xPos, float _yPos, float _angle)
 	{
+		//initialize Character and Entity data
+		super(100, 100, Entity.DEFAULT_SPEED, Entity.DEFAULT_SIZE, _xPos, _yPos, _angle, 1.0f, 1.0f);
+		
+		//initialize Player data
 		energy = 100;
-		health = 100;
-		strength = 10;
-		speed = 1;
 	}
 	
 	public void attack ()
@@ -20,11 +24,17 @@ public class Player extends Character //your character, protagonist
 	@Override
 	public void interact (Entity ent)
 	{
+		String superType = ent.getClass().getSuperclass().getName().substring(13); //gets the type of superclass
 		String entType = ent.getClass().getName().substring(13); //gets the type of class
 		
-		if (entType.equals("Player"))
+		if (entType.equals("Player") || entType.equals("StaticBlock"))
 		{
 			stop();
+			colList.remove(ent);
+		}
+		else if (superType.equals("PickupObj"))
+		{
+			inventory.add(entType);
 			colList.remove(ent);
 		}
 	}

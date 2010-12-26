@@ -2,15 +2,17 @@ package com.lds.game;
 
 public class Button extends StaticObj
 {
-	private boolean active;
+	protected boolean active;
 	
-	public Button ()
+	public Button (float _xPos, float _yPos)
 	{
+		super(Entity.DEFAULT_SIZE, _xPos, _yPos, 0.0f, 1.0f, 1.0f);
 		active = false;
 	}
 	
-	public Button (boolean _active)
+	public Button (float _xPos, float _yPos, boolean _active)
 	{
+		super(Entity.DEFAULT_SIZE, _xPos, _yPos, 0.0f, 1.0f, 1.0f);
 		active = _active;
 	}
 	
@@ -41,7 +43,7 @@ public class Button extends StaticObj
 	}
 	
 	@Override
-	public void uninteract (Entity ent)
+	public void uninteract (Entity ent) //runs when an entity stops colliding with Button
 	{
 		String entType = ent.getClass().getName().substring(13);
 		

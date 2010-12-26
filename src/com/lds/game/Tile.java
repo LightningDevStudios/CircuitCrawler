@@ -6,17 +6,19 @@ import java.nio.FloatBuffer;
 
 import javax.microedition.khronos.opengles.GL10;
 
+
 public class Tile extends Entity
 {
 	public static final int TILE_SIZE = 72;
 	public static final float TILE_SIZE_F = 72.0f;
 	
-	public int tileX, tileY, tileID;
+	public int tileX, tileY, tileID, texturePtr;
 	public float[] texture;
 	public FloatBuffer textureBuffer;
-	public int texturePtr;
-	public Tile(int x, int y)
+	
+	public Tile(int x, int y, float _size, float _xPos, float _yPos)
 	{
+		super(_size, _xPos, _yPos, 0.0f);
 		tileX = x;
 		tileY = y;
 		tileID = (y * 8) + x;
@@ -32,7 +34,7 @@ public class Tile extends Entity
 	@Override
 	public void draw(GL10 gl)
 	{
-		gl.glBindTexture(GL10.GL_TEXTURE_2D, texturePtr);
+ 		gl.glBindTexture(GL10.GL_TEXTURE_2D, texturePtr);
 		
 		gl.glFrontFace(GL10.GL_CW);
 		
@@ -48,42 +50,8 @@ public class Tile extends Entity
 		gl.glDisableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
 	}
 	
-	public void setTexture(int ptr)
+	public void setTexture (int ptr)
 	{
 		texturePtr = ptr;
 	}
-	
-	/*public void loadTexture(GL10 gl, Context context)
-	{
-		InputStream input = context.getResources().openRawResource(R.drawable.tilesetwire);
-		Bitmap bmp = null;
-		try
-		{
-			bmp = BitmapFactory.decodeStream(input);
-		}
-		finally
-		{
-			try
-			{
-				input.close();
-				input = null;
-			}
-			catch (IOException e)
-			{
-				e.printStackTrace();
-			}
-		}
-		gl.glGenTextures(1, texturePtrs, 0);
-		gl.glBindTexture(GL10.GL_TEXTURE_2D, texturePtrs[0]);
-		
-		gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MIN_FILTER, GL10.GL_NEAREST);
-		gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MAG_FILTER, GL10.GL_NEAREST);
-		
-		//gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_S, GL10.GL_REPEAT);
-		//gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_T, GL10.GL_REPEAT);
-		
-		GLUtils.texImage2D(GL10.GL_TEXTURE_2D, 0, bmp, 0);
-		
-		bmp.recycle();
-	}*/
 }

@@ -3,23 +3,23 @@ package com.lds.game;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
-import com.lds.TextureLoader;
-
 import android.opengl.GLU;
 
 import android.content.Context;
 
 public class GameRenderer implements com.lds.Graphics.Renderer
 {
+	//I made game static, so that its entList could be accessed from lower classes, such as Entity. this allows us to easily remove objects from the list
 	public Game game;
 	public Context context;
 	public boolean windowOutdated;
-	int prevRenderCount, framescount;
-	public static final float SPEED = 0.05f; //speed, in units per frame, of translation of Entities
+	public float tempSW, tempSH;
+	int prevRenderCount;
 	
 	public GameRenderer (float screenW, float screenH, Context _context)
 	{
-		game = new Game(screenW, screenH);
+		tempSW = screenW;
+		tempSH = screenH;
 		context = _context;
 		windowOutdated = false;
 	}
@@ -27,32 +27,31 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	@Override
 	public void onSurfaceCreated(GL10 gl, EGLConfig config)
 	{
-		//texture loading
-		game.tl = new TextureLoader(gl, context);
-		game.tl.load(R.drawable.tilesetcolors);
-		game.tl.load(R.drawable.tilesetwire);
 		
-		game.initializeTileset();
-		game.initializeSprites();
+		
 		//openGL settings
 		gl.glEnable(GL10.GL_TEXTURE_2D);
-		gl.glEnable(GL10.GL_DITHER);
-		gl.glEnable(GL10.GL_BLEND);
-		gl.glDisable(GL10.GL_DEPTH_TEST);
 		gl.glShadeModel(GL10.GL_SMOOTH);
+
 		gl.glBlendFunc(GL10.GL_ONE, GL10.GL_ONE_MINUS_SRC_ALPHA);
+
 		gl.glClearColor(0.39f, 0.58f, 0.93f, 0.5f);
-		gl.glHint(GL10.GL_PERSPECTIVE_CORRECTION_HINT, GL10.GL_NICEST);
-		//TODO move method somewhere cleaner, Game or TextureLoader
+		
+		gl.glDisable(GL10.GL_DEPTH_TEST);
+		gl.glEnable(GL10.GL_DITHER);
+		gl.glHint(GL10.GL_PERSPECTIVE_CORRECTION_HINT, GL10.GL_NICEST);	
+		
+		game = new Game(tempSW, tempSH, context, gl);
 		
 	}
 	
 	@Override
-	//TODO move interpolation to another method, less clutter in main loop
 	public void onDrawFrame(GL10 gl) 
 	{
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
+		
 		int renderedcount = 0;
+		game.cleaner.clean(game.entList);
 		
 		//Render tileset
 		for (int i = 0; i < game.tileset.length; i++)
@@ -64,7 +63,6 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 					gl.glTranslatef(game.tileset[i][j].xPos, game.tileset[i][j].yPos, 0.0f);
 					gl.glRotatef(game.tileset[i][j].angle, 0.0f, 0.0f, 1.0f);
 					gl.glScalef(game.tileset[i][j].xScl, game.tileset[i][j].yScl, 1.0f);
-					//game.tileset[i][j].setTexture(tl.getTexture());
 					game.tileset[i][j].draw(gl);
 					gl.glLoadIdentity();
 				}
@@ -74,8 +72,11 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		//Render all entities
 		for (Entity ent : game.entList)
 		{
+			//scales up or down all PickupObj's
+			//ent.pickupScale();
+			
 			//checks for collision with all other entities in entList
-			for (Entity colEnt : game.entList)
+			/*for (Entity colEnt : game.entList)
 			{
 				if (ent != colEnt)
 				{
@@ -89,40 +90,34 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 						ent.colList.remove(colEnt);
 					}
 				}
-			}
+			}*/
 			
 			moveInterpolate(ent);
 			rotateInterpolate(ent);
 			scaleInterpolate(ent);
 			
-			if (game.button1.isActive())
+			/*if (game.button1.isActive())
 			{
 				game.player2.scaleTo(4.0f, 1.0f);
 			}
 			else
 			{
 				game.player2.scaleTo(1.0f, 1.0f);
-			}
+			}*/
 			
 			if (ent.isRendered)
 			{
-				/*System.out.println(ent.getClass().getName());
-				if (ent.getClass().getName() == "com.lds.game.Sprite")
-				{*/
-					ent.renderNextFrame();
-				//}
+				ent.renderNextFrame();
+				
 				renderedcount++;
+				
 				gl.glTranslatef(ent.xPos, ent.yPos, 0.0f);
 				gl.glRotatef(-ent.angle, 0.0f, 0.0f, 1.0f);
 				gl.glScalef(ent.xScl, ent.yScl, 1.0f);
-				
 				ent.draw(gl);
 				gl.glLoadIdentity();
 			}
-			//TEMP, call onSufraceChanged each time, find new way through OpenGL...
-			//this.onSurfaceChanged(gl, (int)game.screenW, (int)game.screenH);
 		}
-		framescount++;
 		
 		//Update screen position and entities
 		game.updateLocalEntities();
@@ -184,15 +179,15 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 			}
 			
 			//increments movement
-			ent.xPos += SPEED * ent.interpX;
-			ent.yPos += SPEED * ent.interpY;
+			ent.xPos += ent.speed * ent.interpX;
+			ent.yPos += ent.speed * ent.interpY;
 			
 			//error check
-			if (ent.xPos <= ent.endX + SPEED / 2&& ent.xPos >= ent.endX - SPEED / 2)
+			if (ent.xPos <= ent.endX + ent.speed / 2&& ent.xPos >= ent.endX - ent.speed / 2)
 			{
 				ent.xPos = ent.endX;
 			}
-			if (ent.yPos <= ent.endY + SPEED / 2 && ent.yPos >= ent.endY - SPEED / 2)
+			if (ent.yPos <= ent.endY + ent.speed / 2 && ent.yPos >= ent.endY - ent.speed / 2)
 			{
 				ent.yPos = ent.endY;
 			}
@@ -211,10 +206,10 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 			}
 			
 			//increments angle
-			ent.angle += SPEED * ent.interpAngle;
+			ent.angle += ent.speed * ent.interpAngle;
 			
 			//error check
-			if (ent.angle <= ent.endAngle + SPEED / 2 && ent.angle >= ent.endAngle - SPEED / 2)
+			if (ent.angle <= ent.endAngle + ent.speed / 2 && ent.angle >= ent.endAngle - ent.speed / 2)
 			{
 				ent.angle = ent.endAngle;
 			}
@@ -233,15 +228,15 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 			}
 			
 			//increments scaling
-			ent.xScl += SPEED * ent.interpXScl;
-			ent.yScl += SPEED * ent.interpYScl;
+			ent.xScl += ent.speed * ent.interpXScl;
+			ent.yScl += ent.speed * ent.interpYScl;
 			
 			//error check
-			if (ent.xScl <= ent.endXScl + SPEED / 2 && ent.xScl >= ent.endXScl - SPEED / 2)
+			if (ent.xScl <= ent.endXScl + ent.speed / 2 && ent.xScl >= ent.endXScl - ent.speed / 2)
 			{
 				ent.xScl = ent.endXScl;
 			}
-			if (ent.yScl <= ent.endYScl + SPEED / 2 && ent.yScl >= ent.endYScl - SPEED / 2)
+			if (ent.yScl <= ent.endYScl + ent.speed / 2 && ent.yScl >= ent.endYScl - ent.speed / 2)
 			{
 				ent.yScl = ent.endYScl;
 			}

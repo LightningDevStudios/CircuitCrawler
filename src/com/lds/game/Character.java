@@ -3,11 +3,15 @@ package com.lds.game;
 public abstract class Character extends Entity //all characters, including the protangonist and enemies
 {
 	protected int health, strength;
-	protected double speed;
 	
-	public Character ()
+	public Character (int _health, int _strength, float  _speed, float _size, float _xPos, float _yPos, float _angle, float _xScl, float _yScl)
 	{
-		//initialize();
+		//initialize Entity variables
+		super(_size, _xPos, _yPos, _angle, _xScl, _yScl, false, true, _speed);
+		
+		//initialize Character variables
+		health = _health;
+		strength = _strength;
 	}
 	
 	public int getHealth ()
@@ -18,11 +22,6 @@ public abstract class Character extends Entity //all characters, including the p
 	public int getStrength ()
 	{
 		return strength;
-	}
-	
-	public double getSpeed ()
-	{
-		return speed;
 	}
 	
 	public void takeDamage (int damage)
