@@ -8,7 +8,7 @@ import javax.microedition.khronos.opengles.GL10;
 
 public class Sprite extends Entity
 {
-	public int maxX, maxY, curX, curY;
+	public int maxX, maxY, curX, curY, curFrame;
 	public float[] texture;
 	public FloatBuffer textureBuffer;
 	public int texturePtr;
@@ -48,7 +48,8 @@ public class Sprite extends Entity
 		{
 			curX++;
 		}
-		
+		curFrame = (curY + 1) * maxX + curX;
+		//System.out.println(curFrame);
 		this.texture = com.lds.TilesetHelper.getTextureVertices(curX, curY, 0, maxX);
 		
 		ByteBuffer byteBuf = ByteBuffer.allocateDirect(texture.length * 4);

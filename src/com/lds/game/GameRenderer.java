@@ -1,8 +1,5 @@
 package com.lds.game;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
