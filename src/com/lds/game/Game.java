@@ -177,7 +177,8 @@ public class Game
 			}
 			else
 			{
-				ent.isRendered = false;
+				//ent.isRendered = false;
+				EntityCleaner.queueEntityForRemoval(ent);
 			}
 		}
 	}
@@ -228,8 +229,7 @@ public class Game
 			}
 			else
 			{
-				//ent.isRendered = false;
-				EntityCleaner.queueEntityForRemoval(ent);
+				ent.isRendered = false;
 			}
 	}
 	
