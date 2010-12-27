@@ -20,7 +20,6 @@ public abstract class Entity
 	public static final float DEFAULT_SPEED = 0.05f;
 	
 	//behavior data
-	public boolean isStatic;
 	public boolean isSolid;
 	
 	//graphics data
@@ -29,10 +28,6 @@ public abstract class Entity
 	public byte[] indices;
 	public FloatBuffer vertexBuffer;
 	public ByteBuffer indexBuffer;
-		
-	//interpolation data
-	public float interpX, interpY, interpXScl, interpYScl, interpAngle, endX, endY, endXScl, endYScl, endAngle;
-	public boolean shouldBreak;
 	
 	//debug data
 	public int entID;
@@ -46,10 +41,9 @@ public abstract class Entity
 	
 	public ArrayList<Entity> colList = new ArrayList<Entity>();
 	
-	public  Entity (float _size, float _xPos, float _yPos, float _angle, float _xScl, float _yScl, boolean _isStatic, boolean _isSolid, float _speed)
+	public  Entity (float _size, float _xPos, float _yPos, float _angle, float _xScl, float _yScl, boolean _isSolid, float _speed)
 	{
 		//initialize behavior variables
-		isStatic = _isStatic;
 		isSolid = _isSolid;
 		
 		//initializes graphics variables
@@ -61,15 +55,6 @@ public abstract class Entity
 		yScl = _yScl;
 		speed = _speed;
 		halfSize = size / 2;
-		
-		//initialize interpolation variables
-		endX = xPos;
-		endY = yPos;
-		endXScl = xScl;
-		endYScl = yScl;
-		endAngle = angle;
-		shouldBreak = false;
-		
 		
 		//initializes collision variables
 		rad = Math.toRadians((double)(angle + 90.0f));
@@ -110,7 +95,7 @@ public abstract class Entity
 	
 	public Entity (float _size, float _xPos, float _yPos, float _speed)
 	{
-		this(_size, _xPos, _yPos, 0.0f, 1.0f, 1.0f, false, true, _speed);
+		this(_size, _xPos, _yPos, 0.0f, 1.0f, 1.0f, true, _speed);
 	}
 	
 	public void draw(GL10 gl)
@@ -130,130 +115,15 @@ public abstract class Entity
 		gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
 		//gl.glDisableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
 	}
-	
-	public void renderNextFrame()
-	{
-	}
-	
+		
 	public void remove()
 	{
 		EntityCleaner.queueEntityForRemoval(this);
 	}
 	
-	/**********************************
-	 * Instant Transformation Methods *
-	 **********************************/
 	
-	//mutator for position
-	public void setPos (float x, float y)
-	{
-		xPos = x;
-		yPos = y;
-		endX = x;
-		endY = y;
-	}
 	
-	//mutator for angle
-	public void setAngle (float degrees)
-	{
-		angle = degrees;
-		endAngle = degrees;
-	}
 	
-	//mutator for scale
-	public void setScale (float x, float y)
-	{
-		xScl = x;
-		yScl = y;
-		endXScl = x;
-		endYScl = y;
-	}
-	
-	/***************************************
-	 * Interpolated Transformation Methods *
-	 ***************************************/
-	
-	//sets position to to new x and y and interpolates
-	public void moveTo (float x, float y)
-	{
-		if (!isStatic)
-		{
-			//calculates x and y distance of movement
-			interpX = (x - xPos);
-			interpY = (y - yPos);
-			endX = x;
-			endY = y;
-		}
-		else
-		{
-			System.out.println("Error. Cannot move static object.");
-		}
-	}
-	
-	//sets angle of an entity to a new value
-	public void rotateTo (float degrees)
-	{
-		endAngle = degrees;
-		interpAngle = degrees - angle;
-	}
-	
-	//sets scaling of an entity to a new value
-	//note, we will probably never scale to 0.0f (that will be infinitely small) or negative numbers (you can get the same results with positives)
-	public void scaleTo (float x, float y)
-	{
-		if (!isStatic)
-		{
-			interpXScl = x - xScl;
-			interpYScl = y - yScl;
-			endXScl = x;
-			endYScl = y;
-		}
-		else
-		{
-			System.out.println("Error. Cannot scale static object.");
-		}
-	}
-	
-	//much like moveTo, but instead of going to a specific point, move() moves relative to the current position
-	public void move (float x, float y)
-	{
-		if (!isStatic)
-		{
-			interpX = x;
-			interpY = y;
-			endX = xPos + x;
-			endY = yPos + y;
-		}
-		else
-		{
-			System.out.println("Error. Cannot move static object.");
-		}
-	}
-	
-	//much like rotateTo, but rotate() adds or subtracts the number of degrees from the current number
-	//i.e. ent1 is rotated 30 degrees, if you do ent1.rotate(30.0f) it will be at 60 degrees
-	public void rotate (float degrees)
-	{
-		endAngle = angle + degrees;
-		interpAngle = degrees;	
-	}
-	
-	//scales relative to current scaling
-	//i.e. if ent1 is scaled (2.0f, 2.0f), if you do ent1.scale(3.0f, 3.0f) the final scaling will be (6.0f, 6.0f)
-	public void scale (float x, float y)
-	{
-		if (!isStatic)
-		{	
-			endXScl = xScl * x;
-			endYScl = yScl * y;
-			interpXScl = endXScl - xScl;
-			interpYScl = endYScl - yScl;
-		}
-		else
-		{
-			System.out.println("Error. Cannot scale static object.");
-		}
-	}
 	
 	/*********************
 	 * Collision Methods *
@@ -374,33 +244,7 @@ public abstract class Entity
 	 * Other Methods *
 	 *****************/
 	
-	public void stop ()
-	{
-		if ((xPos != endX || yPos != endY))
-		{
-			xPos -= speed * interpX;
-			yPos -= speed * interpY;
-			endX = xPos;
-			endY = yPos;
-			shouldBreak = true;
-		}
-		
-		if (angle != endAngle)
-		{
-			angle -= speed * interpAngle;
-			endAngle = angle;
-			shouldBreak = true;
-		}
-		
-		if ((xScl != endXScl) || (yScl != endYScl))
-		{
-			xScl -= speed * interpXScl;
-			yScl -= speed * interpYScl;
-			endXScl = xScl;
-			endYScl = yScl;
-			shouldBreak = true;
-		}
-	}
+	
 	
 	//this is a blank method, to be overriden by subclasses
 	//it determines how each object interacts with other objects and performs the action
