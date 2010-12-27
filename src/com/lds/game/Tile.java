@@ -19,7 +19,7 @@ public class Tile extends Entity
 	
 	public Tile(int x, int y, float _size, float _xPos, float _yPos)
 	{
-		super(_size, _xPos, _yPos, 0.0f);
+		super(_size, _xPos, _yPos);
 		tileX = x;
 		tileY = y;
 		tileID = (y * 8) + x;

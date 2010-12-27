@@ -92,9 +92,12 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 				}
 			}
 			
-			moveInterpolate(ent);
-			rotateInterpolate(ent);
-			scaleInterpolate(ent);
+			if (ent instanceof PhysEnt)
+			{
+				moveInterpolate((PhysEnt)ent);
+				rotateInterpolate((PhysEnt)ent);
+				scaleInterpolate((PhysEnt)ent);
+			}
 			
 			/*if (game.button1.isActive())
 			{
@@ -107,7 +110,11 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 			
 			if (ent.isRendered)
 			{
-				ent.renderNextFrame();
+				if (ent instanceof Sprite)
+				{
+					Sprite spr = (Sprite)ent;
+					spr.renderNextFrame();
+				}
 				
 				renderedcount++;
 				
@@ -167,7 +174,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	 *************************/
 	
 	//translation interpolation
-	public void moveInterpolate (Entity ent)
+	public void moveInterpolate (PhysEnt ent)
 	{	
 		//if the object needs to be interpolated
 		if ((ent.xPos != ent.endX || ent.yPos != ent.endY))
@@ -195,7 +202,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	}
 	
 	//rotation interpolation
-	public void rotateInterpolate (Entity ent)
+	public void rotateInterpolate (PhysEnt ent)
 	{
 		if (ent.angle != ent.endAngle)
 		{
@@ -217,7 +224,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	}
 	
 	//scale interpolation
-	public void scaleInterpolate (Entity ent)
+	public void scaleInterpolate (PhysEnt ent)
 	{
 		if ((ent.xScl != ent.endXScl) || (ent.yScl != ent.endYScl))
 		{	

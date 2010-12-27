@@ -2,12 +2,12 @@ package com.lds.game;
 
 import com.lds.EntityCleaner;
 
-public abstract class PickupObj extends Entity //pickup objects are picked up, such as keys, powerups, or batteries
+public abstract class PickupObj extends PhysEnt //pickup objects are picked up, such as keys, powerups, or batteries
 {
 	
 	public PickupObj (float _xPos, float _yPos)
 	{
-		super(10.0f, _xPos, _yPos, 0.0f, 1.0f, 1.0f, false, true, Entity.DEFAULT_SPEED);
+		super(10.0f, _xPos, _yPos, 0.0f, 1.0f, 1.0f, PhysEnt.DEFAULT_SPEED);
 	}
 	
 	@Override

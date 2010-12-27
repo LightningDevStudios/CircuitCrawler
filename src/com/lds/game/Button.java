@@ -1,6 +1,6 @@
 package com.lds.game;
 
-public class Button extends StaticObj
+public class Button extends StaticEnt
 {
 	protected boolean active;
 	

@@ -4,6 +4,8 @@ import javax.microedition.khronos.opengles.GL10;
 
 import com.lds.EntityCleaner;
 import com.lds.Point;
+import com.lds.TextureLoader;
+import com.lds.TilesetHelper;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -15,18 +17,21 @@ import java.util.ArrayList;
 
 public abstract class Entity 
 {
-	//constants
 	public static final float DEFAULT_SIZE = 30.0f;
-	public static final float DEFAULT_SPEED = 0.05f;
 	
 	//behavior data
-	public boolean isSolid;
+	public boolean isSolid, isTextured;
 	
 	//graphics data
+	public int texturePtr;
 	public float angle, size, xPos, yPos, xScl, yScl, speed, halfSize;
+	
 	public float[] vertices;
+	public float[] texture;
 	public byte[] indices;
+	
 	public FloatBuffer vertexBuffer;
+	public FloatBuffer textureBuffer;
 	public ByteBuffer indexBuffer;
 	
 	//debug data
@@ -41,10 +46,11 @@ public abstract class Entity
 	
 	public ArrayList<Entity> colList = new ArrayList<Entity>();
 	
-	public  Entity (float _size, float _xPos, float _yPos, float _angle, float _xScl, float _yScl, boolean _isSolid, float _speed)
+	public  Entity (float _size, float _xPos, float _yPos, float _angle, float _xScl, float _yScl, boolean _isSolid)
 	{
 		//initialize behavior variables
 		isSolid = _isSolid;
+		isTextured = false;
 		
 		//initializes graphics variables
 		size = _size;
@@ -53,7 +59,6 @@ public abstract class Entity
 		angle = _angle;
 		xScl = _xScl;
 		yScl = _yScl;
-		speed = _speed;
 		halfSize = size / 2;
 		
 		//initializes collision variables
@@ -85,35 +90,34 @@ public abstract class Entity
 		vertexBuffer = byteBuf.asFloatBuffer();
 		vertexBuffer.put(vertices);
 		vertexBuffer.position(0);
-		
-		
-		
+				
 		indexBuffer = ByteBuffer.allocateDirect(indices.length);
 		indexBuffer.put(indices);
 		indexBuffer.position(0);
 	}
 	
-	public Entity (float _size, float _xPos, float _yPos, float _speed)
+	public Entity (float _size, float _xPos, float _yPos)
 	{
-		this(_size, _xPos, _yPos, 0.0f, 1.0f, 1.0f, true, _speed);
+		this(_size, _xPos, _yPos, 0.0f, 1.0f, 1.0f, true);
 	}
 	
 	public void draw(GL10 gl)
 	{
-		//gl.glBindTexture(GL10.GL_TEXTURE_2D, texturePtrs[0]);
+		if (isTextured)	{gl.glBindTexture(GL10.GL_TEXTURE_2D, texturePtr);}
 		
 		gl.glFrontFace(GL10.GL_CW);
 		
 		gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
-		//gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
+		
+		if (isTextured)	{gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);}
 		
 		gl.glVertexPointer(2, GL10.GL_FLOAT, 0, vertexBuffer);
-		//gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, textureBuffer);
+		if (isTextured) {gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, textureBuffer);}
 		
 		gl.glDrawElements(GL10.GL_TRIANGLE_STRIP, indices.length, GL10.GL_UNSIGNED_BYTE, indexBuffer);
 		
 		gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
-		//gl.glDisableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
+		if (isTextured) {gl.glDisableClientState(GL10.GL_TEXTURE_COORD_ARRAY);}
 	}
 		
 	public void remove()
@@ -239,12 +243,37 @@ public abstract class Entity
 			return false;
 		}
 	}
+
+	public void toggleTexturing(boolean value)
+	{
+		isTextured = value;
+	}
 	
-	/*****************
-	 * Other Methods *
-	 *****************/
+	public void setTexture (int ptr)
+	{
+		texturePtr = ptr;
+	}
 	
+	public void setTilesetCoords (int x, int y)
+	{
+		texture = TilesetHelper.getTextureVertices(x, y, 0, 7);
+		allocTextureBuffer();
+	}
 	
+	public void setTilesetCoords (int tileID)
+	{
+		texture = TilesetHelper.getTextureVertices(tileID);
+		allocTextureBuffer();
+	}
+	
+	private void allocTextureBuffer()
+	{
+		ByteBuffer byteBuf = ByteBuffer.allocateDirect(texture.length * 4);
+		byteBuf.order(ByteOrder.nativeOrder());
+		textureBuffer = byteBuf.asFloatBuffer();
+		textureBuffer.put(texture);
+		textureBuffer.position(0);
+	}
 	
 	//this is a blank method, to be overriden by subclasses
 	//it determines how each object interacts with other objects and performs the action

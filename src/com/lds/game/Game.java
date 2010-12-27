@@ -78,7 +78,7 @@ public class Game
 		//entList.add(player1);
 		//entList.add(button1);
 		//entList.add(player2);
-		spr1 = new Sprite(7,7, 96.0f, 0.0f, 0.0f, 0.0f);
+		spr1 = new Sprite(7,7, 96.0f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, PhysEnt.DEFAULT_SPEED);
 		tl.setTexture(0);
 		spr1.setTexture(tl.getTexture());
 		entList.add(spr1);
@@ -227,7 +227,10 @@ public class Game
 				ent.isRendered = true;
 			}
 			else
-				ent.isRendered = false;
+			{
+				//ent.isRendered = false;
+				EntityCleaner.queueEntityForRemoval(ent);
+			}
 	}
 	
 }

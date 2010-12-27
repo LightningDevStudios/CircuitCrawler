@@ -10,7 +10,7 @@ public class Player extends Character //your character, protagonist
 	public Player (float _xPos, float _yPos, float _angle)
 	{
 		//initialize Character and Entity data
-		super(100, 100, Entity.DEFAULT_SPEED, Entity.DEFAULT_SIZE, _xPos, _yPos, _angle, 1.0f, 1.0f);
+		super(100, 100, PhysEnt.DEFAULT_SPEED, Entity.DEFAULT_SIZE, _xPos, _yPos, _angle, 1.0f, 1.0f);
 		
 		//initialize Player data
 		energy = 100;

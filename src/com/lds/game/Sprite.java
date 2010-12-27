@@ -6,16 +6,16 @@ import java.nio.FloatBuffer;
 
 import javax.microedition.khronos.opengles.GL10;
 
-public class Sprite extends Entity
+public class Sprite extends PhysEnt
 {
 	public int maxX, maxY, curX, curY, curFrame;
 	public float[] texture;
 	public FloatBuffer textureBuffer;
 	public int texturePtr;
 	
-	public Sprite(int _maxX, int _maxY, float _size, float _xPos, float _yPos, float _speed)
+	public Sprite(int _maxX, int _maxY, float _size, float _xPos, float _yPos, float _angle, float _xScl, float _yScl, float _speed)
 	{
-		super(_size, _xPos, _yPos, _speed);
+		super(_size, _xPos, _yPos, _angle, _xScl, _yScl, PhysEnt.DEFAULT_SPEED);
 		maxX = _maxX;
 		maxY = _maxY;
 		

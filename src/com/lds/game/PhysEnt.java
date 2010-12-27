@@ -2,13 +2,16 @@ package com.lds.game;
 
 public abstract class PhysEnt extends Entity //physics objects are movable, such as doors, blocks, etc.
 {
+	//constants
+	public static final float DEFAULT_SPEED = 0.05f;
+	
 	//interpolation data
-	public float interpX, interpY, interpXScl, interpYScl, interpAngle, endX, endY, endXScl, endYScl, endAngle;
+	public float interpX, interpY, interpXScl, interpYScl, interpAngle, endX, endY, endXScl, endYScl, endAngle, speed;
 	public boolean shouldBreak;
 	
 	public PhysEnt (float _size, float _xPos, float _yPos, float _angle, float _xScl, float _yScl, float _speed)
 	{
-		super(_size, _xPos, _yPos, _angle, _xScl, _yScl, true, _speed);
+		super(_size, _xPos, _yPos, _angle, _xScl, _yScl, true);
 		
 		//initialize interpolation variables
 		endX = xPos;
@@ -16,6 +19,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 		endXScl = xScl;
 		endYScl = yScl;
 		endAngle = angle;
+		speed = _speed;
 		shouldBreak = false;
 	}
 	
