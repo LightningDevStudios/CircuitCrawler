@@ -22,13 +22,12 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		tempSH = screenH;
 		context = _context;
 		windowOutdated = false;
+		prevRenderCount = 2;
 	}
 	
 	@Override
 	public void onSurfaceCreated(GL10 gl, EGLConfig config)
 	{
-		
-		
 		//openGL settings
 		gl.glEnable(GL10.GL_TEXTURE_2D);
 		gl.glShadeModel(GL10.GL_SMOOTH);
@@ -50,6 +49,16 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	{
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		
+		if (windowOutdated)
+		{
+			onSurfaceChanged(gl, (int)game.screenW, (int)game.screenH);
+			for (UIEntity ent : game.UIList)
+			{
+				ent.updatePosition(game.screenW, game.screenH, game.camPosX, game.camPosY);
+			}
+			windowOutdated = false;
+		}
+		
 		int renderedcount = 0;
 		game.cleaner.clean(game.entList);
 		
@@ -61,10 +70,10 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 				if (game.tileset[i][j].isRendered)
 				{
 					gl.glTranslatef(game.tileset[i][j].xPos, game.tileset[i][j].yPos, 0.0f);
-					gl.glRotatef(game.tileset[i][j].angle, 0.0f, 0.0f, 1.0f);
-					gl.glScalef(game.tileset[i][j].xScl, game.tileset[i][j].yScl, 1.0f);
 					game.tileset[i][j].draw(gl);
 					gl.glLoadIdentity();
+					if (prevRenderCount < 2)
+						game.tileset[i][j].toggleTexturing(true);
 				}
 			}
 		}
@@ -126,20 +135,24 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 			}
 		}
 		
+		for (UIEntity ent : game.UIList)
+		{
+			gl.glTranslatef(ent.xPos, ent.yPos, 0.0f);
+			ent.draw(gl);
+			gl.glLoadIdentity();
+		}
+		
+		
 		//Update screen position and entities
 		game.updateLocalEntities();
-		game.updateLocalTileset();
-		if (windowOutdated)
-		{
-			onSurfaceChanged(gl, (int)game.screenW, (int)game.screenH);
-			windowOutdated = false;
-		}
+		
+		
 		//Debugging info
-		/*if (renderedcount != prevRenderCount)
+		if (renderedcount != prevRenderCount)
 		{
 			System.out.println("Items rendered: " + renderedcount);
 			prevRenderCount = renderedcount;
-		}*/
+		}
 	}
 
 	@Override
@@ -151,6 +164,8 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		GLU.gluOrtho2D(gl, game.camPosX - (float)(game.screenW/2), game.camPosX + (float)(game.screenW/2), game.camPosY - (float)(game.screenH/2), game.camPosY + (float)(game.screenH/2));
 		gl.glMatrixMode(GL10.GL_MODELVIEW);
 		gl.glLoadIdentity();
+		
+		game.updateLocalTileset();
 	}
 
 	@Override
@@ -167,6 +182,8 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		game.camPosX = xInput - (game.screenW / 2);
 		game.camPosY = -yInput + (game.screenH / 2);
 		windowOutdated = true;
+		
+		
 	}
 	
 	/*************************

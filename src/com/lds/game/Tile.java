@@ -13,9 +13,6 @@ public class Tile extends Entity
 	public static final float TILE_SIZE_F = 72.0f;
 	
 	public int tileX, tileY, tileID;
-	public int texturePtr;
-	public float[] texture;
-	public FloatBuffer textureBuffer;
 	
 	public Tile(int x, int y, float _size, float _xPos, float _yPos)
 	{
@@ -32,7 +29,7 @@ public class Tile extends Entity
 		textureBuffer.position(0);
 	}
 	
-	@Override
+	/*@Override
 	public void draw(GL10 gl)
 	{
  		gl.glBindTexture(GL10.GL_TEXTURE_2D, texturePtr);
@@ -49,7 +46,7 @@ public class Tile extends Entity
 		
 		gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
 		gl.glDisableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
-	}
+	}*/
 	
 	public void setTexture (int ptr)
 	{
