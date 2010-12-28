@@ -32,10 +32,18 @@ public class Player extends Character //your character, protagonist
 			stop();
 			colList.remove(ent);
 		}
-		else if (superType.equals("PickupObj"))
+		else if (entType.equals("InvenPickup"))
 		{
-			inventory.add(entType);
+			inventory.add(((InvenPickup)ent).getName());
 			colList.remove(ent);
+		}
+		else if (entType.equals("Health"))
+		{
+			health += ((Powerup)ent).getValue();
+		}
+		else if (entType.equals("Energy"))
+		{
+			energy += ((Powerup)ent).getValue();
 		}
 	}
 	
