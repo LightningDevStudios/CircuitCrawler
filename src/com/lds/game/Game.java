@@ -90,8 +90,8 @@ public class Game
 		entList.add(spr1);
 		entList.add(player1);
 		
-		UIE = new UIEntity(200.0f, 30.0f, UIPosition.TOPLEFT);
-		UIE.autoPadding();
+		UIE = new UIImage(200.0f, 30.0f, UIPosition.TOPLEFT);
+		UIE.autoPadding(5, 5, 0, 0);
 		UIList.add(UIE);
 		camPosX = 0.0f;
 		camPosY = 0.0f;

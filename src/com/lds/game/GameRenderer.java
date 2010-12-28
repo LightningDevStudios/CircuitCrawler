@@ -37,6 +37,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		gl.glClearColor(0.39f, 0.58f, 0.93f, 0.5f);
 		
 		gl.glDisable(GL10.GL_DEPTH_TEST);
+		gl.glDepthMask(false);
 		gl.glEnable(GL10.GL_DITHER);
 		gl.glHint(GL10.GL_PERSPECTIVE_CORRECTION_HINT, GL10.GL_NICEST);	
 		
@@ -135,6 +136,8 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 			}
 		}
 		
+		viewHUD(gl);
+		
 		for (UIEntity ent : game.UIList)
 		{
 			gl.glTranslatef(ent.xPos, ent.yPos, 0.0f);
@@ -142,6 +145,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 			gl.glLoadIdentity();
 		}
 		
+		viewWorld(gl);
 		
 		//Update screen position and entities
 		game.updateLocalEntities();
@@ -184,6 +188,25 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		windowOutdated = true;
 		
 		
+	}
+	
+	public void viewHUD(GL10 gl)
+	{
+		gl.glMatrixMode(GL10.GL_PROJECTION);
+		gl.glPushMatrix();
+		gl.glLoadIdentity();
+		GLU.gluOrtho2D(gl, -game.screenW /2 , game.screenW / 2, -game.screenH / 2, game.screenH / 2);
+		gl.glMatrixMode(GL10.GL_MODELVIEW);
+		gl.glPushMatrix();
+		gl.glLoadIdentity();
+	}
+	
+	public void viewWorld(GL10 gl)
+	{
+		gl.glMatrixMode(GL10.GL_PROJECTION);
+		gl.glPopMatrix();
+		gl.glMatrixMode(GL10.GL_MODELVIEW);
+		gl.glPopMatrix();
 	}
 	
 	/*************************

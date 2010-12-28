@@ -7,7 +7,7 @@ import java.nio.FloatBuffer;
 import javax.microedition.khronos.opengles.GL10;
 import com.lds.Enums.UIPosition;
 
-public class UIEntity
+public abstract class UIEntity
 {
 	//constants
 	private static final float[] UIPositionF = { 	0.0f, 1.0f,
@@ -107,8 +107,8 @@ public class UIEntity
 	
 	public void updatePosition(float screenW, float screenH, float camPosX, float camPosY)
 	{
-		xPos = camPosX + ((screenW / 2) * xRelative) + leftPad - rightPad;
-		yPos = camPosY + ((screenH /2) * yRelative) + bottomPad - topPad;
+		xPos = (screenW / 2 * xRelative) + leftPad - rightPad;
+		yPos = (screenH / 2 * yRelative) + bottomPad - topPad;
 	}
 	
 	public void autoPadding()
@@ -118,39 +118,42 @@ public class UIEntity
 	
 	public void autoPadding(float topPad, float leftPad, float bottomPad, float rightPad)
 	{
-		switch (position)
+		if (position != null)
 		{
-			case TOP:
-				this.topPad = halfYSize + topPad;
-				break;
-			case LEFT:
-				this.leftPad = halfXSize + leftPad;
-				break;
-			case BOTTOM:
-				this.bottomPad = halfYSize + bottomPad;
-				break;
-			case RIGHT:
-				this.rightPad = halfXSize + rightPad;
-				break;
-			case CENTER:
-				break;
-			case TOPLEFT:
-				this.leftPad = halfXSize + leftPad;
-				this.topPad = halfYSize + topPad;
-				break;
-			case TOPRIGHT:
-				this.rightPad = halfXSize + rightPad;
-				this.topPad = halfYSize + topPad;
-				break;
-			case BOTTOMLEFT:
-				this.leftPad = halfXSize + leftPad;
-				this.bottomPad = halfYSize + bottomPad;
-				break;
-			case BOTTOMRIGHT:
-				this.rightPad = halfXSize + rightPad;
-				this.bottomPad = halfYSize + bottomPad;
-				break;
-			default:
+			switch (position)
+			{
+				case TOP:
+					this.topPad = halfYSize + topPad;
+					break;
+				case LEFT:
+					this.leftPad = halfXSize + leftPad;
+					break;
+				case BOTTOM:
+					this.bottomPad = halfYSize + bottomPad;
+					break;
+				case RIGHT:
+					this.rightPad = halfXSize + rightPad;
+					break;
+				case CENTER:
+					break;
+				case TOPLEFT:
+					this.leftPad = halfXSize + leftPad;
+					this.topPad = halfYSize + topPad;
+					break;
+				case TOPRIGHT:
+					this.rightPad = halfXSize + rightPad;
+					this.topPad = halfYSize + topPad;
+					break;
+				case BOTTOMLEFT:
+					this.leftPad = halfXSize + leftPad;
+					this.bottomPad = halfYSize + bottomPad;
+					break;
+				case BOTTOMRIGHT:
+					this.rightPad = halfXSize + rightPad;
+					this.bottomPad = halfYSize + bottomPad;
+					break;
+				default:
+			}
 		}
 	}
 }
