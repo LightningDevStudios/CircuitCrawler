@@ -9,9 +9,9 @@ import javax.microedition.khronos.opengles.GL10;
 public class Sprite extends PhysEnt
 {
 	public int maxX, maxY, curX, curY, curFrame;
-	public float[] texture;
-	public FloatBuffer textureBuffer;
-	public int texturePtr;
+	//public float[] texture;
+	//public FloatBuffer textureBuffer;
+	//public int texturePtr;
 	
 	public Sprite(int _maxX, int _maxY, float _size, float _xPos, float _yPos, float _angle, float _xScl, float _yScl, float _speed)
 	{
@@ -62,7 +62,7 @@ public class Sprite extends PhysEnt
 	}
 	
 	@Override
-	public void draw(GL10 gl)
+	/*public void draw(GL10 gl)
 	{
 		gl.glBindTexture(GL10.GL_TEXTURE_2D, texturePtr);
 		
@@ -78,7 +78,7 @@ public class Sprite extends PhysEnt
 		
 		gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
 		gl.glDisableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
-	}
+	}*/
 	
 	public void setTexture(int ptr)
 	{

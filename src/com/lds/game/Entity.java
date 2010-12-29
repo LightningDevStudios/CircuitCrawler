@@ -106,12 +106,20 @@ public abstract class Entity
 	
 	public void draw(GL10 gl)
 	{
+		if (renderMode == RenderMode.COLOR) 
+		{
+			gl.glColor4f(colorR, colorG, colorB, colorA);
+		}
 		if (renderMode == RenderMode.TEXTURE || renderMode == RenderMode.TILESET)
 		{
+			gl.glEnable(GL10.GL_TEXTURE_2D);
 			gl.glBindTexture(GL10.GL_TEXTURE_2D, texturePtr);
 		}
 		
 		gl.glFrontFace(GL10.GL_CW);
+		
+		gl.glEnable(GL10.GL_CULL_FACE);
+		gl.glCullFace(GL10.GL_BACK);
 		
 		gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
 		
@@ -125,20 +133,22 @@ public abstract class Entity
 		{
 			gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, textureBuffer);
 		}
-		if (renderMode == RenderMode.COLOR) 
-		{
-			gl.glColor4f(colorR, colorG, colorB, colorA);
-		}
+				
 		if (renderMode == RenderMode.GRADIENT)
 		{
 			
 		}
-		gl.glDrawElements(GL10.GL_TRIANGLE_STRIP, indices.length, GL10.GL_UNSIGNED_BYTE, indexBuffer);
-		
+		gl.glDrawElements(GL10.GL_TRIANGLE_STRIP, indices.length, GL10.GL_UNSIGNED_BYTE, indexBuffer);		
 		gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
+		gl.glDisable(GL10.GL_CULL_FACE);
 		if (renderMode == RenderMode.TEXTURE || renderMode == RenderMode.TILESET) 
 		{
 			gl.glDisableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
+			gl.glDisable(GL10.GL_TEXTURE_2D);
+		}
+		if (renderMode == RenderMode.COLOR || renderMode == RenderMode.GRADIENT)
+		{
+			gl.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 		}
 	}
 		

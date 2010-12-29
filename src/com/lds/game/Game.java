@@ -94,7 +94,11 @@ public class Game
 		UIE = new UIImage(200.0f, 30.0f, UIPosition.TOPLEFT);
 		UIE.autoPadding(5, 5, 0, 0);
 		UIE.renderMode = RenderMode.COLOR;
-		UIE.setColor(0.0f, 0.0f, 1.0f, 0.5f);
+		//UIE.setColor(1.0f, 0.3f, 0.7f, 0.8f);
+		UIE.colorR = 1.0f;
+		UIE.colorG = 0.3f;
+		UIE.colorB = 0.7f;
+		UIE.colorA = 0.9f;
 		UIList.add(UIE);
 		camPosX = 0.0f;
 		camPosY = 0.0f;

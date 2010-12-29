@@ -31,7 +31,6 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	public void onSurfaceCreated(GL10 gl, EGLConfig config)
 	{
 		//openGL settings
-		gl.glEnable(GL10.GL_TEXTURE_2D);
 		gl.glShadeModel(GL10.GL_SMOOTH);
 		gl.glEnable(GL10.GL_BLEND);
 		gl.glBlendFunc(GL10.GL_ONE, GL10.GL_ONE_MINUS_SRC_ALPHA);
