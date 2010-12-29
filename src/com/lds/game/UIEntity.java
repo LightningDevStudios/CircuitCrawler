@@ -5,6 +5,8 @@ import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 
 import javax.microedition.khronos.opengles.GL10;
+
+import com.lds.Enums.RenderMode;
 import com.lds.Enums.UIPosition;
 
 public abstract class UIEntity
@@ -21,16 +23,19 @@ public abstract class UIEntity
 													1.0f, -1.0f }; //clamped between -1 and 1
 	
 	//graphics data
-	public float xSize, ySize, xPos, yPos, xRelative, yRelative, topPad, leftPad, bottomPad, rightPad, halfXSize, halfYSize;
+	public float xSize, ySize, xPos, yPos, xRelative, yRelative, halfXSize, halfYSize;
+	public float topPad, leftPad, bottomPad, rightPad;
+	public float colorR, colorG, colorB, colorA;
 	UIPosition position;
+	RenderMode renderMode;
 	
 	public int texturePtr;
 	public float[] vertices;
-	//public float[] texture;
+	public float[] texture;
 	public byte[] indices;
 	
 	public FloatBuffer vertexBuffer;
-	//public FloatBuffer textureBuffer;
+	public FloatBuffer textureBuffer;
 	public ByteBuffer indexBuffer;
 	
 	//constructors
@@ -88,21 +93,40 @@ public abstract class UIEntity
 	
 	public void draw(GL10 gl)
 	{
-		//gl.glBindTexture(GL10.GL_TEXTURE_2D, texturePtr);
+		if (renderMode == RenderMode.TEXTURE || renderMode == RenderMode.TILESET)
+		{
+			gl.glBindTexture(GL10.GL_TEXTURE_2D, texturePtr);
+		}
 		
 		gl.glFrontFace(GL10.GL_CW);
 		
 		gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
 		
-		//gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
+		if (renderMode == RenderMode.TEXTURE || renderMode == RenderMode.TILESET)
+		{
+			gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
+		}
 		
 		gl.glVertexPointer(2, GL10.GL_FLOAT, 0, vertexBuffer);
-		//gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, textureBuffer);
-		
+		if (renderMode == RenderMode.TEXTURE || renderMode == RenderMode.TILESET) 
+		{
+			gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, textureBuffer);
+		}
+		if (renderMode == RenderMode.COLOR) 
+		{
+			gl.glColor4f(colorR, colorG, colorB, colorA);
+		}
+		if (renderMode == RenderMode.GRADIENT)
+		{
+			
+		}
 		gl.glDrawElements(GL10.GL_TRIANGLE_STRIP, indices.length, GL10.GL_UNSIGNED_BYTE, indexBuffer);
 		
 		gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
-		//gl.glDisableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
+		if (renderMode == RenderMode.TEXTURE || renderMode == RenderMode.TILESET) 
+		{
+			gl.glDisableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
+		}
 	}
 	
 	public void updatePosition(float screenW, float screenH, float camPosX, float camPosY)
@@ -155,5 +179,26 @@ public abstract class UIEntity
 				default:
 			}
 		}
+	}
+	
+	public void setColor(float r, float b, float g, float a)
+	{
+		colorR = r;
+		colorB = b;
+		colorG = g;
+		colorA = a;
+	}
+	
+	public void setColor (int r, int b, int g, int a)
+	{
+		colorR = (float) r / 255.0f;
+		colorG = (float) g / 255.0f;
+		colorB = (float) b / 255.0f;
+		colorA = (float) a / 255.0f;
+	}
+	
+	public void setGradient(float[] colors)
+	{
+		
 	}
 }

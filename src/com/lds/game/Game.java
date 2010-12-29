@@ -7,6 +7,7 @@ import javax.microedition.khronos.opengles.GL10;
 import android.content.Context;
 
 import com.lds.EntityCleaner;
+import com.lds.Enums.RenderMode;
 import com.lds.TextureLoader;
 import com.lds.TilesetHelper;
 import com.lds.Point;
@@ -88,10 +89,12 @@ public class Game
 		spr1.setTexture(tl.getTexture());
 		
 		entList.add(spr1);
-		entList.add(player1);
+		//entList.add(player1);
 		
 		UIE = new UIImage(200.0f, 30.0f, UIPosition.TOPLEFT);
 		UIE.autoPadding(5, 5, 0, 0);
+		UIE.renderMode = RenderMode.COLOR;
+		UIE.setColor(0.0f, 0.0f, 1.0f, 0.5f);
 		UIList.add(UIE);
 		camPosX = 0.0f;
 		camPosY = 0.0f;

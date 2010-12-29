@@ -3,6 +3,8 @@ package com.lds.game;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
+import com.lds.Enums.RenderMode;
+
 import android.opengl.GLU;
 
 import android.content.Context;
@@ -73,8 +75,8 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 					gl.glTranslatef(game.tileset[i][j].xPos, game.tileset[i][j].yPos, 0.0f);
 					game.tileset[i][j].draw(gl);
 					gl.glLoadIdentity();
-					if (prevRenderCount < 2)
-						game.tileset[i][j].toggleTexturing(true);
+					/*if (prevRenderCount < 2)
+						game.tileset[i][j].renderMode = RenderMode.TILESET;*/
 				}
 			}
 		}
