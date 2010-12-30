@@ -105,19 +105,11 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 			
 			if (ent instanceof PhysEnt)
 			{
-				moveInterpolate((PhysEnt)ent);
-				rotateInterpolate((PhysEnt)ent);
-				scaleInterpolate((PhysEnt)ent);
+				PhysEnt e = (PhysEnt)ent;
+				e.moveInterpolate();
+				e.rotateInterpolate();
+				e.scaleInterpolate();
 			}
-			
-			/*if (game.button1.isActive())
-			{
-				game.player2.scaleTo(4.0f, 1.0f);
-			}
-			else
-			{
-				game.player2.scaleTo(1.0f, 1.0f);
-			}*/
 			
 			if (ent.isRendered)
 			{
@@ -130,7 +122,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 				renderedcount++;
 				
 				gl.glTranslatef(ent.xPos, ent.yPos, 0.0f);
-				gl.glRotatef(-ent.angle, 0.0f, 0.0f, 1.0f);
+				gl.glRotatef(ent.angle, 0.0f, 0.0f, 1.0f);
 				gl.glScalef(ent.xScl, ent.yScl, 1.0f);
 				ent.draw(gl);
 				gl.glLoadIdentity();
@@ -208,86 +200,5 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		gl.glPopMatrix();
 		gl.glMatrixMode(GL10.GL_MODELVIEW);
 		gl.glPopMatrix();
-	}
-	
-	/*************************
-	 * Interpolation Methods *
-	 *************************/
-	
-	//translation interpolation
-	public void moveInterpolate (PhysEnt ent)
-	{	
-		//if the object needs to be interpolated
-		if ((ent.xPos != ent.endX || ent.yPos != ent.endY))
-		{
-			if (ent.shouldBreak)
-			{
-				ent.shouldBreak = false;
-				return;
-			}
-			
-			//increments movement
-			ent.xPos += ent.speed * ent.interpX;
-			ent.yPos += ent.speed * ent.interpY;
-			
-			//error check
-			if (ent.xPos <= ent.endX + ent.speed / 2&& ent.xPos >= ent.endX - ent.speed / 2)
-			{
-				ent.xPos = ent.endX;
-			}
-			if (ent.yPos <= ent.endY + ent.speed / 2 && ent.yPos >= ent.endY - ent.speed / 2)
-			{
-				ent.yPos = ent.endY;
-			}
-		}
-	}
-	
-	//rotation interpolation
-	public void rotateInterpolate (PhysEnt ent)
-	{
-		if (ent.angle != ent.endAngle)
-		{
-			if (ent.shouldBreak)
-			{
-				ent.shouldBreak = false;
-				return;
-			}
-			
-			//increments angle
-			ent.angle += ent.speed * ent.interpAngle;
-			
-			//error check
-			if (ent.angle <= ent.endAngle + ent.speed / 2 && ent.angle >= ent.endAngle - ent.speed / 2)
-			{
-				ent.angle = ent.endAngle;
-			}
-		}
-	}
-	
-	//scale interpolation
-	public void scaleInterpolate (PhysEnt ent)
-	{
-		if ((ent.xScl != ent.endXScl) || (ent.yScl != ent.endYScl))
-		{	
-			if (ent.shouldBreak)
-			{
-				ent.shouldBreak = false;
-				return;
-			}
-			
-			//increments scaling
-			ent.xScl += ent.speed * ent.interpXScl;
-			ent.yScl += ent.speed * ent.interpYScl;
-			
-			//error check
-			if (ent.xScl <= ent.endXScl + ent.speed / 2 && ent.xScl >= ent.endXScl - ent.speed / 2)
-			{
-				ent.xScl = ent.endXScl;
-			}
-			if (ent.yScl <= ent.endYScl + ent.speed / 2 && ent.yScl >= ent.endYScl - ent.speed / 2)
-			{
-				ent.yScl = ent.endYScl;
-			}
-		}
 	}
 }

@@ -48,7 +48,7 @@ public class Game
 		tl = new TextureLoader(gl, context);
 		tl.load(R.drawable.tilesetcolors);
 		tl.load(R.drawable.tilesetwire);
-		
+		tl.setTexture(1);
 		cleaner = new EntityCleaner();
 		
 		for (int i = 0; i < tileset.length; i++)
@@ -57,12 +57,6 @@ public class Game
 			{
 				//TODO: REMOVE THE +/- 1 BY Tile.TILE_SIZE TO GET PERFECTLY ALIGNED TILESET. 1 PX OFF FOR TESTING
 				tileset[i][j] = new Tile((int)(Math.random() * 8), (int)(Math.random() * 8), Tile.TILE_SIZE_F, ((Tile.TILE_SIZE + 1) * j) - 100.0f, ((-Tile.TILE_SIZE - 1) * i) + 50.0f);
-				
-				if (j % 2 == 0)
-					tl.setTexture(0);
-				else
-					tl.setTexture(1);
-				
 				tileset[i][j].setTexture(tl.getTexture());
 				
 				System.out.print(TilesetHelper.getTilesetIndex(tileset[i][j].texture, 0, 7));
@@ -87,7 +81,8 @@ public class Game
 		
 		tl.setTexture(0);
 		spr1.setTexture(tl.getTexture());
-		
+		//spr1.moveTo(200, 5);
+		spr1.rotateTo(45.0f);
 		entList.add(spr1);
 		//entList.add(player1);
 		

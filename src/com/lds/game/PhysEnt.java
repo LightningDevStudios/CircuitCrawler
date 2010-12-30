@@ -5,11 +5,12 @@ import com.lds.Enums.RenderMode;
 public abstract class PhysEnt extends Entity //physics objects are movable, such as doors, blocks, etc.
 {
 	//constants
-	public static final float DEFAULT_SPEED = 0.05f;
+	public static final float DEFAULT_SPEED = 0.5f;
 	
 	//interpolation data
 	public float interpX, interpY, interpXScl, interpYScl, interpAngle, endX, endY, endXScl, endYScl, endAngle, speed;
 	public boolean shouldBreak;
+	private boolean isInterpTrans, isInterpRot, isInterpScl;
 	
 	public PhysEnt (float _size, float _xPos, float _yPos, float _angle, float _xScl, float _yScl, float _speed)
 	{
@@ -41,6 +42,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 		interpY = (y - yPos);
 		endX = x;
 		endY = y;
+		isInterpTrans = true;
 	}
 	
 	//sets angle of an entity to a new value
@@ -48,6 +50,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	{
 		endAngle = degrees;
 		interpAngle = degrees - angle;
+		isInterpRot = true;
 	}
 	
 	//sets scaling of an entity to a new value
@@ -58,6 +61,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 		interpYScl = y - yScl;
 		endXScl = x;
 		endYScl = y;
+		isInterpScl = true;
 	}
 	
 	//much like moveTo, but instead of going to a specific point, move() moves relative to the current position
@@ -67,6 +71,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 		interpY = y;
 		endX = xPos + x;
 		endY = yPos + y;
+		isInterpTrans = true;
 	}
 	
 	//much like rotateTo, but rotate() adds or subtracts the number of degrees from the current number
@@ -75,6 +80,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	{
 		endAngle = angle + degrees;
 		interpAngle = degrees;	
+		isInterpRot = true;
 	}
 	
 	//scales relative to current scaling
@@ -85,33 +91,34 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 		endYScl = yScl * y;
 		interpXScl = endXScl - xScl;
 		interpYScl = endYScl - yScl;
+		isInterpScl = true;
 	}
 	
 	public void stop ()
 	{
-		if ((xPos != endX || yPos != endY))
+		if (isInterpTrans)
 		{
 			xPos -= speed * interpX;
 			yPos -= speed * interpY;
 			endX = xPos;
 			endY = yPos;
-			shouldBreak = true;
+			isInterpTrans = false;
 		}
 		
-		if (angle != endAngle)
+		if (isInterpRot)
 		{
 			angle -= speed * interpAngle;
 			endAngle = angle;
-			shouldBreak = true;
+			isInterpRot = false;
 		}
 		
-		if ((xScl != endXScl) || (yScl != endYScl))
+		if (isInterpScl)
 		{
 			xScl -= speed * interpXScl;
 			yScl -= speed * interpYScl;
 			endXScl = xScl;
 			endYScl = yScl;
-			shouldBreak = true;
+			isInterpScl = false;
 		}
 	}
 	
@@ -142,5 +149,72 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 		yScl = y;
 		endXScl = x;
 		endYScl = y;
+	}
+	
+	public void moveInterpolate ()
+	{	
+		//if the object needs to be interpolated
+		if (isInterpTrans)
+		{		
+			//increments movement
+			xPos += speed * interpX;
+			yPos += speed * interpY;
+			
+			//error check
+			if (xPos <= endX + (speed / 2) && xPos >= endX - (speed / 2))
+			{
+				xPos = endX;
+				isInterpTrans = false;
+			}
+			/*if (yPos <= endY + speed / 2 && yPos >= endY - speed / 2)
+			{
+				yPos = endY;
+			}*/
+		}
+	}
+	
+	public void rotateInterpolate ()
+	{
+		if (isInterpRot)
+		{
+			//if the angle is greater than 360, set it back to within 360
+			if (angle >= 360.0f)
+			{
+				angle = angle - 360.0f * ((int)angle / 360);
+			}
+			//increments angle
+			//TODO Find correlation between modification of speed and accuracy of end check.
+			angle += speed * interpAngle / 10;
+			System.out.println(angle + " " + interpAngle + " " + endAngle);
+			//error check
+			if (angle <= endAngle + (speed / 2) && angle >= endAngle - (speed / 2))
+			{
+				angle = endAngle;
+				isInterpRot = false;
+			}
+			
+		}
+	}
+	
+	public void scaleInterpolate ()
+	{
+		if (isInterpScl)
+		{				
+			//increments scaling
+			xScl += speed * interpXScl;
+			yScl += speed * interpYScl;
+			
+			//error check
+			if (xScl <= endXScl + (speed / 2) && xScl >= endXScl - (speed / 2))
+			{
+				xScl = endXScl;
+				isInterpScl = false;
+			}
+			/*if (ent.yScl <= ent.endYScl + ent.speed / 2 && ent.yScl >= ent.endYScl - ent.speed / 2)
+			{
+				ent.yScl = ent.endYScl;
+				isInterpScl = false;
+			}*/
+		}
 	}
 }
