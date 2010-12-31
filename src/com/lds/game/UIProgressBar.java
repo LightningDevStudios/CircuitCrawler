@@ -7,42 +7,45 @@ import com.lds.Enums.UIPosition;
 
 public class UIProgressBar extends UIEntity
 {
-	public int value;
-	public int maximum;
+	public int value, maximum, minimum;
 	public float[] originalColor;
 	public float originalXSize, originalYSize;
 		
-	public UIProgressBar(float xSize, float ySize, UIPosition position, int value, int maximum)
+	public UIProgressBar(float xSize, float ySize, UIPosition position, int value, int minimum, int maximum)
 	{
 		super(xSize, ySize, position);
 		this.value = value;
+		this.minimum = minimum;
 		this.maximum = maximum;
 		this.originalXSize = xSize;
 		this.originalYSize = ySize;
 	}
 	
-	public UIProgressBar(float xSize, float ySize, float xRelative, float yRelative, int value, int maximum)
+	public UIProgressBar(float xSize, float ySize, float xRelative, float yRelative, int value, int minimum, int maximum)
 	{
 		super (xSize, ySize, xRelative, yRelative);
 		this.value = value;
+		this.minimum = minimum;
 		this.maximum = maximum;
 		this.originalXSize = xSize;
 		this.originalYSize = ySize;
 	}
 	
-	public UIProgressBar(float xSize, float ySize, UIPosition position, float topPad, float leftPad, float bottomPad, float rightPad, int value, int maximum) 
+	public UIProgressBar(float xSize, float ySize, UIPosition position, float topPad, float leftPad, float bottomPad, float rightPad, int value, int minimum, int maximum) 
 	{
 		super(xSize, ySize, position, topPad, leftPad, bottomPad, rightPad);
 		this.value = value;
+		this.minimum = minimum;
 		this.maximum = maximum;
 		this.originalXSize = xSize;
 		this.originalYSize = ySize;
 	}
 	
-	public UIProgressBar(float xSize, float ySize, float xRelative, float yRelative, float topPad, float leftPad, float bottomPad, float rightPad, int value, int maximum)
+	public UIProgressBar(float xSize, float ySize, float xRelative, float yRelative, float topPad, float leftPad, float bottomPad, float rightPad, int value, int minimum, int maximum)
 	{
 		super(xSize, ySize, xRelative, yRelative, topPad, leftPad, bottomPad, rightPad);
 		this.value = value;
+		this.minimum = minimum;
 		this.maximum = maximum;
 		this.originalXSize = xSize;
 		this.originalYSize = ySize;
@@ -65,8 +68,8 @@ public class UIProgressBar extends UIEntity
 		
 		for(int i = 0; i < 4; i++)
 		{
-			topRight[i] = (((float)(maximum - value) * topLeft[i]) + ((float)value * topRight[i])) / (float)maximum; //weighted averages by current percentage
-			bottomRight[i] = (((float)(maximum - value) * bottomLeft[i]) + ((float)value * bottomRight[i])) / (float)maximum;
+			topRight[i] = (((float)(maximum - value) * topLeft[i]) + ((float)(value - minimum) * topRight[i])) / (float)(maximum - minimum); //weighted averages by current percentage
+			bottomRight[i] = (((float)(maximum - value) * bottomLeft[i]) + ((float)(value - minimum) * bottomRight[i])) / (float)(maximum - minimum);
 		}
 		
 		float[] initColor = { 	topRight[0], topRight[1], topRight[2], topRight[3],
@@ -85,7 +88,7 @@ public class UIProgressBar extends UIEntity
 	
 	public void updateVertices()
 	{
-		xSize = originalXSize * ((float)value / maximum);
+		xSize = originalXSize * ((float)(value - minimum) / (float)(maximum - minimum));
 		ySize = originalYSize;
 				
 		halfXSize = xSize / 2;
