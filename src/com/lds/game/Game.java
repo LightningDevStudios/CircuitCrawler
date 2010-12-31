@@ -86,7 +86,7 @@ public class Game
 		entList.add(spr1);
 		//entList.add(player1);
 		
-		UIE = new UIProgressBar(200.0f, 30.0f, UIPosition.TOPLEFT, 100, 100);
+		UIE = new UIProgressBar(200.0f, 30.0f, UIPosition.TOPLEFT, 500, 200, 500);
 		UIE.autoPadding(5, 5, 0, 0);
 		UIE.renderMode = RenderMode.GRADIENT;
 		//						Red	  Green	Blue  Alpha

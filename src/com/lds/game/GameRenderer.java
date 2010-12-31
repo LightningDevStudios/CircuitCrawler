@@ -132,11 +132,14 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 			if (ent instanceof UIProgressBar)
 			{
 				UIProgressBar UIpb = (UIProgressBar)ent;
-				if (UIpb.value > 0) UIpb.value--;
-				UIpb.updateGradient();
-				UIpb.updateVertices();
-				UIpb.autoPadding(5, 5, 0, 0);
-				UIpb.updatePosition(game.screenW, game.screenH);
+				if (UIpb.value > UIpb.minimum)
+				{
+					UIpb.value--;
+					UIpb.updateGradient();
+					UIpb.updateVertices();
+					UIpb.autoPadding(5, 5, 0, 0);
+					UIpb.updatePosition(game.screenW, game.screenH);
+				}
 			}
 			gl.glTranslatef(ent.xPos, ent.yPos, 0.0f);
 			ent.draw(gl);
@@ -174,14 +177,6 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	@Override
 	public void onTouchInput(float xInput, float yInput) 
 	{
-		/*if (xInput < 100 && yInput < 100)
-		{
-			game.player1.rotate(20.0f);
-		}
-		else
-		{
-			game.player1.moveTo(xInput - game.screenW / 2, -yInput + game.screenH / 2);
-		}*/
 		game.camPosX = xInput - (game.screenW / 2);
 		game.camPosY = -yInput + (game.screenH / 2);
 		windowOutdated = true;
