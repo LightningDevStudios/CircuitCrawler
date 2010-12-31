@@ -54,10 +54,6 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		if (windowOutdated)
 		{
 			onSurfaceChanged(gl, (int)game.screenW, (int)game.screenH);
-			for (UIEntity ent : game.UIList)
-			{
-				ent.updatePosition(game.screenW, game.screenH, game.camPosX, game.camPosY);
-			}
 			windowOutdated = false;
 		}
 		
@@ -133,9 +129,19 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		
 		for (UIEntity ent : game.UIList)
 		{
+			if (ent instanceof UIProgressBar)
+			{
+				UIProgressBar UIpb = (UIProgressBar)ent;
+				if (UIpb.value > 0) UIpb.value--;
+				UIpb.updateGradient();
+				UIpb.updateVertices();
+				UIpb.autoPadding(5, 5, 0, 0);
+				UIpb.updatePosition(game.screenW, game.screenH);
+			}
 			gl.glTranslatef(ent.xPos, ent.yPos, 0.0f);
 			ent.draw(gl);
 			gl.glLoadIdentity();
+			
 		}
 		
 		viewWorld(gl);

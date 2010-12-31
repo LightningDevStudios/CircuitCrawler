@@ -185,7 +185,6 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 			//increments angle
 			//TODO Find correlation between modification of speed and accuracy of end check.
 			angle += speed * interpAngle / 10;
-			System.out.println(angle + " " + interpAngle + " " + endAngle);
 			//error check
 			if (angle <= endAngle + (speed / 2) && angle >= endAngle - (speed / 2))
 			{

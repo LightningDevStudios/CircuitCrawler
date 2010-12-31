@@ -32,10 +32,12 @@ public abstract class UIEntity
 	public int texturePtr;
 	public float[] vertices;
 	public float[] texture;
+	public float[] color;
 	public byte[] indices;
 	
 	public FloatBuffer vertexBuffer;
 	public FloatBuffer textureBuffer;
+	public FloatBuffer colorBuffer;
 	public ByteBuffer indexBuffer;
 	
 	//constructors
@@ -93,53 +95,53 @@ public abstract class UIEntity
 	
 	public void draw(GL10 gl)
 	{
-		if (renderMode == RenderMode.COLOR) 
-		{
-			gl.glColor4f(colorR, colorG, colorB, colorA);
-		}
+		//Enable texturing and bind the current texture pointer (texturePtr) to GL_TEXTURE_2D
 		if (renderMode == RenderMode.TEXTURE || renderMode == RenderMode.TILESET)
 		{
 			gl.glEnable(GL10.GL_TEXTURE_2D);
 			gl.glBindTexture(GL10.GL_TEXTURE_2D, texturePtr);
 		}
 		
+		//Sets the front face of a polygon based on rotation (Clockwise - GL_CW, Counter-clockwise - GL_CCW)
 		gl.glFrontFace(GL10.GL_CW);
 		
+		//Backface culling
 		gl.glEnable(GL10.GL_CULL_FACE);
 		gl.glCullFace(GL10.GL_BACK);
 		
+		//Enable settings for this polygon
 		gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
+		if (renderMode == RenderMode.TEXTURE || renderMode == RenderMode.TILESET) {gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);}
+		if (renderMode == RenderMode.GRADIENT) {gl.glEnableClientState(GL10.GL_COLOR_ARRAY);}
 		
-		if (renderMode == RenderMode.TEXTURE || renderMode == RenderMode.TILESET)
-		{
-			gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
-		}
-		
+		//Bind vertices, texture coordinates, and/or color coordinates to the OpenGL system
 		gl.glVertexPointer(2, GL10.GL_FLOAT, 0, vertexBuffer);
-		if (renderMode == RenderMode.TEXTURE || renderMode == RenderMode.TILESET) 
-		{
-			gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, textureBuffer);
-		}
-				
-		if (renderMode == RenderMode.GRADIENT)
-		{
-			
-		}
+		if (renderMode == RenderMode.TEXTURE || renderMode == RenderMode.TILESET) {gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, textureBuffer);}
+		if (renderMode == RenderMode.GRADIENT) {gl.glColorPointer(4, GL10.GL_FLOAT, 0, colorBuffer);}
+		
+		//Sets color
+		if (renderMode == RenderMode.COLOR) {gl.glColor4f(colorR, colorG, colorB, colorA);}
+		
+		//Draw the vertices
 		gl.glDrawElements(GL10.GL_TRIANGLE_STRIP, indices.length, GL10.GL_UNSIGNED_BYTE, indexBuffer);		
+		
+		//Disable things for next polygon
 		gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
+		if(renderMode == RenderMode.GRADIENT) {gl.glDisableClientState(GL10.GL_COLOR_ARRAY);}
 		gl.glDisable(GL10.GL_CULL_FACE);
+		
+		//Disable texturing for next polygon
 		if (renderMode == RenderMode.TEXTURE || renderMode == RenderMode.TILESET) 
 		{
 			gl.glDisableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
 			gl.glDisable(GL10.GL_TEXTURE_2D);
 		}
-		if (renderMode == RenderMode.COLOR || renderMode == RenderMode.GRADIENT)
-		{
-			gl.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-		}
+		
+		//Reset color for next polygon.
+		if (renderMode == RenderMode.COLOR || renderMode == RenderMode.GRADIENT) {gl.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);}
 	}
 	
-	public void updatePosition(float screenW, float screenH, float camPosX, float camPosY)
+	public void updatePosition(float screenW, float screenH)
 	{
 		xPos = (screenW / 2 * xRelative) + leftPad - rightPad;
 		yPos = (screenH / 2 * yRelative) + bottomPad - topPad;
@@ -189,6 +191,10 @@ public abstract class UIEntity
 				default:
 			}
 		}
+		else
+		{
+			System.out.println("Warning: Current UIEntity is not using relative positioning. No padding changes made!");
+		}
 	}
 	
 	public void setColor(float r, float b, float g, float a)
@@ -207,8 +213,22 @@ public abstract class UIEntity
 		colorA = (float) a / 255.0f;
 	}
 	
-	public void setGradient(float[] colors)
+	public void setGradient(float[] color)
 	{
+		this.color = color;
 		
+		ByteBuffer byteBuf = ByteBuffer.allocateDirect(color.length * 4);
+		byteBuf.order(ByteOrder.nativeOrder());
+		colorBuffer = byteBuf.asFloatBuffer();
+		colorBuffer.put(color);
+		colorBuffer.position(0);
+	}
+	
+	public void setPadding (float topPad, float leftPad, float bottomPad, float rightPad)
+	{
+		this.topPad = topPad;
+		this.leftPad = leftPad;
+		this.bottomPad = bottomPad;
+		this.rightPad = rightPad;
 	}
 }
