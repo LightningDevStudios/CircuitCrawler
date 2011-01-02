@@ -29,11 +29,11 @@ public abstract class UIEntity
 	UIPosition position;
 	RenderMode renderMode;
 	
-	public int texturePtr;
 	public float[] vertices;
 	public float[] texture;
 	public float[] color;
 	public byte[] indices;
+	public int texturePtr;
 	
 	public FloatBuffer vertexBuffer;
 	public FloatBuffer textureBuffer;

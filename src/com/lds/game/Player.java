@@ -4,8 +4,8 @@ import java.util.ArrayList;
 
 public class Player extends Character //your character, protagonist
 {
-	protected int energy;
-	protected ArrayList<String> inventory = new ArrayList<String>(); //holds the name of each pickup object in the inventory
+	private int energy;
+	private ArrayList<String> inventory = new ArrayList<String>(); //holds the name of each pickup object in the inventory
 	
 	public Player (float _xPos, float _yPos, float _angle)
 	{
@@ -24,6 +24,18 @@ public class Player extends Character //your character, protagonist
 	@Override
 	public void interact (Entity ent)
 	{
+		if (ent instanceof Player || ent instanceof StaticEnt)
+		{
+			stop();
+			colList.remove(ent);
+		}
+		
+		else if (ent instanceof PickupObj)
+		{
+			inventory.add("test");
+			colList.remove(ent);
+		}
+		/*
 		String superType = ent.getClass().getSuperclass().getName().substring(13); //gets the type of superclass
 		String entType = ent.getClass().getName().substring(13); //gets the type of class
 		
@@ -36,7 +48,12 @@ public class Player extends Character //your character, protagonist
 		{
 			inventory.add(entType);
 			colList.remove(ent);
-		}
+		}*/
+	}
+	
+	public int getEnergy()
+	{
+		return energy;
 	}
 	
 	//this method may be neccessary in the future

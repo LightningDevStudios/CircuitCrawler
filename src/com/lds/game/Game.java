@@ -7,6 +7,7 @@ import javax.microedition.khronos.opengles.GL10;
 import android.content.Context;
 
 import com.lds.EntityCleaner;
+import com.lds.Enums.Direction;
 import com.lds.Enums.RenderMode;
 import com.lds.TextureLoader;
 import com.lds.TilesetHelper;
@@ -33,9 +34,8 @@ public class Game
 	
 	//Testing data
 	public Player player1 = new Player(-100.0f, 50.0f, 0.0f);
-	//public Button button1 = new Button(-100.0f, 50.0f);
-	//public Player player2 = new Player(100.0f, 50.0f, 0.0f);
-	UIEntity UIE;
+	public UIHealthBar healthBar;
+	public UIEnergyBar energyBar;
 	public Sprite spr1;
 	public Sprite spr2;
 
@@ -49,7 +49,9 @@ public class Game
 		tl = new TextureLoader(gl, context);
 		tl.load(R.drawable.tilesetcolors);
 		tl.load(R.drawable.tilesetwire);
+		
 		tl.setTexture(1);
+		
 		cleaner = new EntityCleaner();
 		
 		for (int i = 0; i < tileset.length; i++)
@@ -81,32 +83,53 @@ public class Game
 		spr1 = new Sprite(7,7, 96.0f, 250.0f, 350.0f, 0.0f, 1.0f, 1.0f, PhysEnt.DEFAULT_SPEED);
 		spr2 = new Sprite(7,7, 64.0f, -300.0f, -300.0f, 73.6f, 1.0f, 1.0f, PhysEnt.DEFAULT_SPEED);
 		tl.setTexture(0);
+		
 		spr1.setTexture(tl.getTexture());
 		spr2.setTexture(tl.getTexture());
+		
 		spr1.moveTo(-200.0f, -100.0f);
 		spr1.rotateTo(45.0f);
+		
 		spr2.moveTo(150.0f, 150.0f);
 		spr2.rotateTo(200.3f);
+		
 		entList.add(spr1);
 		entList.add(spr2);
-		//entList.add(player1);
 		
-		UIE = new UIProgressBar(200.0f, 30.0f, UIPosition.TOPLEFT, 200, 100, 200);
-		UIE.autoPadding(5, 5, 0, 0);
-		UIE.renderMode = RenderMode.GRADIENT;
+		healthBar = new UIHealthBar(200.0f, 30.0f, UIPosition.TOPLEFT, Direction.RIGHT);
+		healthBar.originalTopPad = 5.0f;
+		healthBar.originalLeftPad = 5.0f;
+		healthBar.autoPadding(5, 5, 0, 0);
+		healthBar.renderMode = RenderMode.GRADIENT;
+		
 		//						Red	  Green	Blue  Alpha
-		float[] initColor = {	0.0f, 1.0f, 0.0f, 0.9f,		//top right
+		float[] healthColor = {	0.0f, 1.0f, 0.0f, 0.9f,		//top right
 								0.0f, 1.0f, 0.0f, 0.9f, 	//bottom right
 								1.0f, 0.0f, 0.0f, 1.0f, 	//top left
 								1.0f, 0.0f, 0.0f, 1.0f};	//bottom left
-		UIE.setGradient(initColor);
-		UIE.updatePosition(screenW, screenH);
-		UIList.add(UIE);
+		healthBar.setGradient(healthColor);
+		healthBar.updatePosition(screenW, screenH);
+		
+		
+		energyBar = new UIEnergyBar(150.0f, 15.0f, UIPosition.TOPRIGHT, Direction.LEFT);
+		energyBar.originalTopPad = 5.0f;
+		energyBar.originalRightPad = 5.0f;
+		energyBar.autoPadding(5, 0, 0, 5);
+		energyBar.renderMode = RenderMode.GRADIENT;
+		
+		float[] energyColor = {	0.0f, 0.0f, 0.3f, 1.0f,
+								0.0f, 0.0f, 0.3f, 1.0f,
+								0.0f, 0.0f, 1.0f, 0.9f,
+								0.0f, 0.0f, 1.0f, 0.9f };
+		energyBar.setGradient(energyColor);
+		energyBar.updatePosition(screenW, screenH);
+		
+		UIList.add(healthBar);
+		UIList.add(energyBar);
 		camPosX = 0.0f;
 		camPosY = 0.0f;
 		
 		//TODO take into account AI, perhaps render every time it chooses a new point to go to?
-		//player2.move(30.0f, 50.0f);
 		updateLocalEntities();
 		updateLocalTileset();
 	}

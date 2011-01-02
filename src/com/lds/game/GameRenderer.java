@@ -11,7 +11,6 @@ import android.content.Context;
 
 public class GameRenderer implements com.lds.Graphics.Renderer
 {
-	//I made game static, so that its entList could be accessed from lower classes, such as Entity. this allows us to easily remove objects from the list
 	public Game game;
 	public Context context;
 	public boolean windowOutdated;
@@ -145,12 +144,12 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 			if (ent instanceof UIProgressBar)
 			{
 				UIProgressBar UIpb = (UIProgressBar)ent;
-				if (UIpb.value > UIpb.minimum)
+				if (UIpb.getValue() > UIpb.getMinimum())
 				{
-					UIpb.value--;
+					UIpb.setValue(UIpb.getValue() - 1);
 					UIpb.updateGradient();
 					UIpb.updateVertices();
-					UIpb.autoPadding(5, 5, 0, 0);
+					UIpb.autoPadding(UIpb.originalTopPad, UIpb.originalLeftPad, UIpb.originalBottomPad, UIpb.originalRightPad);
 					UIpb.updatePosition(game.screenW, game.screenH);
 				}
 			}
