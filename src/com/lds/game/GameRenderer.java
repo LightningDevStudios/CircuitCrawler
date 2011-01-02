@@ -59,6 +59,8 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		
 		int renderedcount = 0;
 		game.cleaner.clean(game.entList);
+		//Update screen position and entities
+		game.updateLocalEntities();
 		
 		//Render tileset
 		for (int i = 0; i < game.tileset.length; i++)
@@ -70,8 +72,6 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 					gl.glTranslatef(game.tileset[i][j].xPos, game.tileset[i][j].yPos, 0.0f);
 					game.tileset[i][j].draw(gl);
 					gl.glLoadIdentity();
-					/*if (prevRenderCount < 2)
-						game.tileset[i][j].renderMode = RenderMode.TILESET;*/
 				}
 			}
 		}
@@ -82,23 +82,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 			//scales up or down all PickupObj's
 			ent.pickupScale();
 			
-			//checks for collision with all other entities in entList
-			for (Entity colEnt : game.entList)
-			{
-				if (ent != colEnt)
-				{
-					if (ent.isColliding(colEnt))
-					{
-						ent.interact(colEnt);
-					}
-					else if (ent.colList.contains(colEnt))
-					{
-						ent.uninteract(colEnt);
-						ent.colList.remove(colEnt);
-					}
-				}
-			}
-			
+			//Interpolation
 			if (ent instanceof PhysEnt)
 			{
 				PhysEnt e = (PhysEnt)ent;
@@ -106,6 +90,35 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 				e.rotateInterpolate();
 				e.scaleInterpolate();
 			}
+			
+			//checks for collision with all other entities in entList
+			for (Entity colEnt : game.entList)
+			{
+				if (ent != colEnt)
+				{
+					if (ent.isColliding(colEnt))
+					{
+						//ent.interact(colEnt);
+						if (ent instanceof PhysEnt)
+						{
+							PhysEnt p = (PhysEnt)ent;
+							p.stop();
+						}
+						if (colEnt instanceof PhysEnt)
+						{
+							PhysEnt p = (PhysEnt)ent;
+							p.stop();
+						}
+					}
+					/*else if (ent.colList.contains(colEnt))
+					{
+						ent.uninteract(colEnt);
+						ent.colList.remove(colEnt);
+					}*/
+				}
+			}
+			
+			
 			
 			if (ent.isRendered)
 			{
@@ -149,10 +162,6 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		
 		viewWorld(gl);
 		
-		//Update screen position and entities
-		game.updateLocalEntities();
-		
-		
 		//Debugging info
 		if (renderedcount != prevRenderCount)
 		{
@@ -171,6 +180,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		gl.glMatrixMode(GL10.GL_MODELVIEW);
 		gl.glLoadIdentity();
 		
+		game.updateLocalEntities();
 		game.updateLocalTileset();
 	}
 

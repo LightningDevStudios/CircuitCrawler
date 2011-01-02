@@ -9,7 +9,6 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	
 	//interpolation data
 	public float interpX, interpY, interpXScl, interpYScl, interpAngle, endX, endY, endXScl, endYScl, endAngle, speed;
-	public boolean shouldBreak;
 	private boolean isInterpTrans, isInterpRot, isInterpScl;
 	
 	public PhysEnt (float _size, float _xPos, float _yPos, float _angle, float _xScl, float _yScl, float _speed)
@@ -23,7 +22,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 		endYScl = yScl;
 		endAngle = angle;
 		speed = _speed;
-		shouldBreak = false;
+		isSolid = true;
 	}
 	
 	public void renderNextFrame()
@@ -98,8 +97,8 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	{
 		if (isInterpTrans)
 		{
-			xPos -= speed * interpX;
-			yPos -= speed * interpY;
+			xPos -= (speed / 10) * interpX;
+			yPos -= (speed / 10) * interpY;
 			endX = xPos;
 			endY = yPos;
 			isInterpTrans = false;
@@ -107,15 +106,15 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 		
 		if (isInterpRot)
 		{
-			angle -= speed * interpAngle;
+			angle -= (speed / 10) * interpAngle;
 			endAngle = angle;
 			isInterpRot = false;
 		}
 		
 		if (isInterpScl)
 		{
-			xScl -= speed * interpXScl;
-			yScl -= speed * interpYScl;
+			xScl -= (speed / 10) * interpXScl;
+			yScl -= (speed / 10) * interpYScl;
 			endXScl = xScl;
 			endYScl = yScl;
 			isInterpScl = false;
@@ -157,8 +156,9 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 		if (isInterpTrans)
 		{		
 			//increments movement
-			xPos += speed * interpX;
-			yPos += speed * interpY;
+			//TODO find a good speed scale, using 0.05f is too precise to get a clear reading on in error check.
+			xPos += (speed / 10) * interpX;
+			yPos += (speed / 10) * interpY;
 			
 			//error check
 			if (xPos <= endX + (speed / 2) && xPos >= endX - (speed / 2))
@@ -180,7 +180,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 			//if the angle is greater than 360, set it back to within 360
 			if (angle >= 360.0f)
 			{
-				angle = angle - 360.0f * ((int)angle / 360);
+				angle -= 360.0f * ((int)angle / 360);
 			}
 			//increments angle
 			//TODO Find correlation between modification of speed and accuracy of end check.

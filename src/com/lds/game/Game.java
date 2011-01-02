@@ -37,6 +37,7 @@ public class Game
 	//public Player player2 = new Player(100.0f, 50.0f, 0.0f);
 	UIEntity UIE;
 	public Sprite spr1;
+	public Sprite spr2;
 
 	
 	//Constructors
@@ -77,16 +78,20 @@ public class Game
 		//entList.add(player1);
 		//entList.add(button1);
 		//entList.add(player2);
-		spr1 = new Sprite(7,7, 96.0f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, PhysEnt.DEFAULT_SPEED);
-		
+		spr1 = new Sprite(7,7, 96.0f, 250.0f, 350.0f, 0.0f, 1.0f, 1.0f, PhysEnt.DEFAULT_SPEED);
+		spr2 = new Sprite(7,7, 64.0f, -300.0f, -300.0f, 73.6f, 1.0f, 1.0f, PhysEnt.DEFAULT_SPEED);
 		tl.setTexture(0);
 		spr1.setTexture(tl.getTexture());
-		//spr1.moveTo(200, 5);
+		spr2.setTexture(tl.getTexture());
+		spr1.moveTo(-200.0f, -100.0f);
 		spr1.rotateTo(45.0f);
+		spr2.moveTo(150.0f, 150.0f);
+		spr2.rotateTo(200.3f);
 		entList.add(spr1);
+		entList.add(spr2);
 		//entList.add(player1);
 		
-		UIE = new UIProgressBar(200.0f, 30.0f, UIPosition.TOPLEFT, 500, 200, 500);
+		UIE = new UIProgressBar(200.0f, 30.0f, UIPosition.TOPLEFT, 200, 100, 200);
 		UIE.autoPadding(5, 5, 0, 0);
 		UIE.renderMode = RenderMode.GRADIENT;
 		//						Red	  Green	Blue  Alpha
@@ -96,10 +101,6 @@ public class Game
 								1.0f, 0.0f, 0.0f, 1.0f};	//bottom left
 		UIE.setGradient(initColor);
 		UIE.updatePosition(screenW, screenH);
-		/*UIE.colorR = 1.0f;
-		UIE.colorG = 0.3f;
-		UIE.colorB = 0.7f;
-		UIE.colorA = 0.9f;*/
 		UIList.add(UIE);
 		camPosX = 0.0f;
 		camPosY = 0.0f;
@@ -154,8 +155,7 @@ public class Game
 			}
 			else
 			{
-				//ent.isRendered = false;
-				EntityCleaner.queueEntityForRemoval(ent);
+				ent.isRendered = false;
 			}
 		}
 	}
