@@ -4,8 +4,8 @@ import javax.microedition.khronos.opengles.GL10;
 
 import com.lds.EntityCleaner;
 import com.lds.Point;
-import com.lds.TextureLoader;
 import com.lds.TilesetHelper;
+import com.lds.Enums.RenderMode;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -20,11 +20,13 @@ public abstract class Entity
 	public static final float DEFAULT_SIZE = 30.0f;
 	
 	//behavior data
-	public boolean isSolid, isTextured;
+	public boolean isSolid;
 	
 	//graphics data
 	public int texturePtr;
 	public float angle, size, xPos, yPos, xScl, yScl, speed, halfSize;
+	public float colorR, colorG, colorB, colorA;
+	public RenderMode renderMode;
 	
 	public float[] vertices;
 	public float[] texture;
@@ -46,19 +48,20 @@ public abstract class Entity
 	
 	public ArrayList<Entity> colList = new ArrayList<Entity>();
 	
-	public  Entity (float _size, float _xPos, float _yPos, float _angle, float _xScl, float _yScl, boolean _isSolid)
+	public  Entity (float size, float xPos, float yPos, float angle, float xScl, float yScl, boolean isSolid, RenderMode renderMode)
 	{
 		//initialize behavior variables
-		isSolid = _isSolid;
-		isTextured = false;
+		this.isSolid = isSolid;
 		
 		//initializes graphics variables
-		size = _size;
-		xPos = _xPos;
-		yPos = _yPos;
-		angle = _angle;
-		xScl = _xScl;
-		yScl = _yScl;
+		this.size = size;
+		this.xPos = xPos;
+		this.yPos = yPos;
+		this.angle = angle;
+		this.xScl = xScl;
+		this.yScl = yScl;
+		this.renderMode = renderMode;
+		
 		halfSize = size / 2;
 		
 		//initializes collision variables
@@ -96,28 +99,57 @@ public abstract class Entity
 		indexBuffer.position(0);
 	}
 	
-	public Entity (float _size, float _xPos, float _yPos)
+	public Entity (float _size, float _xPos, float _yPos, RenderMode renderMode)
 	{
-		this(_size, _xPos, _yPos, 0.0f, 1.0f, 1.0f, true);
+		this(_size, _xPos, _yPos, 0.0f, 1.0f, 1.0f, true, renderMode);
 	}
 	
 	public void draw(GL10 gl)
 	{
-		if (isTextured)	{gl.glBindTexture(GL10.GL_TEXTURE_2D, texturePtr);}
+		if (renderMode == RenderMode.COLOR) 
+		{
+			gl.glColor4f(colorR, colorG, colorB, colorA);
+		}
+		if (renderMode == RenderMode.TEXTURE || renderMode == RenderMode.TILESET)
+		{
+			gl.glEnable(GL10.GL_TEXTURE_2D);
+			gl.glBindTexture(GL10.GL_TEXTURE_2D, texturePtr);
+		}
 		
 		gl.glFrontFace(GL10.GL_CW);
 		
+		gl.glEnable(GL10.GL_CULL_FACE);
+		gl.glCullFace(GL10.GL_BACK);
+		
 		gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
 		
-		if (isTextured)	{gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);}
+		if (renderMode == RenderMode.TEXTURE || renderMode == RenderMode.TILESET)
+		{
+			gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
+		}
 		
 		gl.glVertexPointer(2, GL10.GL_FLOAT, 0, vertexBuffer);
-		if (isTextured) {gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, textureBuffer);}
-		
-		gl.glDrawElements(GL10.GL_TRIANGLE_STRIP, indices.length, GL10.GL_UNSIGNED_BYTE, indexBuffer);
-		
+		if (renderMode == RenderMode.TEXTURE || renderMode == RenderMode.TILESET) 
+		{
+			gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, textureBuffer);
+		}
+				
+		if (renderMode == RenderMode.GRADIENT)
+		{
+			
+		}
+		gl.glDrawElements(GL10.GL_TRIANGLE_STRIP, indices.length, GL10.GL_UNSIGNED_BYTE, indexBuffer);		
 		gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
-		if (isTextured) {gl.glDisableClientState(GL10.GL_TEXTURE_COORD_ARRAY);}
+		gl.glDisable(GL10.GL_CULL_FACE);
+		if (renderMode == RenderMode.TEXTURE || renderMode == RenderMode.TILESET) 
+		{
+			gl.glDisableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
+			gl.glDisable(GL10.GL_TEXTURE_2D);
+		}
+		if (renderMode == RenderMode.COLOR || renderMode == RenderMode.GRADIENT)
+		{
+			gl.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+		}
 	}
 		
 	public void remove()
@@ -125,7 +157,26 @@ public abstract class Entity
 		EntityCleaner.queueEntityForRemoval(this);
 	}
 	
+	public void setColor(float r, float b, float g, float a)
+	{
+		colorR = r;
+		colorB = b;
+		colorG = g;
+		colorA = a;
+	}
 	
+	public void setColor (int r, int b, int g, int a)
+	{
+		colorR = (float) r / 255.0f;
+		colorG = (float) g / 255.0f;
+		colorB = (float) b / 255.0f;
+		colorA = (float) a / 255.0f;
+	}
+	
+	public void setGradient(float[] colors)
+	{
+		
+	}
 	
 	
 	
@@ -242,11 +293,6 @@ public abstract class Entity
 		{
 			return false;
 		}
-	}
-
-	public void toggleTexturing(boolean value)
-	{
-		isTextured = value;
 	}
 	
 	public void setTexture (int ptr)

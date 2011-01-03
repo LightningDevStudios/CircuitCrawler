@@ -3,6 +3,8 @@ package com.lds.game;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
+import com.lds.Enums.RenderMode;
+
 import android.opengl.GLU;
 
 import android.content.Context;
@@ -22,22 +24,21 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		tempSH = screenH;
 		context = _context;
 		windowOutdated = false;
+		prevRenderCount = 2;
 	}
 	
 	@Override
 	public void onSurfaceCreated(GL10 gl, EGLConfig config)
 	{
-		
-		
 		//openGL settings
-		gl.glEnable(GL10.GL_TEXTURE_2D);
 		gl.glShadeModel(GL10.GL_SMOOTH);
 		gl.glEnable(GL10.GL_BLEND);
-		gl.glBlendFunc(GL10.GL_ONE, GL10.GL_ONE_MINUS_SRC_ALPHA);
+		gl.glBlendFunc(GL10.GL_ONE, GL10.GL_ONE_MINUS_SRC_ALPHA); //TODO change this later and make it
 
 		gl.glClearColor(0.39f, 0.58f, 0.93f, 0.5f);
 		
 		gl.glDisable(GL10.GL_DEPTH_TEST);
+		gl.glDepthMask(false);
 		gl.glEnable(GL10.GL_DITHER);
 		gl.glHint(GL10.GL_PERSPECTIVE_CORRECTION_HINT, GL10.GL_NICEST);	
 		
@@ -50,6 +51,12 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	{
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		
+		if (windowOutdated)
+		{
+			onSurfaceChanged(gl, (int)game.screenW, (int)game.screenH);
+			windowOutdated = false;
+		}
+		
 		int renderedcount = 0;
 		game.cleaner.clean(game.entList);
 		
@@ -61,10 +68,10 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 				if (game.tileset[i][j].isRendered)
 				{
 					gl.glTranslatef(game.tileset[i][j].xPos, game.tileset[i][j].yPos, 0.0f);
-					gl.glRotatef(game.tileset[i][j].angle, 0.0f, 0.0f, 1.0f);
-					gl.glScalef(game.tileset[i][j].xScl, game.tileset[i][j].yScl, 1.0f);
 					game.tileset[i][j].draw(gl);
 					gl.glLoadIdentity();
+					/*if (prevRenderCount < 2)
+						game.tileset[i][j].renderMode = RenderMode.TILESET;*/
 				}
 			}
 		}
@@ -94,19 +101,11 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 			
 			if (ent instanceof PhysEnt)
 			{
-				moveInterpolate((PhysEnt)ent);
-				rotateInterpolate((PhysEnt)ent);
-				scaleInterpolate((PhysEnt)ent);
+				PhysEnt e = (PhysEnt)ent;
+				e.moveInterpolate();
+				e.rotateInterpolate();
+				e.scaleInterpolate();
 			}
-			
-			/*if (game.button1.isActive())
-			{
-				game.player2.scaleTo(4.0f, 1.0f);
-			}
-			else
-			{
-				game.player2.scaleTo(1.0f, 1.0f);
-			}*/
 			
 			if (ent.isRendered)
 			{
@@ -119,27 +118,47 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 				renderedcount++;
 				
 				gl.glTranslatef(ent.xPos, ent.yPos, 0.0f);
-				gl.glRotatef(-ent.angle, 0.0f, 0.0f, 1.0f);
+				gl.glRotatef(ent.angle, 0.0f, 0.0f, 1.0f);
 				gl.glScalef(ent.xScl, ent.yScl, 1.0f);
 				ent.draw(gl);
 				gl.glLoadIdentity();
 			}
 		}
 		
+		viewHUD(gl);
+		
+		for (UIEntity ent : game.UIList)
+		{
+			if (ent instanceof UIProgressBar)
+			{
+				UIProgressBar UIpb = (UIProgressBar)ent;
+				if (UIpb.value > UIpb.minimum)
+				{
+					UIpb.value--;
+					UIpb.updateGradient();
+					UIpb.updateVertices();
+					UIpb.autoPadding(5, 5, 0, 0);
+					UIpb.updatePosition(game.screenW, game.screenH);
+				}
+			}
+			gl.glTranslatef(ent.xPos, ent.yPos, 0.0f);
+			ent.draw(gl);
+			gl.glLoadIdentity();
+			
+		}
+		
+		viewWorld(gl);
+		
 		//Update screen position and entities
 		game.updateLocalEntities();
-		game.updateLocalTileset();
-		if (windowOutdated)
-		{
-			onSurfaceChanged(gl, (int)game.screenW, (int)game.screenH);
-			windowOutdated = false;
-		}
+		
+		
 		//Debugging info
-		/*if (renderedcount != prevRenderCount)
+		if (renderedcount != prevRenderCount)
 		{
 			System.out.println("Items rendered: " + renderedcount);
 			prevRenderCount = renderedcount;
-		}*/
+		}
 	}
 
 	@Override
@@ -151,102 +170,36 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		GLU.gluOrtho2D(gl, game.camPosX - (float)(game.screenW/2), game.camPosX + (float)(game.screenW/2), game.camPosY - (float)(game.screenH/2), game.camPosY + (float)(game.screenH/2));
 		gl.glMatrixMode(GL10.GL_MODELVIEW);
 		gl.glLoadIdentity();
+		
+		game.updateLocalTileset();
 	}
 
 	@Override
 	public void onTouchInput(float xInput, float yInput) 
 	{
-		/*if (xInput < 100 && yInput < 100)
-		{
-			game.player1.rotate(20.0f);
-		}
-		else
-		{
-			game.player1.moveTo(xInput - game.screenW / 2, -yInput + game.screenH / 2);
-		}*/
 		game.camPosX = xInput - (game.screenW / 2);
 		game.camPosY = -yInput + (game.screenH / 2);
 		windowOutdated = true;
+		
+		
 	}
 	
-	/*************************
-	 * Interpolation Methods *
-	 *************************/
-	
-	//translation interpolation
-	public void moveInterpolate (PhysEnt ent)
-	{	
-		//if the object needs to be interpolated
-		if ((ent.xPos != ent.endX || ent.yPos != ent.endY))
-		{
-			if (ent.shouldBreak)
-			{
-				ent.shouldBreak = false;
-				return;
-			}
-			
-			//increments movement
-			ent.xPos += ent.speed * ent.interpX;
-			ent.yPos += ent.speed * ent.interpY;
-			
-			//error check
-			if (ent.xPos <= ent.endX + ent.speed / 2&& ent.xPos >= ent.endX - ent.speed / 2)
-			{
-				ent.xPos = ent.endX;
-			}
-			if (ent.yPos <= ent.endY + ent.speed / 2 && ent.yPos >= ent.endY - ent.speed / 2)
-			{
-				ent.yPos = ent.endY;
-			}
-		}
-	}
-	
-	//rotation interpolation
-	public void rotateInterpolate (PhysEnt ent)
+	public void viewHUD(GL10 gl)
 	{
-		if (ent.angle != ent.endAngle)
-		{
-			if (ent.shouldBreak)
-			{
-				ent.shouldBreak = false;
-				return;
-			}
-			
-			//increments angle
-			ent.angle += ent.speed * ent.interpAngle;
-			
-			//error check
-			if (ent.angle <= ent.endAngle + ent.speed / 2 && ent.angle >= ent.endAngle - ent.speed / 2)
-			{
-				ent.angle = ent.endAngle;
-			}
-		}
+		gl.glMatrixMode(GL10.GL_PROJECTION);
+		gl.glPushMatrix();
+		gl.glLoadIdentity();
+		GLU.gluOrtho2D(gl, -game.screenW /2 , game.screenW / 2, -game.screenH / 2, game.screenH / 2);
+		gl.glMatrixMode(GL10.GL_MODELVIEW);
+		gl.glPushMatrix();
+		gl.glLoadIdentity();
 	}
 	
-	//scale interpolation
-	public void scaleInterpolate (PhysEnt ent)
+	public void viewWorld(GL10 gl)
 	{
-		if ((ent.xScl != ent.endXScl) || (ent.yScl != ent.endYScl))
-		{	
-			if (ent.shouldBreak)
-			{
-				ent.shouldBreak = false;
-				return;
-			}
-			
-			//increments scaling
-			ent.xScl += ent.speed * ent.interpXScl;
-			ent.yScl += ent.speed * ent.interpYScl;
-			
-			//error check
-			if (ent.xScl <= ent.endXScl + ent.speed / 2 && ent.xScl >= ent.endXScl - ent.speed / 2)
-			{
-				ent.xScl = ent.endXScl;
-			}
-			if (ent.yScl <= ent.endYScl + ent.speed / 2 && ent.yScl >= ent.endYScl - ent.speed / 2)
-			{
-				ent.yScl = ent.endYScl;
-			}
-		}
+		gl.glMatrixMode(GL10.GL_PROJECTION);
+		gl.glPopMatrix();
+		gl.glMatrixMode(GL10.GL_MODELVIEW);
+		gl.glPopMatrix();
 	}
 }
