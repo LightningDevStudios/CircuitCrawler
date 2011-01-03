@@ -35,20 +35,6 @@ public class Player extends Character //your character, protagonist
 			inventory.add("test");
 			colList.remove(ent);
 		}
-		/*
-		String superType = ent.getClass().getSuperclass().getName().substring(13); //gets the type of superclass
-		String entType = ent.getClass().getName().substring(13); //gets the type of class
-		
-		if (entType.equals("Player") || entType.equals("StaticBlock"))
-		{
-			stop();
-			colList.remove(ent);
-		}
-		else if (superType.equals("PickupObj"))
-		{
-			inventory.add(entType);
-			colList.remove(ent);
-		}*/
 	}
 	
 	public int getEnergy()
