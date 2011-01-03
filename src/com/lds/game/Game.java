@@ -171,34 +171,29 @@ public class Game
 		{
 			//define max square bounds
 			ent.updateAbsolutePointLocations();
-			float entMinX = 999999.9f;
-			float entMaxX = 0.0f;
-			float entMinY = 999999.9f;
-			float entMaxY = 0.0f;
-			for (Point point : ent.colPoints)
+			float entMinX = ent.colPoints[0].getX();
+			float entMaxX = ent.colPoints[0].getX();
+			float entMinY = ent.colPoints[0].getY();
+			float entMaxY = ent.colPoints[0].getY();
+			for (int i = 1; i < ent.colPoints.length; i++)
 			{
-				if (point.getX() > entMaxX)
+				if (ent.colPoints[i].getX() > entMaxX)
 				{
-					entMaxX = point.getX();
+					entMaxX = ent.colPoints[i].getX();
 				}
-				else if (point.getX() < entMinX)
+				else if (ent.colPoints[i].getX() < entMinX)
 				{
-					entMinX = point.getX();
+					entMinX = ent.colPoints[i].getX();
 				}
-				if (point.getY() > entMaxY)
+				if (ent.colPoints[i].getY() > entMaxY)
 				{
-					entMaxY = point.getY();
+					entMaxY = ent.colPoints[i].getY();
 				}
-				else if (point.getY() < entMinY)
+				else if (ent.colPoints[i].getY() < entMinY)
 				{
-					entMinY = point.getY();
+					entMinY = ent.colPoints[i].getY();
 				}
 			}
-			
-			entMinX = ent.xPos - (float)(Math.sqrt(2) / 2);
-			entMaxX = ent.xPos + (float)(Math.sqrt(2) / 2);
-			entMinY = ent.yPos - (float)(Math.sqrt(2) / 2);
-			entMaxY = ent.yPos + (float)(Math.sqrt(2) / 2);
 			
 			//values are opposite for entMin/Max because only the far tips have to be inside the screen (leftmost point on right border of screen)
 			if (entMinX <= maxX && entMaxX >= minX && entMinY <= maxY && entMaxY >= minY)
