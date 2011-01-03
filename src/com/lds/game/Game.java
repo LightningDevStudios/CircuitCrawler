@@ -99,7 +99,7 @@ public class Game
 		
 		//spr2.moveTo(150.0f, 150.0f);
 		spr2.rotateTo(30.3f);
-		spr2.moveTo(100.0f, 100.0f);
+		spr2.moveTo(-100.0f, 100.0f);
 		
 		//entList.add(spr1);
 		entList.add(spr2);
