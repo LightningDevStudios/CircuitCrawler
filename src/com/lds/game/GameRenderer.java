@@ -213,11 +213,10 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	@Override
 	public void onTouchInput(float xInput, float yInput) 
 	{
+		game.player1.setPos(xInput - (game.screenW / 2), -yInput + (game.screenH / 2));
 		game.camPosX = xInput - (game.screenW / 2);
 		game.camPosY = -yInput + (game.screenH / 2);
-		windowOutdated = true;
-		
-		
+		windowOutdated = true;	
 	}
 	
 	public void viewHUD(GL10 gl)

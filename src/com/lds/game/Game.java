@@ -43,8 +43,6 @@ public class Game
 	public UIEnergyBar energyBar;
 	public UIButton btnA;
 	public UIButton btnB;
-	public Sprite spr1;
-	public Sprite spr2;
 	
 	//Constructors
 	public Game (float _screenW, float _screenH, Context context, GL10 gl)
@@ -76,35 +74,12 @@ public class Game
 			System.out.print("\n");
 		}
 		
-		
+		player1.move(100.0f, 50.0f);
 		
 		screenW = _screenW;
 		screenH = _screenH;
 
-		//entList.add(player1);
-		//entList.add(button1);
-		//entList.add(player2);
-		spr1 = new Sprite(7,7, 96.0f, 250.0f, 350.0f, 0.0f, 1.0f, 1.0f, PhysEnt.DEFAULT_SPEED);
-		spr2 = new Sprite(7,7, 64.0f, -100.0f, -100.0f, 200.0f, 1.0f, 1.0f, PhysEnt.DEFAULT_SPEED);
-		tl.setTexture(0);
 		
-		spr1.setTexture(tl.getTexture());
-		//spr1.moveTo(200, 5);
-		spr1.rotateTo(45.0f);
-		entList.add(spr1);
-		//entList.add(player1);
-		
-		spr2.setTexture(tl.getTexture());
-		
-		//spr1.moveTo(-200.0f, -100.0f);
-		//spr1.rotateTo(45.0f);
-		
-		//spr2.moveTo(150.0f, 150.0f);
-		spr2.rotateTo(30.3f);
-		spr2.moveTo(-100.0f, 100.0f);
-		
-		//entList.add(spr1);
-		entList.add(spr2);
 		
 		healthBar = new UIHealthBar(200.0f, 30.0f, UIPosition.TOPLEFT, Direction.RIGHT);
 		healthBar.originalTopPad = 5.0f;
