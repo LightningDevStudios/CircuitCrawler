@@ -6,15 +6,15 @@ import javax.microedition.khronos.opengles.GL10;
 import com.lds.Enums.RenderMode;
 
 import android.opengl.GLU;
-
 import android.content.Context;
+
+import com.lds.Stopwatch;
 
 public class GameRenderer implements com.lds.Graphics.Renderer
 {
-	//I made game static, so that its entList could be accessed from lower classes, such as Entity. this allows us to easily remove objects from the list
 	public Game game;
 	public Context context;
-	public boolean windowOutdated;
+	public boolean windowOutdated, testPB;
 	public float tempSW, tempSH;
 	int prevRenderCount;
 	
@@ -42,7 +42,12 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		gl.glEnable(GL10.GL_DITHER);
 		gl.glHint(GL10.GL_PERSPECTIVE_CORRECTION_HINT, GL10.GL_NICEST);	
 		
+		//start the timer and use an initial tick to prevent errors where interpolation starts at -32768, making it go 
+		Stopwatch.restartTimer();
+		Stopwatch.tick();
+		
 		game = new Game(tempSW, tempSH, context, gl);
+		testPB = true;
 		
 	}
 	
@@ -50,6 +55,8 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	public void onDrawFrame(GL10 gl) 
 	{
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
+		
+		Stopwatch.tick();
 		
 		if (windowOutdated)
 		{
@@ -59,6 +66,8 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		
 		int renderedcount = 0;
 		game.cleaner.clean(game.entList);
+		//Update screen position and entities
+		game.updateLocalEntities();
 		
 		//Render tileset
 		for (int i = 0; i < game.tileset.length; i++)
@@ -82,20 +91,40 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 			//scales up or down all PickupObj's
 			ent.pickupScale();
 			
+			//Interpolation
+			if (ent instanceof PhysEnt)
+			{
+				PhysEnt e = (PhysEnt)ent;
+				e.moveInterpolate();
+				e.rotateInterpolate();
+				e.scaleInterpolate();
+			}
+			
 			//checks for collision with all other entities in entList
+			//TODO calculate only when necessary, not every frame.
 			for (Entity colEnt : game.entList)
 			{
 				if (ent != colEnt)
 				{
 					if (ent.isColliding(colEnt))
 					{
-						ent.interact(colEnt);
+						//ent.interact(colEnt);
+						if (ent instanceof PhysEnt)
+						{
+							PhysEnt p = (PhysEnt)ent;
+							p.stop();
+						}
+						if (colEnt instanceof PhysEnt)
+						{
+							PhysEnt p = (PhysEnt)ent;
+							p.stop();
+						}
 					}
-					else if (ent.colList.contains(colEnt))
+					/*else if (ent.colList.contains(colEnt))
 					{
 						ent.uninteract(colEnt);
 						ent.colList.remove(colEnt);
-					}
+					}*/
 				}
 			}
 			
@@ -132,13 +161,25 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 			if (ent instanceof UIProgressBar)
 			{
 				UIProgressBar UIpb = (UIProgressBar)ent;
-				if (UIpb.value > UIpb.minimum)
+				if (UIpb.tempBool)
 				{
-					UIpb.value--;
+					UIpb.setValue(UIpb.getValue() - 1);
 					UIpb.updateGradient();
 					UIpb.updateVertices();
-					UIpb.autoPadding(5, 5, 0, 0);
+					UIpb.autoPadding(UIpb.originalTopPad, UIpb.originalLeftPad, UIpb.originalBottomPad, UIpb.originalRightPad);
 					UIpb.updatePosition(game.screenW, game.screenH);
+					if (UIpb.getValue() == UIpb.getMinimum())
+						UIpb.tempBool = false;
+				}
+				else
+				{
+					UIpb.setValue(UIpb.getValue() + 1);
+					UIpb.updateGradient();
+					UIpb.updateVertices();
+					UIpb.autoPadding(UIpb.originalTopPad, UIpb.originalLeftPad, UIpb.originalBottomPad, UIpb.originalRightPad);
+					UIpb.updatePosition(game.screenW, game.screenH);
+					if (UIpb.getValue() == UIpb.getMaximum())
+						UIpb.tempBool = true;
 				}
 			}
 			gl.glTranslatef(ent.xPos, ent.yPos, 0.0f);
@@ -148,11 +189,6 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		}
 		
 		viewWorld(gl);
-		
-		//Update screen position and entities
-		game.updateLocalEntities();
-		
-		
 		//Debugging info
 		if (renderedcount != prevRenderCount)
 		{
@@ -170,7 +206,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		GLU.gluOrtho2D(gl, game.camPosX - (float)(game.screenW/2), game.camPosX + (float)(game.screenW/2), game.camPosY - (float)(game.screenH/2), game.camPosY + (float)(game.screenH/2));
 		gl.glMatrixMode(GL10.GL_MODELVIEW);
 		gl.glLoadIdentity();
-		
+
 		game.updateLocalTileset();
 	}
 

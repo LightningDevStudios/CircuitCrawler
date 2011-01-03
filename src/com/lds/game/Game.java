@@ -7,6 +7,7 @@ import javax.microedition.khronos.opengles.GL10;
 import android.content.Context;
 
 import com.lds.EntityCleaner;
+import com.lds.Enums.Direction;
 import com.lds.Enums.RenderMode;
 import com.lds.TextureLoader;
 import com.lds.TilesetHelper;
@@ -25,6 +26,11 @@ public class Game
 	public TextureLoader tl;
 	public EntityCleaner cleaner;
 	
+	//Timer data
+	public long timeMs;
+	public int timeS;
+	public int timeM;
+	
 	//Camera data
 	public float screenW;
 	public float screenH;
@@ -33,11 +39,12 @@ public class Game
 	
 	//Testing data
 	public Player player1 = new Player(-100.0f, 50.0f, 0.0f);
-	//public Button button1 = new Button(-100.0f, 50.0f);
-	//public Player player2 = new Player(100.0f, 50.0f, 0.0f);
-	UIEntity UIE;
+	public UIHealthBar healthBar;
+	public UIEnergyBar energyBar;
+	public UIButton btnA;
+	public UIButton btnB;
 	public Sprite spr1;
-
+	public Sprite spr2;
 	
 	//Constructors
 	public Game (float _screenW, float _screenH, Context context, GL10 gl)
@@ -77,35 +84,76 @@ public class Game
 		//entList.add(player1);
 		//entList.add(button1);
 		//entList.add(player2);
-		spr1 = new Sprite(7,7, 96.0f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, PhysEnt.DEFAULT_SPEED);
-		
+		spr1 = new Sprite(7,7, 96.0f, 250.0f, 350.0f, 0.0f, 1.0f, 1.0f, PhysEnt.DEFAULT_SPEED);
+		spr2 = new Sprite(7,7, 64.0f, -100.0f, -100.0f, 200.0f, 1.0f, 1.0f, PhysEnt.DEFAULT_SPEED);
 		tl.setTexture(0);
+		
 		spr1.setTexture(tl.getTexture());
 		//spr1.moveTo(200, 5);
 		spr1.rotateTo(45.0f);
 		entList.add(spr1);
 		//entList.add(player1);
 		
-		UIE = new UIProgressBar(200.0f, 30.0f, UIPosition.TOPLEFT, 500, 200, 500);
-		UIE.autoPadding(5, 5, 0, 0);
-		UIE.renderMode = RenderMode.GRADIENT;
+		spr2.setTexture(tl.getTexture());
+		
+		//spr1.moveTo(-200.0f, -100.0f);
+		//spr1.rotateTo(45.0f);
+		
+		//spr2.moveTo(150.0f, 150.0f);
+		spr2.rotateTo(30.3f);
+		spr2.moveTo(-100.0f, 100.0f);
+		
+		//entList.add(spr1);
+		entList.add(spr2);
+		
+		healthBar = new UIHealthBar(200.0f, 30.0f, UIPosition.TOPLEFT, Direction.RIGHT);
+		healthBar.originalTopPad = 5.0f;
+		healthBar.originalLeftPad = 5.0f;
+		healthBar.autoPadding(5, 5, 0, 0);
+		healthBar.renderMode = RenderMode.GRADIENT;
+		
 		//						Red	  Green	Blue  Alpha
-		float[] initColor = {	0.0f, 1.0f, 0.0f, 0.9f,		//top right
+		float[] healthColor = {	0.0f, 1.0f, 0.0f, 0.9f,		//top right
 								0.0f, 1.0f, 0.0f, 0.9f, 	//bottom right
 								1.0f, 0.0f, 0.0f, 1.0f, 	//top left
 								1.0f, 0.0f, 0.0f, 1.0f};	//bottom left
-		UIE.setGradient(initColor);
-		UIE.updatePosition(screenW, screenH);
-		/*UIE.colorR = 1.0f;
-		UIE.colorG = 0.3f;
-		UIE.colorB = 0.7f;
-		UIE.colorA = 0.9f;*/
-		UIList.add(UIE);
+		healthBar.setGradient(healthColor);
+		healthBar.updatePosition(screenW, screenH);
+		
+		
+		energyBar = new UIEnergyBar(150.0f, 15.0f, UIPosition.TOPRIGHT, Direction.LEFT);
+		energyBar.originalTopPad = 5.0f;
+		energyBar.originalRightPad = 5.0f;
+		energyBar.autoPadding(5, 0, 0, 5);
+		energyBar.renderMode = RenderMode.GRADIENT;
+		
+		float[] energyColor = {	0.0f, 0.0f, 0.3f, 1.0f,
+								0.0f, 0.0f, 0.3f, 1.0f,
+								0.0f, 0.0f, 1.0f, 0.9f,
+								0.0f, 0.0f, 1.0f, 0.9f };
+		energyBar.setGradient(energyColor);
+		energyBar.updatePosition(screenW, screenH);
+		
+		btnA = new UIButton(80.0f, 80.0f, UIPosition.BOTTOMRIGHT);
+		btnA.autoPadding(0.0f, 0.0f, 5.0f, 90.0f);
+		btnA.renderMode = RenderMode.COLOR;
+		btnA.setColor(86, 93, 128, 128);
+		btnA.updatePosition(screenW, screenH);
+		
+		btnB = new UIButton(80.0f, 80.0f, UIPosition.BOTTOMRIGHT);
+		btnB.autoPadding(0.0f, 0.0f, 90.0f, 5.0f);
+		btnB.renderMode = RenderMode.COLOR;
+		btnB.setColor(200, 93, 50, 128);
+		btnB.updatePosition(screenW, screenH);
+		
+		UIList.add(healthBar);
+		UIList.add(energyBar);
+		UIList.add(btnA);
+		UIList.add(btnB);
 		camPosX = 0.0f;
 		camPosY = 0.0f;
 		
 		//TODO take into account AI, perhaps render every time it chooses a new point to go to?
-		//player2.move(30.0f, 50.0f);
 		updateLocalEntities();
 		updateLocalTileset();
 	}
@@ -147,6 +195,11 @@ public class Game
 				}
 			}
 			
+			entMinX = ent.xPos - (float)(Math.sqrt(2) / 2);
+			entMaxX = ent.xPos + (float)(Math.sqrt(2) / 2);
+			entMinY = ent.yPos - (float)(Math.sqrt(2) / 2);
+			entMaxY = ent.yPos + (float)(Math.sqrt(2) / 2);
+			
 			//values are opposite for entMin/Max because only the far tips have to be inside the screen (leftmost point on right border of screen)
 			if (entMinX <= maxX && entMaxX >= minX && entMinY <= maxY && entMaxY >= minY)
 			{
@@ -154,8 +207,7 @@ public class Game
 			}
 			else
 			{
-				//ent.isRendered = false;
-				EntityCleaner.queueEntityForRemoval(ent);
+				ent.isRendered = false;
 			}
 		}
 	}

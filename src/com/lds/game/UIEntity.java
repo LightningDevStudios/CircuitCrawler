@@ -29,11 +29,11 @@ public abstract class UIEntity
 	UIPosition position;
 	RenderMode renderMode;
 	
-	public int texturePtr;
 	public float[] vertices;
 	public float[] texture;
 	public float[] color;
 	public byte[] indices;
+	public int texturePtr;
 	
 	public FloatBuffer vertexBuffer;
 	public FloatBuffer textureBuffer;
@@ -159,41 +159,42 @@ public abstract class UIEntity
 			switch (position)
 			{
 				case TOP:
-					this.topPad = halfYSize + topPad;
-					break;
-				case LEFT:
-					this.leftPad = halfXSize + leftPad;
-					break;
-				case BOTTOM:
-					this.bottomPad = halfYSize + bottomPad;
-					break;
-				case RIGHT:
-					this.rightPad = halfXSize + rightPad;
-					break;
-				case CENTER:
-					break;
 				case TOPLEFT:
-					this.leftPad = halfXSize + leftPad;
-					this.topPad = halfYSize + topPad;
-					break;
 				case TOPRIGHT:
-					this.rightPad = halfXSize + rightPad;
 					this.topPad = halfYSize + topPad;
 					break;
+			}
+			
+			switch (position)
+			{
+				case LEFT:
+				case TOPLEFT:
 				case BOTTOMLEFT:
 					this.leftPad = halfXSize + leftPad;
+					break;
+			}
+			
+			switch (position)
+			{
+				case BOTTOM:
+				case BOTTOMLEFT:
+				case BOTTOMRIGHT:
 					this.bottomPad = halfYSize + bottomPad;
 					break;
+			}
+			
+			switch (position)
+			{
+				case RIGHT:
+				case TOPRIGHT:
 				case BOTTOMRIGHT:
 					this.rightPad = halfXSize + rightPad;
-					this.bottomPad = halfYSize + bottomPad;
 					break;
-				default:
 			}
 		}
 		else
 		{
-			System.out.println("Warning: Current UIEntity is not using relative positioning. No padding changes made!");
+			System.out.println("Warning: Current UIEntity is not using positioning with UIPosition. No padding changes made!");
 		}
 	}
 	
