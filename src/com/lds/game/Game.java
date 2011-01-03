@@ -38,11 +38,11 @@ public class Game
 	public float camPosY;
 	
 	//Testing data
-	public Player player1 = new Player(-100.0f, 50.0f, 0.0f);
 	public UIHealthBar healthBar;
 	public UIEnergyBar energyBar;
 	public UIButton btnA;
 	public UIButton btnB;
+	public Player player1;
 	
 	//Constructors
 	public Game (float _screenW, float _screenH, Context context, GL10 gl)
@@ -73,8 +73,11 @@ public class Game
 			}
 			System.out.print("\n");
 		}
+		player1 = new Player(-100.0f, 50.0f, 0.0f);
 		
-		player1.move(100.0f, 50.0f);
+		player1.renderMode = RenderMode.COLOR;
+		player1.setColor(255, 255, 0, 255);
+		entList.add(player1);
 		
 		screenW = _screenW;
 		screenH = _screenH;
