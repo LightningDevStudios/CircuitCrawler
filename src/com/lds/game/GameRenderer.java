@@ -3,17 +3,16 @@ package com.lds.game;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
-import com.lds.Enums.RenderMode;
-
 import android.opengl.GLU;
-
 import android.content.Context;
+
+import com.lds.Stopwatch;
 
 public class GameRenderer implements com.lds.Graphics.Renderer
 {
 	public Game game;
 	public Context context;
-	public boolean windowOutdated;
+	public boolean windowOutdated, testPB;
 	public float tempSW, tempSH;
 	int prevRenderCount;
 	
@@ -24,6 +23,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		context = _context;
 		windowOutdated = false;
 		prevRenderCount = 2;
+		
 	}
 	
 	@Override
@@ -41,7 +41,12 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		gl.glEnable(GL10.GL_DITHER);
 		gl.glHint(GL10.GL_PERSPECTIVE_CORRECTION_HINT, GL10.GL_NICEST);	
 		
+		//start the timer and use an initial tick to prevent errors where interpolation starts at -32768, making it go 
+		Stopwatch.restartTimer();
+		Stopwatch.tick();
+		
 		game = new Game(tempSW, tempSH, context, gl);
+		testPB = true;
 		
 	}
 	
@@ -49,6 +54,8 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	public void onDrawFrame(GL10 gl) 
 	{
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
+		
+		Stopwatch.tick();
 		
 		if (windowOutdated)
 		{
@@ -91,6 +98,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 			}
 			
 			//checks for collision with all other entities in entList
+			//TODO calculate only when necessary, not every frame.
 			for (Entity colEnt : game.entList)
 			{
 				if (ent != colEnt)
@@ -144,13 +152,25 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 			if (ent instanceof UIProgressBar)
 			{
 				UIProgressBar UIpb = (UIProgressBar)ent;
-				if (UIpb.getValue() > UIpb.getMinimum())
+				if (UIpb.tempBool)
 				{
 					UIpb.setValue(UIpb.getValue() - 1);
 					UIpb.updateGradient();
 					UIpb.updateVertices();
 					UIpb.autoPadding(UIpb.originalTopPad, UIpb.originalLeftPad, UIpb.originalBottomPad, UIpb.originalRightPad);
 					UIpb.updatePosition(game.screenW, game.screenH);
+					if (UIpb.getValue() == UIpb.getMinimum())
+						UIpb.tempBool = false;
+				}
+				else
+				{
+					UIpb.setValue(UIpb.getValue() + 1);
+					UIpb.updateGradient();
+					UIpb.updateVertices();
+					UIpb.autoPadding(UIpb.originalTopPad, UIpb.originalLeftPad, UIpb.originalBottomPad, UIpb.originalRightPad);
+					UIpb.updatePosition(game.screenW, game.screenH);
+					if (UIpb.getValue() == UIpb.getMaximum())
+						UIpb.tempBool = true;
 				}
 			}
 			gl.glTranslatef(ent.xPos, ent.yPos, 0.0f);

@@ -13,6 +13,7 @@ public abstract class UIProgressBar extends UIEntity
 	protected float originalXSize, originalYSize;
 	protected Direction dir;
 	public float originalTopPad, originalLeftPad, originalBottomPad, originalRightPad;
+	public boolean tempBool;
 		
 	public UIProgressBar(float xSize, float ySize, UIPosition position, Direction dir, int value, int minimum, int maximum)
 	{
@@ -181,7 +182,7 @@ public abstract class UIProgressBar extends UIEntity
 	
 	public void setValue(int value)
 	{
-		if (value > minimum && value < maximum)
+		if (value >= minimum && value <= maximum)
 			this.value = value;
 	}
 	

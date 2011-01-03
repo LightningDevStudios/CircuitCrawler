@@ -4,7 +4,6 @@ import com.lds.Enums.UIPosition;
 
 public class UIImage extends UIEntity
 {
-	
 	public UIImage(float xSize, float ySize, UIPosition position)
 	{
 		super(xSize, ySize, position);
@@ -24,5 +23,4 @@ public class UIImage extends UIEntity
 	{
 		super(xSize, ySize, xRelative, yRelative, topPad, leftPad, bottomPad, rightPad);
 	}
-
 }
