@@ -2,6 +2,8 @@ package com.lds.game;
 
 import java.util.ArrayList;
 
+import com.lds.EntityCleaner;
+
 public class Player extends Character //your character, protagonist
 {
 	private int energy;
@@ -21,18 +23,24 @@ public class Player extends Character //your character, protagonist
 		energy -= 5;
 	}
 	
+	public void buttonInteract (Entity ent)
+	{
+		EntityCleaner.queueEntityForRemoval(ent);
+	}
+	
 	@Override
 	public void interact (Entity ent)
 	{
-		if (ent instanceof Player || ent instanceof StaticEnt)
+		if (ent instanceof StaticEnt)
 		{
 			stop();
 			colList.remove(ent);
 		}
 		
-		else if (ent instanceof PickupObj)
+		else if (ent instanceof InvenPickup)
 		{
-			inventory.add("test");
+			Inventory.add(((InvenPickup)ent).getName());
+			EntityCleaner.queueEntityForRemoval(ent);
 			colList.remove(ent);
 		}
 		else if (ent instanceof Health)

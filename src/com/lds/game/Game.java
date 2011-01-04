@@ -43,7 +43,7 @@ public class Game
 	public UIButton btnA;
 	public UIButton btnB;
 	public UIJoypad joypad;
-	public Player player1;
+	public Player player;
 	
 	//Constructors
 	public Game (float _screenW, float _screenH, Context context, GL10 gl)
@@ -74,11 +74,11 @@ public class Game
 			}
 			System.out.print("\n");
 		}
-		player1 = new Player(-100.0f, 50.0f, 0.0f);
+		player = new Player(-100.0f, 50.0f, 0.0f);
 		
-		player1.renderMode = RenderMode.COLOR;
-		player1.setColor(255, 255, 0, 255);
-		entList.add(player1);
+		player.renderMode = RenderMode.COLOR;
+		player.setColor(255, 255, 0, 255);
+		entList.add(player);
 		
 		screenW = _screenW;
 		screenH = _screenH;
@@ -155,30 +155,10 @@ public class Game
 		for(Entity ent : entList)
 		{
 			//define max square bounds
-			ent.updateAbsolutePointLocations();
-			float entMinX = ent.colPoints[0].getX();
-			float entMaxX = ent.colPoints[0].getX();
-			float entMinY = ent.colPoints[0].getY();
-			float entMaxY = ent.colPoints[0].getY();
-			for (int i = 1; i < ent.colPoints.length; i++)
-			{
-				if (ent.colPoints[i].getX() > entMaxX)
-				{
-					entMaxX = ent.colPoints[i].getX();
-				}
-				else if (ent.colPoints[i].getX() < entMinX)
-				{
-					entMinX = ent.colPoints[i].getX();
-				}
-				if (ent.colPoints[i].getY() > entMaxY)
-				{
-					entMaxY = ent.colPoints[i].getY();
-				}
-				else if (ent.colPoints[i].getY() < entMinY)
-				{
-					entMinY = ent.colPoints[i].getY();
-				}
-			}
+			float entMinX = ent.xPos - (float)ent.diagonal;
+			float entMaxX = ent.xPos + (float)ent.diagonal;
+			float entMinY = ent.yPos - (float)ent.diagonal;
+			float entMaxY = ent.yPos + (float)ent.diagonal;
 			
 			//values are opposite for entMin/Max because only the far tips have to be inside the screen (leftmost point on right border of screen)
 			if (entMinX <= maxX && entMaxX >= minX && entMinY <= maxY && entMaxY >= minY)

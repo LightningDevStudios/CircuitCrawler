@@ -215,6 +215,18 @@ public abstract class Entity
 		colPoints[3].setY((float)(Math.sin(this.rad - Math.PI + diagAngle) * diagonal) + yPos);
 	}
 	
+	public boolean closeEnough (Entity ent)
+	{
+		if (Math.sqrt(Math.pow(xPos - ent.xPos, 2) + Math.pow(yPos - ent.yPos, 2)) < (float)((diagonal) + ent.diagonal))
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
 	//This tests for collision between two entities (no shit) - Devin
 	public boolean isColliding (Entity ent)
 	{	
@@ -229,7 +241,7 @@ public abstract class Entity
 		ent.updateAbsolutePointLocations();
 		
 		//makes sure the entities are close enough so that collision testing is actually neccessary
-		if (Math.sqrt(Math.pow(xPos - ent.xPos, 2) + Math.pow(yPos - ent.yPos, 2)) > ((diagonal) + ent.diagonal))
+		if (!closeEnough(ent))
 		{
 			return false;
 		}
