@@ -7,7 +7,7 @@ import com.lds.EntityCleaner;
 public class Player extends Character //your character, protagonist
 {
 	private int energy;
-	private ArrayList<String> inventory = new ArrayList<String>(); //holds the name of each pickup object in the inventory
+	private boolean holdingObject;
 	
 	public Player (float _xPos, float _yPos, float _angle)
 	{
@@ -16,6 +16,7 @@ public class Player extends Character //your character, protagonist
 		
 		//initialize Player data
 		energy = 100;
+		boolean holdingObject = false;
 	}
 	
 	public void attack ()
@@ -25,7 +26,10 @@ public class Player extends Character //your character, protagonist
 	
 	public void buttonInteract (Entity ent)
 	{
-		EntityCleaner.queueEntityForRemoval(ent);
+		if (ent instanceof PhysEnt)
+		{
+			//TODO: pickup object
+		}
 	}
 	
 	@Override
@@ -51,6 +55,11 @@ public class Player extends Character //your character, protagonist
 		{
 			energy += ((Powerup)ent).getValue();
 		}
+	}
+	
+	public boolean isHoldingObject ()
+	{
+		return holdingObject;
 	}
 	
 	public int getEnergy()

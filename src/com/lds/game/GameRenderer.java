@@ -129,9 +129,16 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 				}
 				
 				//checks for button interaction
-				if (game.player.closeEnough(colEnt) /*&& buttonA.isPressed()*/)
+				if (!game.player.isHoldingObject())
 				{
-					game.player.buttonInteract(colEnt);
+					if (game.player.closeEnough(colEnt) && game.btnB.isPressed())
+					{
+						game.player.buttonInteract(colEnt);
+					}
+				}
+				else
+				{
+					//TODO: throw or drop object
 				}
 			}
 			
@@ -239,7 +246,14 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 				}
 				if (ent instanceof UIButton)
 				{
-					
+					((UIButton)ent).press();
+				}
+			}
+			else
+			{
+				if (ent instanceof UIButton && ((UIButton)ent).isPressed())
+				{
+					((UIButton)ent).unpress();
 				}
 			}
 		}

@@ -17,7 +17,7 @@ import java.util.ArrayList;
 
 public abstract class Entity 
 {
-	public static final float DEFAULT_SIZE = 30.0f;
+	public static final float DEFAULT_SIZE = 69.0f;
 	
 	//behavior data
 	public boolean isSolid;
@@ -259,7 +259,7 @@ public abstract class Entity
 		//checks for collision on each of the 4 slopes
 		for (float slope : colSlopes)
 		{
-			//TODO get a more reliable system. Maybe a world is offset by a value of 1,000,000. Constants like this are NEVER a good idea.
+			//TODO: Make this cleaner, get rid of constants
 			ent1High = -999999.0f;
 			ent2High = -999999.0f;
 			ent1Low = 999999.0f;

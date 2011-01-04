@@ -173,8 +173,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 		//if the object needs to be interpolated
 		if (isInterpTrans)
 		{		
-			//increments movement
-			//TODO find a good speed scale, using 0.05f is too precise to get a clear reading on in error check.
+			//increments movement\
 			float interval = (float)(Stopwatch.elapsedTimeInMilliseconds() - interpMoveTimeMs);
 			xPos += moveSpeed / 1000 * interval * moveX;
 			yPos += moveSpeed / 1000 * interval * moveY;
