@@ -42,6 +42,7 @@ public class Game
 	public UIEnergyBar energyBar;
 	public UIButton btnA;
 	public UIButton btnB;
+	public UIJoypad joypad;
 	public Player player1;
 	
 	//Constructors
@@ -124,10 +125,16 @@ public class Game
 		btnB.setColor(200, 93, 50, 128);
 		btnB.updatePosition(screenW, screenH);
 		
+		joypad = new UIJoypad(100, 100, UIPosition.BOTTOMLEFT);
+		joypad.autoPadding(5.0f, 0.0f, 5.0f, 0.0f);
+		joypad.renderMode = RenderMode.BLANK;
+		joypad.updatePosition(screenW, screenH);
+		
 		UIList.add(healthBar);
 		UIList.add(energyBar);
 		UIList.add(btnA);
 		UIList.add(btnB);
+		UIList.add(joypad);
 		camPosX = 0.0f;
 		camPosY = 0.0f;
 		

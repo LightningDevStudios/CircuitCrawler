@@ -20,13 +20,13 @@ public class Graphics extends GLSurfaceView
 	{
 		//grab touch input, pass it through to the generic renderer (in this case, com.lds.GameRenderer
 		//TODO pass e instead of e.getX() and e.getY()
-		renderer.onTouchInput( e.getX(), e.getY());
+		renderer.onTouchInput(e);
 		return true;
 	}
 	
 	public interface Renderer extends GLSurfaceView.Renderer
 	{
 		//TODO Pass in Gl10, so we can use the renderer.
-		public abstract void onTouchInput(/*GL10 gl,*/ float xInput, float yInput);
+		public abstract void onTouchInput(MotionEvent e);
 	}
 }

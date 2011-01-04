@@ -6,6 +6,7 @@ import javax.microedition.khronos.opengles.GL10;
 import com.lds.Enums.RenderMode;
 
 import android.opengl.GLU;
+import android.view.MotionEvent;
 import android.content.Context;
 
 import com.lds.Stopwatch;
@@ -211,12 +212,34 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	}
 
 	@Override
-	public void onTouchInput(float xInput, float yInput) 
+	public void onTouchInput(MotionEvent e) 
 	{
-		game.player1.setPos(xInput - (game.screenW / 2), -yInput + (game.screenH / 2));
-		game.camPosX = xInput - (game.screenW / 2);
-		game.camPosY = -yInput + (game.screenH / 2);
-		windowOutdated = true;	
+		//game.player1.setPos(xInput - (game.screenW / 2), -yInput + (game.screenH / 2));
+		//game.camPosX = xInput - (game.screenW / 2);
+		//game.camPosY = -yInput + (game.screenH / 2);
+		float xInput = e.getRawX() - game.screenW / 2;
+		float yInput = -e.getRawY() + game.screenH / 2;
+		
+		for (UIEntity ent : game.UIList)
+		{
+			if (xInput >= ent.xPos - ent.xSize / 2 && xInput <= ent.xPos + ent.xSize / 2 && yInput >= ent.yPos - ent.ySize / 2 && yInput <= ent.yPos + ent.ySize / 2)
+			{
+				if (ent instanceof UIJoypad)
+				{
+					UIJoypad UIjp = (UIJoypad)ent;
+					game.camPosX += 0.05f * (UIjp.getRelativeX(xInput));
+					game.camPosY += 0.05f * (UIjp.getRelativeY(yInput));
+					
+					float newAngle = (float)Math.toDegrees(Math.tan((double)yInput/(double)xInput));
+					game.player1.setAngle(newAngle);
+					windowOutdated = true;
+				}
+				if (ent instanceof UIButton)
+				{
+					
+				}
+			}
+		}
 	}
 	
 	public void viewHUD(GL10 gl)
