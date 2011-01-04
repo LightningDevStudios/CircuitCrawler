@@ -3,8 +3,8 @@ package com.lds.game;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
-import com.lds.Enums.Direction;
 import com.lds.Enums.UIPosition;
+import com.lds.Enums.Direction;
 
 public abstract class UIProgressBar extends UIEntity
 {

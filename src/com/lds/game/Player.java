@@ -35,6 +35,14 @@ public class Player extends Character //your character, protagonist
 			inventory.add("test");
 			colList.remove(ent);
 		}
+		else if (ent instanceof Health)
+		{
+			health += ((Powerup)ent).getValue();
+		}
+		else if (ent instanceof Energy)
+		{
+			energy += ((Powerup)ent).getValue();
+		}
 	}
 	
 	public int getEnergy()

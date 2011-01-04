@@ -56,7 +56,7 @@ public class Sprite extends PhysEnt
 		textureBuffer.put(texture);
 		textureBuffer.position(0);
 	}
-		
+	
 	public void setTexture(int ptr)
 	{
 		texturePtr = ptr;

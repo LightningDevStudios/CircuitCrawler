@@ -38,14 +38,11 @@ public class Game
 	public float camPosY;
 	
 	//Testing data
-	public Player player1 = new Player(-100.0f, 50.0f, 0.0f);
 	public UIHealthBar healthBar;
 	public UIEnergyBar energyBar;
 	public UIButton btnA;
 	public UIButton btnB;
-	public Sprite spr1;
-	public Sprite spr2;
-
+	public Player player1;
 	
 	//Constructors
 	public Game (float _screenW, float _screenH, Context context, GL10 gl)
@@ -56,9 +53,7 @@ public class Game
 		tl = new TextureLoader(gl, context);
 		tl.load(R.drawable.tilesetcolors);
 		tl.load(R.drawable.tilesetwire);
-		
 		tl.setTexture(1);
-		
 		cleaner = new EntityCleaner();
 		
 		for (int i = 0; i < tileset.length; i++)
@@ -78,31 +73,16 @@ public class Game
 			}
 			System.out.print("\n");
 		}
+		player1 = new Player(-100.0f, 50.0f, 0.0f);
 		
-		
+		player1.renderMode = RenderMode.COLOR;
+		player1.setColor(255, 255, 0, 255);
+		entList.add(player1);
 		
 		screenW = _screenW;
 		screenH = _screenH;
 
-		//entList.add(player1);
-		//entList.add(button1);
-		//entList.add(player2);
-		spr1 = new Sprite(7,7, 96.0f, 250.0f, 350.0f, 0.0f, 1.0f, 1.0f, PhysEnt.DEFAULT_SPEED);
-		spr2 = new Sprite(7,7, 64.0f, -100.0f, -100.0f, 200.0f, 1.0f, 1.0f, PhysEnt.DEFAULT_SPEED);
-		tl.setTexture(0);
 		
-		spr1.setTexture(tl.getTexture());
-		spr2.setTexture(tl.getTexture());
-		
-		//spr1.moveTo(-200.0f, -100.0f);
-		//spr1.rotateTo(45.0f);
-		
-		//spr2.moveTo(150.0f, 150.0f);
-		spr2.rotateTo(30.3f);
-		spr2.moveTo(-100.0f, 100.0f);
-		
-		//entList.add(spr1);
-		entList.add(spr2);
 		
 		healthBar = new UIHealthBar(200.0f, 30.0f, UIPosition.TOPLEFT, Direction.RIGHT);
 		healthBar.originalTopPad = 5.0f;
@@ -148,7 +128,6 @@ public class Game
 		UIList.add(energyBar);
 		UIList.add(btnA);
 		UIList.add(btnB);
-		
 		camPosX = 0.0f;
 		camPosY = 0.0f;
 		
@@ -170,34 +149,29 @@ public class Game
 		{
 			//define max square bounds
 			ent.updateAbsolutePointLocations();
-			float entMinX = 999999.9f;
-			float entMaxX = 0.0f;
-			float entMinY = 999999.9f;
-			float entMaxY = 0.0f;
-			for (Point point : ent.colPoints)
+			float entMinX = ent.colPoints[0].getX();
+			float entMaxX = ent.colPoints[0].getX();
+			float entMinY = ent.colPoints[0].getY();
+			float entMaxY = ent.colPoints[0].getY();
+			for (int i = 1; i < ent.colPoints.length; i++)
 			{
-				if (point.getX() > entMaxX)
+				if (ent.colPoints[i].getX() > entMaxX)
 				{
-					entMaxX = point.getX();
+					entMaxX = ent.colPoints[i].getX();
 				}
-				else if (point.getX() < entMinX)
+				else if (ent.colPoints[i].getX() < entMinX)
 				{
-					entMinX = point.getX();
+					entMinX = ent.colPoints[i].getX();
 				}
-				if (point.getY() > entMaxY)
+				if (ent.colPoints[i].getY() > entMaxY)
 				{
-					entMaxY = point.getY();
+					entMaxY = ent.colPoints[i].getY();
 				}
-				else if (point.getY() < entMinY)
+				else if (ent.colPoints[i].getY() < entMinY)
 				{
-					entMinY = point.getY();
+					entMinY = ent.colPoints[i].getY();
 				}
 			}
-			
-			entMinX = ent.xPos - (float)(Math.sqrt(2) / 2);
-			entMaxX = ent.xPos + (float)(Math.sqrt(2) / 2);
-			entMinY = ent.yPos - (float)(Math.sqrt(2) / 2);
-			entMaxY = ent.yPos + (float)(Math.sqrt(2) / 2);
 			
 			//values are opposite for entMin/Max because only the far tips have to be inside the screen (leftmost point on right border of screen)
 			if (entMinX <= maxX && entMaxX >= minX && entMinY <= maxY && entMaxY >= minY)

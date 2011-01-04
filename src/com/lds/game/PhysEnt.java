@@ -7,7 +7,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 {
 	//constants
 	public static final float DEFAULT_SPEED = 20.0f;
-	
+
 	//interpolation data
 	public float interpX, interpY, interpXScl, interpYScl, interpAngle;
 	public float endX, endY, endXScl, endYScl, endAngle, speed;
@@ -64,6 +64,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 		endX = x;
 		endY = y;
 		isInterpTrans = true;
+		
 		interpMoveTimeMs = Stopwatch.elapsedTimeInMilliseconds();
 	}
 	
@@ -73,6 +74,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 		endAngle = degrees;
 		interpAngle = degrees - angle;
 		isInterpRot = true;
+		
 		interpRotTimeMs = Stopwatch.elapsedTimeInMilliseconds();
 	}
 	
@@ -85,6 +87,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 		endXScl = x;
 		endYScl = y;
 		isInterpScl = true;
+
 		interpSclTimeMs = Stopwatch.elapsedTimeInMilliseconds();
 	}
 	
@@ -96,6 +99,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 		endX = xPos + x;
 		endY = yPos + y;
 		isInterpTrans = true;
+
 		interpMoveTimeMs = Stopwatch.elapsedTimeInMilliseconds();
 	}
 	
@@ -118,6 +122,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 		interpXScl = endXScl - xScl;
 		interpYScl = endYScl - yScl;
 		isInterpScl = true;
+		
 		interpSclTimeMs = Stopwatch.elapsedTimeInMilliseconds();
 	}
 	
@@ -125,6 +130,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	{
 		if (isInterpTrans)
 		{
+
 			xPos -= speed / 1000 * (float)(Stopwatch.elapsedTimeInMilliseconds() - interpRotTimeMs) * interpX;
 			yPos -= (speed / 10) * interpY;
 			isInterpTrans = false;

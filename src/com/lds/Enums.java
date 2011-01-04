@@ -10,7 +10,6 @@ public class Enums
 									private UIPosition(int value) { this.value = value; }
 									public int getValue() { return value; }
 								  }
-	
 	private Enums() 
 	{
 

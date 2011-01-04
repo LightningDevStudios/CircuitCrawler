@@ -3,6 +3,8 @@ package com.lds.game;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
+import com.lds.Enums.RenderMode;
+
 import android.opengl.GLU;
 import android.content.Context;
 
@@ -23,7 +25,6 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		context = _context;
 		windowOutdated = false;
 		prevRenderCount = 2;
-		
 	}
 	
 	@Override
@@ -78,6 +79,8 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 					gl.glTranslatef(game.tileset[i][j].xPos, game.tileset[i][j].yPos, 0.0f);
 					game.tileset[i][j].draw(gl);
 					gl.glLoadIdentity();
+					/*if (prevRenderCount < 2)
+						game.tileset[i][j].renderMode = RenderMode.TILESET;*/
 				}
 			}
 		}
@@ -125,7 +128,13 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 				}
 			}
 			
-			
+			if (ent instanceof PhysEnt)
+			{
+				PhysEnt e = (PhysEnt)ent;
+				e.moveInterpolate();
+				e.rotateInterpolate();
+				e.scaleInterpolate();
+			}
 			
 			if (ent.isRendered)
 			{
@@ -180,7 +189,6 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		}
 		
 		viewWorld(gl);
-		
 		//Debugging info
 		if (renderedcount != prevRenderCount)
 		{
@@ -198,19 +206,17 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		GLU.gluOrtho2D(gl, game.camPosX - (float)(game.screenW/2), game.camPosX + (float)(game.screenW/2), game.camPosY - (float)(game.screenH/2), game.camPosY + (float)(game.screenH/2));
 		gl.glMatrixMode(GL10.GL_MODELVIEW);
 		gl.glLoadIdentity();
-		
-		game.updateLocalEntities();
+
 		game.updateLocalTileset();
 	}
 
 	@Override
 	public void onTouchInput(float xInput, float yInput) 
 	{
+		game.player1.setPos(xInput - (game.screenW / 2), -yInput + (game.screenH / 2));
 		game.camPosX = xInput - (game.screenW / 2);
 		game.camPosY = -yInput + (game.screenH / 2);
-		windowOutdated = true;
-		
-		
+		windowOutdated = true;	
 	}
 	
 	public void viewHUD(GL10 gl)
