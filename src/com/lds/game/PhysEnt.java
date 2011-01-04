@@ -6,7 +6,7 @@ import com.lds.Stopwatch;
 public abstract class PhysEnt extends Entity //physics objects are movable, such as doors, blocks, etc.
 {
 	//constants
-	public static final float DEFAULT_SPEED = 20.0f;
+	public static final float DEFAULT_SPEED = 0.05f;
 
 	//interpolation data
 	public float interpX, interpY, interpXScl, interpYScl, interpAngle;
@@ -85,6 +85,11 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	{
 		interpX = x;
 		interpY = y;
+		if (interpX == 0) { interpX = 0.1f; }
+		if (interpY == 0) { interpY = 0.1f; }
+		double theta = Math.atan((double)interpY/(double)interpX);
+		moveX = (float)Math.cos(theta);
+		moveY = (float)Math.sin(theta);
 		endX = xPos + x;
 		endY = yPos + y;
 		isInterpTrans = true;

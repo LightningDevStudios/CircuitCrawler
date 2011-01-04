@@ -3,8 +3,6 @@ package com.lds.game;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
-import com.lds.Enums.RenderMode;
-
 import android.opengl.GLU;
 import android.view.MotionEvent;
 import android.content.Context;
@@ -58,6 +56,8 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		
 		Stopwatch.tick();
+		
+		//testME = true;
 		
 		if (windowOutdated)
 		{
@@ -229,7 +229,6 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	{
 		float xInput = e.getRawX() - game.screenW / 2;
 		float yInput = -e.getRawY() + game.screenH / 2;
-		
 		for (UIEntity ent : game.UIList)
 		{
 			if (xInput >= ent.xPos - ent.xSize / 2 && xInput <= ent.xPos + ent.xSize / 2 && yInput >= ent.yPos - ent.ySize / 2 && yInput <= ent.yPos + ent.ySize / 2)
@@ -241,7 +240,10 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 					game.camPosY += 0.05f * (UIjp.getRelativeY(yInput));
 					
 					float newAngle = (float)Math.toDegrees(Math.tan((double)yInput/(double)xInput));
-					game.player.setAngle(newAngle);
+					game.player.rotateTo(newAngle);
+					//game.player.rotateInterpolate();
+					game.player.move(0.0005f * (UIjp.getRelativeX(xInput)), 0.0005f * (UIjp.getRelativeY(yInput)));
+					//game.player.moveInterpolate();
 					windowOutdated = true;
 				}
 				if (ent instanceof UIButton)
