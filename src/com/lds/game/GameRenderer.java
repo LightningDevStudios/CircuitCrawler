@@ -108,7 +108,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 				{
 					if (ent.isColliding(colEnt))
 					{
-						//ent.interact(colEnt);
+						ent.interact(colEnt);
 						if (ent instanceof PhysEnt)
 						{
 							PhysEnt p = (PhysEnt)ent;
@@ -120,11 +120,17 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 							p.stop();
 						}
 					}
-					/*else if (ent.colList.contains(colEnt))
+					else if (ent.colList.contains(colEnt))
 					{
 						ent.uninteract(colEnt);
 						ent.colList.remove(colEnt);
-					}*/
+					}
+				}
+				
+				//checks for button interaction
+				if (game.player.closeEnough(colEnt) /*&& buttonA.isPressed()*/)
+				{
+					game.player.buttonInteract(colEnt);
 				}
 			}
 			
@@ -213,7 +219,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	@Override
 	public void onTouchInput(float xInput, float yInput) 
 	{
-		game.player1.setPos(xInput - (game.screenW / 2), -yInput + (game.screenH / 2));
+		//game.player1.moveTo(xInput - (game.screenW / 2), -yInput + (game.screenH / 2));
 		game.camPosX = xInput - (game.screenW / 2);
 		game.camPosY = -yInput + (game.screenH / 2);
 		windowOutdated = true;	

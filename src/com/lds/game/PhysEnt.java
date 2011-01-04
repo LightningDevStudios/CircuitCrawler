@@ -46,21 +46,6 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 		//calculates x and y distance of movement
 		interpX = (x - xPos);
 		interpY = (y - yPos);
-		double distance = Math.sqrt(interpX * interpX + interpY * interpY);
-		this.distance = (float)distance;
-		if (interpX == 0) { interpX = 0.1f; }
-		if (interpY == 0) { interpY = 0.1f; }
-		double theta = Math.atan((double)interpY/(double)interpX);
-		moveX = (float)Math.cos(theta);
-		moveY = (float)Math.sin(theta);
-		System.out.println(interpX + " " + interpY + " " + theta + " " + moveX + " " + moveY);
-		
-		/*double xVec = Math.sin((double)interpY/distance);
-		double yVec = Math.cos((double)interpX/distance);
-		
-		double magnitude = Math.sqrt(xVec * xVec + yVec * yVec);
-		uxVec = (float)(xVec/magnitude);
-		uyVec = (float)(yVec/magnitude);*/
 		endX = x;
 		endY = y;
 		isInterpTrans = true;

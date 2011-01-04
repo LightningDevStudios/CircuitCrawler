@@ -3,8 +3,7 @@ package com.lds.game;
 import com.lds.EntityCleaner;
 
 public abstract class PickupObj extends PhysEnt //pickup objects are picked up, such as keys, powerups, or batteries
-{
-	
+{	
 	public PickupObj (float _xPos, float _yPos)
 	{
 		super(10.0f, _xPos, _yPos, 0.0f, 1.0f, 1.0f, PhysEnt.DEFAULT_SPEED);
@@ -20,17 +19,6 @@ public abstract class PickupObj extends PhysEnt //pickup objects are picked up, 
 		else if (xScl == 2.0)
 		{
 			scale(0.5f, 0.5f);
-		}
-	}
-	
-	@Override
-	public void interact (Entity ent)
-	{
-		String entType = ent.getClass().getName().substring(13); //gets the type of class
-		
-		if (entType.equals("Player"))
-		{
-			EntityCleaner.queueEntityForRemoval(this);
 		}
 	}
 }
