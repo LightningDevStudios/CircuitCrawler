@@ -75,9 +75,12 @@ public class Game
 			System.out.print("\n");
 		}
 		player = new Player(0.0f, 0.0f, 0.0f);
-		
-		player.renderMode = RenderMode.COLOR;
-		player.setColor(255, 255, 0, 255);
+		tl.setTexture(0);
+		player.setTexture(tl.getTexture());
+		player.setTilesetCoords(13);
+		player.renderMode = RenderMode.TILESET;
+	
+		//player.setColor(255, 255, 0, 255);
 		entList.add(player);
 		
 		screenW = _screenW;
