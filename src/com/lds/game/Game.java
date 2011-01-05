@@ -44,6 +44,7 @@ public class Game
 	public UIButton btnB;
 	public UIJoypad joypad;
 	public Player player;
+	public PhysBlock block;
 	
 	//Constructors
 	public Game (float _screenW, float _screenH, Context context, GL10 gl)
@@ -75,10 +76,15 @@ public class Game
 			System.out.print("\n");
 		}
 		player = new Player(0.0f, 0.0f, 0.0f);
+		block = new PhysBlock(20.0f, -20.0f);
 		
 		player.renderMode = RenderMode.COLOR;
 		player.setColor(255, 255, 0, 255);
 		entList.add(player);
+		
+		block.renderMode = RenderMode.COLOR;
+		block.setColor(0, 255, 255, 255);
+		entList.add(block);
 		
 		screenW = _screenW;
 		screenH = _screenH;

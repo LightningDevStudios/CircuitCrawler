@@ -67,7 +67,7 @@ public abstract class Entity
 		halfSize = size / 2;
 		
 		//initializes collision variables
-		rad = Math.toRadians((double)(angle + 90.0f));
+		rad = Math.toRadians((double)(angle));
 		diagonal = Math.sqrt(Math.pow(halfSize * xScl, 2) + Math.pow(halfSize * yScl, 2)); //distance from center to corner
 		diagAngle = Math.asin((halfSize * xScl) / diagonal); //angle between vertical line and diagonal to top left corner
 		colSlopes = new float[4];
@@ -195,7 +195,7 @@ public abstract class Entity
 	//reinitialize colllision variables
 	public void initializeCollisionVariables ()
 	{
-		rad = Math.toRadians((double)(angle + 90.0f));
+		rad = Math.toRadians((double)(angle));
 		diagonal = Math.sqrt(Math.pow(halfSize * xScl, 2) + Math.pow(halfSize * yScl, 2));
 		diagAngle = Math.atan((halfSize * xScl) / (halfSize * yScl));
 	}
