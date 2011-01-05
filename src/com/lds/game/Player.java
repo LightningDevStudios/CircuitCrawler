@@ -8,6 +8,7 @@ public class Player extends Character //your character, protagonist
 {
 	private int energy;
 	private boolean holdingObject;
+	private PhysEnt heldEnt;
 	
 	public Player (float _xPos, float _yPos, float _angle)
 	{
@@ -26,9 +27,14 @@ public class Player extends Character //your character, protagonist
 	
 	public void buttonInteract (Entity ent)
 	{
-		if (ent instanceof PhysEnt)
+		if (ent instanceof PhysBlock)
 		{
-			//TODO: pickup object
+			heldEnt = (PhysEnt)ent;
+			holdingObject = true;
+			float heldDistance = this.halfSize + heldEnt.halfSize + 3.0f;
+			initializeCollisionVariables();
+			heldEnt.setPos((float)Math.cos(rad) * heldDistance, (float)Math.sin(rad) * heldDistance);
+			heldEnt.setAngle(this.angle); //TODO: Make this happen smoothly
 		}
 	}
 	
@@ -40,7 +46,11 @@ public class Player extends Character //your character, protagonist
 			stop();
 			colList.remove(ent);
 		}
-		
+		else if (ent instanceof PhysBlock)
+		{
+			stop();
+			colList.remove(ent);
+		}
 		else if (ent instanceof InvenPickup)
 		{
 			Inventory.add(((InvenPickup)ent).getName());
@@ -65,6 +75,16 @@ public class Player extends Character //your character, protagonist
 	public int getEnergy()
 	{
 		return energy;
+	}
+	
+	public PhysEnt getHeldEnt ()
+	{
+		return heldEnt;
+	}
+	
+	public void dropEnt ()
+	{
+		heldEnt = null;
 	}
 	
 	//this method may be neccessary in the future

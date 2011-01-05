@@ -192,6 +192,14 @@ public abstract class Entity
 	 * Collision Methods *
 	 *********************/
 	
+	//reinitialize colllision variables
+	public void initializeCollisionVariables ()
+	{
+		rad = Math.toRadians((double)(angle + 90.0f));
+		diagonal = Math.sqrt(Math.pow(halfSize * xScl, 2) + Math.pow(halfSize * yScl, 2));
+		diagAngle = Math.atan((halfSize * xScl) / (halfSize * yScl));
+	}
+	
 	//used to get the absolute, not relative, positions of the entity's 4 points in the XY Plane
 	public void updateAbsolutePointLocations ()
 	{
@@ -200,10 +208,7 @@ public abstract class Entity
 		{
 			angle += 0.1f;
 		}
-		//reinitialize colllision variables
-		rad = Math.toRadians((double)(angle + 90.0f));
-		diagonal = Math.sqrt(Math.pow(halfSize * xScl, 2) + Math.pow(halfSize * yScl, 2));
-		diagAngle = Math.atan((halfSize * xScl) / (halfSize * yScl));
+		initializeCollisionVariables();
 		
 		colPoints[0].setX((float)(Math.cos(this.rad + diagAngle) * diagonal) + xPos);
 		colPoints[0].setY((float)(Math.sin(this.rad + diagAngle) * diagonal) + yPos);
@@ -248,7 +253,7 @@ public abstract class Entity
 		
 		//used to determine the number of collisions with respect to the axes. if it is 4 after the check, method returns true
 		int colCount = 0;
-		float ent1High, ent1Low, ent2High, ent2Low;
+		float ent1Low, ent1High, ent2Low, ent2High;
 		
 		//calculates 4 slopes to use with the SAT
 		colSlopes[0] = ((this.colPoints[0].getY() - this.colPoints[1].getY()) / (this.colPoints[0].getX() - this.colPoints[1].getX()));
@@ -259,37 +264,41 @@ public abstract class Entity
 		//checks for collision on each of the 4 slopes
 		for (float slope : colSlopes)
 		{
-			//TODO: Make this cleaner, get rid of constants
-			ent1High = -999999.0f;
-			ent2High = -999999.0f;
-			ent1Low = 999999.0f;
-			ent2Low = 999999.0f;
+			
+			this.colPoints[0].setColC((colPoints[0].getY() - slope * colPoints[0].getX()));
+			ent1Low = this.colPoints[0].getColC();
+			ent1High = this.colPoints[0].getColC();
 			//iterates through each point on ent1 to get high and low c values
-			for (Point point : this.colPoints)
+			for (int i = 1; i < this.colPoints.length; i++)
 			{
 				//finds c (as in y = mx + c) for the line going through each point
-				point.setColC((point.getY() - slope * point.getX()));
-				if (ent1Low > point.getColC())
+				colPoints[i].setColC((colPoints[i].getY() - slope * colPoints[i].getX()));
+				if (ent1Low > colPoints[i].getColC())
 				{
-					ent1Low = point.getColC();
+					ent1Low = colPoints[i].getColC();
 				}
-				if (ent1High < point.getColC())
+				if (ent1High < colPoints[i].getColC())
 				{
-					ent1High = point.getColC();
+					ent1High = colPoints[i].getColC();
 				}
 			}
 			
-			//same as above for ent2
-			for (Point point : ent.colPoints)
+			//same for ent2
+			ent.colPoints[0].setColC((ent.colPoints[0].getY() - slope * ent.colPoints[0].getX()));
+			ent2Low = ent.colPoints[0].getColC();
+			ent2High = ent.colPoints[0].getColC();
+			//iterates through each point on ent1 to get high and low c values
+			for (int i = 1; i < ent.colPoints.length; i++)
 			{
-				point.setColC(point.getY() - slope * point.getX());
-				if (ent2Low > point.getColC())
+				//finds c (as in y = mx + c) for the line going through each point
+				ent.colPoints[i].setColC((ent.colPoints[i].getY() - slope * ent.colPoints[i].getX()));
+				if (ent1Low > ent.colPoints[i].getColC())
 				{
-					ent2Low = point.getColC();
+					ent2Low = ent.colPoints[i].getColC();
 				}
-				if (ent2High < point.getColC())
+				if (ent1High < ent.colPoints[i].getColC())
 				{
-					ent2High = point.getColC();
+					ent2High = ent.colPoints[i].getColC();
 				}
 			}
 			

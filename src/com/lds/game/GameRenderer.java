@@ -129,25 +129,22 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 				}
 				
 				//checks for button interaction
-				if (!game.player.isHoldingObject())
+				//TODO: Clean up, check for object in front of entity
+				if (!game.player.isHoldingObject()) //not holding anything
 				{
-					if (game.player.closeEnough(colEnt) && game.btnB.isPressed())
+					if (game.player.closeEnough(colEnt) && game.btnB.isPressed()) //entity is close enough and button is pressed
 					{
 						game.player.buttonInteract(colEnt);
 					}
 				}
-				else
+				else if (!game.btnB.isPressed()) //holding object, button not pressed
 				{
-					//TODO: throw or drop object
+					game.player.buttonInteract(colEnt);
 				}
-			}
-			
-			if (ent instanceof PhysEnt)
-			{
-				PhysEnt e = (PhysEnt)ent;
-				e.moveInterpolate();
-				e.rotateInterpolate();
-				e.scaleInterpolate();
+				else //holding object, button pressed
+				{
+					game.player.dropEnt();
+				}
 			}
 			
 			if (ent.isRendered)

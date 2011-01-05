@@ -8,7 +8,7 @@ public abstract class Character extends PhysEnt //all characters, including the 
 	public Character (int _health, int _strength, float  _speed, float _size, float _xPos, float _yPos, float _angle, float _xScl, float _yScl)
 	{
 		//initialize Entity variables
-		super(_size, _xPos, _yPos, _angle, _xScl, _yScl, PhysEnt.DEFAULT_SPEED);
+		super(_size, _xPos, _yPos, _angle, _xScl, _yScl);
 		
 		//initialize Character variables
 		health = _health;

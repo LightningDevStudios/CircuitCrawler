@@ -10,13 +10,13 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 
 	//interpolation data
 	public float interpX, interpY, interpXScl, interpYScl, interpAngle;
-	public float endX, endY, endXScl, endYScl, endAngle, speed;
+	public float endX, endY, endXScl, endYScl, endAngle;
 	public int interpMoveTimeMs, interpRotTimeMs, interpSclTimeMs;
 	private float moveX, moveY;
 	private float moveSpeed, rotSpeed, sclSpeed;
 	private boolean isInterpTrans, isInterpRot, isInterpScl;
 	
-	public PhysEnt (float _size, float _xPos, float _yPos, float _angle, float _xScl, float _yScl, float _speed)
+	public PhysEnt (float _size, float _xPos, float _yPos, float _angle, float _xScl, float _yScl)
 	{
 		super(_size, _xPos, _yPos, _angle, _xScl, _yScl, true, RenderMode.TILESET);
 		
@@ -167,6 +167,10 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 		endXScl = x;
 		endYScl = y;
 	}
+	
+	/*************************
+	 * Interpolation Methods *
+	 *************************/
 	
 	public void moveInterpolate ()
 	{	

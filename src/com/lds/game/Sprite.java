@@ -12,7 +12,7 @@ public class Sprite extends PhysEnt
 	
 	public Sprite(int _maxX, int _maxY, float _size, float _xPos, float _yPos, float _angle, float _xScl, float _yScl, float _speed)
 	{
-		super(_size, _xPos, _yPos, _angle, _xScl, _yScl, PhysEnt.DEFAULT_SPEED);
+		super(_size, _xPos, _yPos, _angle, _xScl, _yScl);
 		maxX = _maxX;
 		maxY = _maxY;
 		
