@@ -15,6 +15,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	public Context context;
 	public boolean windowOutdated, testPB;
 	public float tempSW, tempSH;
+	int i;
 	int prevRenderCount;
 	
 	public GameRenderer (float screenW, float screenH, Context _context)
@@ -142,14 +143,6 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 				}
 			}
 			
-			if (ent instanceof PhysEnt)
-			{
-				PhysEnt e = (PhysEnt)ent;
-				e.moveInterpolate();
-				e.rotateInterpolate();
-				e.scaleInterpolate();
-			}
-			
 			if (ent.isRendered)
 			{
 				if (ent instanceof Sprite)
@@ -227,6 +220,8 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	@Override
 	public void onTouchInput(MotionEvent e) 
 	{
+		i++;
+		System.out.println(i + ": " + e);
 		float xInput = e.getRawX() - game.screenW / 2;
 		float yInput = -e.getRawY() + game.screenH / 2;
 		for (UIEntity ent : game.UIList)
@@ -236,13 +231,21 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 				if (ent instanceof UIJoypad)
 				{
 					UIJoypad UIjp = (UIJoypad)ent;
-					game.camPosX += 0.05f * (UIjp.getRelativeX(xInput));
-					game.camPosY += 0.05f * (UIjp.getRelativeY(yInput));
 					
-					float newAngle = (float)Math.toDegrees(Math.tan((double)yInput/(double)xInput));
+					float x = UIjp.getRelativeX(xInput);
+					float y = UIjp.getRelativeY(yInput);
+					
+					game.camPosX += 0.05f * x;
+					game.camPosY += 0.05f * y;
+					
+					double newRad = Math.atan2((double)y, (double)x);
+					if (newRad < 0)
+						newRad += 2 * Math.PI;
+					
+					float newAngle = (float)Math.toDegrees(newRad);
 					game.player.rotateTo(newAngle);
 					//game.player.rotateInterpolate();
-					game.player.move(0.0005f * (UIjp.getRelativeX(xInput)), 0.0005f * (UIjp.getRelativeY(yInput)));
+					game.player.moveTo(game.camPosX, game.camPosY);
 					//game.player.moveInterpolate();
 					windowOutdated = true;
 				}

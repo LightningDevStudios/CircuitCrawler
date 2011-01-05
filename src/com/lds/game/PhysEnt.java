@@ -15,6 +15,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	private float moveX, moveY;
 	private float moveSpeed, rotSpeed, sclSpeed;
 	private boolean isInterpTrans, isInterpRot, isInterpScl;
+	private boolean isRotatingCounterCW;
 	
 	public PhysEnt (float _size, float _xPos, float _yPos, float _angle, float _xScl, float _yScl, float _speed)
 	{
@@ -26,7 +27,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 		endXScl = xScl;
 		endYScl = yScl;
 		endAngle = angle;
-		moveSpeed = 100.0f;
+		moveSpeed = 20.0f;
 		rotSpeed = 90.0f;
 		isSolid = true;
 	}
@@ -47,7 +48,9 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 		interpY = (y - yPos);
 		if (interpX == 0) { interpX = 0.1f; }
 		if (interpY == 0) { interpY = 0.1f; }
-		double theta = Math.atan((double)interpY/(double)interpX);
+		double theta = Math.atan2((double)interpY, (double)interpX);
+		if (theta < 0)
+			theta += 2 * Math.PI;
 		moveX = (float)Math.cos(theta);
 		moveY = (float)Math.sin(theta);
 		endX = x;
@@ -62,6 +65,10 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	{
 		endAngle = degrees;
 		interpAngle = degrees - angle;
+		if (endAngle - angle < angle - endAngle)
+			isRotatingCounterCW = false;
+		else
+			isRotatingCounterCW = true;
 		isInterpRot = true;
 		
 		interpRotTimeMs = Stopwatch.elapsedTimeInMilliseconds();
@@ -87,7 +94,9 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 		interpY = y;
 		if (interpX == 0) { interpX = 0.1f; }
 		if (interpY == 0) { interpY = 0.1f; }
-		double theta = Math.atan((double)interpY/(double)interpX);
+		double theta = Math.atan2((double)interpY, (double)interpX);
+		if (theta < 0)
+			theta += 2 * Math.PI;
 		moveX = (float)Math.cos(theta);
 		moveY = (float)Math.sin(theta);
 		endX = xPos + x;
@@ -178,7 +187,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 		//if the object needs to be interpolated
 		if (isInterpTrans)
 		{		
-			//increments movement\
+			//increments movement
 			float interval = (float)(Stopwatch.elapsedTimeInMilliseconds() - interpMoveTimeMs);
 			xPos += moveSpeed / 1000 * interval * moveX;
 			yPos += moveSpeed / 1000 * interval * moveY;
@@ -199,18 +208,26 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	{
 		if (isInterpRot)
 		{
-			//if the angle is greater than 360, set it back to within 360
-			if (angle >= 360.0f)
-			{
-				angle -= 360.0f * ((int)angle / 360);
-			}
-			else if (angle < 0.0f)
-			{
-				angle = 0.0f; //just in case timer freaks out and goes to a very large negative number
-			}
-			//increments angle
 			float increment = (float)(Stopwatch.elapsedTimeInMilliseconds() - interpRotTimeMs);
-			angle += rotSpeed / 1000 * increment; //speed is degrees per second, time in milliseconds, so divide by 1000
+			if (isRotatingCounterCW)
+			{
+				//clamp the angle 0-360
+				if (angle >= 360.0f)
+					angle -= 360.0f * ((int)angle/360);
+				else if (angle < 0.0f)
+					angle = 0.0f;
+				
+				angle += rotSpeed / 1000 * increment;
+			}
+			else
+			{
+				if (angle <= 0.0f)
+					angle = angle + 360.0f;
+				else if (angle > 360.0f)
+					angle = 360.0f;
+				
+				angle -= rotSpeed / 1000 * increment;
+			}
 			System.out.println(increment + " " + angle);
 			//error check
 			if (angle <= endAngle + (rotSpeed / 2000 * increment) && angle >= endAngle - (rotSpeed / 2000 * increment))
