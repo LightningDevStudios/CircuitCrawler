@@ -74,7 +74,7 @@ public class Game
 			}
 			System.out.print("\n");
 		}
-		player = new Player(-100.0f, 50.0f, 0.0f);
+		player = new Player(0.0f, 0.0f, 0.0f);
 		
 		player.renderMode = RenderMode.COLOR;
 		player.setColor(255, 255, 0, 255);

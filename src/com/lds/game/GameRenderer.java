@@ -3,8 +3,6 @@ package com.lds.game;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
-import com.lds.Enums.RenderMode;
-
 import android.opengl.GLU;
 import android.view.MotionEvent;
 import android.content.Context;
@@ -17,6 +15,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	public Context context;
 	public boolean windowOutdated, testPB;
 	public float tempSW, tempSH;
+	int i;
 	int prevRenderCount;
 	
 	public GameRenderer (float screenW, float screenH, Context _context)
@@ -58,6 +57,8 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		
 		Stopwatch.tick();
+		
+		//testME = true;
 		
 		if (windowOutdated)
 		{
@@ -224,9 +225,10 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	@Override
 	public void onTouchInput(MotionEvent e) 
 	{
+		i++;
+		System.out.println(i + ": " + e);
 		float xInput = e.getRawX() - game.screenW / 2;
 		float yInput = -e.getRawY() + game.screenH / 2;
-		
 		for (UIEntity ent : game.UIList)
 		{
 			if (xInput >= ent.xPos - ent.xSize / 2 && xInput <= ent.xPos + ent.xSize / 2 && yInput >= ent.yPos - ent.ySize / 2 && yInput <= ent.yPos + ent.ySize / 2)
@@ -234,11 +236,22 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 				if (ent instanceof UIJoypad)
 				{
 					UIJoypad UIjp = (UIJoypad)ent;
-					game.camPosX += 0.05f * (UIjp.getRelativeX(xInput));
-					game.camPosY += 0.05f * (UIjp.getRelativeY(yInput));
 					
-					float newAngle = (float)Math.toDegrees(Math.tan((double)yInput/(double)xInput));
-					game.player.setAngle(newAngle);
+					float x = UIjp.getRelativeX(xInput);
+					float y = UIjp.getRelativeY(yInput);
+					
+					game.camPosX += 0.05f * x;
+					game.camPosY += 0.05f * y;
+					
+					double newRad = Math.atan2((double)y, (double)x);
+					if (newRad < 0)
+						newRad += 2 * Math.PI;
+					
+					float newAngle = (float)Math.toDegrees(newRad);
+					game.player.rotateTo(newAngle);
+					//game.player.rotateInterpolate();
+					game.player.moveTo(game.camPosX, game.camPosY);
+					//game.player.moveInterpolate();
 					windowOutdated = true;
 				}
 				if (ent instanceof UIButton)
