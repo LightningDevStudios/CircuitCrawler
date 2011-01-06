@@ -76,12 +76,13 @@ public class Game
 			System.out.print("\n");
 		}
 		player = new Player(0.0f, 0.0f, 0.0f);
-		block = new PhysBlock(20.0f, -20.0f);
-		
-		player.renderMode = RenderMode.COLOR;
-		player.setColor(255, 255, 0, 255);
+		tl.setTexture(0);
+		player.setTexture(tl.getTexture());
+		player.setTilesetCoords(13);
+		player.renderMode = RenderMode.TILESET;
 		entList.add(player);
 		
+		block = new PhysBlock(200.0f, 0.0f);
 		block.renderMode = RenderMode.COLOR;
 		block.setColor(0, 255, 255, 255);
 		entList.add(block);
@@ -228,4 +229,22 @@ public class Game
 			}
 	}
 	
+	public void setHeldObjectPosition (PhysBlock heldEnt)
+	{
+		PhysBlock.hold();
+		float heldDistance = player.halfSize + heldEnt.halfSize + 3.0f;
+		player.initializeCollisionVariables();
+		heldEnt.moveTo((float)Math.cos(player.rad) * heldDistance + player.xPos, (float)Math.sin(player.rad) * heldDistance + player.yPos);
+		heldEnt.rotateTo(player.angle);
+		System.out.println("FAP");
+	}
+	
+	public void updateHeldObjectPosition (PhysBlock heldEnt)
+	{
+		PhysBlock.hold();
+		float heldDistance = player.halfSize + heldEnt.halfSize + 3.0f;
+		player.initializeCollisionVariables();
+		heldEnt.setPos((float)Math.cos(player.rad) * heldDistance + player.xPos, (float)Math.sin(player.rad) * heldDistance + player.yPos);
+		heldEnt.setAngle(player.angle);
+	}	
 }

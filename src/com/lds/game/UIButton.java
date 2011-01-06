@@ -45,7 +45,7 @@ public class UIButton extends UIEntity
 		pressed = true;
 	}
 	
-	public void unpress ()
+	public void unpress()
 	{
 		pressed = false;
 	}

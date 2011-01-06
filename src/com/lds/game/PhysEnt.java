@@ -13,9 +13,11 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	public float endX, endY, endXScl, endYScl, endAngle;
 	public int interpMoveTimeMs, interpRotTimeMs, interpSclTimeMs;
 	private float moveX, moveY;
-	private float moveSpeed, rotSpeed, sclSpeed;
+	protected float moveSpeed;
+	protected float rotSpeed;
+	protected float sclSpeed;
 	private boolean isInterpTrans, isInterpRot, isInterpScl;
-	private boolean isRotatingCounterCW;
+	private boolean isRotatingCCW;
 	
 	public PhysEnt (float _size, float _xPos, float _yPos, float _angle, float _xScl, float _yScl)
 	{
@@ -28,7 +30,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 		endYScl = yScl;
 		endAngle = angle;
 		moveSpeed = 20.0f;
-		rotSpeed = 90.0f;
+		rotSpeed = 360.0f;
 		isSolid = true;
 	}
 	
@@ -63,15 +65,21 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	//sets angle of an entity to a new value
 	public void rotateTo (float degrees)
 	{
+		if (!isInterpRot)
+		{
 		endAngle = degrees;
-		interpAngle = degrees - angle;
-		if (endAngle - angle < angle - endAngle)
-			isRotatingCounterCW = false;
+		float dist = degrees - angle;
+		
+		if (dist >= 180 || dist >= -180 && dist <= 0)
+			isRotatingCCW = false;
 		else
-			isRotatingCounterCW = true;
-		isInterpRot = true;
+			isRotatingCCW = true;
+		
+		if (!(dist == 0))
+			isInterpRot = true;
 		
 		interpRotTimeMs = Stopwatch.elapsedTimeInMilliseconds();
+		}
 	}
 	
 	//sets scaling of an entity to a new value
@@ -213,7 +221,14 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 		if (isInterpRot)
 		{
 			float increment = (float)(Stopwatch.elapsedTimeInMilliseconds() - interpRotTimeMs);
-			if (isRotatingCounterCW)
+			
+			if (angle <= endAngle + (rotSpeed / 1000 * increment) && angle >= endAngle - (rotSpeed / 1000 * increment))
+			{
+				angle = endAngle;
+				isInterpRot = false;
+			}
+			
+			if (isRotatingCCW)
 			{
 				//clamp the angle 0-360
 				if (angle >= 360.0f)
@@ -233,13 +248,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 				angle -= rotSpeed / 1000 * increment;
 			}
 			System.out.println(increment + " " + angle);
-			//error check
-			if (angle <= endAngle + (rotSpeed / 2000 * increment) && angle >= endAngle - (rotSpeed / 2000 * increment))
-			{
-				angle = endAngle;
-				isInterpRot = false;
-			}
-			
+			//error check			
 			interpRotTimeMs = Stopwatch.elapsedTimeInMilliseconds();
 			
 		}

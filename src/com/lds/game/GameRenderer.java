@@ -131,20 +131,24 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 				
 				//checks for button interaction
 				//TODO: Clean up, check for object in front of entity
-				if (!game.player.isHoldingObject()) //not holding anything
+				if (colEnt instanceof PhysBlock)
 				{
-					if (game.player.closeEnough(colEnt) && game.btnB.isPressed()) //entity is close enough and button is pressed
+					if (!PhysBlock.isHeld()) //not holding anything
 					{
-						game.player.buttonInteract(colEnt);
+						if (game.player.closeEnough(colEnt) && game.btnB.isPressed()) //entity is close enough and button is pressed
+						{
+							game.setHeldObjectPosition((PhysBlock)colEnt);
+							game.btnB.unpress();
+						}
 					}
-				}
-				else if (!game.btnB.isPressed()) //holding object, button not pressed
-				{
-					game.player.buttonInteract(colEnt);
-				}
-				else //holding object, button pressed
-				{
-					game.player.dropEnt();
+					else if (!game.btnB.isPressed()) //holding object, button not pressed
+					{
+						game.updateHeldObjectPosition((PhysBlock)colEnt);
+					}
+					else //holding object, button pressed
+					{
+						PhysBlock.drop();
+					}
 				}
 			}
 			
@@ -240,18 +244,18 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 					float x = UIjp.getRelativeX(xInput);
 					float y = UIjp.getRelativeY(yInput);
 					
-					game.camPosX += 0.05f * x;
-					game.camPosY += 0.05f * y;
+					/*game.camPosX += 0.05f * x;
+					game.camPosY += 0.05f * y;*/
 					
 					double newRad = Math.atan2((double)y, (double)x);
 					if (newRad < 0)
 						newRad += 2 * Math.PI;
 					
 					float newAngle = (float)Math.toDegrees(newRad);
-					game.player.rotateTo(newAngle);
-					//game.player.rotateInterpolate();
-					game.player.moveTo(game.camPosX, game.camPosY);
-					//game.player.moveInterpolate();
+					game.player.setAngle(newAngle);
+					game.player.setPos(game.player.xPos + (x / 10), game.player.yPos + (y / 10));
+					game.camPosX = game.player.endX;
+					game.camPosY = game.player.endY;
 					windowOutdated = true;
 				}
 				if (ent instanceof UIButton)
@@ -259,14 +263,8 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 					((UIButton)ent).press();
 				}
 			}
-			else
-			{
-				if (ent instanceof UIButton && ((UIButton)ent).isPressed())
-				{
-					((UIButton)ent).unpress();
-				}
-			}
 		}
+		
 	}
 	
 	public void viewHUD(GL10 gl)
