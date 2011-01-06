@@ -19,10 +19,14 @@ public class TilesetHelper
 			float negY = y * interval;
 			float posY = (y + 1) * interval;
 			
-			float[] coords = { posX, negY,
+			/*float[] coords = { posX, negY,
 								posX, posY,
 								negX, negY,
-								negX, posY };
+								negX, posY };*/
+			float[] coords = { negX, negY,
+								posX, negY,
+								negX, posY,
+								posX, posY };
 			return coords;
 								
 		}

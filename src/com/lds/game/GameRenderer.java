@@ -235,18 +235,18 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 					float x = UIjp.getRelativeX(xInput);
 					float y = UIjp.getRelativeY(yInput);
 					
-					game.camPosX += 0.05f * x;
-					game.camPosY += 0.05f * y;
+					/*game.camPosX += 0.05f * x;
+					game.camPosY += 0.05f * y;*/
 					
 					double newRad = Math.atan2((double)y, (double)x);
 					if (newRad < 0)
 						newRad += 2 * Math.PI;
 					
 					float newAngle = (float)Math.toDegrees(newRad);
-					game.player.rotateTo(newAngle);
-					//game.player.rotateInterpolate();
-					game.player.moveTo(game.camPosX, game.camPosY);
-					//game.player.moveInterpolate();
+					game.player.setAngle(newAngle);
+					game.player.setPos(game.player.xPos + (x / 10), game.player.yPos + (y / 10));
+					game.camPosX = game.player.endX;
+					game.camPosY = game.player.endY;
 					windowOutdated = true;
 				}
 				if (ent instanceof UIButton)
