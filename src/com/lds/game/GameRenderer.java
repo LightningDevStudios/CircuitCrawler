@@ -17,7 +17,6 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	public static Object syncObj;
 	public boolean windowOutdated, testPB;
 	public float tempSW, tempSH;
-	public int btnATime, btnBTime;
 	int i;
 	int prevRenderCount;
 	
@@ -51,10 +50,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		Stopwatch.tick();
 		
 		game = new Game(tempSW, tempSH, context, gl);
-		testPB = true;
-		btnATime = Stopwatch.elapsedTimeInMilliseconds();
-		btnBTime = Stopwatch.elapsedTimeInMilliseconds();
-		
+		testPB = true;		
 	}
 	
 	@Override
@@ -272,16 +268,11 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 				}
 				if (ent instanceof UIButton)
 				{
-					if (Stopwatch.elapsedTimeInMilliseconds() - btnATime >= 500)
-					{
-						game.btnA.press();
-						btnATime = Stopwatch.elapsedTimeInMilliseconds();
-					}
-					if (Stopwatch.elapsedTimeInMilliseconds() - btnBTime >= 500)
-					{
-						game.btnB.press();
-						System.out.println("Beatin some meat!");
-						btnBTime = Stopwatch.elapsedTimeInMilliseconds();
+					UIButton btn = (UIButton)ent;
+					if (btn.canPress(500))
+					{ 
+						((UIButton)ent).press();
+						btn.setIntervalTime(Stopwatch.elapsedTimeInMilliseconds());
 					}
 				}
 			}

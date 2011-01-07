@@ -9,6 +9,7 @@ import android.content.Context;
 import com.lds.EntityCleaner;
 import com.lds.Enums.Direction;
 import com.lds.Enums.RenderMode;
+import com.lds.Stopwatch;
 import com.lds.TextureLoader;
 import com.lds.TilesetHelper;
 import com.lds.Point;
@@ -126,12 +127,14 @@ public class Game
 		btnA.renderMode = RenderMode.COLOR;
 		btnA.setColor(86, 93, 128, 128);
 		btnA.updatePosition(screenW, screenH);
+		btnA.setIntervalTime(Stopwatch.elapsedTimeInMilliseconds());
 		
 		btnB = new UIButton(80.0f, 80.0f, UIPosition.BOTTOMRIGHT);
 		btnB.autoPadding(0.0f, 0.0f, 90.0f, 5.0f);
 		btnB.renderMode = RenderMode.COLOR;
 		btnB.setColor(200, 93, 50, 128);
 		btnB.updatePosition(screenW, screenH);
+		btnB.setIntervalTime(Stopwatch.elapsedTimeInMilliseconds());
 		
 		joypad = new UIJoypad(100, 100, UIPosition.BOTTOMLEFT);
 		joypad.autoPadding(5.0f, 0.0f, 5.0f, 0.0f);

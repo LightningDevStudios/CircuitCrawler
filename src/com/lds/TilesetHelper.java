@@ -1,5 +1,7 @@
 package com.lds;
 
+import com.lds.game.Tile;
+
 //TODO grab min/max through a textureID type thing
 public class TilesetHelper 
 {
@@ -19,7 +21,7 @@ public class TilesetHelper
 			float negY = y * interval;
 			float posY = (y + 1) * interval;
 			
-			float[] coords = { posX, negY,
+			float[] coords = { 	posX, negY,
 								posX, posY,
 								negX, negY,
 								negX, posY };
@@ -60,6 +62,18 @@ public class TilesetHelper
 	public static int getTilesetY(float[] vertices, int min, int max)
 	{
 		return (int)(vertices[1] / (1.0f / (float)(min - max + 1)));
+	}
+	
+	public static void setInitialTileOffset(Tile[][] tileset)
+	{
+		int length = tileset.length, width = tileset[0].length;
+		for (int i = 0; i < length; i++)
+		{
+			for (int j = 0; j < width; j++)
+			{
+				tileset[i][j].xPos = ((float)width / 2 * Tile.TILE_SIZE_F);
+			}
+		}
 	}
 }
 
