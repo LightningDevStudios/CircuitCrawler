@@ -33,10 +33,8 @@ public class Button extends StaticEnt
 	
 	@Override
 	public void interact (Entity ent)
-	{
-		String entType = ent.getClass().getName().substring(13);
-		
-		if (entType.equals("Player"))
+	{	
+		if (ent instanceof Player || ent instanceof PhysBlock)
 		{
 			activate();
 		}	
@@ -45,11 +43,9 @@ public class Button extends StaticEnt
 	@Override
 	public void uninteract (Entity ent) //runs when an entity stops colliding with Button
 	{
-		String entType = ent.getClass().getName().substring(13);
-		
-		if (entType.equals("Player"))
+		if (ent instanceof Player || ent instanceof PhysBlock)
 		{
-			deactivate();
-		}
+			activate();
+		}	
 	}
 }

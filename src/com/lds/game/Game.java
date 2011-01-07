@@ -229,19 +229,19 @@ public class Game
 			}
 	}
 	
-	public void setHeldObjectPosition (PhysBlock heldEnt)
+	public void setHeldObjectPosition (HoldObject heldEnt)
 	{
-		PhysBlock.hold();
+		heldEnt.hold();
 		float heldDistance = player.halfSize + heldEnt.halfSize + 3.0f;
 		player.initializeCollisionVariables();
+		player.holdObject();
 		heldEnt.moveTo((float)Math.cos(player.rad) * heldDistance + player.xPos, (float)Math.sin(player.rad) * heldDistance + player.yPos);
 		heldEnt.rotateTo(player.angle);
 		System.out.println("FAP");
 	}
 	
-	public void updateHeldObjectPosition (PhysBlock heldEnt)
+	public void updateHeldObjectPosition (HoldObject heldEnt)
 	{
-		PhysBlock.hold();
 		float heldDistance = player.halfSize + heldEnt.halfSize + 3.0f;
 		player.initializeCollisionVariables();
 		heldEnt.setPos((float)Math.cos(player.rad) * heldDistance + player.xPos, (float)Math.sin(player.rad) * heldDistance + player.yPos);

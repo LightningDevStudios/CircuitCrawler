@@ -15,6 +15,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	public Context context;
 	public boolean windowOutdated, testPB;
 	public float tempSW, tempSH;
+	public int btnATime, btnBTime;
 	int i;
 	int prevRenderCount;
 	
@@ -48,6 +49,8 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		
 		game = new Game(tempSW, tempSH, context, gl);
 		testPB = true;
+		btnATime = Stopwatch.elapsedTimeInMilliseconds();
+		btnBTime = Stopwatch.elapsedTimeInMilliseconds();
 		
 	}
 	
@@ -57,7 +60,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		
 		Stopwatch.tick();
-		
+
 		//testME = true;
 		
 		if (windowOutdated)
@@ -131,25 +134,29 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 				
 				//checks for button interaction
 				//TODO: Clean up, check for object in front of entity
-				if (colEnt instanceof PhysBlock)
+				if (game.btnB.isPressed() && colEnt instanceof HoldObject)
 				{
-					if (!PhysBlock.isHeld()) //not holding anything
+					HoldObject hObj = (HoldObject)colEnt;
+					
+					if (!game.player.isHoldingObject()) //not holding anything and is close enough
 					{
-						if (game.player.closeEnough(colEnt) && game.btnB.isPressed()) //entity is close enough and button is pressed
+						if (game.player.closeEnough(colEnt))
 						{
-							game.setHeldObjectPosition((PhysBlock)colEnt);
-							game.btnB.unpress();
+							game.setHeldObjectPosition(hObj);
 						}
-					}
-					else if (!game.btnB.isPressed()) //holding object, button not pressed
-					{
-						game.updateHeldObjectPosition((PhysBlock)colEnt);
 					}
 					else //holding object, button pressed
 					{
-						PhysBlock.drop();
+						hObj.drop();
+						game.player.dropObject();
 					}
+					game.btnB.unpress();
 				}
+			}
+			
+			if (ent instanceof HoldObject && ((HoldObject)ent).isHeld())
+			{
+				game.updateHeldObjectPosition((HoldObject)ent);
 			}
 			
 			if (ent.isRendered)
@@ -260,7 +267,17 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 				}
 				if (ent instanceof UIButton)
 				{
-					((UIButton)ent).press();
+					if (Stopwatch.elapsedTimeInMilliseconds() - btnATime >= 100)
+					{
+						game.btnA.press();
+						btnATime = Stopwatch.elapsedTimeInMilliseconds();
+					}
+					if (Stopwatch.elapsedTimeInMilliseconds() - btnBTime >= 100)
+					{
+						game.btnB.press();
+						System.out.println("Beatin some meat!");
+						btnBTime = Stopwatch.elapsedTimeInMilliseconds();
+					}
 				}
 			}
 		}

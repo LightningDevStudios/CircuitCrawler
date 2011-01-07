@@ -7,6 +7,7 @@ import com.lds.EntityCleaner;
 public class Player extends Character //your character, protagonist
 {
 	private int energy;
+	private boolean holdingObject;
 	
 	public Player (float _xPos, float _yPos, float _angle)
 	{
@@ -35,7 +36,7 @@ public class Player extends Character //your character, protagonist
 			stop();
 			colList.remove(ent);
 		}
-		else if (ent instanceof PhysBlock)
+		else if (ent instanceof HoldObject)
 		{
 			stop();
 			colList.remove(ent);
@@ -59,6 +60,21 @@ public class Player extends Character //your character, protagonist
 	public int getEnergy()
 	{
 		return energy;
+	}
+	
+	public boolean isHoldingObject()
+	{
+		return holdingObject;
+	}
+	
+	public void holdObject()
+	{
+		holdingObject = true;
+	}
+	
+	public void dropObject()
+	{
+		holdingObject = false;
 	}
 	
 	//this method may be neccessary in the future
