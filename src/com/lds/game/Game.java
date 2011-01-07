@@ -20,7 +20,7 @@ public class Game
 	//public Level[][] GameLevels;
 
 	public ArrayList<Entity> entList;
-	public Tile[][] tileset = new Tile[8][8];
+	public Tile[][] tileset;
 	public ArrayList<UIEntity> UIList;
 	
 	public TextureLoader tl;
@@ -52,18 +52,20 @@ public class Game
 		entList = new ArrayList<Entity>();
 		UIList = new ArrayList<UIEntity>();
 		
+		tileset = new Tile[16][16];
+		cleaner = new EntityCleaner();
+		
 		tl = new TextureLoader(gl, context);
 		tl.load(R.drawable.tilesetcolors);
 		tl.load(R.drawable.tilesetwire);
+		tl.load(R.drawable.randomthings);
 		tl.setTexture(1);
-		cleaner = new EntityCleaner();
-		
+				
 		for (int i = 0; i < tileset.length; i++)
 		{
 			for (int j = 0; j < tileset[0].length; j++)
 			{
-				//TODO: REMOVE THE +/- 1 BY Tile.TILE_SIZE TO GET PERFECTLY ALIGNED TILESET. 1 PX OFF FOR TESTING
-				tileset[i][j] = new Tile((int)(Math.random() * 8), (int)(Math.random() * 8), Tile.TILE_SIZE_F, ((Tile.TILE_SIZE + 1) * j) - 100.0f, ((-Tile.TILE_SIZE - 1) * i) + 50.0f);
+				tileset[i][j] = new Tile(0, 0, Tile.TILE_SIZE_F, (Tile.TILE_SIZE * j) - 100.0f, (Tile.TILE_SIZE * i) + 50.0f);
 				tileset[i][j].setTexture(tl.getTexture());
 				
 				System.out.print(TilesetHelper.getTilesetIndex(tileset[i][j].texture, 0, 7));
@@ -74,11 +76,10 @@ public class Game
 				System.out.print("\t");
 			}
 			System.out.print("\n");
-		}
-		player = new Player(0.0f, 0.0f, 0.0f);
-		tl.setTexture(0);
+		}		player = new Player(0.0f, 0.0f, 90.0f);
+		tl.setTexture(1);
 		player.setTexture(tl.getTexture());
-		player.setTilesetCoords(13);
+		player.setTilesetCoords(1, 0);
 		player.renderMode = RenderMode.TILESET;
 		entList.add(player);
 		
