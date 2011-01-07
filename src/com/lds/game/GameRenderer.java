@@ -143,7 +143,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 					
 					if (!game.player.isHoldingObject()) //not holding anything and is close enough
 					{
-						if (game.player.closeEnough(colEnt))
+						if (game.player.closeEnough(colEnt) && game.player.isFacing(colEnt))
 						{
 							game.setHeldObjectPosition(hObj);
 						}

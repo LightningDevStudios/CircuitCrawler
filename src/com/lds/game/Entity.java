@@ -210,11 +210,11 @@ public abstract class Entity
 		}
 		initializeCollisionVariables();
 		
-		colPoints[0].setX((float)(Math.cos(this.rad + diagAngle) * diagonal) + xPos);
-		colPoints[0].setY((float)(Math.sin(this.rad + diagAngle) * diagonal) + yPos);
-		colPoints[1].setX((float)(Math.cos(this.rad + Math.PI - diagAngle) * diagonal) + xPos);
-		colPoints[1].setY((float)(Math.sin(this.rad + Math.PI - diagAngle) * diagonal) + yPos);
-		colPoints[2].setX((float)(Math.cos(this.rad - diagAngle) * diagonal) + xPos);
+		colPoints[0].setX((float)(Math.cos(this.rad + diagAngle) * diagonal) + xPos); //top left
+		colPoints[0].setY((float)(Math.sin(this.rad + diagAngle) * diagonal) + yPos); //top left
+		colPoints[1].setX((float)(Math.cos(this.rad + Math.PI - diagAngle) * diagonal) + xPos); //bottom left
+		colPoints[1].setY((float)(Math.sin(this.rad + Math.PI - diagAngle) * diagonal) + yPos); //bottom left
+		colPoints[2].setX((float)(Math.cos(this.rad - diagAngle) * diagonal) + xPos); //
 		colPoints[2].setY((float)(Math.sin(this.rad - diagAngle) * diagonal) + yPos);
 		colPoints[3].setX((float)(Math.cos(this.rad - Math.PI + diagAngle) * diagonal) + xPos);
 		colPoints[3].setY((float)(Math.sin(this.rad - Math.PI + diagAngle) * diagonal) + yPos);
@@ -223,6 +223,22 @@ public abstract class Entity
 	public boolean closeEnough (Entity ent)
 	{
 		if (Math.sqrt(Math.pow(xPos - ent.xPos, 2) + Math.pow(yPos - ent.yPos, 2)) < (float)((diagonal) + ent.diagonal))
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
+	public boolean isFacing (Entity ent)
+	{
+		float m = (this.colPoints[0].getY() - this.colPoints[1].getY()) / (this.colPoints[0].getX() - this.colPoints[1].getX());
+		float b1 = (colPoints[0].getY() - m * colPoints[0].getX());
+		float b2 = (colPoints[3].getY() - m * colPoints[3].getX());
+		float entB = (ent.yPos - m * ent.xPos);
+		if (entB < b1 && entB > b2 || entB > b1 && entB < b2)
 		{
 			return true;
 		}
@@ -256,6 +272,7 @@ public abstract class Entity
 		float ent1Low, ent1High, ent2Low, ent2High;
 		
 		//calculates 4 slopes to use with the SAT
+
 		colSlopes[0] = ((this.colPoints[0].getY() - this.colPoints[1].getY()) / (this.colPoints[0].getX() - this.colPoints[1].getX()));
 		colSlopes[1] = -1 / colSlopes[0];
 		colSlopes[2] = ((ent.colPoints[0].getY() - ent.colPoints[1].getY()) / (ent.colPoints[0].getX() - ent.colPoints[1].getX()));
