@@ -1,5 +1,7 @@
 package com.lds;
 
+import com.lds.game.GameRenderer;
+
 import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.view.MotionEvent;
@@ -7,10 +9,12 @@ import android.view.MotionEvent;
 public class Graphics extends GLSurfaceView
 {
 	private Renderer renderer;
+	//private Object syncObj;
 	
 	public Graphics(Context context, Renderer r) 
 	{
 		super(context);
+		//this.syncObj = syncObj;
 		renderer = r;
 		setRenderer(r);
 	}
@@ -20,6 +24,19 @@ public class Graphics extends GLSurfaceView
 	{
 		//grab touch input, pass it through to the generic renderer (in this case, com.lds.GameRenderer
 		renderer.onTouchInput(e);
+		
+		//sync with OpenGL thread
+		synchronized(GameRenderer.syncObj)
+		{
+			try
+			{
+				GameRenderer.syncObj.wait(1000L);
+			}
+			catch (InterruptedException e1)
+			{
+				e1.printStackTrace();
+			}
+		}
 		return true;
 	}
 	

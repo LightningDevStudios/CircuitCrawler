@@ -7,23 +7,26 @@ import android.opengl.GLU;
 import android.view.MotionEvent;
 import android.content.Context;
 
+import com.lds.Graphics;
 import com.lds.Stopwatch;
 
 public class GameRenderer implements com.lds.Graphics.Renderer
 {
 	public Game game;
 	public Context context;
+	public static Object syncObj;
 	public boolean windowOutdated, testPB;
 	public float tempSW, tempSH;
 	public int btnATime, btnBTime;
 	int i;
 	int prevRenderCount;
 	
-	public GameRenderer (float screenW, float screenH, Context _context)
+	public GameRenderer (float screenW, float screenH, Context _context, Object syncObj)
 	{
 		tempSW = screenW;
 		tempSH = screenH;
 		context = _context;
+		GameRenderer.syncObj = syncObj;
 		windowOutdated = false;
 		prevRenderCount = 2;
 	}
@@ -218,6 +221,11 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 			System.out.println("Items rendered: " + renderedcount);
 			prevRenderCount = renderedcount;
 		}
+
+		synchronized (syncObj)
+		{
+			syncObj.notify();
+		}
 	}
 
 	@Override
@@ -281,7 +289,6 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 				}
 			}
 		}
-		
 	}
 	
 	public void viewHUD(GL10 gl)
