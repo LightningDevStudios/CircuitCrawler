@@ -1,10 +1,12 @@
 package com.lds.game;
 
 import com.lds.Enums.UIPosition;
+import com.lds.Stopwatch;
 
 public class UIButton extends UIEntity
 {
-	public boolean pressed;
+	private boolean pressed;
+	private int intervalTime;
 	
 	public UIButton (float xSize, float ySize, UIPosition position)
 	{
@@ -40,6 +42,14 @@ public class UIButton extends UIEntity
 		return pressed;
 	}
 	
+	public boolean canPress(int interval)
+	{
+		if (Stopwatch.elapsedTimeInMilliseconds() - intervalTime >= interval)
+			return true;
+		else
+			return false;
+	}
+	
 	public void press ()
 	{
 		pressed = true;
@@ -48,5 +58,10 @@ public class UIButton extends UIEntity
 	public void unpress()
 	{
 		pressed = false;
+	}
+	
+	public void setIntervalTime(int time)
+	{
+		this.intervalTime = time;
 	}
 }

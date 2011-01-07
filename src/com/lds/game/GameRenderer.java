@@ -17,7 +17,6 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	public static Object syncObj;
 	public boolean windowOutdated, testPB;
 	public float tempSW, tempSH;
-	public int btnATime, btnBTime;
 	int i;
 	int prevRenderCount;
 	
@@ -37,7 +36,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		//openGL settings
 		gl.glShadeModel(GL10.GL_SMOOTH);
 		gl.glEnable(GL10.GL_BLEND);
-		gl.glBlendFunc(GL10.GL_ONE, GL10.GL_ONE_MINUS_SRC_ALPHA); //TODO change this later and make it
+		gl.glBlendFunc(GL10.GL_ONE, GL10.GL_ONE_MINUS_SRC_ALPHA); //TODO change this later and make it per-poly
 
 		gl.glClearColor(0.39f, 0.58f, 0.93f, 0.5f);
 		
@@ -51,10 +50,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		Stopwatch.tick();
 		
 		game = new Game(tempSW, tempSH, context, gl);
-		testPB = true;
-		btnATime = Stopwatch.elapsedTimeInMilliseconds();
-		btnBTime = Stopwatch.elapsedTimeInMilliseconds();
-		
+		testPB = true;		
 	}
 	
 	@Override
@@ -136,7 +132,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 				}
 				
 				//checks for button interaction
-				//TODO: Clean up, check for object in front of entity
+				//TODO: check for object in front of entity
 				if (game.btnB.isPressed() && colEnt instanceof HoldObject)
 				{
 					HoldObject hObj = (HoldObject)colEnt;
@@ -259,32 +255,24 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 					float x = UIjp.getRelativeX(xInput);
 					float y = UIjp.getRelativeY(yInput);
 					
-					/*game.camPosX += 0.05f * x;
-					game.camPosY += 0.05f * y;*/
-					
 					double newRad = Math.atan2((double)y, (double)x);
 					if (newRad < 0)
 						newRad += 2 * Math.PI;
 					
 					float newAngle = (float)Math.toDegrees(newRad);
-					game.player.setAngle(newAngle);
-					game.player.setPos(game.player.xPos + (x / 10), game.player.yPos + (y / 10));
+					game.player.setAngle(newAngle - 90.0f);
+					game.player.setPos(game.player.xPos + (x / 5), game.player.yPos + (y / 5));
 					game.camPosX = game.player.endX;
 					game.camPosY = game.player.endY;
 					windowOutdated = true;
 				}
 				if (ent instanceof UIButton)
 				{
-					if (Stopwatch.elapsedTimeInMilliseconds() - btnATime >= 100)
-					{
-						game.btnA.press();
-						btnATime = Stopwatch.elapsedTimeInMilliseconds();
-					}
-					if (Stopwatch.elapsedTimeInMilliseconds() - btnBTime >= 100)
-					{
-						game.btnB.press();
-						System.out.println("Beatin some meat!");
-						btnBTime = Stopwatch.elapsedTimeInMilliseconds();
+					UIButton btn = (UIButton)ent;
+					if (btn.canPress(500))
+					{ 
+						((UIButton)ent).press();
+						btn.setIntervalTime(Stopwatch.elapsedTimeInMilliseconds());
 					}
 				}
 			}

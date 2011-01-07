@@ -42,7 +42,6 @@ public class Graphics extends GLSurfaceView
 	
 	public interface Renderer extends GLSurfaceView.Renderer
 	{
-		//TODO Pass in Gl10, so we can use the renderer.
 		public abstract void onTouchInput(MotionEvent e);
 	}
 }
