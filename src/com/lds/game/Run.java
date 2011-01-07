@@ -11,6 +11,7 @@ import com.lds.Graphics;
 public class Run extends Activity
 {
 	public Graphics glSurface;
+	public Object syncObj;
 	private float screenX;
 	private float screenY;
 	
@@ -31,7 +32,8 @@ public class Run extends Activity
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		
 		//set up OpenGL rendering
-		glSurface = new Graphics(this, new GameRenderer(screenX, screenY, this));
+		syncObj = new Object();
+		glSurface = new Graphics(this, new GameRenderer(screenX, screenY, this, syncObj));
 		setContentView(glSurface);
 	}
 	
