@@ -260,8 +260,17 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 						newRad += 2 * Math.PI;
 					
 					float newAngle = (float)Math.toDegrees(newRad);
+					float oldAngle = game.player.angle;
 					game.player.setAngle(newAngle - 90.0f);
 					game.player.setPos(game.player.xPos + (x / 5), game.player.yPos + (y / 5));
+					for (Entity colEnt : game.entList)
+					{
+						if (colEnt != game.player && game.player.isColliding(colEnt))
+						{
+							game.player.setAngle(oldAngle);
+							game.player.setPos(game.player.xPos - (x / 5), game.player.yPos - (y / 5));
+						}
+					}
 					game.camPosX = game.player.endX;
 					game.camPosY = game.player.endY;
 					windowOutdated = true;
