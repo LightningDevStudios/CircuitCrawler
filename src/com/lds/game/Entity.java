@@ -197,25 +197,30 @@ public abstract class Entity
 	{
 		rad = Math.toRadians((double)(angle + 90.0f));
 		diagonal = Math.sqrt(Math.pow(halfSize * xScl, 2) + Math.pow(halfSize * yScl, 2));
-		diagAngle = Math.atan((halfSize * xScl) / (halfSize * yScl));
+		diagAngle = Math.atan2((halfSize * xScl) , (halfSize * yScl));
+		/*if (diagAngle < 0)
+			diagAngle += 2 * Math.PI;*/
 	}
 	
 	//used to get the absolute, not relative, positions of the entity's 4 points in the XY Plane
 	public void updateAbsolutePointLocations ()
 	{
 		//keeps the angle not exactly 0, so slope is never undefined. Still works within unnoticeable margin of error
-		if (angle % 90 == 0.0f)
+		/*if (angle % 90 == 0.0f)
 		{
 			angle += 0.1f;
-		}
+		}*/
 		initializeCollisionVariables();
 		
 		colPoints[0].setX((float)(Math.cos(this.rad + diagAngle) * diagonal) + xPos); //top left
 		colPoints[0].setY((float)(Math.sin(this.rad + diagAngle) * diagonal) + yPos); //top left
+		
 		colPoints[1].setX((float)(Math.cos(this.rad + Math.PI - diagAngle) * diagonal) + xPos); //bottom left
 		colPoints[1].setY((float)(Math.sin(this.rad + Math.PI - diagAngle) * diagonal) + yPos); //bottom left
+		
 		colPoints[2].setX((float)(Math.cos(this.rad - diagAngle) * diagonal) + xPos); //
 		colPoints[2].setY((float)(Math.sin(this.rad - diagAngle) * diagonal) + yPos);
+		
 		colPoints[3].setX((float)(Math.cos(this.rad - Math.PI + diagAngle) * diagonal) + xPos);
 		colPoints[3].setY((float)(Math.sin(this.rad - Math.PI + diagAngle) * diagonal) + yPos);
 	}
@@ -223,13 +228,10 @@ public abstract class Entity
 	public boolean closeEnough (Entity ent)
 	{
 		if (Math.sqrt(Math.pow(xPos - ent.xPos, 2) + Math.pow(yPos - ent.yPos, 2)) < (float)((diagonal) + ent.diagonal))
-		{
 			return true;
-		}
+		
 		else
-		{
 			return false;
-		}
 	}
 	
 	public boolean isFacing (Entity ent)
@@ -238,6 +240,16 @@ public abstract class Entity
 		float b1 = (colPoints[0].getY() - m * colPoints[0].getX());
 		float b2 = (colPoints[3].getY() - m * colPoints[3].getX());
 		float entB = (ent.yPos - m * ent.xPos);
+		Point frontPoint = new Point(halfSize * (float)Math.cos(rad) + xPos, halfSize * (float)Math.sin(rad) + yPos);
+		Point backPoint = new Point(halfSize * (float)Math.cos(rad + Math.PI) + xPos, halfSize * (float)Math.sin(rad + Math.PI) + yPos);
+		double frontDist = Math.sqrt((double)Math.pow(ent.xPos - frontPoint.getX(), 2) + Math.pow(ent.yPos - frontPoint.getY(), 2));
+		double backDist = Math.sqrt((double)Math.pow(ent.xPos - backPoint.getX(), 2) + Math.pow(ent.yPos - backPoint.getY(), 2));
+		
+		if (backDist < frontDist)
+		{
+			return false;
+		}
+		
 		if (entB < b1 && entB > b2 || entB > b1 && entB < b2)
 		{
 			return true;
@@ -279,6 +291,7 @@ public abstract class Entity
 		colSlopes[3] = -1 / colSlopes[2];
 		
 		//checks for collision on each of the 4 slopes
+		
 		for (float slope : colSlopes)
 		{
 			
@@ -309,11 +322,11 @@ public abstract class Entity
 			{
 				//finds c (as in y = mx + c) for the line going through each point
 				ent.colPoints[i].setColC((ent.colPoints[i].getY() - slope * ent.colPoints[i].getX()));
-				if (ent1Low > ent.colPoints[i].getColC())
+				if (ent2Low > ent.colPoints[i].getColC())
 				{
 					ent2Low = ent.colPoints[i].getColC();
 				}
-				if (ent1High < ent.colPoints[i].getColC())
+				if (ent2High < ent.colPoints[i].getColC())
 				{
 					ent2High = ent.colPoints[i].getColC();
 				}
