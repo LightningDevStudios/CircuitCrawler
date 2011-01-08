@@ -32,6 +32,8 @@ public class Game
 	public float camPosX;
 	public float camPosY;
 	
+	public float worldMinX, worldMinY, worldMaxX, worldMaxY;
+	
 	//Testing data
 	public UIHealthBar healthBar;
 	public UIEnergyBar energyBar;
@@ -134,8 +136,14 @@ public class Game
 		UIList.add(btnA);
 		UIList.add(btnB);
 		UIList.add(joypad);
+		
 		camPosX = 0.0f;
 		camPosY = 0.0f;
+		
+		worldMinX = -500.0f;
+		worldMinY = -500.0f;
+		worldMaxX = 500.0f;
+		worldMaxY = 500.0f;
 		
 		//TODO take into account AI, perhaps render every time it chooses a new point to go to?
 		updateLocalEntities();

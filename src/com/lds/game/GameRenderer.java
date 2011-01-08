@@ -276,6 +276,16 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 					}
 					game.camPosX = game.player.endX;
 					game.camPosY = game.player.endY;
+					
+					if (game.camPosX < game.worldMinX)
+						game.camPosX = game.worldMinX;
+					else if (game.camPosX > game.worldMaxX)
+						game.camPosX = game.worldMaxX;
+					if (game.camPosY < game.worldMinY)
+						game.camPosY = game.worldMinY;
+					else if (game.camPosY > game.worldMaxY)
+						game.camPosY = game.worldMaxY;
+					
 					windowOutdated = true;
 				}
 				if (ent instanceof UIButton)
