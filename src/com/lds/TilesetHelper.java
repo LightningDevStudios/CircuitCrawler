@@ -64,16 +64,23 @@ public class TilesetHelper
 		return (int)(vertices[1] / (1.0f / (float)(min - max + 1)));
 	}
 	
-	public static void setInitialTileOffset(Tile[][] tileset)
+	public static void setInitialTilesetOffset(Tile[][] tileset)
 	{
 		int length = tileset.length, width = tileset[0].length;
 		for (int i = 0; i < length; i++)
 		{
 			for (int j = 0; j < width; j++)
 			{
-				tileset[i][j].xPos = ((float)width / 2 * Tile.TILE_SIZE_F);
+				tileset[i][j].xPos = (-(float)width / 2 * Tile.TILE_SIZE_F) + (j * Tile.TILE_SIZE_F);
+				tileset[i][j].yPos = ((float)length / 2 * Tile.TILE_SIZE_F) - (i * Tile.TILE_SIZE_F);
 			}
 		}
+	}
+	
+	public static void setInitialTileOffset(Tile tile, int y, int x, int length, int width)
+	{
+		tile.xPos = (-(float)width / 2 * Tile.TILE_SIZE_F) + (x * Tile.TILE_SIZE_F);
+		tile.yPos = ((float)length / 2 * Tile.TILE_SIZE_F) - (y * Tile.TILE_SIZE_F);
 	}
 }
 

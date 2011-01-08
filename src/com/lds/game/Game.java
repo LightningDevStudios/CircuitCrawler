@@ -66,7 +66,9 @@ public class Game
 		{
 			for (int j = 0; j < tileset[0].length; j++)
 			{
-				tileset[i][j] = new Tile(0, 0, Tile.TILE_SIZE_F, (Tile.TILE_SIZE * j) - 100.0f, (Tile.TILE_SIZE * i) + 50.0f);
+				
+				tileset[i][j] = new Tile(0, 0, Tile.TILE_SIZE_F, 0, 0);
+				TilesetHelper.setInitialTileOffset(tileset[i][j], i, j, tileset.length, tileset[0].length);
 				tileset[i][j].setTexture(tl.getTexture());
 				
 				System.out.print(TilesetHelper.getTilesetIndex(tileset[i][j].texture, 0, 7));
