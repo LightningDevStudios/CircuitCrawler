@@ -1,7 +1,5 @@
 package com.lds.game;
 
-import java.util.ArrayList;
-
 import com.lds.EntityCleaner;
 
 public class Player extends Character //your character, protagonist

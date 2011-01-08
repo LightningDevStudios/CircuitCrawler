@@ -12,7 +12,6 @@ import com.lds.Enums.RenderMode;
 import com.lds.Stopwatch;
 import com.lds.TextureLoader;
 import com.lds.TilesetHelper;
-import com.lds.Point;
 import com.lds.Enums.UIPosition;
 
 public class Game
@@ -26,12 +25,7 @@ public class Game
 	
 	public TextureLoader tl;
 	public EntityCleaner cleaner;
-	
-	//Timer data
-	public long timeMs;
-	public int timeS;
-	public int timeM;
-	
+		
 	//Camera data
 	public float screenW;
 	public float screenH;
@@ -66,20 +60,12 @@ public class Game
 		{
 			for (int j = 0; j < tileset[0].length; j++)
 			{
-				
 				tileset[i][j] = new Tile(0, 0, Tile.TILE_SIZE_F, 0, 0);
 				TilesetHelper.setInitialTileOffset(tileset[i][j], i, j, tileset.length, tileset[0].length);
 				tileset[i][j].setTexture(tl.getTexture());
-				
-				System.out.print(TilesetHelper.getTilesetIndex(tileset[i][j].texture, 0, 7));
-				
-				if (TilesetHelper.getTilesetIndex(tileset[i][j].texture, 0, 7) < 10)
-					System.out.print(" ");
-				
-				System.out.print("\t");
 			}
-			System.out.print("\n");
-		}		player = new Player(0.0f, 0.0f, 90.0f);
+		}		
+		player = new Player(0.0f, 0.0f, 90.0f);
 		tl.setTexture(1);
 		player.setTexture(tl.getTexture());
 		player.setTilesetCoords(1, 0);

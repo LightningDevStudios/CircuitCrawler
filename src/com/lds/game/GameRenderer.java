@@ -7,7 +7,6 @@ import android.opengl.GLU;
 import android.view.MotionEvent;
 import android.content.Context;
 
-import com.lds.Graphics;
 import com.lds.Stopwatch;
 
 public class GameRenderer implements com.lds.Graphics.Renderer
@@ -142,12 +141,16 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 						if (game.player.closeEnough(colEnt) && game.player.isFacing(colEnt))
 						{
 							game.setHeldObjectPosition(hObj);
+							game.player.colIgnoreList.add(hObj);
+							hObj.colIgnoreList.add(game.player);
 						}
 					}
 					else //holding object, button pressed
 					{
 						hObj.drop();
 						game.player.dropObject();
+						game.player.colIgnoreList.remove(hObj);
+						hObj.colIgnoreList.remove(game.player);
 					}
 					game.btnB.unpress();
 				}

@@ -2,9 +2,6 @@ package com.lds.game;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
-import java.nio.FloatBuffer;
-
-import javax.microedition.khronos.opengles.GL10;
 
 public class Sprite extends PhysEnt
 {

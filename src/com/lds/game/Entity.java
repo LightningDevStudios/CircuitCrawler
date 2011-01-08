@@ -49,6 +49,7 @@ public abstract class Entity
 	public double diagonal, rad, diagAngle;
 	
 	public ArrayList<Entity> colList = new ArrayList<Entity>();
+	public ArrayList<Entity> colIgnoreList = new ArrayList<Entity>();
 	
 	public  Entity (float size, float xPos, float yPos, float angle, float xScl, float yScl, boolean isSolid, RenderMode renderMode)
 	{
@@ -265,11 +266,12 @@ public abstract class Entity
 	{	
 		//checks to see if either object is not solid
 		if (this.isSolid == false || ent.isSolid == false)
-		{
 			return false;
-		}
 		
-		//hurr durr
+		if (colIgnoreList.contains(ent))
+			return false;
+		
+		//update values
 		updateAbsolutePointLocations();
 		ent.updateAbsolutePointLocations();
 		
