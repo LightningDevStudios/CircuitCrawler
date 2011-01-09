@@ -1,92 +1,65 @@
 package com.lds.game;
 
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-
 import com.lds.Enums.UIPosition;
 import com.lds.Enums.Direction;
 
 public abstract class UIProgressBar extends UIEntity
 {
-	protected int value, maximum, minimum;
-	protected float[] originalColor;
-	protected float originalXSize, originalYSize;
-	protected Direction dir;
-	public float originalTopPad, originalLeftPad, originalBottomPad, originalRightPad;
-	public boolean tempBool;
+	private int value, maximum, minimum, originalValue;
+	private float[] originalColor;
+	private float originalXSize, originalYSize;
+	private Direction dir;
+	private float originalTopPad, originalLeftPad, originalBottomPad, originalRightPad;
 		
 	public UIProgressBar(float xSize, float ySize, UIPosition position, Direction dir, int value, int minimum, int maximum)
 	{
-		super(xSize, ySize, position);
-		this.dir = dir;
-		this.value = value;
-		this.minimum = minimum;
-		this.maximum = maximum;
-		this.originalXSize = xSize;
-		this.originalYSize = ySize;
-		
-		this.originalTopPad = 0.0f;
-		this.originalLeftPad = 0.0f;
-		this.originalBottomPad = 0.0f;
-		this.originalRightPad = 0.0f;
+		this(xSize, ySize, UIPositionF[position.getValue() * 2], UIPositionF[(position.getValue() * 2) + 1], dir, 0, 0, 0, 0, value, minimum, maximum);
+		this.position = position;
 	}
 	
 	public UIProgressBar(float xSize, float ySize, float xRelative, float yRelative, Direction dir, int value, int minimum, int maximum)
 	{
-		super (xSize, ySize, xRelative, yRelative);
-		this.dir = dir;
-		this.value = value;
-		this.minimum = minimum;
-		this.maximum = maximum;
-		this.originalXSize = xSize;
-		this.originalYSize = ySize;
-		
-		this.originalTopPad = 0.0f;
-		this.originalLeftPad = 0.0f;
-		this.originalBottomPad = 0.0f;
-		this.originalRightPad = 0.0f;
+		this(xSize, ySize, xRelative, yRelative, dir, 0, 0, 0, 0, value, minimum, maximum);
 	}
 	
 	public UIProgressBar(float xSize, float ySize, UIPosition position, Direction dir, float topPad, float leftPad, float bottomPad, float rightPad, int value, int minimum, int maximum) 
 	{
-		super(xSize, ySize, position, topPad, leftPad, bottomPad, rightPad);
-		this.dir = dir;
-		this.value = value;
-		this.minimum = minimum;
-		this.maximum = maximum;
-		this.originalXSize = xSize;
-		this.originalYSize = ySize;
-		
-		this.originalTopPad = topPad;
-		this.originalLeftPad = leftPad;
-		this.originalBottomPad = bottomPad;
-		this.originalRightPad = rightPad;
+		this(xSize, ySize, UIPositionF[position.getValue() * 2], UIPositionF[(position.getValue() * 2) + 1], dir, topPad, leftPad, bottomPad, rightPad, value, minimum, maximum);
+		this.position = position;
 	}
 	
 	public UIProgressBar(float xSize, float ySize, float xRelative, float yRelative, Direction dir, float topPad, float leftPad, float bottomPad, float rightPad, int value, int minimum, int maximum)
 	{
 		super(xSize, ySize, xRelative, yRelative, topPad, leftPad, bottomPad, rightPad);
+		
 		this.dir = dir;
 		this.value = value;
 		this.minimum = minimum;
 		this.maximum = maximum;
+		
 		this.originalXSize = xSize;
 		this.originalYSize = ySize;
-		
 		this.originalTopPad = topPad;
 		this.originalLeftPad = leftPad;
 		this.originalBottomPad = bottomPad;
 		this.originalRightPad = rightPad;
 	}
 	
+	//If there's any change to value, 
 	@Override
-	public void setGradient(float[] color)
+	public void update()
 	{
-		this.originalColor = color;
-		updateGradient();
+		if (this.value != this.originalValue)
+		{
+			updateGradient();
+			updateVertices();
+			autoPadding(originalTopPad, originalLeftPad, originalBottomPad, originalRightPad);
+			updatePosition();
+			originalValue = value;
+		}
 	}
 	
-	public void updateGradient()
+	private void updateGradient()
 	{
 		//split the color array to colors for each vertex
 		float[] topRight = {originalColor[0], originalColor[1], originalColor[2], originalColor[3]};
@@ -134,17 +107,10 @@ public abstract class UIProgressBar extends UIEntity
 								topLeft[0], topLeft[1], topLeft[2], topLeft[3],
 								bottomLeft[0], bottomLeft[1], bottomLeft[2], bottomLeft[3] };
 		
-		this.color = initColor;
-		
-		//re-allocate the color buffer
-		ByteBuffer byteBuf = ByteBuffer.allocateDirect(color.length * 4);
-		byteBuf.order(ByteOrder.nativeOrder());
-		colorBuffer = byteBuf.asFloatBuffer();
-		colorBuffer.put(color);
-		colorBuffer.position(0);
+		updateGradient(initColor);
 	}
 	
-	public void updateVertices()
+	private void updateVertices()
 	{
 		//different values must be used for different directions
 		switch(dir)
@@ -171,14 +137,17 @@ public abstract class UIProgressBar extends UIEntity
 								-halfXSize, halfYSize,
 								-halfXSize, -halfYSize };
 		
-		vertices = initVerts;
-		
-		ByteBuffer byteBuf = ByteBuffer.allocateDirect(vertices.length * 4);
-		byteBuf.order(ByteOrder.nativeOrder());
-		vertexBuffer = byteBuf.asFloatBuffer();
-		vertexBuffer.put(vertices);
-		vertexBuffer.position(0);
+		setVertices(initVerts);
 	}
+	
+	
+	
+	public int getValue()				{ return value;	}
+	public int getMaximum() 			{ return maximum; }
+	public int getMinimum() 			{ return minimum; }
+	
+	public void setMaximum(int maximum) { this.maximum = maximum; }
+	public void setMinimum(int minimum) { this.minimum = minimum; }
 	
 	public void setValue(int value)
 	{
@@ -186,28 +155,53 @@ public abstract class UIProgressBar extends UIEntity
 			this.value = value;
 	}
 	
-	public void setMaximum(int maximum)
+	@Override
+	public void setGradientMode(float[] color)
 	{
-		this.maximum = maximum;
+		this.originalColor = color;
+		updateGradient();
+		super.setGradientMode(color);
 	}
 	
-	public void setMinimum(int minimum)
+	@Override
+	public void setXSize(float xSize)
 	{
-		this.minimum = minimum;
+		this.originalXSize = xSize;
+		updateVertices();
 	}
 	
-	public int getValue()
+	@Override
+	public void setYSize(float ySize)
 	{
-		return value;
+		this.originalYSize = ySize;
+		updateVertices();
 	}
 	
-	public int getMaximum()
+	@Override
+	public void setTopPad(float topPad)
 	{
-		return maximum;
+		this.originalTopPad = topPad;
+		super.setTopPad(topPad);
 	}
 	
-	public int getMinimum()
+	@Override
+	public void setLeftPad(float leftPad)
 	{
-		return minimum;
+		this.originalLeftPad = leftPad;
+		super.setLeftPad(leftPad);
+	}
+	
+	@Override
+	public void setBottomPad(float bottomPad)
+	{
+		this.originalBottomPad = bottomPad;
+		super.setBottomPad(bottomPad);
+	}
+	
+	@Override
+	public void setRightPad(float rightPad)
+	{
+		this.originalRightPad = rightPad;
+		super.setRightPad(rightPad);
 	}
 }

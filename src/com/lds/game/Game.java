@@ -27,8 +27,7 @@ public class Game
 	public EntityCleaner cleaner;
 		
 	//Camera data
-	public float screenW;
-	public float screenH;
+	public static float screenW, screenH;
 	public float camPosX;
 	public float camPosY;
 	
@@ -44,7 +43,7 @@ public class Game
 	public PhysBlock block;
 	
 	//Constructors
-	public Game (float _screenW, float _screenH, Context context, GL10 gl)
+	public Game (Context context, GL10 gl)
 	{
 		entList = new ArrayList<Entity>();
 		UIList = new ArrayList<UIEntity>();
@@ -79,57 +78,47 @@ public class Game
 		block.setColor(0, 255, 255, 255);
 		entList.add(block);
 		
-		screenW = _screenW;
-		screenH = _screenH;
-
-		
-		
 		healthBar = new UIHealthBar(200.0f, 30.0f, UIPosition.TOPLEFT, Direction.RIGHT);
-		healthBar.originalTopPad = 5.0f;
-		healthBar.originalLeftPad = 5.0f;
+		healthBar.setTopPad(5.0f);
+		healthBar.setLeftPad(5.0f);
 		healthBar.autoPadding(5, 5, 0, 0);
-		healthBar.renderMode = RenderMode.GRADIENT;
-		
+				
 		//						Red	  Green	Blue  Alpha
 		float[] healthColor = {	0.0f, 1.0f, 0.0f, 0.9f,		//top right
 								0.0f, 1.0f, 0.0f, 0.9f, 	//bottom right
 								1.0f, 0.0f, 0.0f, 1.0f, 	//top left
 								1.0f, 0.0f, 0.0f, 1.0f};	//bottom left
-		healthBar.setGradient(healthColor);
-		healthBar.updatePosition(screenW, screenH);
+		healthBar.setGradientMode(healthColor);
+		healthBar.setValue(99);
 		
 		
 		energyBar = new UIEnergyBar(150.0f, 15.0f, UIPosition.TOPRIGHT, Direction.LEFT);
-		energyBar.originalTopPad = 5.0f;
-		energyBar.originalRightPad = 5.0f;
+		energyBar.setTopPad(5.0f);
+		energyBar.setRightPad(5.0f);
 		energyBar.autoPadding(5, 0, 0, 5);
-		energyBar.renderMode = RenderMode.GRADIENT;
 		
 		float[] energyColor = {	0.0f, 0.0f, 0.3f, 1.0f,
 								0.0f, 0.0f, 0.3f, 1.0f,
 								0.0f, 0.0f, 1.0f, 0.9f,
 								0.0f, 0.0f, 1.0f, 0.9f };
-		energyBar.setGradient(energyColor);
-		energyBar.updatePosition(screenW, screenH);
+		energyBar.setGradientMode(energyColor);
+		energyBar.setValue(99);
 		
 		btnA = new UIButton(80.0f, 80.0f, UIPosition.BOTTOMRIGHT);
 		btnA.autoPadding(0.0f, 0.0f, 5.0f, 90.0f);
-		btnA.renderMode = RenderMode.COLOR;
-		btnA.setColor(86, 93, 128, 128);
-		btnA.updatePosition(screenW, screenH);
+		//btnA.renderMode = RenderMode.COLOR;
+		btnA.setColorMode(86, 93, 128, 128);
 		btnA.setIntervalTime(Stopwatch.elapsedTimeInMilliseconds());
 		
 		btnB = new UIButton(80.0f, 80.0f, UIPosition.BOTTOMRIGHT);
 		btnB.autoPadding(0.0f, 0.0f, 90.0f, 5.0f);
-		btnB.renderMode = RenderMode.COLOR;
-		btnB.setColor(200, 93, 50, 128);
-		btnB.updatePosition(screenW, screenH);
+		//btnB.renderMode = RenderMode.COLOR;
+		btnB.setColorMode(200, 93, 50, 128);
 		btnB.setIntervalTime(Stopwatch.elapsedTimeInMilliseconds());
 		
 		joypad = new UIJoypad(100, 100, UIPosition.BOTTOMLEFT);
-		joypad.autoPadding(5.0f, 0.0f, 5.0f, 0.0f);
-		joypad.renderMode = RenderMode.BLANK;
-		joypad.updatePosition(screenW, screenH);
+		joypad.autoPadding(0.0f, 5.0f, 5.0f, 0.0f);
+		joypad.setBlankMode();
 		
 		UIList.add(healthBar);
 		UIList.add(energyBar);

@@ -27,6 +27,6 @@ public class UIEnergyBar extends UIProgressBar
 	
 	public void setEnergy(Player player)
 	{
-		this.value = player.getEnergy();
+		setValue(player.getEnergy());
 	}
 }

@@ -15,18 +15,15 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	public Context context;
 	public static Object syncObj;
 	public boolean windowOutdated, testPB;
-	public float tempSW, tempSH;
-	int i;
-	int prevRenderCount;
+	public int frameInterval;
 	
 	public GameRenderer (float screenW, float screenH, Context _context, Object syncObj)
 	{
-		tempSW = screenW;
-		tempSH = screenH;
+		Game.screenW = screenW;
+		Game.screenH = screenH;
 		context = _context;
 		GameRenderer.syncObj = syncObj;
 		windowOutdated = false;
-		prevRenderCount = 2;
 	}
 	
 	@Override
@@ -48,7 +45,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		Stopwatch.restartTimer();
 		Stopwatch.tick();
 		
-		game = new Game(tempSW, tempSH, context, gl);
+		game = new Game(context, gl);
 		testPB = true;		
 	}
 	
@@ -57,21 +54,22 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	{
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		
+		frameInterval = Stopwatch.elapsedTimeInMilliseconds();
+		
 		Stopwatch.tick();
 
 		//testME = true;
 		
 		if (windowOutdated)
 		{
-			onSurfaceChanged(gl, (int)game.screenW, (int)game.screenH);
+			updateCamPosition(gl);
 			windowOutdated = false;
 		}
 		
-		int renderedcount = 0;
 		game.cleaner.clean(game.entList);
 		//Update screen position and entities
 		game.updateLocalEntities();
-		
+				
 		//Render tileset
 		for (int i = 0; i < game.tileset.length; i++)
 		{
@@ -168,9 +166,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 					Sprite spr = (Sprite)ent;
 					spr.renderNextFrame();
 				}
-				
-				renderedcount++;
-				
+								
 				gl.glTranslatef(ent.xPos, ent.yPos, 0.0f);
 				gl.glRotatef(ent.angle, 0.0f, 0.0f, 1.0f);
 				gl.glScalef(ent.xScl, ent.yScl, 1.0f);
@@ -183,70 +179,36 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		
 		for (UIEntity ent : game.UIList)
 		{
-			if (ent instanceof UIProgressBar)
-			{
-				UIProgressBar UIpb = (UIProgressBar)ent;
-				if (UIpb.tempBool)
-				{
-					UIpb.setValue(UIpb.getValue() - 1);
-					UIpb.updateGradient();
-					UIpb.updateVertices();
-					UIpb.autoPadding(UIpb.originalTopPad, UIpb.originalLeftPad, UIpb.originalBottomPad, UIpb.originalRightPad);
-					UIpb.updatePosition(game.screenW, game.screenH);
-					if (UIpb.getValue() == UIpb.getMinimum())
-						UIpb.tempBool = false;
-				}
-				else
-				{
-					UIpb.setValue(UIpb.getValue() + 1);
-					UIpb.updateGradient();
-					UIpb.updateVertices();
-					UIpb.autoPadding(UIpb.originalTopPad, UIpb.originalLeftPad, UIpb.originalBottomPad, UIpb.originalRightPad);
-					UIpb.updatePosition(game.screenW, game.screenH);
-					if (UIpb.getValue() == UIpb.getMaximum())
-						UIpb.tempBool = true;
-				}
-			}
+			ent.update();
 			gl.glTranslatef(ent.xPos, ent.yPos, 0.0f);
 			ent.draw(gl);
 			gl.glLoadIdentity();
-			
 		}
 		
 		viewWorld(gl);
+		
 		//Debugging info
-		if (renderedcount != prevRenderCount)
-		{
-			System.out.println("Items rendered: " + renderedcount);
-			prevRenderCount = renderedcount;
-		}
-
+		
+		//poll for touch input
 		synchronized (syncObj)
 		{
 			syncObj.notify();
 		}
+		
+		System.out.println("FPS: " + (1000 / (Stopwatch.elapsedTimeInMilliseconds() - frameInterval)));
 	}
 
 	@Override
 	public void onSurfaceChanged(GL10 gl, int width, int height)
 	{		
-		gl.glViewport(0, 0, width, height);
-		gl.glMatrixMode(GL10.GL_PROJECTION);
-		gl.glLoadIdentity();
-		GLU.gluOrtho2D(gl, game.camPosX - (float)(game.screenW/2), game.camPosX + (float)(game.screenW/2), game.camPosY - (float)(game.screenH/2), game.camPosY + (float)(game.screenH/2));
-		gl.glMatrixMode(GL10.GL_MODELVIEW);
-		gl.glLoadIdentity();
-
-		game.updateLocalTileset();
+		updateCamPosition(gl);
 	}
 
 	@Override
 	public void onTouchInput(MotionEvent e) 
 	{
-		i++;
-		System.out.println(i + ": " + e);
-		float xInput = e.getRawX() - game.screenW / 2;
-		float yInput = -e.getRawY() + game.screenH / 2;
+		float xInput = e.getRawX() - Game.screenW / 2;
+		float yInput = -e.getRawY() + Game.screenH / 2;
 		for (UIEntity ent : game.UIList)
 		{
 			if (xInput >= ent.xPos - ent.xSize / 2 && xInput <= ent.xPos + ent.xSize / 2 && yInput >= ent.yPos - ent.ySize / 2 && yInput <= ent.yPos + ent.ySize / 2)
@@ -265,24 +227,28 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 					float newAngle = (float)Math.toDegrees(newRad);
 					float oldAngle = game.player.angle;
 					game.player.setAngle(newAngle - 90.0f);
-					game.player.setPos(game.player.xPos + (x / 5), game.player.yPos + (y / 5));
+					game.player.setPos(game.player.xPos + (x / 10), game.player.yPos + (y / 10));
 					for (Entity colEnt : game.entList)
 					{
 						if (colEnt != game.player && game.player.isColliding(colEnt))
 						{
 							game.player.setAngle(oldAngle);
-							game.player.setPos(game.player.xPos - (x / 5), game.player.yPos - (y / 5));
+							game.player.setPos(game.player.xPos - (x / 10), game.player.yPos - (y / 10));
 						}
 					}
 					game.camPosX = game.player.endX;
 					game.camPosY = game.player.endY;
 					
+					//camera can't go further than defined level bounds
 					if (game.camPosX < game.worldMinX)
 						game.camPosX = game.worldMinX;
+						
 					else if (game.camPosX > game.worldMaxX)
 						game.camPosX = game.worldMaxX;
+					
 					if (game.camPosY < game.worldMinY)
 						game.camPosY = game.worldMinY;
+					
 					else if (game.camPosY > game.worldMaxY)
 						game.camPosY = game.worldMaxY;
 					
@@ -301,12 +267,24 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		}
 	}
 	
+	public void updateCamPosition(GL10 gl)
+	{
+		gl.glViewport(0, 0, (int)Game.screenW, (int)Game.screenH);
+		gl.glMatrixMode(GL10.GL_PROJECTION);
+		gl.glLoadIdentity();
+		GLU.gluOrtho2D(gl, game.camPosX - (Game.screenW/2), game.camPosX + (Game.screenW/2), game.camPosY - (Game.screenH/2), game.camPosY + (Game.screenH/2));
+		gl.glMatrixMode(GL10.GL_MODELVIEW);
+		gl.glLoadIdentity();
+		
+		game.updateLocalTileset();
+	}
+	
 	public void viewHUD(GL10 gl)
 	{
 		gl.glMatrixMode(GL10.GL_PROJECTION);
 		gl.glPushMatrix();
 		gl.glLoadIdentity();
-		GLU.gluOrtho2D(gl, -game.screenW /2 , game.screenW / 2, -game.screenH / 2, game.screenH / 2);
+		GLU.gluOrtho2D(gl, -Game.screenW /2 , Game.screenW / 2, -Game.screenH / 2, Game.screenH / 2);
 		gl.glMatrixMode(GL10.GL_MODELVIEW);
 		gl.glPushMatrix();
 		gl.glLoadIdentity();

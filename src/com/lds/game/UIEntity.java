@@ -8,11 +8,12 @@ import javax.microedition.khronos.opengles.GL10;
 
 import com.lds.Enums.RenderMode;
 import com.lds.Enums.UIPosition;
+import com.lds.TilesetHelper;
 
 public abstract class UIEntity
 {
 	//constants
-	private static final float[] UIPositionF = { 	0.0f, 1.0f,
+	protected static final float[] UIPositionF = { 	0.0f, 1.0f,
 													-1.0f, 0.0f,
 													0.0f, -1.0f,
 													1.0f, 0.0f,
@@ -20,25 +21,25 @@ public abstract class UIEntity
 													-1.0f, 1.0f,
 													1.0f, 1.0f,
 													-1.0f, -1.0f,
-													1.0f, -1.0f }; //clamped between -1 and 1
+													1.0f, -1.0f }; //clamped between -1 and 1, turns UIPosition enum to relative coords
 	
 	//graphics data
-	public float xSize, ySize, xPos, yPos, xRelative, yRelative, halfXSize, halfYSize;
-	public float topPad, leftPad, bottomPad, rightPad;
-	public float colorR, colorG, colorB, colorA;
-	UIPosition position;
-	RenderMode renderMode;
+	protected float xSize, ySize, xPos, yPos, xRelative, yRelative, halfXSize, halfYSize;
+	private float topPad, leftPad, bottomPad, rightPad;
+	private float colorR, colorG, colorB, colorA;
+	protected UIPosition position;
+	protected RenderMode renderMode;
 	
-	public float[] vertices;
-	public float[] texture;
-	public float[] color;
-	public byte[] indices;
-	public int texturePtr;
+	private float[] vertices;
+	private float[] texture;
+	private float[] color;
+	private byte[] indices;
+	private int texturePtr;
 	
-	public FloatBuffer vertexBuffer;
-	public FloatBuffer textureBuffer;
-	public FloatBuffer colorBuffer;
-	public ByteBuffer indexBuffer;
+	private FloatBuffer vertexBuffer;
+	private FloatBuffer textureBuffer;
+	private FloatBuffer colorBuffer;
+	private ByteBuffer indexBuffer;
 	
 	//constructors
 	public UIEntity(float xSize, float ySize, UIPosition position)
@@ -55,6 +56,7 @@ public abstract class UIEntity
 	public UIEntity(float xSize, float ySize, UIPosition position, float topPad, float leftPad, float bottomPad, float rightPad)
 	{
 		this (xSize, ySize, UIPositionF[position.getValue() * 2], UIPositionF[(position.getValue() * 2) + 1], topPad, leftPad, bottomPad, rightPad);
+		this.position = position;
 	}
 	
 	public UIEntity(float xSize, float ySize, float xRelative, float yRelative, float topPad, float leftPad, float bottomPad, float rightPad) 
@@ -76,21 +78,16 @@ public abstract class UIEntity
 								-halfXSize, halfYSize,
 								-halfXSize, -halfYSize };
 		
-		vertices = initVerts;
+		setVertices(initVerts);
 		
 		byte[] initIndices = { 0, 1, 2, 3 };
 		
 		indices = initIndices;
-		
-		ByteBuffer byteBuf = ByteBuffer.allocateDirect(vertices.length * 4);
-		byteBuf.order(ByteOrder.nativeOrder());
-		vertexBuffer = byteBuf.asFloatBuffer();
-		vertexBuffer.put(vertices);
-		vertexBuffer.position(0);
 				
 		indexBuffer = ByteBuffer.allocateDirect(indices.length);
 		indexBuffer.put(indices);
 		indexBuffer.position(0);
+		
 	}
 	
 	public void draw(GL10 gl)
@@ -141,10 +138,22 @@ public abstract class UIEntity
 		if (renderMode == RenderMode.COLOR || renderMode == RenderMode.GRADIENT) {gl.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);}
 	}
 	
-	public void updatePosition(float screenW, float screenH)
+	//Runs every frame
+	public void update()
 	{
-		xPos = (screenW / 2 * xRelative) + leftPad - rightPad;
-		yPos = (screenH / 2 * yRelative) + bottomPad - topPad;
+		//default update does nothing, no updating needed.
+	}
+	
+	/*******************
+	 * Padding Methods *
+	 *******************/
+	
+	public void setPadding (float topPad, float leftPad, float bottomPad, float rightPad)
+	{
+		this.topPad = topPad;
+		this.leftPad = leftPad;
+		this.bottomPad = bottomPad;
+		this.rightPad = rightPad;
 	}
 	
 	public void autoPadding()
@@ -191,6 +200,7 @@ public abstract class UIEntity
 					this.rightPad = halfXSize + rightPad;
 					break;
 			}
+			updatePosition();
 		}
 		else
 		{
@@ -198,38 +208,192 @@ public abstract class UIEntity
 		}
 	}
 	
-	public void setColor(float r, float b, float g, float a)
+	public void updatePosition()
 	{
-		colorR = r;
-		colorG = g;
-		colorB = b;
-		colorA = a;
+		xPos = (Game.screenW / 2 * xRelative) + leftPad - rightPad;
+		yPos = (Game.screenH / 2 * yRelative) + bottomPad - topPad;
 	}
 	
-	public void setColor (int r, int b, int g, int a)
+	/**********************
+	 * RenderMode methods *
+	 **********************/
+	
+	//BLANK
+	public void setBlankMode()
 	{
-		colorR = (float) r / 255.0f;
-		colorG = (float) g / 255.0f;
-		colorB = (float) b / 255.0f;
-		colorA = (float) a / 255.0f;
+		renderMode = RenderMode.BLANK;
 	}
 	
-	public void setGradient(float[] color)
+	//COLOR
+	public void setColorMode(float r, float g, float b, float a)
 	{
-		this.color = color;
+		renderMode = RenderMode.COLOR;
+		updateColor(r, g, b, a);
+	}
+	
+	public void setColorMode(int r, int b, int g, int a)
+	{
+		renderMode = RenderMode.COLOR;
+		updateColor(r, g, b, a);
+	}
+	
+	public void updateColor(float r, float g, float b, float a)
+	{
+		if (renderMode == RenderMode.COLOR)
+		{
+			colorR = r;
+			colorG = g;
+			colorB = b;
+			colorA = a;
+		}
+	}
+	
+	public void updateColor(int r, int g, int b, int a)
+	{
+		if (renderMode == RenderMode.COLOR)
+		{
+			colorR = (float) r / 255.0f;
+			colorG = (float) g / 255.0f;
+			colorB = (float) b / 255.0f;
+			colorA = (float) a / 255.0f;
+		}
+	}
+	
+	//GRADIENT
+	public void setGradientMode(float[] color)
+	{
+		renderMode = RenderMode.GRADIENT;
+		updateGradient(color);
+	}
+	
+	public void updateGradient(float[] color)
+	{
+		if (renderMode == RenderMode.GRADIENT)
+		{
+			this.color = color;
+			
+			ByteBuffer byteBuf = ByteBuffer.allocateDirect(color.length * 4);
+			byteBuf.order(ByteOrder.nativeOrder());
+			colorBuffer = byteBuf.asFloatBuffer();
+			colorBuffer.put(color);
+			colorBuffer.position(0);
+		}
+	}
+	
+	//TEXTURE
+	public void setTextureMode(int texturePtr)
+	{
+		renderMode = RenderMode.TEXTURE;
+		updateTexture(texturePtr);
+	}
+	
+	public void setTextureMode(int texturePtr, float[] texture)
+	{
+		renderMode = RenderMode.TEXTURE;
+		updateTexture(texturePtr, texture);
+	}
 		
-		ByteBuffer byteBuf = ByteBuffer.allocateDirect(color.length * 4);
-		byteBuf.order(ByteOrder.nativeOrder());
-		colorBuffer = byteBuf.asFloatBuffer();
-		colorBuffer.put(color);
-		colorBuffer.position(0);
+	public void updateTexture(int texturePtr)
+	{
+		if (renderMode == RenderMode.TEXTURE)
+		{
+			this.texturePtr = texturePtr;
+			float[] initTexture = { 1.0f, 0.0f,
+									1.0f, 1.0f,
+									0.0f, 0.0f,
+									0.0f, 1.0f};
+			texture = initTexture;
+		}
 	}
 	
-	public void setPadding (float topPad, float leftPad, float bottomPad, float rightPad)
+	public void updateTexture(int texturePtr, float[] texture)
 	{
-		this.topPad = topPad;
-		this.leftPad = leftPad;
-		this.bottomPad = bottomPad;
-		this.rightPad = rightPad;
+		if (renderMode == RenderMode.TEXTURE)
+		{
+			this.texturePtr = texturePtr;
+			this.texture = texture;
+		}
+	}
+	
+	//TILESET
+	public void setTilesetMode(int texturePtr, int x, int y, int min, int max)
+	{
+		renderMode = RenderMode.TILESET;
+		updateTileset(texturePtr, x, y, min, max);
+	}
+	
+	public void setTilesetMode (int texturePtr, int tileID)
+	{
+		renderMode = RenderMode.TILESET;
+		updateTileset(texturePtr, tileID);
+	}
+	
+	public void updateTileset(int texturePtr, int x, int y, int min, int max)
+	{
+		if (renderMode == RenderMode.TILESET)
+		{
+			this.texturePtr = texturePtr;
+			texture = TilesetHelper.getTextureVertices(x, y, min, max);
+		}
+	}
+	
+	public void updateTileset(int texturePtr, int tileID)
+	{
+		if (renderMode == RenderMode.TILESET)
+		{
+			this.texturePtr = texturePtr;
+			texture = TilesetHelper.getTextureVertices(tileID);
+		}
+	}
+	
+	public void updateTileset(int x, int y, int min, int max)
+	{
+		if (renderMode == RenderMode.TILESET)
+			texture = TilesetHelper.getTextureVertices(x, y, min, max);
+	}
+	
+	public void updateTileset(int tileID)
+	{
+		if (renderMode == RenderMode.TILESET)
+			texture = TilesetHelper.getTextureVertices(tileID);
+	}
+	
+	/**************************
+	 * Accessors and Mutators *
+	 **************************/
+	
+	public float getXSize() 			{ return xSize; }
+	public float getYSize() 			{ return ySize; }
+	public float getXPos()				{ return xPos; }
+	public float getYPos()				{ return yPos; }
+	public float getColorR() 			{ return colorR; }
+	public float getColorG()			{ return colorG; }
+	public float getColorB()			{ return colorB; }
+	public float getColorA()			{ return colorA; }
+	public UIPosition getPosEnum()		{ return position; }
+	public RenderMode getRenderMode()	{ return renderMode; }
+	public float[] getVertices()		{ return vertices; }
+	public float[] getGradientCoords()	{ return color; }
+	public float[] getTextureCoords()	{ return texture; }
+	public int getTexturePtr()			{ return texturePtr; }
+	
+	public void setXSize(float xSize)			{ this.xSize = xSize; }
+	public void setYSize(float ySize)			{ this.ySize = ySize; }
+	public void setXPos(float xPos)				{ this.xPos = xPos; }
+	public void setYPos(float yPos)				{ this.yPos = yPos; }
+	public void setTopPad(float topPad)			{ this.topPad = topPad; }
+	public void setLeftPad(float leftPad)		{ this.leftPad = leftPad; }
+	public void setBottomPad(float bottomPad)	{ this.bottomPad = bottomPad; }
+	public void setRightPad(float rightPad)		{ this.rightPad = rightPad; }
+	
+	public void setVertices(float[] vertices)
+	{
+		this.vertices = vertices;
+		
+		ByteBuffer byteBuf = ByteBuffer.allocateDirect(vertices.length * 4);
+		byteBuf.order(ByteOrder.nativeOrder());
+		vertexBuffer = byteBuf.asFloatBuffer();
+		vertexBuffer.put(vertices);
+		vertexBuffer.position(0);
 	}
 }

@@ -34,7 +34,7 @@ public class UIButton extends UIEntity
 	
 	public void onPressed ()
 	{
-		this.colorR = 1.0f;
+		//this.colorR = 1.0f;
 	}
 	
 	public boolean isPressed ()

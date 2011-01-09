@@ -27,6 +27,6 @@ public class UIHealthBar extends UIProgressBar
 	
 	public void updateHealth(Player player)
 	{
-		this.value = player.health;
+		setValue(player.health);
 	}
 }
