@@ -5,9 +5,6 @@ import com.lds.Stopwatch;
 
 public abstract class PhysEnt extends Entity //physics objects are movable, such as doors, blocks, etc.
 {
-	//constants
-	public static final float DEFAULT_SPEED = 0.05f;
-
 	//interpolation data
 	public float interpX, interpY, interpXScl, interpYScl, interpAngle;
 	public float endX, endY, endXScl, endYScl, endAngle;
@@ -19,9 +16,14 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	private boolean isInterpTrans, isInterpRot, isInterpScl;
 	private boolean isRotatingCCW;
 	
-	public PhysEnt (float _size, float _xPos, float _yPos, float _angle, float _xScl, float _yScl)
+	public PhysEnt(float size, float xPos, float yPos, RenderMode renderMode, float moveSpeed, float rotSpeed, float sclSpeed)
 	{
-		super(_size, _xPos, _yPos, _angle, _xScl, _yScl, true, RenderMode.TILESET);
+		this(size, xPos, yPos, 0.0f, 1.0f, 1.0f, true, renderMode, moveSpeed, rotSpeed, sclSpeed);
+	}
+	
+	public PhysEnt(float size, float xPos, float yPos, float angle, float xScl, float yScl, boolean isSolid, RenderMode renderMode, float moveSpeed, float rotSpeed, float sclSpeed)
+	{
+		super(size, xPos, yPos, angle, xScl, yScl, isSolid, renderMode);
 		
 		//initialize interpolation variables
 		endX = xPos;
@@ -29,9 +31,8 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 		endXScl = xScl;
 		endYScl = yScl;
 		endAngle = angle;
-		moveSpeed = 20.0f;
-		rotSpeed = 360.0f;
-		isSolid = true;
+		this.moveSpeed = moveSpeed;
+		this.rotSpeed = rotSpeed;
 	}
 	
 	public void renderNextFrame()
@@ -142,21 +143,21 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 		if (isInterpTrans)
 		{
 
-			xPos -= speed / 1000 * (float)(Stopwatch.elapsedTimeInMilliseconds() - interpRotTimeMs) * interpX;
-			yPos -= (speed / 10) * interpY;
+			xPos -= moveSpeed / 1000 * (float)(Stopwatch.elapsedTimeInMilliseconds() - interpRotTimeMs) * interpX;
+			yPos -= (moveSpeed / 10) * interpY;
 			isInterpTrans = false;
 		}
 		
 		if (isInterpRot)
 		{
-			angle -= speed / 1000 * (float)(Stopwatch.elapsedTimeInMilliseconds() - interpRotTimeMs);
+			angle -= rotSpeed / 1000 * (float)(Stopwatch.elapsedTimeInMilliseconds() - interpRotTimeMs);
 			isInterpRot = false;
 		}
 		
 		if (isInterpScl)
 		{
-			xScl -= (speed / 10) * interpXScl;
-			yScl -= (speed / 10) * interpYScl;
+			xScl -= (sclSpeed / 10) * interpXScl;
+			yScl -= (sclSpeed / 10) * interpYScl;
 			isInterpScl = false;
 		}
 	}
@@ -259,11 +260,11 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 		if (isInterpScl)
 		{				
 			//increments scaling
-			xScl += speed * interpXScl;
-			yScl += speed * interpYScl;
+			xScl += sclSpeed * interpXScl;
+			yScl += sclSpeed * interpYScl;
 			
 			//error check
-			if (xScl <= endXScl + (speed / 6000) && xScl >= endXScl - (speed / 6000))
+			if (xScl <= endXScl + (sclSpeed / 6000) && xScl >= endXScl - (sclSpeed / 6000))
 			{
 				xScl = endXScl;
 				isInterpScl = false;

@@ -303,6 +303,12 @@ public abstract class UIEntity
 									0.0f, 0.0f,
 									0.0f, 1.0f};
 			texture = initTexture;
+			
+			ByteBuffer byteBuf = ByteBuffer.allocateDirect(texture.length * 4);
+			byteBuf.order(ByteOrder.nativeOrder());
+			textureBuffer = byteBuf.asFloatBuffer();
+			textureBuffer.put(texture);
+			textureBuffer.position(0);
 		}
 	}
 	
@@ -312,6 +318,12 @@ public abstract class UIEntity
 		{
 			this.texturePtr = texturePtr;
 			this.texture = texture;
+			
+			ByteBuffer byteBuf = ByteBuffer.allocateDirect(texture.length * 4);
+			byteBuf.order(ByteOrder.nativeOrder());
+			textureBuffer = byteBuf.asFloatBuffer();
+			textureBuffer.put(texture);
+			textureBuffer.position(0);
 		}
 	}
 	
@@ -334,6 +346,12 @@ public abstract class UIEntity
 		{
 			this.texturePtr = texturePtr;
 			texture = TilesetHelper.getTextureVertices(x, y, min, max);
+			
+			ByteBuffer byteBuf = ByteBuffer.allocateDirect(texture.length * 4);
+			byteBuf.order(ByteOrder.nativeOrder());
+			textureBuffer = byteBuf.asFloatBuffer();
+			textureBuffer.put(texture);
+			textureBuffer.position(0);
 		}
 	}
 	
@@ -343,19 +361,41 @@ public abstract class UIEntity
 		{
 			this.texturePtr = texturePtr;
 			texture = TilesetHelper.getTextureVertices(tileID);
+			
+			ByteBuffer byteBuf = ByteBuffer.allocateDirect(texture.length * 4);
+			byteBuf.order(ByteOrder.nativeOrder());
+			textureBuffer = byteBuf.asFloatBuffer();
+			textureBuffer.put(texture);
+			textureBuffer.position(0);
 		}
 	}
 	
 	public void updateTileset(int x, int y, int min, int max)
 	{
 		if (renderMode == RenderMode.TILESET)
+		{
 			texture = TilesetHelper.getTextureVertices(x, y, min, max);
+			
+			ByteBuffer byteBuf = ByteBuffer.allocateDirect(texture.length * 4);
+			byteBuf.order(ByteOrder.nativeOrder());
+			textureBuffer = byteBuf.asFloatBuffer();
+			textureBuffer.put(texture);
+			textureBuffer.position(0);
+		}
 	}
 	
 	public void updateTileset(int tileID)
 	{
 		if (renderMode == RenderMode.TILESET)
+		{
 			texture = TilesetHelper.getTextureVertices(tileID);
+			
+			ByteBuffer byteBuf = ByteBuffer.allocateDirect(texture.length * 4);
+			byteBuf.order(ByteOrder.nativeOrder());
+			textureBuffer = byteBuf.asFloatBuffer();
+			textureBuffer.put(texture);
+			textureBuffer.position(0);
+		}
 	}
 	
 	/**************************

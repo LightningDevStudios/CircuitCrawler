@@ -11,7 +11,6 @@ import com.lds.Enums.Direction;
 import com.lds.Enums.RenderMode;
 import com.lds.Stopwatch;
 import com.lds.TextureLoader;
-import com.lds.TilesetHelper;
 import com.lds.Enums.UIPosition;
 
 public class Game
@@ -61,21 +60,17 @@ public class Game
 		{
 			for (int j = 0; j < tileset[0].length; j++)
 			{
-				tileset[i][j] = new Tile(0, 0, Tile.TILE_SIZE_F, 0, 0);
-				TilesetHelper.setInitialTileOffset(tileset[i][j], i, j, tileset.length, tileset[0].length);
-				tileset[i][j].setTexture(tl.getTexture());
+				tileset[i][j] = new Tile(Tile.TILE_SIZE_F, j, i, tileset[0].length, tileset.length);
+				tileset[i][j].setTilesetMode(tl.getTexture(), 0, 0, 0, 7);
 			}
 		}		
-		player = new Player(0.0f, 0.0f, 90.0f);
+		player = new Player(0.0f, 0.0f, 0.0f, RenderMode.TILESET);
 		tl.setTexture(1);
-		player.setTexture(tl.getTexture());
-		player.setTilesetCoords(1, 0);
-		player.renderMode = RenderMode.TILESET;
+		player.setTilesetMode(tl.getTexture(), 1, 0, 0, 7);
 		entList.add(player);
 		
-		block = new PhysBlock(200.0f, 0.0f);
-		block.renderMode = RenderMode.COLOR;
-		block.setColor(0, 255, 255, 255);
+		block = new PhysBlock(30.0f, 200.0f, 0.0f, RenderMode.COLOR);
+		block.setColorMode(0, 255, 255, 255);
 		entList.add(block);
 		
 		healthBar = new UIHealthBar(200.0f, 30.0f, UIPosition.TOPLEFT, Direction.RIGHT);

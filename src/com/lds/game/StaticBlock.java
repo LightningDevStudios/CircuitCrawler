@@ -1,10 +1,16 @@
 package com.lds.game;
 
+import com.lds.Enums.RenderMode;
+
 public class StaticBlock extends StaticEnt
 {
-	public StaticBlock (float _xPos, float _yPos, float _xScl, float _yScl)
+	public StaticBlock(float size, float xPos, float yPos, RenderMode renderMode)
 	{
-		super(Entity.DEFAULT_SIZE, _xPos, _yPos, 0.0f, _xScl, _yScl);
+		super(size, xPos, yPos, renderMode);
+	}
+	public StaticBlock (float size, float xPos, float yPos, float angle, float xScl, float yScl, boolean isSolid, RenderMode renderMode)
+	{
+		super(size, xPos, yPos, 0.0f, xScl, yScl, isSolid, renderMode);
 	}
 	
 	@Override

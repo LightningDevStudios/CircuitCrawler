@@ -1,11 +1,11 @@
 package com.lds.game;
 
+import com.lds.Enums.RenderMode;
+
 public class PhysBlock extends HoldObject //a default block
 {	
-	public PhysBlock (float _xPos, float _yPos)
+	public PhysBlock (float size, float xPos, float yPos, RenderMode renderMode)
 	{
-		super(Entity.DEFAULT_SIZE, _xPos, _yPos, 0.0f, 1.0f, 1.0f);
-		rotSpeed = 3.0f;
-		moveSpeed = 1.0f;
+		super(size, xPos, yPos, 0.0f, 1.0f, 1.0f, true, renderMode);
 	}
 }

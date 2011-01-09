@@ -46,6 +46,7 @@ public class UIButton extends UIEntity
 	{
 		if (Stopwatch.elapsedTimeInMilliseconds() - intervalTime >= interval)
 			return true;
+		
 		else
 			return false;
 	}

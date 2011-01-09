@@ -20,28 +20,28 @@ public abstract class Entity
 	public static final float DEFAULT_SIZE = 69.0f;
 	
 	//behavior data
-	public boolean isSolid;
+	protected boolean isSolid;
+	protected boolean isRendered;
 	
 	//graphics data
-	public int texturePtr;
-	public float angle, size, xPos, yPos, xScl, yScl, speed, halfSize;
-	public float colorR, colorG, colorB, colorA;
-	public RenderMode renderMode;
+	protected float angle, size, xPos, yPos, xScl, yScl, halfSize;
+	protected float colorR, colorG, colorB, colorA;
+	protected int texturePtr;
+	protected RenderMode renderMode;
 	
-	public float[] vertices;
-	public float[] texture;
-	public float[] color;
-	public byte[] indices;
+	protected float[] vertices;
+	protected float[] texture;
+	protected float[] color;
+	private byte[] indices;
 	
-	public FloatBuffer vertexBuffer;
-	public FloatBuffer textureBuffer;
-	public FloatBuffer colorBuffer;
-	public ByteBuffer indexBuffer;
+	protected FloatBuffer vertexBuffer;
+	protected FloatBuffer textureBuffer;
+	protected FloatBuffer colorBuffer;
+	private ByteBuffer indexBuffer;
 	
 	//debug data
-	public int entID;
-	public boolean isRendered;
-	public static int entCount;
+	private int entID;
+	private static int entCount = 0;
 	
 	//collision data
 	public Point[] colPoints;
@@ -51,8 +51,18 @@ public abstract class Entity
 	public ArrayList<Entity> colList = new ArrayList<Entity>();
 	public ArrayList<Entity> colIgnoreList = new ArrayList<Entity>();
 	
+	
+	public Entity (float size, float xPos, float yPos, RenderMode renderMode)
+	{
+		this(size, xPos, yPos, 0.0f, 1.0f, 1.0f, true, renderMode);
+	}
+	
 	public  Entity (float size, float xPos, float yPos, float angle, float xScl, float yScl, boolean isSolid, RenderMode renderMode)
 	{
+		//initialize debug data
+		entID = entCount;
+		entCount++;
+		
 		//initialize behavior variables
 		this.isSolid = isSolid;
 		
@@ -100,11 +110,6 @@ public abstract class Entity
 		indexBuffer = ByteBuffer.allocateDirect(indices.length);
 		indexBuffer.put(indices);
 		indexBuffer.position(0);
-	}
-	
-	public Entity (float _size, float _xPos, float _yPos, RenderMode renderMode)
-	{
-		this(_size, _xPos, _yPos, 0.0f, 1.0f, 1.0f, true, renderMode);
 	}
 	
 	public void draw(GL10 gl)
@@ -159,36 +164,7 @@ public abstract class Entity
 	{
 		EntityCleaner.queueEntityForRemoval(this);
 	}
-	
-	public void setColor(float r, float b, float g, float a)
-	{
-		colorR = r;
-		colorB = b;
-		colorG = g;
-		colorA = a;
-	}
-	
-	public void setColor (int r, int b, int g, int a)
-	{
-		colorR = (float) r / 255.0f;
-		colorG = (float) g / 255.0f;
-		colorB = (float) b / 255.0f;
-		colorA = (float) a / 255.0f;
-	}
-	
-	public void setGradient(float[] color)
-	{
-		this.color = color;
 		
-		ByteBuffer byteBuf = ByteBuffer.allocateDirect(color.length * 4);
-		byteBuf.order(ByteOrder.nativeOrder());
-		colorBuffer = byteBuf.asFloatBuffer();
-		colorBuffer.put(color);
-		colorBuffer.position(0);
-	}
-	
-	
-	
 	/*********************
 	 * Collision Methods *
 	 *********************/
@@ -199,18 +175,11 @@ public abstract class Entity
 		rad = Math.toRadians((double)(angle + 90.0f));
 		diagonal = Math.sqrt(Math.pow(halfSize * xScl, 2) + Math.pow(halfSize * yScl, 2));
 		diagAngle = Math.atan2((halfSize * xScl) , (halfSize * yScl));
-		/*if (diagAngle < 0)
-			diagAngle += 2 * Math.PI;*/
 	}
 	
 	//used to get the absolute, not relative, positions of the entity's 4 points in the XY Plane
 	public void updateAbsolutePointLocations ()
 	{
-		//keeps the angle not exactly 0, so slope is never undefined. Still works within unnoticeable margin of error
-		/*if (angle % 90 == 0.0f)
-		{
-			angle += 0.1f;
-		}*/
 		initializeCollisionVariables();
 		
 		colPoints[0].setX((float)(Math.cos(this.rad + diagAngle) * diagonal) + xPos); //top left
@@ -356,33 +325,7 @@ public abstract class Entity
 			return false;
 		}
 	}
-	
-	public void setTexture (int ptr)
-	{
-		texturePtr = ptr;
-	}
-	
-	public void setTilesetCoords (int x, int y)
-	{
-		texture = TilesetHelper.getTextureVertices(x, y, 0, 7);
-		allocTextureBuffer();
-	}
-	
-	public void setTilesetCoords (int tileID)
-	{
-		texture = TilesetHelper.getTextureVertices(tileID);
-		allocTextureBuffer();
-	}
-	
-	private void allocTextureBuffer()
-	{
-		ByteBuffer byteBuf = ByteBuffer.allocateDirect(texture.length * 4);
-		byteBuf.order(ByteOrder.nativeOrder());
-		textureBuffer = byteBuf.asFloatBuffer();
-		textureBuffer.put(texture);
-		textureBuffer.position(0);
-	}
-	
+			
 	//this is a blank method, to be overriden by subclasses
 	//it determines how each object interacts with other objects and performs the action
 	public void interact (Entity ent)
@@ -403,4 +346,217 @@ public abstract class Entity
 	{
 		
 	}
+	
+	/**********************
+	 * RenderMode methods *
+	 **********************/
+	
+	//BLANK
+	public void setBlankMode()
+	{
+		renderMode = RenderMode.BLANK;
+	}
+	
+	//COLOR
+	public void setColorMode(float r, float g, float b, float a)
+	{
+		renderMode = RenderMode.COLOR;
+		updateColor(r, g, b, a);
+	}
+	
+	public void setColorMode(int r, int b, int g, int a)
+	{
+		renderMode = RenderMode.COLOR;
+		updateColor(r, g, b, a);
+	}
+	
+	public void updateColor(float r, float g, float b, float a)
+	{
+		if (renderMode == RenderMode.COLOR)
+		{
+			colorR = r;
+			colorG = g;
+			colorB = b;
+			colorA = a;
+		}
+	}
+	
+	public void updateColor(int r, int g, int b, int a)
+	{
+		if (renderMode == RenderMode.COLOR)
+		{
+			colorR = (float) r / 255.0f;
+			colorG = (float) g / 255.0f;
+			colorB = (float) b / 255.0f;
+			colorA = (float) a / 255.0f;
+		}
+	}
+	
+	//GRADIENT
+	public void setGradientMode(float[] color)
+	{
+		renderMode = RenderMode.GRADIENT;
+		updateGradient(color);
+	}
+	
+	public void updateGradient(float[] color)
+	{
+		if (renderMode == RenderMode.GRADIENT)
+		{
+			this.color = color;
+			
+			ByteBuffer byteBuf = ByteBuffer.allocateDirect(color.length * 4);
+			byteBuf.order(ByteOrder.nativeOrder());
+			colorBuffer = byteBuf.asFloatBuffer();
+			colorBuffer.put(color);
+			colorBuffer.position(0);
+		}
+	}
+	
+	//TEXTURE
+	public void setTextureMode(int texturePtr)
+	{
+		renderMode = RenderMode.TEXTURE;
+		updateTexture(texturePtr);
+	}
+	
+	public void setTextureMode(int texturePtr, float[] texture)
+	{
+		renderMode = RenderMode.TEXTURE;
+		updateTexture(texturePtr, texture);
+	}
+		
+	public void updateTexture(int texturePtr)
+	{
+		if (renderMode == RenderMode.TEXTURE)
+		{
+			this.texturePtr = texturePtr;
+			float[] initTexture = { 1.0f, 0.0f,
+									1.0f, 1.0f,
+									0.0f, 0.0f,
+									0.0f, 1.0f};
+			texture = initTexture;
+			
+			ByteBuffer byteBuf = ByteBuffer.allocateDirect(texture.length * 4);
+			byteBuf.order(ByteOrder.nativeOrder());
+			textureBuffer = byteBuf.asFloatBuffer();
+			textureBuffer.put(texture);
+			textureBuffer.position(0);
+		}
+	}
+	
+	public void updateTexture(int texturePtr, float[] texture)
+	{
+		if (renderMode == RenderMode.TEXTURE)
+		{
+			this.texturePtr = texturePtr;
+			this.texture = texture;
+			
+			ByteBuffer byteBuf = ByteBuffer.allocateDirect(texture.length * 4);
+			byteBuf.order(ByteOrder.nativeOrder());
+			textureBuffer = byteBuf.asFloatBuffer();
+			textureBuffer.put(texture);
+			textureBuffer.position(0);
+		}
+	}
+	
+	//TILESET
+	public void setTilesetMode(int texturePtr, int x, int y, int min, int max)
+	{
+		renderMode = RenderMode.TILESET;
+		updateTileset(texturePtr, x, y, min, max);
+	}
+	
+	public void setTilesetMode (int texturePtr, int tileID)
+	{
+		renderMode = RenderMode.TILESET;
+		updateTileset(texturePtr, tileID);
+	}
+	
+	public void updateTileset(int texturePtr, int x, int y, int min, int max)
+	{
+		if (renderMode == RenderMode.TILESET)
+		{
+			this.texturePtr = texturePtr;
+			texture = TilesetHelper.getTextureVertices(x, y, min, max);
+			
+			ByteBuffer byteBuf = ByteBuffer.allocateDirect(texture.length * 4);
+			byteBuf.order(ByteOrder.nativeOrder());
+			textureBuffer = byteBuf.asFloatBuffer();
+			textureBuffer.put(texture);
+			textureBuffer.position(0);
+		}
+	}
+	
+	public void updateTileset(int texturePtr, int tileID)
+	{
+		if (renderMode == RenderMode.TILESET)
+		{
+			this.texturePtr = texturePtr;
+			texture = TilesetHelper.getTextureVertices(tileID);
+			
+			ByteBuffer byteBuf = ByteBuffer.allocateDirect(texture.length * 4);
+			byteBuf.order(ByteOrder.nativeOrder());
+			textureBuffer = byteBuf.asFloatBuffer();
+			textureBuffer.put(texture);
+			textureBuffer.position(0);
+		}
+	}
+	
+	public void updateTileset(int x, int y, int min, int max)
+	{
+		if (renderMode == RenderMode.TILESET)
+		{
+			texture = TilesetHelper.getTextureVertices(x, y, min, max);
+		
+			ByteBuffer byteBuf = ByteBuffer.allocateDirect(texture.length * 4);
+			byteBuf.order(ByteOrder.nativeOrder());
+			textureBuffer = byteBuf.asFloatBuffer();
+			textureBuffer.put(texture);
+			textureBuffer.position(0);
+		}
+	}
+	
+	public void updateTileset(int tileID)
+	{
+		if (renderMode == RenderMode.TILESET)
+		{
+			texture = TilesetHelper.getTextureVertices(tileID);
+			
+			ByteBuffer byteBuf = ByteBuffer.allocateDirect(texture.length * 4);
+			byteBuf.order(ByteOrder.nativeOrder());
+			textureBuffer = byteBuf.asFloatBuffer();
+			textureBuffer.put(texture);
+			textureBuffer.position(0);
+		}
+	}
+	
+	/**************************
+	 * Accessors and Mutators *
+	 **************************/
+	
+	public float getSize()				{ return size; }
+	public float getXPos()				{ return xPos; }
+	public float getYPos()				{ return yPos; }
+	public float getAngle()				{ return angle; }
+	public float getXScl()				{ return xScl; }
+	public float getYScl()				{ return yScl; }
+	public float getColorR()			{ return colorR; }
+	public float getColorG()			{ return colorG; }
+	public float getColorB()			{ return colorB; }
+	public float getColorA()			{ return colorA; }
+	public int getTexturePtr()			{ return texturePtr; }
+	public RenderMode getRenderMode()	{ return renderMode; }
+	public float[] getVertices()		{ return vertices; }
+	public float[] getColorCoords()		{ return color; }
+	public float[] getTextureCoords()	{ return texture; }
+	public int getEntID()				{ return entID; }
+	public static int getEntCount()		{ return entCount; }
+	
+	public void setSize(float size)		{ this.size = size; }
+	public void setXPos(float xPos)		{ this.xPos = xPos; }
+	public void setYPos(float yPos)		{ this.yPos = yPos; }
+	public void setAngle(float angle)	{ this.angle = angle; }
+	public void setXScl(float xScl)		{ this.xScl = xScl; }
+	public void setYScl(float yScl)		{ this.yScl	= yScl; }
 }

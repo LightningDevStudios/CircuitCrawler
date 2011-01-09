@@ -1,19 +1,21 @@
 package com.lds.game;
 
+import com.lds.Enums.RenderMode;
+
 public class Button extends StaticEnt
 {
 	protected boolean active;
 	
-	public Button (float _xPos, float _yPos)
+	public Button (float xPos, float yPos, RenderMode renderMode)
 	{
-		super(Entity.DEFAULT_SIZE, _xPos, _yPos, 0.0f, 1.0f, 1.0f);
+		super(Entity.DEFAULT_SIZE, xPos, yPos, 0.0f, 1.0f, 1.0f, false, renderMode);
 		active = false;
 	}
 	
-	public Button (float _xPos, float _yPos, boolean _active)
+	public Button (float xPos, float yPos, RenderMode renderMode, boolean active)
 	{
-		super(Entity.DEFAULT_SIZE, _xPos, _yPos, 0.0f, 1.0f, 1.0f);
-		active = _active;
+		super(Entity.DEFAULT_SIZE, xPos, yPos, 0.0f, 1.0f, 1.0f, false, renderMode);
+		this.active = active;
 	}
 	
 	public boolean isActive ()

@@ -71,16 +71,16 @@ public class TilesetHelper
 		{
 			for (int j = 0; j < width; j++)
 			{
-				tileset[i][j].xPos = (-(float)width / 2 * Tile.TILE_SIZE_F) + (j * Tile.TILE_SIZE_F);
-				tileset[i][j].yPos = ((float)length / 2 * Tile.TILE_SIZE_F) - (i * Tile.TILE_SIZE_F);
+				tileset[i][j].setXPos((-(float)width / 2 * Tile.TILE_SIZE_F) + (j * Tile.TILE_SIZE_F));
+				tileset[i][j].setYPos(((float)length / 2 * Tile.TILE_SIZE_F) - (i * Tile.TILE_SIZE_F));
 			}
 		}
 	}
 	
 	public static void setInitialTileOffset(Tile tile, int y, int x, int length, int width)
 	{
-		tile.xPos = (-(float)width / 2 * Tile.TILE_SIZE_F) + (x * Tile.TILE_SIZE_F);
-		tile.yPos = ((float)length / 2 * Tile.TILE_SIZE_F) - (y * Tile.TILE_SIZE_F);
+		tile.setXPos((-(float)width / 2 * Tile.TILE_SIZE_F) + (x * Tile.TILE_SIZE_F));
+		tile.setYPos(((float)length / 2 * Tile.TILE_SIZE_F) - (y * Tile.TILE_SIZE_F));
 	}
 }
 

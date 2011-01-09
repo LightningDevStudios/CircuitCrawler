@@ -1,16 +1,17 @@
 package com.lds.game;
 
 import com.lds.EntityCleaner;
+import com.lds.Enums.RenderMode;
 
 public class Player extends Character //your character, protagonist
 {
 	private int energy;
 	private boolean holdingObject;
 	
-	public Player (float _xPos, float _yPos, float _angle)
+	public Player (float xPos, float yPos, float angle, RenderMode renderMode)
 	{
 		//initialize Character and Entity data
-		super(100, 100, PhysEnt.DEFAULT_SPEED, Entity.DEFAULT_SIZE, _xPos, _yPos, _angle, 1.0f, 1.0f);
+		super(Entity.DEFAULT_SIZE, xPos, yPos, angle, 1.0f, 1.0f, renderMode, 100, 100);
 		
 		//initialize Player data
 		energy = 100;

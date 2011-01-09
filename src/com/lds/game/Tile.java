@@ -4,6 +4,7 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
 import com.lds.Enums.RenderMode;
+import com.lds.TilesetHelper;
 
 
 public class Tile extends Entity
@@ -13,23 +14,74 @@ public class Tile extends Entity
 	
 	public int tileX, tileY, tileID;
 	
-	public Tile(int x, int y, float _size, float _xPos, float _yPos)
+	public Tile(float size, int tilePosX, int tilePosY, int tilesetX, int tilesetY)
 	{
-		super(_size, _xPos, _yPos, RenderMode.TILESET);
-		tileX = x;
-		tileY = y;
-		tileID = (y * 8) + x;
-		this.texture = com.lds.TilesetHelper.getTextureVertices(x, y, 0, 7);
-		
-		ByteBuffer byteBuf = ByteBuffer.allocateDirect(texture.length * 4);
-		byteBuf.order(ByteOrder.nativeOrder());
-		textureBuffer = byteBuf.asFloatBuffer();
-		textureBuffer.put(texture);
-		textureBuffer.position(0);
+		super(size, 0, 0, RenderMode.TILESET);
+		TilesetHelper.setInitialTileOffset(this, tilePosY, tilePosX, tilesetX, tilesetY);
 	}
-		
-	public void setTexture (int ptr)
+	
+	@Override
+	public void updateTileset(int texturePtr, int x, int y, int min, int max)
 	{
-		texturePtr = ptr;
+		if (renderMode == RenderMode.TILESET)
+		{
+			this.texturePtr = texturePtr;
+			texture = TilesetHelper.getTextureVertices(x, y, min, max);
+			
+			ByteBuffer byteBuf = ByteBuffer.allocateDirect(texture.length * 4);
+			byteBuf.order(ByteOrder.nativeOrder());
+			textureBuffer = byteBuf.asFloatBuffer();
+			textureBuffer.put(texture);
+			textureBuffer.position(0);
+			
+			tileX = x;
+			tileY = y;
+		}
+	}
+	
+	@Override
+	public void updateTileset(int texturePtr, int tileID)
+	{
+		if (renderMode == RenderMode.TILESET)
+		{
+			this.texturePtr = texturePtr;
+			texture = TilesetHelper.getTextureVertices(tileID);
+			
+			ByteBuffer byteBuf = ByteBuffer.allocateDirect(texture.length * 4);
+			byteBuf.order(ByteOrder.nativeOrder());
+			textureBuffer = byteBuf.asFloatBuffer();
+			textureBuffer.put(texture);
+			textureBuffer.position(0);
+		}
+	}
+	
+	@Override
+	public void updateTileset(int x, int y, int min, int max)
+	{
+		if (renderMode == RenderMode.TILESET)
+		{
+			texture = TilesetHelper.getTextureVertices(x, y, min, max);
+		
+			ByteBuffer byteBuf = ByteBuffer.allocateDirect(texture.length * 4);
+			byteBuf.order(ByteOrder.nativeOrder());
+			textureBuffer = byteBuf.asFloatBuffer();
+			textureBuffer.put(texture);
+			textureBuffer.position(0);
+		}
+	}
+	
+	@Override
+	public void updateTileset(int tileID)
+	{
+		if (renderMode == RenderMode.TILESET)
+		{
+			texture = TilesetHelper.getTextureVertices(tileID);
+			
+			ByteBuffer byteBuf = ByteBuffer.allocateDirect(texture.length * 4);
+			byteBuf.order(ByteOrder.nativeOrder());
+			textureBuffer = byteBuf.asFloatBuffer();
+			textureBuffer.put(texture);
+			textureBuffer.position(0);
+		}
 	}
 }

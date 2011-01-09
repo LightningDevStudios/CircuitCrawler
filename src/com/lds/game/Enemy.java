@@ -1,11 +1,18 @@
 package com.lds.game;
 
+import com.lds.Enums.RenderMode;
+
 public abstract class Enemy extends Character //enemies will fall under this class
 {
 
-	public Enemy(int _health, int _strength, float _speed, float _size, float _xPos, float _yPos, float _angle, float _xScl, float _yScl)
+	public Enemy(float size, float xPos, float yPos, RenderMode renderMode, int health, int strength)
 	{
-		super(_health, _strength, _speed, _size, _xPos, _yPos, _angle, _xScl, _yScl);
+		this(size, xPos, yPos, 0.0f, 1.0f, 1.0f, renderMode, health, strength);
+	}
+	
+	public Enemy(float size, float xPos, float yPos, float angle, float xScl, float yScl, RenderMode renderMode, int health, int strength)
+	{
+		super(size, xPos, yPos, angle, xScl, yScl, RenderMode.TILESET, health, strength);
 	}
 
 }

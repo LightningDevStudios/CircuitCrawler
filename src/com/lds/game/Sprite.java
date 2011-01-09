@@ -3,15 +3,22 @@ package com.lds.game;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
+import com.lds.Enums.RenderMode;
+
 public class Sprite extends PhysEnt
 {
 	public int maxX, maxY, curX, curY, curFrame;
 	
-	public Sprite(int _maxX, int _maxY, float _size, float _xPos, float _yPos, float _angle, float _xScl, float _yScl, float _speed)
+	public Sprite(float size, float xPos, float yPos, float moveSpeed, float rotSpeed, float sclSpeed, int maxX, int maxY)
 	{
-		super(_size, _xPos, _yPos, _angle, _xScl, _yScl);
-		maxX = _maxX;
-		maxY = _maxY;
+		this(size, xPos, yPos, 0.0f, 1.0f, 1.0f, moveSpeed, rotSpeed, sclSpeed, maxX, maxY);
+	}
+	
+	public Sprite(float size, float xPos, float yPos, float angle, float xScl, float yScl, float moveSpeed, float rotSpeed, float sclSpeed, int maxX, int maxY)
+	{
+		super(size, xPos, yPos, angle, xScl, yScl, true, RenderMode.TILESET, moveSpeed, rotSpeed, sclSpeed);
+		this.maxX = maxX;
+		this.maxY = maxY;
 		
 		curX = 0;
 		curY = 0;
