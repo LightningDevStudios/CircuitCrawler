@@ -36,10 +36,11 @@ public class Game
 	public UIHealthBar healthBar;
 	public UIEnergyBar energyBar;
 	public UIButton btnA;
-	public UIButton btnB;
-	public UIJoypad joypad;
+	public UIButton btnB;	public UIJoypad joypad;
 	public Player player;
 	public PhysBlock block;
+	public Button button;
+	public Door door;
 	
 	//Constructors
 	public Game (Context context, GL10 gl)
@@ -63,16 +64,34 @@ public class Game
 				tileset[i][j] = new Tile(Tile.TILE_SIZE_F, j, i, tileset[0].length, tileset.length);
 				tileset[i][j].setTilesetMode(tl.getTexture(), 0, 0, 0, 7);
 			}
-		}		
-		player = new Player(0.0f, 0.0f, 0.0f, RenderMode.TILESET);
-		tl.setTexture(1);
-		player.setTilesetMode(tl.getTexture(), 1, 0, 0, 7);
-		entList.add(player);
+		}	
+		
+		button = new Button(90.0f, 90.0f, RenderMode.TILESET);
+		tl.setTexture(2);
+		button.setTilesetMode(tl.getTexture(), 0, 0, 0, 7);
+		entList.add(button);
+		button.setWillCollideWithPlayer(false);
+		
+		door = new Door (-100.0f, -100.0f, RenderMode.COLOR);
+		door.setColorMode(255, 0, 0, 100.0f);
+		entList.add(door);
+		door.moveTo(1000.0f, 1000.0f);
+		//door.scale(10.0f, 10.0f);
+		door.rotate(60.0f);
+		door.setWillCollideWithPlayer(true);
+		
 		
 		block = new PhysBlock(30.0f, 200.0f, 0.0f, RenderMode.COLOR);
 		block.setColorMode(0, 255, 255, 255);
 		block.move(-100, 100);
 		entList.add(block);
+		block.setWillCollideWithPlayer(true);
+		
+		player = new Player(0.0f, 0.0f, 0.0f, RenderMode.TILESET);
+		tl.setTexture(1);
+		player.setTilesetMode(tl.getTexture(), 1, 0, 0, 7);
+		entList.add(player);
+		player.setWillCollideWithPlayer(false);
 		
 		healthBar = new UIHealthBar(200.0f, 30.0f, UIPosition.TOPLEFT, Direction.RIGHT);
 		healthBar.setTopPad(5.0f);

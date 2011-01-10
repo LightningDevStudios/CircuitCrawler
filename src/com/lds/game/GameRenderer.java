@@ -88,6 +88,16 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		for (Entity ent : game.entList)
 		{
 			
+			//some button shit
+			if (game.button.isActive())
+			{
+				game.door.open();
+			}
+			else
+			{
+				game.door.close();
+			}
+			
 			ent.update();
 			
 			//checks for collision with all other entities in entList
@@ -203,10 +213,15 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 					game.player.setPos(game.player.xPos + (x / 10) * game.player.speed, game.player.yPos + (y / 10) * game.player.speed);
 					for (Entity colEnt : game.entList)
 					{
+						
 						if (colEnt != game.player && game.player.isColliding(colEnt))
 						{
-							game.player.setAngle(oldAngle);
-							game.player.setPos(game.player.xPos - (x / 10) * game.player.speed, game.player.yPos - (y / 10) * game.player.speed);
+							if (colEnt.willCollideWithPlayer())
+							{
+								game.player.setAngle(oldAngle);
+								game.player.setPos(game.player.xPos - (x / 10), game.player.yPos - (y / 10));
+								game.player.setShouldStop(false); 
+							}
 						}
 					}
 					game.camPosX = game.player.endX;
