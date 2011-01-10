@@ -12,7 +12,7 @@ public abstract class Enemy extends Character //enemies will fall under this cla
 	
 	public Enemy(float size, float xPos, float yPos, float angle, float xScl, float yScl, RenderMode renderMode, int health, int strength)
 	{
-		super(size, xPos, yPos, angle, xScl, yScl, RenderMode.TILESET, health, strength);
+		super(size, xPos, yPos, angle, xScl, yScl, RenderMode.TILESET, health, strength, 0.0f);
 	}
 
 }
