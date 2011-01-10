@@ -20,6 +20,11 @@ public abstract class Character extends PhysEnt //all characters, including the 
 		this.strength = strength;
 	}
 		
+	@Override
+	public void update()
+	{
+		
+	}
 	public int getHealth ()
 	{
 		return health;

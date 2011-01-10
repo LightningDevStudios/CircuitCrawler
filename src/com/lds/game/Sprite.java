@@ -32,6 +32,12 @@ public class Sprite extends PhysEnt
 	}
 	
 	@Override
+	public void update()
+	{
+		renderNextFrame();
+	}
+	
+	@Override
 	public void renderNextFrame()
 	{
 		if (curX == maxX)

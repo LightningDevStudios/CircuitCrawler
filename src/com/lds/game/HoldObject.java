@@ -12,6 +12,21 @@ public abstract class HoldObject extends PhysEnt //and object that is held (bloc
 		held = false;
 	}
 	
+	@Override
+	public void update()
+	{
+		if (held)
+		{
+			
+		}
+	}
+	
+	@Override
+	public void collide(Entity ent)
+	{
+		
+	}
+	
 	public boolean isHeld ()
 	{
 		return held;

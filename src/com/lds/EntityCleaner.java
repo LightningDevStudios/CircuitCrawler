@@ -19,15 +19,6 @@ public class EntityCleaner
 	
 	public void clean(ArrayList<Entity> entList)
 	{
-		/*
-		for (int i = 0; i < trashList.size(); i++)
-		{
-			Entity ent = trashList.get(i);
-			ent = null;
-			entList.remove(trashList.get(i));
-			trashList.remove(i);
-		}*/
-		
 		for (Entity ent : trashList)
 		{
 			entList.remove(ent);

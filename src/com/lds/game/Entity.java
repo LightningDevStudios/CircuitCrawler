@@ -164,7 +164,17 @@ public abstract class Entity
 	{
 		EntityCleaner.queueEntityForRemoval(this);
 	}
+	
+	public void update()
+	{
 		
+	}
+		
+	public void collide(Entity ent)
+	{
+		
+	}
+	
 	/*********************
 	 * Collision Methods *
 	 *********************/
