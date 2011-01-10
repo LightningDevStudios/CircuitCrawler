@@ -71,6 +71,7 @@ public class Game
 		
 		block = new PhysBlock(30.0f, 200.0f, 0.0f, RenderMode.COLOR);
 		block.setColorMode(0, 255, 255, 255);
+		block.move(-100, 100);
 		entList.add(block);
 		
 		healthBar = new UIHealthBar(200.0f, 30.0f, UIPosition.TOPLEFT, Direction.RIGHT);

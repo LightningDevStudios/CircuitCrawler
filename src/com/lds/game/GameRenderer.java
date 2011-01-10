@@ -127,13 +127,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 			}
 					
 			if (ent.isRendered)
-			{
-				if (ent instanceof Sprite)
-				{
-					Sprite spr = (Sprite)ent;
-					spr.renderNextFrame();
-				}
-								
+			{								
 				gl.glTranslatef(ent.xPos, ent.yPos, 0.0f);
 				gl.glRotatef(ent.angle, 0.0f, 0.0f, 1.0f);
 				gl.glScalef(ent.xScl, ent.yScl, 1.0f);

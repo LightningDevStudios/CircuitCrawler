@@ -231,8 +231,8 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 		{		
 			//increments movement
 			float interval = (float)(Stopwatch.elapsedTimeInMilliseconds() - interpMoveTimeMs);
-			xPos += moveSpeed / 1000 * interval * moveX;
-			yPos += moveSpeed / 1000 * interval * moveY;
+			setXPos(getXPos() + (moveSpeed / 1000 * interval * moveX));
+			setYPos(getYPos() + (moveSpeed / 1000 * interval * moveY));
 			
 			//error check
 			if (xPos <= endX + (moveSpeed /2000 * interval * moveX) && xPos >= endX - (moveSpeed /2000 * interval * moveX) || yPos <= endY + (moveSpeed / 2000 * interval * moveY) && yPos >= endY - (moveSpeed / 2000 * interval * moveY))
