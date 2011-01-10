@@ -61,8 +61,17 @@ public class Game
 		{
 			for (int j = 0; j < tileset[0].length; j++)
 			{
-				tileset[i][j] = new Tile(Tile.TILE_SIZE_F, j, i, tileset[0].length, tileset.length);
-				tileset[i][j].setTilesetMode(tl.getTexture(), 0, 0, 0, 7);
+				tileset[i][j] = new Tile(Tile.TILE_SIZE_F, j, i, tileset[0].length - 1, tileset.length - 1);
+				if (i == 0 || j == 0 || i == tileset.length - 1 || j == tileset.length - 1)
+				{
+					tileset[i][j].setTilesetMode(tl.getTexture(), 2, 0, 0, 7);
+					tileset[i][j].setAsWall();
+				}
+				else
+				{
+					tileset[i][j].setTilesetMode(tl.getTexture(), 0, 0, 0, 7);
+					tileset[i][j].setAsFloor();
+				}
 			}
 		}	
 		
@@ -75,15 +84,11 @@ public class Game
 		door = new Door (-100.0f, -100.0f, RenderMode.COLOR);
 		door.setColorMode(255, 0, 0, 100.0f);
 		entList.add(door);
-		door.moveTo(1000.0f, 1000.0f);
-		//door.scale(10.0f, 10.0f);
-		door.rotate(60.0f);
 		door.setWillCollideWithPlayer(true);
 		
 		
 		block = new PhysBlock(30.0f, 200.0f, 0.0f, RenderMode.COLOR);
 		block.setColorMode(0, 255, 255, 255);
-		block.move(-100, 100);
 		entList.add(block);
 		block.setWillCollideWithPlayer(true);
 		
@@ -144,10 +149,10 @@ public class Game
 		camPosX = 0.0f;
 		camPosY = 0.0f;
 		
-		worldMinX = -500.0f;
-		worldMinY = -500.0f;
-		worldMaxX = 500.0f;
-		worldMaxY = 500.0f;
+		worldMinX = (-Tile.TILE_SIZE_F * (tileset[0].length / 2)) + (screenW / 2);
+		worldMinY = (-Tile.TILE_SIZE_F * (tileset.length / 2)) + (screenH / 2);
+		worldMaxX = (Tile.TILE_SIZE_F * (tileset[0].length / 2)) - (screenW / 2);
+		worldMaxY = (Tile.TILE_SIZE_F * (tileset.length / 2)) - (screenH / 2);
 		
 		//TODO take into account AI, perhaps render every time it chooses a new point to go to?
 		updateLocalEntities();

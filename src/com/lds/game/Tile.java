@@ -7,11 +7,12 @@ import com.lds.Enums.RenderMode;
 import com.lds.TilesetHelper;
 
 
-public class Tile extends Entity
+public class Tile extends StaticEnt
 {
 	public static final int TILE_SIZE = 72;
 	public static final float TILE_SIZE_F = 72.0f;
 	
+	private boolean isWall;
 	public int tileX, tileY, tileID;
 	
 	public Tile(float size, int tilePosX, int tilePosY, int tilesetX, int tilesetY)
@@ -84,4 +85,25 @@ public class Tile extends Entity
 			textureBuffer.position(0);
 		}
 	}
+	
+	@Override
+	public boolean isColliding(Entity ent)
+	{
+		if (!isWall)
+			return false;
+		else
+			return super.isColliding(ent);
+	}
+	
+	public void setAsWall()
+	{
+		isWall = true;
+	}
+	
+	public void setAsFloor()
+	{
+		isWall = false;
+	}
+	
+	
 }

@@ -25,10 +25,6 @@ public class TilesetHelper
 								posX, posY,
 								negX, negY,
 								negX, posY };
-			/*float[] coords = { negX, negY,
-								posX, negY,
-								negX, posY,
-								posX, posY };*/
 			return coords;
 								
 		}

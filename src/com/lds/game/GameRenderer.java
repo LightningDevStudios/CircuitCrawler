@@ -224,6 +224,18 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 							}
 						}
 					}
+					for (Tile[] ts : game.tileset)
+					{
+						for (Tile t: ts)
+						{
+							if (t.isColliding(game.player))
+							{
+								game.player.setAngle(oldAngle);
+								game.player.setPos(game.player.xPos - (x / 10), game.player.yPos - (y / 10));
+								game.player.setShouldStop(false);
+							}
+						}
+					}
 					game.camPosX = game.player.endX;
 					game.camPosY = game.player.endY;
 					
