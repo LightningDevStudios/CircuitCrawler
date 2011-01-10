@@ -87,6 +87,17 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		//Render all entities
 		for (Entity ent : game.entList)
 		{
+			
+			//some button shit
+			if (game.button.isActive())
+			{
+				game.door.open();
+			}
+			else
+			{
+				game.door.close();
+			}
+			
 			ent.update();
 			
 			//checks for collision with all other entities in entList
@@ -193,17 +204,17 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 					float newAngle = (float)Math.toDegrees(newRad);
 					float oldAngle = game.player.angle;
 					game.player.setAngle(newAngle - 90.0f);
-					game.player.setPos(game.player.xPos + (x / 10), game.player.yPos + (y / 10));
+					game.player.setPos(game.player.getXPos() + (x / 10), game.player.getYPos() + (y / 10));
 					for (Entity colEnt : game.entList)
 					{
 						
 						if (colEnt != game.player && game.player.isColliding(colEnt))
 						{
-							if (game.player.shouldStop())
+							if (colEnt.willCollideWithPlayer())
 							{
 								game.player.setAngle(oldAngle);
 								game.player.setPos(game.player.xPos - (x / 10), game.player.yPos - (y / 10));
-								game.player.setShouldStop(false);
+								game.player.setShouldStop(false); 
 							}
 						}
 					}

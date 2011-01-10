@@ -22,6 +22,7 @@ public abstract class Entity
 	//behavior data
 	protected boolean isSolid;
 	protected boolean isRendered;
+	protected boolean willCollideWithPlayer;
 	
 	//graphics data
 	protected float angle, size, xPos, yPos, xScl, yScl, halfSize;
@@ -562,6 +563,7 @@ public abstract class Entity
 	public float[] getTextureCoords()	{ return texture; }
 	public int getEntID()				{ return entID; }
 	public static int getEntCount()		{ return entCount; }
+	public boolean willCollideWithPlayer() { return willCollideWithPlayer; }
 	
 	public void setSize(float size)		{ this.size = size; }
 	public void setXPos(float xPos)		{ this.xPos = xPos; }
@@ -569,4 +571,5 @@ public abstract class Entity
 	public void setAngle(float angle)	{ this.angle = angle; }
 	public void setXScl(float xScl)		{ this.xScl = xScl; }
 	public void setYScl(float yScl)		{ this.yScl	= yScl; }
+	public void setWillCollideWithPlayer(boolean willCollideWithPlayer) { this.willCollideWithPlayer = willCollideWithPlayer; }
 }

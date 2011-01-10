@@ -40,12 +40,7 @@ public class Player extends Character //your character, protagonist
 	@Override
 	public void interact (Entity ent)
 	{
-		if (ent instanceof StaticBlock)
-		{
-			setShouldStop(true);
-			colList.remove(ent);
-		}
-		else if (ent instanceof HoldObject)
+		if (ent instanceof StaticBlock || ent instanceof HoldObject || ent instanceof Door)
 		{
 			setShouldStop(true);
 			colList.remove(ent);
