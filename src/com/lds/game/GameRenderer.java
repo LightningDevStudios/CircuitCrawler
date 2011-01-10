@@ -57,8 +57,6 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		frameInterval = Stopwatch.elapsedTimeInMilliseconds();
 		
 		Stopwatch.tick();
-
-		//testME = true;
 		
 		if (windowOutdated)
 		{
@@ -71,14 +69,14 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		game.updateLocalEntities();
 				
 		//Render tileset
-		for (int i = 0; i < game.tileset.length; i++)
+		for (Tile[] ts : game.tileset)
 		{
-			for (int j = 0; j < game.tileset[0].length; j++)
+			for (Tile t : ts)
 			{
-				if (game.tileset[i][j].isRendered)
+				if (t.isRendered)
 				{
-					gl.glTranslatef(game.tileset[i][j].xPos, game.tileset[i][j].yPos, 0.0f);
-					game.tileset[i][j].draw(gl);
+					gl.glTranslatef(t.xPos, t.yPos, 0.0f);
+					t.draw(gl);
 					gl.glLoadIdentity();
 				}
 			}
@@ -214,12 +212,12 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 					for (Entity colEnt : game.entList)
 					{
 						
-						if (colEnt != game.player && game.player.isColliding(colEnt))
+						if (colEnt.isRendered && colEnt != game.player && game.player.isColliding(colEnt))
 						{
 							if (colEnt.willCollideWithPlayer())
 							{
 								game.player.setAngle(oldAngle);
-								game.player.setPos(game.player.xPos - (x / 10), game.player.yPos - (y / 10));
+								game.player.setPos(game.player.xPos - (x / 10) * game.player.speed, game.player.yPos - (y / 10) * game.player.speed);
 								game.player.setShouldStop(false); 
 							}
 						}
@@ -228,10 +226,10 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 					{
 						for (Tile t: ts)
 						{
-							if (t.isColliding(game.player))
+							if (t.isRendered && t.isColliding(game.player))
 							{
 								game.player.setAngle(oldAngle);
-								game.player.setPos(game.player.xPos - (x / 10), game.player.yPos - (y / 10));
+								game.player.setPos(game.player.xPos - (x / 10) * game.player.speed, game.player.yPos - (y / 10) * game.player.speed);
 								game.player.setShouldStop(false);
 							}
 						}
