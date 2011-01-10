@@ -45,7 +45,6 @@ public abstract class UIProgressBar extends UIEntity
 		this.originalRightPad = rightPad;
 	}
 	
-	//If there's any change to value, 
 	@Override
 	public void update()
 	{

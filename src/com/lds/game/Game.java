@@ -212,23 +212,4 @@ public class Game
 				ent.isRendered = false;
 			}
 	}
-	
-	public void setHeldObjectPosition (HoldObject heldEnt)
-	{
-		heldEnt.hold();
-		float heldDistance = player.halfSize + heldEnt.halfSize + 10.0f;
-		player.initializeCollisionVariables();
-		player.holdObject();
-		heldEnt.setPos((float)Math.cos(player.rad) * heldDistance + player.xPos, (float)Math.sin(player.rad) * heldDistance + player.yPos);
-		heldEnt.setAngle(player.angle);
-		System.out.println("FAP");
-	}
-	
-	public void updateHeldObjectPosition (HoldObject heldEnt)
-	{
-		float heldDistance = player.halfSize + heldEnt.halfSize + 10.0f;
-		player.initializeCollisionVariables();
-		heldEnt.setPos((float)Math.cos(player.rad) * heldDistance + player.xPos, (float)Math.sin(player.rad) * heldDistance + player.yPos);
-		heldEnt.setAngle(player.angle);
-	}	
 }

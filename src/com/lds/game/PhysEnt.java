@@ -9,7 +9,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	public float interpX, interpY, interpXScl, interpYScl, interpAngle;
 	public float endX, endY, endXScl, endYScl, endAngle;
 	public int interpMoveTimeMs, interpRotTimeMs, interpSclTimeMs;
-	private float moveX, moveY;
+	private float moveX, moveY, scaleX, scaleY;
 	protected float moveSpeed;
 	protected float rotSpeed;
 	protected float sclSpeed;
@@ -35,8 +35,23 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 		this.rotSpeed = rotSpeed;
 	}
 	
+	@Override
+	public void update()
+	{
+		moveInterpolate();
+		rotateInterpolate();
+		scaleInterpolate();
+	}
+	
+	@Override
+	public void collide(Entity ent)
+	{
+		this.stop();
+	}
+	
 	public void renderNextFrame()
 	{
+		
 	}
 	
 	/***************************************
@@ -89,6 +104,13 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	{
 		interpXScl = x - xScl;
 		interpYScl = y - yScl;
+		if (interpXScl == 0) { interpXScl = 0.1f; }
+		if (interpYScl == 0) { interpYScl = 0.1f; }
+		double ratio = Math.atan2((double)interpYScl, (double)interpXScl);
+		if (ratio < 0)
+			ratio += 2 * Math.PI;
+		scaleX = (float)Math.cos(ratio);
+		scaleY = (float)Math.sin(ratio);
 		endXScl = x;
 		endYScl = y;
 		isInterpScl = true;
@@ -131,6 +153,13 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	{
 		endXScl = xScl * x;
 		endYScl = yScl * y;
+		if (interpXScl == 0) { interpXScl = 0.1f; }
+		if (interpYScl == 0) { interpYScl = 0.1f; }
+		double ratio = Math.atan2((double)interpYScl, (double)interpXScl);
+		if (ratio < 0)
+			ratio += 2 * Math.PI;
+		scaleX = (float)Math.cos(ratio);
+		scaleY = (float)Math.sin(ratio);
 		interpXScl = endXScl - xScl;
 		interpYScl = endYScl - yScl;
 		isInterpScl = true;

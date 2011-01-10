@@ -80,8 +80,6 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 					gl.glTranslatef(game.tileset[i][j].xPos, game.tileset[i][j].yPos, 0.0f);
 					game.tileset[i][j].draw(gl);
 					gl.glLoadIdentity();
-					/*if (prevRenderCount < 2)
-						game.tileset[i][j].renderMode = RenderMode.TILESET;*/
 				}
 			}
 		}
@@ -89,17 +87,8 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		//Render all entities
 		for (Entity ent : game.entList)
 		{
-			//scales up or down all PickupObj's
-			ent.pickupScale();
 			
-			//Interpolation
-			if (ent instanceof PhysEnt)
-			{
-				PhysEnt e = (PhysEnt)ent;
-				e.moveInterpolate();
-				e.rotateInterpolate();
-				e.scaleInterpolate();
-			}
+			ent.update();
 			
 			//checks for collision with all other entities in entList
 			//TODO calculate only when necessary, not every frame.
@@ -110,16 +99,6 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 					if (ent.isColliding(colEnt))
 					{
 						ent.interact(colEnt);
-						if (ent instanceof PhysEnt)
-						{
-							PhysEnt p = (PhysEnt)ent;
-							p.stop();
-						}
-						if (colEnt instanceof PhysEnt)
-						{
-							PhysEnt p = (PhysEnt)ent;
-							p.stop();
-						}
 					}
 					else if (ent.colList.contains(colEnt))
 					{
@@ -132,33 +111,21 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 				//TODO: check for object in front of entity
 				if (game.btnB.isPressed() && colEnt instanceof HoldObject)
 				{
-					HoldObject hObj = (HoldObject)colEnt;
-					
 					if (!game.player.isHoldingObject()) //not holding anything and is close enough
 					{
 						if (game.player.closeEnough(colEnt) && game.player.isFacing(colEnt))
 						{
-							game.setHeldObjectPosition(hObj);
-							game.player.colIgnoreList.add(hObj);
-							hObj.colIgnoreList.add(game.player);
+							game.player.holdObject((HoldObject)colEnt);
 						}
 					}
 					else //holding object, button pressed
 					{
-						hObj.drop();
 						game.player.dropObject();
-						game.player.colIgnoreList.remove(hObj);
-						hObj.colIgnoreList.remove(game.player);
 					}
 					game.btnB.unpress();
 				}
 			}
-			
-			if (ent instanceof HoldObject && ((HoldObject)ent).isHeld())
-			{
-				game.updateHeldObjectPosition((HoldObject)ent);
-			}
-			
+					
 			if (ent.isRendered)
 			{
 				if (ent instanceof Sprite)
