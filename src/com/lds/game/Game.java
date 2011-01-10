@@ -36,10 +36,10 @@ public class Game
 	public UIHealthBar healthBar;
 	public UIEnergyBar energyBar;
 	public UIButton btnA;
-	public UIButton btnB;
-	public UIJoypad joypad;
+	public UIButton btnB;	public UIJoypad joypad;
 	public Player player;
 	public PhysBlock block;
+	public Button button;
 	
 	//Constructors
 	public Game (Context context, GL10 gl)
@@ -63,7 +63,13 @@ public class Game
 				tileset[i][j] = new Tile(Tile.TILE_SIZE_F, j, i, tileset[0].length, tileset.length);
 				tileset[i][j].setTilesetMode(tl.getTexture(), 0, 0, 0, 7);
 			}
-		}		
+		}	
+		
+		button = new Button(90.0f, 90.0f, RenderMode.TILESET);
+		tl.setTexture(2);
+		button.setTilesetMode(tl.getTexture(), 0, 0, 0, 7);
+		entList.add(button);
+		
 		player = new Player(0.0f, 0.0f, 0.0f, RenderMode.TILESET);
 		tl.setTexture(1);
 		player.setTilesetMode(tl.getTexture(), 1, 0, 0, 7);

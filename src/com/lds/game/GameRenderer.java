@@ -92,6 +92,12 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 			//scales up or down all PickupObj's
 			ent.pickupScale();
 			
+			//does some button shit
+			if (game.button.isActive())
+			{
+				System.out.println("trololololololololol");
+			}
+			
 			//Interpolation
 			if (ent instanceof PhysEnt)
 			{
@@ -110,16 +116,6 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 					if (ent.isColliding(colEnt))
 					{
 						ent.interact(colEnt);
-						if (ent instanceof PhysEnt)
-						{
-							PhysEnt p = (PhysEnt)ent;
-							p.stop();
-						}
-						if (colEnt instanceof PhysEnt)
-						{
-							PhysEnt p = (PhysEnt)ent;
-							p.stop();
-						}
 					}
 					else if (ent.colList.contains(colEnt))
 					{
@@ -165,7 +161,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 				{
 					Sprite spr = (Sprite)ent;
 					spr.renderNextFrame();
-				}
+				} 
 								
 				gl.glTranslatef(ent.xPos, ent.yPos, 0.0f);
 				gl.glRotatef(ent.angle, 0.0f, 0.0f, 1.0f);
@@ -230,10 +226,15 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 					game.player.setPos(game.player.xPos + (x / 10), game.player.yPos + (y / 10));
 					for (Entity colEnt : game.entList)
 					{
+						
 						if (colEnt != game.player && game.player.isColliding(colEnt))
 						{
-							game.player.setAngle(oldAngle);
-							game.player.setPos(game.player.xPos - (x / 10), game.player.yPos - (y / 10));
+							if (game.player.shouldStop())
+							{
+								game.player.setAngle(oldAngle);
+								game.player.setPos(game.player.xPos - (x / 10), game.player.yPos - (y / 10));
+								game.player.setShouldStop(false);
+							}
 						}
 					}
 					game.camPosX = game.player.endX;
