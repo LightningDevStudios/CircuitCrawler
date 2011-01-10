@@ -126,14 +126,13 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 						ent.uninteract(colEnt);
 						ent.colList.remove(colEnt);
 					}
-				}
 				
 				//checks for button interaction
 				//TODO: check for object in front of entity
 				if (game.btnB.isPressed() && colEnt instanceof HoldObject)
 				{
 					HoldObject hObj = (HoldObject)colEnt;
-					
+			
 					if (!game.player.isHoldingObject()) //not holding anything and is close enough
 					{
 						if (game.player.closeEnough(colEnt) && game.player.isFacing(colEnt))
@@ -152,7 +151,24 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 					}
 					game.btnB.unpress();
 				}
+				
+				if (game.btnA.isPressed())
+				{		
+					if(game.player.speed != 2)
+					{
+						game.player.setSpeed(2.0f);		
+					}
+					else
+					{
+						game.player.setSpeed(1.0f);
+					}
+					game.btnA.unpress();
+				}
+				
 			}
+		}
+
+	
 			
 			if (ent instanceof HoldObject && ((HoldObject)ent).isHeld())
 			{
@@ -223,17 +239,16 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 					double newRad = Math.atan2((double)y, (double)x);
 					if (newRad < 0)
 						newRad += 2 * Math.PI;
-					
 					float newAngle = (float)Math.toDegrees(newRad);
 					float oldAngle = game.player.angle;
 					game.player.setAngle(newAngle - 90.0f);
-					game.player.setPos(game.player.xPos + (x / 10), game.player.yPos + (y / 10));
+					game.player.setPos(game.player.xPos + (x / 10) * game.player.speed, game.player.yPos + (y / 10) * game.player.speed);
 					for (Entity colEnt : game.entList)
 					{
 						if (colEnt != game.player && game.player.isColliding(colEnt))
 						{
 							game.player.setAngle(oldAngle);
-							game.player.setPos(game.player.xPos - (x / 10), game.player.yPos - (y / 10));
+							game.player.setPos(game.player.xPos - (x / 10) * game.player.speed, game.player.yPos - (y / 10) * game.player.speed);
 						}
 					}
 					game.camPosX = game.player.endX;
