@@ -11,6 +11,7 @@ import com.lds.Enums.Direction;
 import com.lds.Enums.RenderMode;
 import com.lds.Stopwatch;
 import com.lds.TextRenderer;
+import com.lds.Texture;
 import com.lds.TextureLoader;
 import com.lds.Enums.UIPosition;
 
@@ -34,6 +35,13 @@ public class Game
 	
 	public float worldMinX, worldMinY, worldMaxX, worldMaxY;
 	
+	//Texture data
+	public static Texture tilesetcolors;
+	public static Texture tilesetwire;
+	public static Texture randomthings;
+	public static Texture text;
+	
+	
 	//Testing data
 	public UIHealthBar healthBar;
 	public UIEnergyBar energyBar;
@@ -56,10 +64,15 @@ public class Game
 		cleaner = new EntityCleaner();
 		tr = new TextRenderer(context);
 		
+		tilesetcolors = new Texture(R.drawable.tilesetcolors, 128, 128, 8, 8, context);
+		tilesetwire = new Texture(R.drawable.tilesetwire, 128, 128, 8, 8, context);
+		randomthings = new Texture(R.drawable.randomthings, 256, 256, 8, 8, context);
+		text = new Texture(R.drawable.text, 256, 256, 16, 8, context);
+		
 		tl = new TextureLoader(gl, context);
-		tl.load(R.drawable.tilesetcolors);
-		tl.load(R.drawable.tilesetwire);
-		tl.load(R.drawable.randomthings);
+		tl.loadTexture(tilesetcolors);
+		tl.loadTexture(tilesetwire);
+		tl.loadTexture(randomthings);
 		tl.load(tr.textToBitmap("($)", 16, 32));
 		
 		tl.setTexture(R.drawable.tilesetwire);
