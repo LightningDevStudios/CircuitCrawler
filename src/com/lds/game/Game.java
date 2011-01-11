@@ -10,6 +10,7 @@ import com.lds.EntityCleaner;
 import com.lds.Enums.Direction;
 import com.lds.Enums.RenderMode;
 import com.lds.Stopwatch;
+import com.lds.TextRenderer;
 import com.lds.TextureLoader;
 import com.lds.Enums.UIPosition;
 
@@ -24,6 +25,7 @@ public class Game
 	
 	public TextureLoader tl;
 	public EntityCleaner cleaner;
+	public TextRenderer tr;
 		
 	//Camera data
 	public static float screenW, screenH;
@@ -36,7 +38,9 @@ public class Game
 	public UIHealthBar healthBar;
 	public UIEnergyBar energyBar;
 	public UIButton btnA;
-	public UIButton btnB;	public UIJoypad joypad;
+	public UIButton btnB;	
+	public UIJoypad joypad;
+	public UIImage image;
 	public Player player;
 	public PhysBlock block;
 	public Button button;
@@ -50,11 +54,13 @@ public class Game
 		
 		tileset = new Tile[16][16];
 		cleaner = new EntityCleaner();
+		tr = new TextRenderer(context);
 		
 		tl = new TextureLoader(gl, context);
 		tl.load(R.drawable.tilesetcolors);
 		tl.load(R.drawable.tilesetwire);
 		tl.load(R.drawable.randomthings);
+		tl.load(tr.textToBitmap("($)"));
 		tl.setTexture(1);
 				
 		for (int i = 0; i < tileset.length; i++)
@@ -140,11 +146,17 @@ public class Game
 		joypad.autoPadding(0.0f, 5.0f, 5.0f, 0.0f);
 		joypad.setBlankMode();
 		
+		image = new UIImage(48, 32, UIPosition.TOPLEFT);
+		image.autoPadding(5.0f, 5.0f, 0.0f, 0.0f);
+		tl.setTexture(3);
+		image.setTextureMode(tl.getTexture());
+		
 		UIList.add(healthBar);
 		UIList.add(energyBar);
 		UIList.add(btnA);
 		UIList.add(btnB);
 		UIList.add(joypad);
+		UIList.add(image);
 		
 		camPosX = 0.0f;
 		camPosY = 0.0f;
