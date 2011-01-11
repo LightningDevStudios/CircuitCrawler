@@ -59,6 +59,16 @@ public class TilesetHelper
 	{
 		return (int)(vertices[1] / (1.0f / (float)(min - max + 1)));
 	}
+
+	public static int getTilesetX(int tileID, int maxX)
+	{
+		return tileID - (maxX * (tileID / maxX));
+	}
+	
+	public static int getTilesetY(int tileID, int maxX)
+	{
+		return (tileID / maxX);
+	}
 	
 	public static void setInitialTilesetOffset(Tile[][] tileset)
 	{
