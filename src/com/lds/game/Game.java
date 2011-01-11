@@ -60,8 +60,9 @@ public class Game
 		tl.load(R.drawable.tilesetcolors);
 		tl.load(R.drawable.tilesetwire);
 		tl.load(R.drawable.randomthings);
-		tl.load(tr.textToBitmap("($)"));
-		tl.setTexture(1);
+		tl.load(tr.textToBitmap("($)", 16, 32));
+		
+		tl.setTexture(R.drawable.tilesetwire);
 				
 		for (int i = 0; i < tileset.length; i++)
 		{

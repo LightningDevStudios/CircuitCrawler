@@ -4,6 +4,7 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
 import com.lds.Enums.RenderMode;
+import com.lds.Enums.TileStates;
 import com.lds.TilesetHelper;
 
 
@@ -12,7 +13,7 @@ public class Tile extends StaticEnt
 	public static final int TILE_SIZE = 72;
 	public static final float TILE_SIZE_F = 72.0f;
 	
-	private boolean isWall;
+	private TileStates state;
 	public int tileX, tileY, tileID;
 	
 	public Tile(float size, int tilePosX, int tilePosY, int tilesetX, int tilesetY)
@@ -89,7 +90,7 @@ public class Tile extends StaticEnt
 	@Override
 	public boolean isColliding(Entity ent)
 	{
-		if (!isWall)
+		if (state != TileStates.WALL)
 			return false;
 		else
 			return super.isColliding(ent);
@@ -97,13 +98,16 @@ public class Tile extends StaticEnt
 	
 	public void setAsWall()
 	{
-		isWall = true;
+		state = TileStates.WALL;
 	}
 	
 	public void setAsFloor()
 	{
-		isWall = false;
+		state = TileStates.FLOOR;
 	}
 	
-	
+	public void setAsPit()
+	{
+		state = TileStates.PIT;
+	}
 }
