@@ -83,8 +83,9 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		}
 		
 		//Render all entities
-		for (Entity ent : game.entList)
+		for (int i = 0; i < game.entList.size(); i++)
 		{
+			Entity ent = game.entList.get(i);
 			
 			//some button shit
 			if (game.button.isActive())
@@ -100,23 +101,21 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 			
 			//checks for collision with all other entities in entList
 			//TODO calculate only when necessary, not every frame.
-			for (Entity colEnt : game.entList)
+			for (int k = i + 1; k < game.entList.size(); k++)
 			{
-				if (ent != colEnt)
+				Entity colEnt = game.entList.get(k);
+				if (ent.isColliding(colEnt))
 				{
-					if (ent.isColliding(colEnt))
-					{
-						ent.interact(colEnt);
-					}
-					else if (ent.colList.contains(colEnt))
-					{
-						ent.uninteract(colEnt);
-						ent.colList.remove(colEnt);
-					}
+					ent.interact(colEnt);
+					colEnt.interact(ent);
+				}
+				else if (ent.colList.contains(colEnt))
+				{
+					ent.colList.remove(colEnt);
+					colEnt.colList.remove(ent);
 				}
 				
 				//checks for button interaction
-				//TODO: check for object in front of entity
 				if (game.btnB.isPressed() && colEnt instanceof HoldObject)
 				{
 					if (!game.player.isHoldingObject()) //not holding anything and is close enough

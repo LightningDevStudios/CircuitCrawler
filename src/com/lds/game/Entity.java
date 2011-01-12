@@ -199,11 +199,11 @@ public abstract class Entity
 		colPoints[1].setX((float)(Math.cos(this.rad + Math.PI - diagAngle) * diagonal) + xPos); //bottom left
 		colPoints[1].setY((float)(Math.sin(this.rad + Math.PI - diagAngle) * diagonal) + yPos); //bottom left
 		
-		colPoints[2].setX((float)(Math.cos(this.rad - diagAngle) * diagonal) + xPos); //
-		colPoints[2].setY((float)(Math.sin(this.rad - diagAngle) * diagonal) + yPos);
+		colPoints[2].setX((float)(Math.cos(this.rad - diagAngle) * diagonal) + xPos); //top right
+		colPoints[2].setY((float)(Math.sin(this.rad - diagAngle) * diagonal) + yPos); //top right
 		
-		colPoints[3].setX((float)(Math.cos(this.rad - Math.PI + diagAngle) * diagonal) + xPos);
-		colPoints[3].setY((float)(Math.sin(this.rad - Math.PI + diagAngle) * diagonal) + yPos);
+		colPoints[3].setX((float)(Math.cos(this.rad - Math.PI + diagAngle) * diagonal) + xPos); //bottom right
+		colPoints[3].setY((float)(Math.sin(this.rad - Math.PI + diagAngle) * diagonal) + yPos); //bottom right
 	}
 	
 	public boolean closeEnough (Entity ent)
@@ -261,80 +261,46 @@ public abstract class Entity
 			return false;
 		}
 		
-		//used to determine the number of collisions with respect to the axes. if it is 4 after the check, method returns true
-		int colCount = 0;
-		float ent1Low, ent1High, ent2Low, ent2High;
-		
-		//calculates 4 slopes to use with the SAT
-
-		colSlopes[0] = ((this.colPoints[0].getY() - this.colPoints[1].getY()) / (this.colPoints[0].getX() - this.colPoints[1].getX()));
-		colSlopes[1] = -1 / colSlopes[0];
-		colSlopes[2] = ((ent.colPoints[0].getY() - ent.colPoints[1].getY()) / (ent.colPoints[0].getX() - ent.colPoints[1].getX()));
-		colSlopes[3] = -1 / colSlopes[2];
-		
-		//checks for collision on each of the 4 slopes
-		
-		for (float slope : colSlopes)
+		if (collisionCheck(this, ent) || collisionCheck(ent, this))
 		{
-			
-			this.colPoints[0].setColC((colPoints[0].getY() - slope * colPoints[0].getX()));
-			ent1Low = this.colPoints[0].getColC();
-			ent1High = this.colPoints[0].getColC();
-			//iterates through each point on ent1 to get high and low c values
-			for (int i = 1; i < this.colPoints.length; i++)
-			{
-				//finds c (as in y = mx + c) for the line going through each point
-				colPoints[i].setColC((colPoints[i].getY() - slope * colPoints[i].getX()));
-				if (ent1Low > colPoints[i].getColC())
-				{
-					ent1Low = colPoints[i].getColC();
-				}
-				if (ent1High < colPoints[i].getColC())
-				{
-					ent1High = colPoints[i].getColC();
-				}
-			}
-			
-			//same for ent2
-			ent.colPoints[0].setColC((ent.colPoints[0].getY() - slope * ent.colPoints[0].getX()));
-			ent2Low = ent.colPoints[0].getColC();
-			ent2High = ent.colPoints[0].getColC();
-			//iterates through each point on ent1 to get high and low c values
-			for (int i = 1; i < ent.colPoints.length; i++)
-			{
-				//finds c (as in y = mx + c) for the line going through each point
-				ent.colPoints[i].setColC((ent.colPoints[i].getY() - slope * ent.colPoints[i].getX()));
-				if (ent2Low > ent.colPoints[i].getColC())
-				{
-					ent2Low = ent.colPoints[i].getColC();
-				}
-				if (ent2High < ent.colPoints[i].getColC())
-				{
-					ent2High = ent.colPoints[i].getColC();
-				}
-			}
-			
-			//checks for collision with respect to the current axis. adds one to colCount if the collision is true, and returns false if not
-			if ((ent1High >= ent2Low && ent1High <= ent2High) || (ent2High >= ent1Low && ent2High <= ent1High))
-			{
-				colCount++;
-			}
-			else
-			{
-				return false;
-			}
-		}
-		
-		//if the objects are colliding with respect to all 4 axes, return true
-		if (colCount == 4)
-		{
-			colList.add(ent);
 			return true;
 		}
-		else
+		return false;
+	}
+	
+	public boolean collisionCheck (Entity ent1, Entity ent2)
+	{
+		float ent1StartAngle = ent1.angle;
+		float ent2StartAngle = ent2.getAngle();
+		float ent2StartX = ent2.getXPos();
+		float ent2StartY = ent2.getYPos();
+		float entDistance = (float)Math.sqrt(Math.pow(ent1.xPos - ent2.getXPos(), 2) + Math.pow(ent1.yPos - ent2.getYPos(), 2)); //the distance between the entities
+		float entEndAngle = (float)Math.atan((ent1.yPos - ent2.getYPos()) / (ent1.xPos - ent2.getXPos())) - (float)Math.toRadians(ent1.angle); //the angle between the entities
+		
+		ent1.angle = 0.0f;
+		ent2.setAngle(ent2.getAngle() - ent1StartAngle);
+		ent2.setXPos((float)Math.cos(entEndAngle) * entDistance + ent1.xPos);
+		ent2.setYPos((float)Math.sin(entEndAngle) * entDistance + ent1.yPos);
+		
+		ent1.updateAbsolutePointLocations();
+		ent2.updateAbsolutePointLocations();
+		
+		for (Point point : ent2.colPoints)
 		{
-			return false;
+			if (point.getX() <= ent1.colPoints[3].getX() && point.getX() >= ent1.colPoints[0].getX() && point.getY() <= ent1.colPoints[0].getY() && point.getY() >= ent1.colPoints[3].getY())
+			{
+				ent1.angle = ent1StartAngle;
+				ent2.setAngle(ent2StartAngle);
+				ent2.setXPos(ent2StartX);
+				ent2.setYPos(ent2StartY);
+				return true;
+			}
 		}
+		ent1.angle = ent1StartAngle;
+		ent2.setAngle(ent2StartAngle);
+		ent2.setXPos(ent2StartX);
+		ent2.setYPos(ent2StartY);
+		return false;
 	}
 			
 	//this is a blank method, to be overriden by subclasses
