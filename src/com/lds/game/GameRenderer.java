@@ -65,6 +65,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		}
 		
 		game.cleaner.clean(game.entList);
+		
 		//Update screen position and entities
 		game.updateLocalEntities();
 				
@@ -85,17 +86,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		//Render all entities
 		for (Entity ent : game.entList)
 		{
-			
-			//some button shit
-			if (game.button.isActive())
-			{
-				game.door.open();
-			}
-			else
-			{
-				game.door.close();
-			}
-			
+						
 			ent.update();
 			
 			//checks for collision with all other entities in entList
@@ -209,10 +200,14 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 					float oldAngle = game.player.angle;
 					game.player.setAngle(newAngle - 90.0f);
 					game.player.setPos(game.player.xPos + (x / 10) * game.player.speed, game.player.yPos + (y / 10) * game.player.speed);
+					if (game.player.isHoldingObject())
+					{
+						game.player.updateHeldObjectPosition();
+					}
 					for (Entity colEnt : game.entList)
 					{
 						
-						if (colEnt.isRendered && colEnt != game.player && game.player.isColliding(colEnt))
+						if (colEnt != game.player && game.player.isColliding(colEnt) || (game.player.getHeldObject() != null && colEnt != game.player.getHeldObject() && game.player.getHeldObject().isColliding(colEnt)))
 						{
 							if (colEnt.willCollideWithPlayer())
 							{
@@ -226,7 +221,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 					{
 						for (Tile t: ts)
 						{
-							if (t.isRendered && t.isColliding(game.player))
+							if (t.isRendered && (t.isColliding(game.player) || game.player.getHeldObject() != null && t.isColliding(game.player.getHeldObject())))
 							{
 								game.player.setAngle(oldAngle);
 								game.player.setPos(game.player.xPos - (x / 10) * game.player.speed, game.player.yPos - (y / 10) * game.player.speed);

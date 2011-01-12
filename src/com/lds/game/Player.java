@@ -21,9 +21,10 @@ public class Player extends Character //your character, protagonist
 	@Override
 	public void update()
 	{
+		super.update();
 		if (holdingObject)
 		{
-			updateHeldObjectPosition();
+			//updateHeldObjectPosition();
 		}
 	}
 	
@@ -59,6 +60,11 @@ public class Player extends Character //your character, protagonist
 		{
 			energy += ((Powerup)ent).getValue();
 		}
+	}
+	
+	public HoldObject getHeldObject()
+	{
+		return hObj;
 	}
 
 	public int getEnergy()

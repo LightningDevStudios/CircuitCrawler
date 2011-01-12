@@ -94,17 +94,16 @@ public class Game
 				}
 			}
 		}	
-		
-		button = new Button(90.0f, 90.0f, RenderMode.TILESET);
-		button.setTilesetMode(randomthings, 0, 0);
-		entList.add(button);
-		button.setWillCollideWithPlayer(false);
-		
+				
 		door = new Door (-100.0f, -100.0f, RenderMode.COLOR);
 		door.setColorMode(255, 0, 0, 100.0f);
 		entList.add(door);
 		door.setWillCollideWithPlayer(true);
 		
+		button = new Button(90.0f, 90.0f, RenderMode.TILESET, door);
+		button.setTilesetMode(randomthings, 0, 0);
+		entList.add(button);
+		button.setWillCollideWithPlayer(false);
 		
 		block = new PhysBlock(30.0f, 200.0f, 0.0f, RenderMode.COLOR);
 		block.setColorMode(0, 255, 255, 255);

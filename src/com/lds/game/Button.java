@@ -4,12 +4,14 @@ import com.lds.Enums.RenderMode;
 
 public class Button extends StaticEnt
 {
-	protected boolean active;
+	private boolean active;
+	private Door d;
 	
-	public Button (float xPos, float yPos, RenderMode renderMode)
+	public Button (float xPos, float yPos, RenderMode renderMode, Door d)
 	{
 		super(Entity.DEFAULT_SIZE, xPos, yPos, 0.0f, 1.0f, 1.0f, true, renderMode);
 		active = false;
+		this.d = d;
 	}
 	
 	public boolean isActive ()
@@ -20,11 +22,13 @@ public class Button extends StaticEnt
 	public void activate ()
 	{
 		active = true;
+		d.open();
 	}
 	
 	public void deactivate ()
 	{
 		active = false;
+		d.close();
 	}
 	
 	@Override
@@ -33,6 +37,7 @@ public class Button extends StaticEnt
 		if (ent instanceof Player || ent instanceof HoldObject)
 		{
 			activate();
+			updateTileset(1);
 		}	
 	}
 	
@@ -42,6 +47,7 @@ public class Button extends StaticEnt
 		if (ent instanceof Player || ent instanceof HoldObject)
 		{
 			deactivate();
+			updateTileset(0);
 		}	
 	}
 }
