@@ -8,6 +8,7 @@ import javax.microedition.khronos.opengles.GL10;
 
 import com.lds.Enums.RenderMode;
 import com.lds.Enums.UIPosition;
+import com.lds.Texture;
 import com.lds.TilesetHelper;
 
 public abstract class UIEntity
@@ -29,12 +30,12 @@ public abstract class UIEntity
 	private float colorR, colorG, colorB, colorA;
 	protected UIPosition position;
 	protected RenderMode renderMode;
+	private Texture tex;
 	
 	private float[] vertices;
 	private float[] texture;
 	private float[] color;
 	private byte[] indices;
-	private int texturePtr;
 	
 	private FloatBuffer vertexBuffer;
 	private FloatBuffer textureBuffer;
@@ -96,7 +97,7 @@ public abstract class UIEntity
 		if (renderMode == RenderMode.TEXTURE || renderMode == RenderMode.TILESET)
 		{
 			gl.glEnable(GL10.GL_TEXTURE_2D);
-			gl.glBindTexture(GL10.GL_TEXTURE_2D, texturePtr);
+			gl.glBindTexture(GL10.GL_TEXTURE_2D, tex.getTexture());
 		}
 		
 		//Sets the front face of a polygon based on rotation (Clockwise - GL_CW, Counter-clockwise - GL_CCW)
@@ -281,23 +282,23 @@ public abstract class UIEntity
 	}
 	
 	//TEXTURE
-	public void setTextureMode(int texturePtr)
+	public void setTextureMode(Texture tex)
 	{
 		renderMode = RenderMode.TEXTURE;
-		updateTexture(texturePtr);
+		updateTexture(tex);
 	}
 	
-	public void setTextureMode(int texturePtr, float[] texture)
+	public void setTextureMode(Texture tex, float[] texture)
 	{
 		renderMode = RenderMode.TEXTURE;
-		updateTexture(texturePtr, texture);
+		updateTexture(tex, texture);
 	}
 		
-	public void updateTexture(int texturePtr)
+	public void updateTexture(Texture tex)
 	{
 		if (renderMode == RenderMode.TEXTURE)
 		{
-			this.texturePtr = texturePtr;
+			this.tex = tex;
 			float[] initTexture = { 1.0f, 0.0f,
 									1.0f, 1.0f,
 									0.0f, 0.0f,
@@ -312,11 +313,11 @@ public abstract class UIEntity
 		}
 	}
 	
-	public void updateTexture(int texturePtr, float[] texture)
+	public void updateTexture(Texture tex, float[] texture)
 	{
 		if (renderMode == RenderMode.TEXTURE)
 		{
-			this.texturePtr = texturePtr;
+			this.tex = tex;
 			this.texture = texture;
 			
 			ByteBuffer byteBuf = ByteBuffer.allocateDirect(texture.length * 4);
@@ -328,24 +329,24 @@ public abstract class UIEntity
 	}
 	
 	//TILESET
-	public void setTilesetMode(int texturePtr, int x, int y, int min, int max)
+	public void setTilesetMode(Texture tex, int x, int y)
 	{
 		renderMode = RenderMode.TILESET;
-		updateTileset(texturePtr, x, y, min, max);
+		updateTileset(tex, x, y);
 	}
 	
-	public void setTilesetMode (int texturePtr, int tileID)
+	public void setTilesetMode (Texture tex, int tileID)
 	{
 		renderMode = RenderMode.TILESET;
-		updateTileset(texturePtr, tileID);
+		updateTileset(tex, tileID);
 	}
-	
-	public void updateTileset(int texturePtr, int x, int y, int min, int max)
+		
+	public void updateTileset(Texture tex, int x, int y)
 	{
 		if (renderMode == RenderMode.TILESET)
 		{
-			this.texturePtr = texturePtr;
-			texture = TilesetHelper.getTextureVertices(x, y, min, max);
+			this.tex = tex;
+			texture = TilesetHelper.getTextureVertices(tex, x, y);
 			
 			ByteBuffer byteBuf = ByteBuffer.allocateDirect(texture.length * 4);
 			byteBuf.order(ByteOrder.nativeOrder());
@@ -355,12 +356,12 @@ public abstract class UIEntity
 		}
 	}
 	
-	public void updateTileset(int texturePtr, int tileID)
+	public void updateTileset(Texture tex, int tileID)
 	{
 		if (renderMode == RenderMode.TILESET)
 		{
-			this.texturePtr = texturePtr;
-			texture = TilesetHelper.getTextureVertices(tileID);
+			this.tex = tex;
+			texture = TilesetHelper.getTextureVertices(tex, tileID);
 			
 			ByteBuffer byteBuf = ByteBuffer.allocateDirect(texture.length * 4);
 			byteBuf.order(ByteOrder.nativeOrder());
@@ -370,32 +371,16 @@ public abstract class UIEntity
 		}
 	}
 	
-	public void updateTileset(int x, int y, int min, int max)
+	public void updateTileset(int x, int y)
 	{
-		if (renderMode == RenderMode.TILESET)
-		{
-			texture = TilesetHelper.getTextureVertices(x, y, min, max);
-			
-			ByteBuffer byteBuf = ByteBuffer.allocateDirect(texture.length * 4);
-			byteBuf.order(ByteOrder.nativeOrder());
-			textureBuffer = byteBuf.asFloatBuffer();
-			textureBuffer.put(texture);
-			textureBuffer.position(0);
-		}
+		if (tex != null && renderMode == RenderMode.TILESET)
+			updateTileset(tex, x, y);
 	}
 	
 	public void updateTileset(int tileID)
 	{
-		if (renderMode == RenderMode.TILESET)
-		{
-			texture = TilesetHelper.getTextureVertices(tileID);
-			
-			ByteBuffer byteBuf = ByteBuffer.allocateDirect(texture.length * 4);
-			byteBuf.order(ByteOrder.nativeOrder());
-			textureBuffer = byteBuf.asFloatBuffer();
-			textureBuffer.put(texture);
-			textureBuffer.position(0);
-		}
+		if (tex != null && renderMode == RenderMode.TILESET)
+			updateTileset(tex, tileID);
 	}
 	
 	/**************************
@@ -410,12 +395,12 @@ public abstract class UIEntity
 	public float getColorG()			{ return colorG; }
 	public float getColorB()			{ return colorB; }
 	public float getColorA()			{ return colorA; }
+	public Texture getTexture()			{ return tex; }
 	public UIPosition getPosEnum()		{ return position; }
 	public RenderMode getRenderMode()	{ return renderMode; }
 	public float[] getVertices()		{ return vertices; }
 	public float[] getGradientCoords()	{ return color; }
 	public float[] getTextureCoords()	{ return texture; }
-	public int getTexturePtr()			{ return texturePtr; }
 	
 	public void setXSize(float xSize)			{ this.xSize = xSize; }
 	public void setYSize(float ySize)			{ this.ySize = ySize; }

@@ -14,18 +14,26 @@ public class Texture
 	
 	public Texture(int texID, int xSize, int ySize, int xTiles, int yTiles, Context context)
 	{
-		this(texID, xSize, ySize, xTiles, yTiles, BitmapFactory.decodeResource(context.getResources(), texID));
+		this(BitmapFactory.decodeResource(context.getResources(), texID), xSize, ySize, xTiles, yTiles);
+		this.id = texID;
 	}
 	
-	public Texture(int texID, int xSize, int ySize, int xTiles, int yTiles, Bitmap bmp)
+	public Texture(Bitmap bmp, int xSize, int ySize, int xTiles, int yTiles)
 	{
-		this.id = texID;
 		this.xSize = xSize;
 		this.ySize = ySize;
 		this.xTiles = xTiles;
 		this.yTiles = yTiles;
-		this.xPixels = xSize / xTiles;
-		this.yPixels = ySize / yTiles;
+		if (xTiles == 0 || yTiles == 0)
+		{
+			this.xPixels = xSize;
+			this.yPixels = ySize;
+		}
+		else
+		{
+			this.xPixels = xSize / xTiles;
+			this.yPixels = ySize / yTiles;
+		}
 		this.bmp = bmp;
 	}
 	
@@ -40,4 +48,5 @@ public class Texture
 	public Bitmap getBitmap()	{ return bmp; }
 	
 	public void setTexture(int texturePtr)	{ this.texturePtr = texturePtr; }
+	public void setBitmap(Bitmap bmp)		{ this.bmp = bmp; }
 }

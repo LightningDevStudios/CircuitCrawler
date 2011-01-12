@@ -57,26 +57,26 @@ public class Game
 	//Constructors
 	public Game (Context context, GL10 gl)
 	{
-		entList = new ArrayList<Entity>();
-		UIList = new ArrayList<UIEntity>();
-		
-		tileset = new Tile[16][16];
-		cleaner = new EntityCleaner();
-		tr = new TextRenderer(context);
-		
 		tilesetcolors = new Texture(R.drawable.tilesetcolors, 128, 128, 8, 8, context);
 		tilesetwire = new Texture(R.drawable.tilesetwire, 128, 128, 8, 8, context);
 		randomthings = new Texture(R.drawable.randomthings, 256, 256, 8, 8, context);
 		text = new Texture(R.drawable.text, 256, 256, 16, 8, context);
 		
+		entList = new ArrayList<Entity>();
+		UIList = new ArrayList<UIEntity>();
+		
+		tileset = new Tile[16][16];
+		cleaner = new EntityCleaner();
+		tr = new TextRenderer(text);
 		tl = new TextureLoader(gl, context);
+		
+		Texture someText = tr.textToTexture("($)&(+)");
+		
 		tl.loadTexture(tilesetcolors);
 		tl.loadTexture(tilesetwire);
 		tl.loadTexture(randomthings);
-		tl.load(tr.textToBitmap("($)", 16, 32));
-		
-		tl.setTexture(R.drawable.tilesetwire);
-				
+		tl.loadTexture(someText);
+						
 		for (int i = 0; i < tileset.length; i++)
 		{
 			for (int j = 0; j < tileset[0].length; j++)
@@ -84,20 +84,19 @@ public class Game
 				tileset[i][j] = new Tile(Tile.TILE_SIZE_F, j, i, tileset[0].length - 1, tileset.length - 1);
 				if (i == 0 || j == 0 || i == tileset.length - 1 || j == tileset.length - 1)
 				{
-					tileset[i][j].setTilesetMode(tl.getTexture(), 2, 0, 0, 7);
+					tileset[i][j].setTilesetMode(tilesetwire, 2, 0);
 					tileset[i][j].setAsWall();
 				}
 				else
 				{
-					tileset[i][j].setTilesetMode(tl.getTexture(), 0, 0, 0, 7);
+					tileset[i][j].setTilesetMode(tilesetwire, 0, 0);
 					tileset[i][j].setAsFloor();
 				}
 			}
 		}	
 		
 		button = new Button(90.0f, 90.0f, RenderMode.TILESET);
-		tl.setTexture(2);
-		button.setTilesetMode(tl.getTexture(), 0, 0, 0, 7);
+		button.setTilesetMode(randomthings, 0, 0);
 		entList.add(button);
 		button.setWillCollideWithPlayer(false);
 		
@@ -113,8 +112,7 @@ public class Game
 		block.setWillCollideWithPlayer(true);
 		
 		player = new Player(0.0f, 0.0f, 0.0f, RenderMode.TILESET);
-		tl.setTexture(1);
-		player.setTilesetMode(tl.getTexture(), 1, 0, 0, 7);
+		player.setTilesetMode(tilesetwire, 1, 0);
 		entList.add(player);
 		player.setWillCollideWithPlayer(false);
 		
@@ -160,10 +158,9 @@ public class Game
 		joypad.autoPadding(0.0f, 5.0f, 5.0f, 0.0f);
 		joypad.setBlankMode();
 		
-		image = new UIImage(48, 32, UIPosition.TOPLEFT);
+		image = new UIImage(112, 32, UIPosition.TOPLEFT);
 		image.autoPadding(5.0f, 5.0f, 0.0f, 0.0f);
-		tl.setTexture(3);
-		image.setTextureMode(tl.getTexture());
+		image.setTextureMode(someText);
 		
 		UIList.add(healthBar);
 		UIList.add(energyBar);

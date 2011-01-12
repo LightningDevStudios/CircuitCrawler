@@ -7,19 +7,26 @@ public class TilesetHelper
 {
 	private TilesetHelper()
 	{
+		
 	}
 	
-	public static float[] getTextureVertices(int x, int y, int min, int max)
+	public static float[] getTextureVertices(Texture tex, int x, int y)
 	{
-		if (x >= min && x <= max && y >= min && y <= max)
+		return getTextureVertices(x, y, 0, tex.getXTiles() - 1, 0, tex.getYTiles() - 1);
+	}
+	
+	public static float[] getTextureVertices(int x, int y, int minX, int maxX, int minY, int maxY)
+	{
+		if (x >= minX && x <= maxX && y >= minY && y <= maxY)
 		{
-			float interval = 1.0f/(float)(max - min + 1);
+			float intervalX = 1.0f/(float)(maxX - minX + 1);
+			float intervalY = 1.0f/(float)(maxY - minY + 1);
 			
-			float negX = x * interval;
-			float posX = (x + 1) * interval;
+			float negX = x * intervalX;
+			float posX = (x + 1) * intervalX;
 			
-			float negY = y * interval;
-			float posY = (y + 1) * interval;
+			float negY = y * intervalY;
+			float posY = (y + 1) * intervalY;
 			
 			float[] coords = { 	posX, negY,
 								posX, posY,
@@ -32,13 +39,15 @@ public class TilesetHelper
 			return null;
 	}
 	
-	public static float[] getTextureVertices(int tileID)
+	public static float[] getTextureVertices(Texture tex, int tileID)
 	{
-		int y = tileID / 8;
-		int x = tileID - (8 * y);
+		int y = tileID / tex.getXTiles();
+		int x = tileID - (tex.getXTiles() * y);
 		
-		return getTextureVertices(x, y, 0, 7);
+		return getTextureVertices(x, y, 0, tex.getXTiles() - 1, 0, tex.getYTiles() - 1);
 	}
+	
+	
 	
 	public static int getTilesetIndex(float[] vertices, int min, int max)
 	{
@@ -50,24 +59,24 @@ public class TilesetHelper
 		return (y * (max - min + 1) + x);
 	}
 	
-	public static int getTilesetX(float[] vertices, int min, int max)
+	/*public static int getTilesetXV(float[] vertices, int minX, int maxX)
 	{
-		return (int)(vertices[4] / (1.0f / (float)(min - max + 1)));
+		return (int)(vertices[4] / (1.0f / (float)(minX - maxX + 1)));
 	}
 	
-	public static int getTilesetY(float[] vertices, int min, int max)
+	public static int getTilesetYV(float[] vertices, int minY, int maxY)
 	{
-		return (int)(vertices[1] / (1.0f / (float)(min - max + 1)));
-	}
+		return (int)(vertices[1] / (1.0f / (float)(minY - maxY + 1)));
+	}*/
 
-	public static int getTilesetX(int tileID, int maxX)
+	public static int getTilesetX(int tileID, Texture tex)
 	{
-		return tileID - (maxX * (tileID / maxX));
+		return tileID - (tex.getXTiles() * (tileID / tex.getXTiles()));
 	}
 	
-	public static int getTilesetY(int tileID, int maxX)
+	public static int getTilesetY(int tileID, Texture tex)
 	{
-		return (tileID / maxX);
+		return (tileID / tex.getXTiles());
 	}
 	
 	public static void setInitialTilesetOffset(Tile[][] tileset)

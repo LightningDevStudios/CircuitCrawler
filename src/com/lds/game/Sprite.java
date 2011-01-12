@@ -22,7 +22,7 @@ public class Sprite extends PhysEnt
 		
 		curX = 0;
 		curY = 0;
-		texture = com.lds.TilesetHelper.getTextureVertices(0, 0, 0, maxY);
+		texture = com.lds.TilesetHelper.getTextureVertices(tex, 0, 0);
 
 		ByteBuffer byteBuf = ByteBuffer.allocateDirect(texture.length * 4);
 		byteBuf.order(ByteOrder.nativeOrder());
@@ -58,17 +58,12 @@ public class Sprite extends PhysEnt
 			curX++;
 		}
 		curFrame = (curY + 1) * maxX + curX;
-		this.texture = com.lds.TilesetHelper.getTextureVertices(curX, curY, 0, maxX);
+		this.texture = com.lds.TilesetHelper.getTextureVertices(tex, curX, curY);
 		
 		ByteBuffer byteBuf = ByteBuffer.allocateDirect(texture.length * 4);
 		byteBuf.order(ByteOrder.nativeOrder());
 		textureBuffer = byteBuf.asFloatBuffer();
 		textureBuffer.put(texture);
 		textureBuffer.position(0);
-	}
-	
-	public void setTexture(int ptr)
-	{
-		texturePtr = ptr;
 	}
 }
