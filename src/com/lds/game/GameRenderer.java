@@ -84,47 +84,49 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		}
 		
 		//Render all entities
-		for (Entity ent : game.entList)
+		for (int i = 0; i < game.entList.size(); i++)
 		{
-						
+			Entity ent = game.entList.get(i);
 			ent.update();
 			
 			//checks for collision with all other entities in entList
 			//TODO calculate only when necessary, not every frame.
-			for (Entity colEnt : game.entList)
+			for (int j = i; j < game.entList.size(); j++)
 			{
-				if (ent != colEnt)
+				Entity colEnt = game.entList.get(j);
+				if (ent.isColliding(colEnt))
 				{
-					if (ent.isColliding(colEnt))
-					{
-						ent.interact(colEnt);
-					}
-					else if (ent.colList.contains(colEnt))
-					{
-						ent.uninteract(colEnt);
-						ent.colList.remove(colEnt);
-					}
+					ent.interact(colEnt);
+					colEnt.interact(ent);
+					ent.colList.add(colEnt);
+					colEnt.colList.add(ent);
 				}
-				
-				//checks for button interaction
-				//TODO: check for object in front of entity
-				if (game.btnB.isPressed() && colEnt instanceof HoldObject)
+				else if (ent.colList.contains(colEnt))
 				{
-					if (!game.player.isHoldingObject()) //not holding anything and is close enough
-					{
-						if (game.player.closeEnough(colEnt) && game.player.isFacing(colEnt))
-						{
-							game.player.holdObject((HoldObject)colEnt);
-						}
-					}
-					else //holding object, button pressed
-					{
-						game.player.dropObject();
-					}
-					game.btnB.unpress();
+					ent.uninteract(colEnt);
+					colEnt.uninteract(ent);
+					ent.colList.remove(colEnt);
+					colEnt.colList.remove(ent);
 				}
 			}
 	
+			//checks for button interaction
+			if (game.btnB.isPressed() && ent instanceof HoldObject)
+			{
+				if (!game.player.isHoldingObject()) //not holding anything and is close enough
+				{
+					if (game.player.closeEnough(ent) /*&& game.player.isFacing(ent)*/)
+					{
+						game.player.holdObject((HoldObject)ent);
+					}
+				}
+				else //holding object, button pressed
+				{
+					game.player.dropObject();
+				}
+				game.btnB.unpress();
+			}
+			
 			if (game.btnA.isPressed())
 			{		
 				if(game.player.speed != 2)

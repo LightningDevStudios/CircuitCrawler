@@ -21,8 +21,7 @@ public class Door extends PhysEnt
 	
 	
 	public void close ()
-	{
-		
+	{	
 		moveTo(-(permanentX + Entity.DEFAULT_SIZE), permanentY);
 	}
 }
