@@ -68,7 +68,7 @@ public class Game
 		tileset = new Tile[16][16];
 		cleaner = new EntityCleaner();
 		tr = new TextRenderer(text);
-		tl = new TextureLoader(gl, context);
+		tl = new TextureLoader(gl);
 		
 		Texture someText = tr.textToTexture("($)&(+)");
 		
@@ -258,5 +258,42 @@ public class Game
 			{
 				ent.isRendered = false;
 			}
+	}
+	
+	public Tile nearestTile(Entity ent)
+	{
+		int x = (int)ent.getXPos();
+		int y = (int)ent.getYPos();
+		
+		int tileLeft = x / Tile.TILE_SIZE;
+		int tileRight = tileLeft + 1;
+		int tileDown = y / Tile.TILE_SIZE;
+		int tileUp = tileDown + 1;
+		
+		int left = x - (Tile.TILE_SIZE * (x / Tile.TILE_SIZE));
+		int right = Tile.TILE_SIZE - left;
+		int down = y - (Tile.TILE_SIZE) * (y / Tile.TILE_SIZE);
+		int up = Tile.TILE_SIZE - down;
+		
+		if (left <= right && up <= down)
+		{
+			return tileset[tileUp][tileLeft];
+		}
+		else if (left <= right && up > down)
+		{
+			return tileset[tileDown][tileLeft];
+		}
+		else if (left > right && up <= down)
+		{
+			return tileset[tileUp][tileRight];
+		}
+		else if (left > right && up > down)
+		{
+			return tileset[tileDown][tileRight];
+		}
+		else
+		{
+			return null;
+		}
 	}
 }

@@ -140,6 +140,8 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 				game.btnA.unpress();
 			}
 			
+			game.nearestTile(game.player).updateTileset(3);
+			
 			if (ent.isRendered)
 			{								
 				gl.glTranslatef(ent.xPos, ent.yPos, 0.0f);
