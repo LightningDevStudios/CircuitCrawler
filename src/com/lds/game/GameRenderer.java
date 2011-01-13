@@ -115,7 +115,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 			{
 				if (!game.player.isHoldingObject()) //not holding anything and is close enough
 				{
-					if (game.player.closeEnough(ent) /*&& game.player.isFacing(ent)*/)
+					if (game.player.closeEnough(ent) && game.player.isFacing(ent))
 					{
 						game.player.holdObject((HoldObject)ent);
 					}
@@ -180,6 +180,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	}
 
 	@Override
+	//TODO move heldObj back when it collides with something
 	public void onTouchInput(MotionEvent e) 
 	{
 		float xInput = e.getRawX() - Game.screenW / 2;
