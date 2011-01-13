@@ -113,6 +113,8 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 				{
 					ent.colList.remove(colEnt);
 					colEnt.colList.remove(ent);
+					ent.uninteract(colEnt);
+					colEnt.uninteract(ent);
 				}
 				
 				//checks for button interaction

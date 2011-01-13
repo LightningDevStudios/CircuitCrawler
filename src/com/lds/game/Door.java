@@ -15,13 +15,12 @@ public class Door extends PhysEnt
 
 	public void open ()
 	{
-		moveTo(1000.0f, 1000.0f);
-		//moveTo(permanentX + Entity.DEFAULT_SIZE, permanentY);
+		this.moveTo(permanentX + Entity.DEFAULT_SIZE, permanentY);
 	}
 	
 	
 	public void close ()
 	{	
-		moveTo(-(permanentX + Entity.DEFAULT_SIZE), permanentY);
+		this.moveTo(-(permanentX + Entity.DEFAULT_SIZE), permanentY);
 	}
 }
