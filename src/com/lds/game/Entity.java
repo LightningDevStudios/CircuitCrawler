@@ -217,20 +217,7 @@ public abstract class Entity
 	}
 	
 	public boolean isFacing (Entity ent)
-	{
-		/*if (angle % 90 == 0)
-		{
-			angle += 0.01f;
-		}
-		
-		if (ent.getAngle() % 90 == 0)
-		{
-			ent.setAngle(ent.getAngle() + 1);
-		}
-		
-		initializeCollisionVariables();
-		ent.initializeCollisionVariables();*/
-		
+	{		
 		this.updateAbsolutePointLocations();
 		ent.updateAbsolutePointLocations();
 		

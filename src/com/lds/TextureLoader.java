@@ -3,9 +3,6 @@ package com.lds;
 import javax.microedition.khronos.opengles.GL10;
 
 import android.opengl.GLUtils;
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 
 public class TextureLoader 
 {
