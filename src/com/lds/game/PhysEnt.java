@@ -202,6 +202,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 		yPos = y;
 		endX = x;
 		endY = y;
+		Game.worldOutdated = true;
 	}
 	
 	//mutator for angle
@@ -209,6 +210,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	{
 		angle = degrees;
 		endAngle = degrees;
+		Game.worldOutdated = true;
 	}
 	
 	//mutator for scale
@@ -218,6 +220,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 		yScl = y;
 		endXScl = x;
 		endYScl = y;
+		Game.worldOutdated = true;
 	}
 	
 	/*************************
@@ -243,6 +246,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 				isRendered = true;
 			}
 			interpMoveTimeMs = Stopwatch.elapsedTimeInMilliseconds();
+			Game.worldOutdated = true;
 		}
 	}
 	
@@ -281,6 +285,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 			//error check			
 			interpRotTimeMs = Stopwatch.elapsedTimeInMilliseconds();
 			
+			Game.worldOutdated = true;
 		}
 	}
 	
@@ -299,6 +304,10 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 				xScl = endXScl;
 				isInterpScl = false;
 			}
+			
+			interpSclTimeMs = Stopwatch.elapsedTimeInMilliseconds();
+			
+			Game.worldOutdated = true;
 		}
 	}
 }

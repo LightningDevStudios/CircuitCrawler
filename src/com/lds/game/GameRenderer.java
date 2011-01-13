@@ -24,6 +24,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		this.context = context;
 		this.syncObj = syncObj;
 		windowOutdated = false;
+		Game.worldOutdated = false;
 	}
 	
 	@Override
@@ -93,30 +94,34 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 			Entity ent = game.entList.get(i);
 			ent.update();
 			
-			//checks for collision with all other entities in entList
-			//TODO calculate only when necessary, not every frame.
-			for (int j = i; j < game.entList.size(); j++)
+			//checks for collision with all other entities in entList if needed
+			if (Game.worldOutdated)
 			{
-				Entity colEnt = game.entList.get(j);
-				if (ent.isColliding(colEnt))
+				for (int j = i; j < game.entList.size(); j++)
 				{
-					ent.interact(colEnt);
-					colEnt.interact(ent);
-					ent.colList.add(colEnt);
-					colEnt.colList.add(ent);
-				}
-				else if (ent.colList.contains(colEnt))
-				{
-					ent.colList.remove(colEnt);
-					colEnt.colList.remove(ent);
-					
-					//TODO is this right? fix for player + hObj on button, and un-interaction while hObj is still on the button
-					if (ent.colList.isEmpty() && colEnt.colList.isEmpty())
+					Entity colEnt = game.entList.get(j);
+					if (ent.isColliding(colEnt))
 					{
-						ent.uninteract(colEnt);
-						colEnt.uninteract(ent);
+						ent.interact(colEnt);
+						colEnt.interact(ent);
+						ent.colList.add(colEnt);
+						colEnt.colList.add(ent);
+					}
+					else if (ent.colList.contains(colEnt))
+					{
+						ent.colList.remove(colEnt);
+						colEnt.colList.remove(ent);
+						
+						//TODO is this right? fix for player + hObj on button, and un-interaction while hObj is still on the button
+						if (ent.colList.isEmpty() && colEnt.colList.isEmpty())
+						{
+							ent.uninteract(colEnt);
+							colEnt.uninteract(ent);
+						}
 					}
 				}
+				
+				Game.worldOutdated = false;
 			}
 	
 			//checks for button interaction
@@ -151,7 +156,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 			}
 			
 			//temp, checking nearestTile method
-			game.nearestTile(game.player).updateTileset(3);
+			//game.nearestTile(game.player).updateTileset(3);
 			
 			//render it
 			if (ent.isRendered)
@@ -232,6 +237,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 					//move the player
 					game.player.setAngle(newAngle - 90.0f);
 					game.player.setPos(game.player.xPos + (x / 10) * game.player.speed, game.player.yPos + (y / 10) * game.player.speed);
+					Game.worldOutdated = true;
 										
 					//check collision and reverse motion if it's colliding with something solid
 					for (Entity colEnt : game.entList)
@@ -244,6 +250,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 								game.player.setAngle(oldAngle);
 								game.player.setPos(game.player.xPos - (x / 10) * game.player.speed, game.player.yPos - (y / 10) * game.player.speed);
 								game.player.setShouldStop(false);
+								Game.worldOutdated = false;
 								
 							}
 						}
@@ -257,6 +264,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 								game.player.setAngle(oldAngle);
 								game.player.setPos(game.player.xPos - (x / 10) * game.player.speed, game.player.yPos - (y / 10) * game.player.speed);
 								game.player.setShouldStop(false);
+								Game.worldOutdated = false;
 							}
 						}
 					}
