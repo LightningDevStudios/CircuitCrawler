@@ -97,31 +97,32 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 			//checks for collision with all other entities in entList if needed
 			if (Game.worldOutdated)
 			{
-				for (int j = i; j < game.entList.size(); j++)
+				for (int j = i + 1; j < game.entList.size(); j++)
 				{
 					Entity colEnt = game.entList.get(j);
 					if (ent.isColliding(colEnt))
 					{
-						ent.interact(colEnt);
-						colEnt.interact(ent);
-						ent.colList.add(colEnt);
-						colEnt.colList.add(ent);
+						if (!ent.colList.contains(colEnt))
+						{
+							ent.colList.add(colEnt);
+							colEnt.colList.add(ent);
+							ent.interact(colEnt);
+							colEnt.interact(ent);
+						}
 					}
 					else if (ent.colList.contains(colEnt))
 					{
 						ent.colList.remove(colEnt);
 						colEnt.colList.remove(ent);
-						
-						//TODO is this right? fix for player + hObj on button, and un-interaction while hObj is still on the button
-						if (ent.colList.isEmpty() && colEnt.colList.isEmpty())
+						System.out.println(ent.colList.size() + " " + colEnt.colList.size());
+						//TODO may or may not work.
+						if (ent.colList.isEmpty())
 						{
 							ent.uninteract(colEnt);
 							colEnt.uninteract(ent);
 						}
 					}
 				}
-				
-				Game.worldOutdated = false;
 			}
 	
 			//checks for button interaction
@@ -169,6 +170,9 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 				gl.glLoadIdentity();
 			}
 		}
+		
+		//moved this out here so that all entities / colEnts can be compared, not just the next ones
+		Game.worldOutdated = false;
 		
 		//Render UI, in the UI perspective
 		viewHUD(gl);
