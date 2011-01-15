@@ -202,6 +202,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 		yPos = y;
 		endX = x;
 		endY = y;
+		Game.worldOutdated = true;
 	}
 	
 	//mutator for angle
@@ -209,6 +210,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	{
 		angle = degrees;
 		endAngle = degrees;
+		Game.worldOutdated = true;
 	}
 	
 	//mutator for scale
@@ -218,6 +220,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 		yScl = y;
 		endXScl = x;
 		endYScl = y;
+		Game.worldOutdated = true;
 	}
 	
 	/*************************
@@ -235,7 +238,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 			setYPos(getYPos() + (moveSpeed / 1000 * interval * moveY));
 			
 			//error check
-			if (xPos <= endX + (moveSpeed /2000 * interval * moveX) && xPos >= endX - (moveSpeed /2000 * interval * moveX) || yPos <= endY + (moveSpeed / 2000 * interval * moveY) && yPos >= endY - (moveSpeed / 2000 * interval * moveY))
+			if (xPos <= endX + (moveSpeed / 2000 * interval * moveX) && xPos >= endX - (moveSpeed /2000 * interval * moveX) || yPos <= endY + (moveSpeed / 2000 * interval * moveY) && yPos >= endY - (moveSpeed / 2000 * interval * moveY))
 			{
 				xPos = endX;
 				yPos = endY;
@@ -243,6 +246,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 				isRendered = true;
 			}
 			interpMoveTimeMs = Stopwatch.elapsedTimeInMilliseconds();
+			Game.worldOutdated = true;
 		}
 	}
 	
@@ -281,6 +285,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 			//error check			
 			interpRotTimeMs = Stopwatch.elapsedTimeInMilliseconds();
 			
+			Game.worldOutdated = true;
 		}
 	}
 	
@@ -288,21 +293,21 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	{
 		if (isInterpScl)
 		{				
-			//increments scaling
-			xScl += sclSpeed * interpXScl;
-			yScl += sclSpeed * interpYScl;
+			float interval = (float)(Stopwatch.elapsedTimeInMilliseconds() - interpSclTimeMs);
+			
+			xScl += sclSpeed / 1000 * interval * scaleX;
+			yScl += sclSpeed / 1000 * interval * scaleY;
 			
 			//error check
-			if (xScl <= endXScl + (sclSpeed / 6000) && xScl >= endXScl - (sclSpeed / 6000))
+			if (xScl <= endXScl + (sclSpeed / 2000 * interval * scaleX) && xScl >= endXScl - (sclSpeed /2000 * interval * scaleX) || yScl <= endYScl + (sclSpeed / 2000 * interval * scaleY) && yScl >= endYScl - (sclSpeed / 2000 * interval * scaleY))
 			{
 				xScl = endXScl;
 				isInterpScl = false;
 			}
-			/*if (ent.yScl <= ent.endYScl + ent.speed / 2 && ent.yScl >= ent.endYScl - ent.speed / 2)
-			{
-				ent.yScl = ent.endYScl;
-				isInterpScl = false;
-			}*/
+			
+			interpSclTimeMs = Stopwatch.elapsedTimeInMilliseconds();
+			
+			Game.worldOutdated = true;
 		}
 	}
 }

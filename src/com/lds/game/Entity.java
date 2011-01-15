@@ -223,7 +223,6 @@ public abstract class Entity
 	
 	public boolean isFacing (Entity ent)
 	{
-		
 		this.updateAbsolutePointLocations();
 		ent.updateAbsolutePointLocations();
 		

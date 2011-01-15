@@ -20,6 +20,8 @@ public class Game
 	
 	//public Level[][] GameLevels;
 
+	public static boolean worldOutdated;
+	
 	public ArrayList<Entity> entList;
 	public Tile[][] tileset;
 	public ArrayList<UIEntity> UIList;

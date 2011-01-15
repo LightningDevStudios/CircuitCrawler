@@ -2,7 +2,6 @@ package com.lds.game;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.os.Debug;
 import android.util.DisplayMetrics;
 import android.view.Window;
 import android.view.WindowManager;
@@ -12,9 +11,9 @@ import com.lds.Graphics;
 public class Run extends Activity
 {
 	public Graphics glSurface;
-	public Object syncObj;
+	/*public Object syncObj;
 	private float screenX;
-	private float screenY;
+	private float screenY;*/
 	
 	
 	@Override
@@ -25,16 +24,16 @@ public class Run extends Activity
 		//Grab screen information to initialize local entity ArrayList
 		DisplayMetrics screen = new DisplayMetrics();
 		getWindowManager().getDefaultDisplay().getMetrics(screen);
-		screenX = (float)screen.widthPixels;
-		screenY = (float)screen.heightPixels;
+		float screenX = (float)screen.widthPixels;
+		float screenY = (float)screen.heightPixels;
 		
 		//Enable fullscreen
 		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		
 		//set up OpenGL rendering
-		syncObj = new Object();
-		glSurface = new Graphics(this, new GameRenderer(screenX, screenY, this, syncObj));
+		Object syncObj = new Object();
+		glSurface = new Graphics(this, new GameRenderer(screenX, screenY, this, syncObj), syncObj);
 		setContentView(glSurface);
 	}
 	
