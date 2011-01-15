@@ -2,6 +2,7 @@ package com.lds.game;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.os.Debug;
 import android.util.DisplayMetrics;
 import android.view.Window;
 import android.view.WindowManager;
@@ -20,7 +21,7 @@ public class Run extends Activity
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		
+				
 		//Grab screen information to initialize local entity ArrayList
 		DisplayMetrics screen = new DisplayMetrics();
 		getWindowManager().getDefaultDisplay().getMetrics(screen);
@@ -49,5 +50,11 @@ public class Run extends Activity
 	{
 		super.onPause();
 		glSurface.onPause();
+	}
+	
+	@Override
+	protected void onDestroy()
+	{
+		super.onDestroy();
 	}
 }

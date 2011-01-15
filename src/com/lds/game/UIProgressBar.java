@@ -50,7 +50,7 @@ public abstract class UIProgressBar extends UIEntity
 	{
 		if (this.value != this.originalValue)
 		{
-			updateGradient();
+			updateGradientProgress();
 			updateVertices();
 			autoPadding(originalTopPad, originalLeftPad, originalBottomPad, originalRightPad);
 			updatePosition();
@@ -58,16 +58,18 @@ public abstract class UIProgressBar extends UIEntity
 		}
 	}
 	
-	private void updateGradient()
+	private void updateGradientProgress()
 	{
 		//split the color array to colors for each vertex
-		float[] topRight = {originalColor[0], originalColor[1], originalColor[2], originalColor[3]};
+		/*float[] topRight = {originalColor[0], originalColor[1], originalColor[2], originalColor[3]};
 		float[] bottomRight = {originalColor[4], originalColor[5], originalColor[6], originalColor[7]};
 		float[] topLeft = {originalColor[8], originalColor[9], originalColor[10], originalColor[11]};
-		float[] bottomLeft = {originalColor[12], originalColor[13], originalColor[14], originalColor[15]};
+		float[] bottomLeft = {originalColor[12], originalColor[13], originalColor[14], originalColor[15]};*/
+		
+		float[] curGradient = getGradientCoords();
 		
 		//values for the weighted average change based on direction, we need a switch case for this.
-		switch(dir)
+		/*switch(dir)
 		{
 			case UP:
 				for(int i = 0; i < 4; i++)
@@ -98,15 +100,48 @@ public abstract class UIProgressBar extends UIEntity
 				}
 				break;
 			default:
+		}*/
+		
+		switch(dir)
+		{
+			case UP:
+				for(int i = 0; i < 4; i++)
+				{
+					curGradient[i + 4] = (((float)(maximum - value) * originalColor[i]) + ((float)(value - minimum) * originalColor[i + 4])) / (float)(maximum - minimum); //weighted average of colors by current percentage
+					curGradient[i + 12] = (((float)(maximum - value) * originalColor[i + 8]) + ((float)(value - minimum) * originalColor[i + 12])) / (float)(maximum - minimum);
+				}
+				break;
+			case RIGHT:
+				for(int i = 0; i < 4; i++)
+				{
+					curGradient[i] = (((float)(maximum - value) * originalColor[i + 8]) + ((float)(value - minimum) * originalColor[i])) / (float)(maximum - minimum);
+					curGradient[i + 4] = (((float)(maximum - value) * originalColor[i + 12]) + ((float)(value - minimum) * originalColor[i + 4])) / (float)(maximum - minimum);
+				}
+				break;
+			case DOWN:
+				for(int i = 0; i < 4; i++)
+				{
+					curGradient[i + 4] = (((float)(maximum - value) * originalColor[i]) + ((float)(value - minimum) * originalColor[i + 4])) / (float)(maximum - minimum);
+					curGradient[i + 12] = (((float)(maximum - value) * originalColor[i + 8]) + ((float)(value - minimum) * originalColor[i + 12])) / (float)(maximum - minimum);
+				}
+				break;
+			case LEFT:
+				for(int i = 0; i < 4; i++)
+				{
+					curGradient[i + 8] = (((float)(maximum - value) * originalColor[i]) + ((float)(value - minimum) * originalColor[i + 8])) / (float)(maximum - minimum);
+					curGradient[i + 12] = (((float)(maximum - value) * originalColor[i + 4]) + ((float)(value - minimum) * originalColor[i + 12])) / (float)(maximum - minimum);
+				}
+				break;
+			default:
 		}
 		
 		//recreate the color array and send it back
-		float[] initColor = { 	topRight[0], topRight[1], topRight[2], topRight[3],
+		/*float[] initColor = { 	topRight[0], topRight[1], topRight[2], topRight[3],
 								bottomRight[0], bottomRight[1], bottomRight[2], bottomRight[3],
 								topLeft[0], topLeft[1], topLeft[2], topLeft[3],
-								bottomLeft[0], bottomLeft[1], bottomLeft[2], bottomLeft[3] };
+								bottomLeft[0], bottomLeft[1], bottomLeft[2], bottomLeft[3] };*/
 		
-		updateGradient(initColor);
+		updateGradient(curGradient);
 	}
 	
 	private void updateVertices()
@@ -158,8 +193,8 @@ public abstract class UIProgressBar extends UIEntity
 	public void setGradientMode(float[] color)
 	{
 		this.originalColor = color;
-		updateGradient();
 		super.setGradientMode(color);
+		updateGradientProgress();
 	}
 	
 	@Override
