@@ -13,17 +13,18 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 {
 	public Game game;
 	public Context context;
-	public static Object syncObj;
-	public boolean windowOutdated, testPB;
+	public Object syncObj;
+	public boolean windowOutdated;
 	public int frameInterval;
 	
-	public GameRenderer (float screenW, float screenH, Context _context, Object syncObj)
+	public GameRenderer (float screenW, float screenH, Context context, Object syncObj)
 	{
 		Game.screenW = screenW;
 		Game.screenH = screenH;
-		context = _context;
-		GameRenderer.syncObj = syncObj;
+		this.context = context;
+		this.syncObj = syncObj;
 		windowOutdated = false;
+		Game.worldOutdated = false;
 	}
 	
 	@Override
@@ -32,7 +33,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		//openGL settings
 		gl.glShadeModel(GL10.GL_SMOOTH);
 		gl.glEnable(GL10.GL_BLEND);
-		gl.glBlendFunc(GL10.GL_ONE, GL10.GL_ONE_MINUS_SRC_ALPHA); //TODO change this later and make it per-poly
+		gl.glBlendFunc(GL10.GL_ONE, GL10.GL_ONE_MINUS_SRC_ALPHA); //TODO change this later and make it per-poly?
 
 		gl.glClearColor(0.39f, 0.58f, 0.93f, 0.5f);
 		
@@ -41,32 +42,35 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		gl.glEnable(GL10.GL_DITHER);
 		gl.glHint(GL10.GL_PERSPECTIVE_CORRECTION_HINT, GL10.GL_NICEST);	
 		
-		//start the timer and use an initial tick to prevent errors where interpolation starts at -32768, making it go 
+		//start the timer and use an initial tick to prevent errors where elapsed time is a very large negative number
 		Stopwatch.restartTimer();
 		Stopwatch.tick();
 		
-		game = new Game(context, gl);
-		testPB = true;		
+		game = new Game(context, gl);		
 	}
 	
 	@Override
 	public void onDrawFrame(GL10 gl) 
 	{
+		//clear the screen
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		
 		frameInterval = Stopwatch.elapsedTimeInMilliseconds();
 		
+		//tick the stopwatch every frame, gives relatively stable intervals
 		Stopwatch.tick();
 		
+		//Triggered when the perspective needs to be redrawn
 		if (windowOutdated)
 		{
 			updateCamPosition(gl);
 			windowOutdated = false;
 		}
 		
+		//remove entities that are queued for removal
 		game.cleaner.clean(game.entList);
 		
-		//Update screen position and entities
+		//Update which entities are rendered
 		game.updateLocalEntities();
 				
 		//Render tileset
@@ -78,6 +82,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 				{
 					gl.glTranslatef(t.xPos, t.yPos, 0.0f);
 					t.draw(gl);
+					
 					gl.glLoadIdentity();
 				}
 			}
@@ -89,14 +94,12 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 			Entity ent = game.entList.get(i);
 			ent.update();
 			
-			//checks for collision with all other entities in entList
-			//TODO calculate only when necessary, not every frame.
-			for (int j = i; j < game.entList.size(); j++)
+			//checks for collision with all other entities in entList if needed
+			if (Game.worldOutdated)
 			{
-				Entity colEnt = game.entList.get(j);
-				if (ent.isColliding(colEnt))
+				for (int j = i + 1; j < game.entList.size(); j++)
 				{
-					ent.interact(colEnt);
+					/*ent.interact(colEnt);
 					colEnt.interact(ent);
 					ent.colList.add(colEnt);
 					colEnt.colList.add(ent);
@@ -108,7 +111,30 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 					ent.colList.remove(colEnt);
 					colEnt.colList.remove(ent);
 					ent.uninteract(colEnt);
-					colEnt.uninteract(ent);
+					colEnt.uninteract(ent);*/
+					Entity colEnt = game.entList.get(j);
+					if (ent.isColliding(colEnt))
+					{
+						if (!ent.colList.contains(colEnt))
+						{
+							ent.colList.add(colEnt);
+							colEnt.colList.add(ent);
+							ent.interact(colEnt);
+							colEnt.interact(ent);
+						}
+					}
+					else if (ent.colList.contains(colEnt))
+					{
+						ent.colList.remove(colEnt);
+						colEnt.colList.remove(ent);
+						System.out.println(ent.colList.size() + " " + colEnt.colList.size());
+						//TODO may or may not work.
+						if (ent.colList.isEmpty())
+						{
+							ent.uninteract(colEnt);
+							colEnt.uninteract(ent);
+						}
+					}
 				}
 			}
 	
@@ -129,6 +155,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 				game.btnB.unpress();
 			}
 			
+			//set btnA to speed up the player when pressed
 			if (game.btnA.isPressed())
 			{		
 				if(game.player.speed != 2)
@@ -142,36 +169,46 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 				game.btnA.unpress();
 			}
 			
+			//temp, checking nearestTile method
+			//game.nearestTile(game.player).updateTileset(3);
+			
+			//render it
 			if (ent.isRendered)
 			{								
 				gl.glTranslatef(ent.xPos, ent.yPos, 0.0f);
 				gl.glRotatef(ent.angle, 0.0f, 0.0f, 1.0f);
 				gl.glScalef(ent.xScl, ent.yScl, 1.0f);
 				ent.draw(gl);
+				
 				gl.glLoadIdentity();
 			}
 		}
 		
+		//moved this out here so that all entities / colEnts can be compared, not just the next ones
+		Game.worldOutdated = false;
+		
+		//Render UI, in the UI perspective
 		viewHUD(gl);
 		
 		for (UIEntity ent : game.UIList)
 		{
 			ent.update();
+			
 			gl.glTranslatef(ent.xPos, ent.yPos, 0.0f);
 			ent.draw(gl);
+			
 			gl.glLoadIdentity();
 		}
 		
 		viewWorld(gl);
-		
-		//Debugging info
-		
+				
 		//poll for touch input
 		synchronized (syncObj)
 		{
 			syncObj.notify();
 		}
 		
+		//framerate count
 		System.out.println("FPS: " + (1000 / (Stopwatch.elapsedTimeInMilliseconds() - frameInterval)));
 	}
 
@@ -185,30 +222,41 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	//TODO move heldObj back when it collides with something
 	public void onTouchInput(MotionEvent e) 
 	{
+		//TODO remove this
+		System.out.println("input");
+		
+		//get raw input
 		float xInput = e.getRawX() - Game.screenW / 2;
 		float yInput = -e.getRawY() + Game.screenH / 2;
+		
 		for (UIEntity ent : game.UIList)
 		{
+			//loop through UIList, see if input is within UIEntity bounds
 			if (xInput >= ent.xPos - ent.xSize / 2 && xInput <= ent.xPos + ent.xSize / 2 && yInput >= ent.yPos - ent.ySize / 2 && yInput <= ent.yPos + ent.ySize / 2)
 			{
+				//Specific joypad code
+				//TODO move to UIEntity generic method
 				if (ent instanceof UIJoypad)
 				{
 					UIJoypad UIjp = (UIJoypad)ent;
 					
+					//get the relative X and Y coordinates
 					float x = UIjp.getRelativeX(xInput);
 					float y = UIjp.getRelativeY(yInput);
 					
+					//Figure out the angle
 					double newRad = Math.atan2((double)y, (double)x);
 					if (newRad < 0)
 						newRad += 2 * Math.PI;
 					float newAngle = (float)Math.toDegrees(newRad);
 					float oldAngle = game.player.angle;
+					
+					//move the player
 					game.player.setAngle(newAngle - 90.0f);
 					game.player.setPos(game.player.xPos + (x / 10) * game.player.speed, game.player.yPos + (y / 10) * game.player.speed);
-					if (game.player.isHoldingObject())
-					{
-						game.player.updateHeldObjectPosition();
-					}
+					Game.worldOutdated = true;
+										
+					//check collision and reverse motion if it's colliding with something solid
 					for (Entity colEnt : game.entList)
 					{
 						
@@ -218,6 +266,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 							{
 								game.player.setAngle(oldAngle);
 								game.player.setPos(game.player.xPos - (x / 10) * game.player.speed, game.player.yPos - (y / 10) * game.player.speed);
+								Game.worldOutdated = false;
 							}
 						}
 					}
@@ -229,9 +278,17 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 							{
 								game.player.setAngle(oldAngle);
 								game.player.setPos(game.player.xPos - (x / 10) * game.player.speed, game.player.yPos - (y / 10) * game.player.speed);
+								Game.worldOutdated = false;
 							}
 						}
 					}
+					
+					//move the held object if one exists
+					//TODO move to player?
+					if (game.player.isHoldingObject())
+						game.player.updateHeldObjectPosition();
+					
+					//move camera to follow player
 					game.camPosX = game.player.endX;
 					game.camPosY = game.player.endY;
 					
@@ -250,9 +307,13 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 					
 					windowOutdated = true;
 				}
+				
+				//UIButton specific code
 				if (ent instanceof UIButton)
 				{
 					UIButton btn = (UIButton)ent;
+					
+					//500ms delay between presses
 					if (btn.canPress(500))
 					{ 
 						((UIButton)ent).press();
@@ -263,6 +324,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		}
 	}
 	
+	//redraw the perspective
 	public void updateCamPosition(GL10 gl)
 	{
 		gl.glViewport(0, 0, (int)Game.screenW, (int)Game.screenH);
@@ -275,6 +337,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		game.updateLocalTileset();
 	}
 	
+	//draw a screen-based perspective, push the world perspective onto the OpenGL matrix stack
 	public void viewHUD(GL10 gl)
 	{
 		gl.glMatrixMode(GL10.GL_PROJECTION);
@@ -286,6 +349,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		gl.glLoadIdentity();
 	}
 	
+	//pop that perspective back from the stack
 	public void viewWorld(GL10 gl)
 	{
 		gl.glMatrixMode(GL10.GL_PROJECTION);

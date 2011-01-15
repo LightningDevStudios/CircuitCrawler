@@ -197,14 +197,14 @@ public abstract class Entity
 		colPoints[0].setX((float)(Math.cos(this.rad + diagAngle) * diagonal) + xPos); //top left
 		colPoints[0].setY((float)(Math.sin(this.rad + diagAngle) * diagonal) + yPos); //top left
 		
-		colPoints[1].setX((float)(Math.cos(this.rad + Math.PI - diagAngle) * diagonal) + xPos); //bottom left
-		colPoints[1].setY((float)(Math.sin(this.rad + Math.PI - diagAngle) * diagonal) + yPos); //bottom left
+		colPoints[1].setX((float)(Math.cos(this.rad + Math.PI - diagAngle) * diagonal) + xPos); //bottom right?
+		colPoints[1].setY((float)(Math.sin(this.rad + Math.PI - diagAngle) * diagonal) + yPos); //bottom right?
 		
 		colPoints[2].setX((float)(Math.cos(this.rad - diagAngle) * diagonal) + xPos); //top right
 		colPoints[2].setY((float)(Math.sin(this.rad - diagAngle) * diagonal) + yPos); //top right
 		
-		colPoints[3].setX((float)(Math.cos(this.rad - Math.PI + diagAngle) * diagonal) + xPos); //bottom right
-		colPoints[3].setY((float)(Math.sin(this.rad - Math.PI + diagAngle) * diagonal) + yPos); //bottom right
+		colPoints[3].setX((float)(Math.cos(this.rad - Math.PI + diagAngle) * diagonal) + xPos); //bottom left?
+		colPoints[3].setY((float)(Math.sin(this.rad - Math.PI + diagAngle) * diagonal) + yPos); //bottom left?
 	}
 	
 	public boolean closeEnough (Entity ent)
@@ -218,7 +218,6 @@ public abstract class Entity
 	
 	public boolean isFacing (Entity ent)
 	{
-
 		this.updateAbsolutePointLocations();
 		ent.updateAbsolutePointLocations();
 		
