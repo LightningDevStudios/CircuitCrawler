@@ -65,6 +65,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		}
 		
 		game.cleaner.clean(game.entList);
+		
 		//Update screen position and entities
 		game.updateLocalEntities();
 				
@@ -86,55 +87,48 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		for (int i = 0; i < game.entList.size(); i++)
 		{
 			Entity ent = game.entList.get(i);
-			
-			//some button shit
-			if (game.button.isActive())
-			{
-				game.door.open();
-			}
-			else
-			{
-				game.door.close();
-			}
-			
 			ent.update();
 			
 			//checks for collision with all other entities in entList
 			//TODO calculate only when necessary, not every frame.
-			for (int k = i + 1; k < game.entList.size(); k++)
+			for (int j = i; j < game.entList.size(); j++)
 			{
-				Entity colEnt = game.entList.get(k);
+				Entity colEnt = game.entList.get(j);
 				if (ent.isColliding(colEnt))
 				{
 					ent.interact(colEnt);
 					colEnt.interact(ent);
+					ent.colList.add(colEnt);
+					colEnt.colList.add(ent);
 				}
 				else if (ent.colList.contains(colEnt))
 				{
+					ent.uninteract(colEnt);
+					colEnt.uninteract(ent);
 					ent.colList.remove(colEnt);
 					colEnt.colList.remove(ent);
 					ent.uninteract(colEnt);
 					colEnt.uninteract(ent);
 				}
-				
-				//checks for button interaction
-				if (game.btnB.isPressed() && colEnt instanceof HoldObject)
-				{
-					if (!game.player.isHoldingObject()) //not holding anything and is close enough
-					{
-						if (game.player.closeEnough(colEnt) && game.player.isFacing(colEnt))
-						{
-							game.player.holdObject((HoldObject)colEnt);
-						}
-					}
-					else //holding object, button pressed
-					{
-						game.player.dropObject();
-					}
-					game.btnB.unpress();
-				}
 			}
 	
+			//checks for button interaction
+			if (game.btnB.isPressed() && ent instanceof HoldObject)
+			{
+				if (!game.player.isHoldingObject()) //not holding anything and is close enough
+				{
+					if (game.player.closeEnough(ent) && game.player.isFacing(ent))
+					{
+						game.player.holdObject((HoldObject)ent);
+					}
+				}
+				else //holding object, button pressed
+				{
+					game.player.dropObject();
+				}
+				game.btnB.unpress();
+			}
+			
 			if (game.btnA.isPressed())
 			{		
 				if(game.player.speed != 2)
@@ -188,6 +182,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	}
 
 	@Override
+	//TODO move heldObj back when it collides with something
 	public void onTouchInput(MotionEvent e) 
 	{
 		float xInput = e.getRawX() - Game.screenW / 2;
@@ -210,16 +205,19 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 					float oldAngle = game.player.angle;
 					game.player.setAngle(newAngle - 90.0f);
 					game.player.setPos(game.player.xPos + (x / 10) * game.player.speed, game.player.yPos + (y / 10) * game.player.speed);
+					if (game.player.isHoldingObject())
+					{
+						game.player.updateHeldObjectPosition();
+					}
 					for (Entity colEnt : game.entList)
 					{
 						
-						if (colEnt.isRendered && colEnt != game.player && game.player.isColliding(colEnt))
+						if (colEnt != game.player && game.player.isColliding(colEnt) || (game.player.getHeldObject() != null && colEnt != game.player.getHeldObject() && game.player.getHeldObject().isColliding(colEnt)))
 						{
 							if (colEnt.willCollideWithPlayer())
 							{
 								game.player.setAngle(oldAngle);
 								game.player.setPos(game.player.xPos - (x / 10) * game.player.speed, game.player.yPos - (y / 10) * game.player.speed);
-								game.player.setShouldStop(false); 
 							}
 						}
 					}
@@ -227,11 +225,10 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 					{
 						for (Tile t: ts)
 						{
-							if (t.isRendered && t.isColliding(game.player))
+							if (t.isRendered && (t.isColliding(game.player) || game.player.getHeldObject() != null && t.isColliding(game.player.getHeldObject())))
 							{
 								game.player.setAngle(oldAngle);
 								game.player.setPos(game.player.xPos - (x / 10) * game.player.speed, game.player.yPos - (y / 10) * game.player.speed);
-								game.player.setShouldStop(false);
 							}
 						}
 					}
