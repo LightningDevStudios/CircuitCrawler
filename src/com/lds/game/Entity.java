@@ -233,9 +233,7 @@ public abstract class Entity
 		float angleDiff = (angle + 90.0f) - angleBetween;
 		
 		if (angleDiff > 315.0f)
-		{
 			angleDiff -= 360.0f;
-		}
 		
 		if (angleDiff > -45 && angleDiff < 45)
 			return true;
