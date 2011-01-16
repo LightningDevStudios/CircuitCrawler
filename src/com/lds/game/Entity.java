@@ -212,6 +212,12 @@ public abstract class Entity
 		colPoints[3].setY((float)(Math.sin(cp3) * diagonal) + yPos); //bottom right
 	}
 	
+	public void updateAbsolutePointLocations(Point[] pts)
+	{
+		initializeCollisionVariables();
+		this.colPoints = pts;
+	}
+	
 	public boolean closeEnough (Entity ent)
 	{
 		if (Math.sqrt(Math.pow(xPos - ent.xPos, 2) + Math.pow(yPos - ent.yPos, 2)) < (float)((diagonal) + ent.diagonal))
@@ -221,36 +227,23 @@ public abstract class Entity
 			return false;
 	}
 	
-	public boolean isFacing (Entity ent)
+	public boolean isFacing(Entity ent)
 	{
-		/*this.updateAbsolutePointLocations();
-		ent.updateAbsolutePointLocations();*/
+		float angleBetween = (float)Math.toDegrees(Math.atan2((ent.getYPos() - yPos) , (ent.getXPos() - xPos)));
+		float angleDiff = (angle + 90.0f) - angleBetween;
 		
-		float m = (this.colPoints[0].getY() - this.colPoints[1].getY()) / (this.colPoints[0].getX() - this.colPoints[1].getX());
-		float b1 = (colPoints[0].getY() - m * colPoints[0].getX());
-		float b2 = (colPoints[3].getY() - m * colPoints[3].getX());
-		float entB = (ent.yPos - m * ent.xPos);
-		Point frontPoint = new Point(halfSize * (float)Math.cos(rad) + xPos, halfSize * (float)Math.sin(rad) + yPos);
-		Point backPoint = new Point(halfSize * (float)Math.cos(rad + Math.PI) + xPos, halfSize * (float)Math.sin(rad + Math.PI) + yPos);
-		double frontDist = Math.sqrt((double)Math.pow(ent.xPos - frontPoint.getX(), 2) + Math.pow(ent.yPos - frontPoint.getY(), 2));
-		double backDist = Math.sqrt((double)Math.pow(ent.xPos - backPoint.getX(), 2) + Math.pow(ent.yPos - backPoint.getY(), 2));
-		
-		if (backDist < frontDist)
+		if (angleDiff > 315.0f)
 		{
-			return false;
+			angleDiff -= 360.0f;
 		}
 		
-		if (entB < b1 && entB > b2 || entB > b1 && entB < b2)
-		{
+		if (angleDiff > -45 && angleDiff < 45)
 			return true;
-		}
+		
 		else
-		{
 			return false;
-		}
 	}
 	
-	//This tests for collision between two entities (no shit) - Devin
 	public boolean isColliding (Entity ent)
 	{	
 		//checks to see if either object is not solid
@@ -264,7 +257,7 @@ public abstract class Entity
 		initializeCollisionVariables();
 		ent.initializeCollisionVariables();
 		
-		//makes sure the entities are close enough so that collision testing is actually neccessary
+		//makes sure the entities are close enough so that collision testing is actually necessary
 		if (!closeEnough(ent))
 		{
 			return false;
@@ -305,9 +298,9 @@ public abstract class Entity
 				ent2.setAngle(ent2StartAngle);
 				ent2.setXPos(ent2StartX);
 				ent2.setYPos(ent2StartY);
-				
-				ent1.setColPoints(ent1TempPts);
-				ent2.setColPoints(ent2TempPts);
+								
+				ent1.updateAbsolutePointLocations(ent1TempPts);
+				ent2.updateAbsolutePointLocations(ent2TempPts);
 				
 				return true;
 			}
@@ -317,8 +310,9 @@ public abstract class Entity
 		ent2.setXPos(ent2StartX);
 		ent2.setYPos(ent2StartY);
 		
-		ent1.setColPoints(ent1TempPts);
-		ent2.setColPoints(ent2TempPts);
+		
+		ent1.updateAbsolutePointLocations(ent1TempPts);
+		ent2.updateAbsolutePointLocations(ent2TempPts);
 		
 		return false;
 	}

@@ -212,7 +212,6 @@ public class Game
 		}
 	}
 	
-	//TODO OPTIMIZE!!!!
 	public void updateLocalTileset()
 	{
 		float minX, maxX, minY, maxY, tilesetWidth, tilesetHeight;
