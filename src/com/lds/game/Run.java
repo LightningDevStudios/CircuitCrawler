@@ -20,7 +20,7 @@ public class Run extends Activity
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		
+				
 		//Grab screen information to initialize local entity ArrayList
 		DisplayMetrics screen = new DisplayMetrics();
 		getWindowManager().getDefaultDisplay().getMetrics(screen);
@@ -49,5 +49,11 @@ public class Run extends Activity
 	{
 		super.onPause();
 		glSurface.onPause();
+	}
+	
+	@Override
+	protected void onDestroy()
+	{
+		super.onDestroy();
 	}
 }

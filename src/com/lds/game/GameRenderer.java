@@ -4,6 +4,7 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 import android.opengl.GLU;
+import android.os.Debug;
 import android.view.MotionEvent;
 import android.content.Context;
 
@@ -15,8 +16,8 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	public Game game;
 	public Context context;
 	public Object syncObj;
-	public boolean windowOutdated;
-	public int frameInterval;
+	public boolean windowOutdated, testDebug = true;
+	public int frameInterval, frameCount = 0;
 	
 	public GameRenderer (float screenW, float screenH, Context context, Object syncObj)
 	{
@@ -31,6 +32,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	@Override
 	public void onSurfaceCreated(GL10 gl, EGLConfig config)
 	{
+		
 		//openGL settings
 		gl.glShadeModel(GL10.GL_SMOOTH);
 		gl.glEnable(GL10.GL_BLEND);
@@ -53,6 +55,10 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	@Override
 	public void onDrawFrame(GL10 gl) 
 	{
+		frameCount++;
+		if (frameCount == 100)
+			Debug.startMethodTracing("LDS_Game4");
+		
 		//clear the screen
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		
@@ -162,10 +168,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 				}
 				game.btnA.unpress();
 			}
-			
-			//temp, checking nearestTile method
-			//game.nearestTile(game.player).updateTileset(3);
-			
+						
 			//render it
 			if (ent.isRendered)
 			{								
@@ -204,6 +207,12 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		
 		//framerate count
 		System.out.println("FPS: " + (1000 / (Stopwatch.elapsedTimeInMilliseconds() - frameInterval)));
+		
+		if (frameCount == 101)
+		{
+			testDebug = false;
+			Debug.stopMethodTracing();
+		}
 	}
 
 	@Override

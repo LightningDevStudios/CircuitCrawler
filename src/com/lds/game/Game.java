@@ -200,10 +200,10 @@ public class Game
 		for(Entity ent : entList)
 		{
 			//define max square bounds
-			float entMinX = ent.xPos - (float)ent.diagonal;
-			float entMaxX = ent.xPos + (float)ent.diagonal;
-			float entMinY = ent.yPos - (float)ent.diagonal;
-			float entMaxY = ent.yPos + (float)ent.diagonal;
+			float entMinX = ent.xPos - (float)ent.getDiagonal();
+			float entMaxX = ent.xPos + (float)ent.getDiagonal();
+			float entMinY = ent.yPos - (float)ent.getDiagonal();
+			float entMaxY = ent.yPos + (float)ent.getDiagonal();
 			
 			//values are opposite for entMin/Max because only the far tips have to be inside the screen (leftmost point on right border of screen)
 			if (entMinX <= maxX && entMaxX >= minX && entMinY <= maxY && entMaxY >= minY)
@@ -219,27 +219,41 @@ public class Game
 	
 	public void updateLocalTileset()
 	{
-		float minX, maxX, minY, maxY;
+		float minX, maxX, minY, maxY, tilesetWidth, tilesetHeight;
 		minX = camPosX - (screenW / 2);
 		maxX = camPosX + (screenW / 2);
 		minY = camPosY - (screenH / 2);
 		maxY = camPosY + (screenH / 2);
-		for (int i = 0; i < tileset.length; i++)
+		
+		tilesetWidth = tileset[0].length * Tile.TILE_SIZE_F;
+		tilesetHeight = tileset.length * Tile.TILE_SIZE_F;
+		
+		int minXBound = (int)Math.floor(((minX + (tilesetWidth / 2)) / Tile.TILE_SIZE_F) - 1);
+		int maxXBound = (int)Math.ceil(((maxX + (tilesetWidth / 2)) / Tile.TILE_SIZE_F) - 1);
+		int minYBound = 14 - (int)Math.floor(((maxY + (tilesetHeight / 2)) / Tile.TILE_SIZE_F) - 1);
+		int maxYBound = 15 - (int)Math.ceil(((minY + (tilesetHeight / 2)) / Tile.TILE_SIZE_F) - 1);
+		
+		if (minXBound < 0) { minXBound = 0; }
+		if (maxXBound > tileset[0].length) { maxXBound = tileset[0].length; }
+		
+		if (minYBound < 0) { minYBound = 0; }
+		if (maxYBound > tileset.length) { maxYBound = tileset.length; }
+		
+		//set all to false
+		for (Tile[] ts : tileset)
 		{
-			for (int j = 0; j < tileset[0].length; j++)
+			for(Tile t : ts)
 			{
-				float entMinX = tileset[i][j].xPos - (tileset[i][j].size);
-				float entMaxX = tileset[i][j].xPos + (tileset[i][j].size);
-				float entMinY = tileset[i][j].yPos - (tileset[i][j].size);
-				float entMaxY = tileset[i][j].yPos + (tileset[i][j].size);
-								
-				//values are opposite for entMin/Max because only the far tips have to be inside the screen (leftmost point on right border of screen)
-				if (entMinX <= maxX && entMaxX >= minX && entMinY <= maxY && entMaxY >= minY)
-				{
+				t.isRendered = false;
+			}
+		}
+		
+		//only set values in bounds to true
+		for (int i = minYBound; i <= maxYBound; i++)
+		{
+			for (int j = minXBound; j <= maxXBound; j++)
+			{
 					tileset[i][j].isRendered = true;
-				}
-				else
-					tileset[i][j].isRendered = false;
 			}
 		}
 	}
@@ -251,10 +265,10 @@ public class Game
 		maxX = camPosX + (screenW / 2);
 		minY = camPosY - (screenH / 2);
 		maxY = camPosY + (screenH / 2);
-		float entMinX = ent.xPos - (ent.size * (float)Math.sqrt(2) / 2);
-		float entMaxX = ent.xPos + (ent.size * (float)Math.sqrt(2) / 2);
-		float entMinY = ent.yPos - (ent.size * (float)Math.sqrt(2) / 2);
-		float entMaxY = ent.yPos + (ent.size * (float)Math.sqrt(2) / 2);
+		float entMinX = ent.xPos - (float)ent.getDiagonal();
+		float entMaxX = ent.xPos + (float)ent.getDiagonal();
+		float entMinY = ent.yPos - (float)ent.getDiagonal();
+		float entMaxY = ent.yPos + (float)ent.getDiagonal();
 			
 			//values are opposite for entMin/Max because only the far tips have to be inside the screen (leftmost point on right border of screen)
 			if (entMinX <= maxX && entMaxX >= minX && entMinY <= maxY && entMaxY >= minY)

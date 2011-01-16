@@ -46,9 +46,9 @@ public abstract class Entity
 	private static int entCount = 0;
 	
 	//collision data
-	public Point[] colPoints;
-	public float[] colSlopes;
-	public double diagonal, rad, diagAngle;
+	protected Point[] colPoints;
+	protected float[] colSlopes;
+	protected double diagonal, rad, diagAngle;
 	
 	public ArrayList<Entity> colList = new ArrayList<Entity>();
 	public ArrayList<Entity> colIgnoreList = new ArrayList<Entity>();
@@ -194,17 +194,28 @@ public abstract class Entity
 	{
 		initializeCollisionVariables();
 		
-		colPoints[0].setX((float)(Math.cos(this.rad + diagAngle) * diagonal) + xPos); //top left
-		colPoints[0].setY((float)(Math.sin(this.rad + diagAngle) * diagonal) + yPos); //top left
+		double cp0 = this.rad + diagAngle;
+		double cp1 = this.rad + Math.PI - diagAngle;
+		double cp2 = this.rad - diagAngle;
+		double cp3 = this.rad - Math.PI + diagAngle;
 		
-		colPoints[1].setX((float)(Math.cos(this.rad + Math.PI - diagAngle) * diagonal) + xPos); //bottom right?
-		colPoints[1].setY((float)(Math.sin(this.rad + Math.PI - diagAngle) * diagonal) + yPos); //bottom right?
+		colPoints[0].setX((float)(Math.cos(cp0) * diagonal) + xPos); //top left
+		colPoints[0].setY((float)(Math.sin(cp0) * diagonal) + yPos); //top left
 		
-		colPoints[2].setX((float)(Math.cos(this.rad - diagAngle) * diagonal) + xPos); //top right
-		colPoints[2].setY((float)(Math.sin(this.rad - diagAngle) * diagonal) + yPos); //top right
+		colPoints[1].setX((float)(Math.cos(cp1) * diagonal) + xPos); //bottom left
+		colPoints[1].setY((float)(Math.sin(cp1) * diagonal) + yPos); //bottom left
+
+		colPoints[2].setX((float)(Math.cos(cp2) * diagonal) + xPos); //top right
+		colPoints[2].setY((float)(Math.sin(cp2) * diagonal) + yPos); //top right
 		
-		colPoints[3].setX((float)(Math.cos(this.rad - Math.PI + diagAngle) * diagonal) + xPos); //bottom left?
-		colPoints[3].setY((float)(Math.sin(this.rad - Math.PI + diagAngle) * diagonal) + yPos); //bottom left?
+		colPoints[3].setX((float)(Math.cos(cp3) * diagonal) + xPos); //bottom right
+		colPoints[3].setY((float)(Math.sin(cp3) * diagonal) + yPos); //bottom right
+	}
+	
+	public void updateAbsolutePointLocations(Point[] pts)
+	{
+		initializeCollisionVariables();
+		this.colPoints = pts;
 	}
 	
 	public boolean closeEnough (Entity ent)
@@ -215,7 +226,7 @@ public abstract class Entity
 		else
 			return false;
 	}
-	
+
 	public boolean collideWithCircle (Entity ent) //if ent is a circle
 	{
 		if (Math.sqrt(Math.pow(xPos - ent.xPos, 2) + Math.pow(yPos - ent.yPos, 2)) < (float)(diagonal) + ent.halfSize)
@@ -233,37 +244,21 @@ public abstract class Entity
 		else
 			return false;
 	}
-	
-	public boolean isFacing (Entity ent)
+	public boolean isFacing(Entity ent)
 	{
-		this.updateAbsolutePointLocations();
-		ent.updateAbsolutePointLocations();
+		float angleBetween = (float)Math.toDegrees(Math.atan2((ent.getYPos() - yPos) , (ent.getXPos() - xPos)));
+		float angleDiff = (angle + 90.0f) - angleBetween;
 		
-		float m = (this.colPoints[0].getY() - this.colPoints[1].getY()) / (this.colPoints[0].getX() - this.colPoints[1].getX());
-		float b1 = (colPoints[0].getY() - m * colPoints[0].getX());
-		float b2 = (colPoints[3].getY() - m * colPoints[3].getX());
-		float entB = (ent.yPos - m * ent.xPos);
-		Point frontPoint = new Point(halfSize * (float)Math.cos(rad) + xPos, halfSize * (float)Math.sin(rad) + yPos);
-		Point backPoint = new Point(halfSize * (float)Math.cos(rad + Math.PI) + xPos, halfSize * (float)Math.sin(rad + Math.PI) + yPos);
-		double frontDist = Math.sqrt((double)Math.pow(ent.xPos - frontPoint.getX(), 2) + Math.pow(ent.yPos - frontPoint.getY(), 2));
-		double backDist = Math.sqrt((double)Math.pow(ent.xPos - backPoint.getX(), 2) + Math.pow(ent.yPos - backPoint.getY(), 2));
+		if (angleDiff > 315.0f)
+			angleDiff -= 360.0f;
 		
-		if (backDist < frontDist)
-		{
-			return false;
-		}
-		
-		if (entB < b1 && entB > b2 || entB > b1 && entB < b2)
-		{
+		if (angleDiff > -45 && angleDiff < 45)
 			return true;
-		}
+		
 		else
-		{
 			return false;
-		}
 	}
 	
-	//This tests for collision between two entities (no shit) - Devin
 	public boolean isColliding (Entity ent)
 	{	
 		//checks to see if either object is not solid
@@ -274,10 +269,10 @@ public abstract class Entity
 			return false;
 		
 		//update values
-		updateAbsolutePointLocations();
-		ent.updateAbsolutePointLocations();
+		initializeCollisionVariables();
+		ent.initializeCollisionVariables();
 		
-		//makes sure the entities are close enough so that collision testing is actually neccessary
+		//makes sure the entities are close enough so that collision testing is actually necessary
 		if (!closeEnough(ent))
 		{
 			return false;
@@ -292,6 +287,9 @@ public abstract class Entity
 	
 	public boolean collisionCheck (Entity ent1, Entity ent2)
 	{
+		Point[] ent1TempPts = ent1.getColPoints();
+		Point[] ent2TempPts = ent2.getColPoints();
+		
 		float ent1StartAngle = ent1.angle;
 		float ent2StartAngle = ent2.getAngle();
 		float ent2StartX = ent2.getXPos();
@@ -315,6 +313,10 @@ public abstract class Entity
 				ent2.setAngle(ent2StartAngle);
 				ent2.setXPos(ent2StartX);
 				ent2.setYPos(ent2StartY);
+								
+				ent1.updateAbsolutePointLocations(ent1TempPts);
+				ent2.updateAbsolutePointLocations(ent2TempPts);
+				
 				return true;
 			}
 		}
@@ -322,6 +324,11 @@ public abstract class Entity
 		ent2.setAngle(ent2StartAngle);
 		ent2.setXPos(ent2StartX);
 		ent2.setYPos(ent2StartY);
+		
+		
+		ent1.updateAbsolutePointLocations(ent1TempPts);
+		ent2.updateAbsolutePointLocations(ent2TempPts);
+		
 		return false;
 	}
 			
@@ -533,6 +540,10 @@ public abstract class Entity
 	public float[] getColorCoords()		{ return color; }
 	public float[] getTextureCoords()	{ return texture; }
 	public Texture getTexture()			{ return tex; }
+	public Point[] getColPoints()		{ return colPoints; }
+	public double getDiagonal()			{ return diagonal; }
+	public double getRad()				{ return rad; }
+	public double getDiagAngle()		{ return diagAngle; }
 	public int getEntID()				{ return entID; }
 	public static int getEntCount()		{ return entCount; }
 	public boolean willCollideWithPlayer() { return willCollideWithPlayer; }
@@ -544,4 +555,10 @@ public abstract class Entity
 	public void setXScl(float xScl)		{ this.xScl = xScl; }
 	public void setYScl(float yScl)		{ this.yScl	= yScl; }
 	public void setWillCollideWithPlayer(boolean willCollideWithPlayer) { this.willCollideWithPlayer = willCollideWithPlayer; }
+	
+	public void setColPoints(Point[] colPoints)
+	{
+		if (colPoints.length == 4)
+			this.colPoints = colPoints;
+	}
 }
