@@ -8,6 +8,7 @@ import android.view.MotionEvent;
 import android.content.Context;
 
 import com.lds.Stopwatch;
+import com.lds.trigger.Trigger;
 
 public class GameRenderer implements com.lds.Graphics.Renderer
 {
@@ -88,6 +89,12 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 			}
 		}
 		
+		//iterate through triggers
+		for (Trigger t : game.triggerList)
+		{
+			t.update();
+		}
+		
 		//Render all entities
 		for (int i = 0; i < game.entList.size(); i++)
 		{
@@ -99,19 +106,6 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 			{
 				for (int j = i + 1; j < game.entList.size(); j++)
 				{
-					/*ent.interact(colEnt);
-					colEnt.interact(ent);
-					ent.colList.add(colEnt);
-					colEnt.colList.add(ent);
-				}
-				else if (ent.colList.contains(colEnt))
-				{
-					ent.uninteract(colEnt);
-					colEnt.uninteract(ent);
-					ent.colList.remove(colEnt);
-					colEnt.colList.remove(ent);
-					ent.uninteract(colEnt);
-					colEnt.uninteract(ent);*/
 					Entity colEnt = game.entList.get(j);
 					if (ent.isColliding(colEnt))
 					{

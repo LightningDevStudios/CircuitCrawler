@@ -216,6 +216,24 @@ public abstract class Entity
 			return false;
 	}
 	
+	public boolean collideWithCircle (Entity ent) //if ent is a circle
+	{
+		if (Math.sqrt(Math.pow(xPos - ent.xPos, 2) + Math.pow(yPos - ent.yPos, 2)) < (float)(diagonal) + ent.halfSize)
+			return true;
+		
+		else
+			return false;
+	}
+	
+	public boolean circleCollideWithCircle (Entity ent) //if both entities are circles
+	{
+		if (Math.sqrt(Math.pow(xPos - ent.xPos, 2) + Math.pow(yPos - ent.yPos, 2)) < halfSize + ent.halfSize)
+			return true;
+		
+		else
+			return false;
+	}
+	
 	public boolean isFacing (Entity ent)
 	{
 		this.updateAbsolutePointLocations();
