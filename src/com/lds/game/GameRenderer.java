@@ -138,7 +138,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 				}
 			}
 	
-			//checks for button interaction
+			//checks for whatever happens when B is pressed
 			if (game.btnB.isPressed() && ent instanceof HoldObject)
 			{
 				if (!game.player.isHoldingObject()) //not holding anything and is close enough

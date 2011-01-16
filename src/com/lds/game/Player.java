@@ -28,14 +28,14 @@ public class Player extends Character //your character, protagonist
 		}
 	}
 	
+	public void die ()
+	{
+		EntityCleaner.queueEntityForRemoval(this);
+	}
+	
 	public void attack ()
 	{
 		energy -= 5;
-	}
-	
-	public void buttonInteract (Entity ent)
-	{
-		
 	}
 	
 	@Override
