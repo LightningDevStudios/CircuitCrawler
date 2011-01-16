@@ -6,7 +6,7 @@ import com.lds.Enums.RenderMode;
 public class Player extends Character //your character, protagonist
 {
 	private int energy;
-	private boolean holdingObject, shouldStop;
+	private boolean holdingObject;
 	private HoldObject hObj;
 	
 	public Player (float xPos, float yPos, float angle, RenderMode renderMode)
@@ -43,7 +43,6 @@ public class Player extends Character //your character, protagonist
 	{
 		if (ent instanceof StaticBlock || ent instanceof HoldObject || ent instanceof Door)
 		{
-			setShouldStop(true);
 			colList.remove(ent);
 		}
 		else if (ent instanceof InvenPickup)
@@ -71,20 +70,10 @@ public class Player extends Character //your character, protagonist
 	{
 		return energy;
 	}
-	
-	public boolean shouldStop ()
-	{
-		return shouldStop;
-	}
-	
+
 	public boolean isHoldingObject()
 	{
 		return holdingObject;
-	}
-	
-	public void setShouldStop(boolean shouldStop)
-	{
-		this.shouldStop = shouldStop;
 	}
 	
 	public void holdObject(HoldObject hObj)

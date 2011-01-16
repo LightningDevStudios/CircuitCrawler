@@ -14,6 +14,7 @@ import com.lds.TextRenderer;
 import com.lds.Texture;
 import com.lds.TextureLoader;
 import com.lds.Enums.UIPosition;
+import com.lds.trigger.*;
 
 public class Game
 {
@@ -25,6 +26,7 @@ public class Game
 	public ArrayList<Entity> entList;
 	public Tile[][] tileset;
 	public ArrayList<UIEntity> UIList;
+	public ArrayList<Trigger> triggerList;
 	
 	public TextureLoader tl;
 	public EntityCleaner cleaner;
@@ -66,6 +68,7 @@ public class Game
 		
 		entList = new ArrayList<Entity>();
 		UIList = new ArrayList<UIEntity>();
+		triggerList = new ArrayList<Trigger>();
 		
 		tileset = new Tile[16][16];
 		cleaner = new EntityCleaner();
@@ -97,8 +100,8 @@ public class Game
 			}
 		}	
 				
-		door = new Door (-100.0f, -100.0f, RenderMode.COLOR);
-		door.setColorMode(255, 0, 0, 100.0f);
+		door = new Door (110.0f, 150.0f, RenderMode.COLOR);
+		door.setColorMode(255, 225, 0, 100.0f);
 		entList.add(door);
 		door.setWillCollideWithPlayer(true);
 		
@@ -116,6 +119,8 @@ public class Game
 		player.setTilesetMode(tilesetwire, 1, 0);
 		entList.add(player);
 		player.setWillCollideWithPlayer(false);
+		
+		triggerList.add(new Trigger(new ButtonCause(button), new DoorEffect(door)));
 		
 		healthBar = new UIHealthBar(200.0f, 30.0f, UIPosition.TOPLEFT, Direction.RIGHT);
 		healthBar.setTopPad(5.0f);

@@ -9,6 +9,7 @@ import android.view.MotionEvent;
 import android.content.Context;
 
 import com.lds.Stopwatch;
+import com.lds.trigger.Trigger;
 
 public class GameRenderer implements com.lds.Graphics.Renderer
 {
@@ -92,6 +93,12 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 					gl.glLoadIdentity();
 				}
 			}
+		}
+		
+		//iterate through triggers
+		for (Trigger t : game.triggerList)
+		{
+			t.update();
 		}
 		
 		//Render all entities
@@ -262,9 +269,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 							{
 								game.player.setAngle(oldAngle);
 								game.player.setPos(game.player.xPos - (x / 10) * game.player.speed, game.player.yPos - (y / 10) * game.player.speed);
-								game.player.setShouldStop(false);
 								Game.worldOutdated = false;
-								
 							}
 						}
 					}
@@ -276,7 +281,6 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 							{
 								game.player.setAngle(oldAngle);
 								game.player.setPos(game.player.xPos - (x / 10) * game.player.speed, game.player.yPos - (y / 10) * game.player.speed);
-								game.player.setShouldStop(false);
 								Game.worldOutdated = false;
 							}
 						}

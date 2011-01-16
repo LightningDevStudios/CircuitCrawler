@@ -204,7 +204,7 @@ public abstract class Entity
 		
 		colPoints[1].setX((float)(Math.cos(cp1) * diagonal) + xPos); //bottom left
 		colPoints[1].setY((float)(Math.sin(cp1) * diagonal) + yPos); //bottom left
-		
+
 		colPoints[2].setX((float)(Math.cos(cp2) * diagonal) + xPos); //top right
 		colPoints[2].setY((float)(Math.sin(cp2) * diagonal) + yPos); //top right
 		
@@ -226,7 +226,24 @@ public abstract class Entity
 		else
 			return false;
 	}
+
+	public boolean collideWithCircle (Entity ent) //if ent is a circle
+	{
+		if (Math.sqrt(Math.pow(xPos - ent.xPos, 2) + Math.pow(yPos - ent.yPos, 2)) < (float)(diagonal) + ent.halfSize)
+			return true;
+		
+		else
+			return false;
+	}
 	
+	public boolean circleCollideWithCircle (Entity ent) //if both entities are circles
+	{
+		if (Math.sqrt(Math.pow(xPos - ent.xPos, 2) + Math.pow(yPos - ent.yPos, 2)) < halfSize + ent.halfSize)
+			return true;
+		
+		else
+			return false;
+	}
 	public boolean isFacing(Entity ent)
 	{
 		float angleBetween = (float)Math.toDegrees(Math.atan2((ent.getYPos() - yPos) , (ent.getXPos() - xPos)));
