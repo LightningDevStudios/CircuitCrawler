@@ -108,7 +108,7 @@ public class Game
 			}
 		}	
 		
-		door = new Door (150.0f, 180.0f, RenderMode.COLOR);
+		door = new Door (90.0f, 180.0f, RenderMode.COLOR);
 		door.setColorMode(255, 225, 0, 225);
 		entList.add(door);
 		door.setWillCollideWithPlayer(true);
