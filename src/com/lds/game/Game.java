@@ -101,9 +101,9 @@ public class Game
 				}
 			}
 		}	
-				
+		
 		door = new Door (150.0f, 180.0f, RenderMode.COLOR);
-		door.setColorMode(255, 225, 0, 100.0f);
+		door.setColorMode(255, 225, 0, 225);
 		entList.add(door);
 		door.setWillCollideWithPlayer(true);
 		
@@ -152,13 +152,11 @@ public class Game
 		
 		btnA = new UIButton(80.0f, 80.0f, UIPosition.BOTTOMRIGHT);
 		btnA.autoPadding(0.0f, 0.0f, 5.0f, 90.0f);
-		//btnA.renderMode = RenderMode.COLOR;
 		btnA.setColorMode(86, 93, 128, 128);
 		btnA.setIntervalTime(Stopwatch.elapsedTimeInMilliseconds());
 		
 		btnB = new UIButton(80.0f, 80.0f, UIPosition.BOTTOMRIGHT);
 		btnB.autoPadding(0.0f, 0.0f, 90.0f, 5.0f);
-		//btnB.renderMode = RenderMode.COLOR;
 		btnB.setColorMode(200, 93, 50, 128);
 		btnB.setIntervalTime(Stopwatch.elapsedTimeInMilliseconds());
 		
@@ -232,8 +230,8 @@ public class Game
 		
 		int minXBound = (int)Math.floor(((minX + (tilesetWidth / 2)) / Tile.TILE_SIZE_F) - 1);
 		int maxXBound = (int)Math.ceil(((maxX + (tilesetWidth / 2)) / Tile.TILE_SIZE_F) - 1);
-		int minYBound = 14 - (int)Math.floor(((maxY + (tilesetHeight / 2)) / Tile.TILE_SIZE_F) - 1);
-		int maxYBound = 15 - (int)Math.ceil(((minY + (tilesetHeight / 2)) / Tile.TILE_SIZE_F) - 1);
+		int minYBound = (tileset.length - 2) - (int)Math.floor(((maxY + (tilesetHeight / 2)) / Tile.TILE_SIZE_F) - 1);
+		int maxYBound = (tileset.length - 1) - (int)Math.ceil(((minY + (tilesetHeight / 2)) / Tile.TILE_SIZE_F) - 1);
 		
 		if (minXBound < 0) { minXBound = 0; }
 		if (maxXBound > tileset[0].length) { maxXBound = tileset[0].length; }
@@ -272,51 +270,24 @@ public class Game
 		float entMinY = ent.yPos - (float)ent.getDiagonal();
 		float entMaxY = ent.yPos + (float)ent.getDiagonal();
 			
-			//values are opposite for entMin/Max because only the far tips have to be inside the screen (leftmost point on right border of screen)
-			if (entMinX <= maxX && entMaxX >= minX && entMinY <= maxY && entMaxY >= minY)
-			{
-				ent.isRendered = true;
-			}
-			else
-			{
-				ent.isRendered = false;
-			}
-	}
-	
-	public Tile nearestTile(Entity ent)
-	{
-		int x = (int)ent.getXPos();
-		int y = (int)ent.getYPos();
-		
-		int tileLeft = x / Tile.TILE_SIZE;
-		int tileRight = tileLeft + 1;
-		int tileDown = y / Tile.TILE_SIZE;
-		int tileUp = tileDown + 1;
-		
-		int left = x - (Tile.TILE_SIZE * (x / Tile.TILE_SIZE));
-		int right = Tile.TILE_SIZE - left;
-		int down = y - (Tile.TILE_SIZE) * (y / Tile.TILE_SIZE);
-		int up = Tile.TILE_SIZE - down;
-		
-		if (left <= right && up <= down)
+		//values are opposite for entMin/Max because only the far tips have to be inside the screen (leftmost point on right border of screen)
+		if (entMinX <= maxX && entMaxX >= minX && entMinY <= maxY && entMaxY >= minY)
 		{
-			return tileset[tileUp][tileLeft];
-		}
-		else if (left <= right && up > down)
-		{
-			return tileset[tileDown][tileLeft];
-		}
-		else if (left > right && up <= down)
-		{
-			return tileset[tileUp][tileRight];
-		}
-		else if (left > right && up > down)
-		{
-			return tileset[tileDown][tileRight];
+			ent.isRendered = true;
 		}
 		else
 		{
-			return null;
+			ent.isRendered = false;
 		}
+	}
+	
+	public Tile nearestTile(Entity ent)
+	{	
+		float tilesetWidth = tileset[0].length * Tile.TILE_SIZE_F;
+		float tilesetHeight = tileset.length * Tile.TILE_SIZE_F;
+		int x = (int)(((ent.xPos + (tilesetWidth / 2)) / Tile.TILE_SIZE_F) - 1) + 1;
+		int y = (int)(((ent.xPos + (tilesetHeight / 2)) / Tile.TILE_SIZE_F) - 1) + 1;
+		System.out.println(x + ", " + y);
+		return tileset[y][x];
 	}
 }

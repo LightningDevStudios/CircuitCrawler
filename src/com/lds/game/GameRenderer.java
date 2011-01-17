@@ -103,6 +103,8 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 			}
 		}
 		
+		Tile test = game.nearestTile(game.player);
+		
 		//iterate through triggers
 		
 		
