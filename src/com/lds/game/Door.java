@@ -4,23 +4,23 @@ import com.lds.Enums.RenderMode;
 
 public class Door extends PhysEnt
 {
-	private float permanentX, permanentY;
+	private float closedX, closedY;
 	
 	public Door (float xPos, float yPos, RenderMode renderMode)
 	{
-		 super(Entity.DEFAULT_SIZE, xPos, yPos, 0.0f, 1.0f, 0.5f, true, renderMode, 0.69f, 10.0f, 0.069f);
-		 permanentX = xPos;
-		 permanentY = yPos;
+		 super(Entity.DEFAULT_SIZE, xPos, yPos, 0.0f, 1.0f, 1.0f, true, renderMode, 100.0f, 100.0f, 1.0f);
+		 closedX = xPos;
+		 closedY = yPos;
 	}
 
-	public void open ()
+	public void open()
 	{
-		this.moveTo(permanentX + size / 2, permanentY);
+		setPos(closedX + 200, closedY);
 	}
 	
 	
-	public void close ()
+	public void close()
 	{	
-		this.moveTo(permanentX - (size / 2), permanentY);
+		setPos(closedX, closedY);
 	}
 }

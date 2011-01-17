@@ -2,23 +2,23 @@ package com.lds.trigger;
 
 import com.lds.game.Door;
 
-public class DoorEffect extends Effect
+public class EffectDoor extends Effect
 {
 	private Door door;
 	
-	public DoorEffect (Door door)
+	public EffectDoor(Door door)
 	{
 		this.door = door;
 	}
 	
 	@Override
-	public void doEffect ()
+	public void fireOutput()
 	{
 		door.open();
 	}
 	
 	@Override
-	public void undoEffect ()
+	public void unfireOutput()
 	{
 		door.close();
 	}

@@ -14,6 +14,8 @@ import com.lds.TextRenderer;
 import com.lds.Texture;
 import com.lds.TextureLoader;
 import com.lds.Enums.UIPosition;
+
+import com.lds.UI.*;
 import com.lds.trigger.*;
 
 public class Game
@@ -100,7 +102,7 @@ public class Game
 			}
 		}	
 				
-		door = new Door (110.0f, 150.0f, RenderMode.COLOR);
+		door = new Door (150.0f, 180.0f, RenderMode.COLOR);
 		door.setColorMode(255, 225, 0, 100.0f);
 		entList.add(door);
 		door.setWillCollideWithPlayer(true);
@@ -120,7 +122,7 @@ public class Game
 		entList.add(player);
 		player.setWillCollideWithPlayer(false);
 		
-		triggerList.add(new Trigger(new ButtonCause(button), new DoorEffect(door)));
+		triggerList.add(new Trigger(new CauseNOT(new CauseButton(button)), new EffectDoor(door)));
 		
 		healthBar = new UIHealthBar(200.0f, 30.0f, UIPosition.TOPLEFT, Direction.RIGHT);
 		healthBar.setTopPad(5.0f);

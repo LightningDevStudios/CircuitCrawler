@@ -2,17 +2,17 @@ package com.lds.trigger;
 
 public abstract class Effect 
 {
-	public Effect ()
+	public Effect()
 	{
 		
 	}
 	
-	public void doEffect ()
+	public void fireOutput()
 	{
 		
 	}
 	
-	public void undoEffect ()
+	public void unfireOutput()
 	{
 		
 	}

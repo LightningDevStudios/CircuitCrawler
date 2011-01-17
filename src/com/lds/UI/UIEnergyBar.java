@@ -1,7 +1,8 @@
-package com.lds.game;
+package com.lds.UI;
 
 import com.lds.Enums.Direction;
 import com.lds.Enums.UIPosition;
+import com.lds.game.Player;
 
 public class UIEnergyBar extends UIProgressBar
 {

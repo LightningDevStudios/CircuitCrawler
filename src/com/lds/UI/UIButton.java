@@ -1,4 +1,4 @@
-package com.lds.game;
+package com.lds.UI;
 
 import com.lds.Enums.UIPosition;
 import com.lds.Stopwatch;

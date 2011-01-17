@@ -64,8 +64,8 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 		//calculates x and y distance of movement
 		interpX = (x - xPos);
 		interpY = (y - yPos);
-		if (interpX == 0) { interpX = 0.1f; }
-		if (interpY == 0) { interpY = 0.1f; }
+		if (interpX == 0) { interpX = 0.001f; }
+		if (interpY == 0) { interpY = 0.001f; }
 		double theta = Math.atan2((double)interpY, (double)interpX);
 		if (theta < 0)
 			theta += 2 * Math.PI;
@@ -153,8 +153,8 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	{
 		endXScl = xScl * x;
 		endYScl = yScl * y;
-		if (interpXScl == 0) { interpXScl = 0.1f; }
-		if (interpYScl == 0) { interpYScl = 0.1f; }
+		if (interpXScl == 0) { interpXScl = 0.001f; }
+		if (interpYScl == 0) { interpYScl = 0.001f; }
 		double ratio = Math.atan2((double)interpYScl, (double)interpXScl);
 		if (ratio < 0)
 			ratio += 2 * Math.PI;
@@ -238,7 +238,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 			setYPos(getYPos() + (moveSpeed / 1000 * interval * moveY));
 			
 			//error check
-			if (xPos <= endX + (moveSpeed / 2000 * interval * moveX) && xPos >= endX - (moveSpeed /2000 * interval * moveX) || yPos <= endY + (moveSpeed / 2000 * interval * moveY) && yPos >= endY - (moveSpeed / 2000 * interval * moveY))
+			if (xPos <= endX + (moveSpeed / 2000 * interval * moveX) && xPos >= endX - (moveSpeed / 2000 * interval * moveX) || yPos <= endY + (moveSpeed / 2000 * interval * moveY) && yPos >= endY - (moveSpeed / 2000 * interval * moveY))
 			{
 				xPos = endX;
 				yPos = endY;

@@ -9,7 +9,10 @@ import android.view.MotionEvent;
 import android.content.Context;
 
 import com.lds.Stopwatch;
+import com.lds.UI.UIButton;
+import com.lds.UI.UIJoypad;
 import com.lds.trigger.Trigger;
+import com.lds.UI.*;
 
 public class GameRenderer implements com.lds.Graphics.Renderer
 {
@@ -59,6 +62,11 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		if (frameCount == 100)
 			Debug.startMethodTracing("LDS_Game4");
 		
+		for (Trigger t : game.triggerList)
+		{
+			t.update();
+		}
+		
 		//clear the screen
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		
@@ -96,10 +104,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		}
 		
 		//iterate through triggers
-		for (Trigger t : game.triggerList)
-		{
-			t.update();
-		}
+		
 		
 		//Render all entities
 		for (int i = 0; i < game.entList.size(); i++)
@@ -191,7 +196,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		{
 			ent.update();
 			
-			gl.glTranslatef(ent.xPos, ent.yPos, 0.0f);
+			gl.glTranslatef(ent.getXPos(), ent.getYPos(), 0.0f);
 			ent.draw(gl);
 			
 			gl.glLoadIdentity();
@@ -235,7 +240,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		for (UIEntity ent : game.UIList)
 		{
 			//loop through UIList, see if input is within UIEntity bounds
-			if (xInput >= ent.xPos - ent.xSize / 2 && xInput <= ent.xPos + ent.xSize / 2 && yInput >= ent.yPos - ent.ySize / 2 && yInput <= ent.yPos + ent.ySize / 2)
+			if (xInput >= ent.getXPos() - ent.getXSize() / 2 && xInput <= ent.getXPos() + ent.getXSize() / 2 && yInput >= ent.getYPos() - ent.getYSize() / 2 && yInput <= ent.getYPos() + ent.getYSize() / 2)
 			{
 				//Specific joypad code
 				//TODO move to UIEntity generic method

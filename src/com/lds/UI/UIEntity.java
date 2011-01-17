@@ -1,4 +1,4 @@
-package com.lds.game;
+package com.lds.UI;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -6,6 +6,7 @@ import java.nio.FloatBuffer;
 
 import javax.microedition.khronos.opengles.GL10;
 
+import com.lds.game.Game;
 import com.lds.Enums.RenderMode;
 import com.lds.Enums.UIPosition;
 import com.lds.Texture;

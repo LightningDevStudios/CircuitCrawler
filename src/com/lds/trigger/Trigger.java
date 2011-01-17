@@ -2,24 +2,42 @@ package com.lds.trigger;
 
 public class Trigger
 {
-	private Cause cause;
-	private Effect effect;
+	protected Cause cause;
+	protected Effect effect;
+	protected boolean firing;
 	
-	public Trigger (Cause cause, Effect effect)
+	public Trigger(Cause cause, Effect effect)
 	{
 		this.cause = cause;
 		this.effect = effect;
+		firing = false;
 	}
 	
-	public void update ()
+	public void update()
 	{
-		if (cause.isTriggered())
+		cause.update();
+		
+		if (!firing)
 		{
-			effect.doEffect();
+			if(cause.isTriggered())
+			{
+				effect.fireOutput();
+				firing = true;
+			}
 		}
+				
 		else
 		{
-			effect.undoEffect();
+			if(!cause.isTriggered())
+			{
+				effect.unfireOutput();
+				firing = false;
+			}
 		}
+	}
+	
+	public boolean isFiring()
+	{
+		return firing;
 	}
 }
