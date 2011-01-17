@@ -235,10 +235,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	@Override
 	//TODO move heldObj back when it collides with something
 	public void onTouchInput(MotionEvent e) 
-	{
-		//TODO remove this
-		System.out.println("input");
-		
+	{		
 		//get raw input
 		float xInput = e.getRawX() - Game.screenW / 2;
 		float yInput = -e.getRawY() + Game.screenH / 2;
@@ -298,7 +295,6 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 					}
 					
 					//move the held object if one exists
-					//TODO move to player?
 					if (game.player.isHoldingObject())
 						game.player.updateHeldObjectPosition();
 					

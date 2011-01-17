@@ -345,14 +345,7 @@ public abstract class Entity
 	{
 		
 	}
-	
-	//this is a blank method to be overriden by PickupObj
-	//TODO: get rid of this shell, run pickupScale directly from GameRenderer
-	public void pickupScale ()
-	{
 		
-	}
-	
 	/**********************
 	 * RenderMode methods *
 	 **********************/

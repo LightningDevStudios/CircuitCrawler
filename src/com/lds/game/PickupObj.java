@@ -14,7 +14,7 @@ public abstract class PickupObj extends PhysEnt //pickup objects are picked up, 
 	{
 		pickupScale();
 	}
-	@Override
+
 	public void pickupScale() //pickup objects will constantly scale up and down using this method
 	{
 		if (xScl == 1.0f)

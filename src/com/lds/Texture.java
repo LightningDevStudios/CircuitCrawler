@@ -9,8 +9,6 @@ import android.graphics.BitmapFactory;
 //In C++ this would be a struct, but alas...
 public class Texture 
 {
-	
-	//TODO find a method to store GL caps for texture params
 	private int id, xSize, ySize, xPixels, yPixels, xTiles, yTiles, texturePtr;
 	private int minFilter, magFilter, wrapS, wrapT;
 	private Bitmap bmp;
