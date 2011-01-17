@@ -8,6 +8,7 @@ import android.os.Debug;
 import android.view.MotionEvent;
 import android.content.Context;
 
+import com.lds.EntityCleaner;
 import com.lds.Stopwatch;
 import com.lds.UI.UIButton;
 import com.lds.UI.UIJoypad;
@@ -103,7 +104,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 			}
 		}
 		
-		Tile test = game.nearestTile(game.player);
+		//Tile test = game.nearestTile(game.player);
 		
 		//iterate through triggers
 		
@@ -113,6 +114,9 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		{
 			Entity ent = game.entList.get(i);
 			ent.update();
+			
+			if (ent.xScl == 0.0f || ent.yScl == 0.0f)
+				EntityCleaner.queueEntityForRemoval(ent);
 			
 			//checks for collision with all other entities in entList if needed
 			if (Game.worldOutdated)
@@ -265,7 +269,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 					game.player.setAngle(newAngle - 90.0f);
 					game.player.setPos(game.player.xPos + (x / 10) * game.player.speed, game.player.yPos + (y / 10) * game.player.speed);
 					Game.worldOutdated = true;
-										
+					
 					//check collision and reverse motion if it's colliding with something solid
 					for (Entity colEnt : game.entList)
 					{
@@ -297,6 +301,14 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 					//TODO move to player?
 					if (game.player.isHoldingObject())
 						game.player.updateHeldObjectPosition();
+					
+					Tile nTile = game.nearestTile(game.player);
+					
+					if (nTile.isPit())
+					{
+						game.player.moveTo(nTile.getXPos(), nTile.getYPos());
+						game.player.scaleTo(0.0f, 0.0f);
+					}
 					
 					//move camera to follow player
 					game.camPosX = game.player.xPos;

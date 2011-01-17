@@ -94,6 +94,11 @@ public class Game
 					tileset[i][j].setTilesetMode(tilesetwire, 2, 0);
 					tileset[i][j].setAsWall();
 				}
+				else if (j == 9)
+				{
+					tileset[i][j].setTilesetMode(tilesetwire, 3, 0);
+					tileset[i][j].setAsFloor();
+				}
 				else
 				{
 					tileset[i][j].setTilesetMode(tilesetwire, 0, 0);
@@ -234,10 +239,10 @@ public class Game
 		int maxYBound = (tileset.length - 1) - (int)Math.ceil(((minY + (tilesetHeight / 2)) / Tile.TILE_SIZE_F) - 1);
 		
 		if (minXBound < 0) { minXBound = 0; }
-		if (maxXBound > tileset[0].length) { maxXBound = tileset[0].length; }
+		if (maxXBound >= tileset[0].length) { maxXBound = tileset[0].length - 1; }
 		
 		if (minYBound < 0) { minYBound = 0; }
-		if (maxYBound > tileset.length) { maxYBound = tileset.length; }
+		if (maxYBound >= tileset.length) { maxYBound = tileset.length - 1; }
 		
 		//set all to false
 		for (Tile[] ts : tileset)
@@ -286,8 +291,8 @@ public class Game
 		float tilesetWidth = tileset[0].length * Tile.TILE_SIZE_F;
 		float tilesetHeight = tileset.length * Tile.TILE_SIZE_F;
 		int x = (int)(((ent.xPos + (tilesetWidth / 2)) / Tile.TILE_SIZE_F) - 1) + 1;
-		int y = (int)(((ent.xPos + (tilesetHeight / 2)) / Tile.TILE_SIZE_F) - 1) + 1;
+		int y = ((int)tilesetHeight - 1) - (int)(((ent.yPos + (tilesetHeight / 2)) / Tile.TILE_SIZE_F) - 1) + 1;
 		System.out.println(x + ", " + y);
-		return tileset[y][x];
+		return tileset[x][y];
 	}
 }
