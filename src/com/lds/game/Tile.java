@@ -79,4 +79,30 @@ public class Tile extends StaticEnt
 	{
 		state = TileStates.PIT;
 	}
+	
+	public boolean isWall()
+	{
+		if (state == TileStates.WALL)
+			return true;
+		return false;
+	}
+	
+	public boolean isFloor()
+	{
+		if (state == TileStates.FLOOR)
+			return true;
+		return false;
+	}
+	
+	public boolean isPit()
+	{
+		if (state == TileStates.PIT)
+			return true;
+		return false;
+	}
+	
+	public TileStates getTileState()
+	{
+		return state;
+	}
 }
