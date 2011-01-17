@@ -108,7 +108,7 @@ public class Game
 			}
 		}	
 		
-		door = new Door (90.0f, 180.0f, RenderMode.COLOR);
+		door = new Door (100.0f, 150.0f, RenderMode.COLOR);
 		door.setColorMode(255, 225, 0, 225);
 		entList.add(door);
 		door.setWillCollideWithPlayer(true);
@@ -128,7 +128,7 @@ public class Game
 		entList.add(player);
 		player.setWillCollideWithPlayer(false);
 		
-		triggerList.add(new Trigger(new CauseNOT(new CauseButton(button)), new EffectDoor(door)));
+		triggerList.add(new Trigger(new CauseButton(button), new EffectDoor(door)));
 		
 		healthBar = new UIHealthBar(200.0f, 30.0f, UIPosition.TOPLEFT, Direction.RIGHT);
 		healthBar.setTopPad(5.0f);

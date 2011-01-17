@@ -2,19 +2,22 @@ package com.lds.game;
 
 import com.lds.Enums.RenderMode;
 import com.lds.Stopwatch;
+import com.lds.Vector2f;
 
 public abstract class PhysEnt extends Entity //physics objects are movable, such as doors, blocks, etc.
 {
 	//interpolation data
-	public float interpX, interpY, interpXScl, interpYScl, interpAngle;
-	public float endX, endY, endXScl, endYScl, endAngle;
+	public float interpXScl, interpYScl, interpAngle;
+	public float endXScl, endYScl, endAngle;
 	public int interpMoveTimeMs, interpRotTimeMs, interpSclTimeMs;
-	private float moveX, moveY, scaleX, scaleY;
+	private float scaleX, scaleY;
 	protected float moveSpeed;
 	protected float rotSpeed;
 	protected float sclSpeed;
 	private boolean isInterpTrans, isInterpRot, isInterpScl;
 	private boolean isRotatingCCW;
+	protected Vector2f moveVec, moveInterpVec;
+	protected int moveInterpCount;
 	
 	public PhysEnt(float size, float xPos, float yPos, RenderMode renderMode, float moveSpeed, float rotSpeed, float sclSpeed)
 	{
@@ -26,13 +29,13 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 		super(size, xPos, yPos, angle, xScl, yScl, isSolid, renderMode);
 		
 		//initialize interpolation variables
-		endX = xPos;
-		endY = yPos;
 		endXScl = xScl;
 		endYScl = yScl;
 		endAngle = angle;
 		this.moveSpeed = moveSpeed;
 		this.rotSpeed = rotSpeed;
+		this.sclSpeed = sclSpeed;
+		moveVec = new Vector2f();
 	}
 	
 	@Override
@@ -61,20 +64,8 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	//sets position to to new x and y and interpolates
 	public void moveTo (float x, float y)
 	{
-		//calculates x and y distance of movement
-		interpX = (x - xPos);
-		interpY = (y - yPos);
-		if (interpX == 0) { interpX = 0.001f; }
-		if (interpY == 0) { interpY = 0.001f; }
-		double theta = Math.atan2((double)interpY, (double)interpX);
-		if (theta < 0)
-			theta += 2 * Math.PI;
-		moveX = (float)Math.cos(theta);
-		moveY = (float)Math.sin(theta);
-		endX = x;
-		endY = y;
+		moveVec.set(x - xPos, y - yPos);
 		isInterpTrans = true;
-		
 		interpMoveTimeMs = Stopwatch.elapsedTimeInMilliseconds();
 	}
 	
@@ -121,19 +112,8 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	//much like moveTo, but instead of going to a specific point, move() moves relative to the current position
 	public void move (float x, float y)
 	{
-		interpX = x;
-		interpY = y;
-		if (interpX == 0) { interpX = 0.1f; }
-		if (interpY == 0) { interpY = 0.1f; }
-		double theta = Math.atan2((double)interpY, (double)interpX);
-		if (theta < 0)
-			theta += 2 * Math.PI;
-		moveX = (float)Math.cos(theta);
-		moveY = (float)Math.sin(theta);
-		endX = xPos + x;
-		endY = yPos + y;
+		moveVec.set(x, y);
 		isInterpTrans = true;
-
 		interpMoveTimeMs = Stopwatch.elapsedTimeInMilliseconds();
 	}
 	
@@ -171,9 +151,8 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	{
 		if (isInterpTrans)
 		{
-
-			xPos -= moveSpeed / 1000 * (float)(Stopwatch.elapsedTimeInMilliseconds() - interpRotTimeMs) * interpX;
-			yPos -= (moveSpeed / 10) * interpY;
+			xPos -= moveInterpVec.getX();
+			yPos -= moveInterpVec.getY();
 			isInterpTrans = false;
 		}
 		
@@ -200,8 +179,6 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	{
 		xPos = x;
 		yPos = y;
-		endX = x;
-		endY = y;
 		Game.worldOutdated = true;
 	}
 	
@@ -232,19 +209,21 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 		//if the object needs to be interpolated
 		if (isInterpTrans)
 		{		
-			//increments movement
-			float interval = (float)(Stopwatch.elapsedTimeInMilliseconds() - interpMoveTimeMs);
-			setXPos(getXPos() + (moveSpeed / 1000 * interval * moveX));
-			setYPos(getYPos() + (moveSpeed / 1000 * interval * moveY));
+			moveInterpCount++;
+			moveInterpVec = Vector2f.scale(Vector2f.norm(moveVec), moveSpeed / 1000 * (Stopwatch.elapsedTimeInMilliseconds() - interpMoveTimeMs));
+			xPos += moveInterpVec.getX();
+			yPos += moveInterpVec.getY();
 			
-			//error check
-			if (xPos <= endX + (moveSpeed / 2000 * interval * moveX) && xPos >= endX - (moveSpeed / 2000 * interval * moveX) || yPos <= endY + (moveSpeed / 2000 * interval * moveY) && yPos >= endY - (moveSpeed / 2000 * interval * moveY))
+			if (moveVec.mag() - moveInterpVec.mag() * moveInterpCount <= 0)
 			{
-				xPos = endX;
-				yPos = endY;
+				Vector2f vecToEnd = Vector2f.sub(moveVec, Vector2f.scale(moveInterpVec, moveInterpCount));
+				xPos += vecToEnd.getX();
+				yPos += vecToEnd.getY();
 				isInterpTrans = false;
 				isRendered = true;
+				moveInterpCount = 0;
 			}
+			
 			interpMoveTimeMs = Stopwatch.elapsedTimeInMilliseconds();
 			Game.worldOutdated = true;
 		}

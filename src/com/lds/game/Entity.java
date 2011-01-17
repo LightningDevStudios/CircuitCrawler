@@ -7,6 +7,7 @@ import com.lds.Point;
 import com.lds.Texture;
 import com.lds.TilesetHelper;
 import com.lds.Enums.RenderMode;
+import com.lds.Vector2f;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
