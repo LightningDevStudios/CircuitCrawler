@@ -1,17 +1,17 @@
 package com.lds.game;
 
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-
 import com.lds.Enums.RenderMode;
+import com.lds.Enums.TileStates;
+import com.lds.Texture;
 import com.lds.TilesetHelper;
 
 
-public class Tile extends Entity
+public class Tile extends StaticEnt
 {
 	public static final int TILE_SIZE = 72;
 	public static final float TILE_SIZE_F = 72.0f;
 	
+	private TileStates state;
 	public int tileX, tileY, tileID;
 	
 	public Tile(float size, int tilePosX, int tilePosY, int tilesetX, int tilesetY)
@@ -21,67 +21,62 @@ public class Tile extends Entity
 	}
 	
 	@Override
-	public void updateTileset(int texturePtr, int x, int y, int min, int max)
+	public void updateTileset(Texture tex, int x, int y)
 	{
-		if (renderMode == RenderMode.TILESET)
-		{
-			this.texturePtr = texturePtr;
-			texture = TilesetHelper.getTextureVertices(x, y, min, max);
-			
-			ByteBuffer byteBuf = ByteBuffer.allocateDirect(texture.length * 4);
-			byteBuf.order(ByteOrder.nativeOrder());
-			textureBuffer = byteBuf.asFloatBuffer();
-			textureBuffer.put(texture);
-			textureBuffer.position(0);
-			
-			tileX = x;
-			tileY = y;
-		}
-	}
-	
-	@Override
-	public void updateTileset(int texturePtr, int tileID)
-	{
-		if (renderMode == RenderMode.TILESET)
-		{
-			this.texturePtr = texturePtr;
-			texture = TilesetHelper.getTextureVertices(tileID);
-			
-			ByteBuffer byteBuf = ByteBuffer.allocateDirect(texture.length * 4);
-			byteBuf.order(ByteOrder.nativeOrder());
-			textureBuffer = byteBuf.asFloatBuffer();
-			textureBuffer.put(texture);
-			textureBuffer.position(0);
-		}
-	}
-	
-	@Override
-	public void updateTileset(int x, int y, int min, int max)
-	{
-		if (renderMode == RenderMode.TILESET)
-		{
-			texture = TilesetHelper.getTextureVertices(x, y, min, max);
 		
-			ByteBuffer byteBuf = ByteBuffer.allocateDirect(texture.length * 4);
-			byteBuf.order(ByteOrder.nativeOrder());
-			textureBuffer = byteBuf.asFloatBuffer();
-			textureBuffer.put(texture);
-			textureBuffer.position(0);
-		}
+		super.updateTileset(tex, x, y);
+		tileX = x;
+		tileY = y;
+	}
+	
+	@Override
+	public void updateTileset(Texture tex, int tileID)
+	{
+		super.updateTileset(tex, tileID);
+		tileX = TilesetHelper.getTilesetX(tileID, tex);
+		tileY = TilesetHelper.getTilesetY(tileID, tex);
+	}
+	
+	@Override
+	public void updateTileset(int x, int y)
+	{
+		super.updateTileset(x, y);
+		tileX = x;
+		tileY = y;
 	}
 	
 	@Override
 	public void updateTileset(int tileID)
 	{
-		if (renderMode == RenderMode.TILESET)
+		super.updateTileset(tileID);
+		if (tex != null)
 		{
-			texture = TilesetHelper.getTextureVertices(tileID);
-			
-			ByteBuffer byteBuf = ByteBuffer.allocateDirect(texture.length * 4);
-			byteBuf.order(ByteOrder.nativeOrder());
-			textureBuffer = byteBuf.asFloatBuffer();
-			textureBuffer.put(texture);
-			textureBuffer.position(0);
+			tileX = TilesetHelper.getTilesetX(tileID, tex);
+			tileY = TilesetHelper.getTilesetY(tileID, tex);
 		}
+	}
+	
+	@Override
+	public boolean isColliding(Entity ent)
+	{
+		if (state != TileStates.WALL)
+			return false;
+		else
+			return super.isColliding(ent);
+	}
+	
+	public void setAsWall()
+	{
+		state = TileStates.WALL;
+	}
+	
+	public void setAsFloor()
+	{
+		state = TileStates.FLOOR;
+	}
+	
+	public void setAsPit()
+	{
+		state = TileStates.PIT;
 	}
 }

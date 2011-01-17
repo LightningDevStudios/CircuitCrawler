@@ -4,6 +4,7 @@ import javax.microedition.khronos.opengles.GL10;
 
 import com.lds.EntityCleaner;
 import com.lds.Point;
+import com.lds.Texture;
 import com.lds.TilesetHelper;
 import com.lds.Enums.RenderMode;
 
@@ -27,8 +28,8 @@ public abstract class Entity
 	//graphics data
 	protected float angle, size, xPos, yPos, xScl, yScl, halfSize;
 	protected float colorR, colorG, colorB, colorA;
-	protected int texturePtr;
 	protected RenderMode renderMode;
+	protected Texture tex;
 	
 	protected float[] vertices;
 	protected float[] texture;
@@ -119,7 +120,7 @@ public abstract class Entity
 		if (renderMode == RenderMode.TEXTURE || renderMode == RenderMode.TILESET)
 		{
 			gl.glEnable(GL10.GL_TEXTURE_2D);
-			gl.glBindTexture(GL10.GL_TEXTURE_2D, texturePtr);
+			gl.glBindTexture(GL10.GL_TEXTURE_2D, tex.getTexture());
 		}
 		
 		//Sets the front face of a polygon based on rotation (Clockwise - GL_CW, Counter-clockwise - GL_CCW)
@@ -196,14 +197,14 @@ public abstract class Entity
 		colPoints[0].setX((float)(Math.cos(this.rad + diagAngle) * diagonal) + xPos); //top left
 		colPoints[0].setY((float)(Math.sin(this.rad + diagAngle) * diagonal) + yPos); //top left
 		
-		colPoints[1].setX((float)(Math.cos(this.rad + Math.PI - diagAngle) * diagonal) + xPos); //bottom left
-		colPoints[1].setY((float)(Math.sin(this.rad + Math.PI - diagAngle) * diagonal) + yPos); //bottom left
+		colPoints[1].setX((float)(Math.cos(this.rad + Math.PI - diagAngle) * diagonal) + xPos); //bottom right?
+		colPoints[1].setY((float)(Math.sin(this.rad + Math.PI - diagAngle) * diagonal) + yPos); //bottom right?
 		
-		colPoints[2].setX((float)(Math.cos(this.rad - diagAngle) * diagonal) + xPos); //
-		colPoints[2].setY((float)(Math.sin(this.rad - diagAngle) * diagonal) + yPos);
+		colPoints[2].setX((float)(Math.cos(this.rad - diagAngle) * diagonal) + xPos); //top right
+		colPoints[2].setY((float)(Math.sin(this.rad - diagAngle) * diagonal) + yPos); //top right
 		
-		colPoints[3].setX((float)(Math.cos(this.rad - Math.PI + diagAngle) * diagonal) + xPos);
-		colPoints[3].setY((float)(Math.sin(this.rad - Math.PI + diagAngle) * diagonal) + yPos);
+		colPoints[3].setX((float)(Math.cos(this.rad - Math.PI + diagAngle) * diagonal) + xPos); //bottom left?
+		colPoints[3].setY((float)(Math.sin(this.rad - Math.PI + diagAngle) * diagonal) + yPos); //bottom left?
 	}
 	
 	public boolean closeEnough (Entity ent)
@@ -215,8 +216,29 @@ public abstract class Entity
 			return false;
 	}
 	
+	public boolean collideWithCircle (Entity ent) //if ent is a circle
+	{
+		if (Math.sqrt(Math.pow(xPos - ent.xPos, 2) + Math.pow(yPos - ent.yPos, 2)) < (float)(diagonal) + ent.halfSize)
+			return true;
+		
+		else
+			return false;
+	}
+	
+	public boolean circleCollideWithCircle (Entity ent) //if both entities are circles
+	{
+		if (Math.sqrt(Math.pow(xPos - ent.xPos, 2) + Math.pow(yPos - ent.yPos, 2)) < halfSize + ent.halfSize)
+			return true;
+		
+		else
+			return false;
+	}
+	
 	public boolean isFacing (Entity ent)
 	{
+		this.updateAbsolutePointLocations();
+		ent.updateAbsolutePointLocations();
+		
 		float m = (this.colPoints[0].getY() - this.colPoints[1].getY()) / (this.colPoints[0].getX() - this.colPoints[1].getX());
 		float b1 = (colPoints[0].getY() - m * colPoints[0].getX());
 		float b2 = (colPoints[3].getY() - m * colPoints[3].getX());
@@ -261,80 +283,46 @@ public abstract class Entity
 			return false;
 		}
 		
-		//used to determine the number of collisions with respect to the axes. if it is 4 after the check, method returns true
-		int colCount = 0;
-		float ent1Low, ent1High, ent2Low, ent2High;
-		
-		//calculates 4 slopes to use with the SAT
-
-		colSlopes[0] = ((this.colPoints[0].getY() - this.colPoints[1].getY()) / (this.colPoints[0].getX() - this.colPoints[1].getX()));
-		colSlopes[1] = -1 / colSlopes[0];
-		colSlopes[2] = ((ent.colPoints[0].getY() - ent.colPoints[1].getY()) / (ent.colPoints[0].getX() - ent.colPoints[1].getX()));
-		colSlopes[3] = -1 / colSlopes[2];
-		
-		//checks for collision on each of the 4 slopes
-		
-		for (float slope : colSlopes)
+		if (collisionCheck(this, ent) || collisionCheck(ent, this))
 		{
-			
-			this.colPoints[0].setColC((colPoints[0].getY() - slope * colPoints[0].getX()));
-			ent1Low = this.colPoints[0].getColC();
-			ent1High = this.colPoints[0].getColC();
-			//iterates through each point on ent1 to get high and low c values
-			for (int i = 1; i < this.colPoints.length; i++)
-			{
-				//finds c (as in y = mx + c) for the line going through each point
-				colPoints[i].setColC((colPoints[i].getY() - slope * colPoints[i].getX()));
-				if (ent1Low > colPoints[i].getColC())
-				{
-					ent1Low = colPoints[i].getColC();
-				}
-				if (ent1High < colPoints[i].getColC())
-				{
-					ent1High = colPoints[i].getColC();
-				}
-			}
-			
-			//same for ent2
-			ent.colPoints[0].setColC((ent.colPoints[0].getY() - slope * ent.colPoints[0].getX()));
-			ent2Low = ent.colPoints[0].getColC();
-			ent2High = ent.colPoints[0].getColC();
-			//iterates through each point on ent1 to get high and low c values
-			for (int i = 1; i < ent.colPoints.length; i++)
-			{
-				//finds c (as in y = mx + c) for the line going through each point
-				ent.colPoints[i].setColC((ent.colPoints[i].getY() - slope * ent.colPoints[i].getX()));
-				if (ent2Low > ent.colPoints[i].getColC())
-				{
-					ent2Low = ent.colPoints[i].getColC();
-				}
-				if (ent2High < ent.colPoints[i].getColC())
-				{
-					ent2High = ent.colPoints[i].getColC();
-				}
-			}
-			
-			//checks for collision with respect to the current axis. adds one to colCount if the collision is true, and returns false if not
-			if ((ent1High >= ent2Low && ent1High <= ent2High) || (ent2High >= ent1Low && ent2High <= ent1High))
-			{
-				colCount++;
-			}
-			else
-			{
-				return false;
-			}
-		}
-		
-		//if the objects are colliding with respect to all 4 axes, return true
-		if (colCount == 4)
-		{
-			colList.add(ent);
 			return true;
 		}
-		else
+		return false;
+	}
+	
+	public boolean collisionCheck (Entity ent1, Entity ent2)
+	{
+		float ent1StartAngle = ent1.angle;
+		float ent2StartAngle = ent2.getAngle();
+		float ent2StartX = ent2.getXPos();
+		float ent2StartY = ent2.getYPos();
+		float entDistance = (float)Math.sqrt(Math.pow(ent1.xPos - ent2.getXPos(), 2) + Math.pow(ent1.yPos - ent2.getYPos(), 2)); //the distance between the entities
+		float entEndAngle = (float)Math.atan((ent1.yPos - ent2.getYPos()) / (ent1.xPos - ent2.getXPos())) - (float)Math.toRadians(ent1.angle); //the angle between the entities
+		
+		ent1.angle = 0.0f;
+		ent2.setAngle(ent2.getAngle() - ent1StartAngle);
+		ent2.setXPos((float)Math.cos(entEndAngle) * entDistance + ent1.xPos);
+		ent2.setYPos((float)Math.sin(entEndAngle) * entDistance + ent1.yPos);
+		
+		ent1.updateAbsolutePointLocations();
+		ent2.updateAbsolutePointLocations();
+		
+		for (Point point : ent2.colPoints)
 		{
-			return false;
+			if (point.getX() <= ent1.colPoints[3].getX() && point.getX() >= ent1.colPoints[0].getX() && point.getY() <= ent1.colPoints[0].getY() && point.getY() >= ent1.colPoints[3].getY())
+			{
+				ent1.angle = ent1StartAngle;
+				ent2.setAngle(ent2StartAngle);
+				ent2.setXPos(ent2StartX);
+				ent2.setYPos(ent2StartY);
+				return true;
+			}
 		}
+		ent1.angle = ent1StartAngle;
+		ent2.setAngle(ent2StartAngle);
+		ent2.setXPos(ent2StartX);
+		ent2.setYPos(ent2StartY);
+		return false;
 	}
 			
 	//this is a blank method, to be overriden by subclasses
@@ -425,23 +413,23 @@ public abstract class Entity
 	}
 	
 	//TEXTURE
-	public void setTextureMode(int texturePtr)
+	public void setTextureMode(Texture tex)
 	{
 		renderMode = RenderMode.TEXTURE;
-		updateTexture(texturePtr);
+		updateTexture(tex);
 	}
 	
-	public void setTextureMode(int texturePtr, float[] texture)
+	public void setTextureMode(Texture tex, float[] texture)
 	{
 		renderMode = RenderMode.TEXTURE;
-		updateTexture(texturePtr, texture);
+		updateTexture(tex, texture);
 	}
 		
-	public void updateTexture(int texturePtr)
+	public void updateTexture(Texture tex)
 	{
 		if (renderMode == RenderMode.TEXTURE)
 		{
-			this.texturePtr = texturePtr;
+			this.tex = tex;
 			float[] initTexture = { 1.0f, 0.0f,
 									1.0f, 1.0f,
 									0.0f, 0.0f,
@@ -456,11 +444,11 @@ public abstract class Entity
 		}
 	}
 	
-	public void updateTexture(int texturePtr, float[] texture)
+	public void updateTexture(Texture tex, float[] texture)
 	{
 		if (renderMode == RenderMode.TEXTURE)
 		{
-			this.texturePtr = texturePtr;
+			this.tex = tex;
 			this.texture = texture;
 			
 			ByteBuffer byteBuf = ByteBuffer.allocateDirect(texture.length * 4);
@@ -472,74 +460,58 @@ public abstract class Entity
 	}
 	
 	//TILESET
-	public void setTilesetMode(int texturePtr, int x, int y, int min, int max)
+	public void setTilesetMode(Texture tex, int x, int y)
 	{
 		renderMode = RenderMode.TILESET;
-		updateTileset(texturePtr, x, y, min, max);
+		updateTileset(tex, x, y);
 	}
 	
-	public void setTilesetMode (int texturePtr, int tileID)
+	public void setTilesetMode (Texture tex, int tileID)
 	{
 		renderMode = RenderMode.TILESET;
-		updateTileset(texturePtr, tileID);
+		updateTileset(tex, tileID);
 	}
-	
-	public void updateTileset(int texturePtr, int x, int y, int min, int max)
-	{
-		if (renderMode == RenderMode.TILESET)
-		{
-			this.texturePtr = texturePtr;
-			texture = TilesetHelper.getTextureVertices(x, y, min, max);
-			
-			ByteBuffer byteBuf = ByteBuffer.allocateDirect(texture.length * 4);
-			byteBuf.order(ByteOrder.nativeOrder());
-			textureBuffer = byteBuf.asFloatBuffer();
-			textureBuffer.put(texture);
-			textureBuffer.position(0);
-		}
-	}
-	
-	public void updateTileset(int texturePtr, int tileID)
-	{
-		if (renderMode == RenderMode.TILESET)
-		{
-			this.texturePtr = texturePtr;
-			texture = TilesetHelper.getTextureVertices(tileID);
-			
-			ByteBuffer byteBuf = ByteBuffer.allocateDirect(texture.length * 4);
-			byteBuf.order(ByteOrder.nativeOrder());
-			textureBuffer = byteBuf.asFloatBuffer();
-			textureBuffer.put(texture);
-			textureBuffer.position(0);
-		}
-	}
-	
-	public void updateTileset(int x, int y, int min, int max)
-	{
-		if (renderMode == RenderMode.TILESET)
-		{
-			texture = TilesetHelper.getTextureVertices(x, y, min, max);
 		
+	public void updateTileset(Texture tex, int x, int y)
+	{
+		if (renderMode == RenderMode.TILESET)
+		{
+			this.tex = tex;
+			texture = TilesetHelper.getTextureVertices(tex, x, y);
+			
 			ByteBuffer byteBuf = ByteBuffer.allocateDirect(texture.length * 4);
 			byteBuf.order(ByteOrder.nativeOrder());
 			textureBuffer = byteBuf.asFloatBuffer();
 			textureBuffer.put(texture);
 			textureBuffer.position(0);
 		}
+	}
+	
+	public void updateTileset(Texture tex, int tileID)
+	{
+		if (renderMode == RenderMode.TILESET)
+		{
+			this.tex = tex;
+			texture = TilesetHelper.getTextureVertices(tex, tileID);
+			
+			ByteBuffer byteBuf = ByteBuffer.allocateDirect(texture.length * 4);
+			byteBuf.order(ByteOrder.nativeOrder());
+			textureBuffer = byteBuf.asFloatBuffer();
+			textureBuffer.put(texture);
+			textureBuffer.position(0);
+		}
+	}
+	
+	public void updateTileset(int x, int y)
+	{
+		if (tex != null)
+			updateTileset(tex, x, y);
 	}
 	
 	public void updateTileset(int tileID)
 	{
-		if (renderMode == RenderMode.TILESET)
-		{
-			texture = TilesetHelper.getTextureVertices(tileID);
-			
-			ByteBuffer byteBuf = ByteBuffer.allocateDirect(texture.length * 4);
-			byteBuf.order(ByteOrder.nativeOrder());
-			textureBuffer = byteBuf.asFloatBuffer();
-			textureBuffer.put(texture);
-			textureBuffer.position(0);
-		}
+		if (tex != null)
+			updateTileset(tex, tileID);
 	}
 	
 	/**************************
@@ -556,11 +528,11 @@ public abstract class Entity
 	public float getColorG()			{ return colorG; }
 	public float getColorB()			{ return colorB; }
 	public float getColorA()			{ return colorA; }
-	public int getTexturePtr()			{ return texturePtr; }
 	public RenderMode getRenderMode()	{ return renderMode; }
 	public float[] getVertices()		{ return vertices; }
 	public float[] getColorCoords()		{ return color; }
 	public float[] getTextureCoords()	{ return texture; }
+	public Texture getTexture()			{ return tex; }
 	public int getEntID()				{ return entID; }
 	public static int getEntCount()		{ return entCount; }
 	public boolean willCollideWithPlayer() { return willCollideWithPlayer; }

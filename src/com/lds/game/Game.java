@@ -10,20 +10,27 @@ import com.lds.EntityCleaner;
 import com.lds.Enums.Direction;
 import com.lds.Enums.RenderMode;
 import com.lds.Stopwatch;
+import com.lds.TextRenderer;
+import com.lds.Texture;
 import com.lds.TextureLoader;
 import com.lds.Enums.UIPosition;
+import com.lds.trigger.*;
 
 public class Game
 {
 	
 	//public Level[][] GameLevels;
 
+	public static boolean worldOutdated;
+	
 	public ArrayList<Entity> entList;
 	public Tile[][] tileset;
 	public ArrayList<UIEntity> UIList;
+	public ArrayList<Trigger> triggerList;
 	
 	public TextureLoader tl;
 	public EntityCleaner cleaner;
+	public TextRenderer tr;
 		
 	//Camera data
 	public static float screenW, screenH;
@@ -32,11 +39,20 @@ public class Game
 	
 	public float worldMinX, worldMinY, worldMaxX, worldMaxY;
 	
+	//Texture data
+	public static Texture tilesetcolors;
+	public static Texture tilesetwire;
+	public static Texture randomthings;
+	public static Texture text;
+	
+	
 	//Testing data
 	public UIHealthBar healthBar;
 	public UIEnergyBar energyBar;
 	public UIButton btnA;
-	public UIButton btnB;	public UIJoypad joypad;
+	public UIButton btnB;	
+	public UIJoypad joypad;
+	public UIImage image;
 	public Player player;
 	public PhysBlock block;
 	public Button button;
@@ -45,53 +61,66 @@ public class Game
 	//Constructors
 	public Game (Context context, GL10 gl)
 	{
+		tilesetcolors = new Texture(R.drawable.tilesetcolors, 128, 128, 8, 8, context);
+		tilesetwire = new Texture(R.drawable.tilesetwire, 128, 128, 8, 8, context);
+		randomthings = new Texture(R.drawable.randomthings, 256, 256, 8, 8, context);
+		text = new Texture(R.drawable.text, 256, 256, 16, 8, context);
+		
 		entList = new ArrayList<Entity>();
 		UIList = new ArrayList<UIEntity>();
+		triggerList = new ArrayList<Trigger>();
 		
 		tileset = new Tile[16][16];
 		cleaner = new EntityCleaner();
+		tr = new TextRenderer(text);
+		tl = new TextureLoader(gl);
 		
-		tl = new TextureLoader(gl, context);
-		tl.load(R.drawable.tilesetcolors);
-		tl.load(R.drawable.tilesetwire);
-		tl.load(R.drawable.randomthings);
-		tl.setTexture(1);
-				
+		Texture someText = tr.textToTexture("($)&(+)");
+		
+		tl.loadTexture(tilesetcolors);
+		tl.loadTexture(tilesetwire);
+		tl.loadTexture(randomthings);
+		tl.loadTexture(someText);
+						
 		for (int i = 0; i < tileset.length; i++)
 		{
 			for (int j = 0; j < tileset[0].length; j++)
 			{
-				tileset[i][j] = new Tile(Tile.TILE_SIZE_F, j, i, tileset[0].length, tileset.length);
-				tileset[i][j].setTilesetMode(tl.getTexture(), 0, 0, 0, 7);
+				tileset[i][j] = new Tile(Tile.TILE_SIZE_F, j, i, tileset[0].length - 1, tileset.length - 1);
+				if (i == 0 || j == 0 || i == tileset.length - 1 || j == tileset.length - 1)
+				{
+					tileset[i][j].setTilesetMode(tilesetwire, 2, 0);
+					tileset[i][j].setAsWall();
+				}
+				else
+				{
+					tileset[i][j].setTilesetMode(tilesetwire, 0, 0);
+					tileset[i][j].setAsFloor();
+				}
 			}
 		}	
+				
+		door = new Door (110.0f, 150.0f, RenderMode.COLOR);
+		door.setColorMode(255, 225, 0, 100.0f);
+		entList.add(door);
+		door.setWillCollideWithPlayer(true);
 		
-		button = new Button(90.0f, 90.0f, RenderMode.TILESET);
-		tl.setTexture(2);
-		button.setTilesetMode(tl.getTexture(), 0, 0, 0, 7);
+		button = new Button(90.0f, 90.0f, RenderMode.TILESET, door);
+		button.setTilesetMode(randomthings, 0, 0);
 		entList.add(button);
 		button.setWillCollideWithPlayer(false);
 		
-		door = new Door (-100.0f, -100.0f, RenderMode.COLOR);
-		door.setColorMode(255, 0, 0, 100.0f);
-		entList.add(door);
-		door.moveTo(1000.0f, 1000.0f);
-		//door.scale(10.0f, 10.0f);
-		door.rotate(60.0f);
-		door.setWillCollideWithPlayer(true);
-		
-		
 		block = new PhysBlock(30.0f, 200.0f, 0.0f, RenderMode.COLOR);
 		block.setColorMode(0, 255, 255, 255);
-		block.move(-100, 100);
 		entList.add(block);
 		block.setWillCollideWithPlayer(true);
 		
 		player = new Player(0.0f, 0.0f, 0.0f, RenderMode.TILESET);
-		tl.setTexture(1);
-		player.setTilesetMode(tl.getTexture(), 1, 0, 0, 7);
+		player.setTilesetMode(tilesetwire, 1, 0);
 		entList.add(player);
 		player.setWillCollideWithPlayer(false);
+		
+		triggerList.add(new Trigger(new ButtonCause(button), new DoorEffect(door)));
 		
 		healthBar = new UIHealthBar(200.0f, 30.0f, UIPosition.TOPLEFT, Direction.RIGHT);
 		healthBar.setTopPad(5.0f);
@@ -135,19 +164,24 @@ public class Game
 		joypad.autoPadding(0.0f, 5.0f, 5.0f, 0.0f);
 		joypad.setBlankMode();
 		
+		image = new UIImage(112, 32, UIPosition.TOPLEFT);
+		image.autoPadding(5.0f, 5.0f, 0.0f, 0.0f);
+		image.setTextureMode(someText);
+		
 		UIList.add(healthBar);
 		UIList.add(energyBar);
 		UIList.add(btnA);
 		UIList.add(btnB);
 		UIList.add(joypad);
+		UIList.add(image);
 		
 		camPosX = 0.0f;
 		camPosY = 0.0f;
 		
-		worldMinX = -500.0f;
-		worldMinY = -500.0f;
-		worldMaxX = 500.0f;
-		worldMaxY = 500.0f;
+		worldMinX = (-Tile.TILE_SIZE_F * (tileset[0].length / 2)) + (screenW / 2);
+		worldMinY = (-Tile.TILE_SIZE_F * (tileset.length / 2)) + (screenH / 2);
+		worldMaxX = (Tile.TILE_SIZE_F * (tileset[0].length / 2)) - (screenW / 2);
+		worldMaxY = (Tile.TILE_SIZE_F * (tileset.length / 2)) - (screenH / 2);
 		
 		//TODO take into account AI, perhaps render every time it chooses a new point to go to?
 		updateLocalEntities();
@@ -231,5 +265,42 @@ public class Game
 			{
 				ent.isRendered = false;
 			}
+	}
+	
+	public Tile nearestTile(Entity ent)
+	{
+		int x = (int)ent.getXPos();
+		int y = (int)ent.getYPos();
+		
+		int tileLeft = x / Tile.TILE_SIZE;
+		int tileRight = tileLeft + 1;
+		int tileDown = y / Tile.TILE_SIZE;
+		int tileUp = tileDown + 1;
+		
+		int left = x - (Tile.TILE_SIZE * (x / Tile.TILE_SIZE));
+		int right = Tile.TILE_SIZE - left;
+		int down = y - (Tile.TILE_SIZE) * (y / Tile.TILE_SIZE);
+		int up = Tile.TILE_SIZE - down;
+		
+		if (left <= right && up <= down)
+		{
+			return tileset[tileUp][tileLeft];
+		}
+		else if (left <= right && up > down)
+		{
+			return tileset[tileDown][tileLeft];
+		}
+		else if (left > right && up <= down)
+		{
+			return tileset[tileUp][tileRight];
+		}
+		else if (left > right && up > down)
+		{
+			return tileset[tileDown][tileRight];
+		}
+		else
+		{
+			return null;
+		}
 	}
 }
