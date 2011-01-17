@@ -299,8 +299,8 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 						game.player.updateHeldObjectPosition();
 					
 					//move camera to follow player
-					game.camPosX = game.player.endX;
-					game.camPosY = game.player.endY;
+					game.camPosX = game.player.xPos;
+					game.camPosY = game.player.yPos;
 					
 					//camera can't go further than defined level bounds
 					if (game.camPosX < game.worldMinX)
