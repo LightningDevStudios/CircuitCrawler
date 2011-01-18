@@ -346,7 +346,7 @@ public abstract class Entity
 	{
 		
 	}
-		
+	
 	/**********************
 	 * RenderMode methods *
 	 **********************/

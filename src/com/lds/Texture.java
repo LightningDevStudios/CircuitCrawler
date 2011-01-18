@@ -17,6 +17,11 @@ public class Texture
 	{
 		this(BitmapFactory.decodeResource(context.getResources(), texID), xSize, ySize, xTiles, yTiles);
 		this.id = texID;
+		
+		minFilter = GL10.GL_NEAREST;
+		magFilter = GL10.GL_NEAREST;
+		wrapS = GL10.GL_REPEAT;
+		wrapT = GL10.GL_REPEAT;
 	}
 	
 	public Texture(Bitmap bmp, int xSize, int ySize, int xTiles, int yTiles)
@@ -43,15 +48,20 @@ public class Texture
 		wrapT = GL10.GL_REPEAT;
 	}
 	
-	public Texture (String text)
+	public Texture(String text, StringRenderer sr)
 	{
-		this.bmp = StringRenderer.textToBitmap(text);
+		this.bmp = sr.textToBitmap(text);
 		this.xSize = bmp.getWidth();
 		this.ySize = bmp.getHeight();
 		this.xTiles = 1;
 		this.yTiles = 1;
 		this.xPixels = xSize;
 		this.yPixels = ySize;
+		
+		minFilter = GL10.GL_NEAREST;
+		magFilter = GL10.GL_NEAREST;
+		wrapS = GL10.GL_REPEAT;
+		wrapT = GL10.GL_REPEAT;
 	}
 	
 	public int getTextureID()	{ return id; }

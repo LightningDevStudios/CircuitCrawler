@@ -32,6 +32,7 @@ public class Game
 	
 	public TextureLoader tl;
 	public EntityCleaner cleaner;
+	public StringRenderer sr;
 		
 	//Camera data
 	public static float screenW, screenH;
@@ -45,7 +46,7 @@ public class Game
 	public static Texture tilesetwire;
 	public static Texture randomthings;
 	public static Texture text;
-	public static Texture rndmString;
+	
 	
 	//Testing data
 	public UIHealthBar healthBar;
@@ -66,24 +67,22 @@ public class Game
 		tilesetwire = new Texture(R.drawable.tilesetwire, 128, 128, 8, 8, context);
 		randomthings = new Texture(R.drawable.randomthings, 256, 256, 8, 8, context);
 		text = new Texture(R.drawable.text, 256, 256, 16, 8, context);
-				
+		
 		entList = new ArrayList<Entity>();
 		UIList = new ArrayList<UIEntity>();
 		triggerList = new ArrayList<Trigger>();
 		
 		tileset = new Tile[16][16];
 		cleaner = new EntityCleaner();
+		sr = new StringRenderer(text);
 		tl = new TextureLoader(gl);
 		
-		StringRenderer sr = new StringRenderer();
-		
-		sr.setCharTileset(text);
-		rndmString = new Texture("Testing!");
+		Texture someText = new Texture("Testing!", sr);
 		
 		tl.loadTexture(tilesetcolors);
 		tl.loadTexture(tilesetwire);
 		tl.loadTexture(randomthings);
-		tl.loadTexture(rndmString);
+		tl.loadTexture(someText);
 						
 		for (int i = 0; i < tileset.length; i++)
 		{
@@ -122,6 +121,7 @@ public class Game
 		block.setColorMode(0, 255, 255, 255);
 		entList.add(block);
 		block.setWillCollideWithPlayer(true);
+		block.scale(2.0f, 2.0f);
 		
 		player = new Player(0.0f, 0.0f, 0.0f, RenderMode.TILESET);
 		player.setTilesetMode(tilesetwire, 1, 0);
@@ -172,7 +172,7 @@ public class Game
 		
 		image = new UIImage(112, 32, UIPosition.TOPLEFT);
 		image.autoPadding(5.0f, 5.0f, 0.0f, 0.0f);
-		image.setTextureMode(rndmString);
+		image.setTextureMode(someText);
 		
 		UIList.add(healthBar);
 		UIList.add(energyBar);
@@ -238,7 +238,7 @@ public class Game
 		int maxXBound = ((int)(maxX + tilesetHalfWidth) / Tile.TILE_SIZE) + 1;
 		int minYBound = (int)(Math.abs(maxY - tilesetHalfHeight)) / Tile.TILE_SIZE;
 		int maxYBound = ((int)(Math.abs(minY - tilesetHalfHeight)) / Tile.TILE_SIZE) + 1;
-		
+
 		//set all to false
 		for (Tile[] ts : tileset)
 		{
