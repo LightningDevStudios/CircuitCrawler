@@ -8,7 +8,7 @@ public abstract class HoldObject extends PhysEnt //and object that is held (bloc
 	
 	public HoldObject (float size, float xPos, float yPos, float angle, float xScl, float yScl, boolean isSolid, RenderMode renderMode)
 	{
-		super(size, xPos, yPos, angle, xScl, yScl, isSolid, renderMode, 10.0f, 90.0f, 0.1f);
+		super(size, xPos, yPos, angle, xScl, yScl, isSolid, renderMode, 100.0f, 90.0f, 5.0f);
 		held = false;
 	}
 	
