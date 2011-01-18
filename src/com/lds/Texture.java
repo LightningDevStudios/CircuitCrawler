@@ -43,6 +43,17 @@ public class Texture
 		wrapT = GL10.GL_REPEAT;
 	}
 	
+	public Texture (String text)
+	{
+		this.bmp = StringRenderer.textToBitmap(text);
+		this.xSize = bmp.getWidth();
+		this.ySize = bmp.getHeight();
+		this.xTiles = 1;
+		this.yTiles = 1;
+		this.xPixels = xSize;
+		this.yPixels = ySize;
+	}
+	
 	public int getTextureID()	{ return id; }
 	public int getXSize()		{ return xSize; }
 	public int getYSize()		{ return ySize; }

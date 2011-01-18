@@ -2,20 +2,23 @@ package com.lds;
 
 import android.graphics.Bitmap;
 
-public class TextRenderer 
+public class StringRenderer 
 {
-	Texture text;
+	private static Texture text;
 	
-	public TextRenderer(Texture text)
+	public StringRenderer()
 	{
-		this.text = text;
 	}
 	
-	public Bitmap textToBitmap(String input)
+	public static Bitmap textToBitmap(String input)
 	{
+		if(text == null)
+		{
+			System.out.println("WARNING: No character tileset has been set, returning blank Bitmap!");
+			return Bitmap.createBitmap(1, 1, Bitmap.Config.RGB_565);
+		}
 		//Create a new, blank bitmap. Also allocate an int array which the Bitmap class uses to store in getPixels() and read in setPixels()
 		//TODO check for ySize with the number of \n chars
-		Bitmap textTileset = text.getBitmap();
 		int xTileSize = text.getXPixPerTile();
 		int yTileSize = text.getYPixPerTile();
 		
@@ -26,16 +29,15 @@ public class TextRenderer
 		//Then write those referenced pixels back to the text bitmap
 		for (int i = 0; i < input.length(); i++)
 		{
-			textTileset.getPixels(charPixels, 0, xTileSize, TilesetHelper.getTilesetX((int)input.charAt(i), text) * xTileSize, TilesetHelper.getTilesetY((int)input.charAt(i), text) * yTileSize, xTileSize, yTileSize);
+			text.getBitmap().getPixels(charPixels, 0, xTileSize, TilesetHelper.getTilesetX((int)input.charAt(i), text) * xTileSize, TilesetHelper.getTilesetY((int)input.charAt(i), text) * yTileSize, xTileSize, yTileSize);
 			bmp.setPixels(charPixels, 0, xTileSize, xTileSize * i, 0, xTileSize, yTileSize);
 		}
 		
 		return bmp;
 	}
 	
-	public Texture textToTexture(String input)
+	public void setCharTileset(Texture texture)
 	{
-		Bitmap bmp = textToBitmap(input);
-		return new Texture(bmp, bmp.getWidth(), bmp.getHeight(), 1, 1);
+		text = texture;
 	}
 }
