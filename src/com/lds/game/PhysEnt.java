@@ -7,17 +7,16 @@ import com.lds.Vector2f;
 public abstract class PhysEnt extends Entity //physics objects are movable, such as doors, blocks, etc.
 {
 	//interpolation data
-	public float interpXScl, interpYScl, interpAngle;
-	public float endXScl, endYScl, endAngle;
+	public float interpAngle;
+	public float endAngle;
 	public int interpMoveTimeMs, interpRotTimeMs, interpSclTimeMs;
-	private float scaleX, scaleY;
 	protected float moveSpeed;
 	protected float rotSpeed;
 	protected float sclSpeed;
 	private boolean isInterpTrans, isInterpRot, isInterpScl;
 	private boolean isRotatingCCW;
-	protected Vector2f moveVec, moveInterpVec;
-	protected int moveInterpCount;
+	protected Vector2f moveVec, moveInterpVec, sclVec, sclInterpVec;
+	protected int moveInterpCount, sclInterpCount;
 	
 	public PhysEnt(float size, float xPos, float yPos, RenderMode renderMode, float moveSpeed, float rotSpeed, float sclSpeed)
 	{
@@ -29,13 +28,14 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 		super(size, xPos, yPos, angle, xScl, yScl, isSolid, renderMode);
 		
 		//initialize interpolation variables
-		endXScl = xScl;
-		endYScl = yScl;
 		endAngle = angle;
 		this.moveSpeed = moveSpeed;
 		this.rotSpeed = rotSpeed;
 		this.sclSpeed = sclSpeed;
 		moveVec = new Vector2f();
+		sclVec = new Vector2f();
+		moveInterpCount = 0;
+		sclInterpCount = 0;
 	}
 	
 	@Override
@@ -93,19 +93,8 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	//note, we will probably never scale to 0.0f (that will be infinitely small) or negative numbers (you can get the same results with positives)
 	public void scaleTo (float x, float y)
 	{
-		interpXScl = x - xScl;
-		interpYScl = y - yScl;
-		if (interpXScl == 0) { interpXScl = 0.1f; }
-		if (interpYScl == 0) { interpYScl = 0.1f; }
-		double ratio = Math.atan2((double)interpYScl, (double)interpXScl);
-		if (ratio < 0)
-			ratio += 2 * Math.PI;
-		scaleX = (float)Math.cos(ratio);
-		scaleY = (float)Math.sin(ratio);
-		endXScl = x;
-		endYScl = y;
+		sclVec.set(x - xScl, y - yScl);
 		isInterpScl = true;
-
 		interpSclTimeMs = Stopwatch.elapsedTimeInMilliseconds();
 	}
 	
@@ -131,19 +120,8 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	//i.e. if ent1 is scaled (2.0f, 2.0f), if you do ent1.scale(3.0f, 3.0f) the final scaling will be (6.0f, 6.0f)
 	public void scale (float x, float y)
 	{
-		endXScl = xScl * x;
-		endYScl = yScl * y;
-		if (interpXScl == 0) { interpXScl = 0.001f; }
-		if (interpYScl == 0) { interpYScl = 0.001f; }
-		double ratio = Math.atan2((double)interpYScl, (double)interpXScl);
-		if (ratio < 0)
-			ratio += 2 * Math.PI;
-		scaleX = (float)Math.cos(ratio);
-		scaleY = (float)Math.sin(ratio);
-		interpXScl = endXScl - xScl;
-		interpYScl = endYScl - yScl;
+		sclVec.set((x - 1) * xScl, (y - 1) * yScl);
 		isInterpScl = true;
-		
 		interpSclTimeMs = Stopwatch.elapsedTimeInMilliseconds();
 	}
 	
@@ -164,8 +142,8 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 		
 		if (isInterpScl)
 		{
-			xScl -= (sclSpeed / 10) * interpXScl;
-			yScl -= (sclSpeed / 10) * interpYScl;
+			xScl -= sclInterpVec.getX();
+			yScl -= sclInterpVec.getY();
 			isInterpScl = false;
 		}
 	}
@@ -195,8 +173,6 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	{
 		xScl = x;
 		yScl = y;
-		endXScl = x;
-		endYScl = y;
 		Game.worldOutdated = true;
 	}
 	
@@ -272,20 +248,22 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	{
 		if (isInterpScl)
 		{				
-			float interval = (float)(Stopwatch.elapsedTimeInMilliseconds() - interpSclTimeMs);
+			sclInterpCount++;
+			sclInterpVec = Vector2f.scale(Vector2f.norm(sclVec), sclSpeed / 1000 * (Stopwatch.elapsedTimeInMilliseconds() - interpSclTimeMs));
+			xScl += sclInterpVec.getX();
+			yScl += sclInterpVec.getY();
 			
-			xScl += sclSpeed / 1000 * interval * scaleX;
-			yScl += sclSpeed / 1000 * interval * scaleY;
-			
-			//error check
-			if (xScl <= endXScl + (sclSpeed / 2000 * interval * scaleX) && xScl >= endXScl - (sclSpeed /2000 * interval * scaleX) || yScl <= endYScl + (sclSpeed / 2000 * interval * scaleY) && yScl >= endYScl - (sclSpeed / 2000 * interval * scaleY))
+			if (sclVec.mag() - sclInterpVec.mag() * sclInterpCount <= 0)
 			{
-				xScl = endXScl;
+				Vector2f vecToEnd = Vector2f.sub(sclVec, Vector2f.scale(sclInterpVec, sclInterpCount));
+				xScl += vecToEnd.getX();
+				yScl += vecToEnd.getY();
 				isInterpScl = false;
+				isRendered = true;
+				sclInterpCount = 0;
 			}
 			
 			interpSclTimeMs = Stopwatch.elapsedTimeInMilliseconds();
-			
 			Game.worldOutdated = true;
 		}
 	}

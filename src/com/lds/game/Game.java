@@ -121,6 +121,7 @@ public class Game
 		block.setColorMode(0, 255, 255, 255);
 		entList.add(block);
 		block.setWillCollideWithPlayer(true);
+		block.scale(2.0f, 2.0f);
 		
 		player = new Player(0.0f, 0.0f, 0.0f, RenderMode.TILESET);
 		player.setTilesetMode(tilesetwire, 1, 0);
@@ -293,6 +294,6 @@ public class Game
 		int x = (int)(((ent.xPos + (tilesetWidth / 2)) / Tile.TILE_SIZE_F) - 1) + 1;
 		int y = ((int)tilesetHeight - 1) - (int)(((ent.yPos + (tilesetHeight / 2)) / Tile.TILE_SIZE_F) - 1) + 1;
 		System.out.println(x + ", " + y);
-		return tileset[x][y];
+		return null;//return tileset[x][y];
 	}
 }
