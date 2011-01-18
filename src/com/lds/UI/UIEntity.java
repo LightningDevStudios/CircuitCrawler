@@ -146,11 +146,16 @@ public abstract class UIEntity
 		//default update does nothing, no updating needed.
 	}
 	
+	public void touch(int x, int y)
+	{
+		
+	}
+	
 	/*******************
 	 * Padding Methods *
 	 *******************/
 	
-	public void setPadding (float topPad, float leftPad, float bottomPad, float rightPad)
+	public void setPadding(float topPad, float leftPad, float bottomPad, float rightPad)
 	{
 		this.topPad = topPad;
 		this.leftPad = leftPad;

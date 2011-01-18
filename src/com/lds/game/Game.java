@@ -94,10 +94,10 @@ public class Game
 					tileset[i][j].setTilesetMode(tilesetwire, 2, 0);
 					tileset[i][j].setAsWall();
 				}
-				else if (j == 9)
+				else if (i == 13)
 				{
-					tileset[i][j].setTilesetMode(tilesetwire, 3, 0);
-					tileset[i][j].setAsFloor();
+					tileset[i][j].setTilesetMode(tilesetwire, 0, 1);
+					tileset[i][j].setAsPit();
 				}
 				else
 				{
@@ -159,12 +159,12 @@ public class Game
 		btnA = new UIButton(80.0f, 80.0f, UIPosition.BOTTOMRIGHT);
 		btnA.autoPadding(0.0f, 0.0f, 5.0f, 90.0f);
 		btnA.setColorMode(86, 93, 128, 128);
-		btnA.setIntervalTime(Stopwatch.elapsedTimeInMilliseconds());
+		btnA.setIntervalTime(Stopwatch.elapsedTimeMs());
 		
 		btnB = new UIButton(80.0f, 80.0f, UIPosition.BOTTOMRIGHT);
 		btnB.autoPadding(0.0f, 0.0f, 90.0f, 5.0f);
 		btnB.setColorMode(200, 93, 50, 128);
-		btnB.setIntervalTime(Stopwatch.elapsedTimeInMilliseconds());
+		btnB.setIntervalTime(Stopwatch.elapsedTimeMs());
 		
 		joypad = new UIJoypad(100, 100, UIPosition.BOTTOMLEFT);
 		joypad.autoPadding(0.0f, 5.0f, 5.0f, 0.0f);

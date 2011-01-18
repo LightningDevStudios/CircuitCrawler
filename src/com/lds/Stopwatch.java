@@ -24,27 +24,27 @@ public class Stopwatch
 		elapsedTimeM = (int)(SystemClock.elapsedRealtime() - startTimeMs) / 60000;
 	}
 	
-	public static int elapsedTimeInMilliseconds()
+	public static int elapsedTimeMs()
 	{
 		return elapsedTimeMs;
 	}
 	
-	public static int elapsedTimeInSeconds()
+	public static int elapsedTimeS()
 	{
 		return elapsedTimeS;
 	}
 	
-	public static int elapsedTimeInMinutes()
+	public static int elapsedTimeM()
 	{
 		return elapsedTimeM;
 	}
 	
-	public static int elapsedTimeInMillisecondsRemainder()
+	public static int elapsedTimeMsRemainder()
 	{
 		return elapsedTimeMs % 1000;
 	}
 	
-	public static int elapsedTimeInSecondsRemainder()
+	public static int elapsedTimeSRemainder()
 	{
 		return elapsedTimeS % 60;
 	}

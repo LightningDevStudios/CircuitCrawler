@@ -25,7 +25,7 @@ public class Vector2f
 		this.y = v.getY();
 	}
 	
-	/* Static Metods - return new vectors, do not change plugged in vectors */
+	/* Static Methods - return new vectors, do not change plugged in vectors */
 	
 	public static Vector2f abs (Vector2f v)
 	{
@@ -158,9 +158,10 @@ public class Vector2f
 	    return((float)Math.acos(vDot));
 	}
 	
-	public float angle ()
+	public float angle()
 	{
-		return angle(new Vector2f (1, 0));
+		//return angle(new Vector2f (1, 0));
+		return (float)(Math.atan2(y, x) + Math.PI);
 	}
 	
 	public String toString ()

@@ -1,21 +1,20 @@
 package com.lds.game;
 
 import com.lds.Enums.RenderMode;
+import com.lds.Point;
 import com.lds.Stopwatch;
 import com.lds.Vector2f;
 
 public abstract class PhysEnt extends Entity //physics objects are movable, such as doors, blocks, etc.
 {
 	//interpolation data
-	public float interpAngle;
-	public float endAngle;
-	public int interpMoveTimeMs, interpRotTimeMs, interpSclTimeMs;
-	protected float moveSpeed;
-	protected float rotSpeed;
-	protected float sclSpeed;
-	private boolean isInterpTrans, isInterpRot, isInterpScl;
-	private boolean isRotatingCCW;
-	protected Vector2f moveVec, moveInterpVec, sclVec, sclInterpVec;
+	public float interpAngle, endAngle;
+	public int moveTimeMs, rotTimeMs, sclTimeMs;
+	protected float moveSpeed, rotSpeed, sclSpeed;
+	private boolean isMoving, isRotating, isScaling, isRotatingCCW;
+	protected Vector2f moveVec, moveInterpVec;
+	protected Vector2f sclVec, sclInterpVec;
+	protected float startMoveX, startMoveY, startScaleX, startScaleY;
 	protected int moveInterpCount, sclInterpCount;
 	
 	public PhysEnt(float size, float xPos, float yPos, RenderMode renderMode, float moveSpeed, float rotSpeed, float sclSpeed)
@@ -65,14 +64,16 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	public void moveTo (float x, float y)
 	{
 		moveVec.set(x - xPos, y - yPos);
-		isInterpTrans = true;
-		interpMoveTimeMs = Stopwatch.elapsedTimeInMilliseconds();
+		isMoving = true;
+		moveTimeMs = Stopwatch.elapsedTimeMs();
+		startMoveX = xPos;
+		startMoveY = yPos;
 	}
 	
 	//sets angle of an entity to a new value
 	public void rotateTo (float degrees)
 	{
-		if (!isInterpRot)
+		if (!isRotating)
 		{
 		endAngle = degrees;
 		float dist = degrees - angle;
@@ -82,10 +83,10 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 		else
 			isRotatingCCW = true;
 		
-		if (!(dist == 0))
-			isInterpRot = true;
+		if (dist != 0)
+			isRotating = true;
 		
-		interpRotTimeMs = Stopwatch.elapsedTimeInMilliseconds();
+		rotTimeMs = Stopwatch.elapsedTimeMs();
 		}
 	}
 	
@@ -94,16 +95,18 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	public void scaleTo (float x, float y)
 	{
 		sclVec.set(x - xScl, y - yScl);
-		isInterpScl = true;
-		interpSclTimeMs = Stopwatch.elapsedTimeInMilliseconds();
+		isScaling = true;
+		sclTimeMs = Stopwatch.elapsedTimeMs();
 	}
 	
 	//much like moveTo, but instead of going to a specific point, move() moves relative to the current position
 	public void move (float x, float y)
 	{
 		moveVec.set(x, y);
-		isInterpTrans = true;
-		interpMoveTimeMs = Stopwatch.elapsedTimeInMilliseconds();
+		isMoving = true;
+		moveTimeMs = Stopwatch.elapsedTimeMs();
+		startMoveX = xPos;
+		startMoveY = yPos;
 	}
 	
 	//much like rotateTo, but rotate() adds or subtracts the number of degrees from the current number
@@ -112,8 +115,8 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	{
 		endAngle = angle + degrees;
 		interpAngle = degrees;	
-		isInterpRot = true;
-		interpRotTimeMs = Stopwatch.elapsedTimeInMilliseconds();
+		isRotating = true;
+		rotTimeMs = Stopwatch.elapsedTimeMs();
 	}
 	
 	//scales relative to current scaling
@@ -121,30 +124,30 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	public void scale (float x, float y)
 	{
 		sclVec.set((x - 1) * xScl, (y - 1) * yScl);
-		isInterpScl = true;
-		interpSclTimeMs = Stopwatch.elapsedTimeInMilliseconds();
+		isScaling = true;
+		sclTimeMs = Stopwatch.elapsedTimeMs();
 	}
 	
 	public void stop ()
 	{
-		if (isInterpTrans)
+		if (isMoving)
 		{
 			xPos -= moveInterpVec.getX();
 			yPos -= moveInterpVec.getY();
-			isInterpTrans = false;
+			isMoving = false;
 		}
 		
-		if (isInterpRot)
+		if (isRotating)
 		{
-			angle -= rotSpeed / 1000 * (float)(Stopwatch.elapsedTimeInMilliseconds() - interpRotTimeMs);
-			isInterpRot = false;
+			angle -= rotSpeed / 1000 * (float)(Stopwatch.elapsedTimeMs() - rotTimeMs);
+			isRotating = false;
 		}
 		
-		if (isInterpScl)
+		if (isScaling)
 		{
 			xScl -= sclInterpVec.getX();
 			yScl -= sclInterpVec.getY();
-			isInterpScl = false;
+			isScaling = false;
 		}
 	}
 	
@@ -183,38 +186,51 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	public void moveInterpolate ()
 	{	
 		//if the object needs to be interpolated
-		if (isInterpTrans)
-		{		
-			moveInterpCount++;
-			moveInterpVec = Vector2f.scale(Vector2f.norm(moveVec), moveSpeed / 1000 * (Stopwatch.elapsedTimeInMilliseconds() - interpMoveTimeMs));
-			xPos += moveInterpVec.getX();
-			yPos += moveInterpVec.getY();
-			
-			if (moveVec.mag() - moveInterpVec.mag() * moveInterpCount <= 0)
+		if (isMoving)
+		{
+			if(moveSpeed <= 0)
 			{
-				Vector2f vecToEnd = Vector2f.sub(moveVec, Vector2f.scale(moveInterpVec, moveInterpCount));
-				xPos += vecToEnd.getX();
-				yPos += vecToEnd.getY();
-				isInterpTrans = false;
-				isRendered = true;
+				moveSpeed = 0;
+				isMoving = false;
 				moveInterpCount = 0;
 			}
-			
-			interpMoveTimeMs = Stopwatch.elapsedTimeInMilliseconds();
-			Game.worldOutdated = true;
+			else 
+			{
+				moveInterpCount++;
+				moveInterpVec = Vector2f.scale(Vector2f.norm(moveVec), moveSpeed / 1000 * (Stopwatch.elapsedTimeMs() - moveTimeMs));
+				
+				if (moveVec.mag() - moveInterpVec.mag() * moveInterpCount <= moveInterpVec.mag())
+				{
+					//TODO this doesn't take into account differences in framerate. Hence the inaccuracies
+					//Vector2f vecToEnd = Vector2f.sub(moveVec, Vector2f.scale(moveInterpVec, moveInterpCount));
+					xPos = startMoveX + moveVec.getX();
+					yPos = startMoveY + moveVec.getY();
+					isMoving = false;
+					moveInterpCount = 0;
+				}
+				else
+				{
+					xPos += moveInterpVec.getX();
+					yPos += moveInterpVec.getY();
+				}
+				
+				Game.worldOutdated = true;
+			}
+							
+			moveTimeMs = Stopwatch.elapsedTimeMs();
 		}
 	}
 	
 	public void rotateInterpolate ()
 	{
-		if (isInterpRot)
+		if (isRotating)
 		{
-			float increment = (float)(Stopwatch.elapsedTimeInMilliseconds() - interpRotTimeMs);
+			float increment = (float)(Stopwatch.elapsedTimeMs() - rotTimeMs);
 			
 			if (angle <= endAngle + (rotSpeed / 1000 * increment) && angle >= endAngle - (rotSpeed / 1000 * increment))
 			{
 				angle = endAngle;
-				isInterpRot = false;
+				isRotating = false;
 			}
 			
 			if (isRotatingCCW)
@@ -238,7 +254,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 			}
 			System.out.println(increment + " " + angle);
 			//error check			
-			interpRotTimeMs = Stopwatch.elapsedTimeInMilliseconds();
+			rotTimeMs = Stopwatch.elapsedTimeMs();
 			
 			Game.worldOutdated = true;
 		}
@@ -246,10 +262,10 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	
 	public void scaleInterpolate ()
 	{
-		if (isInterpScl)
+		if (isScaling)
 		{				
 			sclInterpCount++;
-			sclInterpVec = Vector2f.scale(Vector2f.norm(sclVec), sclSpeed / 1000 * (Stopwatch.elapsedTimeInMilliseconds() - interpSclTimeMs));
+			sclInterpVec = Vector2f.scale(Vector2f.norm(sclVec), sclSpeed / 1000 * (Stopwatch.elapsedTimeMs() - sclTimeMs));
 			xScl += sclInterpVec.getX();
 			yScl += sclInterpVec.getY();
 			
@@ -258,12 +274,12 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 				Vector2f vecToEnd = Vector2f.sub(sclVec, Vector2f.scale(sclInterpVec, sclInterpCount));
 				xScl += vecToEnd.getX();
 				yScl += vecToEnd.getY();
-				isInterpScl = false;
+				isScaling = false;
 				isRendered = true;
 				sclInterpCount = 0;
 			}
 			
-			interpSclTimeMs = Stopwatch.elapsedTimeInMilliseconds();
+			sclTimeMs = Stopwatch.elapsedTimeMs();
 			Game.worldOutdated = true;
 		}
 	}
