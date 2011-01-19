@@ -46,6 +46,7 @@ public class Game
 	public static Texture tilesetwire;
 	public static Texture randomthings;
 	public static Texture text;
+	public Texture someText;
 	
 	
 	//Testing data
@@ -77,7 +78,7 @@ public class Game
 		sr = new StringRenderer(text);
 		tl = new TextureLoader(gl);
 		
-		Texture someText = new Texture("Testing!", sr);
+		someText = new Texture("Testing!", sr);
 		
 		tl.loadTexture(tilesetcolors);
 		tl.loadTexture(tilesetwire);
@@ -235,9 +236,9 @@ public class Game
 		tilesetHalfHeight = tileset.length * Tile.TILE_SIZE_F / 2;
 		
 		int minXBound = (int)(minX + tilesetHalfWidth) / Tile.TILE_SIZE;
-		int maxXBound = ((int)(maxX + tilesetHalfWidth) / Tile.TILE_SIZE) + 1;
-		int minYBound = (int)(Math.abs(maxY - tilesetHalfHeight)) / Tile.TILE_SIZE;
-		int maxYBound = ((int)(Math.abs(minY - tilesetHalfHeight)) / Tile.TILE_SIZE) + 1;
+		int maxXBound = ((int)(Math.ceil(maxX + tilesetHalfWidth) - 1) / Tile.TILE_SIZE);
+		int minYBound = ((int)(Math.abs(maxY - tilesetHalfHeight) - 1) / Tile.TILE_SIZE);
+		int maxYBound = ((int)(Math.ceil(Math.abs(minY - tilesetHalfHeight)) - 1) / Tile.TILE_SIZE);
 
 		//set all to false
 		for (Tile[] ts : tileset)

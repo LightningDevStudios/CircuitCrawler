@@ -73,7 +73,7 @@ public class Vector2f
 	
 	public static Vector2f getNormal (Vector2f v)
 	{
-		return new Vector2f(-v.getY(), v.getX());
+		return new Vector2f(v.getY(), -v.getX());
 	}
 	
 	/************************************************************************************************************
