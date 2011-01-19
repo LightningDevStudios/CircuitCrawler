@@ -1,7 +1,6 @@
 package com.lds.game;
 
 import com.lds.Enums.RenderMode;
-import com.lds.Point;
 import com.lds.Stopwatch;
 import com.lds.Vector2f;
 

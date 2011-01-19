@@ -5,7 +5,9 @@ public class Vector2f
 	private float x;
 	private float y;
 	
-	/* Constructors */
+	/****************
+	 * Constructors *
+	 ****************/
 	
 	public Vector2f ()
 	{
@@ -25,7 +27,9 @@ public class Vector2f
 		this.y = v.getY();
 	}
 	
-	/* Static Methods - return new vectors, do not change plugged in vectors */
+	/*************************************************************************
+	 * Static Methods - return new vectors, do not change plugged in vectors *
+	 *************************************************************************/
 	
 	public static Vector2f abs (Vector2f v)
 	{
@@ -72,7 +76,9 @@ public class Vector2f
 		return new Vector2f(-v.getY(), v.getX());
 	}
 	
-	/* Non-Static Methods - return and change vectors, calculate vector quantites (i.e. dot product, magnitude) */
+	/************************************************************************************************************
+	 * Non-Static Methods - return and change vectors, calculate vector quantites (i.e. dot product, magnitude) *
+	 ************************************************************************************************************/
 	
 	public void set (float x, float y)
 	{
@@ -174,7 +180,9 @@ public class Vector2f
 		return "<" + x + ", " + y + ">";
 	}
 	
-	/* Mutators */
+	/************
+	 * Mutators *
+	 ************/
 	
 	public void setX (float x)
 	{
@@ -186,7 +194,9 @@ public class Vector2f
 		this.y = y;
 	}
 	
-	/* Accessors */
+	/*************
+	 * Accessors *
+	 *************/
 	
 	public float getX ()
 	{
