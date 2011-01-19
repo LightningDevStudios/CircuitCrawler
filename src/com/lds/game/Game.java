@@ -107,7 +107,7 @@ public class Game
 			}
 		}	
 		
-		door = new Door (100.0f, 150.0f, RenderMode.COLOR);
+		door = new Door (100.0f, 300.0f, RenderMode.COLOR);
 		door.setColorMode(255, 225, 0, 225);
 		entList.add(door);
 		door.setWillCollideWithPlayer(true);
@@ -206,10 +206,10 @@ public class Game
 		for(Entity ent : entList)
 		{
 			//define max square bounds
-			float entMinX = ent.xPos - (float)ent.getDiagonal();
-			float entMaxX = ent.xPos + (float)ent.getDiagonal();
-			float entMinY = ent.yPos - (float)ent.getDiagonal();
-			float entMaxY = ent.yPos + (float)ent.getDiagonal();
+			float entMinX = ent.getXPos() - (float)ent.getDiagonal();
+			float entMaxX = ent.getXPos() + (float)ent.getDiagonal();
+			float entMinY = ent.getYPos() - (float)ent.getDiagonal();
+			float entMaxY = ent.getYPos() + (float)ent.getDiagonal();
 			
 			//values are opposite for entMin/Max because only the far tips have to be inside the screen (leftmost point on right border of screen)
 			if (entMinX <= maxX && entMaxX >= minX && entMinY <= maxY && entMaxY >= minY)
@@ -271,10 +271,10 @@ public class Game
 		maxX = camPosX + (screenW / 2);
 		minY = camPosY - (screenH / 2);
 		maxY = camPosY + (screenH / 2);
-		float entMinX = ent.xPos - (float)ent.getDiagonal();
-		float entMaxX = ent.xPos + (float)ent.getDiagonal();
-		float entMinY = ent.yPos - (float)ent.getDiagonal();
-		float entMaxY = ent.yPos + (float)ent.getDiagonal();
+		float entMinX = ent.getXPos() - (float)ent.getDiagonal();
+		float entMaxX = ent.getXPos() + (float)ent.getDiagonal();
+		float entMinY = ent.getYPos() - (float)ent.getDiagonal();
+		float entMaxY = ent.getYPos() + (float)ent.getDiagonal();
 			
 		//values are opposite for entMin/Max because only the far tips have to be inside the screen (leftmost point on right border of screen)
 		if (entMinX <= maxX && entMaxX >= minX && entMinY <= maxY && entMaxY >= minY)
@@ -291,8 +291,8 @@ public class Game
 	{	
 		float tilesetWidth = tileset[0].length * Tile.TILE_SIZE_F;
 		float tilesetHeight = tileset.length * Tile.TILE_SIZE_F;
-		int x = (int)(((ent.xPos + (tilesetWidth / 2)) / Tile.TILE_SIZE_F) - 1) + 1;
-		int y = ((int)tilesetHeight - 1) - (int)(((ent.yPos + (tilesetHeight / 2)) / Tile.TILE_SIZE_F) - 1) + 1;
+		int x = (int)(((ent.getXPos() + (tilesetWidth / 2)) / Tile.TILE_SIZE_F) - 1) + 1;
+		int y = ((int)tilesetHeight - 1) - (int)(((ent.getYPos() + (tilesetHeight / 2)) / Tile.TILE_SIZE_F) - 1) + 1;
 		System.out.println(x + ", " + y);
 		return null;//return tileset[x][y];
 	}

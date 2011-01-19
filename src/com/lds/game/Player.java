@@ -100,7 +100,7 @@ public class Player extends Character //your character, protagonist
 	{
 		float heldDistance = halfSize + hObj.halfSize + 10.0f;
 		initializeCollisionVariables();
-		hObj.setPos((float)Math.cos(rad) * heldDistance + xPos, (float)Math.sin(rad) * heldDistance + yPos);
+		hObj.setPos((float)Math.cos(rad) * heldDistance + getXPos(), (float)Math.sin(rad) * heldDistance + getYPos());
 		hObj.setAngle(angle);
 	}
 }

@@ -62,9 +62,14 @@ public class Vector2f
 		return new Vector2f(scalar * v.getX(), scalar * v.getY());
 	}
 	
-	public static Vector2f norm (Vector2f v)
+	public static Vector2f normalize (Vector2f v)
 	{
 		return Vector2f.scale(v, 1 / v.mag());
+	}
+	
+	public static Vector2f getNormal (Vector2f v)
+	{
+		return new Vector2f(-v.getY(), v.getX());
 	}
 	
 	/* Non-Static Methods - return and change vectors, calculate vector quantites (i.e. dot product, magnitude) */

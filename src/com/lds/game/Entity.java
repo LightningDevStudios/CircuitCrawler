@@ -25,12 +25,14 @@ public abstract class Entity
 	protected boolean isSolid;
 	protected boolean isRendered;
 	protected boolean willCollideWithPlayer;
+	protected boolean circular;
 	
 	//graphics data
-	protected float angle, size, xPos, yPos, xScl, yScl, halfSize;
+	protected float angle, size, xScl, yScl, halfSize;
 	protected float colorR, colorG, colorB, colorA;
 	protected RenderMode renderMode;
 	protected Texture tex;
+	protected Vector2f posVec;
 	
 	protected float[] vertices;
 	protected float[] texture;
@@ -47,8 +49,7 @@ public abstract class Entity
 	private static int entCount = 0;
 	
 	//collision data
-	protected Point[] colPoints;
-	protected float[] colSlopes;
+	protected Vector2f[] vertVecs;
 	protected double diagonal, rad, diagAngle;
 	
 	public ArrayList<Entity> colList = new ArrayList<Entity>();
@@ -68,11 +69,11 @@ public abstract class Entity
 		
 		//initialize behavior variables
 		this.isSolid = isSolid;
+		circular = false;
 		
 		//initializes graphics variables
 		this.size = size;
-		this.xPos = xPos;
-		this.yPos = yPos;
+		posVec = new Vector2f(xPos, yPos);
 		this.angle = angle;
 		this.xScl = xScl;
 		this.yScl = yScl;
@@ -84,13 +85,13 @@ public abstract class Entity
 		rad = Math.toRadians((double)(angle + 90.0f));
 		diagonal = Math.sqrt(Math.pow(halfSize * xScl, 2) + Math.pow(halfSize * yScl, 2)); //distance from center to corner
 		diagAngle = Math.asin((halfSize * xScl) / diagonal); //angle between vertical line and diagonal to top left corner
-		colSlopes = new float[4];
+		 
+		vertVecs = new Vector2f[4];
+		for (int i = 0; i < vertVecs.length; i++)
+		{
+			vertVecs[i] = new Vector2f();
+		}
 		
-		colPoints = new Point[4]; //0: top left, 1: bottom left, 2:top right, 3: bottom right
-		colPoints[0] = new Point();
-		colPoints[1] = new Point();
-		colPoints[2] = new Point();
-		colPoints[3] = new Point();
 		
 		//makes it so x/yPos are in center of box - Robert
 		float[] initVerts = {	halfSize, halfSize, 	//top left
@@ -186,68 +187,42 @@ public abstract class Entity
 	public void initializeCollisionVariables ()
 	{
 		rad = Math.toRadians((double)(angle + 90.0f));
-		diagonal = Math.sqrt(Math.pow(halfSize * xScl, 2) + Math.pow(halfSize * yScl, 2));
-		diagAngle = Math.atan2((halfSize * xScl) , (halfSize * yScl));
+		
+		float unscaledX = (float)Math.cos(angle) * halfSize;
+		float unscaledY = (float)Math.sin(angle) * halfSize;
+		Vector2f xVec = new Vector2f(unscaledX * xScl, unscaledY * xScl);
+		Vector2f yVec = new Vector2f(unscaledX * yScl, unscaledY * yScl);
+		Vector2f diagVec = new Vector2f(Vector2f.add(xVec, yVec));
+		
+		diagonal = diagVec.mag();
 	}
 	
 	//used to get the absolute, not relative, positions of the entity's 4 points in the XY Plane
 	public void updateAbsolutePointLocations ()
-	{
-		initializeCollisionVariables();
-		
-		double cp0 = this.rad + diagAngle;
-		double cp1 = this.rad + Math.PI - diagAngle;
-		double cp2 = this.rad - diagAngle;
-		double cp3 = this.rad - Math.PI + diagAngle;
-		
-		colPoints[0].setX((float)(Math.cos(cp0) * diagonal) + xPos); //top left
-		colPoints[0].setY((float)(Math.sin(cp0) * diagonal) + yPos); //top left
-		
-		colPoints[1].setX((float)(Math.cos(cp1) * diagonal) + xPos); //bottom left
-		colPoints[1].setY((float)(Math.sin(cp1) * diagonal) + yPos); //bottom left
-
-		colPoints[2].setX((float)(Math.cos(cp2) * diagonal) + xPos); //top right
-		colPoints[2].setY((float)(Math.sin(cp2) * diagonal) + yPos); //top right
-		
-		colPoints[3].setX((float)(Math.cos(cp3) * diagonal) + xPos); //bottom right
-		colPoints[3].setY((float)(Math.sin(cp3) * diagonal) + yPos); //bottom right
-	}
-	
-	public void updateAbsolutePointLocations(Point[] pts)
-	{
-		initializeCollisionVariables();
-		this.colPoints = pts;
+	{	
+		float unscaledX = (float)Math.cos(angle) * halfSize;
+		float unscaledY = (float)Math.sin(angle) * halfSize;
+		Vector2f xVec = new Vector2f(unscaledX * xScl, unscaledY * xScl);
+		Vector2f yVec = new Vector2f(unscaledX * yScl, unscaledY * yScl);
+		 
+		vertVecs[0].set(Vector2f.add(posVec, Vector2f.add(xVec, yVec))); //top  right
+		vertVecs[1].set(Vector2f.add(posVec, Vector2f.add(Vector2f.neg(yVec), xVec))); //top left
+		vertVecs[2].set(Vector2f.add(posVec, Vector2f.neg(vertVecs[0]))); //bottom left
+		vertVecs[3].set(Vector2f.add(posVec, Vector2f.neg(vertVecs[1]))); //bottom right
 	}
 	
 	public boolean closeEnough (Entity ent)
 	{
-		if (Math.sqrt(Math.pow(xPos - ent.xPos, 2) + Math.pow(yPos - ent.yPos, 2)) < (float)((diagonal) + ent.diagonal))
+		initializeCollisionVariables();
+		if (Vector2f.sub(this.posVec, ent.posVec).mag() < (float)((diagonal) + ent.diagonal))
 			return true;
-		
 		else
 			return false;
 	}
 
-	public boolean collideWithCircle (Entity ent) //if ent is a circle
-	{
-		if (Math.sqrt(Math.pow(xPos - ent.xPos, 2) + Math.pow(yPos - ent.yPos, 2)) < (float)(diagonal) + ent.halfSize)
-			return true;
-		
-		else
-			return false;
-	}
-	
-	public boolean circleCollideWithCircle (Entity ent) //if both entities are circles
-	{
-		if (Math.sqrt(Math.pow(xPos - ent.xPos, 2) + Math.pow(yPos - ent.yPos, 2)) < halfSize + ent.halfSize)
-			return true;
-		
-		else
-			return false;
-	}
 	public boolean isFacing(Entity ent)
 	{
-		float angleBetween = (float)Math.toDegrees(Math.atan2((ent.getYPos() - yPos) , (ent.getXPos() - xPos)));
+		float angleBetween = (float)Math.toDegrees(Math.atan2((ent.getYPos() - this.getYPos()) , (ent.getXPos() - this.getXPos())));
 		float angleDiff = (angle + 90.0f) - angleBetween;
 		
 		if (angleDiff > 315.0f)
@@ -260,7 +235,7 @@ public abstract class Entity
 			return false;
 	}
 	
-	public boolean isColliding (Entity ent)
+	public boolean isColliding (Entity ent) //if both entities are polygons
 	{	
 		//checks to see if either object is not solid
 		if (this.isSolid == false || ent.isSolid == false)
@@ -269,68 +244,86 @@ public abstract class Entity
 		if (colIgnoreList.contains(ent))
 			return false;
 		
-		//update values
-		initializeCollisionVariables();
-		ent.initializeCollisionVariables();
-		
 		//makes sure the entities are close enough so that collision testing is actually necessary
 		if (!closeEnough(ent))
-		{
 			return false;
-		}
 		
-		if (collisionCheck(this, ent) || collisionCheck(ent, this))
-		{
+		if (this.isCircular() && ent.isCircular())
+			return this.isCircleCollidingWithCircle(ent);
+		
+		else if (ent.isCircular())
+			return this.isRectangleCollidingWithCircle(ent);
+		
+		else if (this.isCircular())
+			return ent.isRectangleCollidingWithCircle(this);
+		
+		else
+			return this.isRectangleCollidingWithRectangle(ent);
+	}
+	
+	private boolean isCircleCollidingWithCircle (Entity ent) //if both entities are circles
+	{
+		if (Vector2f.sub(this.posVec, ent.posVec).mag() < halfSize + ent.halfSize)
 			return true;
-		}
+		else
+			return false;
+	}
+	
+	private boolean isRectangleCollidingWithCircle (Entity ent) //if only ent is a circle
+	{
 		return false;
 	}
 	
-	public boolean collisionCheck (Entity ent1, Entity ent2)
+	private boolean isRectangleCollidingWithRectangle (Entity ent) //if both entities are circles
 	{
-		Point[] ent1TempPts = ent1.getColPoints();
-		Point[] ent2TempPts = ent2.getColPoints();
+		this.updateAbsolutePointLocations();
+		ent.updateAbsolutePointLocations();
 		
-		float ent1StartAngle = ent1.angle;
-		float ent2StartAngle = ent2.getAngle();
-		float ent2StartX = ent2.getXPos();
-		float ent2StartY = ent2.getYPos();
-		float entDistance = (float)Math.sqrt(Math.pow(ent1.xPos - ent2.getXPos(), 2) + Math.pow(ent1.yPos - ent2.getYPos(), 2)); //the distance between the entities
-		float entEndAngle = (float)Math.atan((ent1.yPos - ent2.getYPos()) / (ent1.xPos - ent2.getXPos())) - (float)Math.toRadians(ent1.angle); //the angle between the entities
+		Vector2f[] axes = new Vector2f[4];
+		axes[0] = Vector2f.normalize(Vector2f.sub(this.vertVecs[0], this.vertVecs[1]));
+		axes[1] = Vector2f.getNormal(axes[0]);
+		axes[2] = Vector2f.normalize(Vector2f.sub(ent.vertVecs[0], ent.vertVecs[1]));
+		axes[3] = Vector2f.getNormal(axes[2]);
 		
-		ent1.angle = 0.0f;
-		ent2.setAngle(ent2.getAngle() - ent1StartAngle);
-		ent2.setXPos((float)Math.cos(entEndAngle) * entDistance + ent1.xPos);
-		ent2.setYPos((float)Math.sin(entEndAngle) * entDistance + ent1.yPos);
-		
-		ent1.updateAbsolutePointLocations();
-		ent2.updateAbsolutePointLocations();
-		
-		for (Point point : ent2.colPoints)
+		for (Vector2f axis : axes)
 		{
-			if (point.getX() <= ent1.colPoints[3].getX() && point.getX() >= ent1.colPoints[0].getX() && point.getY() <= ent1.colPoints[0].getY() && point.getY() >= ent1.colPoints[3].getY())
+			float min1;
+			float max1;
+			float min2;
+			float max2;
+			
+			//get mins and maxes for first entity
+			float firstDotProd1 = axis.dot(vertVecs[0]);
+			min1 = firstDotProd1;
+			max1 = firstDotProd1;
+			for (int i = 1; i < vertVecs.length; i++)
 			{
-				ent1.angle = ent1StartAngle;
-				ent2.setAngle(ent2StartAngle);
-				ent2.setXPos(ent2StartX);
-				ent2.setYPos(ent2StartY);
-								
-				ent1.updateAbsolutePointLocations(ent1TempPts);
-				ent2.updateAbsolutePointLocations(ent2TempPts);
-				
-				return true;
+				float dotProd1 = axis.dot(vertVecs[i]);
+				if (dotProd1 > max1)
+					max1 = dotProd1;
+				else
+					min1 = dotProd1;
+			}
+			
+			//get mins and maxes for second entity
+			float firstDotProd2 = axis.dot(ent.vertVecs[0]);
+			min2 = firstDotProd2;
+			max2 = firstDotProd2;
+			for (int i = 1; i < ent.vertVecs.length; i++)
+			{
+				float dotProd2 = axis.dot(ent.vertVecs[i]);
+				if (dotProd2 > max2)
+					max2 = dotProd2;
+				else
+					min2 = dotProd2;
+			}
+			
+			if ((max1 > max2 || max1 < min2) && (max2 > max1 || max2 < min1))
+			{
+				return false;
 			}
 		}
-		ent1.angle = ent1StartAngle;
-		ent2.setAngle(ent2StartAngle);
-		ent2.setXPos(ent2StartX);
-		ent2.setYPos(ent2StartY);
-		
-		
-		ent1.updateAbsolutePointLocations(ent1TempPts);
-		ent2.updateAbsolutePointLocations(ent2TempPts);
-		
-		return false;
+		return true;
 	}
 			
 	//this is a blank method, to be overriden by subclasses
@@ -527,8 +520,9 @@ public abstract class Entity
 	 **************************/
 	
 	public float getSize()				{ return size; }
-	public float getXPos()				{ return xPos; }
-	public float getYPos()				{ return yPos; }
+	public Vector2f getPos()			{ return posVec; }
+	public float getXPos()				{ return posVec.getX(); }
+	public float getYPos()				{ return posVec.getY(); }
 	public float getAngle()				{ return angle; }
 	public float getXScl()				{ return xScl; }
 	public float getYScl()				{ return yScl; }
@@ -541,25 +535,25 @@ public abstract class Entity
 	public float[] getColorCoords()		{ return color; }
 	public float[] getTextureCoords()	{ return texture; }
 	public Texture getTexture()			{ return tex; }
-	public Point[] getColPoints()		{ return colPoints; }
+	public Vector2f[] getVertVecs()		{ return vertVecs; }
 	public double getDiagonal()			{ return diagonal; }
 	public double getRad()				{ return rad; }
 	public double getDiagAngle()		{ return diagAngle; }
 	public int getEntID()				{ return entID; }
 	public static int getEntCount()		{ return entCount; }
 	public boolean willCollideWithPlayer() { return willCollideWithPlayer; }
+	public boolean isCircular()			{ return circular; }
 	
 	public void setSize(float size)		{ this.size = size; }
-	public void setXPos(float xPos)		{ this.xPos = xPos; }
-	public void setYPos(float yPos)		{ this.yPos = yPos; }
+	public void setXPos(float xPos)		{ this.posVec.setX(xPos); }
+	public void setYPos(float yPos)		{ this.posVec.setY(yPos); }
 	public void setAngle(float angle)	{ this.angle = angle; }
 	public void setXScl(float xScl)		{ this.xScl = xScl; }
 	public void setYScl(float yScl)		{ this.yScl	= yScl; }
 	public void setWillCollideWithPlayer(boolean willCollideWithPlayer) { this.willCollideWithPlayer = willCollideWithPlayer; }
-	
-	public void setColPoints(Point[] colPoints)
+	public void setVertexVecs(Vector2f[] vertVecs)
 	{
-		if (colPoints.length == 4)
-			this.colPoints = colPoints;
+		if (vertVecs.length == 4)
+			this.vertVecs = vertVecs;
 	}
 }

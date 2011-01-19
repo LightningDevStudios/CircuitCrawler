@@ -64,7 +64,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	//sets position to to new x and y and interpolates
 	public void moveTo (float x, float y)
 	{
-		moveVec.set(x - xPos, y - yPos);
+		moveVec.set(x - getXPos(), y - getYPos());
 		isInterpTrans = true;
 		interpMoveTimeMs = Stopwatch.elapsedTimeInMilliseconds();
 	}
@@ -129,8 +129,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	{
 		if (isInterpTrans)
 		{
-			xPos -= moveInterpVec.getX();
-			yPos -= moveInterpVec.getY();
+			posVec.sub(moveInterpVec);
 			isInterpTrans = false;
 		}
 		
@@ -155,8 +154,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	//mutator for position
 	public void setPos (float x, float y)
 	{
-		xPos = x;
-		yPos = y;
+		posVec.set(x, y);
 		Game.worldOutdated = true;
 	}
 	
@@ -186,15 +184,13 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 		if (isInterpTrans)
 		{		
 			moveInterpCount++;
-			moveInterpVec = Vector2f.scale(Vector2f.norm(moveVec), moveSpeed / 1000 * (Stopwatch.elapsedTimeInMilliseconds() - interpMoveTimeMs));
-			xPos += moveInterpVec.getX();
-			yPos += moveInterpVec.getY();
+			moveInterpVec = Vector2f.scale(Vector2f.normalize(moveVec), moveSpeed / 1000 * (Stopwatch.elapsedTimeInMilliseconds() - interpMoveTimeMs));
+			posVec.add(moveInterpVec);
 			
 			if (moveVec.mag() - moveInterpVec.mag() * moveInterpCount <= 0)
 			{
 				Vector2f vecToEnd = Vector2f.sub(moveVec, Vector2f.scale(moveInterpVec, moveInterpCount));
-				xPos += vecToEnd.getX();
-				yPos += vecToEnd.getY();
+				posVec.add(vecToEnd);
 				isInterpTrans = false;
 				isRendered = true;
 				moveInterpCount = 0;
@@ -249,7 +245,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 		if (isInterpScl)
 		{				
 			sclInterpCount++;
-			sclInterpVec = Vector2f.scale(Vector2f.norm(sclVec), sclSpeed / 1000 * (Stopwatch.elapsedTimeInMilliseconds() - interpSclTimeMs));
+			sclInterpVec = Vector2f.scale(Vector2f.normalize(sclVec), sclSpeed / 1000 * (Stopwatch.elapsedTimeInMilliseconds() - interpSclTimeMs));
 			xScl += sclInterpVec.getX();
 			yScl += sclInterpVec.getY();
 			

@@ -96,7 +96,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 			{
 				if (t.isRendered)
 				{
-					gl.glTranslatef(t.xPos, t.yPos, 0.0f);
+					gl.glTranslatef(t.getXPos(), t.getYPos(), 0.0f);
 					t.draw(gl);
 					
 					gl.glLoadIdentity();
@@ -183,7 +183,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 			//render it
 			if (ent.isRendered)
 			{								
-				gl.glTranslatef(ent.xPos, ent.yPos, 0.0f);
+				gl.glTranslatef(ent.getXPos(), ent.getYPos(), 0.0f);
 				gl.glRotatef(ent.angle, 0.0f, 0.0f, 1.0f);
 				gl.glScalef(ent.xScl, ent.yScl, 1.0f);
 				ent.draw(gl);
@@ -267,7 +267,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 					
 					//move the player
 					game.player.setAngle(newAngle - 90.0f);
-					game.player.setPos(game.player.xPos + (x / 10) * game.player.speed, game.player.yPos + (y / 10) * game.player.speed);
+					game.player.setPos(game.player.getXPos() + (x / 10) * game.player.speed, game.player.getYPos() + (y / 10) * game.player.speed);
 					Game.worldOutdated = true;
 					
 					//check collision and reverse motion if it's colliding with something solid
@@ -279,7 +279,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 							if (colEnt.willCollideWithPlayer())
 							{
 								game.player.setAngle(oldAngle);
-								game.player.setPos(game.player.xPos - (x / 10) * game.player.speed, game.player.yPos - (y / 10) * game.player.speed);
+								game.player.setPos(game.player.getXPos() - (x / 10) * game.player.speed, game.player.getYPos() - (y / 10) * game.player.speed);
 								Game.worldOutdated = false;
 							}
 						}
@@ -291,7 +291,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 							if (t.isRendered && (t.isColliding(game.player) || game.player.getHeldObject() != null && t.isColliding(game.player.getHeldObject())))
 							{
 								game.player.setAngle(oldAngle);
-								game.player.setPos(game.player.xPos - (x / 10) * game.player.speed, game.player.yPos - (y / 10) * game.player.speed);
+								game.player.setPos(game.player.getXPos() - (x / 10) * game.player.speed, game.player.getYPos() - (y / 10) * game.player.speed);
 								Game.worldOutdated = false;
 							}
 						}
@@ -302,17 +302,17 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 					if (game.player.isHoldingObject())
 						game.player.updateHeldObjectPosition();
 					
-					Tile nTile = game.nearestTile(game.player);
+					//Tile nTile = game.nearestTile(game.player);
 					
-					if (nTile.isPit())
+					/*if (nTile.isPit())
 					{
 						game.player.moveTo(nTile.getXPos(), nTile.getYPos());
 						game.player.scaleTo(0.0f, 0.0f);
-					}
+					}*/
 					
 					//move camera to follow player
-					game.camPosX = game.player.xPos;
-					game.camPosY = game.player.yPos;
+					game.camPosX = game.player.getXPos();
+					game.camPosY = game.player.getYPos();
 					
 					//camera can't go further than defined level bounds
 					if (game.camPosX < game.worldMinX)
