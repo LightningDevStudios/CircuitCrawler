@@ -3,7 +3,6 @@ package com.lds.game;
 import javax.microedition.khronos.opengles.GL10;
 
 import com.lds.EntityCleaner;
-import com.lds.Point;
 import com.lds.Texture;
 import com.lds.TilesetHelper;
 import com.lds.Enums.RenderMode;
@@ -50,7 +49,7 @@ public abstract class Entity
 	
 	//collision data
 	protected Vector2f[] vertVecs;
-	protected double diagonal, rad, diagAngle;
+	protected double diagonal, rad;
 	
 	public ArrayList<Entity> colList = new ArrayList<Entity>();
 	public ArrayList<Entity> colIgnoreList = new ArrayList<Entity>();
@@ -82,9 +81,8 @@ public abstract class Entity
 		halfSize = size / 2;
 		
 		//initializes collision variables
-		rad = Math.toRadians((double)(angle + 90.0f));
+		rad = Math.toRadians((double)(angle));
 		diagonal = Math.sqrt(Math.pow(halfSize * xScl, 2) + Math.pow(halfSize * yScl, 2)); //distance from center to corner
-		diagAngle = Math.asin((halfSize * xScl) / diagonal); //angle between vertical line and diagonal to top left corner
 		 
 		vertVecs = new Vector2f[4];
 		for (int i = 0; i < vertVecs.length; i++)
@@ -186,27 +184,18 @@ public abstract class Entity
 	//reinitialize colllision variables
 	public void initializeCollisionVariables ()
 	{
-		rad = Math.toRadians((double)(angle + 90.0f));
-		
-		float unscaledX = (float)Math.cos(angle) * halfSize;
-		float unscaledY = (float)Math.sin(angle) * halfSize;
-		Vector2f xVec = new Vector2f(unscaledX * xScl, unscaledY * xScl);
-		Vector2f yVec = new Vector2f(unscaledX * yScl, unscaledY * yScl);
-		Vector2f diagVec = new Vector2f(Vector2f.add(xVec, yVec));
-		
-		diagonal = diagVec.mag();
-	}
+		rad = Math.toRadians(angle);
+		diagonal = Math.sqrt(Math.pow(halfSize * xScl, 2) + Math.pow(halfSize * yScl, 2));	}
 	
 	//used to get the absolute, not relative, positions of the entity's 4 points in the XY Plane
 	public void updateAbsolutePointLocations ()
 	{	
-		float unscaledX = (float)Math.cos(angle) * halfSize;
-		float unscaledY = (float)Math.sin(angle) * halfSize;
-		Vector2f xVec = new Vector2f(unscaledX * xScl, unscaledY * xScl);
-		Vector2f yVec = new Vector2f(unscaledX * yScl, unscaledY * yScl);
+		Vector2f unscaledVec = Vector2f.scale(new Vector2f((float)Math.cos(Math.toRadians(angle - 90.0f)), (float)Math.sin(Math.toRadians(angle - 90.0f))), halfSize);
+		Vector2f xVec = Vector2f.scale(unscaledVec, xScl);
+		Vector2f yVec = Vector2f.scale(Vector2f.getNormal(unscaledVec), yScl);
 		 
 		vertVecs[0].set(Vector2f.add(posVec, Vector2f.add(xVec, yVec))); //top  right
-		vertVecs[1].set(Vector2f.add(posVec, Vector2f.add(Vector2f.neg(yVec), xVec))); //top left
+		vertVecs[1].set(Vector2f.add(posVec, Vector2f.sub(yVec, xVec))); //top left
 		vertVecs[2].set(Vector2f.add(posVec, Vector2f.neg(vertVecs[0]))); //bottom left
 		vertVecs[3].set(Vector2f.add(posVec, Vector2f.neg(vertVecs[1]))); //bottom right
 	}
@@ -323,6 +312,7 @@ public abstract class Entity
 				return false;
 			}
 		}
+		System.out.println("Collision!");
 		return true;
 	}
 			
@@ -538,7 +528,6 @@ public abstract class Entity
 	public Vector2f[] getVertVecs()		{ return vertVecs; }
 	public double getDiagonal()			{ return diagonal; }
 	public double getRad()				{ return rad; }
-	public double getDiagAngle()		{ return diagAngle; }
 	public int getEntID()				{ return entID; }
 	public static int getEntCount()		{ return entCount; }
 	public boolean willCollideWithPlayer() { return willCollideWithPlayer; }

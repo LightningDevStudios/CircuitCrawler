@@ -1,5 +1,7 @@
 package com.lds;
 
+/*TODO: DELETE THIS CLASS */
+
 public class Point 
 {
 	private float x, y;
