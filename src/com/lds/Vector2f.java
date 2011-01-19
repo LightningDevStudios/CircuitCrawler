@@ -153,7 +153,7 @@ public class Vector2f
 		return x * v.getX() + y * v.getY();
 	}
 	
-	public Vector2f norm ()
+	public Vector2f normalize ()
 	{
 		scale(1 / mag());
 		return this;
@@ -161,12 +161,7 @@ public class Vector2f
 	
 	public float angle (Vector2f v)
 	{
-		float vDot = this.dot(v) / ( this.mag() * v.mag() );
-	    if( vDot < -1.0f) 
-	    	vDot = -1.0f;
-	    if( vDot >  1.0f) 
-	    	vDot =  1.0f;
-	    return((float)Math.acos(vDot));
+	    return((float)Math.acos(Vector2f.normalize(this).dot(Vector2f.normalize(v))));
 	}
 	
 	public float angle()

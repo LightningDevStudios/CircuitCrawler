@@ -190,14 +190,14 @@ public abstract class Entity
 	//used to get the absolute, not relative, positions of the entity's 4 points in the XY Plane
 	public void updateAbsolutePointLocations ()
 	{	
-		Vector2f unscaledVec = Vector2f.scale(new Vector2f((float)Math.cos(Math.toRadians(angle - 90.0f)), (float)Math.sin(Math.toRadians(angle - 90.0f))), halfSize);
+		Vector2f unscaledVec = Vector2f.scale(new Vector2f((float)Math.cos(Math.toRadians(angle)), (float)Math.sin(Math.toRadians(angle))), halfSize);
 		Vector2f xVec = Vector2f.scale(unscaledVec, xScl);
 		Vector2f yVec = Vector2f.scale(Vector2f.getNormal(unscaledVec), yScl);
 		 
 		vertVecs[0].set(Vector2f.add(posVec, Vector2f.add(xVec, yVec))); //top  right
 		vertVecs[1].set(Vector2f.add(posVec, Vector2f.sub(yVec, xVec))); //top left
-		vertVecs[2].set(Vector2f.add(posVec, Vector2f.neg(vertVecs[0]))); //bottom left
-		vertVecs[3].set(Vector2f.add(posVec, Vector2f.neg(vertVecs[1]))); //bottom right
+		vertVecs[2].set(Vector2f.add(posVec, Vector2f.add(Vector2f.neg(xVec), Vector2f.neg(yVec)))); //bottom left
+		vertVecs[3].set(Vector2f.add(posVec, Vector2f.sub(xVec, yVec))); //bottom right
 	}
 	
 	public boolean closeEnough (Entity ent)
@@ -269,45 +269,45 @@ public abstract class Entity
 		ent.updateAbsolutePointLocations();
 		
 		Vector2f[] axes = new Vector2f[4];
-		axes[0] = Vector2f.normalize(Vector2f.sub(this.vertVecs[0], this.vertVecs[1]));
+		axes[0] = Vector2f.abs(Vector2f.sub(this.vertVecs[0], this.vertVecs[1]));
 		axes[1] = Vector2f.getNormal(axes[0]);
-		axes[2] = Vector2f.normalize(Vector2f.sub(ent.vertVecs[0], ent.vertVecs[1]));
+		axes[2] = Vector2f.abs(Vector2f.sub(ent.vertVecs[0], ent.vertVecs[1]));
 		axes[3] = Vector2f.getNormal(axes[2]);
 		
 		for (Vector2f axis : axes)
 		{
+			axis.normalize();
+			
 			float min1;
 			float max1;
 			float min2;
 			float max2;
-			
+						
 			//get mins and maxes for first entity
-			float firstDotProd1 = axis.dot(vertVecs[0]);
-			min1 = firstDotProd1;
-			max1 = firstDotProd1;
-			for (int i = 1; i < vertVecs.length; i++)
+			min1 = axis.dot(this.vertVecs[0]);
+			max1 = min1;
+			for (int i = 1; i < this.vertVecs.length; i++)
 			{
-				float dotProd1 = axis.dot(vertVecs[i]);
+				float dotProd1 = axis.dot(this.vertVecs[i]);
 				if (dotProd1 > max1)
 					max1 = dotProd1;
-				else
+				if (dotProd1 < min1)
 					min1 = dotProd1;
 			}
 			
 			//get mins and maxes for second entity
-			float firstDotProd2 = axis.dot(ent.vertVecs[0]);
-			min2 = firstDotProd2;
-			max2 = firstDotProd2;
+			min2 = axis.dot(ent.vertVecs[0]);
+			max2 = min2;
 			for (int i = 1; i < ent.vertVecs.length; i++)
 			{
 				float dotProd2 = axis.dot(ent.vertVecs[i]);
 				if (dotProd2 > max2)
 					max2 = dotProd2;
-				else
+				if (dotProd2 < min2)
 					min2 = dotProd2;
 			}
 			
-			if ((max1 > max2 || max1 < min2) && (max2 > max1 || max2 < min1))
+			if (!((max1 < max2 && max1 > min2) || (max2 < max1 && max2 > min1)))
 			{
 				return false;
 			}
