@@ -105,7 +105,15 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 			}
 		}
 		
-		//Tile test = game.nearestTile(game.player);
+		Tile test = game.nearestTile(game.player);
+		
+		if (test.isPit())
+		{
+			game.player.moveTo(test.getXPos(), test.getYPos());
+			game.player.scaleTo(0, 0);
+			game.someText.setBitmap(game.sr.textToBitmap("Pit Tile"));
+			game.tl.reload(game.someText);
+		}
 		
 		//iterate through triggers
 		

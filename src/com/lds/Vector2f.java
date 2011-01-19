@@ -73,7 +73,7 @@ public class Vector2f
 	
 	public static Vector2f getNormal (Vector2f v)
 	{
-		return new Vector2f(-v.getY(), v.getX());
+		return new Vector2f(v.getY(), -v.getX());
 	}
 	
 	/************************************************************************************************************
@@ -153,7 +153,7 @@ public class Vector2f
 		return x * v.getX() + y * v.getY();
 	}
 	
-	public Vector2f norm ()
+	public Vector2f normalize ()
 	{
 		scale(1 / mag());
 		return this;
