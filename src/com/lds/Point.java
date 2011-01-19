@@ -8,10 +8,10 @@ public class Point
 	//used only for collision testing
 	private float colC;
 	
-	public Point (float _x, float _y)
+	public Point (float x, float y)
 	{
-		x = _x;
-		y = _y;
+		this.x = x;
+		this.y = y;
 		colC = 0;
 	}
 	

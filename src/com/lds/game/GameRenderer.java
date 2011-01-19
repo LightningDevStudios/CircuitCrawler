@@ -10,6 +10,7 @@ import android.content.Context;
 
 import com.lds.EntityCleaner;
 import com.lds.Stopwatch;
+import com.lds.Vector2f;
 import com.lds.UI.UIButton;
 import com.lds.UI.UIJoypad;
 import com.lds.trigger.Trigger;
@@ -71,7 +72,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		//clear the screen
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		
-		frameInterval = Stopwatch.elapsedTimeInMilliseconds();
+		frameInterval = Stopwatch.elapsedTimeMs();
 		
 		//tick the stopwatch every frame, gives relatively stable intervals
 		Stopwatch.tick();
@@ -217,7 +218,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		}
 		
 		//framerate count
-		System.out.println("FPS: " + (1000 / (Stopwatch.elapsedTimeInMilliseconds() - frameInterval)));
+		System.out.println("FPS: " + (1000 / (Stopwatch.elapsedTimeMs() - frameInterval)));
 		
 		if (frameCount == 101)
 		{
@@ -255,19 +256,17 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 					UIJoypad UIjp = (UIJoypad)ent;
 					
 					//get the relative X and Y coordinates
-					float x = UIjp.getRelativeX(xInput);
-					float y = UIjp.getRelativeY(yInput);
+					Vector2f tempMoveVec = UIjp.getMovementVec((int)xInput, (int)yInput);
 					
 					//Figure out the angle
-					double newRad = Math.atan2((double)y, (double)x);
-					if (newRad < 0)
-						newRad += 2 * Math.PI;
-					float newAngle = (float)Math.toDegrees(newRad);
+					float newAngle = (float)Math.toDegrees(tempMoveVec.angle());
 					float oldAngle = game.player.angle;
 					
 					//move the player
-					game.player.setAngle(newAngle - 90.0f);
-					game.player.setPos(game.player.getXPos() + (x / 10) * game.player.speed, game.player.getYPos() + (y / 10) * game.player.speed);
+					//TODO move w/ time, use move()?
+					game.player.setAngle(newAngle + 90.0f);
+					game.player.setPos(game.player.getXPos() + tempMoveVec.getX() * game.player.speed / 10, game.player.getYPos() + (tempMoveVec.getY()) * game.player.speed / 10);
+					//game.player.move(tempMoveVec.getX(), tempMoveVec.getY());
 					Game.worldOutdated = true;
 					
 					//check collision and reverse motion if it's colliding with something solid
@@ -279,7 +278,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 							if (colEnt.willCollideWithPlayer())
 							{
 								game.player.setAngle(oldAngle);
-								game.player.setPos(game.player.getXPos() - (x / 10) * game.player.speed, game.player.getYPos() - (y / 10) * game.player.speed);
+								game.player.setPos(game.player.getXPos() - tempMoveVec.getX() * game.player.speed / 10, game.player.getYPos() - tempMoveVec.getY() * game.player.speed / 10);
 								Game.worldOutdated = false;
 							}
 						}
@@ -291,7 +290,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 							if (t.isRendered && (t.isColliding(game.player) || game.player.getHeldObject() != null && t.isColliding(game.player.getHeldObject())))
 							{
 								game.player.setAngle(oldAngle);
-								game.player.setPos(game.player.getXPos() - (x / 10) * game.player.speed, game.player.getYPos() - (y / 10) * game.player.speed);
+								game.player.setPos(game.player.getXPos() - tempMoveVec.getX() * game.player.speed / 10, game.player.getYPos() - tempMoveVec.getY() * game.player.speed / 10);
 								Game.worldOutdated = false;
 							}
 						}
@@ -339,7 +338,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 					if (btn.canPress(500))
 					{ 
 						((UIButton)ent).press();
-						btn.setIntervalTime(Stopwatch.elapsedTimeInMilliseconds());
+						btn.setIntervalTime(Stopwatch.elapsedTimeMs());
 					}
 				}
 			}

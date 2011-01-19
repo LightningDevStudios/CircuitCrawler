@@ -10,7 +10,7 @@ import com.lds.EntityCleaner;
 import com.lds.Enums.Direction;
 import com.lds.Enums.RenderMode;
 import com.lds.Stopwatch;
-import com.lds.TextRenderer;
+import com.lds.StringRenderer;
 import com.lds.Texture;
 import com.lds.TextureLoader;
 import com.lds.Enums.UIPosition;
@@ -32,7 +32,7 @@ public class Game
 	
 	public TextureLoader tl;
 	public EntityCleaner cleaner;
-	public TextRenderer tr;
+	public StringRenderer sr;
 		
 	//Camera data
 	public static float screenW, screenH;
@@ -74,10 +74,10 @@ public class Game
 		
 		tileset = new Tile[16][16];
 		cleaner = new EntityCleaner();
-		tr = new TextRenderer(text);
+		sr = new StringRenderer(text);
 		tl = new TextureLoader(gl);
 		
-		Texture someText = tr.textToTexture("($)&(+)");
+		Texture someText = new Texture("Testing!", sr);
 		
 		tl.loadTexture(tilesetcolors);
 		tl.loadTexture(tilesetwire);
@@ -94,10 +94,10 @@ public class Game
 					tileset[i][j].setTilesetMode(tilesetwire, 2, 0);
 					tileset[i][j].setAsWall();
 				}
-				else if (j == 9)
+				else if (i == 13)
 				{
-					tileset[i][j].setTilesetMode(tilesetwire, 3, 0);
-					tileset[i][j].setAsFloor();
+					tileset[i][j].setTilesetMode(tilesetwire, 0, 1);
+					tileset[i][j].setAsPit();
 				}
 				else
 				{
@@ -159,12 +159,12 @@ public class Game
 		btnA = new UIButton(80.0f, 80.0f, UIPosition.BOTTOMRIGHT);
 		btnA.autoPadding(0.0f, 0.0f, 5.0f, 90.0f);
 		btnA.setColorMode(86, 93, 128, 128);
-		btnA.setIntervalTime(Stopwatch.elapsedTimeInMilliseconds());
+		btnA.setIntervalTime(Stopwatch.elapsedTimeMs());
 		
 		btnB = new UIButton(80.0f, 80.0f, UIPosition.BOTTOMRIGHT);
 		btnB.autoPadding(0.0f, 0.0f, 90.0f, 5.0f);
 		btnB.setColorMode(200, 93, 50, 128);
-		btnB.setIntervalTime(Stopwatch.elapsedTimeInMilliseconds());
+		btnB.setIntervalTime(Stopwatch.elapsedTimeMs());
 		
 		joypad = new UIJoypad(100, 100, UIPosition.BOTTOMLEFT);
 		joypad.autoPadding(0.0f, 5.0f, 5.0f, 0.0f);
@@ -225,26 +225,20 @@ public class Game
 	
 	public void updateLocalTileset()
 	{
-		float minX, maxX, minY, maxY, tilesetWidth, tilesetHeight;
+		float minX, maxX, minY, maxY, tilesetHalfWidth, tilesetHalfHeight;
 		minX = camPosX - (screenW / 2);
 		maxX = camPosX + (screenW / 2);
 		minY = camPosY - (screenH / 2);
 		maxY = camPosY + (screenH / 2);
 		
-		tilesetWidth = tileset[0].length * Tile.TILE_SIZE_F;
-		tilesetHeight = tileset.length * Tile.TILE_SIZE_F;
+		tilesetHalfWidth = tileset[0].length * Tile.TILE_SIZE_F / 2;
+		tilesetHalfHeight = tileset.length * Tile.TILE_SIZE_F / 2;
 		
-		int minXBound = (int)Math.floor(((minX + (tilesetWidth / 2)) / Tile.TILE_SIZE_F) - 1);
-		int maxXBound = (int)Math.ceil(((maxX + (tilesetWidth / 2)) / Tile.TILE_SIZE_F) - 1);
-		int minYBound = (tileset.length - 2) - (int)Math.floor(((maxY + (tilesetHeight / 2)) / Tile.TILE_SIZE_F) - 1);
-		int maxYBound = (tileset.length - 1) - (int)Math.ceil(((minY + (tilesetHeight / 2)) / Tile.TILE_SIZE_F) - 1);
-		
-		if (minXBound < 0) { minXBound = 0; }
-		if (maxXBound >= tileset[0].length) { maxXBound = tileset[0].length - 1; }
-		
-		if (minYBound < 0) { minYBound = 0; }
-		if (maxYBound >= tileset.length) { maxYBound = tileset.length - 1; }
-		
+		int minXBound = (int)(minX + tilesetHalfWidth) / Tile.TILE_SIZE;
+		int maxXBound = ((int)(maxX + tilesetHalfWidth) / Tile.TILE_SIZE) + 1;
+		int minYBound = (int)(Math.abs(maxY - tilesetHalfHeight)) / Tile.TILE_SIZE;
+		int maxYBound = ((int)(Math.abs(minY - tilesetHalfHeight)) / Tile.TILE_SIZE) + 1;
+
 		//set all to false
 		for (Tile[] ts : tileset)
 		{
@@ -289,11 +283,12 @@ public class Game
 	
 	public Tile nearestTile(Entity ent)
 	{	
-		float tilesetWidth = tileset[0].length * Tile.TILE_SIZE_F;
-		float tilesetHeight = tileset.length * Tile.TILE_SIZE_F;
-		int x = (int)(((ent.getXPos() + (tilesetWidth / 2)) / Tile.TILE_SIZE_F) - 1) + 1;
-		int y = ((int)tilesetHeight - 1) - (int)(((ent.getYPos() + (tilesetHeight / 2)) / Tile.TILE_SIZE_F) - 1) + 1;
-		System.out.println(x + ", " + y);
-		return null;//return tileset[x][y];
+		float tilesetHalfWidth = tileset[0].length * Tile.TILE_SIZE_F / 2;
+		float tilesetHalfHeight = tileset.length * Tile.TILE_SIZE_F / 2;
+		
+		int x = (int)(ent.getXPos() + tilesetHalfWidth) / Tile.TILE_SIZE;
+		int y = (int)(Math.abs(ent.getYPos() - tilesetHalfHeight)) / Tile.TILE_SIZE;
+		
+		return tileset[y][x];
 	}
 }

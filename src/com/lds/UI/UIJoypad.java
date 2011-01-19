@@ -1,6 +1,7 @@
 package com.lds.UI;
 
 import com.lds.Enums.UIPosition;
+import com.lds.Vector2f;
 
 public class UIJoypad extends UIEntity
 {
@@ -23,7 +24,12 @@ public class UIJoypad extends UIEntity
 	{
 		super(xSize, ySize, xRelative, yRelative, topPad, leftPad, bottomPad, rightPad);
 	}
-	
+
+	public Vector2f getMovementVec(int x, int y)
+	{
+		return new Vector2f(x - xPos, y - yPos);
+	}
+	/*
 	public float getRelativeX (float xInput)
 	{
 		return xInput - xPos;
@@ -32,5 +38,5 @@ public class UIJoypad extends UIEntity
 	public float getRelativeY (float yInput)
 	{
 		return yInput - yPos;
-	}
+	}*/
 }

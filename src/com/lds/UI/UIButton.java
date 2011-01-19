@@ -44,7 +44,7 @@ public class UIButton extends UIEntity
 	
 	public boolean canPress(int interval)
 	{
-		if (Stopwatch.elapsedTimeInMilliseconds() - intervalTime >= interval)
+		if (Stopwatch.elapsedTimeMs() - intervalTime >= interval)
 			return true;
 		
 		else

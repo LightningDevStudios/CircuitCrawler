@@ -2,11 +2,11 @@ package com.lds;
 
 import android.graphics.Bitmap;
 
-public class TextRenderer 
+public class StringRenderer 
 {
 	Texture text;
 	
-	public TextRenderer(Texture text)
+	public StringRenderer(Texture text)
 	{
 		this.text = text;
 	}
@@ -31,11 +31,5 @@ public class TextRenderer
 		}
 		
 		return bmp;
-	}
-	
-	public Texture textToTexture(String input)
-	{
-		Bitmap bmp = textToBitmap(input);
-		return new Texture(bmp, bmp.getWidth(), bmp.getHeight(), 1, 1);
 	}
 }
