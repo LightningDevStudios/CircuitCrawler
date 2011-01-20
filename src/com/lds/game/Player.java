@@ -2,6 +2,7 @@ package com.lds.game;
 
 import com.lds.EntityCleaner;
 import com.lds.Enums.RenderMode;
+import com.lds.Vector2f;
 
 public class Player extends Character //your character, protagonist
 {
@@ -98,9 +99,14 @@ public class Player extends Character //your character, protagonist
 
 	public void updateHeldObjectPosition()
 	{
-		float heldDistance = halfSize + hObj.halfSize + 10.0f;
-		initializeCollisionVariables();
-		hObj.setPos((float)Math.cos(rad) * heldDistance + getXPos(), (float)Math.sin(rad) * heldDistance + getYPos());
+		//TODO: FIND OUT WHY THE FUCK THIS WORKS
+		float heldDistance = hObj.size + this.halfSize + 10.0f;
+		double rad = Math.toRadians(angle + 90.0);
+		Vector2f directionVec = new Vector2f((float)Math.cos(rad), (float)Math.sin(rad));
+		directionVec.scale(heldDistance);
+		directionVec.add(posVec);
+		
+		hObj.setPos(directionVec.getX(), directionVec.getY());
 		hObj.setAngle(angle);
 	}
 }

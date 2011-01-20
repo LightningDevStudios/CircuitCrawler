@@ -32,7 +32,6 @@ public class Game
 	
 	public TextureLoader tl;
 	public EntityCleaner cleaner;
-	public StringRenderer sr;
 		
 	//Camera data
 	public static float screenW, screenH;
@@ -75,8 +74,10 @@ public class Game
 		
 		tileset = new Tile[16][16];
 		cleaner = new EntityCleaner();
-		sr = new StringRenderer(text);
+		StringRenderer sr = StringRenderer.getInstance();
 		tl = new TextureLoader(gl);
+		
+		sr.loadTextTileset(text);
 		
 		someText = new Texture("Testing!", sr);
 		
@@ -118,7 +119,7 @@ public class Game
 		entList.add(button);
 		button.setWillCollideWithPlayer(false);
 		
-		block = new PhysBlock(30.0f, 200.0f, 0.0f, RenderMode.COLOR);
+		block = new PhysBlock(20.0f, 200.0f, 0.0f, RenderMode.COLOR);
 		block.setColorMode(0, 255, 255, 255);
 		entList.add(block);
 		block.setWillCollideWithPlayer(true);
