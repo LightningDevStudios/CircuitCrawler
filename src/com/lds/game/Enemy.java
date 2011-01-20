@@ -3,7 +3,7 @@ package com.lds.game;
 import com.lds.Enums.RenderMode;
 import com.lds.EntityCleaner;
 
-public /*abstract*/ class Enemy extends Character //enemies will fall under this class
+public abstract class Enemy extends Character //enemies will fall under this class
 {
 	private static int enemyCount = 0;
 
