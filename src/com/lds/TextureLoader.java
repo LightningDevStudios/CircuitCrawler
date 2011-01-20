@@ -6,14 +6,28 @@ import android.opengl.GLUtils;
 
 public class TextureLoader 
 {
+	private static TextureLoader tl_s;
 	private int[] tempTexture;
-	
 	private GL10 gl;
-	
-	public TextureLoader(GL10 gl)
+		
+	private TextureLoader()
 	{
-		this.gl = gl;
 		tempTexture = new int[1];
+	}
+	
+	public static TextureLoader getInstance()
+	{
+		if (tl_s == null)
+		{
+			synchronized(TextureLoader.class)
+			{
+				if (tl_s == null)
+				{
+					tl_s = new TextureLoader();
+				}
+			}
+		}
+		return tl_s;
 	}
 	
 	public void loadTexture(Texture tex)
@@ -49,5 +63,10 @@ public class TextureLoader
 		gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_T, GL10.GL_REPEAT);
 		
 		GLUtils.texImage2D(GL10.GL_TEXTURE_2D, 0, tex.getBitmap(), 0);
+	}
+	
+	public void initialize(GL10 gl)
+	{
+		this.gl = gl;
 	}
 }

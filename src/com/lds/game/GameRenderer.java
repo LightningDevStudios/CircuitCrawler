@@ -107,12 +107,11 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		
 		Tile test = game.nearestTile(game.player);
 		
-		if (test.isPit())
+		if (test != null && test.isPit())
 		{
 			game.player.moveTo(test.getXPos(), test.getYPos());
 			game.player.scaleTo(0, 0);
-			game.someText.reloadTexture("Yer a wizerd harry!");
-			game.tl.reload(game.someText);
+			game.textbox.reloadTexture("Yer a wizerd harry!");
 		}
 		
 		//iterate through triggers

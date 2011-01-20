@@ -31,7 +31,7 @@ public abstract class UIEntity
 	private float colorR, colorG, colorB, colorA;
 	protected UIPosition position;
 	protected RenderMode renderMode;
-	private Texture tex;
+	protected Texture tex;
 	
 	private float[] vertices;
 	private float[] texture;

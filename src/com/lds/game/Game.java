@@ -30,7 +30,6 @@ public class Game
 	public ArrayList<UIEntity> UIList;
 	public ArrayList<Trigger> triggerList;
 	
-	public TextureLoader tl;
 	public EntityCleaner cleaner;
 		
 	//Camera data
@@ -54,7 +53,7 @@ public class Game
 	public UIButton btnA;
 	public UIButton btnB;	
 	public UIJoypad joypad;
-	public UIImage image;
+	public UITextBox textbox;
 	public Player player;
 	public PhysBlock block;
 	public Button button;
@@ -75,11 +74,13 @@ public class Game
 		tileset = new Tile[16][16];
 		cleaner = new EntityCleaner();
 		StringRenderer sr = StringRenderer.getInstance();
-		tl = new TextureLoader(gl);
+		TextureLoader.getInstance().initialize(gl);
 		
 		sr.loadTextTileset(text);
 		
 		someText = new Texture("Testing!", sr);
+		
+		TextureLoader tl = TextureLoader.getInstance();
 		
 		tl.loadTexture(tilesetcolors);
 		tl.loadTexture(tilesetwire);
@@ -172,16 +173,16 @@ public class Game
 		joypad.autoPadding(0.0f, 5.0f, 5.0f, 0.0f);
 		joypad.setBlankMode();
 		
-		image = new UIImage(112, 32, UIPosition.TOPLEFT);
-		image.autoPadding(5.0f, 5.0f, 0.0f, 0.0f);
-		image.setTextureMode(someText);
+		textbox = new UITextBox(112, 32, UIPosition.TOPLEFT);
+		textbox.autoPadding(5.0f, 5.0f, 0.0f, 0.0f);
+		textbox.setTextureMode(someText);
 		
 		UIList.add(healthBar);
 		UIList.add(energyBar);
 		UIList.add(btnA);
 		UIList.add(btnB);
 		UIList.add(joypad);
-		UIList.add(image);
+		UIList.add(textbox);
 		
 		camPosX = 0.0f;
 		camPosY = 0.0f;
@@ -291,6 +292,12 @@ public class Game
 		int x = (int)(ent.getXPos() + tilesetHalfWidth) / Tile.TILE_SIZE;
 		int y = (int)(Math.abs(ent.getYPos() - tilesetHalfHeight)) / Tile.TILE_SIZE;
 		
-		return tileset[y][x];
+		if (x < tileset[0].length && x >= 0 && y < tileset.length && y >= 0)
+		{
+			return tileset[y][x];
+		}
+		
+		return null;
+		
 	}
 }
