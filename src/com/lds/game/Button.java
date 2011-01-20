@@ -12,7 +12,7 @@ public class Button extends StaticEnt
 		super(Entity.DEFAULT_SIZE, xPos, yPos, 0.0f, 1.0f, 1.0f, true, renderMode);
 		active = false;
 		this.d = d;
-		//circular = true;
+		circular = true;
 	}
 	
 	public boolean isActive ()

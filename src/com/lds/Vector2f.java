@@ -166,13 +166,18 @@ public class Vector2f
 	
 	public float angle()
 	{
-		//return angle(new Vector2f (1, 0));
 		return (float)(Math.atan2(y, x) + Math.PI);
 	}
 	
 	public String toString ()
 	{
 		return "<" + x + ", " + y + ">";
+	}
+	
+	public Vector2f setNormal ()
+	{
+		set(y, -x);
+		return this;
 	}
 	
 	/************

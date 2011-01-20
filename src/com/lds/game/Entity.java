@@ -254,13 +254,62 @@ public abstract class Entity
 	{
 		if (Vector2f.sub(this.posVec, ent.posVec).mag() < halfSize + ent.halfSize)
 			return true;
-		else
-			return false;
+		return false;
 	}
 	
 	private boolean isRectangleCollidingWithCircle (Entity ent) //if only ent is a circle
 	{
-		return false;
+		this.updateAbsolutePointLocations();
+		
+		Vector2f[] axes = new Vector2f[3];
+		//set rectangle-based axes
+		axes[0] = Vector2f.abs(Vector2f.sub(vertVecs[0], this.vertVecs[1]));
+		axes[1] = Vector2f.getNormal(axes[0]);
+		//set circle axis
+		axes[2] = Vector2f.sub(vertVecs[0], ent.posVec);
+		for (int i = 1; i < vertVecs.length; i++)
+		{
+			Vector2f tempVec = Vector2f.sub(vertVecs[i], ent.posVec);
+			if (axes[2].mag() > tempVec.mag())
+			{
+				axes[2].set(tempVec);
+			}
+		}
+		//axes[2].setNormal();
+		
+		for (Vector2f axis : axes)
+		{
+			axis.normalize();
+						
+			//get mins and maxes for rectangle
+			float min1 = axis.dot(this.vertVecs[0]);
+			float max1 = min1;
+			for (int i = 1; i < this.vertVecs.length; i++)
+			{
+				float dotProd1 = axis.dot(this.vertVecs[i]);
+				if (dotProd1 > max1)
+					max1 = dotProd1;
+				if (dotProd1 < min1)
+					min1 = dotProd1;
+			}
+			
+			//get mins and maxes for circle 
+			float min2 = axis.dot(Vector2f.add(ent.posVec, Vector2f.scale(axis, ent.halfSize)));
+			float max2 = axis.dot(Vector2f.sub(ent.posVec, Vector2f.scale(axis, ent.halfSize)));
+			if (min2 > max2)
+			{
+				float temp = min2;
+				min2 = max2;
+				max2 = temp;
+			}
+			
+			if ((max1 > max2 || max1 < min2) && (max2 > max1 || max2 < min1))
+			{
+				return false;
+			}
+		}
+		System.out.println("Collision!");
+		return true;
 	}
 	
 	private boolean isRectangleCollidingWithRectangle (Entity ent) //if both entities are circles
@@ -277,15 +326,10 @@ public abstract class Entity
 		for (Vector2f axis : axes)
 		{
 			axis.normalize();
-			
-			float min1;
-			float max1;
-			float min2;
-			float max2;
 						
 			//get mins and maxes for first entity
-			min1 = axis.dot(this.vertVecs[0]);
-			max1 = min1;
+			float min1 = axis.dot(this.vertVecs[0]);
+			float max1 = min1;
 			for (int i = 1; i < this.vertVecs.length; i++)
 			{
 				float dotProd1 = axis.dot(this.vertVecs[i]);
@@ -296,8 +340,8 @@ public abstract class Entity
 			}
 			
 			//get mins and maxes for second entity
-			min2 = axis.dot(ent.vertVecs[0]);
-			max2 = min2;
+			float min2 = axis.dot(ent.vertVecs[0]);
+			float max2 = min2;
 			for (int i = 1; i < ent.vertVecs.length; i++)
 			{
 				float dotProd2 = axis.dot(ent.vertVecs[i]);
@@ -307,7 +351,7 @@ public abstract class Entity
 					min2 = dotProd2;
 			}
 			
-			if (!((max1 < max2 && max1 > min2) || (max2 < max1 && max2 > min1)))
+			if ((max1 > max2 || max1 < min2) && (max2 > max1 || max2 < min1))
 			{
 				return false;
 			}

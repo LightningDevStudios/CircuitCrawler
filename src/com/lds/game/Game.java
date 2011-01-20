@@ -124,7 +124,7 @@ public class Game
 		block.setWillCollideWithPlayer(true);
 		block.scale(2.0f, 2.0f);
 		
-		player = new Player(0.0f, 0.0f, 30.0f, RenderMode.TILESET);
+		player = new Player(0.0f, 0.0f, 0.0f, RenderMode.TILESET);
 		player.setTilesetMode(tilesetwire, 1, 0);
 		entList.add(player);
 		player.setWillCollideWithPlayer(false);
