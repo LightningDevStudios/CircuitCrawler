@@ -47,7 +47,7 @@ public class Texture
 	
 	public Texture(String text, StringRenderer sr)
 	{
-		this.bmp = sr.textToBitmap(text);
+		this.bmp = sr.stringToBitmap(text);
 		this.xSize = bmp.getWidth();
 		this.ySize = bmp.getHeight();
 		this.xTiles = 1;
@@ -59,6 +59,17 @@ public class Texture
 		magFilter = GL10.GL_NEAREST;
 		wrapS = GL10.GL_REPEAT;
 		wrapT = GL10.GL_REPEAT;
+	}
+	
+	public void reloadTexture(String text)
+	{
+		this.bmp = StringRenderer.getInstance().stringToBitmap(text);
+		this.xSize = bmp.getWidth();
+		this.ySize = bmp.getHeight();
+		this.xTiles = 1;
+		this.yTiles = 1;
+		this.xPixels = xSize;
+		this.yPixels = ySize;
 	}
 	
 	public int getTextureID()	{ return id; }

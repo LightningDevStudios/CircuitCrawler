@@ -4,14 +4,31 @@ import android.graphics.Bitmap;
 
 public class StringRenderer 
 {
+	private static StringRenderer p_sr;
+	
 	Texture text;
 	
-	public StringRenderer(Texture text)
+	private StringRenderer()
 	{
-		this.text = text;
 	}
 	
-	public Bitmap textToBitmap(String input)
+	public static StringRenderer getInstance()
+	{
+		if (p_sr == null)
+		{
+			synchronized(StringRenderer.class)
+			{
+				if (p_sr == null)
+				{
+					p_sr = new StringRenderer();
+				}
+			}
+		}
+		
+		return p_sr;
+	}
+	
+	public Bitmap stringToBitmap(String input)
 	{
 		//Create a new, blank bitmap. Also allocate an int array which the Bitmap class uses to store in getPixels() and read in setPixels()
 		//TODO check for ySize with the number of \n chars
@@ -31,5 +48,10 @@ public class StringRenderer
 		}
 		
 		return bmp;
+	}
+	
+	public void loadTextTileset(Texture text)
+	{
+		this.text = text;
 	}
 }

@@ -111,7 +111,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		{
 			game.player.moveTo(test.getXPos(), test.getYPos());
 			game.player.scaleTo(0, 0);
-			game.someText.setBitmap(game.sr.textToBitmap("Pit Tile"));
+			game.someText.reloadTexture("Yer a wizerd harry!");
 			game.tl.reload(game.someText);
 		}
 		
