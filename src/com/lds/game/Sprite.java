@@ -16,7 +16,7 @@ public class Sprite extends PhysEnt
 	
 	public Sprite(float size, float xPos, float yPos, float angle, float xScl, float yScl, float moveSpeed, float rotSpeed, float sclSpeed, int maxX, int maxY)
 	{
-		super(size, xPos, yPos, angle, xScl, yScl, true, RenderMode.TILESET, moveSpeed, rotSpeed, sclSpeed);
+		super(size, xPos, yPos, angle, xScl, yScl, true, false, RenderMode.TILESET, moveSpeed, rotSpeed, sclSpeed);
 		this.maxX = maxX;
 		this.maxY = maxY;
 		

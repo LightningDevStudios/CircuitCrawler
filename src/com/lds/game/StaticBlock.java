@@ -6,11 +6,11 @@ public class StaticBlock extends StaticEnt
 {
 	public StaticBlock(float size, float xPos, float yPos, RenderMode renderMode)
 	{
-		super(size, xPos, yPos, renderMode);
+		super(size, xPos, yPos, false, renderMode);
 	}
 	public StaticBlock (float size, float xPos, float yPos, float angle, float xScl, float yScl, boolean isSolid, RenderMode renderMode)
 	{
-		super(size, xPos, yPos, 0.0f, xScl, yScl, isSolid, renderMode);
+		super(size, xPos, yPos, 0.0f, xScl, yScl, isSolid, false, renderMode);
 	}
 	
 	@Override

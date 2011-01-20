@@ -16,14 +16,14 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	protected float startMoveX, startMoveY, startScaleX, startScaleY;
 	protected int moveInterpCount, sclInterpCount;
 	
-	public PhysEnt(float size, float xPos, float yPos, RenderMode renderMode, float moveSpeed, float rotSpeed, float sclSpeed)
+	public PhysEnt(float size, float xPos, float yPos, boolean circular, RenderMode renderMode, float moveSpeed, float rotSpeed, float sclSpeed)
 	{
-		this(size, xPos, yPos, 0.0f, 1.0f, 1.0f, true, renderMode, moveSpeed, rotSpeed, sclSpeed);
+		this(size, xPos, yPos, 0.0f, 1.0f, 1.0f, true, circular, renderMode, moveSpeed, rotSpeed, sclSpeed);
 	}
 	
-	public PhysEnt(float size, float xPos, float yPos, float angle, float xScl, float yScl, boolean isSolid, RenderMode renderMode, float moveSpeed, float rotSpeed, float sclSpeed)
+	public PhysEnt(float size, float xPos, float yPos, float angle, float xScl, float yScl, boolean isSolid, boolean circular, RenderMode renderMode, float moveSpeed, float rotSpeed, float sclSpeed)
 	{
-		super(size, xPos, yPos, angle, xScl, yScl, isSolid, renderMode);
+		super(size, xPos, yPos, angle, xScl, yScl, isSolid, circular, renderMode);
 		
 		//initialize interpolation variables
 		endAngle = angle;
@@ -93,7 +93,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	//note, we will probably never scale to 0.0f (that will be infinitely small) or negative numbers (you can get the same results with positives)
 	public void scaleTo (float x, float y)
 	{
-		sclVec.set(x - xScl, y - yScl);
+		sclVec.set(x - getXScl(), y - getYScl());
 		isScaling = true;
 		sclTimeMs = Stopwatch.elapsedTimeMs();
 	}
@@ -122,7 +122,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	//i.e. if ent1 is scaled (2.0f, 2.0f), if you do ent1.scale(3.0f, 3.0f) the final scaling will be (6.0f, 6.0f)
 	public void scale (float x, float y)
 	{
-		sclVec.set((x - 1) * xScl, (y - 1) * yScl);
+		sclVec.set((x - 1) * getXScl(), (y - 1) * getYScl());
 		isScaling = true;
 		sclTimeMs = Stopwatch.elapsedTimeMs();
 	}
@@ -144,8 +144,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 		
 		if (isScaling)
 		{
-			xScl -= sclInterpVec.getX();
-			yScl -= sclInterpVec.getY();
+			sclVec.sub(sclInterpVec);
 			isScaling = false;
 		}
 	}
@@ -161,6 +160,11 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 		Game.worldOutdated = true;
 	}
 	
+	public void setPos (Vector2f v)
+	{
+		setPos(v.getX(), v.getY());
+	}
+	
 	//mutator for angle
 	public void setAngle (float degrees)
 	{
@@ -172,8 +176,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	//mutator for scale
 	public void setScale (float x, float y)
 	{
-		xScl = x;
-		yScl = y;
+		sclVec.set(x, y);
 		Game.worldOutdated = true;
 	}
 	
@@ -262,14 +265,12 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 		{				
 			sclInterpCount++;
 			sclInterpVec = Vector2f.scale(Vector2f.normalize(sclVec), sclSpeed / 1000 * (Stopwatch.elapsedTimeMs() - sclTimeMs));
-			xScl += sclInterpVec.getX();
-			yScl += sclInterpVec.getY();
+			sclVec.add(sclInterpVec);
 			
 			if (sclVec.mag() - sclInterpVec.mag() * sclInterpCount <= 0)
 			{
 				Vector2f vecToEnd = Vector2f.sub(sclVec, Vector2f.scale(sclInterpVec, sclInterpCount));
-				xScl += vecToEnd.getX();
-				yScl += vecToEnd.getY();
+				sclVec.add(vecToEnd);
 				isScaling = false;
 				isRendered = true;
 				sclInterpCount = 0;

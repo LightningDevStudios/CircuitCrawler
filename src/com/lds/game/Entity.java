@@ -27,11 +27,11 @@ public abstract class Entity
 	protected boolean circular;
 	
 	//graphics data
-	protected float angle, size, xScl, yScl, halfSize;
+	protected float angle, size, halfSize;
 	protected float colorR, colorG, colorB, colorA;
 	protected RenderMode renderMode;
 	protected Texture tex;
-	protected Vector2f posVec;
+	protected Vector2f posVec, sclVec;
 	
 	protected float[] vertices;
 	protected float[] texture;
@@ -55,12 +55,12 @@ public abstract class Entity
 	public ArrayList<Entity> colIgnoreList = new ArrayList<Entity>();
 	
 	
-	public Entity (float size, float xPos, float yPos, RenderMode renderMode)
+	public Entity (float size, float xPos, float yPos, boolean circular, RenderMode renderMode)
 	{
-		this(size, xPos, yPos, 0.0f, 1.0f, 1.0f, true, renderMode);
+		this(size, xPos, yPos, 0.0f, 1.0f, 1.0f, true, circular, renderMode);
 	}
 	
-	public  Entity (float size, float xPos, float yPos, float angle, float xScl, float yScl, boolean isSolid, RenderMode renderMode)
+	public  Entity (float size, float xPos, float yPos, float angle, float xScl, float yScl, boolean isSolid, boolean circular, RenderMode renderMode)
 	{
 		//initialize debug data
 		entID = entCount;
@@ -68,17 +68,15 @@ public abstract class Entity
 		
 		//initialize behavior variables
 		this.isSolid = isSolid;
-		circular = false;
+		this.circular = circular;
 		
 		//initializes graphics variables
 		this.size = size;
-		posVec = new Vector2f(xPos, yPos);
-		this.angle = angle;
-		this.xScl = xScl;
-		this.yScl = yScl;
-		this.renderMode = renderMode;
-		
 		halfSize = size / 2;
+		this.angle = angle;
+		this.renderMode = renderMode;
+		posVec = new Vector2f(xPos, yPos);
+		sclVec = new Vector2f(xScl, yScl);
 		
 		//initializes collision variables
 		rad = Math.toRadians((double)(angle));
@@ -185,14 +183,14 @@ public abstract class Entity
 	public void initializeCollisionVariables ()
 	{
 		rad = Math.toRadians(angle);
-		diagonal = Math.sqrt(Math.pow(halfSize * xScl, 2) + Math.pow(halfSize * yScl, 2));	}
+		diagonal = Math.sqrt(Math.pow(halfSize * getXScl(), 2) + Math.pow(halfSize * getYScl(), 2));	}
 	
 	//used to get the absolute, not relative, positions of the entity's 4 points in the XY Plane
 	public void updateAbsolutePointLocations ()
 	{	
 		Vector2f unscaledVec = Vector2f.scale(new Vector2f((float)Math.cos(Math.toRadians(angle)), (float)Math.sin(Math.toRadians(angle))), halfSize);
-		Vector2f xVec = Vector2f.scale(unscaledVec, xScl);
-		Vector2f yVec = Vector2f.scale(Vector2f.getNormal(unscaledVec), yScl);
+		Vector2f xVec = Vector2f.scale(unscaledVec, getXScl());
+		Vector2f yVec = Vector2f.scale(Vector2f.getNormal(unscaledVec), getYScl());
 		 
 		vertVecs[0].set(Vector2f.add(posVec, Vector2f.add(xVec, yVec))); //top  right
 		vertVecs[1].set(Vector2f.add(posVec, Vector2f.sub(yVec, xVec))); //top left
@@ -275,7 +273,6 @@ public abstract class Entity
 				axes[2].set(tempVec);
 			}
 		}
-		//axes[2].setNormal();
 		
 		for (Vector2f axis : axes)
 		{
@@ -555,11 +552,12 @@ public abstract class Entity
 	
 	public float getSize()				{ return size; }
 	public Vector2f getPos()			{ return posVec; }
+	public Vector2f getScl()			{ return sclVec; }
 	public float getXPos()				{ return posVec.getX(); }
 	public float getYPos()				{ return posVec.getY(); }
 	public float getAngle()				{ return angle; }
-	public float getXScl()				{ return xScl; }
-	public float getYScl()				{ return yScl; }
+	public float getXScl()				{ return sclVec.getX(); }
+	public float getYScl()				{ return sclVec.getY(); }
 	public float getColorR()			{ return colorR; }
 	public float getColorG()			{ return colorG; }
 	public float getColorB()			{ return colorB; }
@@ -578,11 +576,11 @@ public abstract class Entity
 	public boolean isCircular()			{ return circular; }
 	
 	public void setSize(float size)		{ this.size = size; }
-	public void setXPos(float xPos)		{ this.posVec.setX(xPos); }
-	public void setYPos(float yPos)		{ this.posVec.setY(yPos); }
 	public void setAngle(float angle)	{ this.angle = angle; }
-	public void setXScl(float xScl)		{ this.xScl = xScl; }
-	public void setYScl(float yScl)		{ this.yScl	= yScl; }
+	public void setXPos(float xPos)		{ posVec.setX(xPos); }
+	public void setYPos(float yPos)		{ posVec.setY(yPos); }
+	public void setXScl(float xScl)		{ sclVec.setX(xScl); }
+	public void setYScl(float yScl)		{ sclVec.setY(yScl); }
 	public void setWillCollideWithPlayer(boolean willCollideWithPlayer) { this.willCollideWithPlayer = willCollideWithPlayer; }
 	public void setVertexVecs(Vector2f[] vertVecs)
 	{

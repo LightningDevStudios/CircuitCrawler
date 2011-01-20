@@ -124,7 +124,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 			Entity ent = game.entList.get(i);
 			ent.update();
 			
-			if (ent.xScl == 0.0f || ent.yScl == 0.0f)
+			if (ent.getXScl() == 0.0f || ent.getYScl() == 0.0f)
 				EntityCleaner.queueEntityForRemoval(ent);
 			
 			//checks for collision with all other entities in entList if needed
@@ -178,7 +178,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 			//set btnA to speed up the player when pressed
 			if (game.btnA.isPressed())
 			{		
-				if(game.player.speed != 2)
+				if(game.player.getSpeed() != 2)
 				{
 					game.player.setSpeed(2.0f);		
 				}
@@ -194,7 +194,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 			{								
 				gl.glTranslatef(ent.getXPos(), ent.getYPos(), 0.0f);
 				gl.glRotatef(ent.angle, 0.0f, 0.0f, 1.0f);
-				gl.glScalef(ent.xScl, ent.yScl, 1.0f);
+				gl.glScalef(ent.getXScl(), ent.getYScl(), 1.0f);
 				ent.draw(gl);
 				
 				gl.glLoadIdentity();
@@ -273,8 +273,9 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 					//move the player
 					//TODO move w/ time, use move()?
 					game.player.setAngle(newAngle + 90.0f);
-					game.player.setPos(game.player.getXPos() + tempMoveVec.getX() * game.player.speed / 10, game.player.getYPos() + (tempMoveVec.getY()) * game.player.speed / 10);
-					//game.player.move(tempMoveVec.getX(), tempMoveVec.getY());
+					Vector2f moveVec = Vector2f.scale(tempMoveVec, game.player.getSpeed() / 10);
+					//game.player.setPos(game.player.getXPos() + tempMoveVec.getX() * game.player.getSpeed() / 10, game.player.getYPos() + (tempMoveVec.getY()) * game.player.speed / 10);
+					game.player.setPos(Vector2f.add(game.player.getPos(), moveVec));
 					Game.worldOutdated = true;
 					
 					//check collision and reverse motion if it's colliding with something solid
@@ -286,7 +287,8 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 							if (colEnt.willCollideWithPlayer())
 							{
 								game.player.setAngle(oldAngle);
-								game.player.setPos(game.player.getXPos() - tempMoveVec.getX() * game.player.speed / 10, game.player.getYPos() - tempMoveVec.getY() * game.player.speed / 10);
+								//game.player.setPos(game.player.getXPos() - tempMoveVec.getX() * game.player.getSpeed() / 10, game.player.getYPos() - tempMoveVec.getY() * game.player.getSpeed() / 10);
+								game.player.setPos(Vector2f.add(game.player.getPos(), Vector2f.getNormal(moveVec)));
 								Game.worldOutdated = false;
 							}
 						}
@@ -298,7 +300,8 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 							if (t.isRendered && (t.isColliding(game.player) || game.player.getHeldObject() != null && t.isColliding(game.player.getHeldObject())))
 							{
 								game.player.setAngle(oldAngle);
-								game.player.setPos(game.player.getXPos() - tempMoveVec.getX() * game.player.speed / 10, game.player.getYPos() - tempMoveVec.getY() * game.player.speed / 10);
+								//game.player.setPos(game.player.getXPos() - tempMoveVec.getX() * game.player.getSpeed() / 10, game.player.getYPos() - tempMoveVec.getY() * game.player.getSpeed() / 10);
+								game.player.setPos(Vector2f.add(game.player.getPos(), Vector2f.getNormal(moveVec)));
 								Game.worldOutdated = false;
 							}
 						}
