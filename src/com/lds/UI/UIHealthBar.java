@@ -2,7 +2,7 @@ package com.lds.UI;
 
 import com.lds.Enums.Direction;
 import com.lds.Enums.UIPosition;
-import com.lds.game.Player;
+import com.lds.game.entity.Player;
 
 public class UIHealthBar extends UIProgressBar
 {

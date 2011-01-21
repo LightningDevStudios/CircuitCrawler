@@ -13,6 +13,9 @@ import com.lds.Stopwatch;
 import com.lds.Vector2f;
 import com.lds.UI.UIButton;
 import com.lds.UI.UIJoypad;
+import com.lds.game.entity.Entity;
+import com.lds.game.entity.HoldObject;
+import com.lds.game.entity.Tile;
 import com.lds.trigger.Trigger;
 import com.lds.UI.*;
 
@@ -96,7 +99,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		{
 			for (Tile t : ts)
 			{
-				if (t.isRendered)
+				if (t.isRendered())
 				{
 					gl.glTranslatef(t.getXPos(), t.getYPos(), 0.0f);
 					t.draw(gl);
@@ -187,10 +190,10 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 			}
 						
 			//render it
-			if (ent.isRendered)
+			if (ent.isRendered())
 			{								
 				gl.glTranslatef(ent.getXPos(), ent.getYPos(), 0.0f);
-				gl.glRotatef(ent.angle, 0.0f, 0.0f, 1.0f);
+				gl.glRotatef(ent.getAngle(), 0.0f, 0.0f, 1.0f);
 				gl.glScalef(ent.getXScl(), ent.getYScl(), 1.0f);
 				ent.draw(gl);
 				
@@ -262,7 +265,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 					
 					//Figure out the angle
 					float newAngle = (float)Math.toDegrees(tempMoveVec.angle());
-					float oldAngle = game.player.angle;
+					float oldAngle = game.player.getAngle();
 					
 					//move the player
 					//TODO move w/ time, use move()?
@@ -289,7 +292,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 					{
 						for (Tile t: ts)
 						{
-							if (t.isRendered && (t.isColliding(game.player) || game.player.getHeldObject() != null && t.isColliding(game.player.getHeldObject())))
+							if (t.isRendered() && (t.isColliding(game.player) || game.player.getHeldObject() != null && t.isColliding(game.player.getHeldObject())))
 							{
 								game.player.setAngle(oldAngle);
 								game.player.setPos(Vector2f.add(game.player.getPos(), Vector2f.getNormal(moveVec)));

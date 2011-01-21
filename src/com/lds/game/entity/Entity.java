@@ -1,4 +1,4 @@
-package com.lds.game;
+package com.lds.game.entity;
 
 import javax.microedition.khronos.opengles.GL10;
 
@@ -22,7 +22,7 @@ public abstract class Entity
 	
 	//behavior data
 	protected boolean isSolid;
-	protected boolean isRendered;
+	protected boolean rendered;
 	protected boolean willCollideWithPlayer;
 	protected boolean circular;
 	
@@ -584,6 +584,7 @@ public abstract class Entity
 	public static int getEntCount()		{ return entCount; }
 	public boolean willCollideWithPlayer() { return willCollideWithPlayer; }
 	public boolean isCircular()			{ return circular; }
+	public boolean isRendered()			{ return rendered; }
 	
 	public void setSize(float size)		{ this.size = size; }
 	public void setAngle(float angle)	{ this.angle = angle; }
@@ -591,6 +592,7 @@ public abstract class Entity
 	public void setYPos(float yPos)		{ posVec.setY(yPos); }
 	public void setXScl(float xScl)		{ sclVec.setX(xScl); }
 	public void setYScl(float yScl)		{ sclVec.setY(yScl); }
+	public void setRendered(boolean state)	{ rendered = state; }
 	public void setWillCollideWithPlayer(boolean willCollideWithPlayer) { this.willCollideWithPlayer = willCollideWithPlayer; }
 	public void setVertexVecs(Vector2f[] vertVecs)
 	{

@@ -1,7 +1,8 @@
 package com.lds;
 
 import java.util.ArrayList;
-import com.lds.game.Entity;
+
+import com.lds.game.entity.Entity;
 
 public class EntityCleaner 
 {

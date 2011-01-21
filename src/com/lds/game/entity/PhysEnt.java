@@ -1,6 +1,7 @@
-package com.lds.game;
+package com.lds.game.entity;
 
 import com.lds.Enums.RenderMode;
+import com.lds.game.Game;
 import com.lds.Stopwatch;
 import com.lds.Vector2f;
 
@@ -278,7 +279,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 				Vector2f vecToEnd = Vector2f.sub(sclVec, Vector2f.scale(sclInterpVec, sclInterpCount));
 				sclVec.add(vecToEnd);
 				isScaling = false;
-				isRendered = true;
+				rendered = true;
 				sclInterpCount = 0;
 			}
 			

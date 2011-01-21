@@ -1,6 +1,6 @@
 package com.lds.trigger;
 
-import com.lds.game.Enemy;
+import com.lds.game.entity.Enemy;
 
 public class CauseEnemyCount extends Cause
 {

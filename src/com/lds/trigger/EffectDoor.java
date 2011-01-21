@@ -1,6 +1,6 @@
 package com.lds.trigger;
 
-import com.lds.game.Door;
+import com.lds.game.entity.Door;
 
 public class EffectDoor extends Effect
 {

@@ -1,4 +1,4 @@
-package com.lds.game;
+package com.lds.game.entity;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;

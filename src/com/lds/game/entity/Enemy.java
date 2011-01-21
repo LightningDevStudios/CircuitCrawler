@@ -1,4 +1,4 @@
-package com.lds.game;
+package com.lds.game.entity;
 
 import com.lds.Enums.RenderMode;
 import com.lds.EntityCleaner;

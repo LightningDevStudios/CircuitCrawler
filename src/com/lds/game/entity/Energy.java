@@ -1,4 +1,4 @@
-package com.lds.game;
+package com.lds.game.entity;
 
 public class Energy extends Powerup
 {

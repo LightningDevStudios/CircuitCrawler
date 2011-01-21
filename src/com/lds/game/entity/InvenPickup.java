@@ -1,4 +1,4 @@
-package com.lds.game;
+package com.lds.game.entity;
 
 public class InvenPickup extends PickupObj
 {

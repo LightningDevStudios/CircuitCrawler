@@ -16,6 +16,12 @@ import com.lds.TextureLoader;
 import com.lds.Enums.UIPosition;
 
 import com.lds.UI.*;
+import com.lds.game.entity.Button;
+import com.lds.game.entity.Door;
+import com.lds.game.entity.Entity;
+import com.lds.game.entity.PhysBlock;
+import com.lds.game.entity.Player;
+import com.lds.game.entity.Tile;
 import com.lds.trigger.*;
 
 public class Game
@@ -217,11 +223,11 @@ public class Game
 			//values are opposite for entMin/Max because only the far tips have to be inside the screen (leftmost point on right border of screen)
 			if (entMinX <= maxX && entMaxX >= minX && entMinY <= maxY && entMaxY >= minY)
 			{
-				ent.isRendered = true;
+				ent.setRendered(true);
 			}
 			else
 			{
-				ent.isRendered = false;
+				ent.setRendered(false);
 			}
 		}
 	}
@@ -247,7 +253,7 @@ public class Game
 		{
 			for(Tile t : ts)
 			{
-				t.isRendered = false;
+				t.setRendered(false);
 			}
 		}
 		
@@ -256,7 +262,7 @@ public class Game
 		{
 			for (int j = minXBound; j <= maxXBound; j++)
 			{
-					tileset[i][j].isRendered = true;
+					tileset[i][j].setRendered(true);
 			}
 		}
 	}
@@ -276,11 +282,11 @@ public class Game
 		//values are opposite for entMin/Max because only the far tips have to be inside the screen (leftmost point on right border of screen)
 		if (entMinX <= maxX && entMaxX >= minX && entMinY <= maxY && entMaxY >= minY)
 		{
-			ent.isRendered = true;
+			ent.setRendered(true);
 		}
 		else
 		{
-			ent.isRendered = false;
+			ent.setRendered(false);
 		}
 	}
 	

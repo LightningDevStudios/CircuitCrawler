@@ -1,6 +1,6 @@
 package com.lds.trigger;
 
-import com.lds.game.Player;
+import com.lds.game.entity.Player;
 
 public class CauseLocation extends Cause
 {

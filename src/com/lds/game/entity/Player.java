@@ -1,7 +1,8 @@
-package com.lds.game;
+package com.lds.game.entity;
 
 import com.lds.EntityCleaner;
 import com.lds.Enums.RenderMode;
+import com.lds.game.Inventory;
 import com.lds.Vector2f;
 
 public class Player extends Character //your character, protagonist

@@ -1,6 +1,6 @@
 package com.lds.trigger;
 
-import com.lds.game.Button;
+import com.lds.game.entity.Button;
 
 public class CauseButton extends Cause//cause based on the state of a button
 {
