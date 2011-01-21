@@ -353,7 +353,17 @@ public abstract class Entity
 				return false;
 			}
 		}
-		System.out.println("Collision!");
+		
+		//return a bounceVec to bounce out PhysEnts
+		axes[2] = Vector2f.sub(vertVecs[0], ent.posVec);
+		for (int i = 1; i < vertVecs.length; i++)
+		{
+			Vector2f tempVec = Vector2f.sub(vertVecs[i], ent.posVec);
+			if (axes[2].mag() > tempVec.mag())
+			{
+				axes[2].set(tempVec);
+			}
+		}
 		return true;
 	}
 			
