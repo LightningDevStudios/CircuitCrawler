@@ -64,6 +64,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		if (frameCount == 100)
 			Debug.startMethodTracing("LDS_Game4");
 		
+		//iterate through triggers
 		for (Trigger t : game.triggerList)
 		{
 			t.update();
@@ -113,10 +114,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 			game.player.scaleTo(0, 0);
 			game.someText.reloadTexture("Yer a wizerd harry!");
 			game.tl.reload(game.someText);
-		}
-		
-		//iterate through triggers
-		
+		}		
 		
 		//Render all entities
 		for (int i = 0; i < game.entList.size(); i++)
@@ -245,9 +243,6 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	//TODO move heldObj back when it collides with something
 	public void onTouchInput(MotionEvent e) 
 	{
-		//TODO remove this
-		System.out.println("input");
-		
 		//get raw input
 		float xInput = e.getRawX() - Game.screenW / 2;
 		float yInput = -e.getRawY() + Game.screenH / 2;
@@ -274,7 +269,6 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 					//TODO move w/ time, use move()?
 					game.player.setAngle(newAngle + 90.0f);
 					Vector2f moveVec = Vector2f.scale(tempMoveVec, game.player.getSpeed() / 10);
-					//game.player.setPos(game.player.getXPos() + tempMoveVec.getX() * game.player.getSpeed() / 10, game.player.getYPos() + (tempMoveVec.getY()) * game.player.speed / 10);
 					game.player.setPos(Vector2f.add(game.player.getPos(), moveVec));
 					Game.worldOutdated = true;
 					
@@ -287,7 +281,6 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 							if (colEnt.willCollideWithPlayer())
 							{
 								game.player.setAngle(oldAngle);
-								//game.player.setPos(game.player.getXPos() - tempMoveVec.getX() * game.player.getSpeed() / 10, game.player.getYPos() - tempMoveVec.getY() * game.player.getSpeed() / 10);
 								game.player.setPos(Vector2f.add(game.player.getPos(), Vector2f.getNormal(moveVec)));
 								Game.worldOutdated = false;
 							}
@@ -300,7 +293,6 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 							if (t.isRendered && (t.isColliding(game.player) || game.player.getHeldObject() != null && t.isColliding(game.player.getHeldObject())))
 							{
 								game.player.setAngle(oldAngle);
-								//game.player.setPos(game.player.getXPos() - tempMoveVec.getX() * game.player.getSpeed() / 10, game.player.getYPos() - tempMoveVec.getY() * game.player.getSpeed() / 10);
 								game.player.setPos(Vector2f.add(game.player.getPos(), Vector2f.getNormal(moveVec)));
 								Game.worldOutdated = false;
 							}

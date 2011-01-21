@@ -15,6 +15,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	protected Vector2f sclVec, sclInterpVec;
 	protected float startMoveX, startMoveY, startScaleX, startScaleY;
 	protected int moveInterpCount, sclInterpCount;
+	private Vector2f bounceVec;
 	
 	public PhysEnt(float size, float xPos, float yPos, boolean circular, RenderMode renderMode, float moveSpeed, float rotSpeed, float sclSpeed)
 	{
@@ -149,6 +150,11 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 		}
 	}
 	
+	public void bounce ()
+	{
+		
+	}
+	
 	/**********************************
 	 * Instant Transformation Methods *
 	 **********************************/
@@ -262,7 +268,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	public void scaleInterpolate ()
 	{
 		if (isScaling)
-		{				
+		{	
 			sclInterpCount++;
 			sclInterpVec = Vector2f.scale(Vector2f.normalize(sclVec), sclSpeed / 1000 * (Stopwatch.elapsedTimeMs() - sclTimeMs));
 			sclVec.add(sclInterpVec);
