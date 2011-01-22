@@ -139,6 +139,7 @@ public class Game
 		player.enableUserControl();
 		
 		triggerList.add(new Trigger(new CauseButton(button), new EffectDoor(door)));
+		triggerList.add(new Trigger(new CauseDoneScaling(player), new EffectRemoveEntity(player)));
 		
 		healthBar = new UIHealthBar(200.0f, 30.0f, UIPosition.TOPLEFT, Direction.RIGHT);
 		healthBar.setTopPad(5.0f);

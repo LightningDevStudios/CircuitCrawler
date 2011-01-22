@@ -7,6 +7,12 @@ public class EffectRemoveEntity extends Effect
 {
 	private Entity ent;
 	
+	public EffectRemoveEntity(Entity ent)
+	{
+		super();
+		this.ent = ent;
+	}
+	
 	@Override
 	public void fireOutput()
 	{

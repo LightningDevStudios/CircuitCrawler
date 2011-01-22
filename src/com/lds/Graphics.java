@@ -28,7 +28,7 @@ public class Graphics extends GLSurfaceView
 		{
 			try
 			{
-				syncObj.wait(1000L);
+				syncObj.wait();
 			}
 			catch (InterruptedException e1)
 			{

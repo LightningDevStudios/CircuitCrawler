@@ -12,8 +12,8 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	public int moveTimeMs, rotTimeMs, sclTimeMs;
 	protected float moveSpeed, rotSpeed, sclSpeed;
 	public boolean isMoving, isRotating, isScaling, isRotatingCCW;
-	protected Vector2f moveVec, moveInterpVec, originalPosVec;
-	protected Vector2f sclVec, sclInterpVec, originalScaleVec;
+	protected Vector2f moveVec, moveInterpVec, endPosVec;
+	protected Vector2f sclVec, sclInterpVec, endScaleVec;
 	protected int moveInterpCount, sclInterpCount;
 	private Vector2f bounceVec;
 	
@@ -68,7 +68,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 		moveVec.set(x - getXPos(), y - getYPos());
 		isMoving = true;
 		moveTimeMs = Stopwatch.elapsedTimeMs();
-		originalPosVec = posVec;
+		endPosVec = new Vector2f(x, y);
 	}
 	
 	//sets angle of an entity to a new value
@@ -98,6 +98,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 		sclVec.set(x - getXScl(), y - getYScl());
 		isScaling = true;
 		sclTimeMs = Stopwatch.elapsedTimeMs();
+		endScaleVec = new Vector2f(x, y);
 	}
 	
 	//much like moveTo, but instead of going to a specific point, move() moves relative to the current position
@@ -106,7 +107,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 		moveVec.set(x, y);
 		isMoving = true;
 		moveTimeMs = Stopwatch.elapsedTimeMs();
-		originalScaleVec = scaleVec;
+		endPosVec = Vector2f.add(moveVec, posVec);
 	}
 	
 	//much like rotateTo, but rotate() adds or subtracts the number of degrees from the current number
@@ -126,6 +127,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 		sclVec.set((x - 1) * getXScl(), (y - 1) * getYScl());
 		isScaling = true;
 		sclTimeMs = Stopwatch.elapsedTimeMs();
+		endScaleVec = Vector2f.add(sclVec, scaleVec);
 	}
 	
 	public void stop ()
@@ -210,7 +212,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 				{
 					//TODO this doesn't take into account differences in framerate. Hence the inaccuracies
 					//Vector2f vecToEnd = Vector2f.sub(moveVec, Vector2f.scale(moveInterpVec, moveInterpCount));
-					posVec.add(moveInterpVec);
+					posVec = endPosVec;
 					isMoving = false;
 					moveInterpCount = 0;
 				}
@@ -284,7 +286,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 				{
 					//TODO this doesn't take into account differences in framerate. Hence the inaccuracies
 					//Vector2f vecToEnd = Vector2f.sub(moveVec, Vector2f.scale(moveInterpVec, moveInterpCount));
-					sclVec.add(sclInterpVec);
+					scaleVec = endScaleVec;
 					isScaling = false;
 					sclInterpCount = 0;
 				}

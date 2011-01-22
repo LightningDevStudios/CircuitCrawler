@@ -11,12 +11,8 @@ import android.content.Context;
 import com.lds.EntityCleaner;
 import com.lds.Stopwatch;
 import com.lds.Vector2f;
-import com.lds.UI.UIButton;
-import com.lds.UI.UIJoypad;
-import com.lds.game.entity.Entity;
-import com.lds.game.entity.HoldObject;
-import com.lds.game.entity.Tile;
-import com.lds.trigger.Trigger;
+import com.lds.game.entity.*;
+import com.lds.trigger.*;
 import com.lds.UI.*;
 
 public class GameRenderer implements com.lds.Graphics.Renderer
@@ -66,11 +62,13 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		frameCount++;
 		if (frameCount == 100)
 			Debug.startMethodTracing("LDS_Game4");
-		
-		//iterate through triggers
-		for (Trigger t : game.triggerList)
+				
+		if(!game.entList.contains(game.player))
 		{
-			t.update();
+			game = null;
+			game = new Game(context, gl);
+			game.updateLocalEntities();
+			game.updateLocalTileset();
 		}
 		
 		//clear the screen
@@ -80,17 +78,23 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		
 		//tick the stopwatch every frame, gives relatively stable intervals
 		Stopwatch.tick();
+				
+		//iterate through triggers
+		for (Trigger t : game.triggerList)
+		{
+			t.update();
+		}
 		
+		//remove entities that are queued for removal
+		game.cleaner.clean(game.entList);
+				
 		//Triggered when the perspective needs to be redrawn
 		if (windowOutdated)
 		{
 			updateCamPosition(gl);
 			windowOutdated = false;
 		}
-		
-		//remove entities that are queued for removal
-		game.cleaner.clean(game.entList);
-		
+				
 		//Update which entities are rendered
 		game.updateLocalEntities();
 				
@@ -114,10 +118,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		{
 			Entity ent = game.entList.get(i);
 			ent.update();
-			
-			if (ent.getXScl() == 0.0f || ent.getYScl() == 0.0f)
-				EntityCleaner.queueEntityForRemoval(ent);
-			
+						
 			//checks for collision with all other entities in entList if needed
 			if (Game.worldOutdated)
 			{
@@ -257,7 +258,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 					{
 						game.textbox.reloadTexture("Yer a wizerd harry!");
 						game.player.disableUserControl();
-						game.player.scaleTo(0.1f, 0.1f);
+						game.player.scaleTo(0, 0);
 						game.player.moveTo(test.getXPos(), test.getYPos());
 					}
 					

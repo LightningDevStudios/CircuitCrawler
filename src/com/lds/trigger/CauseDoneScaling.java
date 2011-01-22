@@ -2,12 +2,12 @@ package com.lds.trigger;
 
 import com.lds.game.entity.PhysEnt;
 
-public class CauseDoneMoving extends Cause
+public class CauseDoneScaling extends Cause
 {
 	private PhysEnt ent;
 	private boolean readyToTrigger;
 	
-	public CauseDoneMoving(PhysEnt ent)
+	public CauseDoneScaling(PhysEnt ent)
 	{
 		super();
 		this.ent = ent;
@@ -19,12 +19,12 @@ public class CauseDoneMoving extends Cause
 	{
 		if (!readyToTrigger)
 		{
-			if (ent.isMoving)
+			if (ent.isScaling)
 				readyToTrigger = true;
 		}
 		else
 		{
-			if (!ent.isMoving)
+			if (!ent.isScaling)
 			{
 				trigger();
 				readyToTrigger = false;
