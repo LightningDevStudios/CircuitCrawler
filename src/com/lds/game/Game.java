@@ -136,6 +136,7 @@ public class Game
 		player.setTilesetMode(tilesetwire, 1, 0);
 		entList.add(player);
 		player.setWillCollideWithPlayer(false);
+		player.enableUserControl();
 		
 		triggerList.add(new Trigger(new CauseButton(button), new EffectDoor(door)));
 		

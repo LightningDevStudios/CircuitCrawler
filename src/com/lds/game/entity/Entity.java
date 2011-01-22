@@ -31,7 +31,7 @@ public abstract class Entity
 	protected float colorR, colorG, colorB, colorA;
 	protected RenderMode renderMode;
 	protected Texture tex;
-	protected Vector2f posVec, sclVec;
+	protected Vector2f posVec, scaleVec;
 	
 	protected float[] vertices;
 	protected float[] texture;
@@ -76,7 +76,7 @@ public abstract class Entity
 		this.angle = angle;
 		this.renderMode = renderMode;
 		posVec = new Vector2f(xPos, yPos);
-		sclVec = new Vector2f(xScl, yScl);
+		scaleVec = new Vector2f(xScl, yScl);
 		
 		//initializes collision variables
 		rad = Math.toRadians((double)(angle));
@@ -562,12 +562,12 @@ public abstract class Entity
 	
 	public float getSize()				{ return size; }
 	public Vector2f getPos()			{ return posVec; }
-	public Vector2f getScl()			{ return sclVec; }
+	public Vector2f getScl()			{ return scaleVec; }
 	public float getXPos()				{ return posVec.getX(); }
 	public float getYPos()				{ return posVec.getY(); }
 	public float getAngle()				{ return angle; }
-	public float getXScl()				{ return sclVec.getX(); }
-	public float getYScl()				{ return sclVec.getY(); }
+	public float getXScl()				{ return scaleVec.getX(); }
+	public float getYScl()				{ return scaleVec.getY(); }
 	public float getColorR()			{ return colorR; }
 	public float getColorG()			{ return colorG; }
 	public float getColorB()			{ return colorB; }
@@ -590,8 +590,8 @@ public abstract class Entity
 	public void setAngle(float angle)	{ this.angle = angle; }
 	public void setXPos(float xPos)		{ posVec.setX(xPos); }
 	public void setYPos(float yPos)		{ posVec.setY(yPos); }
-	public void setXScl(float xScl)		{ sclVec.setX(xScl); }
-	public void setYScl(float yScl)		{ sclVec.setY(yScl); }
+	public void setXScl(float xScl)		{ scaleVec.setX(xScl); }
+	public void setYScl(float yScl)		{ scaleVec.setY(yScl); }
 	public void setRendered(boolean state)	{ rendered = state; }
 	public void setWillCollideWithPlayer(boolean willCollideWithPlayer) { this.willCollideWithPlayer = willCollideWithPlayer; }
 	public void setVertexVecs(Vector2f[] vertVecs)

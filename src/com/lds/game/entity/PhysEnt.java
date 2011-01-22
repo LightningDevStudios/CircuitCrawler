@@ -11,10 +11,9 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	public float interpAngle, endAngle;
 	public int moveTimeMs, rotTimeMs, sclTimeMs;
 	protected float moveSpeed, rotSpeed, sclSpeed;
-	private boolean isMoving, isRotating, isScaling, isRotatingCCW;
-	protected Vector2f moveVec, moveInterpVec;
-	protected Vector2f sclVec, sclInterpVec;
-	protected float startMoveX, startMoveY, startScaleX, startScaleY;
+	public boolean isMoving, isRotating, isScaling, isRotatingCCW;
+	protected Vector2f moveVec, moveInterpVec, originalPosVec;
+	protected Vector2f sclVec, sclInterpVec, originalScaleVec;
 	protected int moveInterpCount, sclInterpCount;
 	private Vector2f bounceVec;
 	
@@ -41,6 +40,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	@Override
 	public void update()
 	{
+		super.update();
 		moveInterpolate();
 		rotateInterpolate();
 		scaleInterpolate();
@@ -61,14 +61,14 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	 * Interpolated Transformation Methods *
 	 ***************************************/
 	
+	//TODO set endPos/endScale vectors instead of starting ones!
 	//sets position to to new x and y and interpolates
 	public void moveTo (float x, float y)
 	{
 		moveVec.set(x - getXPos(), y - getYPos());
 		isMoving = true;
 		moveTimeMs = Stopwatch.elapsedTimeMs();
-		startMoveX = getXPos();
-		startMoveY = getYPos();
+		originalPosVec = posVec;
 	}
 	
 	//sets angle of an entity to a new value
@@ -106,8 +106,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 		moveVec.set(x, y);
 		isMoving = true;
 		moveTimeMs = Stopwatch.elapsedTimeMs();
-		startMoveX = getXPos();
-		startMoveY = getYPos();
+		originalScaleVec = scaleVec;
 	}
 	
 	//much like rotateTo, but rotate() adds or subtracts the number of degrees from the current number
@@ -269,22 +268,35 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	public void scaleInterpolate ()
 	{
 		if (isScaling)
-		{	
-			sclInterpCount++;
-			sclInterpVec = Vector2f.scale(Vector2f.normalize(sclVec), sclSpeed / 1000 * (Stopwatch.elapsedTimeMs() - sclTimeMs));
-			sclVec.add(sclInterpVec);
-			
-			if (sclVec.mag() - sclInterpVec.mag() * sclInterpCount <= 0)
+		{
+			if(sclSpeed <= 0)
 			{
-				Vector2f vecToEnd = Vector2f.sub(sclVec, Vector2f.scale(sclInterpVec, sclInterpCount));
-				sclVec.add(vecToEnd);
+				sclSpeed = 0;
 				isScaling = false;
-				rendered = true;
 				sclInterpCount = 0;
 			}
-			
+			else 
+			{
+				sclInterpCount++;
+				sclInterpVec = Vector2f.scale(Vector2f.normalize(sclVec), sclSpeed / 1000 * (Stopwatch.elapsedTimeMs() - sclTimeMs));
+				
+				if (sclVec.mag() - sclInterpVec.mag() * sclInterpCount <= sclInterpVec.mag())
+				{
+					//TODO this doesn't take into account differences in framerate. Hence the inaccuracies
+					//Vector2f vecToEnd = Vector2f.sub(moveVec, Vector2f.scale(moveInterpVec, moveInterpCount));
+					sclVec.add(sclInterpVec);
+					isScaling = false;
+					sclInterpCount = 0;
+				}
+				else
+				{
+					scaleVec.add(sclInterpVec);
+				}
+				
+				Game.worldOutdated = true;
+			}
+							
 			sclTimeMs = Stopwatch.elapsedTimeMs();
-			Game.worldOutdated = true;
 		}
 	}
 }

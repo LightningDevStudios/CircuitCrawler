@@ -108,16 +108,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 				}
 			}
 		}
-		
-		Tile test = game.nearestTile(game.player);
-		
-		if (test != null && test.isPit())
-		{
-			game.player.moveTo(test.getXPos(), test.getYPos());
-			game.player.scaleTo(0, 0);
-			game.textbox.reloadTexture("Yer a wizerd harry!");
-		}
-		
+				
 		//Render all entities
 		for (int i = 0; i < game.entList.size(); i++)
 		{
@@ -256,9 +247,19 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 			{
 				//Specific joypad code
 				//TODO move to UIEntity generic method
-				if (ent instanceof UIJoypad)
+				if (ent instanceof UIJoypad && game.player.userHasControl())
 				{
 					UIJoypad UIjp = (UIJoypad)ent;
+					
+					Tile test = game.nearestTile(game.player);
+					
+					if (test != null && test.isPit())
+					{
+						game.textbox.reloadTexture("Yer a wizerd harry!");
+						game.player.disableUserControl();
+						game.player.scaleTo(0.1f, 0.1f);
+						game.player.moveTo(test.getXPos(), test.getYPos());
+					}
 					
 					//get the relative X and Y coordinates
 					Vector2f tempMoveVec = UIjp.getMovementVec((int)xInput, (int)yInput);
@@ -331,7 +332,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 					else if (game.camPosY > game.worldMaxY)
 						game.camPosY = game.worldMaxY;
 					
-					windowOutdated = true;
+					windowOutdated = true;					
 				}
 				
 				//UIButton specific code

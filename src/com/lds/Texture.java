@@ -70,6 +70,7 @@ public class Texture
 		this.yTiles = 1;
 		this.xPixels = xSize;
 		this.yPixels = ySize;
+		
 		TextureLoader.getInstance().reload(this);
 	}
 	

@@ -10,6 +10,7 @@ public class Player extends Character //your character, protagonist
 	private int energy;
 	private boolean holdingObject;
 	private HoldObject hObj;
+	private boolean controlled;
 	
 	public Player (float xPos, float yPos, float angle, RenderMode renderMode)
 	{
@@ -24,10 +25,6 @@ public class Player extends Character //your character, protagonist
 	public void update()
 	{
 		super.update();
-		if (holdingObject)
-		{
-			//updateHeldObjectPosition();
-		}
 	}
 	
 	public void die ()
@@ -109,5 +106,20 @@ public class Player extends Character //your character, protagonist
 		
 		hObj.setPos(directionVec.getX(), directionVec.getY());
 		hObj.setAngle(angle);
+	}
+	
+	public void disableUserControl()
+	{
+		controlled = false;
+	}
+	
+	public void enableUserControl()
+	{
+		controlled = true;
+	}
+	
+	public boolean userHasControl()
+	{
+		return controlled;
 	}
 }
