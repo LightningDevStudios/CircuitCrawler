@@ -609,6 +609,7 @@ public abstract class Entity
 	public void setXScl(float xScl)		{ scaleVec.setX(xScl); }
 	public void setYScl(float yScl)		{ scaleVec.setY(yScl); }
 	public void setRendered(boolean state)	{ rendered = state; }
+	public void setSolidity(boolean solid)	{ isSolid = solid; }
 	public void setWillCollideWithPlayer(boolean willCollideWithPlayer) { this.willCollideWithPlayer = willCollideWithPlayer; }
 	public void setVertexVecs(Vector2f[] vertVecs)
 	{

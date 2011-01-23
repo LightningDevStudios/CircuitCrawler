@@ -6,7 +6,7 @@ public abstract class Character extends PhysEnt //all characters, including the 
 {
 	protected int health;
 	protected int strength;
-	private float speed = 1.0f;
+	private float speed;
 	
 	public Character(float size, float xPos, float yPos, boolean circular, RenderMode renderMode, int health, int strength, float speed)
 	{
@@ -18,6 +18,7 @@ public abstract class Character extends PhysEnt //all characters, including the 
 		super(size, xPos, yPos, angle, xScl, yScl, true, circular, RenderMode.TILESET, 20.0f, 90.0f, 1.0f);
 		
 		this.health = health;
+		this.speed = 1.0f;
 		this.strength = strength;
 	}
 		
