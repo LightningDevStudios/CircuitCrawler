@@ -349,21 +349,37 @@ public abstract class Entity
 			}
 			
 			if ((max1 > max2 || max1 < min2) && (max2 > max1 || max2 < min1))
-			{
+			{	
 				return false;
 			}
 		}
 		
 		//return a bounceVec to bounce out PhysEnts
-		axes[2] = Vector2f.sub(vertVecs[0], ent.posVec);
-		for (int i = 1; i < vertVecs.length; i++)
+		if (this instanceof PhysEnt)
 		{
-			Vector2f tempVec = Vector2f.sub(vertVecs[i], ent.posVec);
-			if (axes[2].mag() > tempVec.mag())
+			//find the side to bounce the PhysEnt off of
+			Vector2f closestPointVec = Vector2f.sub(ent.vertVecs[0], posVec);
+			Vector2f secondClosestPointVec = new Vector2f(closestPointVec);
+			for (int i = 1; i < ent.vertVecs.length; i++)
 			{
-				axes[2].set(tempVec);
+				Vector2f tempVec = Vector2f.sub(ent.vertVecs[i], posVec);
+				if (closestPointVec.mag() > tempVec.mag())
+				{
+					secondClosestPointVec.set(closestPointVec);
+					closestPointVec.set(tempVec);
+				}
+				else if (secondClosestPointVec.mag() > tempVec.mag())
+				{
+					secondClosestPointVec.set(tempVec);
+				}
 			}
+			Vector2f bounceSide = Vector2f.normalize(Vector2f.sub(closestPointVec, secondClosestPointVec));
+			//calculate the bouceVec
+			Vector2f thisMoveInterpVec = ((PhysEnt)this).moveInterpVec;
+			bounceSide.scale(2 * thisMoveInterpVec.dot(bounceSide));
+			((PhysEnt)this).setBounceVec(Vector2f.sub(bounceSide, thisMoveInterpVec));
 		}
+		
 		return true;
 	}
 			
