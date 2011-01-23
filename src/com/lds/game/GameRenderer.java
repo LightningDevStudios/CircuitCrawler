@@ -308,7 +308,6 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 					}
 					
 					//move the held object if one exists
-					//TODO move to player?
 					if (game.player.isHoldingObject())
 						game.player.updateHeldObjectPosition();
 										

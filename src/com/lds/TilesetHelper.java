@@ -2,7 +2,6 @@ package com.lds;
 
 import com.lds.game.entity.Tile;
 
-//TODO grab min/max through a textureID type thing
 public class TilesetHelper 
 {
 	private TilesetHelper()
