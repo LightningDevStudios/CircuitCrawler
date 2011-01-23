@@ -98,19 +98,25 @@ public class Game
 			for (int j = 0; j < tileset[0].length; j++)
 			{
 				tileset[i][j] = new Tile(Tile.TILE_SIZE_F, j, i, tileset[0].length - 1, tileset.length - 1);
-				if (i == 0 || j == 0 || i == tileset.length - 1 || j == tileset.length - 1)
+				tileset[i][j].setTexture(tilesetwire);
+				if (i == 0 || j == 0 || i == tileset.length - 1 || j == tileset[0].length - 1 || (i < 4 && (j < 4 || j > 7)) || (i > 10 && (j < 4 || j > 7)))
 				{
-					tileset[i][j].setTilesetMode(tilesetwire, 2, 0);
+					//tileset[i][j].setTilesetMode(tilesetwire, 2, 0);
 					tileset[i][j].setAsWall();
 				}
-				else if (i == 13)
+				else if (i == 4 || i == 5 || (i == 6 || i == 9 || i == 10) && (j < 4 || j > 7) || (i == 7 || i == 8) && (j < 3 || j > 8))
 				{
-					tileset[i][j].setTilesetMode(tilesetwire, 0, 1);
+					//tileset[i][j].setTilesetMode(tilesetwire, 0, 1);
 					tileset[i][j].setAsPit();
 				}
+				/*else if (i == 3)
+				{
+					//tileset[i][j].setTilesetMode(tilesetwire, 1, 1);
+					tileset[i][j].setAsBridge();
+				}*/
 				else
 				{
-					tileset[i][j].setTilesetMode(tilesetwire, 0, 0);
+					//tileset[i][j].setTilesetMode(tilesetwire, 0, 0);
 					tileset[i][j].setAsFloor();
 				}
 			}

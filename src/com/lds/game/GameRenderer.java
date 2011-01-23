@@ -8,7 +8,6 @@ import android.os.Debug;
 import android.view.MotionEvent;
 import android.content.Context;
 
-import com.lds.EntityCleaner;
 import com.lds.Stopwatch;
 import com.lds.Vector2f;
 import com.lds.game.entity.*;
@@ -59,16 +58,20 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	@Override
 	public void onDrawFrame(GL10 gl) 
 	{
-		frameCount++;
+		//TODO keep so we can see what's slowing down a frame later
+		/*frameCount++;
 		if (frameCount == 100)
-			Debug.startMethodTracing("LDS_Game4");
+			Debug.startMethodTracing("LDS_Game4");*/
 				
 		if(!game.entList.contains(game.player))
 		{
 			game = null;
 			game = new Game(context, gl);
+			game.camPosX = game.player.getXPos();
+			game.camPosY = game.player.getYPos();
 			game.updateLocalEntities();
 			game.updateLocalTileset();
+			
 		}
 		
 		//clear the screen
@@ -220,11 +223,12 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		//framerate count
 		System.out.println("FPS: " + (1000 / (Stopwatch.elapsedTimeMs() - frameInterval)));
 		
-		if (frameCount == 101)
+		//TODO keep for later, if we want to see what's slowing down a frame.
+		/*if (frameCount == 101)
 		{
 			testDebug = false;
 			Debug.stopMethodTracing();
-		}
+		}*/
 	}
 
 	@Override
