@@ -126,8 +126,8 @@ public class Game
 		entList.add(button);
 		button.setWillCollideWithPlayer(false);
 		
-		block = new PhysBlock(20.0f, 200.0f, 0.0f, RenderMode.COLOR);
-		block.setColorMode(0, 255, 255, 255);
+		block = new PhysBlock(100.0f, 200.0f, 0.0f, RenderMode.COLOR);
+		block.setColorMode(255, 255, 0, 255);
 		entList.add(block);
 		block.setWillCollideWithPlayer(true);
 		block.scale(2.0f, 2.0f);
@@ -151,7 +151,6 @@ public class Game
 								1.0f, 0.0f, 0.0f, 1.0f};	//bottom left
 		healthBar.setGradientMode(healthColor);
 		healthBar.setValue(99);
-		
 		
 		energyBar = new UIEnergyBar(150.0f, 15.0f, UIPosition.TOPRIGHT, Direction.LEFT);
 		energyBar.setTopPad(5.0f);

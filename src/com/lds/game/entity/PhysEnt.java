@@ -34,6 +34,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 		this.sclSpeed = sclSpeed;
 		moveVec = new Vector2f();
 		sclVec = new Vector2f();
+		moveInterpVec = new Vector2f();
 		moveInterpCount = 0;
 		sclInterpCount = 0;
 	}
@@ -160,16 +161,17 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	 * Instant Transformation Methods *
 	 **********************************/
 	
-	//mutator for position
-	public void setPos (float x, float y)
+	//mutators for position
+	public void setPos (Vector2f v)
 	{
-		posVec.set(x, y);
+		moveInterpVec = Vector2f.sub(v, posVec);
+		posVec.set(v);
 		Game.worldOutdated = true;
 	}
 	
-	public void setPos (Vector2f v)
+	public void setPos (float x, float y)
 	{
-		setPos(v.getX(), v.getY());
+		setPos(new Vector2f(x, y));
 	}
 	
 	//mutator for angle
@@ -286,5 +288,15 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 			sclTimeMs = Stopwatch.elapsedTimeMs();
 			Game.worldOutdated = true;
 		}
+	}
+	
+	public Vector2f getBounceVec ()
+	{
+		return bounceVec;
+	}
+	
+	public void setBounceVec (Vector2f v)
+	{
+		bounceVec = v;
 	}
 }
