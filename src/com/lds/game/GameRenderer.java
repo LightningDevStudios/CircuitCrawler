@@ -58,7 +58,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	@Override
 	public void onDrawFrame(GL10 gl) 
 	{
-		//TODO keep so we can see what's slowing down a frame later
+		//TODO keep so we can see what's slowing down a frame later.
 		/*frameCount++;
 		if (frameCount == 100)
 			Debug.startMethodTracing("LDS_Game4");*/
