@@ -34,6 +34,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 		moveVec = new Vector2f();
 		sclVec = new Vector2f();
 		moveInterpVec = new Vector2f();
+		bounceVec = new Vector2f();
 		moveInterpCount = 0;
 		sclInterpCount = 0;
 	}
@@ -310,6 +311,16 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	}
 	
 	public void setBounceVec (Vector2f v)
+	{
+		bounceVec = v;
+	}
+	
+	public Vector2f getMoveInterpVec ()
+	{
+		return moveInterpVec;
+	}
+	
+	public void setMoveInterpVec (Vector2f v)
 	{
 		bounceVec = v;
 	}

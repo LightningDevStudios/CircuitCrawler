@@ -298,7 +298,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 					{
 						for (Tile t: ts)
 						{
-							if (t.isRendered() && (t.isColliding(game.player) || game.player.getHeldObject() != null && t.isColliding(game.player.getHeldObject())))
+							if (t.isRendered() && (game.player.isColliding(t) || game.player.getHeldObject() != null && t.isColliding(game.player.getHeldObject())))
 							{
 								game.player.setAngle(oldAngle);
 								game.player.setPos(Vector2f.add(game.player.getPos(), game.player.getBounceVec()));
