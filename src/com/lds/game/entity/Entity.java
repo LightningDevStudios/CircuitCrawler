@@ -358,7 +358,7 @@ public abstract class Entity
 		if (this instanceof PhysEnt)
 		{
 			//find the side to bounce the PhysEnt off of
-			Vector2f closestPointVec = Vector2f.sub(ent.vertVecs[0], posVec);
+			/*Vector2f closestPointVec = Vector2f.sub(ent.vertVecs[0], posVec);
 			int closestIndex = 0;
 			for (int i = 1; i < ent.vertVecs.length; i++)
 			{
@@ -384,14 +384,34 @@ public abstract class Entity
 						secondClosestPointVec.set(tempVec);
 					}
 				}
+			}*/
+			//gets an array of all the vectors between this and the ent's vertices
+			Vector2f[] vertDistVecs = new Vector2f[4];
+			for (int i = 0; i < 4; i++)
+			{
+				vertDistVecs[i] = Vector2f.sub(ent.vertVecs[i], this.posVec);
 			}
-			Vector2f bounceSide = Vector2f.normalize(Vector2f.sub(closestPointVec, secondClosestPointVec));
-			//calculate the bouceVec
+			//goes through the vectors and sorts them from low to high (thanks Mr. Carlson)
+			int i, k, maxPos;
+			Vector2f temp = new Vector2f();
+		    for (k = vertDistVecs.length; k >= 2; k--)
+		    {
+		    	maxPos = 0; 
+		        for (i = 1; i < k; i++) 
+		        {
+		             if (vertDistVecs[i].mag() > vertDistVecs[maxPos].mag()) 
+		                  maxPos = i; 
+		        }
+		        temp.set(vertDistVecs[maxPos]); 
+		        vertDistVecs[maxPos].set(vertDistVecs[k-1]); 
+		        vertDistVecs[k-1].set(temp); 
+		    }
+		    //calculate the bouceVec
+			Vector2f bounceSide = Vector2f.normalize(Vector2f.sub(vertDistVecs[0], vertDistVecs[1]));
 			Vector2f thisMoveInterpVec = ((PhysEnt)this).moveInterpVec;
 			bounceSide.scale(thisMoveInterpVec.dot(bounceSide));
 			((PhysEnt)this).setBounceVec(Vector2f.sub(bounceSide, thisMoveInterpVec));
 		}
-		
 		return true;
 	}
 			
