@@ -296,10 +296,10 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 					}
 					
 					for (Tile[] ts : game.tileset)
-					{
+					{						
 						for (Tile t: ts)
 						{
-							if (t.isRendered() && (game.player.isColliding(t) || game.player.getHeldObject() != null && t.isColliding(game.player.getHeldObject())))
+							if (t.isRendered() && (game.player.isColliding(t) || game.player.getHeldObject() != null && game.player.getHeldObject().isColliding(t)))
 							{
 								game.player.setAngle(oldAngle);
 								game.player.setPos(Vector2f.add(game.player.getPos(), game.player.getBounceVec()));
@@ -309,18 +309,9 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 					}
 					
 					//move the held object if one exists
-					//TODO move to player?
 					if (game.player.isHoldingObject())
 						game.player.updateHeldObjectPosition();
-					
-					//Tile nTile = game.nearestTile(game.player);
-					
-					/*if (nTile.isPit())
-					{
-						game.player.moveTo(nTile.getXPos(), nTile.getYPos());
-						game.player.scaleTo(0.0f, 0.0f);
-					}*/
-					
+										
 					//move camera to follow player
 					game.camPosX = game.player.getXPos();
 					game.camPosY = game.player.getYPos();

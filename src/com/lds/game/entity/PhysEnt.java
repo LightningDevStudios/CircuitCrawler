@@ -63,7 +63,6 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	 * Interpolated Transformation Methods *
 	 ***************************************/
 	
-	//TODO set endPos/endScale vectors instead of starting ones!
 	//sets position to to new x and y and interpolates
 	public void moveTo (float x, float y)
 	{
@@ -213,8 +212,6 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 				
 				if (moveVec.mag() - moveInterpVec.mag() * moveInterpCount <= moveInterpVec.mag())
 				{
-					//TODO this doesn't take into account differences in framerate. Hence the inaccuracies
-					//Vector2f vecToEnd = Vector2f.sub(moveVec, Vector2f.scale(moveInterpVec, moveInterpCount));
 					posVec = endPosVec;
 					isMoving = false;
 					moveInterpCount = 0;
@@ -287,8 +284,6 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 				
 				if (sclVec.mag() - sclInterpVec.mag() * sclInterpCount <= sclInterpVec.mag())
 				{
-					//TODO this doesn't take into account differences in framerate. Hence the inaccuracies
-					//Vector2f vecToEnd = Vector2f.sub(moveVec, Vector2f.scale(moveInterpVec, moveInterpCount));
 					scaleVec = endScaleVec;
 					isScaling = false;
 					sclInterpCount = 0;
