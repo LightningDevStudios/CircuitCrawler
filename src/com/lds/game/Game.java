@@ -99,7 +99,7 @@ public class Game
 			{
 				tileset[i][j] = new Tile(Tile.TILE_SIZE_F, j, i, tileset[0].length - 1, tileset.length - 1);
 				tileset[i][j].setTexture(tilesetwire);
-				if (i == 0 || j == 0 || i == tileset.length - 1 || j == tileset[0].length - 1 || (i < 4 && (j < 4 || j > 8)) || (i > 10 && (j < 4 || j > 8)))
+				if (i == 0 || j == 0 || i == tileset.length - 1 || j == tileset[0].length - 1 || (i < 4 && (j < 4 || j > 8)) || (i == 10 && j != 6) || (i > 10 && (j < 4 || j > 8)))
 				{
 					tileset[i][j].setAsWall();
 				}
@@ -118,12 +118,12 @@ public class Game
 			}
 		}	
 		
-		door = new Door (100.0f, 300.0f, RenderMode.COLOR);
+		door = new Door (-108.0f, -180.0f, RenderMode.COLOR);
 		door.setColorMode(255, 225, 0, 225);
 		entList.add(door);
 		door.setWillCollideWithPlayer(true);
 		
-		button = new Button(90.0f, 90.0f, RenderMode.TILESET, door);
+		button = new Button(48.0f, -375.0f, RenderMode.TILESET, door);
 		button.setTilesetMode(randomthings, 0, 0);
 		entList.add(button);
 		button.setWillCollideWithPlayer(false);
@@ -134,7 +134,7 @@ public class Game
 		block.setWillCollideWithPlayer(true);
 		block.scale(2.0f, 2.0f);
 		
-		player = new Player(0.0f, 0.0f, 0.0f, RenderMode.TILESET);
+		player = new Player(-108.0f, -450.0f, 0.0f, RenderMode.TILESET);
 		player.setTilesetMode(tilesetwire, 1, 0);
 		entList.add(player);
 		player.setWillCollideWithPlayer(false);
@@ -192,16 +192,14 @@ public class Game
 		UIList.add(btnB);
 		UIList.add(joypad);
 		UIList.add(textbox);
-		
-		camPosX = 0.0f;
-		camPosY = 0.0f;
-		
+				
 		worldMinX = (-Tile.TILE_SIZE_F * (tileset[0].length / 2)) + (screenW / 2);
 		worldMinY = (-Tile.TILE_SIZE_F * (tileset.length / 2)) + (screenH / 2);
 		worldMaxX = (Tile.TILE_SIZE_F * (tileset[0].length / 2)) - (screenW / 2);
 		worldMaxY = (Tile.TILE_SIZE_F * (tileset.length / 2)) - (screenH / 2);
 		
 		//TODO take into account AI, perhaps render every time it chooses a new point to go to?
+		updateCameraPosition();
 		updateLocalEntities();
 		updateLocalTileset();
 	}
@@ -308,5 +306,25 @@ public class Game
 		
 		return null;
 		
+	}
+	
+	public void updateCameraPosition()
+	{
+		//move camera to follow player
+		camPosX = player.getXPos();
+		camPosY = player.getYPos();
+		
+		//camera can't go further than defined level bounds
+		if (camPosX < worldMinX)
+			camPosX = worldMinX;
+			
+		else if (camPosX > worldMaxX)
+			camPosX = worldMaxX;
+		
+		if (camPosY < worldMinY)
+			camPosY = worldMinY;
+		
+		else if (camPosY > worldMaxY)
+			camPosY = worldMaxY;
 	}
 }

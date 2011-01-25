@@ -25,6 +25,11 @@ public class Player extends Character //your character, protagonist
 	public void update()
 	{
 		super.update();
+		
+		if (holdingObject)
+		{
+			updateHeldObjectPosition();
+		}
 	}
 	
 	public void die ()

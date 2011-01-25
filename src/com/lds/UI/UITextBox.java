@@ -4,6 +4,7 @@ import com.lds.Enums.UIPosition;
 
 public class UITextBox extends UIEntity
 {
+	private String text;
 	private float originalTopPad, originalLeftPad, originalBottomPad, originalRightPad;
 	
 	public UITextBox(float xSize, float ySize, UIPosition position)
@@ -37,21 +38,30 @@ public class UITextBox extends UIEntity
 		super.autoPadding(topPad, leftPad, bottomPad, rightPad);
 	}
 	
-	public void reloadTexture(String text)
+	public void setText(String text)
 	{
-		tex.reloadTexture(text);
-		xSize = tex.getXSize();
-		ySize = tex.getYSize();
-		halfXSize = xSize / 2;
-		halfYSize = ySize / 2;
-		
-		float[] initVerts = { 	halfXSize, halfYSize,
-								halfXSize, -halfYSize,
-								-halfXSize, halfYSize,
-								-halfXSize, -halfYSize };
-		setVertices(initVerts);
-		
-		autoPadding(originalTopPad, originalLeftPad, originalBottomPad, originalRightPad);
-		this.updatePosition();
+		if( this.text == null || !this.text.equalsIgnoreCase(text))
+		{
+			this.text = text;
+			tex.reloadTexture(text);
+			xSize = tex.getXSize();
+			ySize = tex.getYSize();
+			halfXSize = xSize / 2;
+			halfYSize = ySize / 2;
+			
+			float[] initVerts = { 	halfXSize, halfYSize,
+									halfXSize, -halfYSize,
+									-halfXSize, halfYSize,
+									-halfXSize, -halfYSize };
+			setVertices(initVerts);
+			
+			autoPadding(originalTopPad, originalLeftPad, originalBottomPad, originalRightPad);
+			this.updatePosition();
+		}
+	}
+	
+	public String getText()
+	{
+		return text;
 	}
 }

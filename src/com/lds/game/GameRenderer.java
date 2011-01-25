@@ -252,7 +252,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 			{
 				//Specific joypad code
 				//TODO move to UIEntity generic method
-				if (ent instanceof UIJoypad && game.player.userHasControl())
+				if (game.player.userHasControl() && ent instanceof UIJoypad)
 				{
 					UIJoypad UIjp = (UIJoypad)ent;
 					
@@ -260,7 +260,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 					
 					if (test != null && test.isPit())
 					{
-						game.textbox.reloadTexture("Yer a wizerd harry!");
+						//game.textbox.setText("Yer a wizerd harry!");
 						game.player.disableUserControl();
 						game.player.scaleTo(0, 0);
 						game.player.moveTo(test.getXPos(), test.getYPos());
@@ -308,26 +308,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 						}
 					}
 					
-					//move the held object if one exists
-					if (game.player.isHoldingObject())
-						game.player.updateHeldObjectPosition();
-										
-					//move camera to follow player
-					game.camPosX = game.player.getXPos();
-					game.camPosY = game.player.getYPos();
-					
-					//camera can't go further than defined level bounds
-					if (game.camPosX < game.worldMinX)
-						game.camPosX = game.worldMinX;
-						
-					else if (game.camPosX > game.worldMaxX)
-						game.camPosX = game.worldMaxX;
-					
-					if (game.camPosY < game.worldMinY)
-						game.camPosY = game.worldMinY;
-					
-					else if (game.camPosY > game.worldMaxY)
-						game.camPosY = game.worldMaxY;
+					game.updateCameraPosition();
 					
 					windowOutdated = true;					
 				}
