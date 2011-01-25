@@ -359,24 +359,36 @@ public abstract class Entity
 		{
 			//find the side to bounce the PhysEnt off of
 			Vector2f closestPointVec = Vector2f.sub(ent.vertVecs[0], posVec);
-			Vector2f secondClosestPointVec = new Vector2f(closestPointVec);
+			int closestIndex = 0;
 			for (int i = 1; i < ent.vertVecs.length; i++)
 			{
 				Vector2f tempVec = Vector2f.sub(ent.vertVecs[i], posVec);
 				if (closestPointVec.mag() > tempVec.mag())
 				{
-					secondClosestPointVec.set(closestPointVec);
 					closestPointVec.set(tempVec);
+					closestIndex = 1;
 				}
-				else if (secondClosestPointVec.mag() > tempVec.mag())
+			}
+			Vector2f secondClosestPointVec;
+			if (closestIndex == 0)
+				secondClosestPointVec = Vector2f.sub(ent.vertVecs[1], posVec);
+			else
+				secondClosestPointVec = Vector2f.sub(ent.vertVecs[closestIndex - 1], posVec);
+			for (int i = 0; i < ent.vertVecs.length; i++)
+			{
+				if (i != closestIndex)
 				{
-					secondClosestPointVec.set(tempVec);
+					Vector2f tempVec = Vector2f.sub(ent.vertVecs[i], posVec);
+					if (secondClosestPointVec.mag() > tempVec.mag())
+					{
+						secondClosestPointVec.set(tempVec);
+					}
 				}
 			}
 			Vector2f bounceSide = Vector2f.normalize(Vector2f.sub(closestPointVec, secondClosestPointVec));
 			//calculate the bouceVec
 			Vector2f thisMoveInterpVec = ((PhysEnt)this).moveInterpVec;
-			bounceSide.scale(2 * thisMoveInterpVec.dot(bounceSide));
+			bounceSide.scale(thisMoveInterpVec.dot(bounceSide));
 			((PhysEnt)this).setBounceVec(Vector2f.sub(bounceSide, thisMoveInterpVec));
 		}
 		
