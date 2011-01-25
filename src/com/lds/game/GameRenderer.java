@@ -294,6 +294,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 							}
 						}
 					}
+					
 					for (Tile[] ts : game.tileset)
 					{
 						for (Tile t: ts)
