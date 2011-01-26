@@ -1,5 +1,7 @@
 package com.lds.game.entity;
 
+import java.util.ArrayList;
+
 import com.lds.Enums.RenderMode;
 import com.lds.game.Game;
 import com.lds.Stopwatch;
@@ -15,7 +17,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	protected Vector2f moveVec, moveInterpVec, endPosVec;
 	protected Vector2f sclVec, sclInterpVec, endScaleVec;
 	protected int moveInterpCount, sclInterpCount;
-	private Vector2f bounceVec;
+	protected ArrayList<Vector2f> bounceList;
 	
 	public PhysEnt(float size, float xPos, float yPos, boolean circular, RenderMode renderMode, float moveSpeed, float rotSpeed, float sclSpeed)
 	{
@@ -34,9 +36,9 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 		moveVec = new Vector2f();
 		sclVec = new Vector2f();
 		moveInterpVec = new Vector2f();
-		bounceVec = new Vector2f();
 		moveInterpCount = 0;
 		sclInterpCount = 0;
+		bounceList = new ArrayList<Vector2f>();
 	}
 	
 	@Override
@@ -158,6 +160,31 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	 *********************/
 	
 	@Override
+	protected boolean isCircleCollidingWithCircle (Entity ent)
+	{
+		boolean output = super.isCircleCollidingWithCircle(ent);
+		this.circleWithCircleBounce(ent);
+		ent.circleWithCircleBounce(ent);
+		return output;
+	}
+	
+	@Override
+	protected boolean isRectangleCollidingWithCircle (Entity ent) 
+	{
+		boolean output = super.isRectangleCollidingWithCircle(ent);
+		return output;
+	}
+	
+	@Override
+	protected boolean isRectangleCollidingWithRectangle (Entity ent)
+	{
+		boolean output = super.isRectangleCollidingWithRectangle(ent);
+		this.rectangleWithRectangleBounce(ent);
+		ent.rectangleWithRectangleBounce(this);
+		return output;
+	}
+	
+	@Override
 	public void rectangleWithRectangleBounce (Entity ent)
 	{
 		//gets an array of all the vectors between this and the ent's vertices
@@ -184,16 +211,19 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	    //calculate the bouceVec
 		Vector2f bounceSide = Vector2f.normalize(Vector2f.sub(vertDistVecs[0], vertDistVecs[1]));
 		bounceSide.scale(moveInterpVec.dot(bounceSide));
-		this.setBounceVec(Vector2f.sub(bounceSide, moveInterpVec));
+		this.addBounceVec(Vector2f.sub(bounceSide, moveInterpVec));
 	}
 	
 	@Override
-	protected boolean isRectangleCollidingWithRectangle (Entity ent)
+	public void rectangleWithCircleBounce (Entity ent)
 	{
-		boolean output = super.isRectangleCollidingWithRectangle(ent);
-		this.rectangleWithRectangleBounce(ent);
-		ent.rectangleWithRectangleBounce(this);
-		return output;
+		
+	}
+	
+	@Override
+	public void circleWithCircleBounce (Entity ent)
+	{
+		
 	}
 	
 	/**********************************
@@ -338,14 +368,27 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 		}
 	}
 	
-	public Vector2f getBounceVec ()
+	public Vector2f getTotalBounceVec ()
 	{
-		return bounceVec;
+		if (bounceList.isEmpty())
+		{
+			System.out.println("Sorry, no bounceVecs found in bounceList");
+			return null;
+		}
+		else
+		{
+			Vector2f bounceVec = new Vector2f(bounceList.get(0));
+			for (int i = 1; i < bounceList.size(); i++)
+			{
+				bounceVec.add(bounceList.get(i));
+			}
+			return bounceVec;
+		}
 	}
 	
-	public void setBounceVec (Vector2f v)
+	public void addBounceVec (Vector2f v)
 	{
-		bounceVec = v;
+		bounceList.add(v);
 	}
 	
 	public Vector2f getMoveInterpVec ()
@@ -355,6 +398,6 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	
 	public void setMoveInterpVec (Vector2f v)
 	{
-		bounceVec = v;
+		moveInterpVec = v;
 	}
 }
