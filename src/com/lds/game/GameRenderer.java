@@ -221,7 +221,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		}
 		
 		//framerate count
-		System.out.println("FPS: " + (1000 / (Stopwatch.elapsedTimeMs() - frameInterval)));
+		//System.out.println("FPS: " + (1000 / (Stopwatch.elapsedTimeMs() - frameInterval)));
 		
 		//TODO keep for later, if we want to see what's slowing down a frame.
 		/*if (frameCount == 101)

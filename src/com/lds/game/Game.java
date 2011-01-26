@@ -1,8 +1,11 @@
 package com.lds.game;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.microedition.khronos.opengles.GL10;
+
+import org.xmlpull.v1.XmlPullParserException;
 
 import android.content.Context;
 
@@ -22,6 +25,8 @@ import com.lds.game.entity.Entity;
 import com.lds.game.entity.PhysBlock;
 import com.lds.game.entity.Player;
 import com.lds.game.entity.Tile;
+import com.lds.parser.Parser;
+import com.lds.parser.PhysBlockData;
 import com.lds.trigger.*;
 
 public class Game
@@ -66,7 +71,8 @@ public class Game
 	public Door door;
 	
 	//Constructors
-	public Game (Context context, GL10 gl)
+	public Game (Context context, GL10 gl) 
+	
 	{
 		tilesetcolors = new Texture(R.drawable.tilesetcolors, 128, 128, 8, 8, context);
 		tilesetwire = new Texture(R.drawable.tilesetwire, 128, 128, 8, 8, context);
@@ -204,6 +210,19 @@ public class Game
 		//TODO take into account AI, perhaps render every time it chooses a new point to go to?
 		updateLocalEntities();
 		updateLocalTileset();
+		
+		//Parser
+		Parser parser = new Parser(context);
+		try {
+			parser.parseLevel();
+		} catch (XmlPullParserException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
 	
 	public void updateLocalEntities()
