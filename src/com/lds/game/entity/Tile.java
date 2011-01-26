@@ -1,6 +1,5 @@
 package com.lds.game.entity;
 
-import com.lds.Enums.RenderMode;
 import com.lds.Enums.TileStates;
 import com.lds.Texture;
 import com.lds.TilesetHelper;
@@ -16,7 +15,7 @@ public class Tile extends StaticEnt
 	
 	public Tile(float size, int tilePosX, int tilePosY, int tilesetX, int tilesetY)
 	{
-		super(size, 0, 0, false, RenderMode.TILESET);
+		super(size, 0, 0, false);
 		TilesetHelper.setInitialTileOffset(this, tilePosY, tilePosX, tilesetX, tilesetY);
 	}
 	

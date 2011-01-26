@@ -1,12 +1,10 @@
 package com.lds.game.entity;
 
-import com.lds.Enums.RenderMode;
-
 public abstract class PickupObj extends PhysEnt //pickup objects are picked up, such as keys, powerups, or batteries
 {	
-	public PickupObj (float _xPos, float _yPos)
+	public PickupObj (float xPos, float yPos)
 	{
-		super(10.0f, _xPos, _yPos, false, RenderMode.TILESET, 50.0f, 90.0f, 0.1f);
+		super(10.0f, xPos, yPos, false, 50.0f, 90.0f, 0.1f);
 	}
 	
 	@Override

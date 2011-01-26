@@ -3,26 +3,24 @@ package com.lds.game.entity;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
-import com.lds.Enums.RenderMode;
+import com.lds.Animation;
 
 public class Sprite extends PhysEnt
 {
-	public int maxX, maxY, curX, curY, curFrame;
+	public Animation anim;
 	
-	public Sprite(float size, float xPos, float yPos, float moveSpeed, float rotSpeed, float sclSpeed, int maxX, int maxY)
+	//TODO pass in a texture, set renderMode manually
+	public Sprite(float size, float xPos, float yPos, float moveSpeed, float rotSpeed, float sclSpeed, Animation anim)
 	{
-		this(size, xPos, yPos, 0.0f, 1.0f, 1.0f, moveSpeed, rotSpeed, sclSpeed, maxX, maxY);
+		this(size, xPos, yPos, 0.0f, 1.0f, 1.0f, moveSpeed, rotSpeed, sclSpeed, anim);
 	}
 	
-	public Sprite(float size, float xPos, float yPos, float angle, float xScl, float yScl, float moveSpeed, float rotSpeed, float sclSpeed, int maxX, int maxY)
+	public Sprite(float size, float xPos, float yPos, float angle, float xScl, float yScl, float moveSpeed, float rotSpeed, float sclSpeed, Animation anim)
 	{
-		super(size, xPos, yPos, angle, xScl, yScl, true, false, RenderMode.TILESET, moveSpeed, rotSpeed, sclSpeed);
-		this.maxX = maxX;
-		this.maxY = maxY;
-		
-		curX = 0;
-		curY = 0;
-		texture = com.lds.TilesetHelper.getTextureVertices(tex, 0, 0);
+		super(size, xPos, yPos, angle, xScl, yScl, true, false, moveSpeed, rotSpeed, sclSpeed);
+
+		this.anim = anim;
+		texture = anim.getCurrentFrame();
 
 		ByteBuffer byteBuf = ByteBuffer.allocateDirect(texture.length * 4);
 		byteBuf.order(ByteOrder.nativeOrder());
@@ -34,31 +32,15 @@ public class Sprite extends PhysEnt
 	@Override
 	public void update()
 	{
-		renderNextFrame();
+		super.update();
+		anim.update();
+		
 	}
 	
 	@Override
 	public void renderNextFrame()
 	{
-		if (curX == maxX)
-		{
-			curX = 0;
-			
-			if (curY == maxY)
-			{
-				curY = 0;
-			}
-			else
-			{
-				curY++;
-			}
-		}
-		else
-		{
-			curX++;
-		}
-		curFrame = (curY + 1) * maxX + curX;
-		this.texture = com.lds.TilesetHelper.getTextureVertices(tex, curX, curY);
+		this.texture = anim.getCurrentFrame();
 		
 		ByteBuffer byteBuf = ByteBuffer.allocateDirect(texture.length * 4);
 		byteBuf.order(ByteOrder.nativeOrder());

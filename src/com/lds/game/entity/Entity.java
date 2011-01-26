@@ -55,12 +55,12 @@ public abstract class Entity
 	public ArrayList<Entity> colIgnoreList = new ArrayList<Entity>();
 	
 	
-	public Entity (float size, float xPos, float yPos, boolean circular, RenderMode renderMode)
+	public Entity (float size, float xPos, float yPos, boolean circular)
 	{
-		this(size, xPos, yPos, 0.0f, 1.0f, 1.0f, true, circular, renderMode);
+		this(size, xPos, yPos, 0.0f, 1.0f, 1.0f, true, circular);
 	}
 	
-	public  Entity (float size, float xPos, float yPos, float angle, float xScl, float yScl, boolean isSolid, boolean circular, RenderMode renderMode)
+	public  Entity (float size, float xPos, float yPos, float angle, float xScl, float yScl, boolean isSolid, boolean circular)
 	{
 		//initialize debug data
 		entID = entCount;
@@ -74,7 +74,6 @@ public abstract class Entity
 		this.size = size;
 		halfSize = size / 2;
 		this.angle = angle;
-		this.renderMode = renderMode;
 		posVec = new Vector2f(xPos, yPos);
 		scaleVec = new Vector2f(xScl, yScl);
 		
@@ -110,6 +109,8 @@ public abstract class Entity
 		indexBuffer = ByteBuffer.allocateDirect(indices.length);
 		indexBuffer.put(indices);
 		indexBuffer.position(0);
+		
+		renderMode = RenderMode.BLANK;
 	}
 	
 	public void draw(GL10 gl)
