@@ -1,21 +1,19 @@
 package com.lds.game.entity;
 
-import com.lds.Enums.RenderMode;
-
 public abstract class Character extends PhysEnt //all characters, including the protangonist and enemies
 {
 	protected int health;
 	protected int strength;
 	private float speed;
 	
-	public Character(float size, float xPos, float yPos, boolean circular, RenderMode renderMode, int health, int strength, float speed)
+	public Character(float size, float xPos, float yPos, boolean circular, int health, int strength, float speed)
 	{
-		this(size, xPos, yPos, 0.0f, 1.0f, 1.0f, circular, renderMode, health, strength, speed);
+		this(size, xPos, yPos, 0.0f, 1.0f, 1.0f, circular, health, strength, speed);
 	}
 	
-	public Character(float size, float xPos, float yPos, float angle, float xScl, float yScl, boolean circular, RenderMode renderMode, int health, int strength, float speed)
+	public Character(float size, float xPos, float yPos, float angle, float xScl, float yScl, boolean circular, int health, int strength, float speed)
 	{
-		super(size, xPos, yPos, angle, xScl, yScl, true, circular, RenderMode.TILESET, 20.0f, 90.0f, 1.0f);
+		super(size, xPos, yPos, angle, xScl, yScl, true, circular, 20.0f, 90.0f, 1.0f);
 		
 		this.health = health;
 		this.speed = 1.0f;

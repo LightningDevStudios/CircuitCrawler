@@ -1,6 +1,5 @@
 package com.lds.game.entity;
 
-import com.lds.Enums.RenderMode;
 import com.lds.game.Game;
 import com.lds.Stopwatch;
 import com.lds.Vector2f;
@@ -17,14 +16,14 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	protected int moveInterpCount, sclInterpCount;
 	private Vector2f bounceVec;
 	
-	public PhysEnt(float size, float xPos, float yPos, boolean circular, RenderMode renderMode, float moveSpeed, float rotSpeed, float sclSpeed)
+	public PhysEnt(float size, float xPos, float yPos, boolean circular, float moveSpeed, float rotSpeed, float sclSpeed)
 	{
-		this(size, xPos, yPos, 0.0f, 1.0f, 1.0f, true, circular, renderMode, moveSpeed, rotSpeed, sclSpeed);
+		this(size, xPos, yPos, 0.0f, 1.0f, 1.0f, true, circular, moveSpeed, rotSpeed, sclSpeed);
 	}
 	
-	public PhysEnt(float size, float xPos, float yPos, float angle, float xScl, float yScl, boolean isSolid, boolean circular, RenderMode renderMode, float moveSpeed, float rotSpeed, float sclSpeed)
+	public PhysEnt(float size, float xPos, float yPos, float angle, float xScl, float yScl, boolean isSolid, boolean circular, float moveSpeed, float rotSpeed, float sclSpeed)
 	{
-		super(size, xPos, yPos, angle, xScl, yScl, isSolid, circular, renderMode);
+		super(size, xPos, yPos, angle, xScl, yScl, isSolid, circular);
 		
 		//initialize interpolation variables
 		endAngle = angle;

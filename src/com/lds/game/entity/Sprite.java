@@ -3,12 +3,11 @@ package com.lds.game.entity;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
-import com.lds.Enums.RenderMode;
-
 public class Sprite extends PhysEnt
 {
 	public int maxX, maxY, curX, curY, curFrame;
 	
+	//TODO pass in a texture, set renderMode manually
 	public Sprite(float size, float xPos, float yPos, float moveSpeed, float rotSpeed, float sclSpeed, int maxX, int maxY)
 	{
 		this(size, xPos, yPos, 0.0f, 1.0f, 1.0f, moveSpeed, rotSpeed, sclSpeed, maxX, maxY);
@@ -16,7 +15,7 @@ public class Sprite extends PhysEnt
 	
 	public Sprite(float size, float xPos, float yPos, float angle, float xScl, float yScl, float moveSpeed, float rotSpeed, float sclSpeed, int maxX, int maxY)
 	{
-		super(size, xPos, yPos, angle, xScl, yScl, true, false, RenderMode.TILESET, moveSpeed, rotSpeed, sclSpeed);
+		super(size, xPos, yPos, angle, xScl, yScl, true, false, moveSpeed, rotSpeed, sclSpeed);
 		this.maxX = maxX;
 		this.maxY = maxY;
 		

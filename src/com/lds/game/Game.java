@@ -8,7 +8,6 @@ import android.content.Context;
 
 import com.lds.EntityCleaner;
 import com.lds.Enums.Direction;
-import com.lds.Enums.RenderMode;
 import com.lds.Stopwatch;
 import com.lds.StringRenderer;
 import com.lds.Texture;
@@ -107,10 +106,6 @@ public class Game
 				{
 					tileset[i][j].setAsPit();
 				}
-				/*else if (i == 3)
-				{
-					tileset[i][j].setAsBridge();
-				}*/
 				else
 				{
 					tileset[i][j].setAsFloor();
@@ -118,23 +113,23 @@ public class Game
 			}
 		}	
 		
-		door = new Door (-108.0f, -180.0f, RenderMode.COLOR);
+		door = new Door (-108.0f, -180.0f);
 		door.setColorMode(255, 225, 0, 225);
 		entList.add(door);
 		door.setWillCollideWithPlayer(true);
 		
-		button = new Button(48.0f, -375.0f, RenderMode.TILESET, door);
+		button = new Button(48.0f, -375.0f);
 		button.setTilesetMode(randomthings, 0, 0);
 		entList.add(button);
 		button.setWillCollideWithPlayer(false);
 		
-		block = new PhysBlock(50.0f, -100.0f, -100.0f, RenderMode.COLOR);
+		block = new PhysBlock(50.0f, -100.0f, -100.0f);
 		block.setColorMode(255, 255, 0, 255);
 		entList.add(block);
 		block.setWillCollideWithPlayer(true);
 		block.scale(2.0f, 2.0f);
 		
-		player = new Player(-108.0f, -450.0f, 0.0f, RenderMode.TILESET);
+		player = new Player(-108.0f, -450.0f, 0.0f);
 		player.setTilesetMode(tilesetwire, 1, 0);
 		entList.add(player);
 		player.setWillCollideWithPlayer(false);
