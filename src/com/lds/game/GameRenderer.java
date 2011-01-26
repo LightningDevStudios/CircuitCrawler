@@ -289,7 +289,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 							if (colEnt.willCollideWithPlayer())
 							{
 								game.player.setAngle(oldAngle);
-								game.player.setPos(Vector2f.add(game.player.getPos(), game.player.getTotalBounceVec()));
+								game.player.setPos(Vector2f.add(game.player.getPos(), game.player.getBounceVec()));
 								Game.worldOutdated = false;
 							}
 						}
@@ -302,7 +302,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 							if (t.isRendered() && (game.player.isColliding(t) || game.player.getHeldObject() != null && game.player.getHeldObject().isColliding(t)))
 							{
 								game.player.setAngle(oldAngle);
-								game.player.setPos(Vector2f.add(game.player.getPos(), game.player.getTotalBounceVec()));
+								game.player.setPos(Vector2f.add(game.player.getPos(), game.player.getBounceVec()));
 								Game.worldOutdated = false;
 							}
 						}
