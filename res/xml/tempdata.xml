@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Level>
+	<PhysBlock>
+		<angle>30</angle>
+		<size>65.0f</size>
+		<xPos>-100.0f</xPos>
+		<yPos>-200.0f</yPos>
+		<xScale>1.0f</xScale>
+		<yScale>1.0f</yScale>
+		<isSolid>true</isSolid>
+		<moveSpeed>6</moveSpeed>
+		<rotateSpeed>3</rotateSpeed>
+		<scaleSpeed>5</scaleSpeed>
+		<RenderMode>?</RenderMode>
+		<circular>false</circular>
+		<color>0,255,0,255</color>
+		<Texture>?</Texture>
+	</PhysBlock>
+	<Player></Player>
+</Level>

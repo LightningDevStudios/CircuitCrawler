@@ -1,8 +1,11 @@
 package com.lds.game;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.microedition.khronos.opengles.GL10;
+
+import org.xmlpull.v1.XmlPullParserException;
 
 import android.content.Context;
 
@@ -15,8 +18,13 @@ import com.lds.Texture;
 import com.lds.TextureLoader;
 import com.lds.Enums.UIPosition;
 
+
 import com.lds.UI.*;
 import com.lds.game.entity.*;
+
+import com.lds.parser.Parser;
+import com.lds.parser.PhysBlockData;
+
 import com.lds.trigger.*;
 
 public class Game
@@ -57,6 +65,7 @@ public class Game
 	public UITextBox textbox;
 	public Player player;
 	public PhysBlock block;
+	public PhysCircle circle;
 	public Button button;
 	public Door door;
 	public Sprite spr;
@@ -64,7 +73,8 @@ public class Game
 	public Animation spriteAnim;
 	
 	//Constructors
-	public Game (Context context, GL10 gl)
+	public Game (Context context, GL10 gl) 
+	
 	{
 		tilesetcolors = new Texture(R.drawable.tilesetcolors, 128, 128, 8, 8, context);
 		tilesetwire = new Texture(R.drawable.tilesetwire, 128, 128, 8, 8, context);
@@ -137,6 +147,7 @@ public class Game
 		button2.setWillCollideWithPlayer(false);
 		entList.add(button2);
 		
+
 		PhysBlock block1 = new PhysBlock(50, -200, 100);
 		block1.setTilesetMode(tilesetwire, 2, 1);
 		block1.setWillCollideWithPlayer(true);
@@ -146,6 +157,12 @@ public class Game
 		block2.setTilesetMode(tilesetwire, 2, 1);
 		block2.setWillCollideWithPlayer(true);
 		entList.add(block2);
+		
+		//TODO NOPE LOL
+		/*circle = new PhysCircle(50.0f, -100.0f, -310.0f);
+		circle.setTilesetMode(tilesetwire, 1, 2);
+		entList.add(circle);
+		circle.setWillCollideWithPlayer(true);*/
 		
 		player = new Player(-108.0f, -450.0f, 0.0f);
 		player.setTilesetMode(tilesetwire, 1, 0);
@@ -226,6 +243,19 @@ public class Game
 		updateCameraPosition();
 		updateLocalEntities();
 		updateLocalTileset();
+		
+		//Parser
+		Parser parser = new Parser(context);
+		try {
+			parser.parseLevel();
+		} catch (XmlPullParserException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
 	
 	public void updateLocalEntities()

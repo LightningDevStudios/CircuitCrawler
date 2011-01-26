@@ -101,8 +101,7 @@ public class Player extends Character //your character, protagonist
 
 	public void updateHeldObjectPosition()
 	{
-		//TODO: FIND OUT WHY THE FUCK THIS WORKS
-		float heldDistance = hObj.size + this.halfSize + 10.0f;
+		float heldDistance = hObj.halfSize * hObj.getXScl() + this.halfSize + 10.0f;
 		double rad = Math.toRadians(angle + 90.0);
 		Vector2f directionVec = new Vector2f((float)Math.cos(rad), (float)Math.sin(rad));
 		directionVec.scale(heldDistance);
