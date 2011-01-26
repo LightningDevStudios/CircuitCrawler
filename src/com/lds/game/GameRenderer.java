@@ -284,23 +284,22 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 					//check collision and reverse motion if it's colliding with something solid
 					for (Entity colEnt : game.entList)
 					{
-						
-						if (colEnt != game.player && game.player.isColliding(colEnt) || (game.player.getHeldObject() != null && colEnt != game.player.getHeldObject() && game.player.getHeldObject().isColliding(colEnt)))
-						{
-							if (colEnt.willCollideWithPlayer())
+							if ((colEnt != game.player && game.player.isColliding(colEnt)) || (game.player.getHeldObject() != null && colEnt != game.player.getHeldObject() && game.player.getHeldObject().isColliding(colEnt)))
 							{
-								game.player.setAngle(oldAngle);
-								playerIsColliding = true;
-								Game.worldOutdated = false;
+								if (colEnt.willCollideWithPlayer())
+								{
+									game.player.setAngle(oldAngle);
+									playerIsColliding = true;
+									Game.worldOutdated = false;
+								}
 							}
-						}
 					}
 					
 					for (Tile[] ts : game.tileset)
 					{						
 						for (Tile t: ts)
 						{
-							if (t.isRendered() && (game.player.isColliding(t) || game.player.getHeldObject() != null && game.player.getHeldObject().isColliding(t)))
+							if ((t.isRendered() && (game.player.isColliding(t))) || (game.player.getHeldObject() != null && game.player.getHeldObject().isColliding(t)))
 							{
 								game.player.setAngle(oldAngle);
 								playerIsColliding = true;
@@ -309,7 +308,13 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 						}
 					}
 					if (playerIsColliding)
-						game.player.setPos(Vector2f.add(game.player.getPos(), game.player.getBounceVec()));
+					{
+						if (game.player.getHeldObject() == null)
+							game.player.setPos(Vector2f.add(game.player.getPos(), game.player.getBounceVec()));
+						else  
+							game.player.setPos
+							(Vector2f.add(game.player.getPos(), game.player.getBounceVec()).add(game.player.getHeldObject().getBounceVec()));
+					}
 					
 					game.updateCameraPosition();
 					
