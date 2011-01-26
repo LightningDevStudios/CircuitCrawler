@@ -158,11 +158,11 @@ public class Game
 		block2.setWillCollideWithPlayer(true);
 		entList.add(block2);
 		
-		//TODO NOPE LOL
-		/*circle = new PhysCircle(50.0f, -100.0f, -310.0f);
+		
+		circle = new PhysCircle(50.0f, -125.0f, -310.0f);
 		circle.setTilesetMode(tilesetwire, 1, 2);
 		entList.add(circle);
-		circle.setWillCollideWithPlayer(true);*/
+		circle.setWillCollideWithPlayer(true);
 		
 		player = new Player(-108.0f, -450.0f, 0.0f);
 		player.setTilesetMode(tilesetwire, 1, 0);
@@ -364,7 +364,7 @@ public class Game
 	
 	public void updateCameraPosition()
 	{
-		//move camera to follow player
+		//move camera to follow player.
 		camPosX = player.getXPos();
 		camPosY = player.getYPos();
 		
