@@ -119,13 +119,33 @@ public class Game
 		
 		button = new Button(36.0f, -320.0f);
 		button.setTilesetMode(randomthings, 0, 0);
-		entList.add(button);
 		button.setWillCollideWithPlayer(false);
+		entList.add(button);
 		
 		block = new PhysBlock(50.0f, -215.0f, -350.0f);
 		block.setTilesetMode(tilesetwire, 2, 1);
 		entList.add(block);
 		block.setWillCollideWithPlayer(true);
+				
+		Button button1 = new Button(0, 0);
+		button1.setTilesetMode(randomthings, 0, 0);
+		button1.setWillCollideWithPlayer(false);
+		entList.add(button1);
+				
+		Button button2 = new Button(-69.0f, 0.0f);
+		button2.setTilesetMode(randomthings, 0, 0);
+		button2.setWillCollideWithPlayer(false);
+		entList.add(button2);
+		
+		PhysBlock block1 = new PhysBlock(50, -200, 100);
+		block1.setTilesetMode(tilesetwire, 2, 1);
+		block1.setWillCollideWithPlayer(true);
+		entList.add(block1);
+		
+		PhysBlock block2 = new PhysBlock(50, -200, -100);
+		block2.setTilesetMode(tilesetwire, 2, 1);
+		block2.setWillCollideWithPlayer(true);
+		entList.add(block2);
 		
 		player = new Player(-108.0f, -450.0f, 0.0f);
 		player.setTilesetMode(tilesetwire, 1, 0);
@@ -138,8 +158,14 @@ public class Game
 		//spr = new Sprite(30.0f, -108.0f, -300.0f, 45.0f, 1.0f, 1.0f, 10, 90, 1, spriteAnim);
 		//entList.add(spr);
 		
+		CauseAND bridgeAND = new CauseAND(new CauseButton(button1), new CauseButton(button2));
+		
 		triggerList.add(new Trigger(new CauseButton(button), new EffectDoor(door)));
 		triggerList.add(new Trigger(new CauseDoneScaling(player), new EffectRemoveEntity(player)));
+		triggerList.add(new Trigger(bridgeAND, new EffectRaiseBridge(tileset[4][6])));
+		triggerList.add(new Trigger(bridgeAND, new EffectRaiseBridge(tileset[4][7])));
+		triggerList.add(new Trigger(bridgeAND, new EffectRaiseBridge(tileset[5][6])));
+		triggerList.add(new Trigger(bridgeAND, new EffectRaiseBridge(tileset[5][7])));
 		
 		healthBar = new UIHealthBar(200.0f, 30.0f, UIPosition.TOPLEFT, Direction.RIGHT);
 		healthBar.setTopPad(5.0f);

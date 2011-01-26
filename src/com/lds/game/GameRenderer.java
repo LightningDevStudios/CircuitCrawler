@@ -66,12 +66,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		if(!game.entList.contains(game.player))
 		{
 			game = null;
-			game = new Game(context, gl);
-			game.camPosX = game.player.getXPos();
-			game.camPosY = game.player.getYPos();
-			game.updateLocalEntities();
-			game.updateLocalTileset();
-			
+			game = new Game(context, gl);			
 		}
 		
 		//clear the screen
