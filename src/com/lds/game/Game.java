@@ -1,8 +1,11 @@
 package com.lds.game;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.microedition.khronos.opengles.GL10;
+
+import org.xmlpull.v1.XmlPullParserException;
 
 import android.content.Context;
 
@@ -15,8 +18,13 @@ import com.lds.Texture;
 import com.lds.TextureLoader;
 import com.lds.Enums.UIPosition;
 
+
 import com.lds.UI.*;
 import com.lds.game.entity.*;
+
+import com.lds.parser.Parser;
+import com.lds.parser.PhysBlockData;
+
 import com.lds.trigger.*;
 
 public class Game
@@ -65,7 +73,8 @@ public class Game
 	public Animation spriteAnim;
 	
 	//Constructors
-	public Game (Context context, GL10 gl)
+	public Game (Context context, GL10 gl) 
+	
 	{
 		tilesetcolors = new Texture(R.drawable.tilesetcolors, 128, 128, 8, 8, context);
 		tilesetwire = new Texture(R.drawable.tilesetwire, 128, 128, 8, 8, context);
@@ -120,19 +129,41 @@ public class Game
 		
 		button = new Button(36.0f, -320.0f);
 		button.setTilesetMode(randomthings, 0, 0);
-		entList.add(button);
 		button.setWillCollideWithPlayer(false);
+		entList.add(button);
 		
 		block = new PhysBlock(50.0f, -215.0f, -350.0f);
 		block.setTilesetMode(tilesetwire, 2, 1);
 		entList.add(block);
 		block.setWillCollideWithPlayer(true);
+				
+		Button button1 = new Button(0, 0);
+		button1.setTilesetMode(randomthings, 0, 0);
+		button1.setWillCollideWithPlayer(false);
+		entList.add(button1);
+				
+		Button button2 = new Button(-69.0f, 0.0f);
+		button2.setTilesetMode(randomthings, 0, 0);
+		button2.setWillCollideWithPlayer(false);
+		entList.add(button2);
 		
-		circle = new PhysCircle(50.0f, -100.0f, -310.0f);
+
+		PhysBlock block1 = new PhysBlock(50, -200, 100);
+		block1.setTilesetMode(tilesetwire, 2, 1);
+		block1.setWillCollideWithPlayer(true);
+		entList.add(block1);
+		
+		PhysBlock block2 = new PhysBlock(50, -200, -100);
+		block2.setTilesetMode(tilesetwire, 2, 1);
+		block2.setWillCollideWithPlayer(true);
+		entList.add(block2);
+		
+		//TODO NOPE LOL
+		/*circle = new PhysCircle(50.0f, -100.0f, -310.0f);
 		circle.setTilesetMode(tilesetwire, 1, 2);
 		entList.add(circle);
-		circle.setWillCollideWithPlayer(true);
-				
+		circle.setWillCollideWithPlayer(true);*/
+		
 		player = new Player(-108.0f, -450.0f, 0.0f);
 		player.setTilesetMode(tilesetwire, 1, 0);
 		entList.add(player);
@@ -144,8 +175,14 @@ public class Game
 		//spr = new Sprite(30.0f, -108.0f, -300.0f, 45.0f, 1.0f, 1.0f, 10, 90, 1, spriteAnim);
 		//entList.add(spr);
 		
+		CauseAND bridgeAND = new CauseAND(new CauseButton(button1), new CauseButton(button2));
+		
 		triggerList.add(new Trigger(new CauseButton(button), new EffectDoor(door)));
 		triggerList.add(new Trigger(new CauseDoneScaling(player), new EffectRemoveEntity(player)));
+		triggerList.add(new Trigger(bridgeAND, new EffectRaiseBridge(tileset[4][6])));
+		triggerList.add(new Trigger(bridgeAND, new EffectRaiseBridge(tileset[4][7])));
+		triggerList.add(new Trigger(bridgeAND, new EffectRaiseBridge(tileset[5][6])));
+		triggerList.add(new Trigger(bridgeAND, new EffectRaiseBridge(tileset[5][7])));
 		
 		healthBar = new UIHealthBar(200.0f, 30.0f, UIPosition.TOPLEFT, Direction.RIGHT);
 		healthBar.setTopPad(5.0f);
@@ -206,6 +243,19 @@ public class Game
 		updateCameraPosition();
 		updateLocalEntities();
 		updateLocalTileset();
+		
+		//Parser
+		Parser parser = new Parser(context);
+		try {
+			parser.parseLevel();
+		} catch (XmlPullParserException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
 	
 	public void updateLocalEntities()

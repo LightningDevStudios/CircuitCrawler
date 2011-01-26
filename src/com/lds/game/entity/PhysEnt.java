@@ -167,8 +167,8 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 		boolean output = super.isCircleCollidingWithCircle(ent);
 		if (output)
 		{
-			this.circleWithCircleBounce(ent);
-			ent.circleWithCircleBounce(ent);
+			this.circleBounce(ent);
+			ent.circleBounce(ent);
 		}
 		return output;
 	}
@@ -177,6 +177,11 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	protected boolean isRectangleCollidingWithCircle (Entity ent) 
 	{
 		boolean output = super.isRectangleCollidingWithCircle(ent);
+		if (output)
+		{
+			this.circleBounce(ent);
+			ent.rectangleBounce(this);
+		}
 		return output;
 	}
 	
@@ -186,14 +191,14 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 		boolean output = super.isRectangleCollidingWithRectangle(ent);
 		if (output)
 		{
-			this.rectangleWithRectangleBounce(ent);
-			ent.rectangleWithRectangleBounce(this);
+			this.rectangleBounce(ent);
+			ent.rectangleBounce(this);
 		}
 		return output;
 	}
 	
 	@Override
-	public void circleWithCircleBounce (Entity ent)
+	public void circleBounce (Entity ent)
 	{
 		Vector2f bounceSide = Vector2f.sub(this.posVec, ent.posVec);
 		bounceSide.setNormal();
@@ -201,15 +206,9 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 		bounceSide.scale(2 * moveInterpVec.dot(bounceSide));
 		this.addBounceVec(Vector2f.sub(bounceSide, moveInterpVec));
 	}
-	
+
 	@Override
-	public void rectangleWithCircleBounce (Entity ent)
-	{
-		
-	}
-	
-	@Override
-	public void rectangleWithRectangleBounce (Entity ent)
+	public void rectangleBounce (Entity ent)
 	{
 		//gets an array of all the vectors between this and the ent's vertices
 		Vector2f[] vertDistVecs = new Vector2f[4];
@@ -385,7 +384,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	 	if (bounceList.isEmpty())
 		{
 			System.out.println("Sorry, no bounceVecs found in bounceList");
-			return null;
+			return new Vector2f();
 		}
 		else
 		{
