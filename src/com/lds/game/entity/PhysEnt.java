@@ -17,8 +17,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	protected Vector2f moveVec, moveInterpVec, endPosVec;
 	protected Vector2f sclVec, sclInterpVec, endScaleVec;
 	protected int moveInterpCount, sclInterpCount;
-	//protected ArrayList<Vector2f> bounceList;
-	protected Vector2f bounceVec;
+	protected ArrayList<Vector2f> bounceList;
 	
 	
 	public PhysEnt(float size, float xPos, float yPos, boolean circular, RenderMode renderMode, float moveSpeed, float rotSpeed, float sclSpeed)
@@ -40,8 +39,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 		moveInterpVec = new Vector2f();
 		moveInterpCount = 0;
 		sclInterpCount = 0;
-		//bounceList = new ArrayList<Vector2f>();
-		bounceVec = new Vector2f();
+		bounceList = new ArrayList<Vector2f>();
 	}
 	
 	@Override
@@ -162,7 +160,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	 * Collision Methods *
 	 *********************/
 	
-	//TODO: Rectangle vs. Circle, complicated physics, double collision, corner collision
+	//TODO: Rectangle vs. Circle, complicated physics, corner collision
 	
 	@Override
 	protected boolean isCircleCollidingWithCircle (Entity ent)
@@ -198,7 +196,11 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	@Override
 	public void circleWithCircleBounce (Entity ent)
 	{
-		
+		Vector2f bounceSide = Vector2f.sub(this.posVec, ent.posVec);
+		bounceSide.setNormal();
+		bounceSide.normalize();
+		bounceSide.scale(2 * moveInterpVec.dot(bounceSide));
+		this.addBounceVec(Vector2f.sub(bounceSide, moveInterpVec));
 	}
 	
 	@Override
@@ -234,7 +236,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	    //calculate the bouceVec
 		Vector2f bounceSide = Vector2f.normalize(Vector2f.sub(vertDistVecs[0], vertDistVecs[1]));
 		bounceSide.scale(this.moveInterpVec.dot(bounceSide));
-		this.setBounceVec(Vector2f.sub(bounceSide, this.moveInterpVec));
+		this.addBounceVec(Vector2f.sub(bounceSide, this.moveInterpVec));
 	}
 	
 	/**********************************
@@ -381,7 +383,6 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	
 	public Vector2f getBounceVec ()
 	{
-		/* TODO: make this calculate with multiple collisions
 	 	if (bounceList.isEmpty())
 		{
 			System.out.println("Sorry, no bounceVecs found in bounceList");
@@ -394,14 +395,14 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 			{
 				bounceVec.add(bounceList.get(i));
 			}
+			bounceList.clear();
 			return bounceVec;
-		}*/
-		return bounceVec;
+		}
 	}
 	
-	public void setBounceVec (Vector2f v)
+	public void addBounceVec (Vector2f v)
 	{
-		bounceVec = v;
+		bounceList.add(v);
 	}
 	
 	public Vector2f getMoveInterpVec ()
