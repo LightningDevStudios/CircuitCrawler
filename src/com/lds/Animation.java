@@ -1,7 +1,5 @@
 package com.lds;
 
-import com.lds.Enums.Direction;
-
 public class Animation 
 {
 	private Texture tex;
@@ -22,12 +20,16 @@ public class Animation
 		curX = startX;
 		curY = startY;
 		
+		this.framesPerSec = framerate;
+		
 		if (framerate < 0)
-			framerateDependent = false;
+			framerateDependent = true;
 		else
 			animTimeMs = 1000 / framerate;
 		
-		startTimeMs = Stopwatch.elapsedTimeMs();
+		
+		
+		startTimeMs = Stopwatch.elapsedTimeMs() + 1;
 		animTimeMs = startTimeMs;
 	}
 	
@@ -43,7 +45,7 @@ public class Animation
 			if (timeElapsed > animTimeMs)
 			{
 				//take the amount of time that has passed, see if we need to skip a frame or two in order to keep up animation in low-FPS times
-				int framesPassed = timeElapsed / animTimeMs;
+				int framesPassed = timeElapsed / (animTimeMs * 1000);
 				
 				//skip all the rows if we need to skip at least 1 row.
 				while(framesPassed > xTiles)
@@ -55,7 +57,7 @@ public class Animation
 						curY++;
 					
 					//decrement framesPassed
-					framesPassed -= xTiles;
+					framesPassed -= xTiles + 1;
 				}
 				
 				//if we're near the end and there's enough for it to jump to the next row...
@@ -119,6 +121,6 @@ public class Animation
 	
 	public float[] getCurrentFrame()
 	{
-		return TilesetHelper.getTextureVertices(tex, curX + startX, curY + startY);
+		return TilesetHelper.getTextureVertices(tex, curX + startX, curY + startY - 1);
 	}
 }

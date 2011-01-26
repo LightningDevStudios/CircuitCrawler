@@ -46,8 +46,6 @@ public class TilesetHelper
 		return getTextureVertices(x, y, 0, tex.getXTiles() - 1, 0, tex.getYTiles() - 1);
 	}
 	
-	
-	
 	public static int getTilesetIndex(float[] vertices, int min, int max)
 	{
 		float interval = (1.0f / (float)(max - min + 1));
@@ -57,16 +55,6 @@ public class TilesetHelper
 		
 		return (y * (max - min + 1) + x);
 	}
-	
-	/*public static int getTilesetXV(float[] vertices, int minX, int maxX)
-	{
-		return (int)(vertices[4] / (1.0f / (float)(minX - maxX + 1)));
-	}
-	
-	public static int getTilesetYV(float[] vertices, int minY, int maxY)
-	{
-		return (int)(vertices[1] / (1.0f / (float)(minY - maxY + 1)));
-	}*/
 
 	public static int getTilesetX(int tileID, Texture tex)
 	{

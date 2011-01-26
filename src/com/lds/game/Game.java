@@ -6,9 +6,9 @@ import javax.microedition.khronos.opengles.GL10;
 
 import android.content.Context;
 
+import com.lds.Animation;
 import com.lds.EntityCleaner;
 import com.lds.Enums.Direction;
-import com.lds.Enums.RenderMode;
 import com.lds.Stopwatch;
 import com.lds.StringRenderer;
 import com.lds.Texture;
@@ -16,12 +16,7 @@ import com.lds.TextureLoader;
 import com.lds.Enums.UIPosition;
 
 import com.lds.UI.*;
-import com.lds.game.entity.Button;
-import com.lds.game.entity.Door;
-import com.lds.game.entity.Entity;
-import com.lds.game.entity.PhysBlock;
-import com.lds.game.entity.Player;
-import com.lds.game.entity.Tile;
+import com.lds.game.entity.*;
 import com.lds.trigger.*;
 
 public class Game
@@ -62,8 +57,12 @@ public class Game
 	public UITextBox textbox;
 	public Player player;
 	public PhysBlock block;
+	public PhysCircle circle;
 	public Button button;
 	public Door door;
+	public Sprite spr;
+	
+	public Animation spriteAnim;
 	
 	//Constructors
 	public Game (Context context, GL10 gl)
@@ -107,10 +106,6 @@ public class Game
 				{
 					tileset[i][j].setAsPit();
 				}
-				/*else if (i == 3)
-				{
-					tileset[i][j].setAsBridge();
-				}*/
 				else
 				{
 					tileset[i][j].setAsFloor();
@@ -118,26 +113,36 @@ public class Game
 			}
 		}	
 		
-		door = new Door (-108.0f, -180.0f, RenderMode.COLOR);
-		door.setColorMode(255, 225, 0, 225);
+		door = new Door (-108.0f, -180.0f);
+		door.setTilesetMode(tilesetwire, 0, 2);
 		entList.add(door);
 		door.setWillCollideWithPlayer(true);
 		
-		button = new Button(48.0f, -375.0f, RenderMode.TILESET, door);
+		button = new Button(36.0f, -320.0f);
 		button.setTilesetMode(randomthings, 0, 0);
 		entList.add(button);
 		button.setWillCollideWithPlayer(false);
 		
-		block = new PhysBlock(50.0f, -100.0f, -250.0f, RenderMode.COLOR);
-		block.setColorMode(255, 255, 0, 255);
+		block = new PhysBlock(50.0f, -215.0f, -350.0f);
+		block.setTilesetMode(tilesetwire, 2, 1);
 		entList.add(block);
 		block.setWillCollideWithPlayer(true);
+		
+		circle = new PhysCircle(50.0f, -100.0f, -310.0f);
+		circle.setTilesetMode(tilesetwire, 1, 2);
+		entList.add(circle);
+		circle.setWillCollideWithPlayer(true);
 				
-		player = new Player(-108.0f, -450.0f, 0.0f, RenderMode.TILESET);
+		player = new Player(-108.0f, -450.0f, 0.0f);
 		player.setTilesetMode(tilesetwire, 1, 0);
 		entList.add(player);
 		player.setWillCollideWithPlayer(false);
 		player.enableUserControl();
+		
+		//spriteAnim = new Animation(tilesetwire, 1, 8, 7, 0, -1);
+		
+		//spr = new Sprite(30.0f, -108.0f, -300.0f, 45.0f, 1.0f, 1.0f, 10, 90, 1, spriteAnim);
+		//entList.add(spr);
 		
 		triggerList.add(new Trigger(new CauseButton(button), new EffectDoor(door)));
 		triggerList.add(new Trigger(new CauseDoneScaling(player), new EffectRemoveEntity(player)));

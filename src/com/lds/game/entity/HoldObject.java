@@ -1,14 +1,12 @@
 package com.lds.game.entity;
 
-import com.lds.Enums.RenderMode;
-
 public abstract class HoldObject extends PhysEnt //and object that is held (blocks, balls, etc.)
 {
 	private boolean held;
 	
-	public HoldObject (float size, float xPos, float yPos, float angle, float xScl, float yScl, boolean isSolid, boolean circular, RenderMode renderMode)
+	public HoldObject (float size, float xPos, float yPos, float angle, float xScl, float yScl, boolean isSolid, boolean circular)
 	{
-		super(size, xPos, yPos, angle, xScl, yScl, isSolid, circular, renderMode, 100.0f, 90.0f, 5.0f);
+		super(size, xPos, yPos, angle, xScl, yScl, isSolid, circular, 100.0f, 90.0f, 5.0f);
 		held = false;
 	}
 	

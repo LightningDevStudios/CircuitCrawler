@@ -1,7 +1,6 @@
 package com.lds.game.entity;
 
 import com.lds.EntityCleaner;
-import com.lds.Enums.RenderMode;
 import com.lds.game.Inventory;
 import com.lds.Vector2f;
 
@@ -12,10 +11,10 @@ public class Player extends Character //your character, protagonist
 	private HoldObject hObj;
 	private boolean controlled;
 	
-	public Player (float xPos, float yPos, float angle, RenderMode renderMode)
+	public Player (float xPos, float yPos, float angle)
 	{
 		//initialize Character and Entity data
-		super(Entity.DEFAULT_SIZE, xPos, yPos, angle, 1.0f, 1.0f, false, renderMode, 100, 100, 0.5f);
+		super(Entity.DEFAULT_SIZE, xPos, yPos, angle, 1.0f, 1.0f, false, 100, 100, 0.5f);
 		
 		//initialize Player data
 		energy = 100;
@@ -96,7 +95,7 @@ public class Player extends Character //your character, protagonist
 		colIgnoreList.remove(hObj);
 		hObj.colIgnoreList.remove(this);
 		hObj.drop();
-		hObj = new PhysBlock(0.0f, 0.0f, 0.0f, RenderMode.BLANK);
+		hObj = new PhysBlock(0.0f, 0.0f, 0.0f);
 		hObj = null;
 	}
 

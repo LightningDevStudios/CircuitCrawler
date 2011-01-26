@@ -1,17 +1,13 @@
 package com.lds.game.entity;
 
-import com.lds.Enums.RenderMode;
-
 public class Button extends StaticEnt
 {
 	private boolean active;
-	private Door d;
 	
-	public Button (float xPos, float yPos, RenderMode renderMode, Door d)
+	public Button (float xPos, float yPos)
 	{
-		super(Entity.DEFAULT_SIZE, xPos, yPos, 0.0f, 1.0f, 1.0f, true, true, renderMode);
+		super(Entity.DEFAULT_SIZE, xPos, yPos, 0.0f, 1.0f, 1.0f, true, true);
 		active = false;
-		this.d = d;
 		circular = true;
 	}
 	
@@ -23,13 +19,11 @@ public class Button extends StaticEnt
 	public void activate ()
 	{
 		active = true;
-		d.open();
 	}
 	
 	public void deactivate ()
 	{
 		active = false;
-		d.close();
 	}
 	
 	@Override
