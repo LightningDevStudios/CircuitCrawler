@@ -249,14 +249,14 @@ public abstract class Entity
 			return this.isRectangleCollidingWithRectangle(ent);
 	}
 	
-	private boolean isCircleCollidingWithCircle (Entity ent) //if both entities are circles
+	protected boolean isCircleCollidingWithCircle (Entity ent) //if both entities are circles
 	{
 		if (Vector2f.sub(this.posVec, ent.posVec).mag() < halfSize + ent.halfSize)
 			return true;
 		return false;
 	}
 	
-	private boolean isRectangleCollidingWithCircle (Entity ent) //if only ent is a circle
+	protected boolean isRectangleCollidingWithCircle (Entity ent) //if only ent is a circle
 	{
 		this.updateAbsolutePointLocations();
 		
@@ -356,6 +356,18 @@ public abstract class Entity
 		}
 		
 		return true;
+	}
+	
+	//blank method, overridden by PhysEnt
+	public void circleWithCircleBounce (Entity ent)
+	{
+		
+	}
+	
+	//blank method, overridden by PhysEnt
+	public void rectangleWithCircleBounce (Entity ent)
+	{
+		
 	}
 	
 	//blank method, overridden by PhysEnt

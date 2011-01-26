@@ -1,7 +1,5 @@
 package com.lds;
 
-import com.lds.Enums.Direction;
-
 public class Animation 
 {
 	private Texture tex;
