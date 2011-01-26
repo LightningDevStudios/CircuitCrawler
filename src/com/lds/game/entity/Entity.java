@@ -310,7 +310,7 @@ public abstract class Entity
 		return true;
 	}
 	
-	private boolean isRectangleCollidingWithRectangle (Entity ent) //if both entities are circles
+	protected boolean isRectangleCollidingWithRectangle (Entity ent) //if both entities are circles
 	{
 		this.updateAbsolutePointLocations();
 		ent.updateAbsolutePointLocations();
@@ -355,65 +355,13 @@ public abstract class Entity
 			}
 		}
 		
-		//return a bounceVec to bounce out PhysEnts
-		if (this instanceof PhysEnt)
-		{
-			//find the side to bounce the PhysEnt off of
-			/*Vector2f closestPointVec = Vector2f.sub(ent.vertVecs[0], posVec);
-			int closestIndex = 0;
-			for (int i = 1; i < ent.vertVecs.length; i++)
-			{
-				Vector2f tempVec = Vector2f.sub(ent.vertVecs[i], posVec);
-				if (closestPointVec.mag() > tempVec.mag())
-				{
-					closestPointVec.set(tempVec);
-					closestIndex = 1;
-				}
-			}
-			Vector2f secondClosestPointVec;
-			if (closestIndex == 0)
-				secondClosestPointVec = Vector2f.sub(ent.vertVecs[1], posVec);
-			else
-				secondClosestPointVec = Vector2f.sub(ent.vertVecs[closestIndex - 1], posVec);
-			for (int i = 0; i < ent.vertVecs.length; i++)
-			{
-				if (i != closestIndex)
-				{
-					Vector2f tempVec = Vector2f.sub(ent.vertVecs[i], posVec);
-					if (secondClosestPointVec.mag() > tempVec.mag())
-					{
-						secondClosestPointVec.set(tempVec);
-					}
-				}
-			}*/
-			//gets an array of all the vectors between this and the ent's vertices
-			Vector2f[] vertDistVecs = new Vector2f[4];
-			for (int i = 0; i < 4; i++)
-			{
-				vertDistVecs[i] = Vector2f.sub(ent.vertVecs[i], this.posVec);
-			}
-			//goes through the vectors and sorts them from low to high (thanks Mr. Carlson)
-			int i, k, maxPos;
-			Vector2f temp = new Vector2f();
-		    for (k = vertDistVecs.length; k >= 2; k--)
-		    {
-		    	maxPos = 0; 
-		        for (i = 1; i < k; i++) 
-		        {
-		             if (vertDistVecs[i].mag() > vertDistVecs[maxPos].mag()) 
-		                  maxPos = i; 
-		        }
-		        temp.set(vertDistVecs[maxPos]); 
-		        vertDistVecs[maxPos].set(vertDistVecs[k-1]); 
-		        vertDistVecs[k-1].set(temp); 
-		    }
-		    //calculate the bouceVec
-			Vector2f bounceSide = Vector2f.normalize(Vector2f.sub(vertDistVecs[0], vertDistVecs[1]));
-			Vector2f thisMoveInterpVec = ((PhysEnt)this).moveInterpVec;
-			bounceSide.scale(thisMoveInterpVec.dot(bounceSide));
-			((PhysEnt)this).setBounceVec(Vector2f.sub(bounceSide, thisMoveInterpVec));
-		}
 		return true;
+	}
+	
+	//blank method, overridden by PhysEnt
+	public void rectangleWithRectangleBounce (Entity ent)
+	{
+		
 	}
 			
 	//this is a blank method, to be overriden by subclasses
@@ -423,7 +371,7 @@ public abstract class Entity
 		
 	}
 	
-	//this is a blank method ot be overriden similat to interact
+	//this is a blank method ot be overriden similar to interact
 	//it performs the action to occur when an object stops colliding with another
 	public void uninteract (Entity ent)
 	{

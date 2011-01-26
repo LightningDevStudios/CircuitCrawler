@@ -152,9 +152,47 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 		}
 	}
 	
-	public void bounce ()
+	/*********************
+	 * Collision Methods *
+	 *********************/
+	
+	@Override
+	public void rectangleWithRectangleBounce (Entity ent)
 	{
-		
+		//gets an array of all the vectors between this and the ent's vertices
+		Vector2f[] vertDistVecs = new Vector2f[4];
+		for (int i = 0; i < 4; i++)
+		{
+			vertDistVecs[i] = Vector2f.sub(ent.vertVecs[i], this.posVec);
+		}
+		//goes through the vectors and sorts them from low to high (thanks Mr. Carlson)
+		int i, k, maxPos;
+		Vector2f temp = new Vector2f();
+	    for (k = vertDistVecs.length; k >= 2; k--)
+	    {
+	    	maxPos = 0; 
+	        for (i = 1; i < k; i++) 
+	        {
+	             if (vertDistVecs[i].mag() > vertDistVecs[maxPos].mag()) 
+	                  maxPos = i; 
+	        }
+	        temp.set(vertDistVecs[maxPos]); 
+	        vertDistVecs[maxPos].set(vertDistVecs[k-1]); 
+	        vertDistVecs[k-1].set(temp); 
+	    }
+	    //calculate the bouceVec
+		Vector2f bounceSide = Vector2f.normalize(Vector2f.sub(vertDistVecs[0], vertDistVecs[1]));
+		bounceSide.scale(moveInterpVec.dot(bounceSide));
+		this.setBounceVec(Vector2f.sub(bounceSide, moveInterpVec));
+	}
+	
+	@Override
+	protected boolean isRectangleCollidingWithRectangle (Entity ent)
+	{
+		boolean output = super.isRectangleCollidingWithRectangle(ent);
+		this.rectangleWithRectangleBounce(ent);
+		ent.rectangleWithRectangleBounce(this);
+		return output;
 	}
 	
 	/**********************************
