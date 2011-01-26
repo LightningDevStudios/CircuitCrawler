@@ -20,6 +20,7 @@ import com.lds.game.entity.Button;
 import com.lds.game.entity.Door;
 import com.lds.game.entity.Entity;
 import com.lds.game.entity.PhysBlock;
+import com.lds.game.entity.PhysCircle;
 import com.lds.game.entity.Player;
 import com.lds.game.entity.Tile;
 import com.lds.trigger.*;
@@ -62,6 +63,7 @@ public class Game
 	public UITextBox textbox;
 	public Player player;
 	public PhysBlock block;
+	public PhysCircle circle;
 	public Button button;
 	public Door door;
 	
@@ -132,6 +134,11 @@ public class Game
 		block.setColorMode(255, 255, 0, 255);
 		entList.add(block);
 		block.setWillCollideWithPlayer(true);
+		
+		circle = new PhysCircle(50.0f, -100.0f, -310.0f, RenderMode.COLOR);
+		circle.setColorMode(255, 255, 0, 255);
+		entList.add(circle);
+		circle.setWillCollideWithPlayer(true);
 				
 		player = new Player(-108.0f, -450.0f, 0.0f, RenderMode.TILESET);
 		player.setTilesetMode(tilesetwire, 1, 0);
