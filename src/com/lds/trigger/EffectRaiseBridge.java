@@ -19,6 +19,6 @@ public class EffectRaiseBridge extends Effect
 	
 	public void unfireOutput()
 	{
-		//t.setAsPit();
+		t.setAsPit();
 	}
 }
