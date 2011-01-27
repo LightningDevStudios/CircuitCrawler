@@ -137,23 +137,23 @@ public class Game
 		entList.add(block);
 		block.setWillCollideWithPlayer(true);
 				
-		Button button1 = new Button(0, 0);
+		Button button1 = new Button(108.0f, 0.0f);
 		button1.setTilesetMode(randomthings, 0, 0);
 		button1.setWillCollideWithPlayer(false);
 		entList.add(button1);
 				
-		Button button2 = new Button(-69.0f, 0.0f);
+		Button button2 = new Button(-324.0f, 0.0f);
 		button2.setTilesetMode(randomthings, 0, 0);
 		button2.setWillCollideWithPlayer(false);
 		entList.add(button2);
 		
 
-		PhysBlock block1 = new PhysBlock(50, -200, 100);
+		PhysBlock block1 = new PhysBlock(50, 0, 108);
 		block1.setTilesetMode(tilesetwire, 2, 1);
 		block1.setWillCollideWithPlayer(true);
 		entList.add(block1);
 		
-		PhysBlock block2 = new PhysBlock(50, -200, -100);
+		PhysBlock block2 = new PhysBlock(50, -216, 108);
 		block2.setTilesetMode(tilesetwire, 2, 1);
 		block2.setWillCollideWithPlayer(true);
 		entList.add(block2);
@@ -180,9 +180,9 @@ public class Game
 		triggerList.add(new Trigger(new CauseButton(button), new EffectDoor(door)));
 		triggerList.add(new Trigger(new CauseDoneScaling(player), new EffectRemoveEntity(player)));
 		triggerList.add(new Trigger(bridgeAND, new EffectRaiseBridge(tileset[4][6])));
-		triggerList.add(new Trigger(bridgeAND, new EffectRaiseBridge(tileset[4][7])));
+		//triggerList.add(new Trigger(bridgeAND, new EffectRaiseBridge(tileset[4][7])));
 		triggerList.add(new Trigger(bridgeAND, new EffectRaiseBridge(tileset[5][6])));
-		triggerList.add(new Trigger(bridgeAND, new EffectRaiseBridge(tileset[5][7])));
+		//triggerList.add(new Trigger(bridgeAND, new EffectRaiseBridge(tileset[5][7])));
 		
 		healthBar = new UIHealthBar(200.0f, 30.0f, UIPosition.TOPLEFT, Direction.RIGHT);
 		healthBar.setTopPad(5.0f);

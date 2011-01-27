@@ -156,13 +156,14 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 					if (game.player.closeEnough(ent) && game.player.isFacing(ent))
 					{
 						game.player.holdObject((HoldObject)ent);
+						game.btnB.unpress();
 					}
 				}
 				else //holding object, button pressed
 				{
 					game.player.dropObject();
+					game.btnB.unpress();
 				}
-				game.btnB.unpress();
 			}
 			
 			//set btnA to speed up the player when pressed
@@ -190,6 +191,8 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 				gl.glLoadIdentity();
 			}
 		}
+		
+		game.btnB.unpress();
 		
 		//moved this out here so that all entities / colEnts can be compared, not just the next ones
 		Game.worldOutdated = false;
