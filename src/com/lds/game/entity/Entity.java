@@ -116,7 +116,7 @@ public abstract class Entity
 	public void draw(GL10 gl)
 	{
 		//Enable texturing and bind the current texture pointer (texturePtr) to GL_TEXTURE_2D
-		if (renderMode == RenderMode.TEXTURE || renderMode == RenderMode.TILESET)
+		if (renderMode == RenderMode.TEXTURE || renderMode == RenderMode.TILESET || renderMode == RenderMode.TEXTUREALPHA || renderMode == RenderMode.TILESETALPHA)
 		{
 			gl.glEnable(GL10.GL_TEXTURE_2D);
 			gl.glBindTexture(GL10.GL_TEXTURE_2D, tex.getTexture());
@@ -131,16 +131,16 @@ public abstract class Entity
 		
 		//Enable settings for this polygon
 		gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
-		if (renderMode == RenderMode.TEXTURE || renderMode == RenderMode.TILESET) {gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);}
+		if (renderMode == RenderMode.TEXTURE || renderMode == RenderMode.TILESET || renderMode == RenderMode.TEXTUREALPHA || renderMode == RenderMode.TILESETALPHA) {gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);}
 		if (renderMode == RenderMode.GRADIENT) {gl.glEnableClientState(GL10.GL_COLOR_ARRAY);}
 		
 		//Bind vertices, texture coordinates, and/or color coordinates to the OpenGL system
 		gl.glVertexPointer(2, GL10.GL_FLOAT, 0, vertexBuffer);
-		if (renderMode == RenderMode.TEXTURE || renderMode == RenderMode.TILESET) {gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, textureBuffer);}
+		if (renderMode == RenderMode.TEXTURE || renderMode == RenderMode.TILESET || renderMode == RenderMode.TEXTUREALPHA || renderMode == RenderMode.TILESETALPHA) {gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, textureBuffer);}
 		if (renderMode == RenderMode.GRADIENT) {gl.glColorPointer(4, GL10.GL_FLOAT, 0, colorBuffer);}
 		
 		//Sets color
-		if (renderMode == RenderMode.COLOR) {gl.glColor4f(colorR, colorG, colorB, colorA);}
+		if (renderMode == RenderMode.COLOR || renderMode == RenderMode.TEXTUREALPHA || renderMode == RenderMode.TILESETALPHA) {gl.glColor4f(colorR, colorG, colorB, colorA);}
 		
 		//Draw the vertices
 		gl.glDrawElements(GL10.GL_TRIANGLE_STRIP, indices.length, GL10.GL_UNSIGNED_BYTE, indexBuffer);		
@@ -151,14 +151,14 @@ public abstract class Entity
 		gl.glDisable(GL10.GL_CULL_FACE);
 		
 		//Disable texturing for next polygon
-		if (renderMode == RenderMode.TEXTURE || renderMode == RenderMode.TILESET) 
+		if (renderMode == RenderMode.TEXTURE || renderMode == RenderMode.TILESET || renderMode == RenderMode.TEXTUREALPHA || renderMode == RenderMode.TILESETALPHA) 
 		{
 			gl.glDisableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
 			gl.glDisable(GL10.GL_TEXTURE_2D);
 		}
 		
 		//Reset color for next polygon.
-		if (renderMode == RenderMode.COLOR || renderMode == RenderMode.GRADIENT) {gl.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);}
+		if (renderMode == RenderMode.COLOR || renderMode == RenderMode.GRADIENT || renderMode == RenderMode.TEXTUREALPHA || renderMode == RenderMode.TILESETALPHA) {gl.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);}
 	}
 		
 	public void remove()
@@ -409,7 +409,7 @@ public abstract class Entity
 	
 	public void updateColor(float r, float g, float b, float a)
 	{
-		if (renderMode == RenderMode.COLOR)
+		if (renderMode == RenderMode.COLOR || renderMode == RenderMode.TEXTUREALPHA || renderMode == RenderMode.TILESETALPHA)
 		{
 			colorR = r;
 			colorG = g;
@@ -420,7 +420,7 @@ public abstract class Entity
 	
 	public void updateColor(int r, int g, int b, int a)
 	{
-		if (renderMode == RenderMode.COLOR)
+		if (renderMode == RenderMode.COLOR || renderMode == RenderMode.TEXTUREALPHA || renderMode == RenderMode.TILESETALPHA)
 		{
 			colorR = (float) r / 255.0f;
 			colorG = (float) g / 255.0f;
@@ -465,7 +465,7 @@ public abstract class Entity
 		
 	public void updateTexture(Texture tex)
 	{
-		if (renderMode == RenderMode.TEXTURE)
+		if (renderMode == RenderMode.TEXTURE || renderMode == RenderMode.TEXTUREALPHA)
 		{
 			this.tex = tex;
 			float[] initTexture = { 1.0f, 0.0f,
@@ -484,7 +484,7 @@ public abstract class Entity
 	
 	public void updateTexture(Texture tex, float[] texture)
 	{
-		if (renderMode == RenderMode.TEXTURE)
+		if (renderMode == RenderMode.TEXTURE || renderMode == RenderMode.TEXTUREALPHA)
 		{
 			this.tex = tex;
 			this.texture = texture;
@@ -512,7 +512,7 @@ public abstract class Entity
 		
 	public void updateTileset(Texture tex, int x, int y)
 	{
-		if (renderMode == RenderMode.TILESET)
+		if (renderMode == RenderMode.TILESET || renderMode == RenderMode.TILESETALPHA)
 		{
 			this.tex = tex;
 			texture = TilesetHelper.getTextureVertices(tex, x, y);
@@ -527,7 +527,7 @@ public abstract class Entity
 	
 	public void updateTileset(Texture tex, int tileID)
 	{
-		if (renderMode == RenderMode.TILESET)
+		if (renderMode == RenderMode.TILESET || renderMode == RenderMode.TILESETALPHA)
 		{
 			this.tex = tex;
 			texture = TilesetHelper.getTextureVertices(tex, tileID);
@@ -550,6 +550,100 @@ public abstract class Entity
 	{
 		if (tex != null)
 			updateTileset(tex, tileID);
+	}
+	
+	//TEXTUREALPHA
+	public void setTextureAlphaMode(Texture tex, float colorA)
+	{
+		renderMode = RenderMode.TEXTUREALPHA;
+	}
+	
+	public void setTextureAlphaMode(Texture tex, int colorA)
+	{
+		setTextureAlphaMode(tex, (float)colorA / 255.0f);
+	}
+	
+	public void updateTextureAlpha(Texture tex, float colorA)
+	{
+		if (renderMode == RenderMode.TEXTUREALPHA)
+		{
+			updateTexture(tex);
+			updateColor(1.0f, 1.0f, 1.0f, colorA);
+		}
+	}
+	
+	public void updateTextureAlpha(Texture tex, int colorA)
+	{
+		updateTextureAlpha(tex, (float)colorA / 255.0f);
+	}
+	
+	public void updateTextureAlpha(float colorA)
+	{
+		if (renderMode == RenderMode.TEXTUREALPHA)
+			updateColor(1.0f, 1.0f, 1.0f, colorA);
+	}
+	
+	public void updateTextureAlpha(int colorA)
+	{
+		if (renderMode == RenderMode.TEXTUREALPHA)
+			updateColor(1.0f, 1.0f, 1.0f, (float)colorA / 255.0f);
+	}
+	
+	public void updateTextureAlpha(Texture tex)
+	{
+		if (renderMode == RenderMode.TEXTUREALPHA)
+			updateTexture(tex);
+	}
+	
+	//TILESETALPHA
+	public void setTilesetAlphaMode(Texture tex, int x, int y, float colorA)
+	{
+		renderMode = RenderMode.TILESETALPHA;
+		updateTilesetAlpha(tex, x, y, colorA);
+	}
+	
+	public void setTilesetAlphaMode(Texture tex, int x, int y, int colorA)
+	{
+		setTilesetAlphaMode(tex, x, y, (float)colorA / 255.0f);
+	}
+	
+	public void setTilesetAlphaMode(Texture tex, int tileID, float colorA)
+	{
+		renderMode = RenderMode.TILESETALPHA;
+		updateTilesetAlpha(tex, tileID, colorA);
+	}
+	
+	public void setTilesetAlphaMode(Texture tex, int tileID, int colorA)
+	{
+		setTilesetAlphaMode(tex, tileID, (float)colorA / 255.0f);
+	}
+	
+	public void updateTilesetAlpha(Texture tex, int x, int y, float colorA)
+	{
+		if (renderMode == RenderMode.TILESETALPHA)
+		{
+			updateTileset(tex, x, y);
+			updateColor(1.0f, 1.0f, 1.0f, colorA);	
+		}
+	}
+	
+	public void updateTilesetAlpha(Texture tex, int x, int y, int colorA)
+	{
+		updateTilesetAlpha(tex, x, y, (float)colorA / 255.0f);
+	}
+	
+	public void updateTilesetAlpha(Texture tex, int tileID, float colorA)
+	{
+		if (renderMode == RenderMode.TILESETALPHA)
+		{
+			updateTileset(tex, tileID);
+			updateColor(1.0f, 1.0f, 1.0f, colorA);
+		}
+	}
+	
+	public void updateTilesetAlpha(Texture tex, int tileID, int colorA)
+	{
+		updateTilesetAlpha(tex, tileID, (float)colorA / 255.0f);
 	}
 	
 	/**************************
