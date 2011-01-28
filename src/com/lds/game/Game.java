@@ -21,11 +21,9 @@ import com.lds.Enums.UIPosition;
 
 import com.lds.UI.*;
 import com.lds.game.entity.*;
+import com.lds.trigger.*;
 
 import com.lds.parser.Parser;
-import com.lds.parser.PhysBlockData;
-
-import com.lds.trigger.*;
 
 public class Game
 {
@@ -152,7 +150,7 @@ public class Game
 		block1.setTilesetMode(tilesetwire, 2, 1);
 		block1.setWillCollideWithPlayer(true);
 		entList.add(block1);
-		
+		 
 		PhysBlock block2 = new PhysBlock(50, -216, 108);
 		block2.setTilesetMode(tilesetwire, 2, 1);
 		block2.setWillCollideWithPlayer(true);

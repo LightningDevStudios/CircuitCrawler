@@ -1,5 +1,6 @@
 package com.lds.game;
 
+import java.util.Stack;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
@@ -21,6 +22,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	public Object syncObj;
 	public boolean windowOutdated, testDebug = true;
 	public int frameInterval, frameCount = 0;
+	public Stack<Vector2f> touchEventStack;
 	
 	public GameRenderer (float screenW, float screenH, Context context, Object syncObj)
 	{
@@ -52,7 +54,9 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		Stopwatch.restartTimer();
 		Stopwatch.tick();
 		
-		game = new Game(context, gl);		
+		game = new Game(context, gl);
+		
+		touchEventStack = new Stack<Vector2f>();
 	}
 	
 	@Override

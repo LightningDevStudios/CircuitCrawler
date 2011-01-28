@@ -12,6 +12,7 @@ import com.lds.Enums.UIPosition;
 import com.lds.Texture;
 import com.lds.TilesetHelper;
 
+//TODO allow relative sizing to scale for multiple monitors
 public abstract class UIEntity
 {
 	//constants
