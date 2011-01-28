@@ -133,7 +133,7 @@ public class Game
 		entList.add(button);
 		
 		block = new PhysBlock(50.0f, -215.0f, -350.0f);
-		block.setTilesetMode(tilesetwire, 2, 1);
+		block.setTilesetAlphaMode(tilesetwire, 2, 1, 0.5f);
 		entList.add(block);
 		block.setWillCollideWithPlayer(true);
 				
