@@ -53,7 +53,8 @@ public class UITextBox extends UIEntity
 									halfXSize, -halfYSize,
 									-halfXSize, halfYSize,
 									-halfXSize, -halfYSize };
-			setVertices(initVerts);
+			this.vertices = initVerts;
+			setBuffer(vertexBuffer, vertices);
 			
 			autoPadding(originalTopPad, originalLeftPad, originalBottomPad, originalRightPad);
 			this.updatePosition();

@@ -3,6 +3,7 @@ package com.lds.UI;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
+import java.util.EnumSet;
 
 import javax.microedition.khronos.opengles.GL10;
 
@@ -31,17 +32,17 @@ public abstract class UIEntity
 	private float topPad, leftPad, bottomPad, rightPad;
 	private float colorR, colorG, colorB, colorA;
 	protected UIPosition position;
-	protected RenderMode renderMode;
+	protected EnumSet<RenderMode> renderMode;
 	protected Texture tex;
 	
-	private float[] vertices;
-	private float[] texture;
-	private float[] color;
+	protected float[] vertices;
+	protected float[] texture;
+	protected float[] color;
 	private byte[] indices;
 	
-	private FloatBuffer vertexBuffer;
-	private FloatBuffer textureBuffer;
-	private FloatBuffer colorBuffer;
+	protected FloatBuffer vertexBuffer;
+	protected FloatBuffer textureBuffer;
+	protected FloatBuffer colorBuffer;
 	private ByteBuffer indexBuffer;
 	
 	//constructors
@@ -81,22 +82,24 @@ public abstract class UIEntity
 								-halfXSize, halfYSize,
 								-halfXSize, -halfYSize };
 		
-		setVertices(initVerts);
+		this.vertices = initVerts;
+		this.vertexBuffer = setBuffer(vertexBuffer, vertices);
 		
 		byte[] initIndices = { 0, 1, 2, 3 };
-		
 		indices = initIndices;
 				
 		indexBuffer = ByteBuffer.allocateDirect(indices.length);
 		indexBuffer.put(indices);
 		indexBuffer.position(0);
 		
+		renderMode = EnumSet.allOf(RenderMode.class);
+		renderMode.clear();
 	}
 	
 	public void draw(GL10 gl)
 	{
 		//Enable texturing and bind the current texture pointer (texturePtr) to GL_TEXTURE_2D
-		if (renderMode == RenderMode.TEXTURE || renderMode == RenderMode.TILESET)
+		if (renderMode.contains(RenderMode.TEXTURE) || renderMode.contains(RenderMode.TILESET))
 		{
 			gl.glEnable(GL10.GL_TEXTURE_2D);
 			gl.glBindTexture(GL10.GL_TEXTURE_2D, tex.getTexture());
@@ -111,34 +114,34 @@ public abstract class UIEntity
 		
 		//Enable settings for this polygon
 		gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
-		if (renderMode == RenderMode.TEXTURE || renderMode == RenderMode.TILESET) {gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);}
-		if (renderMode == RenderMode.GRADIENT) {gl.glEnableClientState(GL10.GL_COLOR_ARRAY);}
+		if (renderMode.contains(EnumSet.of(RenderMode.TEXTURE, RenderMode.TILESET))) {gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);}
+		if (renderMode.contains(RenderMode.GRADIENT)) {gl.glEnableClientState(GL10.GL_COLOR_ARRAY);}
 		
 		//Bind vertices, texture coordinates, and/or color coordinates to the OpenGL system
 		gl.glVertexPointer(2, GL10.GL_FLOAT, 0, vertexBuffer);
-		if (renderMode == RenderMode.TEXTURE || renderMode == RenderMode.TILESET) {gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, textureBuffer);}
-		if (renderMode == RenderMode.GRADIENT) {gl.glColorPointer(4, GL10.GL_FLOAT, 0, colorBuffer);}
+		if (renderMode.contains(EnumSet.of(RenderMode.TEXTURE, RenderMode.TILESET))) {gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, textureBuffer);}
+		if (renderMode.contains(RenderMode.GRADIENT)) {gl.glColorPointer(4, GL10.GL_FLOAT, 0, colorBuffer);}
 		
 		//Sets color
-		if (renderMode == RenderMode.COLOR) {gl.glColor4f(colorR, colorG, colorB, colorA);}
+		if (renderMode.contains(RenderMode.COLOR)) {gl.glColor4f(colorR, colorG, colorB, colorA);}
 		
 		//Draw the vertices
 		gl.glDrawElements(GL10.GL_TRIANGLE_STRIP, indices.length, GL10.GL_UNSIGNED_BYTE, indexBuffer);		
 		
 		//Disable things for next polygon
 		gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
-		if(renderMode == RenderMode.GRADIENT) {gl.glDisableClientState(GL10.GL_COLOR_ARRAY);}
+		if(renderMode.contains(RenderMode.GRADIENT)) {gl.glDisableClientState(GL10.GL_COLOR_ARRAY);}
 		gl.glDisable(GL10.GL_CULL_FACE);
 		
 		//Disable texturing for next polygon
-		if (renderMode == RenderMode.TEXTURE || renderMode == RenderMode.TILESET) 
+		if (renderMode.contains(EnumSet.of(RenderMode.TEXTURE, RenderMode.TILESET))) 
 		{
 			gl.glDisableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
 			gl.glDisable(GL10.GL_TEXTURE_2D);
 		}
 		
 		//Reset color for next polygon.
-		if (renderMode == RenderMode.COLOR || renderMode == RenderMode.GRADIENT) {gl.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);}
+		if (renderMode.contains(RenderMode.COLOR) /*|| renderMode.contains(RenderMode.GRADIENT)*/) {gl.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);}
 	}
 	
 	//Runs every frame
@@ -150,6 +153,17 @@ public abstract class UIEntity
 	public void touch(int x, int y)
 	{
 		
+	}
+	
+	protected FloatBuffer setBuffer(FloatBuffer buffer, float[] values)
+	{
+		ByteBuffer byteBuf = ByteBuffer.allocateDirect(values.length * 4);
+		byteBuf.order(ByteOrder.nativeOrder());
+		buffer = byteBuf.asFloatBuffer();
+		buffer.put(values);
+		buffer.position(0);
+		
+		return buffer;
 	}
 	
 	/*******************
@@ -227,167 +241,143 @@ public abstract class UIEntity
 	 **********************/
 	
 	//BLANK
-	public void setBlankMode()
+	public void clearRenderModes()
 	{
-		renderMode = RenderMode.BLANK;
+		renderMode.clear();
 	}
 	
 	//COLOR
-	public void setColorMode(float r, float g, float b, float a)
+	public void enableColorMode(float r, float g, float b, float a)
 	{
-		renderMode = RenderMode.COLOR;
+		if (!renderMode.contains(RenderMode.COLOR))
+			renderMode.add(RenderMode.COLOR);
 		updateColor(r, g, b, a);
 	}
 	
-	public void setColorMode(int r, int b, int g, int a)
+	public void enableColorMode(int r, int b, int g, int a)
 	{
-		renderMode = RenderMode.COLOR;
-		updateColor(r, g, b, a);
+		enableColorMode((float) r / 255.0f, (float) b / 255.0f, (float) g / 255.0f, (float) a / 255.0f);
 	}
 	
 	public void updateColor(float r, float g, float b, float a)
 	{
-		if (renderMode == RenderMode.COLOR)
-		{
 			colorR = r;
 			colorG = g;
 			colorB = b;
 			colorA = a;
-		}
 	}
 	
 	public void updateColor(int r, int g, int b, int a)
 	{
-		if (renderMode == RenderMode.COLOR)
-		{
-			colorR = (float) r / 255.0f;
-			colorG = (float) g / 255.0f;
-			colorB = (float) b / 255.0f;
-			colorA = (float) a / 255.0f;
-		}
+		updateColor((float) r / 255.0f, (float) g / 255.0f, (float) b / 255.0f, (float) a / 255.0f);
+	}
+	
+	public void disableColorMode()
+	{
+		if (renderMode.contains(RenderMode.COLOR))
+			renderMode.remove(RenderMode.COLOR);
 	}
 	
 	//GRADIENT
-	public void setGradientMode(float[] color)
+	public void enableGradientMode(float[] color)
 	{
-		renderMode = RenderMode.GRADIENT;
+		if (!renderMode.contains(RenderMode.GRADIENT))
+			renderMode.add(RenderMode.GRADIENT);
 		updateGradient(color);
 	}
 	
 	public void updateGradient(float[] color)
 	{
-		if (renderMode == RenderMode.GRADIENT)
-		{
 			this.color = color;
-			
-			ByteBuffer byteBuf = ByteBuffer.allocateDirect(color.length * 4);
-			byteBuf.order(ByteOrder.nativeOrder());
-			colorBuffer = byteBuf.asFloatBuffer();
-			colorBuffer.put(color);
-			colorBuffer.position(0);
-		}
+			this.colorBuffer = setBuffer(colorBuffer, color);
+	}
+	
+	public void disableGradientMode()
+	{
+		if (renderMode.contains(RenderMode.GRADIENT))
+			renderMode.remove(RenderMode.GRADIENT);
 	}
 	
 	//TEXTURE
-	public void setTextureMode(Texture tex)
+	public void enableTextureMode(Texture tex)
 	{
-		renderMode = RenderMode.TEXTURE;
+		if (!renderMode.contains(RenderMode.TEXTURE))
+			renderMode.add(RenderMode.TEXTURE);
 		updateTexture(tex);
 	}
 	
-	public void setTextureMode(Texture tex, float[] texture)
+	public void enableTextureMode(Texture tex, float[] texture)
 	{
-		renderMode = RenderMode.TEXTURE;
+		if (!renderMode.contains(RenderMode.TEXTURE))
+			renderMode.add(RenderMode.TEXTURE);
 		updateTexture(tex, texture);
 	}
 		
 	public void updateTexture(Texture tex)
 	{
-		if (renderMode == RenderMode.TEXTURE)
-		{
-			this.tex = tex;
 			float[] initTexture = { 1.0f, 0.0f,
 									1.0f, 1.0f,
 									0.0f, 0.0f,
 									0.0f, 1.0f};
-			texture = initTexture;
-			
-			ByteBuffer byteBuf = ByteBuffer.allocateDirect(texture.length * 4);
-			byteBuf.order(ByteOrder.nativeOrder());
-			textureBuffer = byteBuf.asFloatBuffer();
-			textureBuffer.put(texture);
-			textureBuffer.position(0);
-		}
+			updateTexture(tex, initTexture);
 	}
 	
 	public void updateTexture(Texture tex, float[] texture)
 	{
-		if (renderMode == RenderMode.TEXTURE)
-		{
 			this.tex = tex;
 			this.texture = texture;
-			
-			ByteBuffer byteBuf = ByteBuffer.allocateDirect(texture.length * 4);
-			byteBuf.order(ByteOrder.nativeOrder());
-			textureBuffer = byteBuf.asFloatBuffer();
-			textureBuffer.put(texture);
-			textureBuffer.position(0);
-		}
+			this.textureBuffer = setBuffer(textureBuffer, texture);
+	}
+	
+	public void disableTextureMode()
+	{
+		if(renderMode.contains(RenderMode.TEXTURE))
+			renderMode.remove(RenderMode.TEXTURE);
 	}
 	
 	//TILESET
-	public void setTilesetMode(Texture tex, int x, int y)
+	public void enableTilesetMode(Texture tex, int x, int y)
 	{
-		renderMode = RenderMode.TILESET;
+		if (!renderMode.contains(RenderMode.TILESET))
+			renderMode.add(RenderMode.TILESET);
 		updateTileset(tex, x, y);
 	}
 	
-	public void setTilesetMode (Texture tex, int tileID)
+	public void enableTilesetMode(Texture tex, int tileID)
 	{
-		renderMode = RenderMode.TILESET;
+		if (!renderMode.contains(RenderMode.TILESET))
+			renderMode.add(RenderMode.TILESET);
 		updateTileset(tex, tileID);
 	}
 		
 	public void updateTileset(Texture tex, int x, int y)
 	{
-		if (renderMode == RenderMode.TILESET)
-		{
-			this.tex = tex;
-			texture = TilesetHelper.getTextureVertices(tex, x, y);
-			
-			ByteBuffer byteBuf = ByteBuffer.allocateDirect(texture.length * 4);
-			byteBuf.order(ByteOrder.nativeOrder());
-			textureBuffer = byteBuf.asFloatBuffer();
-			textureBuffer.put(texture);
-			textureBuffer.position(0);
-		}
+		updateTileset(tex, TilesetHelper.getTilesetID(x, y, tex));	
 	}
 	
 	public void updateTileset(Texture tex, int tileID)
 	{
-		if (renderMode == RenderMode.TILESET)
-		{
-			this.tex = tex;
-			texture = TilesetHelper.getTextureVertices(tex, tileID);
-			
-			ByteBuffer byteBuf = ByteBuffer.allocateDirect(texture.length * 4);
-			byteBuf.order(ByteOrder.nativeOrder());
-			textureBuffer = byteBuf.asFloatBuffer();
-			textureBuffer.put(texture);
-			textureBuffer.position(0);
-		}
+		this.tex = tex;
+		texture = TilesetHelper.getTextureVertices(tex, tileID);
+		this.textureBuffer = setBuffer(textureBuffer, texture);
 	}
 	
 	public void updateTileset(int x, int y)
 	{
-		if (tex != null && renderMode == RenderMode.TILESET)
+		if (tex != null)
 			updateTileset(tex, x, y);
 	}
 	
 	public void updateTileset(int tileID)
 	{
-		if (tex != null && renderMode == RenderMode.TILESET)
+		if (tex != null)
 			updateTileset(tex, tileID);
+	}
+	
+	public void disableTilesetMode()
+	{
+		if(renderMode.contains(RenderMode.TILESET))
+			renderMode.remove(RenderMode.TILESET);
 	}
 	
 	/**************************
@@ -404,10 +394,10 @@ public abstract class UIEntity
 	public float getColorA()			{ return colorA; }
 	public Texture getTexture()			{ return tex; }
 	public UIPosition getPosEnum()		{ return position; }
-	public RenderMode getRenderMode()	{ return renderMode; }
 	public float[] getVertices()		{ return vertices; }
 	public float[] getGradientCoords()	{ return color; }
 	public float[] getTextureCoords()	{ return texture; }
+	public EnumSet<RenderMode> getRenderMode()	{ return renderMode; }
 	
 	public void setXSize(float xSize)			{ this.xSize = xSize; }
 	public void setYSize(float ySize)			{ this.ySize = ySize; }
@@ -417,15 +407,4 @@ public abstract class UIEntity
 	public void setLeftPad(float leftPad)		{ this.leftPad = leftPad; }
 	public void setBottomPad(float bottomPad)	{ this.bottomPad = bottomPad; }
 	public void setRightPad(float rightPad)		{ this.rightPad = rightPad; }
-	
-	public void setVertices(float[] vertices)
-	{
-		this.vertices = vertices;
-		
-		ByteBuffer byteBuf = ByteBuffer.allocateDirect(vertices.length * 4);
-		byteBuf.order(ByteOrder.nativeOrder());
-		vertexBuffer = byteBuf.asFloatBuffer();
-		vertexBuffer.put(vertices);
-		vertexBuffer.position(0);
-	}
 }

@@ -3,6 +3,7 @@ package com.lds.game.entity;
 import javax.microedition.khronos.opengles.GL10;
 
 import com.lds.EntityCleaner;
+import com.lds.Enums;
 import com.lds.Texture;
 import com.lds.TilesetHelper;
 import com.lds.Enums.RenderMode;
@@ -13,6 +14,7 @@ import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
 
 //Highest level abstract class in game
 
@@ -22,6 +24,7 @@ public abstract class Entity
 	
 	//behavior data
 	protected boolean isSolid;
+	protected boolean isColorInterp;
 	protected boolean rendered;
 	protected boolean willCollideWithPlayer;
 	protected boolean circular;
@@ -29,7 +32,9 @@ public abstract class Entity
 	//graphics data
 	protected float angle, size, halfSize;
 	protected float colorR, colorG, colorB, colorA;
-	protected RenderMode renderMode;
+	protected float endColorR, endColorG, endColorB, endColorA;
+	protected float colorInterpSpeed;
+	protected EnumSet<RenderMode> renderMode;
 	protected Texture tex;
 	protected Vector2f posVec, scaleVec;
 	
@@ -55,12 +60,12 @@ public abstract class Entity
 	public ArrayList<Entity> colIgnoreList = new ArrayList<Entity>();
 	
 	
-	public Entity (float size, float xPos, float yPos, boolean circular)
+	public Entity(float size, float xPos, float yPos, boolean circular)
 	{
 		this(size, xPos, yPos, 0.0f, 1.0f, 1.0f, true, circular);
 	}
 	
-	public  Entity (float size, float xPos, float yPos, float angle, float xScl, float yScl, boolean isSolid, boolean circular)
+	public Entity(float size, float xPos, float yPos, float angle, float xScl, float yScl, boolean isSolid, boolean circular)
 	{
 		//initialize debug data
 		entID = entCount;
@@ -100,23 +105,19 @@ public abstract class Entity
 		
 		indices = initIndices;
 		
-		ByteBuffer byteBuf = ByteBuffer.allocateDirect(vertices.length * 4);
-		byteBuf.order(ByteOrder.nativeOrder());
-		vertexBuffer = byteBuf.asFloatBuffer();
-		vertexBuffer.put(vertices);
-		vertexBuffer.position(0);
+		this.vertexBuffer = setBuffer(vertexBuffer, vertices);
 				
 		indexBuffer = ByteBuffer.allocateDirect(indices.length);
 		indexBuffer.put(indices);
 		indexBuffer.position(0);
 		
-		renderMode = RenderMode.BLANK;
+		renderMode = EnumSet.noneOf(RenderMode.class);
 	}
 	
 	public void draw(GL10 gl)
 	{
 		//Enable texturing and bind the current texture pointer (texturePtr) to GL_TEXTURE_2D
-		if (renderMode == RenderMode.TEXTURE || renderMode == RenderMode.TILESET || renderMode == RenderMode.TEXTUREALPHA || renderMode == RenderMode.TILESETALPHA)
+		if (renderMode.contains(RenderMode.TEXTURE) || renderMode.contains(RenderMode.TILESET))
 		{
 			gl.glEnable(GL10.GL_TEXTURE_2D);
 			gl.glBindTexture(GL10.GL_TEXTURE_2D, tex.getTexture());
@@ -131,36 +132,36 @@ public abstract class Entity
 		
 		//Enable settings for this polygon
 		gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
-		if (renderMode == RenderMode.TEXTURE || renderMode == RenderMode.TILESET || renderMode == RenderMode.TEXTUREALPHA || renderMode == RenderMode.TILESETALPHA) {gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);}
-		if (renderMode == RenderMode.GRADIENT) {gl.glEnableClientState(GL10.GL_COLOR_ARRAY);}
+		if (renderMode.contains(RenderMode.TEXTURE) || renderMode.contains(RenderMode.TILESET)) {gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);}
+		if (renderMode.contains(RenderMode.GRADIENT)) {gl.glEnableClientState(GL10.GL_COLOR_ARRAY);}
 		
 		//Bind vertices, texture coordinates, and/or color coordinates to the OpenGL system
 		gl.glVertexPointer(2, GL10.GL_FLOAT, 0, vertexBuffer);
-		if (renderMode == RenderMode.TEXTURE || renderMode == RenderMode.TILESET || renderMode == RenderMode.TEXTUREALPHA || renderMode == RenderMode.TILESETALPHA) {gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, textureBuffer);}
-		if (renderMode == RenderMode.GRADIENT) {gl.glColorPointer(4, GL10.GL_FLOAT, 0, colorBuffer);}
+		if (renderMode.contains(RenderMode.TEXTURE) || renderMode.contains(RenderMode.TILESET)) {gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, textureBuffer);}
+		if (renderMode.contains(RenderMode.GRADIENT)) {gl.glColorPointer(4, GL10.GL_FLOAT, 0, colorBuffer);}
 		
 		//Sets color
-		if (renderMode == RenderMode.COLOR || renderMode == RenderMode.TEXTUREALPHA || renderMode == RenderMode.TILESETALPHA) {gl.glColor4f(colorR, colorG, colorB, colorA);}
+		if (renderMode.contains(RenderMode.COLOR)) {gl.glColor4f(colorR, colorG, colorB, colorA);}
 		
 		//Draw the vertices
 		gl.glDrawElements(GL10.GL_TRIANGLE_STRIP, indices.length, GL10.GL_UNSIGNED_BYTE, indexBuffer);		
 		
 		//Disable things for next polygon
 		gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
-		if(renderMode == RenderMode.GRADIENT) {gl.glDisableClientState(GL10.GL_COLOR_ARRAY);}
+		if(renderMode.contains(RenderMode.GRADIENT)) {gl.glDisableClientState(GL10.GL_COLOR_ARRAY);}
 		gl.glDisable(GL10.GL_CULL_FACE);
 		
 		//Disable texturing for next polygon
-		if (renderMode == RenderMode.TEXTURE || renderMode == RenderMode.TILESET || renderMode == RenderMode.TEXTUREALPHA || renderMode == RenderMode.TILESETALPHA) 
+		if (renderMode.contains(RenderMode.TEXTURE) || renderMode.contains(RenderMode.TILESET))
 		{
 			gl.glDisableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
 			gl.glDisable(GL10.GL_TEXTURE_2D);
 		}
 		
 		//Reset color for next polygon.
-		if (renderMode == RenderMode.COLOR || renderMode == RenderMode.GRADIENT || renderMode == RenderMode.TEXTUREALPHA || renderMode == RenderMode.TILESETALPHA) {gl.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);}
+		if (renderMode.contains(RenderMode.COLOR) /*|| renderMode.contains(RenderMode.GRADIENT)*/) {gl.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);}
 	}
-		
+			
 	public void remove()
 	{
 		EntityCleaner.queueEntityForRemoval(this);
@@ -168,12 +169,23 @@ public abstract class Entity
 	
 	public void update()
 	{
-		
+		colorInterp();
 	}
 		
 	public void collide(Entity ent)
 	{
 		
+	}
+	
+	protected FloatBuffer setBuffer(FloatBuffer buffer, float[] values)
+	{
+		ByteBuffer byteBuf = ByteBuffer.allocateDirect(values.length * 4);
+		byteBuf.order(ByteOrder.nativeOrder());
+		buffer = byteBuf.asFloatBuffer();
+		buffer.put(values);
+		buffer.position(0);
+		
+		return buffer;
 	}
 	
 	/*********************
@@ -359,185 +371,141 @@ public abstract class Entity
 	}
 	
 	//blank method, overridden by PhysEnt
-	public void circleBounce (Entity ent)
-	{
-		
-	}
+	public void circleBounce (Entity ent) 	{	}
 	
 	//blank method, overridden by PhysEnt
-	public void rectangleBounce (Entity ent)
-	{
-		
-	}
-			
-	//this is a blank method, to be overriden by subclasses
-	//it determines how each object interacts with other objects and performs the action
-	public void interact (Entity ent)
-	{
-		
-	}
+	public void rectangleBounce (Entity ent){	}
 	
-	//this is a blank method ot be overriden similar to interact
-	//it performs the action to occur when an object stops colliding with another
-	public void uninteract (Entity ent)
-	{
-		
-	}
+	//overriden for entity interaction
+	public void interact (Entity ent)		{	}
+	
+	//overriden for entity uninteraction
+	public void uninteract (Entity ent)		{	}
 		
 	/**********************
 	 * RenderMode methods *
 	 **********************/
 	
 	//BLANK
-	public void setBlankMode()
+	public void clearRenderModes()
 	{
-		renderMode = RenderMode.BLANK;
+		renderMode.clear();
 	}
 	
 	//COLOR
-	public void setColorMode(float r, float g, float b, float a)
+	public void enableColorMode(float r, float g, float b, float a)
 	{
-		renderMode = RenderMode.COLOR;
+		if (!renderMode.contains(RenderMode.COLOR))
+			renderMode.add(RenderMode.COLOR);
 		updateColor(r, g, b, a);
 	}
 	
-	public void setColorMode(int r, int b, int g, int a)
+	public void enableColorMode(int r, int g, int b, int a)
 	{
-		renderMode = RenderMode.COLOR;
-		updateColor(r, g, b, a);
+		enableColorMode((float) r / 255.0f, (float) g / 255.0f, (float) b / 255.0f, (float) a / 255.0f);
 	}
 	
 	public void updateColor(float r, float g, float b, float a)
 	{
-		if (renderMode == RenderMode.COLOR || renderMode == RenderMode.TEXTUREALPHA || renderMode == RenderMode.TILESETALPHA)
-		{
 			colorR = r;
 			colorG = g;
 			colorB = b;
 			colorA = a;
-		}
 	}
 	
 	public void updateColor(int r, int g, int b, int a)
 	{
-		if (renderMode == RenderMode.COLOR || renderMode == RenderMode.TEXTUREALPHA || renderMode == RenderMode.TILESETALPHA)
-		{
-			colorR = (float) r / 255.0f;
-			colorG = (float) g / 255.0f;
-			colorB = (float) b / 255.0f;
-			colorA = (float) a / 255.0f;
-		}
+		updateColor((float) r / 255.0f, (float) g / 255.0f, (float) b / 255.0f, (float) a / 255.0f);
+	}
+	
+	public void disableColorMode()
+	{
+		if (renderMode.contains(RenderMode.COLOR))
+			renderMode.remove(RenderMode.COLOR);
 	}
 	
 	//GRADIENT
-	public void setGradientMode(float[] color)
+	public void enableGradientMode(float[] color)
 	{
-		renderMode = RenderMode.GRADIENT;
+		if (!renderMode.contains(RenderMode.GRADIENT))
+			renderMode.add(RenderMode.GRADIENT);
 		updateGradient(color);
 	}
 	
 	public void updateGradient(float[] color)
 	{
-		if (renderMode == RenderMode.GRADIENT)
-		{
 			this.color = color;
-			
-			ByteBuffer byteBuf = ByteBuffer.allocateDirect(color.length * 4);
-			byteBuf.order(ByteOrder.nativeOrder());
-			colorBuffer = byteBuf.asFloatBuffer();
-			colorBuffer.put(color);
-			colorBuffer.position(0);
-		}
+			this.colorBuffer = setBuffer(colorBuffer, color);
+	}
+	
+	public void disableGradientMode()
+	{
+		if (renderMode.contains(RenderMode.GRADIENT))
+			renderMode.remove(RenderMode.GRADIENT);
 	}
 	
 	//TEXTURE
-	public void setTextureMode(Texture tex)
+	public void enableTextureMode(Texture tex)
 	{
-		renderMode = RenderMode.TEXTURE;
+		if (!renderMode.contains(RenderMode.TEXTURE))
+			renderMode.add(RenderMode.TEXTURE);
 		updateTexture(tex);
 	}
 	
-	public void setTextureMode(Texture tex, float[] texture)
+	public void enableTextureMode(Texture tex, float[] texture)
 	{
-		renderMode = RenderMode.TEXTURE;
+		if (!renderMode.contains(RenderMode.TEXTURE))
+			renderMode.add(RenderMode.TEXTURE);
 		updateTexture(tex, texture);
 	}
 		
 	public void updateTexture(Texture tex)
 	{
-		if (renderMode == RenderMode.TEXTURE || renderMode == RenderMode.TEXTUREALPHA)
-		{
-			this.tex = tex;
 			float[] initTexture = { 1.0f, 0.0f,
 									1.0f, 1.0f,
 									0.0f, 0.0f,
 									0.0f, 1.0f};
-			texture = initTexture;
-			
-			ByteBuffer byteBuf = ByteBuffer.allocateDirect(texture.length * 4);
-			byteBuf.order(ByteOrder.nativeOrder());
-			textureBuffer = byteBuf.asFloatBuffer();
-			textureBuffer.put(texture);
-			textureBuffer.position(0);
-		}
+			updateTexture(tex, initTexture);
 	}
 	
 	public void updateTexture(Texture tex, float[] texture)
 	{
-		if (renderMode == RenderMode.TEXTURE || renderMode == RenderMode.TEXTUREALPHA)
-		{
 			this.tex = tex;
 			this.texture = texture;
-			
-			ByteBuffer byteBuf = ByteBuffer.allocateDirect(texture.length * 4);
-			byteBuf.order(ByteOrder.nativeOrder());
-			textureBuffer = byteBuf.asFloatBuffer();
-			textureBuffer.put(texture);
-			textureBuffer.position(0);
-		}
+			this.textureBuffer = setBuffer(textureBuffer, texture);
+	}
+	
+	public void disableTextureMode()
+	{
+		if(renderMode.contains(RenderMode.TEXTURE))
+			renderMode.remove(RenderMode.TEXTURE);
 	}
 	
 	//TILESET
-	public void setTilesetMode(Texture tex, int x, int y)
+	public void enableTilesetMode(Texture tex, int x, int y)
 	{
-		renderMode = RenderMode.TILESET;
+		if (!renderMode.contains(RenderMode.TILESET))
+			renderMode.add(RenderMode.TILESET);
 		updateTileset(tex, x, y);
 	}
 	
-	public void setTilesetMode (Texture tex, int tileID)
+	public void enableTilesetMode(Texture tex, int tileID)
 	{
-		renderMode = RenderMode.TILESET;
+		if (!renderMode.contains(RenderMode.TILESET))
+			renderMode.add(RenderMode.TILESET);
 		updateTileset(tex, tileID);
 	}
 		
 	public void updateTileset(Texture tex, int x, int y)
 	{
-		if (renderMode == RenderMode.TILESET || renderMode == RenderMode.TILESETALPHA)
-		{
-			this.tex = tex;
-			texture = TilesetHelper.getTextureVertices(tex, x, y);
-			
-			ByteBuffer byteBuf = ByteBuffer.allocateDirect(texture.length * 4);
-			byteBuf.order(ByteOrder.nativeOrder());
-			textureBuffer = byteBuf.asFloatBuffer();
-			textureBuffer.put(texture);
-			textureBuffer.position(0);
-		}
+		updateTileset(tex, TilesetHelper.getTilesetID(x, y, tex));	
 	}
 	
 	public void updateTileset(Texture tex, int tileID)
 	{
-		if (renderMode == RenderMode.TILESET || renderMode == RenderMode.TILESETALPHA)
-		{
-			this.tex = tex;
-			texture = TilesetHelper.getTextureVertices(tex, tileID);
-			
-			ByteBuffer byteBuf = ByteBuffer.allocateDirect(texture.length * 4);
-			byteBuf.order(ByteOrder.nativeOrder());
-			textureBuffer = byteBuf.asFloatBuffer();
-			textureBuffer.put(texture);
-			textureBuffer.position(0);
-		}
+		this.tex = tex;
+		texture = TilesetHelper.getTextureVertices(tex, tileID);
+		this.textureBuffer = setBuffer(textureBuffer, texture);
 	}
 	
 	public void updateTileset(int x, int y)
@@ -552,100 +520,58 @@ public abstract class Entity
 			updateTileset(tex, tileID);
 	}
 	
-	//TEXTUREALPHA
-	public void setTextureAlphaMode(Texture tex, float colorA)
+	public void disableTilesetMode()
 	{
-		renderMode = RenderMode.TEXTUREALPHA;
+		if(renderMode.contains(RenderMode.TILESET))
+			renderMode.remove(RenderMode.TILESET);
 	}
 	
-	public void setTextureAlphaMode(Texture tex, int colorA)
+	public void initColorInterp(float r, float g, float b, float a)
 	{
-		setTextureAlphaMode(tex, (float)colorA / 255.0f);
+		endColorR = r;
+		endColorG = g;
+		endColorB = b;
+		endColorA = a;
+		isColorInterp = true;
 	}
 	
-	public void updateTextureAlpha(Texture tex, float colorA)
+	public void colorInterp()
 	{
-		if (renderMode == RenderMode.TEXTUREALPHA)
+		double rNear = Math.abs(endColorR - colorR);
+		double gNear = Math.abs(endColorG - colorG);
+		double bNear = Math.abs(endColorB - colorB);
+		double aNear = Math.abs(endColorA - colorA);
+		if (rNear < colorInterpSpeed && gNear < colorInterpSpeed && bNear < colorInterpSpeed && aNear < colorInterpSpeed)
 		{
-			updateTexture(tex);
-			updateColor(1.0f, 1.0f, 1.0f, colorA);
+			colorR = endColorR;
+			colorG = endColorG;
+			colorB = endColorB;
+			colorA = endColorA;
+			isColorInterp = false;
+		}
+		else
+		{
+			if (endColorR > colorR)
+				colorR += colorInterpSpeed;
+			else
+				colorR -= colorInterpSpeed;
+			
+			if (endColorG > colorG)
+				colorG += colorInterpSpeed;
+			else
+				colorG -= colorInterpSpeed;
+			
+			if (endColorB > colorB)
+				colorB += colorInterpSpeed;
+			else
+				colorB -= colorInterpSpeed;
+			
+			if (endColorA > colorA)
+				colorA += colorInterpSpeed;
+			else
+				colorA -= colorInterpSpeed;
 		}
 	}
-	
-	public void updateTextureAlpha(Texture tex, int colorA)
-	{
-		updateTextureAlpha(tex, (float)colorA / 255.0f);
-	}
-	
-	public void updateTextureAlpha(float colorA)
-	{
-		if (renderMode == RenderMode.TEXTUREALPHA)
-			updateColor(1.0f, 1.0f, 1.0f, colorA);
-	}
-	
-	public void updateTextureAlpha(int colorA)
-	{
-		if (renderMode == RenderMode.TEXTUREALPHA)
-			updateColor(1.0f, 1.0f, 1.0f, (float)colorA / 255.0f);
-	}
-	
-	public void updateTextureAlpha(Texture tex)
-	{
-		if (renderMode == RenderMode.TEXTUREALPHA)
-			updateTexture(tex);
-	}
-	
-	//TILESETALPHA
-	public void setTilesetAlphaMode(Texture tex, int x, int y, float colorA)
-	{
-		renderMode = RenderMode.TILESETALPHA;
-		updateTilesetAlpha(tex, x, y, colorA);
-	}
-	
-	public void setTilesetAlphaMode(Texture tex, int x, int y, int colorA)
-	{
-		setTilesetAlphaMode(tex, x, y, (float)colorA / 255.0f);
-	}
-	
-	public void setTilesetAlphaMode(Texture tex, int tileID, float colorA)
-	{
-		renderMode = RenderMode.TILESETALPHA;
-		updateTilesetAlpha(tex, tileID, colorA);
-	}
-	
-	public void setTilesetAlphaMode(Texture tex, int tileID, int colorA)
-	{
-		setTilesetAlphaMode(tex, tileID, (float)colorA / 255.0f);
-	}
-	
-	public void updateTilesetAlpha(Texture tex, int x, int y, float colorA)
-	{
-		if (renderMode == RenderMode.TILESETALPHA)
-		{
-			updateTileset(tex, x, y);
-			updateColor(1.0f, 1.0f, 1.0f, colorA);	
-		}
-	}
-	
-	public void updateTilesetAlpha(Texture tex, int x, int y, int colorA)
-	{
-		updateTilesetAlpha(tex, x, y, (float)colorA / 255.0f);
-	}
-	
-	public void updateTilesetAlpha(Texture tex, int tileID, float colorA)
-	{
-		if (renderMode == RenderMode.TILESETALPHA)
-		{
-			updateTileset(tex, tileID);
-			updateColor(1.0f, 1.0f, 1.0f, colorA);
-		}
-	}
-	
-	public void updateTilesetAlpha(Texture tex, int tileID, int colorA)
-	{
-		updateTilesetAlpha(tex, tileID, (float)colorA / 255.0f);
-	}
-	
 	/**************************
 	 * Accessors and Mutators *
 	 **************************/
@@ -662,7 +588,6 @@ public abstract class Entity
 	public float getColorG()			{ return colorG; }
 	public float getColorB()			{ return colorB; }
 	public float getColorA()			{ return colorA; }
-	public RenderMode getRenderMode()	{ return renderMode; }
 	public float[] getVertices()		{ return vertices; }
 	public float[] getColorCoords()		{ return color; }
 	public float[] getTextureCoords()	{ return texture; }
@@ -675,6 +600,7 @@ public abstract class Entity
 	public boolean willCollideWithPlayer() { return willCollideWithPlayer; }
 	public boolean isCircular()			{ return circular; }
 	public boolean isRendered()			{ return rendered; }
+	public EnumSet<RenderMode> getRenderMode()	{ return renderMode; }
 	
 	public void setSize(float size)		{ this.size = size; }
 	public void setAngle(float angle)	{ this.angle = angle; }
@@ -682,6 +608,7 @@ public abstract class Entity
 	public void setYPos(float yPos)		{ posVec.setY(yPos); }
 	public void setXScl(float xScl)		{ scaleVec.setX(xScl); }
 	public void setYScl(float yScl)		{ scaleVec.setY(yScl); }
+	public void setColorInterpSpeed(float s) { this.colorInterpSpeed = s; }
 	public void setRendered(boolean state)	{ rendered = state; }
 	public void setSolidity(boolean solid)	{ isSolid = solid; }
 	public void setWillCollideWithPlayer(boolean willCollideWithPlayer) { this.willCollideWithPlayer = willCollideWithPlayer; }
