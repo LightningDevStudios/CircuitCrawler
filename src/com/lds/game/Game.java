@@ -130,11 +130,15 @@ public class Game
 		button.setWillCollideWithPlayer(false);
 		entList.add(button);
 		
-		block = new PhysBlock(50.0f, -215.0f, -350.0f);
+		block = new PhysBlock(70.0f, -215.0f, -350.0f);
 		block.enableTilesetMode(tilesetwire, 2, 1);
-		block.enableColorMode(1.0f, 1.0f, 1.0f, 0.5f);
+		//block.enableColorMode(1.0f, 1.0f, 1.0f, 0.5f);
+		float[] initGM = {1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f};
+		float[] interpGM = {0.7f, 0.3f, 0.5f, 1.0f, 0.7f, 0.8f, 0.1f, 1.0f, 0.1f, 0.8f, 0.1f, 1.0f, 0.9f, 0.2f, 0.1f, 1.0f};
+		block.enableGradientMode(initGM);
 		block.setColorInterpSpeed(0.01f);
-		block.initColorInterp(0.5f, 0.3f, 0.1f, 0.5f);
+		//block.initColorInterp(0.5f, 0.7f, 0.3f, 0.5f);
+		block.initGradientInterp(interpGM);
 		entList.add(block);
 		block.setWillCollideWithPlayer(true);
 				

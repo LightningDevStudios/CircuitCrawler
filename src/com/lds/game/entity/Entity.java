@@ -24,7 +24,7 @@ public abstract class Entity
 	
 	//behavior data
 	protected boolean isSolid;
-	protected boolean isColorInterp;
+	protected boolean isColorInterp, isGradientInterp;
 	protected boolean rendered;
 	protected boolean willCollideWithPlayer;
 	protected boolean circular;
@@ -40,7 +40,7 @@ public abstract class Entity
 	
 	protected float[] vertices;
 	protected float[] texture;
-	protected float[] color;
+	protected float[] color, endColor;
 	private byte[] indices;
 	
 	protected FloatBuffer vertexBuffer;
@@ -170,6 +170,7 @@ public abstract class Entity
 	public void update()
 	{
 		colorInterp();
+		gradientInterp();
 	}
 		
 	public void collide(Entity ent)
@@ -525,7 +526,7 @@ public abstract class Entity
 		if(renderMode.contains(RenderMode.TILESET))
 			renderMode.remove(RenderMode.TILESET);
 	}
-	
+		
 	public void initColorInterp(float r, float g, float b, float a)
 	{
 		endColorR = r;
@@ -537,39 +538,73 @@ public abstract class Entity
 	
 	public void colorInterp()
 	{
-		double rNear = Math.abs(endColorR - colorR);
-		double gNear = Math.abs(endColorG - colorG);
-		double bNear = Math.abs(endColorB - colorB);
-		double aNear = Math.abs(endColorA - colorA);
-		if (rNear < colorInterpSpeed && gNear < colorInterpSpeed && bNear < colorInterpSpeed && aNear < colorInterpSpeed)
+		if (isColorInterp)
 		{
-			colorR = endColorR;
-			colorG = endColorG;
-			colorB = endColorB;
-			colorA = endColorA;
-			isColorInterp = false;
+			double rNear = Math.abs(endColorR - colorR);
+			double gNear = Math.abs(endColorG - colorG);
+			double bNear = Math.abs(endColorB - colorB);
+			double aNear = Math.abs(endColorA - colorA);
+			if (rNear < colorInterpSpeed && gNear < colorInterpSpeed && bNear < colorInterpSpeed && aNear < colorInterpSpeed)
+			{
+				colorR = endColorR;
+				colorG = endColorG;
+				colorB = endColorB;
+				colorA = endColorA;
+				isColorInterp = false;
+			}
+			else
+			{
+				if (endColorR > colorR)
+					colorR += colorInterpSpeed;
+				else
+					colorR -= colorInterpSpeed;
+				
+				if (endColorG > colorG)
+					colorG += colorInterpSpeed;
+				else
+					colorG -= colorInterpSpeed;
+				
+				if (endColorB > colorB)
+					colorB += colorInterpSpeed;
+				else
+					colorB -= colorInterpSpeed;
+				
+				if (endColorA > colorA)
+					colorA += colorInterpSpeed;
+				else
+					colorA -= colorInterpSpeed;
+			}
 		}
-		else
+	}
+	
+	public  void initGradientInterp(float[] c)
+	{
+		endColor = c;
+		isGradientInterp = true;
+	}
+	
+	public void gradientInterp()
+	{
+		if (isGradientInterp)
 		{
-			if (endColorR > colorR)
-				colorR += colorInterpSpeed;
-			else
-				colorR -= colorInterpSpeed;
+			int nearCount = 0;
+			for (int i =0; i < color.length; i++)
+			{
+				if (Math.abs(endColor[i] - color[i]) < colorInterpSpeed)
+				{
+					nearCount++;
+					color[i] = endColor[i];
+				}
+				else if (endColor[i] > color[i])
+					color[i] += colorInterpSpeed;
+				else
+					color[i] -= colorInterpSpeed;
+			}
 			
-			if (endColorG > colorG)
-				colorG += colorInterpSpeed;
-			else
-				colorG -= colorInterpSpeed;
+			if (nearCount == color.length)
+				isGradientInterp = false;
 			
-			if (endColorB > colorB)
-				colorB += colorInterpSpeed;
-			else
-				colorB -= colorInterpSpeed;
-			
-			if (endColorA > colorA)
-				colorA += colorInterpSpeed;
-			else
-				colorA -= colorInterpSpeed;
+			colorBuffer = setBuffer(colorBuffer, color);
 		}
 	}
 	/**************************
