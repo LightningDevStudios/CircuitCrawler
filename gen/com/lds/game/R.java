@@ -18,7 +18,8 @@ public final class R {
         public static final int tilesetwire=0x7f020004;
     }
     public static final class id {
-        public static final int Button01=0x7f060000;
+        public static final int Button1=0x7f060001;
+        public static final int MM_TableLayout=0x7f060000;
     }
     public static final class layout {
         public static final int main=0x7f030000;
