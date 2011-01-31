@@ -20,7 +20,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	public Game game;
 	public Context context;
 	public Object syncObj;
-	public boolean windowOutdated, testDebug = true;
+	public boolean windowOutdated, gameOver;
 	public int frameInterval, frameCount = 0;
 	
 	public GameRenderer (float screenW, float screenH, Context context, Object syncObj)
