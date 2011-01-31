@@ -37,7 +37,7 @@ public class Graphics extends GLSurfaceView
 		}
 		return true;
 	}
-	
+			
 	public interface Renderer extends GLSurfaceView.Renderer
 	{
 		public abstract void onTouchInput(MotionEvent e);

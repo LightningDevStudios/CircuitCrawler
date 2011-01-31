@@ -114,12 +114,12 @@ public abstract class UIEntity
 		
 		//Enable settings for this polygon
 		gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
-		if (renderMode.contains(EnumSet.of(RenderMode.TEXTURE, RenderMode.TILESET))) {gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);}
+		if (renderMode.contains(RenderMode.TEXTURE) || renderMode.contains(RenderMode.TILESET)) {gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);}
 		if (renderMode.contains(RenderMode.GRADIENT)) {gl.glEnableClientState(GL10.GL_COLOR_ARRAY);}
 		
 		//Bind vertices, texture coordinates, and/or color coordinates to the OpenGL system
 		gl.glVertexPointer(2, GL10.GL_FLOAT, 0, vertexBuffer);
-		if (renderMode.contains(EnumSet.of(RenderMode.TEXTURE, RenderMode.TILESET))) {gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, textureBuffer);}
+		if (renderMode.contains(RenderMode.TEXTURE) || renderMode.contains(RenderMode.TILESET)) {gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, textureBuffer);}
 		if (renderMode.contains(RenderMode.GRADIENT)) {gl.glColorPointer(4, GL10.GL_FLOAT, 0, colorBuffer);}
 		
 		//Sets color
@@ -134,7 +134,7 @@ public abstract class UIEntity
 		gl.glDisable(GL10.GL_CULL_FACE);
 		
 		//Disable texturing for next polygon
-		if (renderMode.contains(EnumSet.of(RenderMode.TEXTURE, RenderMode.TILESET))) 
+		if (renderMode.contains(RenderMode.TEXTURE) || renderMode.contains(RenderMode.TILESET))
 		{
 			gl.glDisableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
 			gl.glDisable(GL10.GL_TEXTURE_2D);

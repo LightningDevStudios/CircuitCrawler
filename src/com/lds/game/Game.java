@@ -134,7 +134,7 @@ public class Game
 		block.enableTilesetMode(tilesetwire, 2, 1);
 		//block.enableColorMode(1.0f, 1.0f, 1.0f, 0.5f);
 		float[] initGM = {1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f};
-		float[] interpGM = {0.7f, 0.3f, 0.5f, 1.0f, 0.7f, 0.8f, 0.1f, 1.0f, 0.1f, 0.8f, 0.1f, 1.0f, 0.9f, 0.2f, 0.1f, 1.0f};
+		float[] interpGM = {0.1f, 0.1f, 0.1f, 1.0f, 0.3f, 0.8f, 0.9f, 1.0f, 0.1f, 0.8f, 0.1f, 1.0f, 0.9f, 0.2f, 0.1f, 1.0f};
 		block.enableGradientMode(initGM);
 		block.setColorInterpSpeed(0.01f);
 		//block.initColorInterp(0.5f, 0.7f, 0.3f, 0.5f);
@@ -216,12 +216,12 @@ public class Game
 		
 		btnA = new UIButton(80.0f, 80.0f, UIPosition.BOTTOMRIGHT);
 		btnA.autoPadding(0.0f, 0.0f, 5.0f, 90.0f);
-		btnA.enableColorMode(86, 93, 128, 128);
+		btnA.enableColorMode(65, 200, 65, 128);
 		btnA.setIntervalTime(Stopwatch.elapsedTimeMs());
 		
 		btnB = new UIButton(80.0f, 80.0f, UIPosition.BOTTOMRIGHT);
 		btnB.autoPadding(0.0f, 0.0f, 90.0f, 5.0f);
-		btnB.enableColorMode(200, 93, 50, 128);
+		btnB.enableColorMode(200, 65, 65, 100);
 		btnB.setIntervalTime(Stopwatch.elapsedTimeMs());
 		
 		joypad = new UIJoypad(100, 100, UIPosition.BOTTOMLEFT);
@@ -231,6 +231,7 @@ public class Game
 		textbox = new UITextBox(112, 32, UIPosition.TOPLEFT);
 		textbox.autoPadding(5.0f, 5.0f, 0.0f, 0.0f);
 		textbox.enableTextureMode(someText);
+		textbox.setText("Testing!");
 		
 		UIList.add(healthBar);
 		UIList.add(energyBar);

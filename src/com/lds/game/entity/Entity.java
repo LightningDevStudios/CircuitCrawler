@@ -554,25 +554,17 @@ public abstract class Entity
 			}
 			else
 			{
-				if (endColorR > colorR)
-					colorR += colorInterpSpeed;
-				else
-					colorR -= colorInterpSpeed;
+				if (endColorR > colorR)	colorR += colorInterpSpeed;
+				else					colorR -= colorInterpSpeed;
 				
-				if (endColorG > colorG)
-					colorG += colorInterpSpeed;
-				else
-					colorG -= colorInterpSpeed;
+				if (endColorG > colorG)	colorG += colorInterpSpeed;
+				else					colorG -= colorInterpSpeed;
 				
-				if (endColorB > colorB)
-					colorB += colorInterpSpeed;
-				else
-					colorB -= colorInterpSpeed;
+				if (endColorB > colorB)	colorB += colorInterpSpeed;
+				else					colorB -= colorInterpSpeed;
 				
-				if (endColorA > colorA)
-					colorA += colorInterpSpeed;
-				else
-					colorA -= colorInterpSpeed;
+				if (endColorA > colorA)	colorA += colorInterpSpeed;
+				else					colorA -= colorInterpSpeed;
 			}
 		}
 	}
