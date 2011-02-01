@@ -26,8 +26,8 @@ public abstract class Entity
 	protected boolean isSolid;
 	protected boolean isColorInterp, isGradientInterp;
 	protected boolean rendered;
-	protected boolean willCollideWithPlayer;
 	protected boolean circular;
+	protected boolean willCollide;
 	
 	//graphics data
 	protected float angle, size, halfSize;
@@ -60,12 +60,12 @@ public abstract class Entity
 	public ArrayList<Entity> colIgnoreList = new ArrayList<Entity>();
 	
 	
-	public Entity(float size, float xPos, float yPos, boolean circular)
+	public Entity (float size, float xPos, float yPos, boolean circular, boolean willCollide)
 	{
-		this(size, xPos, yPos, 0.0f, 1.0f, 1.0f, true, circular);
+		this(size, xPos, yPos, 0.0f, 1.0f, 1.0f, true, circular, willCollide);
 	}
 	
-	public Entity(float size, float xPos, float yPos, float angle, float xScl, float yScl, boolean isSolid, boolean circular)
+	public  Entity (float size, float xPos, float yPos, float angle, float xScl, float yScl, boolean isSolid, boolean circular, boolean willCollide)
 	{
 		//initialize debug data
 		entID = entCount;
@@ -74,6 +74,7 @@ public abstract class Entity
 		//initialize behavior variables
 		this.isSolid = isSolid;
 		this.circular = circular;
+		this.willCollide = willCollide;
 		
 		//initializes graphics variables
 		this.size = size;
@@ -113,6 +114,8 @@ public abstract class Entity
 		
 		renderMode = EnumSet.noneOf(RenderMode.class);
 	}
+	
+	
 	
 	public void draw(GL10 gl)
 	{
@@ -238,6 +241,9 @@ public abstract class Entity
 	
 	public boolean isColliding (Entity ent) //if both entities are polygons
 	{	
+		if (this == ent)
+			return false;
+		
 		//checks to see if either object is not solid
 		if (this.isSolid == false || ent.isSolid == false)
 			return false;
@@ -252,10 +258,10 @@ public abstract class Entity
 		if (this.isCircular() && ent.isCircular())
 			return this.isCircleCollidingWithCircle(ent);
 		
-		else if (ent.isCircular())
+		else if (ent.isCircular() && !this.isCircular())
 			return this.isRectangleCollidingWithCircle(ent);
 		
-		else if (this.isCircular())
+		else if (this.isCircular() && !ent.isCircular())
 			return ent.isRectangleCollidingWithCircle(this);
 		
 		else
@@ -319,7 +325,6 @@ public abstract class Entity
 				return false;
 			}
 		}
-		System.out.println("Collision!");
 		return true;
 	}
 	
@@ -624,7 +629,7 @@ public abstract class Entity
 	public double getRad()				{ return rad; }
 	public int getEntID()				{ return entID; }
 	public static int getEntCount()		{ return entCount; }
-	public boolean willCollideWithPlayer() { return willCollideWithPlayer; }
+	public boolean willCollide()		{ return willCollide; }
 	public boolean isCircular()			{ return circular; }
 	public boolean isRendered()			{ return rendered; }
 	public EnumSet<RenderMode> getRenderMode()	{ return renderMode; }
@@ -638,7 +643,7 @@ public abstract class Entity
 	public void setColorInterpSpeed(float s) { this.colorInterpSpeed = s; }
 	public void setRendered(boolean state)	{ rendered = state; }
 	public void setSolidity(boolean solid)	{ isSolid = solid; }
-	public void setWillCollideWithPlayer(boolean willCollideWithPlayer) { this.willCollideWithPlayer = willCollideWithPlayer; }
+	public void setWillCollide(boolean willCollide) { this.willCollide = willCollide; }
 	public void setVertexVecs(Vector2f[] vertVecs)
 	{
 		if (vertVecs.length == 4)

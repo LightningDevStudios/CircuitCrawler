@@ -13,7 +13,7 @@ public abstract class Character extends PhysEnt //all characters, including the 
 	
 	public Character(float size, float xPos, float yPos, float angle, float xScl, float yScl, boolean circular, int health, int strength, float speed)
 	{
-		super(size, xPos, yPos, angle, xScl, yScl, true, circular, 20.0f, 90.0f, 1.0f);
+		super(size, xPos, yPos, angle, xScl, yScl, true, circular, true, 20.0f, 90.0f, 1.0f);
 		
 		this.health = health;
 		this.speed = 1.0f;

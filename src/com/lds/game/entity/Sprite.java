@@ -17,7 +17,7 @@ public class Sprite extends PhysEnt
 	
 	public Sprite(float size, float xPos, float yPos, float angle, float xScl, float yScl, float moveSpeed, float rotSpeed, float sclSpeed, Animation anim)
 	{
-		super(size, xPos, yPos, angle, xScl, yScl, true, false, moveSpeed, rotSpeed, sclSpeed);
+		super(size, xPos, yPos, angle, xScl, yScl, true, false, true, moveSpeed, rotSpeed, sclSpeed);
 
 		this.anim = anim;
 		texture = anim.getCurrentFrame();

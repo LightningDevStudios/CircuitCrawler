@@ -123,11 +123,9 @@ public class Game
 		door = new Door (-108.0f, -180.0f);
 		door.enableTilesetMode(tilesetwire, 0, 2);
 		entList.add(door);
-		door.setWillCollideWithPlayer(true);
 		
 		button = new Button(36.0f, -320.0f);
 		button.enableTilesetMode(randomthings, 0, 0);
-		button.setWillCollideWithPlayer(false);
 		entList.add(button);
 		
 		block = new PhysBlock(70.0f, -215.0f, -350.0f);
@@ -140,27 +138,22 @@ public class Game
 		//block.initColorInterp(0.5f, 0.7f, 0.3f, 0.5f);
 		block.initGradientInterp(interpGM);
 		entList.add(block);
-		block.setWillCollideWithPlayer(true);
 				
 		Button button1 = new Button(108.0f, 0.0f);
 		button1.enableTilesetMode(randomthings, 0, 0);
-		button1.setWillCollideWithPlayer(false);
 		entList.add(button1);
 				
 		Button button2 = new Button(-324.0f, 0.0f);
 		button2.enableTilesetMode(randomthings, 0, 0);
-		button2.setWillCollideWithPlayer(false);
 		entList.add(button2);
 		
 
 		PhysBlock block1 = new PhysBlock(50, 0, 108);
 		block1.enableTilesetMode(tilesetwire, 2, 1);
-		block1.setWillCollideWithPlayer(true);
 		entList.add(block1);
 		 
 		PhysBlock block2 = new PhysBlock(50, -216, 108);
 		block2.enableTilesetMode(tilesetwire, 2, 1);
-		block2.setWillCollideWithPlayer(true);
 		entList.add(block2);
 		
 		spriteAnim = new Animation(tilesetwire, 1, 8, 0, 0, 1);
@@ -172,12 +165,12 @@ public class Game
 		/*circle = new PhysCircle(50.0f, -100.0f, -310.0f);
 		circle.setTilesetMode(tilesetwire, 1, 2);
 		entList.add(circle);
-		circle.setWillCollideWithPlayer(true);*/
+		circle.setWillCollideWithPlayer(true);
+		*/
 		
 		player = new Player(-108.0f, -450.0f, 0.0f);
 		player.enableTilesetMode(tilesetwire, 1, 0);
 		entList.add(player);
-		player.setWillCollideWithPlayer(false);
 		player.enableUserControl();
 				
 		//spr = new Sprite(30.0f, -108.0f, -300.0f, 45.0f, 1.0f, 1.0f, 10, 90, 1, spriteAnim);
@@ -373,7 +366,7 @@ public class Game
 	
 	public void updateCameraPosition()
 	{
-		//move camera to follow player
+		//move camera to follow player.
 		camPosX = player.getXPos();
 		camPosY = player.getYPos();
 		

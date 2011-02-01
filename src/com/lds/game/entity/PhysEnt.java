@@ -19,14 +19,14 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	protected ArrayList<Vector2f> bounceList;
 	
 	
-	public PhysEnt(float size, float xPos, float yPos, boolean circular, float moveSpeed, float rotSpeed, float sclSpeed)
+	public PhysEnt(float size, float xPos, float yPos, boolean circular, boolean willCollide, float moveSpeed, float rotSpeed, float sclSpeed)
 	{
-		this(size, xPos, yPos, 0.0f, 1.0f, 1.0f, true, circular, moveSpeed, rotSpeed, sclSpeed);
+		this(size, xPos, yPos, 0.0f, 1.0f, 1.0f, true, circular, willCollide, moveSpeed, rotSpeed, sclSpeed);
 	}
 	
-	public PhysEnt(float size, float xPos, float yPos, float angle, float xScl, float yScl, boolean isSolid, boolean circular, float moveSpeed, float rotSpeed, float sclSpeed)
+	public PhysEnt(float size, float xPos, float yPos, float angle, float xScl, float yScl, boolean isSolid, boolean circular, boolean willCollide, float moveSpeed, float rotSpeed, float sclSpeed)
 	{
-		super(size, xPos, yPos, angle, xScl, yScl, isSolid, circular);
+		super(size, xPos, yPos, angle, xScl, yScl, isSolid, circular, willCollide);
 		
 		//initialize interpolation variables
 		endAngle = angle;
@@ -50,12 +50,6 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 		scaleInterpolate();
 	}
 	
-	@Override
-	public void collide(Entity ent)
-	{
-		this.stop();
-	}
-	
 	public void renderNextFrame()
 	{
 		
@@ -68,10 +62,13 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	//sets position to to new x and y and interpolates
 	public void moveTo (float x, float y)
 	{
-		moveVec.set(x - getXPos(), y - getYPos());
-		isMoving = true;
-		moveTimeMs = Stopwatch.elapsedTimeMs();
-		endPosVec = new Vector2f(x, y);
+		if (!(posVec.getX() == x && posVec.getY() == y))
+		{
+			moveVec.set(x - getXPos(), y - getYPos());
+			isMoving = true;
+			moveTimeMs = Stopwatch.elapsedTimeMs();
+			endPosVec = new Vector2f(x, y);
+		}
 	}
 	
 	//sets angle of an entity to a new value
@@ -107,10 +104,13 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	//much like moveTo, but instead of going to a specific point, move() moves relative to the current position
 	public void move (float x, float y)
 	{
-		moveVec.set(x, y);
-		isMoving = true;
-		moveTimeMs = Stopwatch.elapsedTimeMs();
-		endPosVec = Vector2f.add(moveVec, posVec);
+		if (!(x == 0 && y == 0))
+		{
+			moveVec.set(x, y);
+			isMoving = true;
+			moveTimeMs = Stopwatch.elapsedTimeMs();
+			endPosVec = Vector2f.add(moveVec, posVec);
+		}
 	}
 	
 	//much like rotateTo, but rotate() adds or subtracts the number of degrees from the current number
@@ -133,28 +133,6 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 		endScaleVec = Vector2f.add(sclVec, scaleVec);
 	}
 	
-	public void stop ()
-	{
-			
-		if (isMoving)
-		{
-			posVec.sub(moveInterpVec);
-			isMoving = false;
-		}
-		
-		if (isRotating)
-		{
-			angle -= rotSpeed / 1000 * (float)(Stopwatch.elapsedTimeMs() - rotTimeMs);
-			isRotating = false;
-		}
-		
-		if (isScaling)
-		{
-			sclVec.sub(sclInterpVec);
-			isScaling = false;
-		}
-	}
-	
 	/*********************
 	 * Collision Methods *
 	 *********************/
@@ -165,7 +143,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	protected boolean isCircleCollidingWithCircle (Entity ent)
 	{
 		boolean output = super.isCircleCollidingWithCircle(ent);
-		if (output)
+		if (output && this.doesCollide(ent))
 		{
 			this.circleBounce(ent);
 			ent.circleBounce(ent);
@@ -177,7 +155,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	protected boolean isRectangleCollidingWithCircle (Entity ent) 
 	{
 		boolean output = super.isRectangleCollidingWithCircle(ent);
-		if (output)
+		if (output && this.doesCollide(ent))
 		{
 			this.circleBounce(ent);
 			ent.rectangleBounce(this);
@@ -189,7 +167,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	protected boolean isRectangleCollidingWithRectangle (Entity ent)
 	{
 		boolean output = super.isRectangleCollidingWithRectangle(ent);
-		if (output)
+		if (output && this.doesCollide(ent))
 		{
 			this.rectangleBounce(ent);
 			ent.rectangleBounce(this);
@@ -235,6 +213,14 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 		Vector2f bounceSide = Vector2f.normalize(Vector2f.sub(vertDistVecs[0], vertDistVecs[1]));
 		bounceSide.scale(this.moveInterpVec.dot(bounceSide));
 		this.addBounceVec(Vector2f.sub(bounceSide, this.moveInterpVec));
+	}
+	
+	public boolean doesCollide (Entity ent)
+	{
+		if (!ent.willCollide())
+			return false;
+		else
+			return true;
 	}
 	
 	/**********************************
@@ -298,9 +284,8 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 				else
 				{
 					posVec.add(moveInterpVec);
+					Game.worldOutdated = true;
 				}
-				
-				Game.worldOutdated = true;
 			}
 							
 			moveTimeMs = Stopwatch.elapsedTimeMs();

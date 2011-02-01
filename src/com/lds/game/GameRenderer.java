@@ -126,7 +126,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 					Entity colEnt = game.entList.get(j);
 					if (ent.isColliding(colEnt))
 					{
-						if (!ent.colList.contains(colEnt))
+						if(!ent.colList.contains(colEnt) && !colEnt.colList.contains(ent))
 						{
 							ent.colList.add(colEnt);
 							colEnt.colList.add(ent);
@@ -134,17 +134,17 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 							colEnt.interact(ent);
 						}
 					}
-					else if (ent.colList.contains(colEnt))
+					else if (ent.colList.contains(colEnt) || colEnt.colList.contains(ent))
 					{
+						System.out.println(ent.colList.size() + " " + colEnt.colList.size());
 						ent.colList.remove(colEnt);
 						colEnt.colList.remove(ent);
-						System.out.println(ent.colList.size() + " " + colEnt.colList.size());
-						//TODO may or may not work.
 						if (ent.colList.isEmpty())
 						{
 							ent.uninteract(colEnt);
 							colEnt.uninteract(ent);
 						}
+						//TODO may or may not work.
 					}
 				}
 			}
@@ -275,7 +275,6 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 						
 						//Figure out the angle
 						float newAngle = (float)Math.toDegrees(tempMoveVec.angle());
-						float oldAngle = game.player.getAngle();
 						
 						//move the player
 						//TODO move w/ time, use move()?
@@ -283,6 +282,8 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 						Vector2f moveVec = Vector2f.scale(tempMoveVec, game.player.getSpeed() / 10);
 						game.player.setPos(Vector2f.add(game.player.getPos(), moveVec));
 						Game.worldOutdated = true;
+						if (game.player.isHoldingObject())
+							game.player.updateHeldObjectPosition();
 						
 						boolean playerIsColliding = false;
 						//check collision and reverse motion if it's colliding with something solid
@@ -290,12 +291,8 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 						{
 								if ((colEnt != game.player && game.player.isColliding(colEnt)) || (game.player.getHeldObject() != null && colEnt != game.player.getHeldObject() && game.player.getHeldObject().isColliding(colEnt)))
 								{
-									if (colEnt.willCollideWithPlayer())
-									{
-										game.player.setAngle(oldAngle);
 										playerIsColliding = true;
 										Game.worldOutdated = false;
-									}
 								}
 						}
 						
@@ -305,7 +302,6 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 							{
 								if ((t.isRendered() && (game.player.isColliding(t))) || (game.player.getHeldObject() != null && game.player.getHeldObject().isColliding(t)))
 								{
-									game.player.setAngle(oldAngle);
 									playerIsColliding = true;
 									Game.worldOutdated = false;
 								}
@@ -315,9 +311,11 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 						{
 							if (game.player.getHeldObject() == null)
 								game.player.setPos(Vector2f.add(game.player.getPos(), game.player.getBounceVec()));
-							else  
-								game.player.setPos
-								(Vector2f.add(game.player.getPos(), game.player.getBounceVec()).add(game.player.getHeldObject().getBounceVec()));
+							else
+							{
+								game.player.setPos(Vector2f.add(game.player.getPos(), game.player.getBounceVec()).add(game.player.getHeldObject().getBounceVec()));
+								game.player.updateHeldObjectPosition();
+							}
 						}
 						
 						game.updateCameraPosition();
