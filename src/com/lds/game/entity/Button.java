@@ -6,7 +6,7 @@ public class Button extends StaticEnt
 	
 	public Button (float xPos, float yPos)
 	{
-		super(Entity.DEFAULT_SIZE, xPos, yPos, 0.0f, 1.0f, 1.0f, true, true);
+		super(Entity.DEFAULT_SIZE, xPos, yPos, 0.0f, 1.0f, 1.0f, true, true, false);
 		active = false;
 		circular = true;
 	}

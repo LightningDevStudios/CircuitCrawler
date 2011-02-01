@@ -20,7 +20,7 @@ public class Player extends Character //your character, protagonist
 		energy = 100;
 	}
 	
-	@Override
+	/*@Override
 	public void update()
 	{
 		super.update();
@@ -29,7 +29,7 @@ public class Player extends Character //your character, protagonist
 		{
 			updateHeldObjectPosition();
 		}
-	}
+	}*/
 	
 	public void die ()
 	{
@@ -109,6 +109,14 @@ public class Player extends Character //your character, protagonist
 		
 		hObj.setPos(directionVec.getX(), directionVec.getY());
 		hObj.setAngle(angle);
+	}
+	
+	@Override
+	public boolean isColliding(Entity ent)
+	{
+		if (ent == this.getHeldObject())
+			return false;
+		return super.isColliding(ent);
 	}
 	
 	public void disableUserControl()

@@ -23,8 +23,8 @@ public abstract class Entity
 	//behavior data
 	protected boolean isSolid;
 	protected boolean rendered;
-	protected boolean willCollideWithPlayer;
 	protected boolean circular;
+	protected boolean willCollide;
 	
 	//graphics data
 	protected float angle, size, halfSize;
@@ -55,12 +55,12 @@ public abstract class Entity
 	public ArrayList<Entity> colIgnoreList = new ArrayList<Entity>();
 	
 	
-	public Entity (float size, float xPos, float yPos, boolean circular)
+	public Entity (float size, float xPos, float yPos, boolean circular, boolean willCollide)
 	{
-		this(size, xPos, yPos, 0.0f, 1.0f, 1.0f, true, circular);
+		this(size, xPos, yPos, 0.0f, 1.0f, 1.0f, true, circular, willCollide);
 	}
 	
-	public  Entity (float size, float xPos, float yPos, float angle, float xScl, float yScl, boolean isSolid, boolean circular)
+	public  Entity (float size, float xPos, float yPos, float angle, float xScl, float yScl, boolean isSolid, boolean circular, boolean willCollide)
 	{
 		//initialize debug data
 		entID = entCount;
@@ -69,6 +69,7 @@ public abstract class Entity
 		//initialize behavior variables
 		this.isSolid = isSolid;
 		this.circular = circular;
+		this.willCollide = willCollide;
 		
 		//initializes graphics variables
 		this.size = size;
@@ -225,6 +226,9 @@ public abstract class Entity
 	
 	public boolean isColliding (Entity ent) //if both entities are polygons
 	{	
+		if (this == ent)
+			return false;
+		
 		//checks to see if either object is not solid
 		if (this.isSolid == false || ent.isSolid == false)
 			return false;
@@ -306,7 +310,6 @@ public abstract class Entity
 				return false;
 			}
 		}
-		System.out.println("Collision!");
 		return true;
 	}
 	
@@ -366,20 +369,6 @@ public abstract class Entity
 	
 	//blank method, overridden by PhysEnt
 	public void rectangleBounce (Entity ent)
-	{
-		
-	}
-			
-	//this is a blank method, to be overriden by subclasses
-	//it determines how each object interacts with other objects and performs the action
-	public void interact (Entity ent)
-	{
-		
-	}
-	
-	//this is a blank method ot be overriden similar to interact
-	//it performs the action to occur when an object stops colliding with another
-	public void uninteract (Entity ent)
 	{
 		
 	}
@@ -540,6 +529,19 @@ public abstract class Entity
 		}
 	}
 	
+	//TODO: Get rid of blank methods, find better ways to do this
+	//blank method
+	public void interact (Entity ent)
+	{
+		
+	}
+	
+	//blank method
+	public void uninteract (Entity ent)
+	{
+		
+	}
+	
 	public void updateTileset(int x, int y)
 	{
 		if (tex != null)
@@ -578,7 +580,7 @@ public abstract class Entity
 	public double getRad()				{ return rad; }
 	public int getEntID()				{ return entID; }
 	public static int getEntCount()		{ return entCount; }
-	public boolean willCollideWithPlayer() { return willCollideWithPlayer; }
+	public boolean willCollide()		{ return willCollide; }
 	public boolean isCircular()			{ return circular; }
 	public boolean isRendered()			{ return rendered; }
 	
@@ -590,7 +592,7 @@ public abstract class Entity
 	public void setYScl(float yScl)		{ scaleVec.setY(yScl); }
 	public void setRendered(boolean state)	{ rendered = state; }
 	public void setSolidity(boolean solid)	{ isSolid = solid; }
-	public void setWillCollideWithPlayer(boolean willCollideWithPlayer) { this.willCollideWithPlayer = willCollideWithPlayer; }
+	public void setWillCollide(boolean willCollide) { this.willCollide = willCollide; }
 	public void setVertexVecs(Vector2f[] vertVecs)
 	{
 		if (vertVecs.length == 4)

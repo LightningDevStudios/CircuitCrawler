@@ -125,49 +125,42 @@ public class Game
 		door = new Door (-108.0f, -180.0f);
 		door.setTilesetMode(tilesetwire, 0, 2);
 		entList.add(door);
-		door.setWillCollideWithPlayer(true);
 		
 		button = new Button(36.0f, -320.0f);
 		button.setTilesetMode(randomthings, 0, 0);
-		button.setWillCollideWithPlayer(false);
 		entList.add(button);
 		
 		block = new PhysBlock(50.0f, -215.0f, -350.0f);
 		block.setTilesetMode(tilesetwire, 2, 1);
 		entList.add(block);
-		block.setWillCollideWithPlayer(true);
 				
 		Button button1 = new Button(108.0f, 0.0f);
 		button1.setTilesetMode(randomthings, 0, 0);
-		button1.setWillCollideWithPlayer(false);
 		entList.add(button1);
 				
 		Button button2 = new Button(-324.0f, 0.0f);
 		button2.setTilesetMode(randomthings, 0, 0);
-		button2.setWillCollideWithPlayer(false);
 		entList.add(button2);
 		
 
 		PhysBlock block1 = new PhysBlock(50, 0, 108);
 		block1.setTilesetMode(tilesetwire, 2, 1);
-		block1.setWillCollideWithPlayer(true);
 		entList.add(block1);
 		
 		PhysBlock block2 = new PhysBlock(50, -216, 108);
 		block2.setTilesetMode(tilesetwire, 2, 1);
-		block2.setWillCollideWithPlayer(true);
 		entList.add(block2);
 		
-		
+		/* LOL NO
 		circle = new PhysCircle(50.0f, -125.0f, -310.0f);
 		circle.setTilesetMode(tilesetwire, 1, 2);
 		entList.add(circle);
 		circle.setWillCollideWithPlayer(true);
+		*/
 		
 		player = new Player(-108.0f, -450.0f, 0.0f);
 		player.setTilesetMode(tilesetwire, 1, 0);
 		entList.add(player);
-		player.setWillCollideWithPlayer(false);
 		player.enableUserControl();
 		
 		//spriteAnim = new Animation(tilesetwire, 1, 8, 7, 0, -1);

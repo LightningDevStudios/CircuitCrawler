@@ -15,7 +15,7 @@ public class Tile extends StaticEnt
 	
 	public Tile(float size, int tilePosX, int tilePosY, int tilesetX, int tilesetY)
 	{
-		super(size, 0, 0, false);
+		super(size, 0, 0, false, true);
 		TilesetHelper.setInitialTileOffset(this, tilePosY, tilePosX, tilesetX, tilesetY);
 	}
 	
