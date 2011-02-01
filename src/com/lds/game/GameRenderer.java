@@ -279,6 +279,8 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 						Vector2f moveVec = Vector2f.scale(tempMoveVec, game.player.getSpeed() / 10);
 						game.player.setPos(Vector2f.add(game.player.getPos(), moveVec));
 						Game.worldOutdated = true;
+						if (game.player.isHoldingObject())
+							game.player.updateHeldObjectPosition();
 						
 						boolean playerIsColliding = false;
 						//check collision and reverse motion if it's colliding with something solid
@@ -306,9 +308,11 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 						{
 							if (game.player.getHeldObject() == null)
 								game.player.setPos(Vector2f.add(game.player.getPos(), game.player.getBounceVec()));
-							else  
-								game.player.setPos
-								(Vector2f.add(game.player.getPos(), game.player.getBounceVec()).add(game.player.getHeldObject().getBounceVec()));
+							else
+							{
+								game.player.setPos(Vector2f.add(game.player.getPos(), game.player.getBounceVec()).add(game.player.getHeldObject().getBounceVec()));
+								game.player.updateHeldObjectPosition();
+							}
 						}
 						
 						game.updateCameraPosition();
