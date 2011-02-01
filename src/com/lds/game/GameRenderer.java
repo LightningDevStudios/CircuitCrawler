@@ -124,24 +124,27 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 				for (int j = i + 1; j < game.entList.size(); j++)
 				{
 					Entity colEnt = game.entList.get(j);
-					if (ent.isColliding(colEnt) && !ent.colList.contains(colEnt))
+					if (ent.isColliding(colEnt))
 					{
+						if(!ent.colList.contains(colEnt) && !colEnt.colList.contains(ent))
+						{
 							ent.colList.add(colEnt);
 							colEnt.colList.add(ent);
 							ent.interact(colEnt);
 							colEnt.interact(ent);
+						}
 					}
-					else if (ent.colList.contains(colEnt))
+					else if (ent.colList.contains(colEnt) || colEnt.colList.contains(ent))
 					{
+						System.out.println(ent.colList.size() + " " + colEnt.colList.size());
 						ent.colList.remove(colEnt);
 						colEnt.colList.remove(ent);
-						System.out.println(ent.colList.size() + " " + colEnt.colList.size());
-						//TODO may or may not work.
 						if (ent.colList.isEmpty())
 						{
 							ent.uninteract(colEnt);
 							colEnt.uninteract(ent);
 						}
+						//TODO may or may not work.
 					}
 				}
 			}

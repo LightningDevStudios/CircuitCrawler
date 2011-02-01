@@ -258,10 +258,10 @@ public abstract class Entity
 		if (this.isCircular() && ent.isCircular())
 			return this.isCircleCollidingWithCircle(ent);
 		
-		else if (ent.isCircular())
+		else if (ent.isCircular() && !this.isCircular())
 			return this.isRectangleCollidingWithCircle(ent);
 		
-		else if (this.isCircular())
+		else if (this.isCircular() && !ent.isCircular())
 			return ent.isRectangleCollidingWithCircle(this);
 		
 		else

@@ -156,8 +156,13 @@ public class Game
 		block2.enableTilesetMode(tilesetwire, 2, 1);
 		entList.add(block2);
 		
-		/* LOL NO
-		circle = new PhysCircle(50.0f, -125.0f, -310.0f);
+		spriteAnim = new Animation(tilesetwire, 1, 8, 0, 0, 1);
+		spr = new Sprite(50, -100, 100, 45, 1, 1, spriteAnim);
+		spr.enableTextureMode(tilesetwire);
+		entList.add(spr);
+		
+		//TODO NOPE LOL
+		/*circle = new PhysCircle(50.0f, -100.0f, -310.0f);
 		circle.setTilesetMode(tilesetwire, 1, 2);
 		entList.add(circle);
 		circle.setWillCollideWithPlayer(true);
@@ -167,9 +172,7 @@ public class Game
 		player.enableTilesetMode(tilesetwire, 1, 0);
 		entList.add(player);
 		player.enableUserControl();
-		
-		//spriteAnim = new Animation(tilesetwire, 1, 8, 7, 0, -1);
-		
+				
 		//spr = new Sprite(30.0f, -108.0f, -300.0f, 45.0f, 1.0f, 1.0f, 10, 90, 1, spriteAnim);
 		//entList.add(spr);
 		
