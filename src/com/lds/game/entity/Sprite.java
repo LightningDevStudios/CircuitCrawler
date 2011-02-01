@@ -22,11 +22,7 @@ public class Sprite extends PhysEnt
 		this.anim = anim;
 		texture = anim.getCurrentFrame();
 
-		ByteBuffer byteBuf = ByteBuffer.allocateDirect(texture.length * 4);
-		byteBuf.order(ByteOrder.nativeOrder());
-		textureBuffer = byteBuf.asFloatBuffer();
-		textureBuffer.put(texture);
-		textureBuffer.position(0);
+		this.textureBuffer = setBuffer(textureBuffer, texture);
 	}
 	
 	@Override
@@ -34,6 +30,7 @@ public class Sprite extends PhysEnt
 	{
 		super.update();
 		anim.update();
+		renderNextFrame();
 		
 	}
 	
@@ -41,11 +38,6 @@ public class Sprite extends PhysEnt
 	public void renderNextFrame()
 	{
 		this.texture = anim.getCurrentFrame();
-		
-		ByteBuffer byteBuf = ByteBuffer.allocateDirect(texture.length * 4);
-		byteBuf.order(ByteOrder.nativeOrder());
-		textureBuffer = byteBuf.asFloatBuffer();
-		textureBuffer.put(texture);
-		textureBuffer.position(0);
+		this.textureBuffer = setBuffer(textureBuffer, texture);
 	}
 }

@@ -47,8 +47,11 @@ public class Animation
 				//take the amount of time that has passed, see if we need to skip a frame or two in order to keep up animation in low-FPS times
 				int framesPassed = timeElapsed / (animTimeMs * 1000);
 				
+				for(int i = 0; i < framesPassed; i++)
+					incrementCount();
+				
 				//skip all the rows if we need to skip at least 1 row.
-				while(framesPassed > xTiles)
+				/*while(framesPassed > xTiles)
 				{
 					//adjust the Y value
 					if (curY == yTiles)
@@ -78,27 +81,31 @@ public class Animation
 					curX += framesPassed;
 				
 				//reset the timer
-				startTimeMs = Stopwatch.elapsedTimeMs();
+				startTimeMs = Stopwatch.elapsedTimeMs();*/
 			}
 		}
 		
 		//Increments each frame
 		else
 		{
-			//no need to skip, so only adjust the Y if we've reached the end of a row.
-			if (curX == xTiles)
-			{
-				if (curY == yTiles)
-					curY = 0;
-				else
-					curY++;
-				
-				curX = 0;
-			}
-			
-			else
-				curX++;
+			incrementCount();
 		}
+	}
+	
+	private void incrementCount()
+	{
+		if (curX == xTiles)
+		{
+			if (curY == yTiles)
+				curY = 0;
+			else
+				curY++;
+			
+			curX = 0;
+		}
+		
+		else
+			curX++;
 	}
 	
 	public void reset()
@@ -121,6 +128,6 @@ public class Animation
 	
 	public float[] getCurrentFrame()
 	{
-		return TilesetHelper.getTextureVertices(tex, curX + startX, curY + startY - 1);
+		return TilesetHelper.getTextureVertices(tex, curX + startX, curY + startY);
 	}
 }
