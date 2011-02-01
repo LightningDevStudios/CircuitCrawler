@@ -62,10 +62,13 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	//sets position to to new x and y and interpolates
 	public void moveTo (float x, float y)
 	{
-		moveVec.set(x - getXPos(), y - getYPos());
-		isMoving = true;
-		moveTimeMs = Stopwatch.elapsedTimeMs();
-		endPosVec = new Vector2f(x, y);
+		if (!(posVec.getX() == x && posVec.getY() == y))
+		{
+			moveVec.set(x - getXPos(), y - getYPos());
+			isMoving = true;
+			moveTimeMs = Stopwatch.elapsedTimeMs();
+			endPosVec = new Vector2f(x, y);
+		}
 	}
 	
 	//sets angle of an entity to a new value
@@ -101,10 +104,13 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	//much like moveTo, but instead of going to a specific point, move() moves relative to the current position
 	public void move (float x, float y)
 	{
-		moveVec.set(x, y);
-		isMoving = true;
-		moveTimeMs = Stopwatch.elapsedTimeMs();
-		endPosVec = Vector2f.add(moveVec, posVec);
+		if (!(x == 0 && y == 0))
+		{
+			moveVec.set(x, y);
+			isMoving = true;
+			moveTimeMs = Stopwatch.elapsedTimeMs();
+			endPosVec = Vector2f.add(moveVec, posVec);
+		}
 	}
 	
 	//much like rotateTo, but rotate() adds or subtracts the number of degrees from the current number
@@ -278,9 +284,8 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 				else
 				{
 					posVec.add(moveInterpVec);
+					Game.worldOutdated = true;
 				}
-				
-				Game.worldOutdated = true;
 			}
 							
 			moveTimeMs = Stopwatch.elapsedTimeMs();
