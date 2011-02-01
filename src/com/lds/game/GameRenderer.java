@@ -1,5 +1,6 @@
 package com.lds.game;
 
+import java.util.Stack;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
@@ -19,7 +20,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	public Game game;
 	public Context context;
 	public Object syncObj;
-	public boolean windowOutdated, testDebug = true;
+	public boolean windowOutdated, gameOver;
 	public int frameInterval, frameCount = 0;
 	
 	public GameRenderer (float screenW, float screenH, Context context, Object syncObj)
@@ -52,7 +53,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		Stopwatch.restartTimer();
 		Stopwatch.tick();
 		
-		game = new Game(context, gl);		
+		game = new Game(context, gl);
 	}
 	
 	@Override
@@ -237,95 +238,95 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	public void onTouchInput(MotionEvent e) 
 	{
 		//get raw input
-		float xInput = e.getRawX() - Game.screenW / 2;
-		float yInput = -e.getRawY() + Game.screenH / 2;
+		/*float xInput = e.getRawX() - Game.screenW / 2;
+		float yInput = -e.getRawY() + Game.screenH / 2;*/
+
 		
-		for (UIEntity ent : game.UIList)
+		for(int i = 0; i < e.getPointerCount(); i++)
 		{
-			//loop through UIList, see if input is within UIEntity bounds
-			if (xInput >= ent.getXPos() - ent.getXSize() / 2 && xInput <= ent.getXPos() + ent.getXSize() / 2 && yInput >= ent.getYPos() - ent.getYSize() / 2 && yInput <= ent.getYPos() + ent.getYSize() / 2)
+			Vector2f touchVec = new Vector2f(e.getX(i) - Game.screenW / 2, Game.screenH / 2 - e.getY(i));
+		
+			for (UIEntity ent : game.UIList)
 			{
-				//Specific joypad code
-				//TODO move to UIEntity generic method
-				if (game.player.userHasControl() && ent instanceof UIJoypad)
+				//loop through UIList, see if input is within UIEntity bounds
+				if (touchVec.getX() >= ent.getXPos() - ent.getXSize() / 2 && touchVec.getX() <= ent.getXPos() + ent.getXSize() / 2 && touchVec.getY() >= ent.getYPos() - ent.getYSize() / 2 && touchVec.getY() <= ent.getYPos() + ent.getYSize() / 2)
 				{
-					UIJoypad UIjp = (UIJoypad)ent;
-					
-					Tile test = game.nearestTile(game.player);
-					
-					if (test != null && test.isPit())
+					//Specific joypad code
+					//TODO move to UIEntity generic method
+					if (game.player.userHasControl() && ent instanceof UIJoypad)
 					{
-						//game.textbox.setText("Yer a wizerd harry!");
-						game.player.disableUserControl();
-						game.player.scaleTo(0, 0);
-						game.player.moveTo(test.getXPos(), test.getYPos());
-					}
-					
-					//get the relative X and Y coordinates
-					Vector2f tempMoveVec = UIjp.getMovementVec((int)xInput, (int)yInput);
-					
-					//Figure out the angle
-					float newAngle = (float)Math.toDegrees(tempMoveVec.angle());
-					//float oldAngle = game.player.getAngle();
-					
-					//move the player
-					game.player.setAngle(newAngle + 90.0f);
-					Vector2f moveVec = Vector2f.scale(tempMoveVec, game.player.getSpeed() / 10);
-					game.player.setPos(Vector2f.add(game.player.getPos(), moveVec));
-					if (game.player.isHoldingObject())
-						game.player.updateHeldObjectPosition();
-					Game.worldOutdated = true;
-					
-					boolean playerIsColliding = false;
-					//check collision and reverse motion if it's colliding with something solid
-					for (Entity colEnt : game.entList)
-					{
-							if (game.player.isColliding(colEnt) || (game.player.getHeldObject() != null && game.player.getHeldObject().isColliding(colEnt)))
+						UIJoypad UIjp = (UIJoypad)ent;
+						
+						Tile test = game.nearestTile(game.player);
+						
+						if (test != null && test.isPit())
+						{
+							//game.textbox.setText("Yer a wizerd harry!");
+							game.player.disableUserControl();
+							game.player.scaleTo(0, 0);
+							game.player.moveTo(test.getXPos(), test.getYPos());
+						}
+						
+						//get the relative X and Y coordinates
+						Vector2f tempMoveVec = UIjp.getMovementVec(touchVec);
+						
+						//Figure out the angle
+						float newAngle = (float)Math.toDegrees(tempMoveVec.angle());
+						
+						//move the player
+						//TODO move w/ time, use move()?
+						game.player.setAngle(newAngle + 90.0f);
+						Vector2f moveVec = Vector2f.scale(tempMoveVec, game.player.getSpeed() / 10);
+						game.player.setPos(Vector2f.add(game.player.getPos(), moveVec));
+						Game.worldOutdated = true;
+						
+						boolean playerIsColliding = false;
+						//check collision and reverse motion if it's colliding with something solid
+						for (Entity colEnt : game.entList)
+						{
+								if ((colEnt != game.player && game.player.isColliding(colEnt)) || (game.player.getHeldObject() != null && colEnt != game.player.getHeldObject() && game.player.getHeldObject().isColliding(colEnt)))
+								{
+										playerIsColliding = true;
+										Game.worldOutdated = false;
+								}
+						}
+						
+						for (Tile[] ts : game.tileset)
+						{						
+							for (Tile t: ts)
 							{
-									//game.player.setAngle(oldAngle);
+								if ((t.isRendered() && (game.player.isColliding(t))) || (game.player.getHeldObject() != null && game.player.getHeldObject().isColliding(t)))
+								{
 									playerIsColliding = true;
 									Game.worldOutdated = false;
-							}
-					}
-					
-					for (Tile[] ts : game.tileset)
-					{						
-						for (Tile t: ts)
-						{
-							if ((t.isRendered() && (game.player.isColliding(t))) || (game.player.getHeldObject() != null && game.player.getHeldObject().isColliding(t)))
-							{
-								//game.player.setAngle(oldAngle);
-								playerIsColliding = true;
-								Game.worldOutdated = false;
+								}
 							}
 						}
+						if (playerIsColliding)
+						{
+							if (game.player.getHeldObject() == null)
+								game.player.setPos(Vector2f.add(game.player.getPos(), game.player.getBounceVec()));
+							else  
+								game.player.setPos
+								(Vector2f.add(game.player.getPos(), game.player.getBounceVec()).add(game.player.getHeldObject().getBounceVec()));
+						}
+						
+						game.updateCameraPosition();
+						
+						windowOutdated = true;					
 					}
-					if (playerIsColliding)
+					
+					//UIButton specific code
+					if (ent instanceof UIButton)
 					{
-						if (game.player.isHoldingObject())
-						{
-							game.player.setPos(Vector2f.add(game.player.getPos(), game.player.getBounceVec()).add(game.player.getHeldObject().getBounceVec()));
-							game.player.updateHeldObjectPosition();
+						UIButton btn = (UIButton)ent;
+						
+						//500ms delay between presses
+						if (btn.canPress(500))
+						{ 
+							((UIButton)ent).press();
+							btn.setIntervalTime(Stopwatch.elapsedTimeMs());
 						}
-						else  
-							game.player.setPos(Vector2f.add(game.player.getPos(), game.player.getBounceVec()));
-					} 
-					
-					game.updateCameraPosition();
-					
-					windowOutdated = true;					
-				}
-				
-				//UIButton specific code
-				if (ent instanceof UIButton)
-				{
-					UIButton btn = (UIButton)ent;
-					
-					//500ms delay between presses
-					if (btn.canPress(500))
-					{ 
-						((UIButton)ent).press();
-						btn.setIntervalTime(Stopwatch.elapsedTimeMs());
 					}
 				}
 			}

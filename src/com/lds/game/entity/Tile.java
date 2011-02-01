@@ -67,28 +67,28 @@ public class Tile extends StaticEnt
 	public void setAsWall()
 	{
 		state = TileStates.WALL;
-		setTilesetMode(tex, 2, 0);
+		updateTileset(2, 0);
 		isSolid = true;
 	}
 	
 	public void setAsFloor()
 	{
 		state = TileStates.FLOOR;
-		setTilesetMode(tex, 0, 0);
+		updateTileset(0, 0);
 		isSolid = false;
 	}
 	
 	public void setAsPit()
 	{
 		state = TileStates.PIT;
-		setTilesetMode(tex, 0, 1);
+		updateTileset(0, 1);
 		isSolid = false;
 	}
 	
 	public void setAsBridge()
 	{
 		state = TileStates.BRIDGE;
-		setTilesetMode(tex, 1, 1);
+		updateTileset(1, 1);
 		isSolid = false;
 	}
 	

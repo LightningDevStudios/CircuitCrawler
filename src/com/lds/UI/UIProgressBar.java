@@ -171,7 +171,9 @@ public abstract class UIProgressBar extends UIEntity
 								-halfXSize, halfYSize,
 								-halfXSize, -halfYSize };
 		
-		setVertices(initVerts);
+		this.vertices = initVerts;
+		setBuffer(vertexBuffer, initVerts);
+		
 	}
 	
 	
@@ -190,10 +192,10 @@ public abstract class UIProgressBar extends UIEntity
 	}
 	
 	@Override
-	public void setGradientMode(float[] color)
+	public void enableGradientMode(float[] color)
 	{
 		this.originalColor = color;
-		super.setGradientMode(color);
+		super.enableGradientMode(color);
 		updateGradientProgress();
 	}
 	

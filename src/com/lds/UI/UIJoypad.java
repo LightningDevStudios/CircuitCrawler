@@ -29,14 +29,9 @@ public class UIJoypad extends UIEntity
 	{
 		return new Vector2f(x - xPos, y - yPos);
 	}
-	/*
-	public float getRelativeX (float xInput)
-	{
-		return xInput - xPos;
-	}
 	
-	public float getRelativeY (float yInput)
+	public Vector2f getMovementVec(Vector2f touchVec)
 	{
-		return yInput - yPos;
-	}*/
+		return new Vector2f(touchVec.getX() - xPos, touchVec.getY() - yPos);
+	}
 }

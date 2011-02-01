@@ -21,11 +21,9 @@ import com.lds.Enums.UIPosition;
 
 import com.lds.UI.*;
 import com.lds.game.entity.*;
+import com.lds.trigger.*;
 
 import com.lds.parser.Parser;
-import com.lds.parser.PhysBlockData;
-
-import com.lds.trigger.*;
 
 public class Game
 {
@@ -106,7 +104,7 @@ public class Game
 			for (int j = 0; j < tileset[0].length; j++)
 			{
 				tileset[i][j] = new Tile(Tile.TILE_SIZE_F, j, i, tileset[0].length - 1, tileset.length - 1);
-				tileset[i][j].setTexture(tilesetwire);
+				tileset[i][j].enableTilesetMode(tilesetwire, 0, 0);
 				if (i == 0 || j == 0 || i == tileset.length - 1 || j == tileset[0].length - 1 || (i < 4 && (j < 4 || j > 8)) || (i == 10 && j != 6) || (i > 10 && (j < 4 || j > 8)))
 				{
 					tileset[i][j].setAsWall();
@@ -123,32 +121,39 @@ public class Game
 		}	
 		
 		door = new Door (-108.0f, -180.0f);
-		door.setTilesetMode(tilesetwire, 0, 2);
+		door.enableTilesetMode(tilesetwire, 0, 2);
 		entList.add(door);
 		
 		button = new Button(36.0f, -320.0f);
-		button.setTilesetMode(randomthings, 0, 0);
+		button.enableTilesetMode(randomthings, 0, 0);
 		entList.add(button);
 		
-		block = new PhysBlock(50.0f, -215.0f, -350.0f);
-		block.setTilesetMode(tilesetwire, 2, 1);
+		block = new PhysBlock(70.0f, -215.0f, -350.0f);
+		block.enableTilesetMode(tilesetwire, 2, 1);
+		//block.enableColorMode(1.0f, 1.0f, 1.0f, 0.5f);
+		float[] initGM = {1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f};
+		float[] interpGM = {0.1f, 0.1f, 0.1f, 1.0f, 0.3f, 0.8f, 0.9f, 1.0f, 0.1f, 0.8f, 0.1f, 1.0f, 0.9f, 0.2f, 0.1f, 1.0f};
+		block.enableGradientMode(initGM);
+		block.setColorInterpSpeed(0.01f);
+		//block.initColorInterp(0.5f, 0.7f, 0.3f, 0.5f);
+		block.initGradientInterp(interpGM);
 		entList.add(block);
 				
 		Button button1 = new Button(108.0f, 0.0f);
-		button1.setTilesetMode(randomthings, 0, 0);
+		button1.enableTilesetMode(randomthings, 0, 0);
 		entList.add(button1);
 				
 		Button button2 = new Button(-324.0f, 0.0f);
-		button2.setTilesetMode(randomthings, 0, 0);
+		button2.enableTilesetMode(randomthings, 0, 0);
 		entList.add(button2);
 		
 
 		PhysBlock block1 = new PhysBlock(50, 0, 108);
-		block1.setTilesetMode(tilesetwire, 2, 1);
+		block1.enableTilesetMode(tilesetwire, 2, 1);
 		entList.add(block1);
-		
+		 
 		PhysBlock block2 = new PhysBlock(50, -216, 108);
-		block2.setTilesetMode(tilesetwire, 2, 1);
+		block2.enableTilesetMode(tilesetwire, 2, 1);
 		entList.add(block2);
 		
 		/* LOL NO
@@ -159,7 +164,7 @@ public class Game
 		*/
 		
 		player = new Player(-108.0f, -450.0f, 0.0f);
-		player.setTilesetMode(tilesetwire, 1, 0);
+		player.enableTilesetMode(tilesetwire, 1, 0);
 		entList.add(player);
 		player.enableUserControl();
 		
@@ -187,7 +192,7 @@ public class Game
 								0.0f, 1.0f, 0.0f, 0.9f, 	//bottom right
 								1.0f, 0.0f, 0.0f, 1.0f, 	//top left
 								1.0f, 0.0f, 0.0f, 1.0f};	//bottom left
-		healthBar.setGradientMode(healthColor);
+		healthBar.enableGradientMode(healthColor);
 		healthBar.setValue(99);
 		
 		energyBar = new UIEnergyBar(150.0f, 15.0f, UIPosition.TOPRIGHT, Direction.LEFT);
@@ -199,26 +204,27 @@ public class Game
 								0.0f, 0.0f, 0.3f, 1.0f,
 								0.0f, 0.0f, 1.0f, 0.9f,
 								0.0f, 0.0f, 1.0f, 0.9f };
-		energyBar.setGradientMode(energyColor);
+		energyBar.enableGradientMode(energyColor);
 		energyBar.setValue(99);
 		
 		btnA = new UIButton(80.0f, 80.0f, UIPosition.BOTTOMRIGHT);
 		btnA.autoPadding(0.0f, 0.0f, 5.0f, 90.0f);
-		btnA.setColorMode(86, 93, 128, 128);
+		btnA.enableColorMode(65, 200, 65, 128);
 		btnA.setIntervalTime(Stopwatch.elapsedTimeMs());
 		
 		btnB = new UIButton(80.0f, 80.0f, UIPosition.BOTTOMRIGHT);
 		btnB.autoPadding(0.0f, 0.0f, 90.0f, 5.0f);
-		btnB.setColorMode(200, 93, 50, 128);
+		btnB.enableColorMode(200, 65, 65, 100);
 		btnB.setIntervalTime(Stopwatch.elapsedTimeMs());
 		
 		joypad = new UIJoypad(100, 100, UIPosition.BOTTOMLEFT);
 		joypad.autoPadding(0.0f, 5.0f, 5.0f, 0.0f);
-		joypad.setBlankMode();
+		//joypad.setBlankMode();
 		
 		textbox = new UITextBox(112, 32, UIPosition.TOPLEFT);
 		textbox.autoPadding(5.0f, 5.0f, 0.0f, 0.0f);
-		textbox.setTextureMode(someText);
+		textbox.enableTextureMode(someText);
+		textbox.setText("Testing!");
 		
 		UIList.add(healthBar);
 		UIList.add(energyBar);

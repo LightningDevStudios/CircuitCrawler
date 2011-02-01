@@ -66,6 +66,11 @@ public class TilesetHelper
 		return (tileID / tex.getXTiles());
 	}
 	
+	public static int getTilesetID(int x, int y, Texture tex)
+	{
+		return (y * tex.getXTiles() + x);
+	}
+	
 	public static void setInitialTilesetOffset(Tile[][] tileset)
 	{
 		int length = tileset.length, width = tileset[0].length;

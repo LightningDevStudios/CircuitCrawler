@@ -11,10 +11,7 @@ import com.lds.Graphics;
 public class Run extends Activity
 {
 	public Graphics glSurface;
-	/*public Object syncObj;
-	private float screenX;
-	private float screenY;*/
-	
+	public GameRenderer gameR;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -33,7 +30,8 @@ public class Run extends Activity
 		
 		//set up OpenGL rendering
 		Object syncObj = new Object();
-		glSurface = new Graphics(this, new GameRenderer(screenX, screenY, this, syncObj), syncObj);
+		gameR = new GameRenderer(screenX, screenY, this, syncObj);
+		glSurface = new Graphics(this, gameR, syncObj);
 		setContentView(glSurface);
 	}
 	
@@ -49,11 +47,13 @@ public class Run extends Activity
 	{
 		super.onPause();
 		glSurface.onPause();
+		finish();
 	}
 	
 	@Override
 	protected void onDestroy()
 	{
 		super.onDestroy();
+		finish();
 	}
 }
