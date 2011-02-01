@@ -156,7 +156,7 @@ public class Game
 		block2.enableTilesetMode(tilesetwire, 2, 1);
 		entList.add(block2);
 		
-		spriteAnim = new Animation(tilesetwire, 1, 8, 0, 0, 1);
+		spriteAnim = new Animation(tilesetwire, 0, 7, 7, 0, 1000);
 		spr = new Sprite(50, -100, 100, 45, 1, 1, spriteAnim);
 		spr.enableTextureMode(tilesetwire);
 		entList.add(spr);
