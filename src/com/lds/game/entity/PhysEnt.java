@@ -140,7 +140,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 		if (output && this.doesCollide(ent))
 		{
 			this.circleBounce(ent);
-			ent.circleBounce(ent);
+			ent.circleBounce(this);
 		}
 		return output;
 	}
