@@ -47,11 +47,13 @@ public class Run extends Activity
 	{
 		super.onPause();
 		glSurface.onPause();
+		finish();
 	}
 	
 	@Override
 	protected void onDestroy()
 	{
 		super.onDestroy();
+		finish();
 	}
 }
