@@ -1,6 +1,5 @@
 package com.lds.game;
 
-import java.util.Stack;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
@@ -67,7 +66,8 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		if(!game.entList.contains(game.player))
 		{
 			game = null;
-			game = new Game(context, gl);			
+			game = new Game(context, gl);
+			windowOutdated = true;
 		}
 		
 		//clear the screen

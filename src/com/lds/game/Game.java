@@ -245,7 +245,7 @@ public class Game
 		updateCameraPosition();
 		updateLocalEntities();
 		updateLocalTileset();
-		
+				
 		//Parser
 		Parser parser = new Parser(context);
 		try {
