@@ -217,10 +217,11 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	
 	public boolean doesCollide (Entity ent)
 	{
-		if (!ent.willCollide())
+		/*if (!ent.willCollide())
 			return false;
 		else
-			return true;
+			return true;*/
+		return ent.willCollide();
 	}
 	
 	/**********************************

@@ -24,7 +24,6 @@ public class AttackBolt extends PhysEnt
 		super.update();
 		if (this.getColorA() == 0.0f)
 		{
-			
 			EntityCleaner.queueEntityForRemoval(this);
 		}
 	}

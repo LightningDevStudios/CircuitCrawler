@@ -18,10 +18,16 @@ public class Graphics extends GLSurfaceView
 	}
 	
 	@Override
-	public boolean onTouchEvent(MotionEvent e)
+	public boolean onTouchEvent(final MotionEvent event)
 	{
 		//grab touch input, pass it through to the generic renderer (in this case, com.lds.GameRenderer
-		renderer.onTouchInput(e);
+		queueEvent(new Runnable() 
+		{
+			public void run()
+			{
+				renderer.onTouchInput(event);
+			}
+		});
 		
 		//sync with OpenGL thread
 		synchronized(syncObj)
@@ -30,9 +36,9 @@ public class Graphics extends GLSurfaceView
 			{
 				syncObj.wait();
 			}
-			catch (InterruptedException e1)
+			catch (InterruptedException e)
 			{
-				e1.printStackTrace();
+				e.printStackTrace();
 			}
 		}
 		return true;
