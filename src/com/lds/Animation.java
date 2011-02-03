@@ -11,14 +11,14 @@ public class Animation
 	{
 		this.tex = tex;
 		
-		this.xTiles = xTiles - 1;
-		this.yTiles = yTiles - 1;
+		this.xTiles = xTiles;
+		this.yTiles = yTiles;
 		
 		this.startX = startX;
 		this.startY = startY;
 		
-		curX = startX;
-		curY = startY;
+		curX = 0;
+		curY = 0;
 		
 		this.framesPerSec = framerate;
 		
