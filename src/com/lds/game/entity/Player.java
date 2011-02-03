@@ -14,7 +14,7 @@ public class Player extends Character //your character, protagonist
 	public Player (float xPos, float yPos, float angle)
 	{
 		//initialize Character and Entity data
-		super(Entity.DEFAULT_SIZE, xPos, yPos, angle, 1.0f, 1.0f, false, 100, 100, 0.5f);
+		super(30.0f, xPos, yPos, angle, 1.0f, 1.0f, false, 100, 100, 0.5f);
 		
 		//initialize Player data
 		energy = 100;
@@ -102,11 +102,9 @@ public class Player extends Character //your character, protagonist
 	public void updateHeldObjectPosition()
 	{
 		float heldDistance = hObj.halfSize * hObj.getXScl() + this.halfSize + 10.0f;
-		double rad = Math.toRadians(angle + 90.0);
-		Vector2f directionVec = new Vector2f((float)Math.cos(rad), (float)Math.sin(rad));
-		directionVec.scale(heldDistance);
-		directionVec.add(posVec);
-		
+		Vector2f directionVec = new Vector2f(angle);
+		directionVec.scale(heldDistance).add(posVec);
+			
 		hObj.setPos(directionVec.getX(), directionVec.getY());
 		hObj.setAngle(angle);
 	}

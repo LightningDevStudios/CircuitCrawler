@@ -27,6 +27,13 @@ public class Vector2f
 		this.y = v.getY();
 	}
 	
+	public Vector2f (float angle)
+	{
+		float convertedAngle = (float)Math.toRadians(angle + 90.0f);
+		this.x = (float)Math.cos(convertedAngle);
+		this.y = (float)Math.sin(convertedAngle);
+	}
+	
 	/*************************************************************************
 	 * Static Methods - return new vectors, do not change plugged in vectors *
 	 *************************************************************************/

@@ -614,6 +614,7 @@ public abstract class Entity
 	 **************************/
 	
 	public float getSize()				{ return size; }
+	public float getHalfSize()			{ return halfSize; }
 	public Vector2f getPos()			{ return posVec; }
 	public Vector2f getScl()			{ return scaleVec; }
 	public float getXPos()				{ return posVec.getX(); }
@@ -639,7 +640,7 @@ public abstract class Entity
 	public boolean isRendered()			{ return rendered; }
 	public EnumSet<RenderMode> getRenderMode()	{ return renderMode; }
 	
-	public void setSize(float size)		{ this.size = size; }
+	public void setSize(float size)		{ this.size = size; this.halfSize = size / 2; }
 	public void setAngle(float angle)	{ this.angle = angle; }
 	public void setXPos(float xPos)		{ posVec.setX(xPos); }
 	public void setYPos(float yPos)		{ posVec.setY(yPos); }

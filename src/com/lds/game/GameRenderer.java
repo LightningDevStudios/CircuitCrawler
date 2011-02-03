@@ -169,14 +169,13 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 			
 			//set btnA to speed up the player when pressed
 			if (game.btnA.isPressed())
-			{		
-				if(game.player.getSpeed() != 2)
+			{
+				if (!game.player.isHoldingObject())
 				{
-					game.player.setSpeed(2.0f);		
-				}
-				else
-				{
-					game.player.setSpeed(1.0f);
+					Vector2f directionVec = new Vector2f(game.player.getAngle());
+					directionVec.scale(game.player.getHalfSize() + 4.0f);
+					AttackBolt attack = new AttackBolt(Vector2f.add(game.player.getPos(), directionVec), directionVec, game.player.getAngle());
+					game.entList.add(attack);
 				}
 				game.btnA.unpress();
 			}
