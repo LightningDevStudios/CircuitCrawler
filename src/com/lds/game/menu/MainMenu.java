@@ -2,13 +2,12 @@ package com.lds.game.menu;
 
 import com.lds.game.R;
 import com.lds.game.Run;
-import com.lds.game.R.id;
-import com.lds.game.R.layout;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
+import android.view.*;
+import android.view.View.*;
 import android.widget.Button;
 
 public class MainMenu extends Activity
@@ -19,7 +18,7 @@ public class MainMenu extends Activity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
 		Button b = (Button)findViewById(R.id.Button1);
-		b.setOnClickListener(new View.OnClickListener() {	
+		b.setOnClickListener(new OnClickListener() {	
 			@Override
 			public void onClick(View v) 
 			{
