@@ -43,9 +43,21 @@ public class Graphics extends GLSurfaceView
 		}
 		return true;
 	}
+	
+	public void setGameOverEvent(final OnGameOverListener listener)
+	{
+		queueEvent(new Runnable()
+		{
+			public void run()
+			{
+				renderer.setGameOverEvent(listener);
+			}
+		});
+	}
 			
 	public interface Renderer extends GLSurfaceView.Renderer
 	{
-		public abstract void onTouchInput(MotionEvent e);
+		public abstract void onTouchInput(MotionEvent event);
+		public abstract void setGameOverEvent(OnGameOverListener listener);
 	}
 }

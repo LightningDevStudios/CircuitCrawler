@@ -1,12 +1,15 @@
 package com.lds.game;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.Window;
 import android.view.WindowManager;
 
 import com.lds.Graphics;
+import com.lds.OnGameOverListener;
+import com.lds.game.menu.MainMenu;
 
 public class Run extends Activity
 {
@@ -32,6 +35,15 @@ public class Run extends Activity
 		Object syncObj = new Object();
 		gameR = new GameRenderer(screenX, screenY, this, syncObj);
 		glSurface = new Graphics(this, gameR, syncObj);
+		glSurface.setGameOverEvent(new OnGameOverListener()
+		{
+			public void onGameOver() 
+			{
+				Intent i = new Intent(Run.this, MainMenu.class);
+				startActivity(i);
+			}
+			
+		});
 		setContentView(glSurface);
 	}
 	

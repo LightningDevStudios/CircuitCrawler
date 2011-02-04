@@ -36,7 +36,6 @@ public class Game
 	public Tile[][] tileset;
 	public ArrayList<UIEntity> UIList;
 	public ArrayList<Trigger> triggerList;
-	
 	public EntityCleaner cleaner;
 		
 	//Camera data

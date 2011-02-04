@@ -8,6 +8,7 @@ import android.os.Debug;
 import android.view.MotionEvent;
 import android.content.Context;
 
+import com.lds.OnGameOverListener;
 import com.lds.Stopwatch;
 import com.lds.Vector2f;
 import com.lds.game.entity.*;
@@ -21,6 +22,8 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	public Object syncObj;
 	public boolean windowOutdated, gameOver;
 	public int frameInterval, frameCount = 0;
+	public OnGameOverListener endGame = null;
+	
 	
 	public GameRenderer (float screenW, float screenH, Context context, Object syncObj)
 	{
@@ -65,9 +68,10 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 				
 		if(!game.entList.contains(game.player))
 		{
-			game = null;
+			gameOver();
+			/*game = null;
 			game = new Game(context, gl);
-			windowOutdated = true;
+			windowOutdated = true;*/
 		}
 		
 		//clear the screen
@@ -370,5 +374,17 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		gl.glPopMatrix();
 		gl.glMatrixMode(GL10.GL_MODELVIEW);
 		gl.glPopMatrix();
+	}
+	
+	public void gameOver()
+	{
+		gameOver = true;
+		endGame.onGameOver();
+	}
+
+	@Override
+	public void setGameOverEvent(OnGameOverListener listener) 
+	{
+		this.endGame = listener;
 	}
 }
