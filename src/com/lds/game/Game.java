@@ -96,6 +96,8 @@ public class Game
 		
 		someText = new Texture("Testing!", sr);
 		
+		SoundPlayer.getInstance().initialize(context);
+		
 		TextureLoader tl = TextureLoader.getInstance();
 		
 		tl.loadTexture(tilesetcolors);

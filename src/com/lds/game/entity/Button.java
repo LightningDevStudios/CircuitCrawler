@@ -1,5 +1,7 @@
 package com.lds.game.entity;
 
+import com.lds.game.SoundPlayer;
+
 public class Button extends StaticEnt
 {
 	private boolean active;
@@ -19,6 +21,7 @@ public class Button extends StaticEnt
 	public void activate ()
 	{
 		active = true;
+		SoundPlayer.getInstance().playSound(SoundPlayer.SOUND_TEST);
 	}
 	
 	public void deactivate ()
