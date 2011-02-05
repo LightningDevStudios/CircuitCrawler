@@ -36,12 +36,19 @@ public class Run extends Activity
 		gameR = new GameRenderer(screenX, screenY, this, syncObj);
 		glSurface = new Graphics(this, gameR, syncObj);
 		setContentView(glSurface);
-		glSurface.setGameOverEvent(new OnGameOverListener()
+		final OnGameOverListener l = new OnGameOverListener()
 		{
-			public void onGameOver() 
+			public void onGameOver()
 			{
 				Intent i = new Intent(Run.this, MainMenu.class);
 				startActivity(i);
+			}
+		};
+		glSurface.setGameInitializedEvent(new OnGameInitializedListener()
+		{
+			public void onGameInitialized() 
+			{
+				glSurface.setGameOverEvent(l);
 			}
 		});
 	}

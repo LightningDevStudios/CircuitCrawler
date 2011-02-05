@@ -71,7 +71,7 @@ public class Game
 	public Animation spriteAnim;
 	
 	//Events
-	public static OnGameOverListener gameOverListener;
+	public OnGameOverListener gameOverListener;
 	public static OnPuzzleActivatedListener puzzleActivatedListener;
 	
 	//Constructors
@@ -183,7 +183,6 @@ public class Game
 		CauseAND bridgeAND = new CauseAND(new CauseButton(button1), new CauseButton(button2));
 		
 		triggerList.add(new Trigger(new CauseButton(button), new EffectDoor(door)));
-		triggerList.add(new Trigger(new CauseDoneScaling(player), new EffectEndGame(gameOverListener)));
 		triggerList.add(new Trigger(bridgeAND, new EffectRaiseBridge(tileset[4][6])));
 		//triggerList.add(new Trigger(bridgeAND, new EffectRaiseBridge(tileset[4][7])));
 		triggerList.add(new Trigger(bridgeAND, new EffectRaiseBridge(tileset[5][6])));
@@ -388,8 +387,9 @@ public class Game
 			camPosY = worldMaxY;
 	}
 	
-	public static void setGameOverEvent(OnGameOverListener listener)
+	public void setGameOverEvent(OnGameOverListener listener)
 	{
 		gameOverListener = listener;
+		triggerList.add(new Trigger(new CauseDoneScaling(player), new EffectEndGame(gameOverListener)));
 	}
 }

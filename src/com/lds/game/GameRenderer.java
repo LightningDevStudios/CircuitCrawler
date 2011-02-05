@@ -374,7 +374,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	@Override
 	public void setGameOverEvent(OnGameOverListener listener) 
 	{
-		Game.setGameOverEvent(listener);
+		game.setGameOverEvent(listener);
 	}
 	
 	@Override
