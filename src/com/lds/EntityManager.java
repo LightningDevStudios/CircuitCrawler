@@ -33,13 +33,14 @@ public class EntityManager
 		{
 			entList.remove(ent);
 			ent = null;
-			trashList.remove(ent);
 		}
 		
 		for (Entity ent : addList)
 		{
 			entList.add(ent);
-			addList.remove(ent);
 		}
+		
+		trashList.clear();
+		addList.clear();
 	}
 }

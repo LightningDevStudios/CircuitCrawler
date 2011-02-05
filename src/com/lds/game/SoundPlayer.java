@@ -2,10 +2,13 @@ package com.lds.game;
 
 import java.util.HashMap;
 
+import android.content.Context;
+import android.media.AudioManager;
 import android.media.SoundPool;
 
 public class SoundPlayer 
 {
+	public static final int SOUND_TEST = 1;
 	private SoundPlayer p_sp;
 	
 	private SoundPool pool;
@@ -13,7 +16,13 @@ public class SoundPlayer
 	
 	private SoundPlayer()	
 	{
-		//pool = new SoundPool();
+		pool = new SoundPool(4, AudioManager.STREAM_MUSIC, 100);
+		poolMap = new HashMap<Integer, Integer>();
+	}
+	
+	public void initialize(Context context)
+	{
+		poolMap.put(SOUND_TEST, pool.load(context, R.raw.testclick, 1));
 	}
 	
 	public SoundPlayer getInstance()
