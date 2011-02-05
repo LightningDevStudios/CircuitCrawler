@@ -18,11 +18,21 @@ public class MainMenu extends Activity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
 		Button b = (Button)findViewById(R.id.Button1);
-		b.setOnClickListener(new OnClickListener() {	
-			@Override
+		b.setOnClickListener(new OnClickListener() 
+		{
 			public void onClick(View v) 
 			{
 				Intent i = new Intent(MainMenu.this, Run.class);
+				startActivity(i);
+			}
+		});
+		
+		Button about = (Button)findViewById(R.id.Button2);
+		about.setOnClickListener(new OnClickListener()
+		{
+			public void onClick(View v)
+			{
+				Intent i = new Intent(MainMenu.this, AboutScreen.class);
 				startActivity(i);
 			}
 		});

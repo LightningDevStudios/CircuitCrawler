@@ -2,7 +2,7 @@ package com.lds.game.entity;
 
 import javax.microedition.khronos.opengles.GL10;
 
-import com.lds.EntityCleaner;
+import com.lds.EntityManager;
 import com.lds.Enums;
 import com.lds.Texture;
 import com.lds.TilesetHelper;
@@ -167,7 +167,7 @@ public abstract class Entity
 			
 	public void remove()
 	{
-		EntityCleaner.queueEntityForRemoval(this);
+		EntityManager.removeEntity(this);
 	}
 	
 	public void update()

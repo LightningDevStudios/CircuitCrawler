@@ -8,7 +8,7 @@ import android.view.Window;
 import android.view.WindowManager;
 
 import com.lds.Graphics;
-import com.lds.OnGameOverListener;
+import com.lds.game.event.*;
 import com.lds.game.menu.MainMenu;
 
 public class Run extends Activity
@@ -35,16 +35,22 @@ public class Run extends Activity
 		Object syncObj = new Object();
 		gameR = new GameRenderer(screenX, screenY, this, syncObj);
 		glSurface = new Graphics(this, gameR, syncObj);
-		glSurface.setGameOverEvent(new OnGameOverListener()
+		setContentView(glSurface);
+		final OnGameOverListener l = new OnGameOverListener()
 		{
-			public void onGameOver() 
+			public void onGameOver()
 			{
 				Intent i = new Intent(Run.this, MainMenu.class);
 				startActivity(i);
 			}
-			
+		};
+		glSurface.setGameInitializedEvent(new OnGameInitializedListener()
+		{
+			public void onGameInitialized() 
+			{
+				glSurface.setGameOverEvent(l);
+			}
 		});
-		setContentView(glSurface);
 	}
 	
 	@Override

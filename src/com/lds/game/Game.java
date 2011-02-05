@@ -10,7 +10,7 @@ import org.xmlpull.v1.XmlPullParserException;
 import android.content.Context;
 
 import com.lds.Animation;
-import com.lds.EntityCleaner;
+import com.lds.EntityManager;
 import com.lds.Enums.Direction;
 import com.lds.Stopwatch;
 import com.lds.StringRenderer;
@@ -21,6 +21,7 @@ import com.lds.Enums.UIPosition;
 
 import com.lds.UI.*;
 import com.lds.game.entity.*;
+import com.lds.game.event.*;
 import com.lds.trigger.*;
 
 import com.lds.parser.Parser;
@@ -36,7 +37,7 @@ public class Game
 	public Tile[][] tileset;
 	public ArrayList<UIEntity> UIList;
 	public ArrayList<Trigger> triggerList;
-	public EntityCleaner cleaner;
+	public EntityManager cleaner;
 		
 	//Camera data
 	public static float screenW, screenH;
@@ -69,6 +70,10 @@ public class Game
 	
 	public Animation spriteAnim;
 	
+	//Events
+	public OnGameOverListener gameOverListener;
+	public static OnPuzzleActivatedListener puzzleActivatedListener;
+	
 	//Constructors
 	public Game (Context context, GL10 gl) 
 	
@@ -83,7 +88,7 @@ public class Game
 		triggerList = new ArrayList<Trigger>();
 		
 		tileset = new Tile[16][16];
-		cleaner = new EntityCleaner();
+		cleaner = new EntityManager();
 		StringRenderer sr = StringRenderer.getInstance();
 		TextureLoader.getInstance().initialize(gl);
 		
@@ -178,7 +183,6 @@ public class Game
 		CauseAND bridgeAND = new CauseAND(new CauseButton(button1), new CauseButton(button2));
 		
 		triggerList.add(new Trigger(new CauseButton(button), new EffectDoor(door)));
-		triggerList.add(new Trigger(new CauseDoneScaling(player), new EffectRemoveEntity(player)));
 		triggerList.add(new Trigger(bridgeAND, new EffectRaiseBridge(tileset[4][6])));
 		//triggerList.add(new Trigger(bridgeAND, new EffectRaiseBridge(tileset[4][7])));
 		triggerList.add(new Trigger(bridgeAND, new EffectRaiseBridge(tileset[5][6])));
@@ -243,7 +247,7 @@ public class Game
 		//TODO take into account AI, perhaps render every time it chooses a new point to go to?
 		updateCameraPosition();
 		updateLocalEntities();
-		updateLocalTileset();
+		updateLocalTileset();	
 				
 		//Parser
 		Parser parser = new Parser(context);
@@ -381,5 +385,11 @@ public class Game
 		
 		else if (camPosY > worldMaxY)
 			camPosY = worldMaxY;
+	}
+	
+	public void setGameOverEvent(OnGameOverListener listener)
+	{
+		gameOverListener = listener;
+		triggerList.add(new Trigger(new CauseDoneScaling(player), new EffectEndGame(gameOverListener)));
 	}
 }

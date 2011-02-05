@@ -1,7 +1,7 @@
 package com.lds.game.entity;
 
 import com.lds.Vector2f;
-import com.lds.EntityCleaner;
+import com.lds.EntityManager;
 
 public class AttackBolt extends PhysEnt
 {
@@ -30,7 +30,7 @@ public class AttackBolt extends PhysEnt
 		super.update();
 		if (this.getColorA() == 0.0f)
 		{
-			EntityCleaner.queueEntityForRemoval(this);
+			EntityManager.removeEntity(this);
 		}
 	}
 }

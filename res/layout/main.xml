@@ -12,4 +12,7 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 	<TableRow>
 		<Button	android:id="@+id/Button1" android:text="Start!" android:layout_span="1" android:layout_height="wrap_content" android:layout_width="wrap_content"/>
 	</TableRow>
+	<TableRow>
+		<Button	android:id="@+id/Button2" android:text="About..." android:layout_span="1" android:layout_height="wrap_content" android:layout_width="wrap_content"/>
+	</TableRow>
 </TableLayout>

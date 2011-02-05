@@ -1,6 +1,6 @@
 package com.lds.game.entity;
 
-import com.lds.EntityCleaner;
+import com.lds.EntityManager;
 import com.lds.game.Inventory;
 import com.lds.Vector2f;
 
@@ -33,7 +33,7 @@ public class Player extends Character //your character, protagonist
 	
 	public void die ()
 	{
-		EntityCleaner.queueEntityForRemoval(this);
+		EntityManager.removeEntity(this);
 	}
 	
 	public void attack ()
@@ -51,7 +51,7 @@ public class Player extends Character //your character, protagonist
 		else if (ent instanceof InvenPickup)
 		{
 			Inventory.add(((InvenPickup)ent).getName());
-			EntityCleaner.queueEntityForRemoval(ent);
+			EntityManager.removeEntity(ent);
 			colList.remove(ent);
 		}
 		else if (ent instanceof Health)
