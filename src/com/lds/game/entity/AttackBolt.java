@@ -14,14 +14,14 @@ public class AttackBolt extends PhysEnt
 		this.angle = angle;
 		this.move(directionVec.getX() * 5.0f, directionVec.getY() * 5.0f);
 		this.enableColorMode(1.0f, 0.0f, 0.0f, 1.0f);
-		this.setColorInterpSpeed(0.005f);
+		this.setColorInterpSpeed(0.05f);
 		this.initColorInterp(0.0f, 0.0f, 0.0f, 0.0f);
 	}
 	
 	@Override
 	public void interact(Entity ent)
 	{
-			EntityCleaner.queueEntityForRemoval(this);
+			EntityManager.removeEntity(this);
 	}
 	
 	@Override
