@@ -4,6 +4,7 @@ import javax.microedition.khronos.opengles.GL10;
 
 import com.lds.EntityManager;
 import com.lds.Enums;
+import com.lds.Stopwatch;
 import com.lds.Texture;
 import com.lds.TilesetHelper;
 import com.lds.Enums.RenderMode;
@@ -59,6 +60,8 @@ public abstract class Entity
 	public ArrayList<Entity> colList = new ArrayList<Entity>();
 	public ArrayList<Entity> colIgnoreList = new ArrayList<Entity>();
 	
+	//color/graident interp data
+	public int colorTimeMs, gradientTimeMs;
 	
 	public Entity (float size, float xPos, float yPos, boolean circular, boolean willCollide)
 	{
@@ -544,12 +547,14 @@ public abstract class Entity
 		endColorB = b;
 		endColorA = a;
 		isColorInterp = true;
+		colorTimeMs = Stopwatch.elapsedTimeMs();
 	}
 	
 	public void colorInterp()
 	{
 		if (isColorInterp)
 		{
+			float colorInterp = colorInterpSpeed / 1000 * (Stopwatch.elapsedTimeMs() - colorTimeMs);
 			double rNear = Math.abs(endColorR - colorR);
 			double gNear = Math.abs(endColorG - colorG);
 			double bNear = Math.abs(endColorB - colorB);
@@ -564,18 +569,20 @@ public abstract class Entity
 			}
 			else
 			{
-				if (endColorR > colorR)	colorR += colorInterpSpeed;
-				else					colorR -= colorInterpSpeed;
+				if (endColorR > colorR)	colorR += colorInterp;
+				else					colorR -= colorInterp;
 				
-				if (endColorG > colorG)	colorG += colorInterpSpeed;
-				else					colorG -= colorInterpSpeed;
+				if (endColorG > colorG)	colorG += colorInterp;
+				else					colorG -= colorInterp;
 				
-				if (endColorB > colorB)	colorB += colorInterpSpeed;
-				else					colorB -= colorInterpSpeed;
+				if (endColorB > colorB)	colorB += colorInterp;
+				else					colorB -= colorInterp;
 				
-				if (endColorA > colorA)	colorA += colorInterpSpeed;
-				else					colorA -= colorInterpSpeed;
+				if (endColorA > colorA)	colorA += colorInterp;
+				else					colorA -= colorInterp;
 			}
+			
+			colorTimeMs = Stopwatch.elapsedTimeMs();
 		}
 	}
 	
@@ -583,30 +590,33 @@ public abstract class Entity
 	{
 		endColor = c;
 		isGradientInterp = true;
+		gradientTimeMs = Stopwatch.elapsedTimeMs();
 	}
 	
 	public void gradientInterp()
 	{
 		if (isGradientInterp)
 		{
+			float gradientInterp = colorInterpSpeed / 1000 * (Stopwatch.elapsedTimeMs() - gradientTimeMs);
 			int nearCount = 0;
 			for (int i =0; i < color.length; i++)
 			{
-				if (Math.abs(endColor[i] - color[i]) < colorInterpSpeed)
+				if (Math.abs(endColor[i] - color[i]) < gradientInterp)
 				{
 					nearCount++;
 					color[i] = endColor[i];
 				}
 				else if (endColor[i] > color[i])
-					color[i] += colorInterpSpeed;
+					color[i] += gradientInterp;
 				else
-					color[i] -= colorInterpSpeed;
+					color[i] -= gradientInterp;
 			}
 			
 			if (nearCount == color.length)
 				isGradientInterp = false;
 			
 			colorBuffer = setBuffer(colorBuffer, color);
+			gradientTimeMs = Stopwatch.elapsedTimeMs();
 		}
 	}
 	/**************************
