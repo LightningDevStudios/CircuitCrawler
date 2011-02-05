@@ -110,6 +110,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 			isMoving = true;
 			moveTimeMs = Stopwatch.elapsedTimeMs();
 			endPosVec = Vector2f.add(moveVec, posVec);
+			Game.worldOutdated = true;
 		}
 	}
 	
@@ -121,6 +122,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 		interpAngle = degrees;	
 		isRotating = true;
 		rotTimeMs = Stopwatch.elapsedTimeMs();
+		Game.worldOutdated = true;
 	}
 	
 	//scales relative to current scaling
@@ -131,6 +133,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 		isScaling = true;
 		sclTimeMs = Stopwatch.elapsedTimeMs();
 		endScaleVec = Vector2f.add(sclVec, scaleVec);
+		Game.worldOutdated = true;
 	}
 	
 	/*********************
@@ -271,6 +274,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 			{
 				moveInterpCount++;
 				moveInterpVec = Vector2f.scale(Vector2f.normalize(moveVec), moveSpeed / 1000 * (Stopwatch.elapsedTimeMs() - moveTimeMs));
+				Game.worldOutdated = true;
 				
 				if (moveVec.mag() - moveInterpVec.mag() * moveInterpCount <= moveInterpVec.mag() / 2)
 				{

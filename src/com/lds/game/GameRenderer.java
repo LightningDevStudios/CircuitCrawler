@@ -111,12 +111,15 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 				}
 			}
 		}
-				
+		
+		//update all entites (before collision)
+		for (Entity ent : game.entList)
+			ent.update();
+		
 		//Render all entities
 		for (int i = 0; i < game.entList.size(); i++)
 		{
 			Entity ent = game.entList.get(i);
-			ent.update();
 						
 			//checks for collision with all other entities in entList if needed
 			if (Game.worldOutdated)
@@ -290,7 +293,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 								if ((colEnt != game.player && game.player.isColliding(colEnt)) || (game.player.getHeldObject() != null && colEnt != game.player.getHeldObject() && game.player.getHeldObject().isColliding(colEnt)))
 								{
 										playerIsColliding = true;
-										Game.worldOutdated = false;
+										//Game.worldOutdated = false;
 								}
 						}
 						
@@ -301,7 +304,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 								if ((t.isRendered() && (game.player.isColliding(t))) || (game.player.getHeldObject() != null && game.player.getHeldObject().isColliding(t)))
 								{
 									playerIsColliding = true;
-									Game.worldOutdated = false;
+									//Game.worldOutdated = false;
 								}
 							}
 						}
