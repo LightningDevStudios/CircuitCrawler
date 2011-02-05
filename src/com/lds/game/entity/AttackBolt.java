@@ -12,10 +12,16 @@ public class AttackBolt extends PhysEnt
 		super(20.0f, posVec.getX(), posVec.getY(), false, false, 100.0f, 100.0f, 0.0f);
 		this.directionVec = directionVec;
 		this.angle = angle;
-		this.move(directionVec.getX() * 4.0f, directionVec.getY() * 4.0f);
+		this.move(directionVec.getX() * 5.0f, directionVec.getY() * 5.0f);
 		this.enableColorMode(1.0f, 0.0f, 0.0f, 1.0f);
-		this.setColorInterpSpeed(0.1f);
+		this.setColorInterpSpeed(0.005f);
 		this.initColorInterp(0.0f, 0.0f, 0.0f, 0.0f);
+	}
+	
+	@Override
+	public void interact(Entity ent)
+	{
+			EntityCleaner.queueEntityForRemoval(this);
 	}
 	
 	@Override

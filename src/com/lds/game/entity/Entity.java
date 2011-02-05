@@ -265,7 +265,7 @@ public abstract class Entity
 			return ent.isRectangleCollidingWithCircle(this);
 		
 		else
-			//return this.isRectangleCollidingWithRectangle(ent); TODO: Set this up so corner collision works, no double bounceVec's and more efficient
+			//return this.isRectangleCollidingWithRectangle(ent); TODO: Set this up so corner collision works better
 		{
 			if (this.isRectangleCollidingWithRectangle(ent) && ent.isRectangleCollidingWithRectangle(this))
 				return true;

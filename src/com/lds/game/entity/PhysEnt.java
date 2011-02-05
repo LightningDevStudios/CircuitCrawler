@@ -217,10 +217,6 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	
 	public boolean doesCollide (Entity ent)
 	{
-		/*if (!ent.willCollide())
-			return false;
-		else
-			return true;*/
 		return ent.willCollide();
 	}
 	
@@ -276,7 +272,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 				moveInterpCount++;
 				moveInterpVec = Vector2f.scale(Vector2f.normalize(moveVec), moveSpeed / 1000 * (Stopwatch.elapsedTimeMs() - moveTimeMs));
 				
-				if (moveVec.mag() - moveInterpVec.mag() * moveInterpCount <= moveInterpVec.mag())
+				if (moveVec.mag() - moveInterpVec.mag() * moveInterpCount <= moveInterpVec.mag() / 2)
 				{
 					posVec = endPosVec;
 					isMoving = false;

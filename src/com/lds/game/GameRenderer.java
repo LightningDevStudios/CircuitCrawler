@@ -177,7 +177,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 				if (!game.player.isHoldingObject())
 				{
 					Vector2f directionVec = new Vector2f(game.player.getAngle());
-					directionVec.scale(game.player.getHalfSize() + 50.0f);
+					directionVec.scale(game.player.getHalfSize() + 5.0f);
 					AttackBolt attack = new AttackBolt(Vector2f.add(game.player.getPos(), directionVec), directionVec, game.player.getAngle());
 					game.entList.add(attack);
 				}
