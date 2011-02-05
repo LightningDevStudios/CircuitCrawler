@@ -10,7 +10,7 @@ import org.xmlpull.v1.XmlPullParserException;
 import android.content.Context;
 
 import com.lds.Animation;
-import com.lds.EntityCleaner;
+import com.lds.EntityManager;
 import com.lds.Enums.Direction;
 import com.lds.Stopwatch;
 import com.lds.StringRenderer;
@@ -36,7 +36,7 @@ public class Game
 	public Tile[][] tileset;
 	public ArrayList<UIEntity> UIList;
 	public ArrayList<Trigger> triggerList;
-	public EntityCleaner cleaner;
+	public EntityManager cleaner;
 		
 	//Camera data
 	public static float screenW, screenH;
@@ -83,7 +83,7 @@ public class Game
 		triggerList = new ArrayList<Trigger>();
 		
 		tileset = new Tile[16][16];
-		cleaner = new EntityCleaner();
+		cleaner = new EntityManager();
 		StringRenderer sr = StringRenderer.getInstance();
 		TextureLoader.getInstance().initialize(gl);
 		
@@ -243,7 +243,7 @@ public class Game
 		//TODO take into account AI, perhaps render every time it chooses a new point to go to?
 		updateCameraPosition();
 		updateLocalEntities();
-		updateLocalTileset();
+		updateLocalTileset();	
 				
 		//Parser
 		Parser parser = new Parser(context);

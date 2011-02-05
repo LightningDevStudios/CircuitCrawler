@@ -1,6 +1,6 @@
 package com.lds.trigger;
 
-import com.lds.EntityCleaner;
+import com.lds.EntityManager;
 import com.lds.game.entity.Entity;
 
 public class EffectRemoveEntity extends Effect
@@ -16,6 +16,6 @@ public class EffectRemoveEntity extends Effect
 	@Override
 	public void fireOutput()
 	{
-		EntityCleaner.queueEntityForRemoval(ent);
+		EntityManager.removeEntity(ent);
 	}
 }

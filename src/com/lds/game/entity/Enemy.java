@@ -1,6 +1,6 @@
 package com.lds.game.entity;
 
-import com.lds.EntityCleaner;
+import com.lds.EntityManager;
 
 public abstract class Enemy extends Character //enemies will fall under this class
 {
@@ -20,7 +20,7 @@ public abstract class Enemy extends Character //enemies will fall under this cla
 	public void die ()
 	{
 		enemyCount--;
-		EntityCleaner.queueEntityForRemoval(this);
+		EntityManager.removeEntity(this);
 	}
 	
 	public static int getEnemyCount ()

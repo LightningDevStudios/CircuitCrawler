@@ -8,6 +8,7 @@ import android.os.Debug;
 import android.view.MotionEvent;
 import android.content.Context;
 
+import com.lds.EntityManager;
 import com.lds.OnGameOverListener;
 import com.lds.Stopwatch;
 import com.lds.Vector2f;
@@ -68,6 +69,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 				
 		if(!game.entList.contains(game.player))
 		{
+			//syncObj.notify();
 			gameOver();
 			/*game = null;
 			game = new Game(context, gl);
@@ -89,7 +91,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		}
 		
 		//remove entities that are queued for removal
-		game.cleaner.clean(game.entList);
+		game.cleaner.update(game.entList);
 				
 		//Triggered when the perspective needs to be redrawn
 		if (windowOutdated)
@@ -179,7 +181,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 					Vector2f directionVec = new Vector2f(game.player.getAngle());
 					directionVec.scale(game.player.getHalfSize() + 50.0f);
 					AttackBolt attack = new AttackBolt(Vector2f.add(game.player.getPos(), directionVec), directionVec, game.player.getAngle());
-					game.entList.add(attack);
+					EntityManager.addEntity(attack);
 				}
 				game.btnA.unpress();
 			}
