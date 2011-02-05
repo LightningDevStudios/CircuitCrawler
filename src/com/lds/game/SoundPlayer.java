@@ -9,23 +9,20 @@ import android.media.SoundPool;
 public class SoundPlayer 
 {
 	public static final int SOUND_TEST = 1;
-	private SoundPlayer p_sp;
+	
+	private static SoundPlayer p_sp;
 	
 	private SoundPool pool;
 	private HashMap<Integer, Integer> poolMap;
+	private Context context;
 	
 	private SoundPlayer()	
 	{
 		pool = new SoundPool(4, AudioManager.STREAM_MUSIC, 100);
 		poolMap = new HashMap<Integer, Integer>();
 	}
-	
-	public void initialize(Context context)
-	{
-		poolMap.put(SOUND_TEST, pool.load(context, R.raw.testclick, 1));
-	}
-	
-	public SoundPlayer getInstance()
+		
+	public static SoundPlayer getInstance()
 	{
 		if (p_sp == null)
 		{
@@ -38,5 +35,21 @@ public class SoundPlayer
 			}
 		}
 		return p_sp;
+	}
+	
+	public void initialize(Context context)
+	{
+		this.context = context;
+		poolMap.put(SOUND_TEST, pool.load(context, R.raw.testclick, 1));
+	}
+	
+	public void playSound(int sound)
+	{
+		AudioManager mgr = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
+		float streamVolumeCurrent = mgr.getStreamVolume(AudioManager.STREAM_MUSIC);
+		float streamVolumeMax = mgr.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
+		float volume = streamVolumeCurrent / streamVolumeMax;
+		
+		pool.play(poolMap.get(sound), volume, volume, 1, 0, 1.0f);
 	}
 }
