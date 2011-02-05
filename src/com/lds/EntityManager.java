@@ -17,12 +17,14 @@ public class EntityManager
 	
 	public static void removeEntity(Entity ent)
 	{
-		trashList.add(ent);
+		if (!trashList.contains(ent))
+			trashList.add(ent);
 	}
 	
 	public static void addEntity(Entity ent)
 	{
-		addList.add(ent);
+		if (!addList.contains(ent))
+			addList.add(ent);
 	}
 	
 	public void update(ArrayList<Entity> entList)
