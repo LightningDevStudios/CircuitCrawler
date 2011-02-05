@@ -21,6 +21,7 @@ public class AttackBolt extends PhysEnt
 	@Override
 	public void interact(Entity ent)
 	{
+		if (!(ent instanceof Player))
 			EntityManager.removeEntity(this);
 	}
 	
