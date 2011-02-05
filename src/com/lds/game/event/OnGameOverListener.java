@@ -1,4 +1,4 @@
-package com.lds;
+package com.lds.game.event;
 
 public interface OnGameOverListener
 {

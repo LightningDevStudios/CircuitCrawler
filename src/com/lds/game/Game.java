@@ -21,6 +21,7 @@ import com.lds.Enums.UIPosition;
 
 import com.lds.UI.*;
 import com.lds.game.entity.*;
+import com.lds.game.event.*;
 import com.lds.trigger.*;
 
 import com.lds.parser.Parser;
@@ -68,6 +69,10 @@ public class Game
 	public Sprite spr;
 	
 	public Animation spriteAnim;
+	
+	//Events
+	public static OnGameOverListener gameOverListener;
+	public static OnPuzzleActivatedListener puzzleActivatedListener;
 	
 	//Constructors
 	public Game (Context context, GL10 gl) 
@@ -178,7 +183,7 @@ public class Game
 		CauseAND bridgeAND = new CauseAND(new CauseButton(button1), new CauseButton(button2));
 		
 		triggerList.add(new Trigger(new CauseButton(button), new EffectDoor(door)));
-		triggerList.add(new Trigger(new CauseDoneScaling(player), new EffectRemoveEntity(player)));
+		triggerList.add(new Trigger(new CauseDoneScaling(player), new EffectEndGame(gameOverListener)));
 		triggerList.add(new Trigger(bridgeAND, new EffectRaiseBridge(tileset[4][6])));
 		//triggerList.add(new Trigger(bridgeAND, new EffectRaiseBridge(tileset[4][7])));
 		triggerList.add(new Trigger(bridgeAND, new EffectRaiseBridge(tileset[5][6])));
@@ -381,5 +386,10 @@ public class Game
 		
 		else if (camPosY > worldMaxY)
 			camPosY = worldMaxY;
+	}
+	
+	public static void setGameOverEvent(OnGameOverListener listener)
+	{
+		gameOverListener = listener;
 	}
 }

@@ -9,10 +9,10 @@ import android.view.MotionEvent;
 import android.content.Context;
 
 import com.lds.EntityManager;
-import com.lds.OnGameOverListener;
 import com.lds.Stopwatch;
 import com.lds.Vector2f;
 import com.lds.game.entity.*;
+import com.lds.game.event.*;
 import com.lds.trigger.*;
 import com.lds.UI.*;
 
@@ -22,9 +22,8 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	public Context context;
 	public Object syncObj;
 	public boolean windowOutdated, gameOver;
-	public int frameInterval, frameCount = 0;
-	public OnGameOverListener endGame = null;
-	
+	public int frameInterval, frameCount = 0;	
+	public OnGameInitializedListener gameInitializedListener;
 	
 	public GameRenderer (float screenW, float screenH, Context context, Object syncObj)
 	{
@@ -57,6 +56,9 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		Stopwatch.tick();
 		
 		game = new Game(context, gl);
+		
+		if(gameInitializedListener != null)
+			gameInitializedListener.onGameInitialized();
 	}
 	
 	@Override
@@ -66,15 +68,6 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		/*frameCount++;
 		if (frameCount == 100)
 			Debug.startMethodTracing("LDS_Game4");*/
-				
-		if(!game.entList.contains(game.player))
-		{
-			//syncObj.notify();
-			gameOver();
-			/*game = null;
-			game = new Game(context, gl);
-			windowOutdated = true;*/
-		}
 		
 		//clear the screen
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
@@ -378,15 +371,15 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		gl.glPopMatrix();
 	}
 	
-	public void gameOver()
-	{
-		gameOver = true;
-		endGame.onGameOver();
-	}
-
 	@Override
 	public void setGameOverEvent(OnGameOverListener listener) 
 	{
-		this.endGame = listener;
+		Game.setGameOverEvent(listener);
+	}
+	
+	@Override
+	public void setGameInitializedEvent(OnGameInitializedListener listener)
+	{
+		this.gameInitializedListener = listener;
 	}
 }

@@ -1,5 +1,7 @@
 package com.lds;
 
+import com.lds.game.event.*;
+
 import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.view.MotionEvent;
@@ -54,10 +56,22 @@ public class Graphics extends GLSurfaceView
 			}
 		});
 	}
+	
+	public void setGameInitializedEvent(final OnGameInitializedListener listener)
+	{
+		queueEvent(new Runnable()
+		{
+			public void run()
+			{
+				renderer.setGameInitializedEvent(listener);
+			}
+		});
+	}
 			
 	public interface Renderer extends GLSurfaceView.Renderer
 	{
 		public abstract void onTouchInput(MotionEvent event);
 		public abstract void setGameOverEvent(OnGameOverListener listener);
+		public abstract void setGameInitializedEvent(OnGameInitializedListener listener);
 	}
 }
