@@ -17,12 +17,21 @@ public abstract class Character extends PhysEnt //all characters, including the 
 	
 	public Character(float size, float xPos, float yPos, float angle, float xScl, float yScl, boolean circular, int health, float speed)
 	{
-		super(size, xPos, yPos, angle, xScl, yScl, true, circular, true, 20.0f, 90.0f, 1.0f);
+		super(size, xPos, yPos, angle, xScl, yScl, true, circular, true, 25.0f, 90.0f, 1.0f);
 		this.enableColorMode(1.0f, 1.0f, 1.0f, 1.0f);
 		isFlashing = false;
 		msPassed = Stopwatch.elapsedTimeMs();
 		this.health = health;
 		this.speed = 1.0f;
+	}
+	
+	@Override
+	public void interact(Entity ent)
+	{
+		if (ent instanceof AttackBolt)
+		{
+			takeDamage(25);
+		}
 	}
 	
 	@Override

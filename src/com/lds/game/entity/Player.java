@@ -28,7 +28,11 @@ public class Player extends Character //your character, protagonist
 	@Override
 	public void interact (Entity ent)
 	{
-		if (ent instanceof StaticBlock || ent instanceof HoldObject || ent instanceof Door)
+		if (ent instanceof AttackBolt)
+		{
+			takeDamage(5);
+		}
+		else if (ent instanceof StaticBlock || ent instanceof HoldObject || ent instanceof Door)
 		{
 			colList.remove(ent);
 		}
@@ -49,6 +53,8 @@ public class Player extends Character //your character, protagonist
 		else if (ent instanceof Enemy)
 		{
 			takeDamage(25);
+			for (Vector2f bounceVec : bounceList)
+				bounceVec.scale(4.25f);
 		}
 	}
 	

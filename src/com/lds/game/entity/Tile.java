@@ -1,6 +1,6 @@
 package com.lds.game.entity;
 
-import com.lds.Enums.TileStates;
+import com.lds.Enums.TileState;
 import com.lds.Texture;
 import com.lds.TilesetHelper;
 
@@ -10,7 +10,7 @@ public class Tile extends StaticEnt
 	public static final int TILE_SIZE = 72;
 	public static final float TILE_SIZE_F = 72.0f;
 	
-	private TileStates state;
+	private TileState state;
 	public int tileX, tileY, tileID;
 	
 	public Tile(float size, int tilePosX, int tilePosY, int tilesetX, int tilesetY)
@@ -58,7 +58,7 @@ public class Tile extends StaticEnt
 	@Override
 	public boolean isColliding(Entity ent)
 	{
-		if (state != TileStates.WALL)
+		if (state != TileState.WALL)
 			return false;
 		else
 			return super.isColliding(ent);
@@ -66,61 +66,61 @@ public class Tile extends StaticEnt
 	
 	public void setAsWall()
 	{
-		state = TileStates.WALL;
+		state = TileState.WALL;
 		updateTileset(2, 0);
 		isSolid = true;
 	}
 	
 	public void setAsFloor()
 	{
-		state = TileStates.FLOOR;
+		state = TileState.FLOOR;
 		updateTileset(0, 0);
 		isSolid = false;
 	}
 	
 	public void setAsPit()
 	{
-		state = TileStates.PIT;
+		state = TileState.PIT;
 		updateTileset(0, 1);
 		isSolid = false;
 	}
 	
 	public void setAsBridge()
 	{
-		state = TileStates.BRIDGE;
+		state = TileState.BRIDGE;
 		updateTileset(1, 1);
 		isSolid = false;
 	}
 	
 	public boolean isWall()
 	{
-		if (state == TileStates.WALL)
+		if (state == TileState.WALL)
 			return true;
 		return false;
 	}
 	
 	public boolean isFloor()
 	{
-		if (state == TileStates.FLOOR)
+		if (state == TileState.FLOOR)
 			return true;
 		return false;
 	}
 	
 	public boolean isPit()
 	{
-		if (state == TileStates.PIT)
+		if (state == TileState.PIT)
 			return true;
 		return false;
 	}
 	
 	public boolean isBridge()
 	{
-		if (state == TileStates.BRIDGE)
+		if (state == TileState.BRIDGE)
 			return true;
 		return false;
 	}
 	
-	public TileStates getTileState()
+	public TileState getTileState()
 	{
 		return state;
 	}

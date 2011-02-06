@@ -16,7 +16,9 @@ import com.lds.Stopwatch;
 import com.lds.StringRenderer;
 import com.lds.Texture;
 import com.lds.TextureLoader;
+import com.lds.Vector2f;
 import com.lds.Enums.UIPosition;
+import com.lds.Enums.EnemyType;
 
 
 import com.lds.UI.*;
@@ -67,7 +69,7 @@ public class Game
 	public Button button;
 	public Door door;
 	public Sprite spr;
-	public Blob blob;
+	public Blob blob1, blob2;
 	
 	public Animation spriteAnim;
 	
@@ -146,9 +148,13 @@ public class Game
 		block.initGradientInterp(interpGM);
 		entList.add(block);
 		
-		blob = new Blob(-150.0f, -350.0f);
-		blob.enableTilesetMode(tilesetcolors, 2, 1);
-		entList.add(blob);
+		blob1 = new Blob(-150.0f, -350.0f, EnemyType.STALKER);
+		blob1.enableTilesetMode(tilesetcolors, 2, 1);
+		entList.add(blob1);
+		
+		blob2 = new Blob(0.0f, 0.0f, EnemyType.TURRET);
+		blob2.enableTilesetMode(tilesetcolors, 2, 1);
+		entList.add(blob2);
 				
 		Button button1 = new Button(108.0f, 0.0f);
 		button1.enableTilesetMode(randomthings, 0, 0);
@@ -372,6 +378,58 @@ public class Game
 		
 		return null;
 		
+	}
+	
+	public void updateAI(Enemy enemy)
+	{
+		if (Vector2f.sub(enemy.getPos(), player.getPos()).mag() < 100.0f)
+			runAgressiveAI(enemy);
+		else
+			runPassiveAI(enemy);
+	}
+	
+	public void runPassiveAI(Enemy enemy)
+	{
+		if (enemy.getType() == EnemyType.STALKER)
+		{
+			enemy.stop();
+		}
+		else if (enemy.getType() == EnemyType.PATROL)
+		{
+			
+		}
+		else if (enemy.getType() == EnemyType.TURRET)
+		{
+			enemy.setAngle(enemy.getAngle() + 1.5f);
+		}
+	}
+	
+	public void runAgressiveAI(Enemy enemy)
+	{
+		if (enemy.getType() == EnemyType.STALKER)
+		{
+			//TODO: A* Pathfinding Algorithm
+			enemy.moveTo(player.getXPos(), player.getYPos());
+			enemy.setAngle((float)Math.toDegrees(Vector2f.sub(enemy.getPos(), player.getPos()).angle()) - 90.0f);
+		}
+		else if (enemy.getType() == EnemyType.PATROL)
+		{
+			//TODO: Nodes n' shit
+		}
+		else if (enemy.getType() == EnemyType.TURRET)
+		{
+			enemy.setAngle((float)Math.toDegrees(Vector2f.sub(enemy.getPos(), player.getPos()).angle()) - 90.0f);
+			
+			if (Stopwatch.elapsedTimeMs() - enemy.getLastTime() > enemy.getRandomTime())
+			{
+				Vector2f directionVec = new Vector2f(enemy.getAngle());
+				directionVec.scale(enemy.getHalfSize() + 20.0f);
+				AttackBolt attack = new AttackBolt(Vector2f.add(enemy.getPos(), directionVec), directionVec, enemy.getAngle());
+				EntityManager.addEntity(attack);
+				enemy.setRandomTime((int)(Math.random() * 500) + 500);
+				enemy.setLastTime(Stopwatch.elapsedTimeMs());
+			}
+		}
 	}
 	
 	public void updateCameraPosition()

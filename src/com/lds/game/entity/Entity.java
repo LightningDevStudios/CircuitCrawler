@@ -199,11 +199,17 @@ public abstract class Entity
 	 * Collision Methods *
 	 *********************/
 	
+	public boolean doesCollide (Entity ent)
+	{
+		return ent.willCollide();
+	}
+	
 	//reinitialize colllision variables
 	public void initializeCollisionVariables ()
 	{
 		rad = Math.toRadians(angle);
-		diagonal = Math.sqrt(Math.pow(halfSize * getXScl(), 2) + Math.pow(halfSize * getYScl(), 2));	}
+		diagonal = Math.sqrt(Math.pow(halfSize * getXScl(), 2) + Math.pow(halfSize * getYScl(), 2));	
+	}
 	
 	//used to get the absolute, not relative, positions of the entity's 4 points in the XY Plane
 	public void updateAbsolutePointLocations ()

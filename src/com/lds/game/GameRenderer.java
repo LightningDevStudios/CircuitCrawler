@@ -85,7 +85,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		
 		//remove entities that are queued for removal
 		game.cleaner.update(game.entList);
-				
+		
 		//Triggered when the perspective needs to be redrawn
 		if (windowOutdated)
 		{
@@ -112,8 +112,13 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		}
 		
 		//update all entites (before collision)
+		//also runs AI Code
 		for (Entity ent : game.entList)
+		{
 			ent.update();
+			if (ent instanceof Enemy)
+				game.updateAI((Enemy)ent);
+		}
 		
 		//Render all entities
 		for (int i = 0; i < game.entList.size(); i++)
@@ -175,7 +180,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 				if (!game.player.isHoldingObject())
 				{
 					Vector2f directionVec = new Vector2f(game.player.getAngle());
-					directionVec.scale(game.player.getHalfSize() + 5.0f);
+					directionVec.scale(game.player.getHalfSize() + 20.0f);
 					AttackBolt attack = new AttackBolt(Vector2f.add(game.player.getPos(), directionVec), directionVec, game.player.getAngle());
 					EntityManager.addEntity(attack);
 					SoundPlayer.getInstance().playSound(2);

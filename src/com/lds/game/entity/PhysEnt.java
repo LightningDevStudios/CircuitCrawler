@@ -64,6 +64,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	{
 		if (!(posVec.getX() == x && posVec.getY() == y))
 		{
+			moveInterpCount = 0;
 			moveVec.set(x - getXPos(), y - getYPos());
 			isMoving = true;
 			moveTimeMs = Stopwatch.elapsedTimeMs();
@@ -95,6 +96,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	//note, we will probably never scale to 0.0f (that will be infinitely small) or negative numbers (you can get the same results with positives)
 	public void scaleTo (float x, float y)
 	{
+		sclInterpCount = 0;
 		sclVec.set(x - getXScl(), y - getYScl());
 		isScaling = true;
 		sclTimeMs = Stopwatch.elapsedTimeMs();
@@ -106,6 +108,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	{
 		if (!(x == 0 && y == 0))
 		{
+			moveInterpCount = 0;
 			moveVec.set(x, y);
 			isMoving = true;
 			moveTimeMs = Stopwatch.elapsedTimeMs();
@@ -129,6 +132,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	//i.e. if ent1 is scaled (2.0f, 2.0f), if you do ent1.scale(3.0f, 3.0f) the final scaling will be (6.0f, 6.0f)
 	public void scale (float x, float y)
 	{
+		sclInterpCount = 0;
 		sclVec.set((x - 1) * getXScl(), (y - 1) * getYScl());
 		isScaling = true;
 		sclTimeMs = Stopwatch.elapsedTimeMs();
@@ -170,7 +174,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	protected boolean isRectangleCollidingWithRectangle (Entity ent)
 	{
 		boolean output = super.isRectangleCollidingWithRectangle(ent);
-		if (output && this.doesCollide(ent))
+		if (output && this.doesCollide(ent) && ent.doesCollide(this))
 		{
 			this.rectangleBounce(ent);
 			ent.rectangleBounce(this);
@@ -216,11 +220,6 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 		Vector2f bounceSide = Vector2f.normalize(Vector2f.sub(vertDistVecs[0], vertDistVecs[1]));
 		bounceSide.scale(this.moveInterpVec.dot(bounceSide));
 		this.addBounceVec(Vector2f.sub(bounceSide, this.moveInterpVec));
-	}
-	
-	public boolean doesCollide (Entity ent)
-	{
-		return ent.willCollide();
 	}
 	
 	/**********************************
@@ -288,7 +287,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 					Game.worldOutdated = true;
 				}
 			}
-							
+				
 			moveTimeMs = Stopwatch.elapsedTimeMs();
 		}
 	}
@@ -314,6 +313,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 					angle = 0.0f;
 				
 				angle += rotSpeed / 1000 * increment;
+				Game.worldOutdated = true;
 			}
 			else
 			{
@@ -365,7 +365,14 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 		}
 	}
 	
-	public Vector2f getBounceVec ()
+	public void stop()
+	{
+		isMoving = false;
+		isRotating = false;
+		isScaling = false;
+	}
+	
+	public Vector2f getBounceVec()
 	{
 	 	if (bounceList.isEmpty())
 		{
