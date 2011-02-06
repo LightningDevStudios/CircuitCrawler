@@ -3,8 +3,8 @@ package com.lds;
 public class Animation 
 {
 	private Texture tex;
-	private int framesPerSec, xTiles, yTiles, startX, startY, curX, curY;
-	private int animTimeMs, startTimeMs;
+	private int framerate, xTiles, yTiles, startX, startY, curX, curY;
+	private int animTimeMs;
 	private boolean framerateDependent;
 	
 	public Animation(Texture tex, int xTiles, int yTiles, int startX, int startY, int framerate)
@@ -20,35 +20,32 @@ public class Animation
 		curX = 0;
 		curY = 0;
 		
-		this.framesPerSec = framerate;
+		this.framerate = framerate;
 		
 		if (framerate < 0)
 			framerateDependent = true;
 		else
-			animTimeMs = 1000 / framerate;
-		
-		
-		
-		startTimeMs = Stopwatch.elapsedTimeMs() + 1;
-		animTimeMs = startTimeMs;
+			animTimeMs = Stopwatch.elapsedTimeMs();
 	}
 	
 	public void update()
 	{
 		//grab a time difference
-		int timeElapsed = Stopwatch.elapsedTimeMs() - startTimeMs;
+		int timeElapsed = Stopwatch.elapsedTimeMs() - animTimeMs;
 		
 		//one set for time-based animation, another for framerate dependent animation
 		if (!framerateDependent)
 		{
 			//make sure enough time has passed for the next frame to be drawn
-			if (timeElapsed > animTimeMs)
+			if (timeElapsed > framerate)
 			{
 				//take the amount of time that has passed, see if we need to skip a frame or two in order to keep up animation in low-FPS times
-				int framesPassed = timeElapsed / (animTimeMs * 1000);
+				int framesPassed = timeElapsed / (framerate);
 				
 				for(int i = 0; i < framesPassed; i++)
 					incrementCount();
+				
+				animTimeMs = Stopwatch.elapsedTimeMs();
 				
 				//skip all the rows if we need to skip at least 1 row.
 				/*while(framesPassed > xTiles)
