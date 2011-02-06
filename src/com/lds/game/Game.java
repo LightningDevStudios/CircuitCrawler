@@ -67,6 +67,7 @@ public class Game
 	public Button button;
 	public Door door;
 	public Sprite spr;
+	public Blob blob;
 	
 	public Animation spriteAnim;
 	
@@ -134,7 +135,7 @@ public class Game
 		button.enableTilesetMode(randomthings, 0, 0);
 		entList.add(button);
 		
-		block = new PhysBlock(70.0f, -215.0f, -350.0f);
+		block = new PhysBlock(Entity.DEFAULT_SIZE, -215.0f, -350.0f);
 		block.enableTilesetMode(tilesetwire, 2, 1);
 		//block.enableColorMode(1.0f, 1.0f, 1.0f, 0.5f);
 		float[] initGM = {1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f};
@@ -144,6 +145,10 @@ public class Game
 		//block.initColorInterp(0.5f, 0.7f, 0.3f, 0.5f);
 		block.initGradientInterp(interpGM);
 		entList.add(block);
+		
+		blob = new Blob(-150.0f, -350.0f);
+		blob.enableTilesetMode(tilesetcolors, 2, 1);
+		entList.add(blob);
 				
 		Button button1 = new Button(108.0f, 0.0f);
 		button1.enableTilesetMode(randomthings, 0, 0);
@@ -393,5 +398,11 @@ public class Game
 	{
 		gameOverListener = listener;
 		triggerList.add(new Trigger(new CauseDoneScaling(player), new EffectEndGame(gameOverListener)));
+		triggerList.add(new Trigger(new CausePlayerHealth(0, player), new EffectEndGame(gameOverListener)));
+	}
+	
+	public void gameOver ()
+	{
+		gameOverListener.onGameOver();
 	}
 }

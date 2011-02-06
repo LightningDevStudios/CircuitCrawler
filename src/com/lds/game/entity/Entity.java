@@ -20,7 +20,7 @@ import java.util.EnumSet;
 
 public abstract class Entity 
 {
-	public static final float DEFAULT_SIZE = 69.0f;
+	public static final float DEFAULT_SIZE = 32.0f;
 	
 	//behavior data
 	protected boolean isSolid;

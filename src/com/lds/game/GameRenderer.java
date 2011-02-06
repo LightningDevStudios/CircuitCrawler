@@ -179,6 +179,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 					directionVec.scale(game.player.getHalfSize() + 5.0f);
 					AttackBolt attack = new AttackBolt(Vector2f.add(game.player.getPos(), directionVec), directionVec, game.player.getAngle());
 					EntityManager.addEntity(attack);
+					SoundPlayer.getInstance().playSound(2);
 				}
 				game.btnA.unpress();
 			}
@@ -293,7 +294,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 								if ((colEnt != game.player && game.player.isColliding(colEnt)) || (game.player.getHeldObject() != null && colEnt != game.player.getHeldObject() && game.player.getHeldObject().isColliding(colEnt)))
 								{
 										playerIsColliding = true;
-										//Game.worldOutdated = false;
+										game.player.interact(colEnt);
 								}
 						}
 						
@@ -304,7 +305,6 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 								if ((t.isRendered() && (game.player.isColliding(t))) || (game.player.getHeldObject() != null && game.player.getHeldObject().isColliding(t)))
 								{
 									playerIsColliding = true;
-									//Game.worldOutdated = false;
 								}
 							}
 						}

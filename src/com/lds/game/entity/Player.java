@@ -14,24 +14,10 @@ public class Player extends Character //your character, protagonist
 	public Player (float xPos, float yPos, float angle)
 	{
 		//initialize Character and Entity data
-		super(30.0f, xPos, yPos, angle, 1.0f, 1.0f, false, 100, 0.5f);
+		super(Entity.DEFAULT_SIZE, xPos, yPos, angle, 1.0f, 1.0f, false, 100, 0.5f);
 		
 		//initialize Player data
 		energy = 100;
-	}
-	
-	@Override
-	public void update()
-	{
-		super.update();
-		
-		if (health <= 0)
-			this.die();
-	}
-	
-	public void die ()
-	{
-		EntityManager.removeEntity(this);
 	}
 	
 	public void attack ()
@@ -59,6 +45,10 @@ public class Player extends Character //your character, protagonist
 		else if (ent instanceof Energy)
 		{
 			energy += ((Powerup)ent).getValue();
+		}
+		else if (ent instanceof Enemy)
+		{
+			takeDamage(25);
 		}
 	}
 	

@@ -17,6 +17,16 @@ public abstract class Enemy extends Character //enemies will fall under this cla
 		enemyCount++;
 	}
 	
+	@Override
+	public void interact(Entity ent)
+	{
+		if (ent instanceof AttackBolt)
+		{
+			takeDamage(25);
+		}
+	}
+	
+	@Override
 	public void die ()
 	{
 		enemyCount--;

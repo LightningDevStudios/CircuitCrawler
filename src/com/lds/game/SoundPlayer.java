@@ -9,6 +9,7 @@ import android.media.SoundPool;
 public class SoundPlayer 
 {
 	public static final int SOUND_TEST = 1;
+	public static final int SHOOT_SOUND = 2;
 	
 	private static SoundPlayer p_sp;
 	
@@ -41,6 +42,7 @@ public class SoundPlayer
 	{
 		this.context = context;
 		poolMap.put(SOUND_TEST, pool.load(context, R.raw.testclick, 1));
+		poolMap.put(SHOOT_SOUND, pool.load(context, R.raw.shootsound, 1));
 	}
 	
 	public void playSound(int sound)
