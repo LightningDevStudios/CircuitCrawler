@@ -1,5 +1,5 @@
 package com.lds.puzzles.circuit;
-import com.lds.game.IPuzzle;
+import com.lds.puzzle.IPuzzle;
 
 public class CircuitPuzzle implements IPuzzle
 {

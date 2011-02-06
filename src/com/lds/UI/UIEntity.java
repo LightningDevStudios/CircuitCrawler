@@ -144,10 +144,8 @@ public abstract class UIEntity
 		if (renderMode.contains(RenderMode.COLOR) /*|| renderMode.contains(RenderMode.GRADIENT)*/) {gl.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);}
 	}
 	
-	//Runs every frame
 	public void update()
 	{
-		//default update does nothing, no updating needed.
 	}
 	
 	public void touch(int x, int y)

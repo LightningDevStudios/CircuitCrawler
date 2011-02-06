@@ -269,6 +269,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 							game.player.disableUserControl();
 							game.player.scaleTo(0, 0);
 							game.player.moveTo(test.getXPos(), test.getYPos());
+							SoundPlayer.getInstance().playSound(SoundPlayer.PIT_FALL);
 						}
 						
 						//get the relative X and Y coordinates
