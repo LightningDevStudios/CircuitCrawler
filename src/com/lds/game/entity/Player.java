@@ -53,8 +53,6 @@ public class Player extends Character //your character, protagonist
 		else if (ent instanceof Enemy)
 		{
 			takeDamage(25);
-			for (Vector2f bounceVec : bounceList)
-				bounceVec.scale(4.25f);
 		}
 	}
 	
