@@ -1,6 +1,7 @@
 package com.lds.game.entity;
 
 import com.lds.EntityManager;
+import com.lds.game.SoundPlayer;
 
 public abstract class Enemy extends Character //enemies will fall under this class
 {
@@ -31,6 +32,7 @@ public abstract class Enemy extends Character //enemies will fall under this cla
 	{
 		enemyCount--;
 		EntityManager.removeEntity(this);
+		SoundPlayer.getInstance().playSound(3);
 	}
 	
 	public static int getEnemyCount ()

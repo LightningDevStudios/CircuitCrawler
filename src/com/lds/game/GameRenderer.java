@@ -68,7 +68,6 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		/*frameCount++;
 		if (frameCount == 100)
 			Debug.startMethodTracing("LDS_Game4");*/
-		System.out.println(game.entList.size());
 		
 		//clear the screen
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
