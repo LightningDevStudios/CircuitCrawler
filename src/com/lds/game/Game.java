@@ -149,11 +149,11 @@ public class Game
 		entList.add(block);
 		
 		blob1 = new Blob(-150.0f, -350.0f, EnemyType.STALKER);
-		blob1.enableTilesetMode(tilesetcolors, 2, 1);
+		blob1.enableTilesetMode(tilesetwire, 2, 2);
 		entList.add(blob1);
 		
 		blob2 = new Blob(0.0f, 0.0f, EnemyType.TURRET);
-		blob2.enableTilesetMode(tilesetcolors, 2, 1);
+		blob2.enableTilesetMode(tilesetwire, 2, 2);
 		entList.add(blob2);
 				
 		Button button1 = new Button(108.0f, 0.0f);
