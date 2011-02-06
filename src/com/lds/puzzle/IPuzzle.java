@@ -1,4 +1,4 @@
-package com.lds.game;
+package com.lds.puzzle;
 
 //TODO draw method, get puzzles rendered
 public interface IPuzzle

@@ -47,38 +47,6 @@ public class Animation
 				
 				animTimeMs = Stopwatch.elapsedTimeMs();
 				
-				//skip all the rows if we need to skip at least 1 row.
-				/*while(framesPassed > xTiles)
-				{
-					//adjust the Y value
-					if (curY == yTiles)
-						curY = 0;
-					else
-						curY++;
-					
-					//decrement framesPassed
-					framesPassed -= xTiles + 1;
-				}
-				
-				//if we're near the end and there's enough for it to jump to the next row...
-				if (framesPassed + curX > xTiles)
-				{
-					//subtract the frames from the current position to the end, leaving us with the position on the next row
-					framesPassed -= xTiles - curX + 1;
-					curX = framesPassed;
-					
-					//again, make sure we don't go over the row limit
-					if (curY == yTiles)
-						curY = 0;
-					else
-						curY++;
-				}
-				//regular increment
-				else
-					curX += framesPassed;
-				
-				//reset the timer
-				startTimeMs = Stopwatch.elapsedTimeMs();*/
 			}
 		}
 		

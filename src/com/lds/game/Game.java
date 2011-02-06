@@ -201,7 +201,7 @@ public class Game
 		triggerList.add(new Trigger(bridgeAND, new EffectRaiseBridge(tileset[5][6])));
 		//triggerList.add(new Trigger(bridgeAND, new EffectRaiseBridge(tileset[5][7])));
 		
-		healthBar = new UIHealthBar(200.0f, 30.0f, UIPosition.TOPLEFT, Direction.RIGHT);
+		healthBar = new UIHealthBar(200.0f, 30.0f, UIPosition.TOPLEFT, Direction.RIGHT, player);
 		healthBar.setTopPad(5.0f);
 		healthBar.setLeftPad(5.0f);
 		healthBar.autoPadding(5, 5, 0, 0);
@@ -214,7 +214,7 @@ public class Game
 		healthBar.enableGradientMode(healthColor);
 		healthBar.setValue(99);
 		
-		energyBar = new UIEnergyBar(150.0f, 15.0f, UIPosition.TOPRIGHT, Direction.LEFT);
+		energyBar = new UIEnergyBar(150.0f, 15.0f, UIPosition.TOPRIGHT, Direction.LEFT, player);
 		energyBar.setTopPad(5.0f);
 		energyBar.setRightPad(5.0f);
 		energyBar.autoPadding(5, 0, 0, 5);

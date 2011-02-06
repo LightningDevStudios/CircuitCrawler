@@ -6,28 +6,42 @@ import com.lds.game.entity.Player;
 
 public class UIHealthBar extends UIProgressBar
 {
-	public UIHealthBar(float xSize, float ySize, UIPosition position, Direction dir)
+	Player player;
+	
+	public UIHealthBar(float xSize, float ySize, UIPosition position, Direction dir, Player player)
 	{
 		super(xSize, ySize, position, dir, 100, 0, 100);
+		this.player = player;
 	}
 	
-	public UIHealthBar(float xSize, float ySize, float xRelative, float yRelative, Direction dir)
+	public UIHealthBar(float xSize, float ySize, float xRelative, float yRelative, Direction dir, Player player)
 	{
-		super (xSize, ySize, xRelative, yRelative, dir, 100, 0, 100);
+		super(xSize, ySize, xRelative, yRelative, dir, 100, 0, 100);
+		this.player = player;
 	}
 	
-	public UIHealthBar(float xSize, float ySize, UIPosition position, Direction dir, float topPad, float leftPad, float bottomPad, float rightPad) 
+	public UIHealthBar(float xSize, float ySize, UIPosition position, Direction dir, Player player, float topPad, float leftPad, float bottomPad, float rightPad) 
 	{
 		super(xSize, ySize, position, dir, topPad, leftPad, bottomPad, rightPad, 100, 0, 100);
+		this.player = player;
 	}
 	
-	public UIHealthBar(float xSize, float ySize, float xRelative, float yRelative, Direction dir, float topPad, float leftPad, float bottomPad, float rightPad)
+	public UIHealthBar(float xSize, float ySize, float xRelative, float yRelative, Direction dir, Player player, float topPad, float leftPad, float bottomPad, float rightPad)
 	{
 		super(xSize, ySize, xRelative, yRelative, dir, topPad, leftPad, bottomPad, rightPad, 100, 0, 100);
+		this.player = player;
 	}
 	
-	public void updateHealth(Player player)
+	public void setPlayer(Player player)
+	{
+		this.player = player;
+	}
+	
+	@Override
+	public void update()
 	{
 		setValue(player.getHealth());
+		super.update();
+		
 	}
 }
