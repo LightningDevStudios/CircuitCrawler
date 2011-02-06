@@ -290,10 +290,14 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 						//check collision and reverse motion if it's colliding with something solid
 						for (Entity colEnt : game.entList)
 						{
-								if ((colEnt != game.player && game.player.isColliding(colEnt)) || (game.player.getHeldObject() != null && colEnt != game.player.getHeldObject() && game.player.getHeldObject().isColliding(colEnt)))
+								if ((colEnt != game.player && game.player.isColliding(colEnt)))
 								{
 										playerIsColliding = true;
 										game.player.interact(colEnt);
+								}
+								else if (game.player.getHeldObject() != null && colEnt != game.player.getHeldObject() && game.player.getHeldObject().isColliding(colEnt))
+								{
+									playerIsColliding = true;
 								}
 						}
 						
