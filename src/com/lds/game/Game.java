@@ -148,7 +148,7 @@ public class Game
 		block.initGradientInterp(interpGM);
 		entList.add(block);
 		
-		blob1 = new Blob(-150.0f, -350.0f, AIType.TURRET);
+		blob1 = new Blob(-150.0f, -350.0f, AIType.STALKER);
 		blob1.enableTilesetMode(tilesetwire, 2, 2);
 		entList.add(blob1);
 		

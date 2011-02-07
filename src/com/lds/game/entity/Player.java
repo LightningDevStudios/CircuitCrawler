@@ -53,6 +53,8 @@ public class Player extends Character //your character, protagonist
 		else if (ent instanceof Enemy)
 		{
 			takeDamage(25);
+			//move the player back further upon collision; copy this line to make it bounce back further
+			this.rectangleBounce(ent);
 		}
 	}
 	
