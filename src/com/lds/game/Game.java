@@ -18,7 +18,7 @@ import com.lds.Texture;
 import com.lds.TextureLoader;
 import com.lds.Vector2f;
 import com.lds.Enums.UIPosition;
-import com.lds.Enums.EnemyType;
+import com.lds.Enums.AIType;
 
 
 import com.lds.UI.*;
@@ -148,11 +148,11 @@ public class Game
 		block.initGradientInterp(interpGM);
 		entList.add(block);
 		
-		blob1 = new Blob(-150.0f, -350.0f, EnemyType.STALKER);
+		blob1 = new Blob(-150.0f, -350.0f, AIType.TURRET);
 		blob1.enableTilesetMode(tilesetwire, 2, 2);
 		entList.add(blob1);
 		
-		blob2 = new Blob(0.0f, 0.0f, EnemyType.TURRET);
+		blob2 = new Blob(0.0f, 0.0f, AIType.TURRET);
 		blob2.enableTilesetMode(tilesetwire, 2, 2);
 		entList.add(blob2);
 				
@@ -380,45 +380,43 @@ public class Game
 		
 	}
 	
-	public void updateAI(Enemy enemy)
+	public void runAI(Enemy enemy)
 	{
 		if (Vector2f.sub(enemy.getPos(), player.getPos()).mag() < 100.0f)
-			runAgressiveAI(enemy);
+		{
+			if (enemy.isAgressive())
+				runAgressiveAI(enemy);
+			else
+				runBecomeAgressiveAI(enemy);
+		}
 		else
-			runPassiveAI(enemy);
-	}
-	
-	public void runPassiveAI(Enemy enemy)
-	{
-		if (enemy.getType() == EnemyType.STALKER)
 		{
-			enemy.stop();
-		}
-		else if (enemy.getType() == EnemyType.PATROL)
-		{
-			
-		}
-		else if (enemy.getType() == EnemyType.TURRET)
-		{
-			enemy.setAngle(enemy.getAngle() + 1.5f);
+			if (enemy.isAgressive())
+				runBecomePassiveAI(enemy);
+			else
+				runPassiveAI(enemy);
 		}
 	}
 	
 	public void runAgressiveAI(Enemy enemy)
 	{
-		if (enemy.getType() == EnemyType.STALKER)
+		if (enemy.getType() == AIType.STALKER)
 		{
 			//TODO: A* Pathfinding Algorithm
 			enemy.moveTo(player.getXPos(), player.getYPos());
 			enemy.setAngle((float)Math.toDegrees(Vector2f.sub(enemy.getPos(), player.getPos()).angle()) - 90.0f);
 		}
-		else if (enemy.getType() == EnemyType.PATROL)
+		else if (enemy.getType() == AIType.PATROL)
 		{
 			//TODO: Nodes n' shit
 		}
-		else if (enemy.getType() == EnemyType.TURRET)
+		else if (enemy.getType() == AIType.TURRET)
 		{
-			enemy.setAngle((float)Math.toDegrees(Vector2f.sub(enemy.getPos(), player.getPos()).angle()) - 90.0f);
+			float towardsPlayerAngle = (float)Math.toDegrees(Vector2f.sub(enemy.getPos(), player.getPos()).angle()) - 90.0f;
+			if (enemy.getAngle() > towardsPlayerAngle + 1.5f || enemy.getAngle() < towardsPlayerAngle - 1.5f)
+				enemy.rotateTo(towardsPlayerAngle);
+			else
+				enemy.setAngle(towardsPlayerAngle);
 			
 			if (Stopwatch.elapsedTimeMs() - enemy.getLastTime() > enemy.getRandomTime())
 			{
@@ -429,6 +427,56 @@ public class Game
 				enemy.setRandomTime((int)(Math.random() * 500) + 500);
 				enemy.setLastTime(Stopwatch.elapsedTimeMs());
 			}
+		}
+	}
+	
+	public void runBecomeAgressiveAI(Enemy enemy)
+	{
+		enemy.setAgressive(true);
+		if (enemy.getType() == AIType.STALKER)
+		{
+			
+		}
+		else if (enemy.getType() == AIType.PATROL)
+		{
+			
+		}
+		else if (enemy.getType() == AIType.TURRET)
+		{
+			
+		}
+	}
+	
+	public void runPassiveAI(Enemy enemy)
+	{
+		if (enemy.getType() == AIType.STALKER)
+		{
+			enemy.stop();
+		}
+		else if (enemy.getType() == AIType.PATROL)
+		{
+			
+		}
+		else if (enemy.getType() == AIType.TURRET)
+		{
+			enemy.setAngle(enemy.getAngle() + 1.5f);
+		}
+	}
+	
+	public void runBecomePassiveAI(Enemy enemy)
+	{
+		enemy.setAgressive(false);
+		if (enemy.getType() == AIType.STALKER)
+		{
+			
+		}
+		else if (enemy.getType() == AIType.PATROL)
+		{
+			
+		}
+		else if (enemy.getType() == AIType.TURRET)
+		{
+			
 		}
 	}
 	

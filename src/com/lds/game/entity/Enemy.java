@@ -2,27 +2,29 @@ package com.lds.game.entity;
 
 import com.lds.EntityManager;
 import com.lds.game.SoundPlayer;
-import com.lds.Enums.EnemyType;
+import com.lds.Enums.AIType;
 import com.lds.Stopwatch;
 
 public abstract class Enemy extends Character //enemies will fall under this class
 {
 	private static int enemyCount = 0;
-	protected EnemyType type;
+	protected AIType type;
+	protected boolean agressive;
 	protected int lastTime, randomTime;
 
-	public Enemy(float size, float xPos, float yPos, boolean circular, int health, EnemyType type)
+	public Enemy(float size, float xPos, float yPos, boolean circular, int health, AIType type)
 	{
 		this(size, xPos, yPos, 0.0f, 1.0f, 1.0f, circular, health, type);
 	}
 	
-	public Enemy(float size, float xPos, float yPos, float angle, float xScl, float yScl, boolean circular, int health, EnemyType type)
+	public Enemy(float size, float xPos, float yPos, float angle, float xScl, float yScl, boolean circular, int health, AIType type)
 	{
 		super(size, xPos, yPos, angle, xScl, yScl, circular, health, 0.0f);
 		this.type = type;
 		lastTime = Stopwatch.elapsedTimeMs();
 		randomTime = 500;
 		enemyCount++;
+		agressive = false;
 	}
 	
 	@Override
@@ -39,9 +41,14 @@ public abstract class Enemy extends Character //enemies will fall under this cla
 		SoundPlayer.getInstance().playSound(3);
 	}
 	
-	public EnemyType getType()
+	public AIType getType()
 	{
 		return type;
+	}
+	
+	public boolean isAgressive()
+	{
+		return agressive;
 	}
 	
 	public static int getEnemyCount ()
@@ -57,6 +64,11 @@ public abstract class Enemy extends Character //enemies will fall under this cla
 	public int getLastTime()
 	{
 		return lastTime;
+	}
+	
+	public void setAgressive(boolean agressive)
+	{
+		this.agressive = agressive;
 	}
 	
 	public void setRandomTime(int randomTime)

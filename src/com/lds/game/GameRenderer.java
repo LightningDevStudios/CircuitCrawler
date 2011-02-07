@@ -117,7 +117,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		{
 			ent.update();
 			if (ent instanceof Enemy)
-				game.updateAI((Enemy)ent);
+				game.runAI((Enemy)ent);
 		}
 		
 		//Render all entities
