@@ -1,9 +1,16 @@
 package com.lds.puzzle;
 
-//TODO draw method, get puzzles rendered
-public interface IPuzzle
+import com.lds.puzzle.event.*;
+
+import android.opengl.GLSurfaceView;
+
+public interface IPuzzle extends GLSurfaceView.Renderer
 {
 	public void init();
 	public void run();
 	public boolean end();
+	
+	public void setOnPuzzleInitializedListener(OnPuzzleInitializedListener listener);
+	public void setOnPuzzleSuccessListener(OnPuzzleSuccessListener listener);
+	public void setOnPuzzleFailListener(OnPuzzleFailListener listener);
 }
