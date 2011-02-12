@@ -395,4 +395,18 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	{
 		this.gameInitializedListener = listener;
 	}
+
+	@Override
+	public void onPuzzleWon() 
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onPuzzleFailed() 
+	{
+		// TODO Auto-generated method stub
+		
+	}
 }

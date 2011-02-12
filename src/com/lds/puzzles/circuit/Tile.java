@@ -1,15 +1,15 @@
 package com.lds.puzzles.circuit;
 
-import com.lds.puzzles.circuit.dir;
+import com.lds.Enums.Direction;
 
 public class Tile 
 {
-	private dir side1;
-	private dir side2;
+	private Direction side1;
+	private Direction side2;
 	private boolean selected;
 	private boolean highlighted;
 	private boolean powered;
-	public Tile (dir _side1, dir _side2)
+	public Tile (Direction _side1, Direction _side2)
 	{
 		selected = false;
 		highlighted = false;
@@ -56,12 +56,12 @@ public class Tile
 		highlighted = false;
 	}
 	//side1 accessor
-	public dir getSide1 ()
+	public Direction getSide1 ()
 	{
 		return side1;
 	}
 	//side2 accessor
-	public dir getSide2 ()
+	public Direction getSide2 ()
 	{
 		return side2;
 	}
@@ -79,27 +79,27 @@ public class Tile
 	public int getType ()
 	{
 		//type 0 is a straight vertical piece
-		if (side1 == dir.up && side2 == dir.down || side1 == dir.down && side2 == dir.up)
+		if (side1 == Direction.UP && side2 == Direction.DOWN || side1 == Direction.DOWN && side2 == Direction.UP)
 		{
 			return 0;
 		}
 		//type 1 is a straight horizontal line
-		else if (side1 == dir.left && side2 == dir.right || side1 == dir.right && side2 == dir.left)
+		else if (side1 == Direction.LEFT && side2 == Direction.RIGHT || side1 == Direction.RIGHT && side2 == Direction.LEFT)
 		{
 			return 1;
 		}
 		//type 2 is a bottom-left corner (L shape)
-		else if (side1 == dir.up && side2 == dir.right || side1 == dir.right && side2 == dir.up)
+		else if (side1 == Direction.UP && side2 == Direction.RIGHT || side1 == Direction.RIGHT && side2 == Direction.UP)
 		{
 			return 2;
 		}
 		//type 3 is a top-left corner
-		else if (side1 == dir.down && side2 == dir.right || side1 == dir.right && side2 == dir.down)
+		else if (side1 == Direction.DOWN && side2 == Direction.RIGHT || side1 == Direction.RIGHT && side2 == Direction.DOWN)
 		{
 			return 3;
 		}
 		//type 4 is a top-right corner
-		else if (side1 == dir.down && side2 == dir.left || side1 == dir.left && side2 == dir.down)
+		else if (side1 == Direction.DOWN && side2 == Direction.LEFT || side1 == Direction.LEFT && side2 == Direction.DOWN)
 		{
 			return 4;
 		}
@@ -110,40 +110,40 @@ public class Tile
 		}
 	}
 	//flips directtion of tile (right to left, up to down, etc.)
-	public static dir returnFlippedTile (dir input)
+	public static Direction returnFlippedTile (Direction dir)
 	{
-		switch (input)
+		switch (dir)
 		{
-			case up:
-				return dir.down;
-			case down:
-				return dir.up;
-			case left:
-				return dir.right;
-			case right:
-				return dir.left;
+			case UP:
+				return Direction.DOWN;
+			case DOWN:
+				return Direction.UP;
+			case LEFT:
+				return Direction.RIGHT;
+			case RIGHT:
+				return Direction.LEFT;
 			default:
-				return dir.up;
+				return Direction.UP;
 		}
 	}
 	
 	//returns x position of next tile in powering sequence
-	public static int returnNewXPos (int x, dir input)
+	public static int returnNewXPos (int x, Direction dir)
 	{
-		if (input == dir.left)
+		if (dir == Direction.LEFT)
 			return x - 1;
-		else if (input == dir.right)
+		else if (dir == Direction.RIGHT)
 			return x + 1;
 		else
 			return x;
 	}
 	
 	//return y position of next tile in powering sequence
-	public static int returnNewYPos (int y, dir input)
+	public static int returnNewYPos (int y, Direction dir)
 	{
-		if (input == dir.up)
+		if (dir == Direction.UP)
 			return y - 1;
-		else if (input == dir.down)
+		else if (dir == Direction.DOWN)
 			return y + 1;
 		else
 			return y;

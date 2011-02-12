@@ -73,5 +73,7 @@ public class Graphics extends GLSurfaceView
 		public abstract void onTouchInput(MotionEvent event);
 		public abstract void setGameOverEvent(OnGameOverListener listener);
 		public abstract void setGameInitializedEvent(OnGameInitializedListener listener);
+		public abstract void onPuzzleWon();
+		public abstract void onPuzzleFailed();
 	}
 }

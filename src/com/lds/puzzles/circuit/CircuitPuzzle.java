@@ -1,4 +1,5 @@
 package com.lds.puzzles.circuit;
+
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
@@ -7,12 +8,13 @@ import com.lds.puzzle.event.*;
 
 import com.lds.puzzles.circuit.KeyboardReader;
 import com.lds.puzzles.circuit.Tile;
-import com.lds.puzzles.circuit.dir;
+
+import com.lds.Enums.Direction;
 
 public class CircuitPuzzle implements IPuzzle
 {
 	KeyboardReader reader = new KeyboardReader();
-	private dir dir1, dir2;
+	private Direction dir1, dir2;
 	private int rand1, rand2;
 	private boolean puzzleIsComplete;
 	private Tile[][] grid = new Tile[3][6];
@@ -131,8 +133,8 @@ public class CircuitPuzzle implements IPuzzle
 					rand2 = (int)(Math.random() * 4);
 				}
 				
-				dir1 = dir.class.getEnumConstants()[rand1];
-				dir2 = dir.class.getEnumConstants()[rand2];
+				dir1 = Direction.class.getEnumConstants()[rand1];
+				dir2 = Direction.class.getEnumConstants()[rand2];
 				
 				grid[i][j] = new Tile(dir1, dir2);
 			}
@@ -221,7 +223,7 @@ public class CircuitPuzzle implements IPuzzle
 			 *************************************************/
 			
 			//runs recursive method
-			rec (null, grid[0][0], 0, 0, dir.down);
+			rec (null, grid[0][0], 0, 0, Direction.DOWN);
 			
 			//unpowers entire grid, so broken circuts are turned off
 			for (int i = 0; i < grid.length; i++)
@@ -233,7 +235,7 @@ public class CircuitPuzzle implements IPuzzle
 			}
 			
 			//if last tile is powered and pointing down, complete puzzle
-			if	(grid[grid.length - 1][grid[0].length - 1].isHightlighted() && (grid[grid.length - 1][grid[0].length - 1].getSide1() == dir.down || grid[grid.length - 1][grid[0].length - 1].getSide2() == dir.down))
+			if	(grid[grid.length - 1][grid[0].length - 1].isHightlighted() && (grid[grid.length - 1][grid[0].length - 1].getSide1() == Direction.DOWN || grid[grid.length - 1][grid[0].length - 1].getSide2() == Direction.DOWN))
 			{
 				puzzleIsComplete = true;
 				System.out.println("Congratulations! You have won!!!!!1!111!1!!1!1111!!!!1111!!1one!!111!11111!11!!!!!!");
@@ -242,9 +244,9 @@ public class CircuitPuzzle implements IPuzzle
 	}
 	
 	//main recursive method
-	public void rec (Tile previous, Tile current, int x, int y, dir start)
+	public void rec (Tile previous, Tile current, int x, int y, Direction start)
 	{
-		dir newDir;
+		Direction newDir;
 		int newX;
 		int newY;
 		if (current.getSide1() == Tile.returnFlippedTile(start))
@@ -256,13 +258,13 @@ public class CircuitPuzzle implements IPuzzle
 		newX = Tile.returnNewXPos(x, newDir);
 		newY = Tile.returnNewYPos(y, newDir);
 		current.setPower(true);
-		if (!(x == 0 && newDir == dir.left))
+		if (!(x == 0 && newDir == Direction.LEFT))
 		{
-			if (!(x == grid.length - 1 && newDir == dir.right))
+			if (!(x == grid.length - 1 && newDir == Direction.RIGHT))
 			{
-				if (!(y == 0 && newDir == dir.up))
+				if (!(y == 0 && newDir == Direction.UP))
 				{
-					if (!(y == grid[0].length - 1 && newDir == dir.down))
+					if (!(y == grid[0].length - 1 && newDir == Direction.DOWN))
 					{
 						rec(current, grid[newX][newY], newX, newY, newDir);
 					}
@@ -325,7 +327,7 @@ public class CircuitPuzzle implements IPuzzle
 	//switches two tiles using a temporary Tile object
 	public void switchTiles (Tile tile1, Tile tile2)
 	{
-		Tile temp = new Tile(dir.up, dir.down);
+		Tile temp = new Tile(Direction.UP, Direction.DOWN);
 		temp.setTile(tile2);
 		tile2.setTile(tile1);
 		tile1.setTile(temp);
