@@ -14,10 +14,15 @@ public class Node
 		linkList = new ArrayList<NodeLink>();
 	}
 	
-	public void addLinkedNode(Node node)
+	public void addNodeLink(Node node)
 	{
 		linkList.add(new NodeLink(this, node));
 		node.linkList.add(new NodeLink(node, this));
+	}
+	
+	public void addOneWayNodeLink(Node node)
+	{
+		linkList.add(new NodeLink(this, node));
 	}
 	
 	public Node getLinkedNode(int index)
@@ -28,6 +33,17 @@ public class Node
 	public Vector2f getLinkVector(int index)
 	{
 		return linkList.get(index).getNodeVec();
+	}
+	
+	public Vector2f getLinkVector(Node node)
+	{
+		Vector2f linkVec = new Vector2f();
+		for (NodeLink link : linkList)
+		{
+			if (link.getLinkedNode() == node)
+				linkVec = link.getNodeVec();
+		}
+		return linkVec;
 	}
 	
 	public NodeLink getNodeLink(int index)

@@ -4,6 +4,8 @@ import com.lds.EntityManager;
 import com.lds.game.SoundPlayer;
 import com.lds.Enums.AIType;
 import com.lds.Stopwatch;
+import com.lds.game.ai.NodePath;
+import com.lds.game.ai.Node;
 
 public abstract class Enemy extends Character //enemies will fall under this class
 {
@@ -11,6 +13,10 @@ public abstract class Enemy extends Character //enemies will fall under this cla
 	protected AIType type;
 	protected boolean agressive;
 	protected int lastTime, randomTime;
+	//Patrol stuff
+	protected NodePath patrolPath;
+	protected int pathLocation;
+	protected boolean onPatrol, doneRotating;
 
 	public Enemy(float size, float xPos, float yPos, boolean circular, int health, AIType type)
 	{
@@ -25,6 +31,8 @@ public abstract class Enemy extends Character //enemies will fall under this cla
 		randomTime = 500;
 		enemyCount++;
 		agressive = false;
+		onPatrol = false;
+		doneRotating = false;
 	}
 	
 	@Override
@@ -34,12 +42,83 @@ public abstract class Enemy extends Character //enemies will fall under this cla
 	}
 	
 	@Override
-	public void die ()
+	public void die()
 	{
 		enemyCount--;
 		EntityManager.removeEntity(this);
 		SoundPlayer.getInstance().playSound(3);
 	}
+	
+	@Override
+	public void interact(Entity ent)
+	{
+		if (ent instanceof AttackBolt)
+		{
+			takeDamage(25);
+			agressive = true;
+		}
+	}
+	
+	//Patrol stuff
+	
+	public void setPatrolPath(NodePath patrolPath)
+	{
+		type = AIType.PATROL;
+		this.patrolPath = patrolPath;
+		pathLocation = 0;
+	}
+	
+	public NodePath getPatrolPath()
+	{
+		return patrolPath;
+	}
+	
+	public Node getPatrolPathNode(int index)
+	{
+		return patrolPath.getNodeList().get(index);
+	}
+	
+	public int getClosestPatrolPathNodeIndex()
+	{
+		return patrolPath.getNodeList().indexOf(patrolPath.getClosestNode(this));
+	}
+	
+	public Node getClosestPatrolPathNode()
+	{
+		return patrolPath.getClosestNode(this);
+	}
+	
+	public int getPathLocation()
+	{
+		return pathLocation;
+	}
+	
+	public boolean isOnPatrol()
+	{
+		return onPatrol;
+	}
+	
+	public void setPathLocation(int pathLocation)
+	{
+		this.pathLocation = pathLocation;
+	}
+	
+	public void setOnPatrol(boolean onPatrol)
+	{
+		this.onPatrol = onPatrol;
+	}
+	
+	public boolean isDoneRotating()
+	{
+		return doneRotating;
+	}
+	
+	public void setDoneRotating(boolean doneRotating)
+	{
+		this.doneRotating = doneRotating;
+	}
+	
+	//General Stuff
 	
 	public AIType getType()
 	{
