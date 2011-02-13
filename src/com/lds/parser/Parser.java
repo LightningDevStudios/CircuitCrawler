@@ -1,8 +1,8 @@
 package com.lds.parser;
 
 import java.io.IOException;
+import java.util.HashMap;
 
-import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import android.content.Context;
 import android.content.res.XmlResourceParser;
@@ -22,45 +22,49 @@ public class Parser
 	public void parseLevel()
 		throws XmlPullParserException, IOException
 	{
-		
-		int eventType = xrp.getEventType();
 	
-		while (eventType != XmlPullParser.END_DOCUMENT)
+		while (xrp.getEventType() != xrp.END_DOCUMENT)
 		{
-			if (eventType == XmlPullParser.START_TAG)
-			{	
-				if(xrp.getName() == "PhysBlock")
-					parsePhysBlock();
+			if (xrp.getEventType() == xrp.START_TAG)
+			{
+				System.out.println(xrp.getName());
+				if(xrp.getName().equals("Entity"))
+					parseEntity();
 				
-				else if(xrp.getName() == "Player")
+				else if(xrp.getName().equals("Player"))
 					parsePlayer();
 			}
-			eventType = xrp.next();
+			xrp.next();
 		}
 	}
 	
-	public void parsePhysBlock() throws XmlPullParserException, IOException
+	public void parseEntity() throws XmlPullParserException, IOException
 	{
 		xrp.next();
-		xrp.next();
 		
 		
-		String[] parserPhysBlockA = new String[14];
+		//String[] entString = new String[14];
+		HashMap <String, String> entHashMap = new HashMap<String, String>();		
 		
-		
-		for (int i = 1; i <= 14; i++)
+		while (!((xrp.getEventType() == xrp.END_TAG && xrp.getName().equals("Entity")))) 
 		{
-			if ((i + 1) % 3 == 0)
-			{
-				parserPhysBlockA[i - 1] = xrp.getText();
-			}
+			//entString[i - 1] = xrp.getText();
+			String tempDataType = null;
+			
+			tempDataType = xrp.getName();
 			
 			xrp.next();
-			xrp.next();
+			
+			entHashMap.put(tempDataType, xrp.getText());
+			
+			System.out.println(xrp.getText());
+				
+			xrp.next(); 
 			xrp.next();
 		}
 		
-		new PhysBlockData(parserPhysBlockA);
+		
+		new EntityData(entHashMap);
 	}
 	
 	public void parsePlayer()

@@ -264,16 +264,19 @@ public class Game
 				
 		//Parser
 		Parser parser = new Parser(context);
-		try {
+		
+		try 
+		{
 			parser.parseLevel();
-		} catch (XmlPullParserException e) {
-			// TODO Auto-generated catch block
+		} 
+			catch (XmlPullParserException e) 
+		{
 			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
+		} 
+			catch (IOException e) 
+		{
 			e.printStackTrace();
 		}
-		
 	}
 	
 	public void updateLocalEntities()
