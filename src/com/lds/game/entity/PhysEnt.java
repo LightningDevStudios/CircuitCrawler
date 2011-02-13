@@ -72,9 +72,19 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 		}
 	}
 	
+	public void moveTo (Vector2f moveToVec)
+	{
+		this.moveTo(moveToVec.getX(), moveToVec.getY());
+	}
+	
 	//sets angle of an entity to a new value
 	public void rotateTo (float degrees)
 	{
+		if (degrees >= 360.0f)
+			degrees -= 360.0f * ((int)degrees/360);
+		else if (degrees < 0.0f)
+			degrees = 0.0f;
+		
 		if (!isRotating)
 		{
 		endAngle = degrees;
@@ -117,10 +127,20 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 		}
 	}
 	
+	public void moveBy (Vector2f moveByVec)
+	{
+		this.move(moveByVec.getX(), moveByVec.getY());
+	}
+	
 	//much like rotateTo, but rotate() adds or subtracts the number of degrees from the current number
 	//i.e. ent1 is rotated 30 degrees, if you do ent1.rotate(30.0f) it will be at 60 degrees
 	public void rotate (float degrees)
 	{
+		if (degrees >= 360.0f)
+			degrees -= 360.0f * ((int)degrees/360);
+		else if (degrees < 0.0f)
+			degrees = 0.0f;
+		
 		endAngle = angle + degrees;
 		interpAngle = degrees;	
 		isRotating = true;
@@ -241,7 +261,11 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	
 	//mutator for angle
 	public void setAngle (float degrees)
-	{
+	{	
+		if (degrees >= 360.0f)
+			degrees -= 360.0f * ((int)degrees/360);
+		else if (degrees < 0.0f)
+			degrees = 0.0f;
 		angle = degrees;
 		endAngle = degrees;
 		Game.worldOutdated = true;

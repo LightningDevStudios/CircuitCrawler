@@ -10,6 +10,11 @@ public class Sprite extends PhysEnt
 	public Animation anim;
 	
 	//TODO pass in a texture, set renderMode manually
+	public Sprite(float size, float xPos, float yPos)
+	{
+		this(size, xPos, yPos, 0.0f, 0.0f, 0.0f, null);
+	}
+	
 	public Sprite(float size, float xPos, float yPos, float moveSpeed, float rotSpeed, float sclSpeed, Animation anim)
 	{
 		this(size, xPos, yPos, 0.0f, 1.0f, 1.0f, moveSpeed, rotSpeed, sclSpeed, anim);
@@ -17,7 +22,7 @@ public class Sprite extends PhysEnt
 	
 	public Sprite(float size, float xPos, float yPos, float angle, float xScl, float yScl, float moveSpeed, float rotSpeed, float sclSpeed, Animation anim)
 	{
-		super(size, xPos, yPos, angle, xScl, yScl, true, false, true, moveSpeed, rotSpeed, sclSpeed);
+		super(size, xPos, yPos, angle, xScl, yScl, false, false, true, moveSpeed, rotSpeed, sclSpeed);
 
 		this.anim = anim;
 		texture = anim.getCurrentFrame();
@@ -31,7 +36,6 @@ public class Sprite extends PhysEnt
 		super.update();
 		anim.update();
 		renderNextFrame();
-		
 	}
 	
 	@Override
