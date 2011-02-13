@@ -4,15 +4,15 @@
 		<size>69.0f</size>
 		<xPos>0.0f</xPos>
 		<yPos>0.0f</yPos>
-		<xScale>1.0f</xScale>
-		<yScale>1.0f</yScale>
-		<angle>13</angle>
-		<moveSpeed>0</moveSpeed>
-		<rotateSpeed>0</rotateSpeed>
-		<scaleSpeed>0</scaleSpeed>
+		<xScl>1.0f</xScl>
+		<yScl>1.0f</yScl>
+		<angle>13.0f</angle>
+		<moveSpeed>0.0f</moveSpeed>
+		<rotSpeed>0.0f</rotSpeed>
+		<sclSpeed>0.0f</sclSpeed>
 		<isSolid>true</isSolid>
 		<circular>true</circular>
 		<color>yellow</color>
+		<willCollide>true</willCollide>
 	</Entity>
-	<Player></Player>
 </Level>

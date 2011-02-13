@@ -1,6 +1,7 @@
 package com.lds.parser;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.xmlpull.v1.XmlPullParserException;
@@ -8,9 +9,13 @@ import android.content.Context;
 import android.content.res.XmlResourceParser;
 
 import com.lds.game.R;
+import com.lds.game.entity.Entity;
+import com.lds.game.entity.PhysBlock;
  
 public class Parser
 {
+	
+	public ArrayList<EntityData> parsedList = new ArrayList<EntityData>();
 	
 	public XmlResourceParser xrp;  
 
@@ -30,9 +35,6 @@ public class Parser
 				System.out.println(xrp.getName());
 				if(xrp.getName().equals("Entity"))
 					parseEntity();
-				
-				else if(xrp.getName().equals("Player"))
-					parsePlayer();
 			}
 			xrp.next();
 		}
@@ -43,32 +45,41 @@ public class Parser
 		xrp.next();
 		
 		
-		//String[] entString = new String[14];
-		HashMap <String, String> entHashMap = new HashMap<String, String>();		
+		HashMap <String, String> dataHashMap = new HashMap<String, String>();		
 		
 		while (!((xrp.getEventType() == xrp.END_TAG && xrp.getName().equals("Entity")))) 
 		{
-			//entString[i - 1] = xrp.getText();
 			String tempDataType = null;
-			
+
 			tempDataType = xrp.getName();
 			
 			xrp.next();
+
+			dataHashMap.put(tempDataType, xrp.getText());
 			
-			entHashMap.put(tempDataType, xrp.getText());
-			
-			System.out.println(xrp.getText());
 				
 			xrp.next(); 
 			xrp.next();
 		}
 		
 		
-		new EntityData(entHashMap);
+		PhysBlockData pbd = new PhysBlockData(dataHashMap);
+		parsedList.add(pbd);
 	}
 	
-	public void parsePlayer()
+	public ArrayList<Entity> convertDataToEnts()
 	{
-		//send to a parser and do other shit here		
+		ArrayList<Entity> entList = new ArrayList<Entity>();
+		
+		for(EntityData ent : parsedList)
+		{
+			if (ent instanceof PhysBlockData)
+			{
+				PhysBlock phy = new PhysBlock(ent.getSize(), ent.getXPos(), ent.getYPos());
+				entList.add(phy);
+			}
+		}
+		
+		return entList;
 	}
 }

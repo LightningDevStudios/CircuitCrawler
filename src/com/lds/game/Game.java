@@ -269,14 +269,16 @@ public class Game
 		{
 			parser.parseLevel();
 		} 
-			catch (XmlPullParserException e) 
+		catch (XmlPullParserException e) 
 		{
 			e.printStackTrace();
 		} 
-			catch (IOException e) 
+		catch (IOException e) 
 		{
 			e.printStackTrace();
 		}
+		
+		entList.addAll(parser.convertDataToEnts());
 	}
 	
 	public void updateLocalEntities()

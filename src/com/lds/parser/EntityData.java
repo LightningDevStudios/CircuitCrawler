@@ -18,9 +18,8 @@ import android.content.res.XmlResourceParser;*/
 
 public class EntityData
 {
-	private float size, xPos, yPos, xScale, yScale, angle;
-	private int moveSpeed, rotateSpeed, scaleSpeed;
-	private boolean isSolid, circular;
+	private float size, xPos, yPos, xScl, yScl, angle;
+	private boolean isSolid, circular, willCollide;
 	private String color;
 
 	public EntityData(HashMap<String, String> entHashMap)
@@ -28,16 +27,13 @@ public class EntityData
 		size = Float.parseFloat(entHashMap.get("size"));
 		xPos = Float.parseFloat(entHashMap.get("xPos"));
 		yPos = Float.parseFloat(entHashMap.get("yPos"));
-		xScale = Float.parseFloat((entHashMap.get("xScale")));
-		yScale = Float.parseFloat(entHashMap.get("yScale"));
+		xScl = Float.parseFloat(entHashMap.get("xScl"));
+		yScl = Float.parseFloat(entHashMap.get("yScl"));
 		angle = Float.parseFloat(entHashMap.get("angle"));
-		
-		moveSpeed = Integer.parseInt(entHashMap.get("moveSpeed")); 
-		rotateSpeed = Integer.parseInt(entHashMap.get("rotateSpeed"));
-		scaleSpeed = Integer.parseInt(entHashMap.get("scaleSpeed"));
 		
 		isSolid = Boolean.parseBoolean(entHashMap.get("isSolid"));
 		circular = Boolean.parseBoolean(entHashMap.get("circular"));
+		willCollide = Boolean.parseBoolean(entHashMap.get("willCollide"));
 		
 		color = (entHashMap.get("color"));
 	}
@@ -46,25 +42,16 @@ public class EntityData
 	public void setSize(float newSize) 			{size = newSize;}
 	public void setXPos (float newXPos)			{xPos = newXPos;}
 	public void setYPos (float newYPos)			{yPos = newYPos;}
-	public void setXScale(float newXScale)		{xScale = newXScale;}
-	public void setYScale(float newYScale)		{yScale = newYScale;}
+	public void setXScl(float newXScl)		{xScl = newXScl;}
+	public void setYScl(float newYScl)		{yScl = newYScl;}
 	public void setAngle(float newAngle)				{angle = newAngle;}
 	
 	public float getSize()			{return size;}
 	public float getXPos() 			{return xPos;}
 	public float getYPos()			{return yPos;}
-	public float getXScale()		{return xScale;}
-	public float getYScale()		{return yScale;}
+	public float getXScl()		{return xScl;}
+	public float getYScl()		{return yScl;}
 	public float getAngle()			{return angle;}
-
-	//int setters/getters
-	public void setMoveSpeed(int newMoveSpeed)		{moveSpeed = newMoveSpeed;}
-	public void setRotateSpeed(int newRotateSpeed)	{rotateSpeed = newRotateSpeed;}
-	public void setScaleSpeed(int newScaleSpeed)	{scaleSpeed = newScaleSpeed;}
-	
-	public int getMoveSpeed()		{return moveSpeed;}
-	public int getRotateSpeed()		{return	rotateSpeed;}
-	public int getScaleSpeed()		{return scaleSpeed;}
 	
 	//bool setters/getters
 	public void setIsSolid(boolean newIsSolid) 		{isSolid = newIsSolid;}
@@ -77,4 +64,6 @@ public class EntityData
 	public void setColor(String newColor)	{color = newColor;}
 	
 	public String getColor()		{return color;}
+	
+	
 }
