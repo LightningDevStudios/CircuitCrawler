@@ -10,8 +10,9 @@ import android.view.WindowManager;
 import com.lds.Graphics;
 import com.lds.game.event.*;
 import com.lds.game.menu.MainMenu;
+import com.lds.game.puzzle.PuzzleActivity;
 
-public class Run extends Activity
+public class Run extends Activity implements OnGameOverListener, OnGameInitializedListener, OnPuzzleActivatedListener
 {
 	public Graphics glSurface;
 	public GameRenderer gameR;
@@ -34,23 +35,34 @@ public class Run extends Activity
 		//set up OpenGL rendering
 		Object syncObj = new Object();
 		gameR = new GameRenderer(screenX, screenY, this, syncObj);
+		gameR.setGameInitializedEvent(this);
+		gameR.setGameOverEvent(this);
+		gameR.setPuzzleActivatedEvent(this);
 		glSurface = new Graphics(this, gameR, syncObj);
 		setContentView(glSurface);
-		final OnGameOverListener l = new OnGameOverListener()
-		{
-			public void onGameOver()
-			{
-				Intent i = new Intent(Run.this, MainMenu.class);
-				startActivity(i);
-			}
-		};
-		glSurface.setGameInitializedEvent(new OnGameInitializedListener()
-		{
-			public void onGameInitialized() 
-			{
-				glSurface.setGameOverEvent(l);
-			}
-		});
+	}
+	
+	@Override
+	public void onGameInitialized()
+	{
+		//glSurface.setGameOverEvent(this);
+		//glSurface.setPuzzleActivatedEvent(this);
+	}
+	
+	@Override
+	public void onGameOver()
+	{
+		Intent i = new Intent(Run.this, MainMenu.class);
+		startActivity(i);
+	}
+	
+	@Override
+	public void onPuzzleActivated()
+	{
+		//glSurface.onPause();
+		Intent i = new Intent(Run.this, PuzzleActivity.class);
+		i.putExtra("PUZZLE_RENDERER", "circuit.CircuitPuzzle");
+		startActivityForResult(i, 1);
 	}
 	
 	@Override

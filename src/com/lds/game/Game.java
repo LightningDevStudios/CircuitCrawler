@@ -70,13 +70,10 @@ public class Game
 	public Door door;
 	public Sprite spr;
 	public Blob blob1, blob2;
+	public PuzzleBox box;
 	
 	public Animation spriteAnim;
-	
-	//Events
-	public OnGameOverListener gameOverListener;
-	public static OnPuzzleActivatedListener puzzleActivatedListener;
-	
+		
 	//Constructors
 	public Game (Context context, GL10 gl) 
 	
@@ -177,6 +174,9 @@ public class Game
 		spr = new Sprite(50, -100, 100, 45, 1, 1, spriteAnim);
 		spr.enableTextureMode(tilesetwire);
 		entList.add(spr);
+		
+		box = new PuzzleBox(64.0f, -100.0f, -300.0f, false, true);
+		entList.add(box);
 		
 		//TODO NOPE LOL
 		/*circle = new PhysCircle(50.0f, -100.0f, -310.0f);
@@ -502,13 +502,7 @@ public class Game
 	
 	public void setGameOverEvent(OnGameOverListener listener)
 	{
-		gameOverListener = listener;
-		triggerList.add(new Trigger(new CauseDoneScaling(player), new EffectEndGame(gameOverListener)));
-		triggerList.add(new Trigger(new CausePlayerHealth(0, player), new EffectEndGame(gameOverListener)));
-	}
-	
-	public void gameOver ()
-	{
-		gameOverListener.onGameOver();
+		triggerList.add(new Trigger(new CauseDoneScaling(player), new EffectEndGame(listener)));
+		triggerList.add(new Trigger(new CausePlayerHealth(0, player), new EffectEndGame(listener)));
 	}
 }

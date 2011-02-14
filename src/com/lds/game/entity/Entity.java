@@ -3,7 +3,6 @@ package com.lds.game.entity;
 import javax.microedition.khronos.opengles.GL10;
 
 import com.lds.EntityManager;
-import com.lds.Enums;
 import com.lds.Stopwatch;
 import com.lds.Texture;
 import com.lds.TilesetHelper;

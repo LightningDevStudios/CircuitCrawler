@@ -24,6 +24,8 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	public boolean windowOutdated, gameOver;
 	public int frameInterval, frameCount = 0;	
 	public OnGameInitializedListener gameInitializedListener;
+	public OnPuzzleActivatedListener puzzleActivatedListener;
+	public OnGameOverListener gameOverListener;
 	
 	public GameRenderer (float screenW, float screenH, Context context, Object syncObj)
 	{
@@ -44,7 +46,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		gl.glEnable(GL10.GL_BLEND);
 		gl.glBlendFunc(GL10.GL_ONE, GL10.GL_ONE_MINUS_SRC_ALPHA); //TODO change this later and make it per-poly?
 
-		gl.glClearColor(0.39f, 0.58f, 0.93f, 0.5f);
+		gl.glClearColor(0.39f, 0.58f, 0.93f, 1.0f);
 		
 		gl.glDisable(GL10.GL_DEPTH_TEST);
 		gl.glDepthMask(false);
@@ -59,6 +61,14 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		
 		if(gameInitializedListener != null)
 			gameInitializedListener.onGameInitialized();
+		
+		for (Entity ent : game.entList)
+		{
+			if (ent instanceof PuzzleBox)
+			{
+				((PuzzleBox)ent).setPuzzleInitListener(puzzleActivatedListener);
+			}
+		}
 	}
 	
 	@Override
@@ -387,7 +397,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	@Override
 	public void setGameOverEvent(OnGameOverListener listener) 
 	{
-		game.setGameOverEvent(listener);
+		this.gameOverListener = listener;
 	}
 	
 	@Override
@@ -397,16 +407,25 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	}
 
 	@Override
+	public void setPuzzleActivatedEvent(OnPuzzleActivatedListener listener)
+	{
+		this.puzzleActivatedListener = listener;
+	}
+	
+	@Override
 	public void onPuzzleWon() 
 	{
 		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public void onPuzzleFailed() 
 	{
 		// TODO Auto-generated method stub
-		
+	}
+	
+	public void gameOver ()
+	{
+		gameOverListener.onGameOver();
 	}
 }

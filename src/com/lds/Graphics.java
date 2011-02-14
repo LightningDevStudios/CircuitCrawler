@@ -46,7 +46,29 @@ public class Graphics extends GLSurfaceView
 		return true;
 	}
 	
-	public void setGameOverEvent(final OnGameOverListener listener)
+	public void onPuzzleWon()
+	{
+		queueEvent(new Runnable()
+		{
+			public void run()
+			{
+				renderer.onPuzzleWon();
+			}
+		});
+	}
+	
+	public void onPuzzleFailed()
+	{
+		queueEvent(new Runnable()
+		{
+			public void run()
+			{
+				renderer.onPuzzleFailed();
+			}
+		});
+	}
+	
+	/*public void setGameOverEvent(final OnGameOverListener listener)
 	{
 		queueEvent(new Runnable()
 		{
@@ -67,12 +89,24 @@ public class Graphics extends GLSurfaceView
 			}
 		});
 	}
+	
+	public void setPuzzleActivatedEvent(final OnPuzzleActivatedListener listener)
+	{
+		queueEvent(new Runnable()
+		{
+			public void run()
+			{
+				renderer.setPuzzleActivatedEvent(listener);
+			}
+		});
+	}*/
 			
 	public interface Renderer extends GLSurfaceView.Renderer
 	{
 		public abstract void onTouchInput(MotionEvent event);
 		public abstract void setGameOverEvent(OnGameOverListener listener);
 		public abstract void setGameInitializedEvent(OnGameInitializedListener listener);
+		public abstract void setPuzzleActivatedEvent(OnPuzzleActivatedListener listener);
 		public abstract void onPuzzleWon();
 		public abstract void onPuzzleFailed();
 	}

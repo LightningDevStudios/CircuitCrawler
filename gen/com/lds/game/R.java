@@ -14,11 +14,12 @@ public final class R {
         public static final int buttonBorder=0x7f060000;
     }
     public static final class drawable {
-        public static final int icon=0x7f020000;
-        public static final int randomthings=0x7f020001;
-        public static final int text=0x7f020002;
-        public static final int tilesetcolors=0x7f020003;
-        public static final int tilesetwire=0x7f020004;
+        public static final int circuitpuzzle=0x7f020000;
+        public static final int icon=0x7f020001;
+        public static final int randomthings=0x7f020002;
+        public static final int text=0x7f020003;
+        public static final int tilesetcolors=0x7f020004;
+        public static final int tilesetwire=0x7f020005;
     }
     public static final class id {
         public static final int Button1=0x7f080002;
