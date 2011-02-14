@@ -1,5 +1,7 @@
 package com.lds.game.entity;
 
+import com.lds.EntityManager;
+
 public abstract class PickupObj extends PhysEnt //pickup objects are picked up, such as keys, powerups, or batteries
 {	
 	public PickupObj (float xPos, float yPos)
@@ -10,18 +12,22 @@ public abstract class PickupObj extends PhysEnt //pickup objects are picked up, 
 	@Override
 	public void update()
 	{
-		pickupScale();
-	}
-	
-	public void pickupScale() //pickup objects will constantly scale up and down using this method
-	{
 		if (getXScl() == 1.0f)
 		{
-			scale(2.0f, 2.0f);
+			scaleTo(2.0f, 2.0f);
 		}
 		else if (getXScl() == 2.0)
 		{
-			scale(0.5f, 0.5f);
+			scaleTo(1.0f, 1.0f);
+		}
+	}
+	
+	@Override
+	public void interact(Entity ent)
+	{
+		if (ent instanceof Player)
+		{
+			EntityManager.removeEntity(this);
 		}
 	}
 }

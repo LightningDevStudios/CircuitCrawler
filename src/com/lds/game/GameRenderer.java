@@ -187,12 +187,13 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 			//set btnA to speed up the player when pressed
 			if (game.btnA.isPressed())
 			{
-				if (!game.player.isHoldingObject())
+				if (!game.player.isHoldingObject() && game.player.getEnergy() != 0)
 				{
 					Vector2f directionVec = new Vector2f(game.player.getAngle());
 					directionVec.scale(game.player.getHalfSize() + 20.0f);
 					AttackBolt attack = new AttackBolt(Vector2f.add(game.player.getPos(), directionVec), directionVec, game.player.getAngle());
 					EntityManager.addEntity(attack);
+					game.player.loseEnergy(10);
 					SoundPlayer.getInstance().playSound(2);
 				}
 				game.btnA.unpress();
@@ -296,7 +297,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 						//move the player
 						//TODO move w/ time, use move()?
 						game.player.setAngle(newAngle + 90.0f);
-						Vector2f moveVec = Vector2f.scale(tempMoveVec, game.player.getSpeed() / 10);
+						Vector2f moveVec = Vector2f.scale(tempMoveVec, 1.0f / 10);
 						game.player.setPos(Vector2f.add(game.player.getPos(), moveVec));
 						Game.worldOutdated = true;
 						if (game.player.isHoldingObject())

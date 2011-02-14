@@ -19,6 +19,8 @@ import com.lds.TextureLoader;
 import com.lds.Vector2f;
 import com.lds.Enums.UIPosition;
 import com.lds.Enums.AIType;
+import com.lds.game.ai.Node;
+import com.lds.game.ai.NodePath;
 
 
 import com.lds.UI.*;
@@ -71,6 +73,7 @@ public class Game
 	public Sprite spr;
 	public Blob blob1, blob2;
 	public PuzzleBox box;
+	public PickupHealth health;
 	
 	public Animation spriteAnim;
 		
@@ -145,8 +148,13 @@ public class Game
 		block.initGradientInterp(interpGM);
 		entList.add(block);
 		
-		blob1 = new Blob(-150.0f, -350.0f, AIType.STALKER);
+		blob1 = new Blob(-150.0f, -350.0f, AIType.PATROL);
 		blob1.enableTilesetMode(tilesetwire, 2, 2);
+		NodePath path = new NodePath();
+		path.add(new Node(-150.0f, -350.0f));
+		path.add(new Node(-50.0f, -350.0f));
+		path.add(new Node(-100.0f, -300.0f));
+		blob1.setPatrolPath(path);
 		entList.add(blob1);
 		
 		blob2 = new Blob(0.0f, 0.0f, AIType.TURRET);
@@ -189,6 +197,10 @@ public class Game
 		player.enableTilesetMode(tilesetwire, 1, 0);
 		entList.add(player);
 		player.enableUserControl();
+		
+		health = new PickupHealth(50, -108.0f, -250.0f);
+		health.enableColorMode(0, 255, 255, 255);
+		entList.add(health);
 				
 		//spr = new Sprite(30.0f, -108.0f, -300.0f, 45.0f, 1.0f, 1.0f, 10, 90, 1, spriteAnim);
 		//entList.add(spr);
@@ -408,7 +420,8 @@ public class Game
 		}
 		else if (enemy.getType() == AIType.PATROL)
 		{
-			//TODO: Nodes n' shit
+			enemy.moveTo(player.getXPos(), player.getYPos());
+			enemy.setAngle((float)Math.toDegrees(Vector2f.sub(enemy.getPos(), player.getPos()).angle()) - 90.0f);
 		}
 		else if (enemy.getType() == AIType.TURRET)
 		{
@@ -439,7 +452,7 @@ public class Game
 		}
 		else if (enemy.getType() == AIType.PATROL)
 		{
-			
+			enemy.setOnPatrol(false);
 		}
 		else if (enemy.getType() == AIType.TURRET)
 		{
@@ -455,7 +468,40 @@ public class Game
 		}
 		else if (enemy.getType() == AIType.PATROL)
 		{
-			
+			if (enemy.isOnPatrol())
+			{
+				Node nextNode;
+				if (enemy.getPathLocation() == enemy.getPatrolPath().getSize() - 1)
+					nextNode = enemy.getPatrolPathNode(0);
+				else
+					nextNode = enemy.getPatrolPathNode(enemy.getPathLocation() + 1);
+				
+				if (enemy.getPos().equals(nextNode.getPos()))
+				{
+					enemy.setDoneRotating(false);
+					if (enemy.getPathLocation() == enemy.getPatrolPath().getSize() - 1)
+						enemy.setPathLocation(0);
+					else
+						enemy.setPathLocation(enemy.getPathLocation() + 1);
+				}
+				
+				float angleToNode = (float)Math.toDegrees(Vector2f.sub(enemy.getPos(), nextNode.getPos()).angle()) - 90.0f;
+				if (enemy.getAngle() <= angleToNode + 5.0f && enemy.getAngle() >= angleToNode - 5.0f)
+					enemy.setDoneRotating(true);
+				
+				if (enemy.isDoneRotating())
+				{
+					enemy.setAngle(angleToNode);
+					enemy.moveTo(nextNode.getPos());
+				}
+				else
+					enemy.rotateTo(angleToNode);
+			}
+			else
+			{
+				enemy.setDoneRotating(false);
+				runBecomePassiveAI(enemy);
+			}
 		}
 		else if (enemy.getType() == AIType.TURRET)
 		{
@@ -472,7 +518,23 @@ public class Game
 		}
 		else if (enemy.getType() == AIType.PATROL)
 		{
-			
+			enemy.stop();
+			Node closestNode = enemy.getClosestPatrolPathNode();
+			float angleToNode = (float)Math.toDegrees(Vector2f.sub(enemy.getPos(), closestNode.getPos()).angle()) - 90.0f;
+			if (enemy.getAngle() <= angleToNode + 5.0f && enemy.getAngle() >= angleToNode - 5.0f)
+			{
+				enemy.setAngle(angleToNode);
+				enemy.moveTo(closestNode.getPos());
+			}
+			else
+			{
+				enemy.rotateTo(angleToNode);
+			}
+			if (enemy.getPos().equals(closestNode.getPos()))
+			{
+				enemy.setOnPatrol(true);
+				enemy.setPathLocation(enemy.getClosestPatrolPathNodeIndex());
+			}
 		}
 		else if (enemy.getType() == AIType.TURRET)
 		{

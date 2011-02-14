@@ -1,7 +1,6 @@
 package com.lds.game.entity;
 
 import com.lds.EntityManager;
-import com.lds.game.Inventory;
 import com.lds.Vector2f;
 
 public class Player extends Character //your character, protagonist
@@ -34,23 +33,13 @@ public class Player extends Character //your character, protagonist
 			//move the player back further upon collision; copy this line to make it bounce back further
 			this.rectangleBounce(ent);
 		}
-		else if (ent instanceof StaticBlock || ent instanceof HoldObject || ent instanceof Door)
+		else if (ent instanceof PickupEnergy)
 		{
-			colList.remove(ent);
+			energy += ((PickupEnergy)ent).getEnergyValue();
 		}
-		else if (ent instanceof InvenPickup)
+		else if (ent instanceof PickupHealth)
 		{
-			Inventory.add(((InvenPickup)ent).getName());
-			EntityManager.removeEntity(ent);
-			colList.remove(ent);
-		}
-		else if (ent instanceof Health)
-		{
-			health += ((Powerup)ent).getValue();
-		}
-		else if (ent instanceof Energy)
-		{
-			energy += ((Powerup)ent).getValue();
+			health += ((PickupHealth)ent).getHealthValue();
 		}
 		else if (ent instanceof Enemy)
 		{
@@ -58,21 +47,6 @@ public class Player extends Character //your character, protagonist
 			//see above
 			this.rectangleBounce(ent);
 		}
-	}
-	
-	public HoldObject getHeldObject()
-	{
-		return hObj;
-	}
-
-	public int getEnergy()
-	{
-		return energy;
-	}
-
-	public boolean isHoldingObject()
-	{
-		return holdingObject;
 	}
 	
 	public void holdObject(HoldObject hObj)
@@ -126,5 +100,25 @@ public class Player extends Character //your character, protagonist
 	public boolean userHasControl()
 	{
 		return controlled;
+	}
+	
+	public HoldObject getHeldObject()
+	{
+		return hObj;
+	}
+
+	public int getEnergy()
+	{
+		return energy;
+	}
+
+	public boolean isHoldingObject()
+	{
+		return holdingObject;
+	}
+	
+	public void loseEnergy(int energyLost)
+	{
+		energy -= energyLost;
 	}
 }
