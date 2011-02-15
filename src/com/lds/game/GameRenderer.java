@@ -40,7 +40,6 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	@Override
 	public void onSurfaceCreated(GL10 gl, EGLConfig config)
 	{
-		
 		//openGL settings
 		gl.glShadeModel(GL10.GL_SMOOTH);
 		gl.glEnable(GL10.GL_BLEND);

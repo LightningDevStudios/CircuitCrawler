@@ -38,8 +38,8 @@ public class CircuitPuzzle implements IPuzzle
 	public void onSurfaceCreated(GL10 gl, EGLConfig config) 
 	{
 		gl.glShadeModel(GL10.GL_SMOOTH);
-		gl.glEnable(GL10.GL_BLEND);
-		gl.glBlendFunc(GL10.GL_ONE, GL10.GL_ONE_MINUS_SRC_ALPHA);
+		//gl.glEnable(GL10.GL_BLEND);
+		//gl.glBlendFunc(GL10.GL_ONE, GL10.GL_ONE_MINUS_SRC_ALPHA);
 		
 		gl.glClearColor(0.39f, 0.58f, 0.93f, 1.0f);
 		
@@ -48,9 +48,9 @@ public class CircuitPuzzle implements IPuzzle
 		gl.glEnable(GL10.GL_DITHER);
 		gl.glHint(GL10.GL_PERSPECTIVE_CORRECTION_HINT, GL10.GL_NICEST);
 		
+		tileTex = new Texture(R.drawable.circuitpuzzle, 128, 128, 8, 8, context);
 		TextureLoader tl = TextureLoader.getInstance();
 		tl.initialize(gl);
-		tileTex = new Texture(R.drawable.circuitpuzzle, 128, 128, 8, 8, context);
 		tl.loadTexture(tileTex);
 		
 		initializePuzzle();
@@ -125,6 +125,7 @@ public class CircuitPuzzle implements IPuzzle
 							selectedX = j;
 							selectedY = i;
 							t.select();
+							highlightAdjacent(j,i);
 						}
 					}
 				}
@@ -150,15 +151,15 @@ public class CircuitPuzzle implements IPuzzle
 				}
 								
 				selected = false;
-				grid[selectedY][selectedX].deselect();
-				for (Tile[] ta : grid)
+				//grid[selectedY][selectedX].deselect();
+				/*for (Tile[] ta : grid)
 				{
 					for (Tile t : ta)
 					{
 						if(t.isHightlighted())
 							t.dehighlight();
 					}
-				}
+				}*/
 			}
 		}
 	}
@@ -185,13 +186,13 @@ public class CircuitPuzzle implements IPuzzle
 	
 	public void highlightAdjacent (int x, int y)
 	{
-		if (y != grid.length - 1)
+		if (y < grid.length - 1)
 			grid[y + 1][x].highlight();
-		if (y != 0)
+		if (y > 0)
 			grid[y - 1][x].highlight();
-		if (x != grid.length - 1)
+		if (x < grid[0].length - 1)
 			grid[y][x + 1].highlight();
-		if (x != 0)
+		if (x > 0)
 			grid[y][x - 1].highlight();
 	}
 	

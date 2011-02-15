@@ -6,10 +6,10 @@ public enum TileType
 { 
 	VERTICAL(Direction.UP, Direction.DOWN, 0), 
 	HORIZONTAL(Direction.LEFT, Direction.RIGHT, 1),
-	BOTTOMLEFT(Direction.LEFT, Direction.DOWN, 2),
-	TOPLEFT(Direction.UP, Direction.LEFT, 3),
-	TOPRIGHT(Direction.RIGHT, Direction.UP, 4),
-	BOTTOMRIGHT(Direction.RIGHT, Direction.DOWN, 5);
+	TOPRIGHT(Direction.RIGHT, Direction.UP, 2),
+	BOTTOMRIGHT(Direction.RIGHT, Direction.DOWN, 3),
+	BOTTOMLEFT(Direction.LEFT, Direction.DOWN, 4),
+	TOPLEFT(Direction.UP, Direction.LEFT, 5);
 	
 	private Direction dir1, dir2;
 	private int value;

@@ -64,17 +64,17 @@ public class Tile
 	
 	public void draw(GL10 gl)
 	{
-		gl.glEnable(GL10.GL_CULL_FACE);
-		gl.glCullFace(GL10.GL_BACK);
+		//gl.glEnable(GL10.GL_CULL_FACE);
+		//gl.glCullFace(GL10.GL_BACK);
 		
 		gl.glEnable(GL10.GL_TEXTURE_2D);
 		gl.glBindTexture(GL10.GL_TEXTURE_2D, tex.getTexture());
 		
-		gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
-		gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
-		
 		gl.glFrontFace(GL10.GL_CW);
 		
+		gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
+		gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
+				
 		gl.glVertexPointer(2, GL10.GL_FLOAT, 0, vertexBuffer);
 		gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, textureBuffer);
 		
@@ -84,7 +84,7 @@ public class Tile
 		gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
 		
 		gl.glDisable(GL10.GL_TEXTURE_2D);
-		gl.glDisable(GL10.GL_CULL_FACE);
+		//gl.glDisable(GL10.GL_CULL_FACE);
 	}
 
 	public FloatBuffer setBuffer(FloatBuffer buffer, float[] array)
