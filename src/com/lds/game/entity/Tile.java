@@ -1,5 +1,8 @@
 package com.lds.game.entity;
 
+import javax.microedition.khronos.opengles.GL10;
+
+import com.lds.Enums.RenderMode;
 import com.lds.Enums.TileState;
 import com.lds.Texture;
 import com.lds.TilesetHelper;
@@ -17,12 +20,15 @@ public class Tile extends StaticEnt
 	{
 		super(size, 0, 0, false, true);
 		TilesetHelper.setInitialTileOffset(this, tilePosY, tilePosX, tilesetX, tilesetY);
+				
+		/*vertices = initVerts;
+		
+		vertexBuffer = setBuffer(vertexBuffer, vertices);*/
 	}
 	
 	@Override
 	public void updateTileset(Texture tex, int x, int y)
 	{
-		
 		super.updateTileset(tex, x, y);
 		tileX = x;
 		tileY = y;
@@ -55,6 +61,22 @@ public class Tile extends StaticEnt
 		}
 	}
 	
+	public void rotateTilesetCoords()
+	{
+		float negX = texture[0];
+		float negY = texture[1];
+		float posX = texture[2];
+		float posY = texture[5];
+		
+		float[] coords = { 	posX, negY,
+							posX, posY,
+							negX, negY,
+							negX, posY };
+		
+		this.texture = coords;
+		textureBuffer = setBuffer(textureBuffer, texture);
+	}
+	
 	@Override
 	public boolean isColliding(Entity ent)
 	{
@@ -69,6 +91,7 @@ public class Tile extends StaticEnt
 		state = TileState.WALL;
 		updateTileset(2, 0);
 		isSolid = true;
+		rotateTilesetCoords();
 	}
 	
 	public void setAsFloor()
@@ -76,6 +99,7 @@ public class Tile extends StaticEnt
 		state = TileState.FLOOR;
 		updateTileset(0, 0);
 		isSolid = false;
+		rotateTilesetCoords();
 	}
 	
 	public void setAsPit()
@@ -83,6 +107,7 @@ public class Tile extends StaticEnt
 		state = TileState.PIT;
 		updateTileset(0, 1);
 		isSolid = false;
+		rotateTilesetCoords();
 	}
 	
 	public void setAsBridge()
@@ -90,6 +115,7 @@ public class Tile extends StaticEnt
 		state = TileState.BRIDGE;
 		updateTileset(1, 1);
 		isSolid = false;
+		rotateTilesetCoords();
 	}
 	
 	public boolean isWall()

@@ -41,12 +41,12 @@ public abstract class Entity
 	protected float[] vertices;
 	protected float[] texture;
 	protected float[] color, endColor;
-	private byte[] indices;
+	protected byte[] indices;
 	
 	protected FloatBuffer vertexBuffer;
 	protected FloatBuffer textureBuffer;
 	protected FloatBuffer colorBuffer;
-	private ByteBuffer indexBuffer;
+	protected ByteBuffer indexBuffer;
 	
 	//debug data
 	private int entID;
@@ -95,8 +95,6 @@ public abstract class Entity
 			vertVecs[i] = new Vector2f();
 		}
 		
-		
-		//makes it so x/yPos are in center of box - Robert
 		float[] initVerts = {	halfSize, halfSize, 	//top left
 								halfSize, -halfSize, 	//bottom left
 								-halfSize, halfSize, 	//top right
