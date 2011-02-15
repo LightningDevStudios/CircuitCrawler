@@ -36,8 +36,8 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 		Object syncObj = new Object();
 		gameR = new GameRenderer(screenX, screenY, this, syncObj);
 		gameR.setGameInitializedEvent(this);
-		gameR.setGameOverEvent(this);
-		gameR.setPuzzleActivatedEvent(this);
+		//gameR.setGameOverEvent(this);
+		//gameR.setPuzzleActivatedEvent(this);
 		glSurface = new Graphics(this, gameR, syncObj);
 		setContentView(glSurface);
 	}
@@ -45,8 +45,8 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 	@Override
 	public void onGameInitialized()
 	{
-		//glSurface.setGameOverEvent(this);
-		//glSurface.setPuzzleActivatedEvent(this);
+		gameR.setGameOverEvent(this);
+		gameR.setPuzzleActivatedEvent(this);
 	}
 	
 	@Override
