@@ -80,25 +80,38 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	//sets angle of an entity to a new value
 	public void rotateTo (float degrees)
 	{
-		if (degrees >= 360.0f)
+		if (degrees == 360.0f)
+			degrees = 0.0f;
+		else if (degrees > 360.0f)
 			degrees -= 360.0f * ((int)degrees/360);
 		else if (degrees < 0.0f)
 			degrees = 0.0f;
 		
 		if (!isRotating)
 		{
-		endAngle = degrees;
-		float dist = degrees - angle;
-		
-		if (dist >= 180 || dist >= -180 && dist <= 0)
-			isRotatingCCW = false;
-		else
-			isRotatingCCW = true;
-		
-		if (dist != 0)
-			isRotating = true;
-		
-		rotTimeMs = Stopwatch.elapsedTimeMs();
+			endAngle = degrees;
+			float dist = degrees - angle;
+			
+			if (dist != 0)
+				isRotating = true;
+			
+			float absDist = Math.abs(dist);
+			if (dist < 0)
+			{
+				if (absDist < 180)
+					isRotatingCCW = false;
+				else
+					isRotatingCCW = true;
+			}
+			else
+			{
+				if (absDist < 180)
+					isRotatingCCW = true;
+				else
+					isRotatingCCW = false;
+			}
+			
+			rotTimeMs = Stopwatch.elapsedTimeMs();
 		}
 	}
 	
@@ -136,7 +149,9 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	//i.e. ent1 is rotated 30 degrees, if you do ent1.rotate(30.0f) it will be at 60 degrees
 	public void rotate (float degrees)
 	{
-		if (degrees >= 360.0f)
+		if (degrees == 360.0f)
+			degrees = 0.0f;
+		else if (degrees > 360.0f)
 			degrees -= 360.0f * ((int)degrees/360);
 		else if (degrees < 0.0f)
 			degrees = 0.0f;
@@ -262,10 +277,13 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	//mutator for angle
 	public void setAngle (float degrees)
 	{	
-		if (degrees >= 360.0f)
+		if (degrees == 360.0f)
+			degrees = 0.0f;
+		else if (degrees > 360.0f)
 			degrees -= 360.0f * ((int)degrees/360);
 		else if (degrees < 0.0f)
 			degrees = 0.0f;
+		
 		angle = degrees;
 		endAngle = degrees;
 		Game.worldOutdated = true;
@@ -293,7 +311,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 				isMoving = false;
 				moveInterpCount = 0;
 			}
-			else 
+			else
 			{
 				moveInterpCount++;
 				moveInterpVec = Vector2f.scale(Vector2f.normalize(moveVec), moveSpeed / 1000 * (Stopwatch.elapsedTimeMs() - moveTimeMs));
@@ -331,7 +349,9 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 			if (isRotatingCCW)
 			{
 				//clamp the angle 0-360
-				if (angle >= 360.0f)
+				if (angle == 360.0f)
+					angle = 0.0f;
+				else if (angle > 360.0f)
 					angle -= 360.0f * ((int)angle/360);
 				else if (angle < 0.0f)
 					angle = 0.0f;

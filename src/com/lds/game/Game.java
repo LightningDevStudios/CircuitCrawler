@@ -151,7 +151,7 @@ public class Game
 		block.initGradientInterp(interpGM);
 		entList.add(block);
 		
-		blob1 = new Blob(-150.0f, -350.0f, AIType.PATROL);
+		blob1 = new Blob(-150.0f, -350.0f, AIType.STALKER);
 		blob1.enableTilesetMode(tilesetwire, 2, 2);
 		NodePath path = new NodePath();
 		path.add(new Node(-150.0f, -350.0f));
@@ -414,19 +414,33 @@ public class Game
 	{
 		if (enemy.getType() == AIType.STALKER)
 		{
-			//TODO: A* Pathfinding Algorithm
-			enemy.moveTo(player.getXPos(), player.getYPos());
-			enemy.setAngle((float)Math.toDegrees(Vector2f.sub(enemy.getPos(), player.getPos()).angle()) - 90.0f);
+			if (enemy.isDoneRotating())
+			{
+				//TODO: A* Pathfinding Algorithm
+				enemy.moveTo(player.getXPos(), player.getYPos());
+				enemy.setAngle((float)Math.toDegrees(Vector2f.sub(enemy.getPos(), player.getPos()).angle()) - 90.0f);
+			}
+			else
+			{
+				runBecomeAgressiveAI(enemy);
+			}
 		}
 		else if (enemy.getType() == AIType.PATROL)
 		{
-			enemy.moveTo(player.getXPos(), player.getYPos());
-			enemy.setAngle((float)Math.toDegrees(Vector2f.sub(enemy.getPos(), player.getPos()).angle()) - 90.0f);
+			if (enemy.isDoneRotating())
+			{
+				enemy.moveTo(player.getXPos(), player.getYPos());
+				enemy.setAngle((float)Math.toDegrees(Vector2f.sub(enemy.getPos(), player.getPos()).angle()) - 90.0f);
+			}
+			else
+			{
+				runBecomeAgressiveAI(enemy);
+			}
 		}
 		else if (enemy.getType() == AIType.TURRET)
 		{
 			float towardsPlayerAngle = (float)Math.toDegrees(Vector2f.sub(enemy.getPos(), player.getPos()).angle()) - 90.0f;
-			if (enemy.getAngle() > towardsPlayerAngle + 1.5f || enemy.getAngle() < towardsPlayerAngle - 1.5f)
+			if (enemy.getAngle() > towardsPlayerAngle + 5.0f || enemy.getAngle() < towardsPlayerAngle - 5.0f)
 				enemy.rotateTo(towardsPlayerAngle);
 			else
 				enemy.setAngle(towardsPlayerAngle);
@@ -446,13 +460,38 @@ public class Game
 	public void runBecomeAgressiveAI(Enemy enemy)
 	{
 		enemy.setAgressive(true);
+		enemy.setOnPatrol(false);
 		if (enemy.getType() == AIType.STALKER)
 		{
-			
+			enemy.stop();
+			float angleToPlayer = (float)Math.toDegrees(Vector2f.sub(enemy.getPos(), player.getPos()).angle()) - 90.0f;
+			if (enemy.getAngle() <= angleToPlayer + 5.0f && enemy.getAngle() >= angleToPlayer - 5.0f)
+			{
+				enemy.setAngle(angleToPlayer);
+				enemy.moveTo(player.getPos());
+				enemy.setDoneRotating(true);
+			}
+			else
+			{
+				enemy.rotateTo(angleToPlayer);
+				enemy.setDoneRotating(false);
+			}
 		}
 		else if (enemy.getType() == AIType.PATROL)
 		{
-			enemy.setOnPatrol(false);
+			enemy.stop();
+			float angleToPlayer = (float)Math.toDegrees(Vector2f.sub(enemy.getPos(), player.getPos()).angle()) - 90.0f;
+			if (enemy.getAngle() <= angleToPlayer + 10.0f && enemy.getAngle() >= angleToPlayer - 10.0f)
+			{
+				enemy.setAngle(angleToPlayer);
+				enemy.moveTo(player.getPos());
+				enemy.setDoneRotating(true);
+			}
+			else
+			{
+				enemy.rotateTo(angleToPlayer);
+				enemy.setDoneRotating(false);
+			}
 		}
 		else if (enemy.getType() == AIType.TURRET)
 		{
@@ -486,16 +525,17 @@ public class Game
 				}
 				
 				float angleToNode = (float)Math.toDegrees(Vector2f.sub(enemy.getPos(), nextNode.getPos()).angle()) - 90.0f;
-				if (enemy.getAngle() <= angleToNode + 5.0f && enemy.getAngle() >= angleToNode - 5.0f)
-					enemy.setDoneRotating(true);
-				
-				if (enemy.isDoneRotating())
+				if (enemy.getAngle() <= angleToNode + 10.0f && enemy.getAngle() >= angleToNode - 10.0f)
 				{
 					enemy.setAngle(angleToNode);
 					enemy.moveTo(nextNode.getPos());
+					enemy.setDoneRotating(true);
 				}
 				else
+				{
 					enemy.rotateTo(angleToNode);
+					enemy.setDoneRotating(false);
+				}
 			}
 			else
 			{
@@ -521,13 +561,15 @@ public class Game
 			enemy.stop();
 			Node closestNode = enemy.getClosestPatrolPathNode();
 			float angleToNode = (float)Math.toDegrees(Vector2f.sub(enemy.getPos(), closestNode.getPos()).angle()) - 90.0f;
-			if (enemy.getAngle() <= angleToNode + 5.0f && enemy.getAngle() >= angleToNode - 5.0f)
+			if (enemy.getAngle() <= angleToNode + 10.0f && enemy.getAngle() >= angleToNode - 10.0f)
 			{
+				enemy.setDoneRotating(true);
 				enemy.setAngle(angleToNode);
 				enemy.moveTo(closestNode.getPos());
 			}
 			else
 			{
+				enemy.setDoneRotating(false);
 				enemy.rotateTo(angleToNode);
 			}
 			if (enemy.getPos().equals(closestNode.getPos()))

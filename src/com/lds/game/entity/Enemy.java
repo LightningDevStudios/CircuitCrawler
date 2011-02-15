@@ -11,12 +11,12 @@ public abstract class Enemy extends Character //enemies will fall under this cla
 {
 	private static int enemyCount = 0;
 	protected AIType type;
-	protected boolean agressive;
+	protected boolean agressive, doneRotating;
 	protected int lastTime, randomTime;
 	//Patrol stuff
 	protected NodePath patrolPath;
 	protected int pathLocation;
-	protected boolean onPatrol, doneRotating;
+	protected boolean onPatrol;
 
 	public Enemy(float size, float xPos, float yPos, boolean circular, int health, AIType type)
 	{
@@ -31,8 +31,8 @@ public abstract class Enemy extends Character //enemies will fall under this cla
 		randomTime = 500;
 		enemyCount++;
 		agressive = false;
-		onPatrol = false;
 		doneRotating = false;
+		onPatrol = false;
 	}
 	
 	@Override
@@ -108,16 +108,6 @@ public abstract class Enemy extends Character //enemies will fall under this cla
 		this.onPatrol = onPatrol;
 	}
 	
-	public boolean isDoneRotating()
-	{
-		return doneRotating;
-	}
-	
-	public void setDoneRotating(boolean doneRotating)
-	{
-		this.doneRotating = doneRotating;
-	}
-	
 	//General Stuff
 	
 	public AIType getType()
@@ -158,5 +148,15 @@ public abstract class Enemy extends Character //enemies will fall under this cla
 	public void setLastTime(int lastTime)
 	{
 		this.lastTime = lastTime;
+	}
+	
+	public boolean isDoneRotating()
+	{
+		return doneRotating;
+	}
+	
+	public void setDoneRotating(boolean doneRotating)
+	{
+		this.doneRotating = doneRotating;
 	}
 }
