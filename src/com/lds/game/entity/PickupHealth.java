@@ -1,6 +1,6 @@
 package com.lds.game.entity;
 
-public class PickupHealth extends PickupObj
+public class PickupHealth extends Pickup
 {
 	int healthValue;
 	

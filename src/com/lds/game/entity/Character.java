@@ -9,12 +9,12 @@ public abstract class Character extends PhysEnt //all characters, including the 
 	protected boolean isFlashing;
 	protected int msPassed;
 	
-	public Character(float size, float xPos, float yPos, boolean circular, int health, float speed)
+	public Character(float size, float xPos, float yPos, boolean circular, int health)
 	{
-		this(size, xPos, yPos, 0.0f, 1.0f, 1.0f, circular, health, speed);
+		this(size, xPos, yPos, 0.0f, 1.0f, 1.0f, circular, health);
 	}
 	
-	public Character(float size, float xPos, float yPos, float angle, float xScl, float yScl, boolean circular, int health, float speed)
+	public Character(float size, float xPos, float yPos, float angle, float xScl, float yScl, boolean circular, int health)
 	{
 		super(size, xPos, yPos, angle, xScl, yScl, true, circular, true, 25.0f, 360.0f, 1.0f);
 		this.enableColorMode(1.0f, 1.0f, 1.0f, 1.0f);
