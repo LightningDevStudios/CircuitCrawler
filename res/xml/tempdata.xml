@@ -14,5 +14,15 @@
 		<circular>true</circular>
 		<color>yellow</color>
 		<willCollide>true</willCollide>
+		<posVec>1.0f,1.0f</posVec>
+		<directionVec>1.0f,1.0f</directionVec>
+		<health>15</health>
+		<msPassed>15</msPassed>
+		<isFlashing>yes</isFlashing>
+		<type>Patrol</type>
+		<tilePosX>1</tilePosX>
+		<tilePosY>1</tilePosY>
+		<tilesetX>1</tilesetX>
+		<tilesetY>1</tilesetY>
 	</Entity>
 </Level>

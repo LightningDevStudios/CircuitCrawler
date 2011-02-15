@@ -22,20 +22,20 @@ public class EntityData
 	private boolean isSolid, circular, willCollide;
 	private String color;
 
-	public EntityData(HashMap<String, String> entHashMap)
+	public EntityData(HashMap<String, String> entHM)
 	{
-		size = Float.parseFloat(entHashMap.get("size"));
-		xPos = Float.parseFloat(entHashMap.get("xPos"));
-		yPos = Float.parseFloat(entHashMap.get("yPos"));
-		xScl = Float.parseFloat(entHashMap.get("xScl"));
-		yScl = Float.parseFloat(entHashMap.get("yScl"));
-		angle = Float.parseFloat(entHashMap.get("angle"));
+		size = Float.parseFloat(entHM.get("size"));
+		xPos = Float.parseFloat(entHM.get("xPos"));
+		yPos = Float.parseFloat(entHM.get("yPos"));
+		xScl = Float.parseFloat(entHM.get("xScl"));
+		yScl = Float.parseFloat(entHM.get("yScl"));
+		angle = Float.parseFloat(entHM.get("angle"));
 		
-		isSolid = Boolean.parseBoolean(entHashMap.get("isSolid"));
-		circular = Boolean.parseBoolean(entHashMap.get("circular"));
-		willCollide = Boolean.parseBoolean(entHashMap.get("willCollide"));
+		isSolid = Boolean.parseBoolean(entHM.get("isSolid"));
+		circular = Boolean.parseBoolean(entHM.get("circular"));
+		willCollide = Boolean.parseBoolean(entHM.get("willCollide"));
 		
-		color = (entHashMap.get("color"));
+		color = (entHM.get("color"));
 	}
 	
 	//float setters/getters

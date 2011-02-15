@@ -1,6 +1,6 @@
 package com.lds.game.entity;
 
-public class PickupEnergy extends PickupObj
+public class PickupEnergy extends Pickup
 {
 	private int energyValue;
 	
