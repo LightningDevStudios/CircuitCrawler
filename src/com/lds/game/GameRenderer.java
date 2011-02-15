@@ -5,6 +5,7 @@ import javax.microedition.khronos.opengles.GL10;
 
 import android.opengl.GLU;
 import android.os.Debug;
+import android.os.Vibrator;
 import android.view.MotionEvent;
 import android.content.Context;
 
@@ -191,6 +192,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 					Vector2f directionVec = new Vector2f(game.player.getAngle());
 					directionVec.scale(game.player.getHalfSize() + 20.0f);
 					AttackBolt attack = new AttackBolt(Vector2f.add(game.player.getPos(), directionVec), directionVec, game.player.getAngle());
+					vibrator(100);
 					EntityManager.addEntity(attack);
 					game.player.loseEnergy(10);
 					SoundPlayer.getInstance().playSound(2);
@@ -246,6 +248,19 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		}*/
 	}
 
+	public void vibrator(int time)
+	{
+		Vibrator vibrator = null; 
+		try { 
+		vibrator=(Vibrator)context.getSystemService(Context.VIBRATOR_SERVICE); 
+		} catch (Exception e) {} 
+		if (vibrator != null) { 
+		  try { 
+		    vibrator.vibrate(((long)time)); 
+		  } catch (Exception e) {} 
+		} 
+	}
+	
 	@Override
 	public void onSurfaceChanged(GL10 gl, int width, int height)
 	{		
