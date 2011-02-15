@@ -306,7 +306,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 						Vector2f tempMoveVec = UIjp.getMovementVec(touchVec);
 						
 						//Figure out the angle
-						float newAngle = (float)Math.toDegrees(tempMoveVec.angle());
+						float newAngle = (float)tempMoveVec.angleDeg();
 						
 						//move the player
 						//TODO move w/ time, use move()?
