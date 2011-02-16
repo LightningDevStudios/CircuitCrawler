@@ -31,12 +31,21 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 		float screenY = (float)screen.heightPixels;
 		
 		//Enable fullscreen
-		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
-		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+		//this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+		//getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+		
+		//retrieve game if the activity restarts
+		final Object data = getLastNonConfigurationInstance();
 		
 		//set up OpenGL rendering
 		Object syncObj = new Object();
 		gameR = new GameRenderer(screenX, screenY, this, syncObj);
+		
+		if(data != null)
+		{
+			gameR.game = (Game)data;
+		}
+		
 		gameR.setGameInitializedEvent(this);
 		glSurface = new Graphics(this, gameR, syncObj);
 		setContentView(glSurface);
@@ -102,5 +111,12 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 	{
 		super.onDestroy();
 		finish();
+	}
+	
+	@Override
+	public Object onRetainNonConfigurationInstance()
+	{
+		final Game game = gameR.game;
+		return game;
 	}
 }

@@ -57,7 +57,8 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		Stopwatch.restartTimer();
 		Stopwatch.tick();
 		
-		game = new Game(context, gl);
+		if(game == null)
+			game = new Game(context, gl);
 		
 		if(gameInitializedListener != null)
 			gameInitializedListener.onGameInitialized();
