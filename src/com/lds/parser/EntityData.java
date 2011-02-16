@@ -2,6 +2,9 @@ package com.lds.parser;
 
 import java.util.HashMap;
 
+import com.lds.Texture;
+import com.lds.game.Game;
+
 /*import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
@@ -18,10 +21,12 @@ import android.content.res.XmlResourceParser;*/
 
 public class EntityData
 {
-	private float size, xPos, yPos, xScl, yScl, angle;
+	protected float size, xPos, yPos, xScl, yScl, angle, r, g, b, a;
 	private boolean isSolid, circular, willCollide;
-	private String color;
-
+	private String color, tileCoords;
+	protected float[] rgba;
+	protected int[] xy;
+	protected Texture tex;
 	public EntityData(HashMap<String, String> entHM)
 	{
 		size = Float.parseFloat(entHM.get("size"));
@@ -35,8 +40,80 @@ public class EntityData
 		circular = Boolean.parseBoolean(entHM.get("circular"));
 		willCollide = Boolean.parseBoolean(entHM.get("willCollide"));
 		
-		color = (entHM.get("color"));
+		//enable colorMode
+		if(entHM.get("color") != null)
+		{
+			color = entHM.get("color");
+			String tempColor = (entHM.get("color"));
+			int i = 0;
+			while(tempColor.indexOf(",") < 0)
+			{
+				if(tempColor.indexOf(",") == 0)
+				tempColor = tempColor.substring(tempColor.indexOf("," + 1));
+				i++;
+				if(tempColor.indexOf(",") > -1)
+					tempColor = tempColor.substring(tempColor.indexOf(","));
+			}
+		
+			rgba = new float[i];
+			for (float clr : rgba)
+			{
+				if(color.indexOf(",") == 0)
+					color = color.substring(color.indexOf("," + 1));
+				clr = Float.parseFloat(color.substring(0, color.indexOf("f") +1));
+				if(tempColor.indexOf(",") > -1)
+					color = color.substring(color.indexOf(","));
+			}  //if u want to enable color mode, use .enableColor(rgba[0], rgba[1], rgba[2], rgba[3]);
+		}
+		else 
+		{
+			rgba = null;
+		}
+			//enableTilesetMode
+		if (entHM.get("tileCoords") != null && entHM.get("texture") != null)
+		{
+			tileCoords = entHM.get("tileCoords");
+			String tempTileCoords = entHM.get("tileCoords");
+		
+			String texture = entHM.get("texture");
+			if(texture.equalsIgnoreCase("tilesetcolors"))
+				tex = Game.tilesetcolors;
+			else if(texture.equalsIgnoreCase("tilesetwire"))
+				tex = Game.tilesetwire;
+			else if(texture.equalsIgnoreCase("randomthings"))
+				tex = Game.randomthings;
+			else if(texture.equalsIgnoreCase("text"))
+				tex = Game.text;
+			else
+				System.out.println("You didn't input a real texture");
+			
+			int k = 0;
+			while(tempTileCoords.indexOf(",") < 0)
+			{
+				if(tempTileCoords.indexOf(",") == 0)
+					tempTileCoords = tempTileCoords.substring(tempTileCoords.indexOf("," + 1));
+				k++;
+				if(tempTileCoords.indexOf(",") > -1)
+					tempTileCoords = tempTileCoords.substring(tempTileCoords.indexOf(","));
+			}
+		
+			xy = new int[k];
+			for (float clr : rgba)
+			{
+				if(tileCoords.indexOf(",") == 0)
+					tileCoords = tileCoords.substring(tileCoords.indexOf("," + 1));
+				clr = Float.parseFloat(tileCoords.substring(0, tileCoords.indexOf("f") +1));
+				if(tempTileCoords.indexOf(",") > -1)
+					tileCoords = tileCoords.substring(tileCoords.indexOf(","));
+			}  //if u want to enable tilesetMode, use .enableTilesetMode(tex, xy[0], xy[1]);
+		}
+		else 
+		{
+			tex = null;
+			xy = null;
+		}
 	}
+	
 	
 	//float setters/getters
 	public void setSize(float newSize) 			{size = newSize;}
@@ -65,5 +142,7 @@ public class EntityData
 	
 	public String getColor()		{return color;}
 	
-	
+	public void createInst()
+	{
+	}
 }
