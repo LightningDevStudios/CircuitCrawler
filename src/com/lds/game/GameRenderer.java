@@ -251,13 +251,19 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	public void vibrator(int time)
 	{
 		Vibrator vibrator = null; 
-		try { 
-		vibrator=(Vibrator)context.getSystemService(Context.VIBRATOR_SERVICE); 
-		} catch (Exception e) {} 
-		if (vibrator != null) { 
-		  try { 
-		    vibrator.vibrate(((long)time)); 
-		  } catch (Exception e) {} 
+		try 
+		{ 
+			vibrator=(Vibrator)context.getSystemService(Context.VIBRATOR_SERVICE); 
+		} 
+		catch (Exception e) {}
+		
+		if (vibrator != null)
+		{ 
+		  try 
+		  { 
+			  vibrator.vibrate(((long)time)); 
+		  } 
+		  catch (Exception e) {} 
 		} 
 	}
 	
@@ -305,27 +311,18 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 						//get the relative X and Y coordinates
 						Vector2f tempMoveVec = UIjp.getMovementVec(touchVec);
 						
-						//Figure out the angle
-						float newAngle = (float)tempMoveVec.angleDeg();
+						//set the angle
+						float tempAngle = game.player.getAngle();
+						game.player.setAngle((float)tempMoveVec.angleDeg());
 						
 						//move the player
-						//TODO move w/ time, use move()?
-						if (game.player.getAngle() <= newAngle + 1.0f && game.player.getAngle() >= newAngle - 1.0f)
-						{
-							game.player.setDoneRotating(true);
-							game.player.setAngle(newAngle);
-						}
-						else
-						{
-							game.player.setDoneRotating(false);
-							game.player.rotateTo(newAngle);
-						}
-						
-						Vector2f moveVec = Vector2f.scale(tempMoveVec, 1.0f / 10);
+						Vector2f moveVec = Vector2f.scale(tempMoveVec, 0.1f);
 						game.player.setPos(Vector2f.add(game.player.getPos(), moveVec));
-						Game.worldOutdated = true;
+						
 						if (game.player.isHoldingObject())
 							game.player.updateHeldObjectPosition();
+						
+						Game.worldOutdated = true;
 						
 						boolean playerIsColliding = false;
 						//check collision and reverse motion if it's colliding with something solid
@@ -354,15 +351,17 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 						}
 						if (playerIsColliding)
 						{
-							if (game.player.getHeldObject() == null)
+							//game.player.setAngle(tempAngle);
+							if (!game.player.isHoldingObject())
+							{
 								game.player.setPos(Vector2f.add(game.player.getPos(), game.player.getBounceVec()));
+							}
 							else
 							{
 								game.player.setPos(Vector2f.add(game.player.getPos(), game.player.getBounceVec()).add(game.player.getHeldObject().getBounceVec()));
 								game.player.updateHeldObjectPosition();
 							}
 						}
-						
 						game.updateCameraPosition();
 						
 						windowOutdated = true;					
@@ -384,7 +383,6 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 			}
 		}
 	}
-	
 	//redraw the perspective
 	public void updateCamPosition(GL10 gl)
 	{

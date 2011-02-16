@@ -271,6 +271,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	    //calculate the bouceVec
 		Vector2f bounceSide = Vector2f.normalize(Vector2f.sub(vertDistVecs[0], vertDistVecs[1]));
 		bounceSide.scale(this.moveInterpVec.dot(bounceSide));
+		Vector2f bounceVec = Vector2f.sub(bounceSide, this.moveInterpVec);
 		this.addBounceVec(Vector2f.sub(bounceSide, this.moveInterpVec));
 	}
 	
@@ -460,4 +461,18 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 		moveInterpVec = v;
 	}
 	
+	public void setIsMoving(boolean isMoving)
+	{
+		this.isMoving = isMoving;
+	}
+	
+	public void setIsRotating(boolean isRotating)
+	{
+		this.isRotating = isRotating;
+	}
+	
+	public void setIsScaling(boolean isScaling)
+	{
+		this.isScaling = isScaling;
+	}
 }
