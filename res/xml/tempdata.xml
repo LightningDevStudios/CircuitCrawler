@@ -20,26 +20,26 @@
 		<msPassed>15</msPassed>
 		<isFlashing>yes</isFlashing>
 		<type>Patrol</type>
-		<tilePosX>1</tilePosX>
+		<!--<tilePosX>1</tilePosX>
 		<tilePosY>1</tilePosY>
 		<tilesetX>1</tilesetX>
-		<tilesetY>1</tilesetY>
+		<tilesetY>1</tilesetY>-->
 	</Entity>
-	<Tileset x=16 y=16>
+	<Tileset x="2" y="2">
 		<TileRow>
 			<Tile>
-				<tileType>FLOOR</tileType>
+				<tileState>FLOOR</tileState>
 			</Tile>
 			<Tile>
-				<tileType>WALL</tileType>
+				<tileState>WALL</tileState>
 			</Tile>
 		</TileRow>
 		<TileRow>
 			<Tile>
-				<tileType>FLOOR</tileType>
+				<tileState>FLOOR</tileState>
 			</Tile>
 			<Tile>
-				<tileType>WALL</tileType>
+				<tileState>WALL</tileState>
 			</Tile>
 		</TileRow>
 	</Tileset>

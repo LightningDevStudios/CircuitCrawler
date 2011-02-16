@@ -14,18 +14,13 @@ import com.lds.game.entity.PhysBlock;
  
 public class Parser
 {
-	public HashMap<String, String> attributes;
-	
 	public ArrayList<EntityData> parsedList = new ArrayList<EntityData>();
 	
 	public XmlResourceParser xrp;  
-	
-	int x, y, curx, cury;
 
 	public Parser(Context context)
 	{
 		xrp = context.getResources().getXml(R.xml.tempdata);
-		attributes = new HashMap<String, String>();
 	}
 	
 	public void parseLevel()
@@ -55,14 +50,14 @@ public class Parser
 		
 		while (!((xrp.getEventType() == xrp.END_TAG && xrp.getName().equals("Entity")))) 
 		{
-			String tempDataType = null;
+			/*String tempDataType = null;
 
 			tempDataType = xrp.getName();
 			
 			xrp.next();
 
-			dataHashMap.put(tempDataType, xrp.getText());
-			
+			dataHashMap.put(tempDataType, xrp.getText());*/
+			dataHashMap = parseTag(dataHashMap);
 				
 			xrp.next(); 
 			xrp.next();
@@ -76,22 +71,51 @@ public class Parser
 	public void parseTileset() throws XmlPullParserException, IOException
 	{
 		HashMap<String, String> tileHashMap = new HashMap<String, String>();
+		int x, y, curX, curY;
+		
+		HashMap<String, String> attributes = parseAttributes();
+		
 		x = Integer.parseInt(attributes.get("x"));
 		y = Integer.parseInt(attributes.get("y"));
 		
-		TileData[][] tdma = new TileData[y][x];
+		TileData[][] tileset = new TileData[y][x];
 		
-		curx = -1;
-		cury = -1;
+		curX = 0;
+		curY = 0;
+		
 		while(!(xrp.getEventType() == xrp.END_TAG && xrp.getName().equals("Tileset")))
 		{
-			parseAttributes();
-			cury++;
+			if(curX >= x)
+				curX = 0;
 			
 			xrp.next();
-			while(!(xrp.getEventType() == xrp.END_TAG && xrp.getName().equals("TileRow")))
+			if (xrp.getEventType() == xrp.START_TAG && xrp.getName().equals("Tile"))
 			{
-				curx++;
+				/*xrp.next();
+				String tagName = xrp.getName();
+				xrp.next();
+				tileHashMap.put(tagName, xrp.getText());*/
+				xrp.next();
+				tileHashMap = parseTag(tileHashMap);
+				
+				tileset[curY][curX] = new TileData(tileHashMap, curX, curY, x, y);
+			}
+			
+			else if(xrp.getEventType() == xrp.END_TAG)
+			{
+				if(xrp.getName().equals("Tile"))
+					curX++;
+				
+				else if(xrp.getName().equals("TileRow"))
+					curY++;
+			}
+		}
+			/*curY++;
+			
+			xrp.next();
+			(while(!(xrp.getEventType() == xrp.END_TAG && xrp.getName().equals("TileRow")))
+			{
+				curX++;
 				xrp.next();
 				while(!(xrp.getEventType() == xrp.END_TAG && xrp.getName().equals("Tile")))
 				{
@@ -100,27 +124,43 @@ public class Parser
 					xrp.next();
 					tileHashMap.put(tempTag, xrp.getText());
 					
-					tdma[cury][curx] = new TileData(tileHashMap);
+					tdma[curY][curX] = new TileData(tileHashMap, curX, curY, x, y);
 					
 					xrp.next();
 					xrp.next();
 				}
 			}
-			curx = -1;
+			curX = -1;
 		}
-		cury = -1;
+		curY = -1;*/
 	}
 	
-	public void parseAttributes()
+	public HashMap<String, String> parseAttributes()
 	{
-		String tag = xrp.getName();
+		HashMap<String, String> map = new HashMap<String, String>();
+		for (int i = 0; i < xrp.getAttributeCount(); i++)
+		{
+			map.put(xrp.getAttributeName(i), xrp.getAttributeValue(i));
+		}
+		
+		return map;
+		/*String tag = xrp.getName();
 		tag = tag.substring(tag.indexOf(" "));
 		while(tag.indexOf(" ") < 0)
 		{
-			attributes.put(tag.substring(1, tag.indexOf("=") - 1), tag.substring((tag.indexOf("=") + 1), tag.indexOf(" ")));
+			attributes.put(tag.substring(1, tag.indexOf("=") - 1), tag.substring((tag.indexOf("=") + 2), tag.indexOf("\"")));
 			tag = tag.trim();
 			tag = tag.substring(tag.indexOf(" "));
-		}
+		}*/
+	}
+	
+	public HashMap<String, String> parseTag(HashMap<String, String> map) throws XmlPullParserException, IOException
+	{
+		String tagName = xrp.getName();
+		xrp.next();
+		map.put(tagName, xrp.getText());
+		
+		return map;
 	}
 	
 	public ArrayList<Entity> convertDataToEnts()
