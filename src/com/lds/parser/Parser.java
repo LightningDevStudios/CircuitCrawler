@@ -14,14 +14,18 @@ import com.lds.game.entity.PhysBlock;
  
 public class Parser
 {
+	public HashMap<String, String> attributes;
 	
 	public ArrayList<EntityData> parsedList = new ArrayList<EntityData>();
 	
 	public XmlResourceParser xrp;  
+	
+	int x, y, curx, cury;
 
 	public Parser(Context context)
 	{
 		xrp = context.getResources().getXml(R.xml.tempdata);
+		attributes = new HashMap<String, String>();
 	}
 	
 	public void parseLevel()
@@ -35,6 +39,8 @@ public class Parser
 				System.out.println(xrp.getName());
 				if(xrp.getName().equals("Entity"))
 					parseEntity();
+				else if(xrp.getName().equals("Tileset"))
+					parseTileset();
 			}
 			xrp.next();
 		}
@@ -65,6 +71,56 @@ public class Parser
 		
 		PhysBlockData pbd = new PhysBlockData(dataHashMap);
 		parsedList.add(pbd);
+	}
+	
+	public void parseTileset() throws XmlPullParserException, IOException
+	{
+		HashMap<String, String> tileHashMap = new HashMap<String, String>();
+		x = Integer.parseInt(attributes.get("x"));
+		y = Integer.parseInt(attributes.get("y"));
+		
+		TileData[][] tdma = new TileData[y][x];
+		
+		curx = -1;
+		cury = -1;
+		while(!(xrp.getEventType() == xrp.END_TAG && xrp.getName().equals("Tileset")))
+		{
+			parseAttributes();
+			cury++;
+			
+			xrp.next();
+			while(!(xrp.getEventType() == xrp.END_TAG && xrp.getName().equals("TileRow")))
+			{
+				curx++;
+				xrp.next();
+				while(!(xrp.getEventType() == xrp.END_TAG && xrp.getName().equals("Tile")))
+				{
+					xrp.next();
+					String tempTag = xrp.getName();
+					xrp.next();
+					tileHashMap.put(tempTag, xrp.getText());
+					
+					tdma[cury][curx] = new TileData(tileHashMap);
+					
+					xrp.next();
+					xrp.next();
+				}
+			}
+			curx = -1;
+		}
+		cury = -1;
+	}
+	
+	public void parseAttributes()
+	{
+		String tag = xrp.getName();
+		tag = tag.substring(tag.indexOf(" "));
+		while(tag.indexOf(" ") < 0)
+		{
+			attributes.put(tag.substring(1, tag.indexOf("=") - 1), tag.substring((tag.indexOf("=") + 1), tag.indexOf(" ")));
+			tag = tag.trim();
+			tag = tag.substring(tag.indexOf(" "));
+		}
 	}
 	
 	public ArrayList<Entity> convertDataToEnts()

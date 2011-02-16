@@ -25,4 +25,22 @@
 		<tilesetX>1</tilesetX>
 		<tilesetY>1</tilesetY>
 	</Entity>
+	<Tileset x=16 y=16>
+		<TileRow>
+			<Tile>
+				<tileType>FLOOR</tileType>
+			</Tile>
+			<Tile>
+				<tileType>WALL</tileType>
+			</Tile>
+		</TileRow>
+		<TileRow>
+			<Tile>
+				<tileType>FLOOR</tileType>
+			</Tile>
+			<Tile>
+				<tileType>WALL</tileType>
+			</Tile>
+		</TileRow>
+	</Tileset>
 </Level>
