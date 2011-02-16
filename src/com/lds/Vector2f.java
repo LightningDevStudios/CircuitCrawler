@@ -29,7 +29,7 @@ public class Vector2f
 	
 	public Vector2f (float angle)
 	{
-		float convertedAngle = (float)Math.toRadians(angle + 90.0f);
+		float convertedAngle = (float)Math.toRadians(angle);
 		this.x = (float)Math.cos(convertedAngle);
 		this.y = (float)Math.sin(convertedAngle);
 	}
@@ -182,7 +182,7 @@ public class Vector2f
 	
 	public float angleRad()
 	{
-		float rad = (float)(Math.atan2(y, x) + Math.PI);
+		float rad = (float)(Math.atan2(y, x));
 		//clamp angle between 0 and 360
 		if (rad == 2 * Math.PI)
 			rad = 0.0f;
@@ -196,7 +196,7 @@ public class Vector2f
 	
 	public float angleDeg()
 	{
-		float deg = (float)Math.toDegrees(Math.atan2(y, x) + Math.PI);
+		float deg = (float)Math.toDegrees(Math.atan2(y, x));
 		//clamp angle between 0 and 360
 		if (deg == 360.0f)
 			deg = 0.0f;

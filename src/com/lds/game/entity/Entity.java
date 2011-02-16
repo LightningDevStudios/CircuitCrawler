@@ -233,7 +233,15 @@ public abstract class Entity
 	public boolean isFacing(Entity ent)
 	{
 		float angleBetween = (float)Math.toDegrees(Math.atan2((ent.getYPos() - this.getYPos()) , (ent.getXPos() - this.getXPos())));
-		float angleDiff = (angle + 90.0f) - angleBetween;
+		//clamp angle between 0 and 360
+		if (angleBetween == 360.0f)
+			angleBetween = 0.0f;
+		else if (angleBetween > 360.0f)
+			angleBetween -= 360 * (int)(angleBetween / 360);
+		else if (angleBetween < 0.0f)
+			angleBetween += 360;
+		
+		float angleDiff = (angle) - angleBetween;
 		
 		if (angleDiff > 315.0f)
 			angleDiff -= 360.0f;
