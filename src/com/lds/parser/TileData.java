@@ -2,13 +2,13 @@ package com.lds.parser;
 
 import java.util.HashMap;
 
-public class TileData extends StaticEntData
+public class TileData //extends StaticEntData
 {
 	private int tilePosX, tilePosY, tilesetX, tilesetY;
 	
 		public TileData(HashMap<String, String> tileHM)
 		{
-			super(tileHM);
+			//super(tileHM);
 			
 			tilePosX = Integer.parseInt(tileHM.get("tilePosX"));
 			tilePosY = Integer.parseInt(tileHM.get("tilePosY"));
