@@ -82,7 +82,7 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 		switch(requestCode)
 		{
 		case PUZZLE_ACTIVITY:
-			if(resultCode == 0)
+			if(resultCode == RESULT_OK)
 				glSurface.onPuzzleFailed();
 			else
 				glSurface.onPuzzleWon();
@@ -103,14 +103,13 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 	{
 		super.onPause();
 		glSurface.onPause();
-		finish();
+		//finish();
 	}
 	
 	@Override
 	protected void onDestroy()
 	{
 		super.onDestroy();
-		finish();
 	}
 	
 	@Override

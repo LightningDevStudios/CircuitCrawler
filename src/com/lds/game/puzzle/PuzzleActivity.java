@@ -37,7 +37,8 @@ public class PuzzleActivity extends Activity implements OnPuzzleInitializedListe
 		catch (InstantiationException e) { finishPuzzleFailed(); }
 		catch (IllegalAccessException e) { finishPuzzleFailed(); }
 		catch (ClassNotFoundException e) { finishPuzzleFailed(); }
-		
+		if(puzzle != null)
+		{
 		Object syncObj = new Object();
 		
 		puzzle.setContext(this);
@@ -47,6 +48,7 @@ public class PuzzleActivity extends Activity implements OnPuzzleInitializedListe
 		puzzle.setPuzzleSuccessEvent(this);
 		glSurface = new PuzzleSurface(this, puzzle, syncObj);
 		setContentView(glSurface);
+		}
 	}
 	
 	@Override
@@ -72,13 +74,15 @@ public class PuzzleActivity extends Activity implements OnPuzzleInitializedListe
 	
 	public void finishPuzzleFailed()
 	{
-		this.setResult(0);
+		System.out.println("FAILURE");
+		this.setResult(RESULT_CANCELED);
 		finish();
 	}
 	
 	public void finishPuzzleSuccess()
 	{
-		this.setResult(1);
+		System.out.println("SUCCESS");
+		this.setResult(RESULT_OK);
 		finish();
 	}
 

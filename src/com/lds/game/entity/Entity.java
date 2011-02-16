@@ -101,13 +101,11 @@ public abstract class Entity
 								-halfSize, -halfSize }; //bottom right
 
 		vertices = initVerts;
-				
-		byte[] initIndices = {	0, 1, 2, 3 };
+		this.vertexBuffer = setBuffer(vertexBuffer, vertices);
 		
+		byte[] initIndices = {	0, 1, 2, 3 };
 		indices = initIndices;
 		
-		this.vertexBuffer = setBuffer(vertexBuffer, vertices);
-				
 		indexBuffer = ByteBuffer.allocateDirect(indices.length);
 		indexBuffer.put(indices);
 		indexBuffer.position(0);
@@ -667,5 +665,21 @@ public abstract class Entity
 	{
 		if (vertVecs.length == 4)
 			this.vertVecs = vertVecs;
+	}
+	
+	public void resetAllBuffers()
+	{
+		if(vertices != null)
+			vertexBuffer = setBuffer(vertexBuffer, vertices);
+		if(color != null)
+			colorBuffer = setBuffer(colorBuffer, color);
+		if(texture!= null)
+			textureBuffer = setBuffer(textureBuffer, texture);
+		
+		byte[] initIndices = {	0, 1, 2, 3 };
+		indices = initIndices;
+		indexBuffer = ByteBuffer.allocateDirect(indices.length);
+		indexBuffer.put(indices);
+		indexBuffer.position(0);
 	}
 }

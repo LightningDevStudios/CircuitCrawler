@@ -11,6 +11,8 @@ import android.content.Context;
 
 import com.lds.EntityManager;
 import com.lds.Stopwatch;
+import com.lds.Texture;
+import com.lds.TextureLoader;
 import com.lds.Vector2f;
 import com.lds.game.entity.*;
 import com.lds.game.event.*;
@@ -59,6 +61,24 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		
 		if(game == null)
 			game = new Game(context, gl);
+		else
+		{
+			Game.tilesetcolors = new Texture(R.drawable.tilesetcolors, 128, 128, 8, 8, context);
+			Game.tilesetwire = new Texture(R.drawable.tilesetwire, 128, 128, 8, 8, context);
+			Game.randomthings = new Texture(R.drawable.randomthings, 256, 256, 8, 8, context);
+			Game.text = new Texture(R.drawable.text, 256, 256, 16, 8, context);
+			
+			TextureLoader.getInstance().initialize(gl);
+			TextureLoader tl = TextureLoader.getInstance();
+			tl.loadTexture(Game.tilesetcolors);
+			tl.loadTexture(Game.tilesetwire);
+			tl.loadTexture(Game.randomthings);
+			tl.loadTexture(Game.text);
+			for(Entity ent : game.entList)
+			{
+				ent.resetAllBuffers();
+			}
+		}
 		
 		if(gameInitializedListener != null)
 			gameInitializedListener.onGameInitialized();
