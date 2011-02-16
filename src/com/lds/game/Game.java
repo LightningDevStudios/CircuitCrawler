@@ -277,7 +277,7 @@ public class Game
 		//Parser
 		Parser parser = new Parser(context, R.xml.tempdata);
 		
-		entList = parser.entList;
+		//entList = parser.entList;
 		try 
 		{
 			parser.parseLevel();
@@ -291,7 +291,7 @@ public class Game
 			e.printStackTrace();
 		}
 		
-		entList.addAll(parser.convertDataToEnts());
+		//entList.addAll(parser.convertDataToEnts());
 	}
 	
 	public void updateLocalEntities()
