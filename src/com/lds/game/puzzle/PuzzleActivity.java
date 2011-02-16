@@ -42,6 +42,9 @@ public class PuzzleActivity extends Activity implements OnPuzzleInitializedListe
 		
 		puzzle.setContext(this);
 		puzzle.setSyncObj(syncObj);
+		puzzle.setPuzzleFailEvent(this);
+		puzzle.setPuzzleInitializedEvent(this);
+		puzzle.setPuzzleSuccessEvent(this);
 		glSurface = new PuzzleSurface(this, puzzle, syncObj);
 		setContentView(glSurface);
 	}

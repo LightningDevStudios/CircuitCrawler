@@ -14,6 +14,8 @@ import com.lds.game.puzzle.PuzzleActivity;
 
 public class Run extends Activity implements OnGameOverListener, OnGameInitializedListener, OnPuzzleActivatedListener
 {
+	public static final int PUZZLE_ACTIVITY = 2;
+	
 	public Graphics glSurface;
 	public GameRenderer gameR;
 	
@@ -60,14 +62,25 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 		//glSurface.onPause();
 		Intent i = new Intent(Run.this, PuzzleActivity.class);
 		i.putExtra("PUZZLE_RENDERER", "circuit.CircuitPuzzle");
-		startActivityForResult(i, 1);
+		startActivityForResult(i, PUZZLE_ACTIVITY);
 	}
 	
-	/*@Override
-	public void onActivityResult(int requestCode, int resultCode, String strData, Bundle bundle)
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent intent)
 	{
-		
-	}*/
+		//glSurface.onResume();
+		//setContentView(glSurface);
+		switch(requestCode)
+		{
+		case PUZZLE_ACTIVITY:
+			if(resultCode == 0)
+				glSurface.onPuzzleFailed();
+			else
+				glSurface.onPuzzleWon();
+			break;
+		default:
+		}
+	}
 	
 	@Override
 	protected void onResume ()
