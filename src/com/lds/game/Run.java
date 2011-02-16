@@ -36,8 +36,6 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 		Object syncObj = new Object();
 		gameR = new GameRenderer(screenX, screenY, this, syncObj);
 		gameR.setGameInitializedEvent(this);
-		//gameR.setGameOverEvent(this);
-		//gameR.setPuzzleActivatedEvent(this);
 		glSurface = new Graphics(this, gameR, syncObj);
 		setContentView(glSurface);
 	}
@@ -64,6 +62,12 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 		i.putExtra("PUZZLE_RENDERER", "circuit.CircuitPuzzle");
 		startActivityForResult(i, 1);
 	}
+	
+	/*@Override
+	public void onActivityResult(int requestCode, int resultCode, String strData, Bundle bundle)
+	{
+		
+	}*/
 	
 	@Override
 	protected void onResume ()

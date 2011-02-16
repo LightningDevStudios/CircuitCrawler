@@ -38,8 +38,8 @@ public class CircuitPuzzle implements IPuzzle
 	public void onSurfaceCreated(GL10 gl, EGLConfig config) 
 	{
 		gl.glShadeModel(GL10.GL_SMOOTH);
-		//gl.glEnable(GL10.GL_BLEND);
-		//gl.glBlendFunc(GL10.GL_ONE, GL10.GL_ONE_MINUS_SRC_ALPHA);
+		gl.glEnable(GL10.GL_BLEND);
+		gl.glBlendFunc(GL10.GL_ONE, GL10.GL_ONE_MINUS_SRC_ALPHA);
 		
 		gl.glClearColor(0.39f, 0.58f, 0.93f, 1.0f);
 		

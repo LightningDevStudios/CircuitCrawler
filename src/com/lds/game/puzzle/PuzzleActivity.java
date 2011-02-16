@@ -5,6 +5,8 @@ import com.lds.game.puzzle.event.*;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.view.Window;
+import android.view.WindowManager;
 
 public class PuzzleActivity extends Activity implements OnPuzzleInitializedListener, OnPuzzleSuccessListener, OnPuzzleFailListener
 {
@@ -17,13 +19,16 @@ public class PuzzleActivity extends Activity implements OnPuzzleInitializedListe
 	{
 		super.onCreate(savedInstanceState);
 		
+		//Enable fullscreen
+		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+		
+		//Dynamically load a puzzle based on a passed-in string
 		String className = getIntent().getExtras().getString("PUZZLE_RENDERER");
 		className = "com.lds.puzzles.".concat(className);
-		//if the className was not set, end the puzzle
+		
 		if (className == null)
-		{
 			finishPuzzleFailed();
-		}
 				
 		try 
 		{

@@ -64,13 +64,12 @@ public class Tile
 	
 	public void draw(GL10 gl)
 	{
-		//gl.glEnable(GL10.GL_CULL_FACE);
-		//gl.glCullFace(GL10.GL_BACK);
+		gl.glFrontFace(GL10.GL_CCW);
+		gl.glEnable(GL10.GL_CULL_FACE);
+		gl.glCullFace(GL10.GL_BACK);
 		
 		gl.glEnable(GL10.GL_TEXTURE_2D);
 		gl.glBindTexture(GL10.GL_TEXTURE_2D, tex.getTexture());
-		
-		gl.glFrontFace(GL10.GL_CW);
 		
 		gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
 		gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
@@ -146,6 +145,18 @@ public class Tile
 	public void updateTexture()
 	{
 		this.texture = TilesetHelper.getTextureVertices(tex, type.getValue(), tileState);
+		
+		float negX = texture[0];
+		float negY = texture[1];
+		float posX = texture[2];
+		float posY = texture[5];
+		
+		float[] coords = { 	posX, negY,
+							posX, posY,
+							negX, negY,
+							negX, posY };
+		
+		this.texture = coords;
 		this.textureBuffer = setBuffer(textureBuffer, texture);
 	}
 	
