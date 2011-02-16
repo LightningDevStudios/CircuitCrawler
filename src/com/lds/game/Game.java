@@ -183,7 +183,7 @@ public class Game
 		spr.enableTextureMode(tilesetwire);
 		entList.add(spr);
 		
-		box = new PuzzleBox(64.0f, -75.0f, -400.0f, false, true);
+		box = new PuzzleBox(64.0f, -75.0f, 0.0f, false, true);
 		entList.add(box);
 		
 		//TODO NOPE LOL
@@ -424,7 +424,7 @@ public class Game
 			{
 				//TODO: A* Pathfinding Algorithm
 				enemy.moveTo(player.getXPos(), player.getYPos());
-				enemy.setAngle((float)Vector2f.sub(enemy.getPos(), player.getPos()).angleDeg());
+				enemy.setAngle((float)Vector2f.sub(player.getPos(), enemy.getPos()).angleDeg());
 			}
 			else
 			{
@@ -436,7 +436,7 @@ public class Game
 			if (enemy.isDoneRotating())
 			{
 				enemy.moveTo(player.getXPos(), player.getYPos());
-				enemy.setAngle((float)Vector2f.sub(enemy.getPos(), player.getPos()).angleDeg());
+				enemy.setAngle((float)Vector2f.sub(player.getPos(), enemy.getPos()).angleDeg());
 			}
 			else
 			{
@@ -445,7 +445,7 @@ public class Game
 		}
 		else if (enemy.getType() == AIType.TURRET)
 		{
-			float towardsPlayerAngle = (float)Vector2f.sub(enemy.getPos(), player.getPos()).angleDeg();
+			float towardsPlayerAngle = (float)Vector2f.sub(player.getPos(), enemy.getPos()).angleDeg();
 			if (enemy.getAngle() > towardsPlayerAngle + 5.0f || enemy.getAngle() < towardsPlayerAngle - 5.0f)
 				enemy.rotateTo(towardsPlayerAngle);
 			else
@@ -470,7 +470,7 @@ public class Game
 		if (enemy.getType() == AIType.STALKER)
 		{
 			enemy.stop();
-			float angleToPlayer = (float)Vector2f.sub(enemy.getPos(), player.getPos()).angleDeg();
+			float angleToPlayer = (float)Vector2f.sub(player.getPos(), enemy.getPos()).angleDeg();
 			if (enemy.getAngle() == angleToPlayer)
 			{
 				enemy.setAngle(angleToPlayer);
@@ -486,7 +486,7 @@ public class Game
 		else if (enemy.getType() == AIType.PATROL)
 		{
 			enemy.stop();
-			float angleToPlayer = (float)Vector2f.sub(enemy.getPos(), player.getPos()).angleDeg();
+			float angleToPlayer = (float)Vector2f.sub(player.getPos(), enemy.getPos()).angleDeg();
 			if (enemy.getAngle() == angleToPlayer)
 			{
 				enemy.setAngle(angleToPlayer);
@@ -530,7 +530,7 @@ public class Game
 						enemy.setPathLocation(enemy.getPathLocation() + 1);
 				}
 				
-				float angleToNode = (float)Vector2f.sub(enemy.getPos(), nextNode.getPos()).angleDeg();
+				float angleToNode = (float)Vector2f.sub(nextNode.getPos(), enemy.getPos()).angleDeg();
 				
 				if (enemy.getAngle() == angleToNode)
 					enemy.setDoneRotating(true);
@@ -578,7 +578,7 @@ public class Game
 			}
 			else
 			{
-				float angleToNode = (float)Vector2f.sub(enemy.getPos(), closestNode.getPos()).angleDeg();
+				float angleToNode = (float)Vector2f.sub(closestNode.getPos(), enemy.getPos()).angleDeg();
 				if (enemy.getAngle() == angleToNode)
 				{
 					enemy.setDoneRotating(true);

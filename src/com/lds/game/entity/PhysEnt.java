@@ -89,19 +89,20 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 			degrees = degrees + 360;
 		
 		endAngle = degrees;
-		float dist = degrees - angle;
+		float dist = endAngle - angle;
 		float absDist = Math.abs(dist);
 		
-		if (absDist < 10.0f)
+		if (absDist < 10.0f || absDist > 350.0f)
 		{
 			this.setAngle(degrees);
 			isRotating = false;
 		}
-		else if (!isRotating)
+		else
 		{
 			//figures out whether the angle crossed 0/360 degrees
 			boolean crossing;
-			if (angle > 0 && angle <= 180)
+			
+			if (angle >= 0 && angle < 180)
 			{
 				if (endAngle > angle + 180)
 					crossing = true;
@@ -119,7 +120,12 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 			//figures out whether it needs to rotate CCW or CW
 			if (crossing)
 			{
-				if (dist > 0)
+				if (absDist > 350.0f)
+				{
+					this.setAngle(degrees);
+					isRotating = false;
+				}
+				else if (dist > 0)
 					isRotatingCCW = false;
 				else
 					isRotatingCCW = true;
@@ -265,6 +271,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	    //calculate the bouceVec
 		Vector2f bounceSide = Vector2f.normalize(Vector2f.sub(vertDistVecs[0], vertDistVecs[1]));
 		bounceSide.scale(this.moveInterpVec.dot(bounceSide));
+		Vector2f bounceVec = Vector2f.sub(bounceSide, this.moveInterpVec);
 		this.addBounceVec(Vector2f.sub(bounceSide, this.moveInterpVec));
 	}
 	
@@ -352,7 +359,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 		{
 			float increment = (float)(Stopwatch.elapsedTimeMs() - rotTimeMs);
 			
-			float dist = Math.abs(angle - endAngle);
+			float dist = Math.abs(endAngle - angle);
 			
 			if (isRotatingCCW)
 			{	
@@ -454,4 +461,18 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 		moveInterpVec = v;
 	}
 	
+	public void setIsMoving(boolean isMoving)
+	{
+		this.isMoving = isMoving;
+	}
+	
+	public void setIsRotating(boolean isRotating)
+	{
+		this.isRotating = isRotating;
+	}
+	
+	public void setIsScaling(boolean isScaling)
+	{
+		this.isScaling = isScaling;
+	}
 }

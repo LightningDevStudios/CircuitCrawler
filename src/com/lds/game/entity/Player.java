@@ -9,6 +9,7 @@ public class Player extends Character //your character, protagonist
 	private boolean holdingObject;
 	private HoldObject hObj;
 	private boolean controlled;
+	private float nextAngle;
 	
 	public Player (float xPos, float yPos, float angle)
 	{
@@ -16,6 +17,7 @@ public class Player extends Character //your character, protagonist
 		super(Entity.DEFAULT_SIZE, xPos, yPos, angle, 1.0f, 1.0f, false, 100, 540.0f);
 		//initialize Player data
 		energy = 100;
+		nextAngle = angle;
 	}
 	
 	public void attack ()
@@ -123,5 +125,15 @@ public class Player extends Character //your character, protagonist
 	public void loseEnergy(int energyLost)
 	{
 		energy -= energyLost;
+	}
+	
+	public float getNextAngle()
+	{
+		return nextAngle;
+	}
+	
+	public void setNextAngle(float angle)
+	{
+		nextAngle = angle;
 	}
 }
