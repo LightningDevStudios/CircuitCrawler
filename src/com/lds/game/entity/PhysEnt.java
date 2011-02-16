@@ -80,25 +80,60 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	//sets angle of an entity to a new value
 	public void rotateTo (float degrees)
 	{
-		if (degrees >= 360.0f)
-			degrees -= 360.0f * ((int)degrees/360);
-		else if (degrees < 0.0f)
+		//clamp between 0 and 360
+		if (degrees == 360.0f)
 			degrees = 0.0f;
+		else if (degrees > 360.0f)
+			degrees -= 360.0f * (int)(degrees/360);
+		else if (degrees < 0.0f)
+			degrees = degrees + 360;
 		
-		if (!isRotating)
-		{
 		endAngle = degrees;
 		float dist = degrees - angle;
+		float absDist = Math.abs(dist);
 		
-		if (dist >= 180 || dist >= -180 && dist <= 0)
-			isRotatingCCW = false;
-		else
-			isRotatingCCW = true;
-		
-		if (dist != 0)
+		if (absDist < 10.0f)
+		{
+			this.setAngle(degrees);
+			isRotating = false;
+		}
+		else if (!isRotating)
+		{
+			//figures out whether the angle crossed 0/360 degrees
+			boolean crossing;
+			if (angle > 0 && angle <= 180)
+			{
+				if (endAngle > angle + 180)
+					crossing = true;
+				else
+					crossing = false;
+			}
+			else
+			{
+				if (endAngle < angle - 180)
+					crossing = true;
+				else
+					crossing = false;
+			}
+			
+			//figures out whether it needs to rotate CCW or CW
+			if (crossing)
+			{
+				if (dist > 0)
+					isRotatingCCW = false;
+				else
+					isRotatingCCW = true;
+			}
+			else
+			{
+				if (dist > 0)
+					isRotatingCCW = true;
+				else
+					isRotatingCCW = false;
+			}
+			
 			isRotating = true;
-		
-		rotTimeMs = Stopwatch.elapsedTimeMs();
+			rotTimeMs = Stopwatch.elapsedTimeMs();
 		}
 	}
 	
@@ -136,16 +171,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	//i.e. ent1 is rotated 30 degrees, if you do ent1.rotate(30.0f) it will be at 60 degrees
 	public void rotate (float degrees)
 	{
-		if (degrees >= 360.0f)
-			degrees -= 360.0f * ((int)degrees/360);
-		else if (degrees < 0.0f)
-			degrees = 0.0f;
-		
-		endAngle = angle + degrees;
-		interpAngle = degrees;	
-		isRotating = true;
-		rotTimeMs = Stopwatch.elapsedTimeMs();
-		Game.worldOutdated = true;
+		rotateTo(angle + degrees);
 	}
 	
 	//scales relative to current scaling
@@ -262,10 +288,14 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	//mutator for angle
 	public void setAngle (float degrees)
 	{	
-		if (degrees >= 360.0f)
-			degrees -= 360.0f * ((int)degrees/360);
-		else if (degrees < 0.0f)
+		//clamp angle between 0 and 360
+		if (degrees == 360.0f)
 			degrees = 0.0f;
+		else if (degrees > 360.0f)
+			degrees -= 360 * (int)(degrees / 360);
+		else if (degrees < 0.0f)
+			degrees += 360;
+		
 		angle = degrees;
 		endAngle = degrees;
 		Game.worldOutdated = true;
@@ -293,7 +323,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 				isMoving = false;
 				moveInterpCount = 0;
 			}
-			else 
+			else
 			{
 				moveInterpCount++;
 				moveInterpVec = Vector2f.scale(Vector2f.normalize(moveVec), moveSpeed / 1000 * (Stopwatch.elapsedTimeMs() - moveTimeMs));
@@ -322,34 +352,28 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 		{
 			float increment = (float)(Stopwatch.elapsedTimeMs() - rotTimeMs);
 			
-			if (angle <= endAngle + (rotSpeed / 1000 * increment) && angle >= endAngle - (rotSpeed / 1000 * increment))
-			{
-				angle = endAngle;
-				isRotating = false;
-			}
+			float dist = Math.abs(angle - endAngle);
 			
 			if (isRotatingCCW)
-			{
-				//clamp the angle 0-360
-				if (angle >= 360.0f)
-					angle -= 360.0f * ((int)angle/360);
-				else if (angle < 0.0f)
-					angle = 0.0f;
-				
-				angle += rotSpeed / 1000 * increment;
-				Game.worldOutdated = true;
+			{	
+				if ((dist > 180 && angle < endAngle) || (dist < 180 && angle > endAngle))
+				{
+					this.setAngle(endAngle);
+					isRotating = false;
+				}
+				else
+					this.setAngle(angle + rotSpeed / 1000 * increment);
 			}
 			else
 			{
-				if (angle <= 0.0f)
-					angle = angle + 360.0f;
-				else if (angle > 360.0f)
-					angle = 360.0f;
-				
-				angle -= rotSpeed / 1000 * increment;
-			}
-			System.out.println(increment + " " + angle);
-			//error check			
+				if ((dist > 180 && angle > endAngle) || (dist < 180 && angle < endAngle))
+				{
+					this.setAngle(endAngle);
+					isRotating = false;
+				}
+				else
+					this.setAngle(angle - rotSpeed / 1000 * increment);
+			}	
 			rotTimeMs = Stopwatch.elapsedTimeMs();
 			
 			Game.worldOutdated = true;

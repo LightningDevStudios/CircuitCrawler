@@ -168,12 +168,44 @@ public class Vector2f
 	
 	public float angle (Vector2f v)
 	{
-	    return((float)Math.acos(Vector2f.normalize(this).dot(Vector2f.normalize(v))));
+	    float rad = ((float)Math.acos(Vector2f.normalize(this).dot(Vector2f.normalize(v))));
+	    //clamp angle between 0 and 360
+		if (rad == 360.0f)
+			rad = 0.0f;
+		else if (rad > 360.0f)
+			rad -= 360 * (int)(rad / 360);
+		else if (rad < 0.0f)
+			rad += 360;
+		
+		return rad;
 	}
 	
-	public float angle()
+	public float angleRad()
 	{
-		return (float)(Math.atan2(y, x) + Math.PI);
+		float rad = (float)(Math.atan2(y, x) + Math.PI);
+		//clamp angle between 0 and 360
+		if (rad == 2 * Math.PI)
+			rad = 0.0f;
+		else if (rad > 2 * Math.PI)
+			rad -= 2 * Math.PI * (int)(rad / 2 * Math.PI);
+		else if (rad < 0.0f)
+			rad += 2 * Math.PI;
+		
+		return rad;
+	}
+	
+	public float angleDeg()
+	{
+		float deg = (float)Math.toDegrees(Math.atan2(y, x) + Math.PI);
+		//clamp angle between 0 and 360
+		if (deg == 360.0f)
+			deg = 0.0f;
+		else if (deg > 360.0f)
+			deg -= 360 * (int)(deg / 360);
+		else if (deg < 0.0f)
+			deg += 360;
+		
+		return deg;
 	}
 	
 	public String toString ()

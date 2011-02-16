@@ -5,6 +5,7 @@ import javax.microedition.khronos.opengles.GL10;
 
 import android.opengl.GLU;
 import android.os.Debug;
+import android.os.Vibrator;
 import android.view.MotionEvent;
 import android.content.Context;
 
@@ -24,6 +25,8 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	public boolean windowOutdated, gameOver;
 	public int frameInterval, frameCount = 0;	
 	public OnGameInitializedListener gameInitializedListener;
+	public OnPuzzleActivatedListener puzzleActivatedListener;
+	public OnGameOverListener gameOverListener;
 	
 	public GameRenderer (float screenW, float screenH, Context context, Object syncObj)
 	{
@@ -38,13 +41,12 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	@Override
 	public void onSurfaceCreated(GL10 gl, EGLConfig config)
 	{
-		
 		//openGL settings
 		gl.glShadeModel(GL10.GL_SMOOTH);
 		gl.glEnable(GL10.GL_BLEND);
 		gl.glBlendFunc(GL10.GL_ONE, GL10.GL_ONE_MINUS_SRC_ALPHA); //TODO change this later and make it per-poly?
 
-		gl.glClearColor(0.39f, 0.58f, 0.93f, 0.5f);
+		gl.glClearColor(0.39f, 0.58f, 0.93f, 1.0f);
 		
 		gl.glDisable(GL10.GL_DEPTH_TEST);
 		gl.glDepthMask(false);
@@ -59,6 +61,14 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		
 		if(gameInitializedListener != null)
 			gameInitializedListener.onGameInitialized();
+		
+		for (Entity ent : game.entList)
+		{
+			if (ent instanceof PuzzleBox)
+			{
+				((PuzzleBox)ent).setPuzzleInitListener(puzzleActivatedListener);
+			}
+		}
 	}
 	
 	@Override
@@ -182,6 +192,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 					Vector2f directionVec = new Vector2f(game.player.getAngle());
 					directionVec.scale(game.player.getHalfSize() + 20.0f);
 					AttackBolt attack = new AttackBolt(Vector2f.add(game.player.getPos(), directionVec), directionVec, game.player.getAngle());
+					vibrator(100);
 					EntityManager.addEntity(attack);
 					game.player.loseEnergy(10);
 					SoundPlayer.getInstance().playSound(2);
@@ -237,6 +248,19 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		}*/
 	}
 
+	public void vibrator(int time)
+	{
+		Vibrator vibrator = null; 
+		try { 
+		vibrator=(Vibrator)context.getSystemService(Context.VIBRATOR_SERVICE); 
+		} catch (Exception e) {} 
+		if (vibrator != null) { 
+		  try { 
+		    vibrator.vibrate(((long)time)); 
+		  } catch (Exception e) {} 
+		} 
+	}
+	
 	@Override
 	public void onSurfaceChanged(GL10 gl, int width, int height)
 	{		
@@ -282,11 +306,21 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 						Vector2f tempMoveVec = UIjp.getMovementVec(touchVec);
 						
 						//Figure out the angle
-						float newAngle = (float)Math.toDegrees(tempMoveVec.angle());
+						float newAngle = (float)tempMoveVec.angleDeg();
 						
 						//move the player
 						//TODO move w/ time, use move()?
-						game.player.setAngle(newAngle + 90.0f);
+						if (game.player.getAngle() <= newAngle + 1.0f && game.player.getAngle() >= newAngle - 1.0f)
+						{
+							game.player.setDoneRotating(true);
+							game.player.setAngle(newAngle);
+						}
+						else
+						{
+							game.player.setDoneRotating(false);
+							game.player.rotateTo(newAngle);
+						}
+						
 						Vector2f moveVec = Vector2f.scale(tempMoveVec, 1.0f / 10);
 						game.player.setPos(Vector2f.add(game.player.getPos(), moveVec));
 						Game.worldOutdated = true;
@@ -388,6 +422,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	@Override
 	public void setGameOverEvent(OnGameOverListener listener) 
 	{
+		this.gameOverListener = listener;
 		game.setGameOverEvent(listener);
 	}
 	
@@ -395,5 +430,28 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	public void setGameInitializedEvent(OnGameInitializedListener listener)
 	{
 		this.gameInitializedListener = listener;
+	}
+
+	@Override
+	public void setPuzzleActivatedEvent(OnPuzzleActivatedListener listener)
+	{
+		this.puzzleActivatedListener = listener;
+	}
+	
+	@Override
+	public void onPuzzleWon() 
+	{
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void onPuzzleFailed() 
+	{
+		// TODO Auto-generated method stub
+	}
+	
+	public void gameOver ()
+	{
+		gameOverListener.onGameOver();
 	}
 }

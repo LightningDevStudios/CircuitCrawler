@@ -1,164 +1,218 @@
 package com.lds.puzzles.circuit;
 
-import com.lds.puzzles.circuit.dir;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.nio.FloatBuffer;
+
+import javax.microedition.khronos.opengles.GL10;
+
+import com.lds.Enums.Direction;
+import com.lds.Texture;
+import com.lds.TilesetHelper;
 
 public class Tile 
 {
-	private dir side1;
-	private dir side2;
+	public static float tileSize;
+	
+	private TileType type;
 	private boolean selected;
 	private boolean highlighted;
 	private boolean powered;
-	public Tile (dir _side1, dir _side2)
+	
+	private float xPos, yPos;
+	private int tileState;
+	
+	private Texture tex;
+	
+	private float[] vertices;
+	private float[] texture;
+	
+	private FloatBuffer vertexBuffer;
+	private FloatBuffer textureBuffer;
+	private ByteBuffer indexBuffer;
+	
+	public Tile(float xPos, float yPos, Texture tex, TileType type)
 	{
 		selected = false;
 		highlighted = false;
 		powered = false;
-		if (_side1 != _side2)
+		
+		this.type = type;
+		this.xPos = xPos;
+		this.yPos = yPos;
+		this.tex = tex;
+		this.tileState = 0;
+		
+		float halfSize = tileSize / 2;
+		
+		float[] initVerts = {	halfSize, halfSize,
+								halfSize, -halfSize,
+								-halfSize, halfSize,
+								-halfSize, -halfSize };
+		
+		this.vertices = initVerts;
+		this.vertexBuffer = setBuffer(vertexBuffer, vertices);
+		
+		updateTexture();
+				
+		byte[] indices = { 0, 1, 2, 3 };
+		
+		indexBuffer = ByteBuffer.allocateDirect(indices.length);
+		indexBuffer.put(indices);
+		indexBuffer.position(0);
+	}
+	
+	public void draw(GL10 gl)
+	{
+		gl.glFrontFace(GL10.GL_CCW);
+		gl.glEnable(GL10.GL_CULL_FACE);
+		gl.glCullFace(GL10.GL_BACK);
+		
+		gl.glEnable(GL10.GL_TEXTURE_2D);
+		gl.glBindTexture(GL10.GL_TEXTURE_2D, tex.getTexture());
+		
+		gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
+		gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
+				
+		gl.glVertexPointer(2, GL10.GL_FLOAT, 0, vertexBuffer);
+		gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, textureBuffer);
+		
+		gl.glDrawElements(GL10.GL_TRIANGLE_STRIP, 4, GL10.GL_UNSIGNED_BYTE, indexBuffer);
+		
+		gl.glDisableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
+		gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
+		
+		gl.glDisable(GL10.GL_TEXTURE_2D);
+		//gl.glDisable(GL10.GL_CULL_FACE);
+	}
+
+	public FloatBuffer setBuffer(FloatBuffer buffer, float[] array)
+	{
+		ByteBuffer byteBuf = ByteBuffer.allocateDirect(array.length * 4);
+		byteBuf.order(ByteOrder.nativeOrder());
+		buffer = byteBuf.asFloatBuffer();
+		buffer.put(array);
+		buffer.position(0);
+		
+		return buffer;
+	}
+		
+	public static Direction flipDirection (Direction dir)
+	{
+		switch (dir)
 		{
-			side1 = _side1;
-			side2 = _side2;
-		}
-	}
-	public void setTile (Tile newTile)
-	{
-		side1 = newTile.getSide1();
-		side2 = newTile.getSide2();
-	}
-	//selected accessor
-	public boolean isSelected ()
-	{
-		return selected;
-	}
-	//selected mutator (make true)
-	public void select ()
-	{
-		selected = true;
-	}
-	//selected mutator (make false)
-	public void deselect ()
-	{
-		selected = false;
-	}
-	//highlighted accessor
-	public boolean isHightlighted ()
-	{
-		return highlighted;
-	}
-	//highlighted mutator (make true)
-	public void highlight ()
-	{
-		highlighted = true;
-	}
-	//highlighted mutator (make false)
-	public void dehighlight ()
-	{
-		highlighted = false;
-	}
-	//side1 accessor
-	public dir getSide1 ()
-	{
-		return side1;
-	}
-	//side2 accessor
-	public dir getSide2 ()
-	{
-		return side2;
-	}
-	//powered accessor
-	public boolean isPowered ()
-	{
-		return powered;
-	}
-	//powered mutator
-	public void setPower (boolean _powered)
-	{
-		powered = _powered;
-	}
-	//gets type based on in/out wires
-	public int getType ()
-	{
-		//type 0 is a straight vertical piece
-		if (side1 == dir.up && side2 == dir.down || side1 == dir.down && side2 == dir.up)
-		{
-			return 0;
-		}
-		//type 1 is a straight horizontal line
-		else if (side1 == dir.left && side2 == dir.right || side1 == dir.right && side2 == dir.left)
-		{
-			return 1;
-		}
-		//type 2 is a bottom-left corner (L shape)
-		else if (side1 == dir.up && side2 == dir.right || side1 == dir.right && side2 == dir.up)
-		{
-			return 2;
-		}
-		//type 3 is a top-left corner
-		else if (side1 == dir.down && side2 == dir.right || side1 == dir.right && side2 == dir.down)
-		{
-			return 3;
-		}
-		//type 4 is a top-right corner
-		else if (side1 == dir.down && side2 == dir.left || side1 == dir.left && side2 == dir.down)
-		{
-			return 4;
-		}
-		//type 5 is a bottom-right corner
-		else
-		{
-			return 5;
-		}
-	}
-	//flips directtion of tile (right to left, up to down, etc.)
-	public static dir returnFlippedTile (dir input)
-	{
-		switch (input)
-		{
-			case up:
-				return dir.down;
-			case down:
-				return dir.up;
-			case left:
-				return dir.right;
-			case right:
-				return dir.left;
+			case UP:
+				return Direction.DOWN;
+			case DOWN:
+				return Direction.UP;
+			case LEFT:
+				return Direction.RIGHT;
+			case RIGHT:
+				return Direction.LEFT;
 			default:
-				return dir.up;
+				return Direction.UP;
 		}
 	}
 	
-	//returns x position of next tile in powering sequence
-	public static int returnNewXPos (int x, dir input)
+	public static int moveXPos (int x, Direction dir)
 	{
-		if (input == dir.left)
+		if (dir == Direction.LEFT)
 			return x - 1;
-		else if (input == dir.right)
+		else if (dir == Direction.RIGHT)
 			return x + 1;
 		else
 			return x;
 	}
 	
-	//return y position of next tile in powering sequence
-	public static int returnNewYPos (int y, dir input)
+	public static int moveYPos (int y, Direction dir)
 	{
-		if (input == dir.up)
+		if (dir == Direction.UP)
 			return y - 1;
-		else if (input == dir.down)
+		else if (dir == Direction.DOWN)
 			return y + 1;
 		else
 			return y;
 	}
-	public String toString ()
+	
+	public boolean containsDirection(Direction dir)
 	{
-		String output = "";
-		output +=( "[ " + side1 + ", " + side2 + ", ");
-		if (selected == true)
-			output += ("selected, ");
-		if (highlighted == true)
-			output += ("highlighted, ");
-		if (powered == true)
-			output += ("powered, ");
-		output += "]";
-		return output;
+		if (type.getDir1() == dir || type.getDir2() == dir)
+			return true;
+		else
+			return false;
 	}
+	
+	public void updateTexture()
+	{
+		this.texture = TilesetHelper.getTextureVertices(tex, type.getValue(), tileState);
+		
+		float negX = texture[0];
+		float negY = texture[1];
+		float posX = texture[2];
+		float posY = texture[5];
+		
+		float[] coords = { 	posX, negY,
+							posX, posY,
+							negX, negY,
+							negX, posY };
+		
+		this.texture = coords;
+		this.textureBuffer = setBuffer(textureBuffer, texture);
+	}
+	
+	public void select()
+	{ 
+		selected = true;
+		tileState += 1;
+		updateTexture();
+	}
+	
+	public void deselect ()		
+	{
+		selected = false;
+		tileState -= 1;
+		updateTexture();
+	}
+	
+	public void highlight ()	
+	{
+		highlighted = true;
+		tileState += 2;
+		updateTexture();
+	}
+	
+	public void dehighlight ()	
+	{ 
+		highlighted = false; 
+		tileState -= 2;
+		updateTexture();
+	}
+	
+	public void power()	
+	{ 
+		powered = true;
+		tileState = 3;
+		updateTexture();
+	}
+	
+	public void unpower()
+	{ 
+		powered = false; 
+		tileState = 0;
+		updateTexture();
+	}
+	
+	public void setTileType(TileType type) 
+	{ 
+		this.type = type; 
+		updateTexture();
+	}
+	
+	public boolean isPowered ()		{ return powered; }
+	public boolean isSelected()		{ return selected; }
+	public boolean isHightlighted() { return highlighted; }
+	public float getXPos()			{ return xPos; }
+	public float getYPos()			{ return yPos; }
+	public int getTileState()		{ return tileState; }
+	public TileType getType()		{ return type; }
 }

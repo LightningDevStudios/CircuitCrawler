@@ -2,5 +2,5 @@ package com.lds.game.event;
 
 public interface OnPuzzleActivatedListener 
 {
-	public void OnPuzzleActivated();
+	public void onPuzzleActivated();
 }

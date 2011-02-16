@@ -1,8 +1,5 @@
 package com.lds.game.entity;
 
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-
 import com.lds.Animation;
 
 public class Sprite extends PhysEnt
@@ -14,7 +11,7 @@ public class Sprite extends PhysEnt
 	{
 		this(size, xPos, yPos, 0.0f, 0.0f, 0.0f, null);
 	}
-	
+
 	public Sprite(float size, float xPos, float yPos, float moveSpeed, float rotSpeed, float sclSpeed, Animation anim)
 	{
 		this(size, xPos, yPos, 0.0f, 1.0f, 1.0f, moveSpeed, rotSpeed, sclSpeed, anim);
