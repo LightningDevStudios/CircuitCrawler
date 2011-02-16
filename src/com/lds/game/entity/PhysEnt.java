@@ -88,6 +88,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 		else if (degrees < 0.0f)
 			degrees = degrees + 360;
 		
+		endAngle = degrees;
 		float dist = degrees - angle;
 		float absDist = Math.abs(dist);
 		
@@ -98,18 +99,34 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 		}
 		else if (!isRotating)
 		{
-			endAngle = degrees;
-			
-			if (dist < 0)
+			//figures out whether the angle crossed 0/360 degrees
+			boolean crossing;
+			if (angle > 0 && angle <= 180)
 			{
-				if (absDist < 180)
+				if (endAngle > angle + 180)
+					crossing = true;
+				else
+					crossing = false;
+			}
+			else
+			{
+				if (endAngle < angle - 180)
+					crossing = true;
+				else
+					crossing = false;
+			}
+			
+			//figures out whether it needs to rotate CCW or CW
+			if (crossing)
+			{
+				if (dist > 0)
 					isRotatingCCW = false;
 				else
 					isRotatingCCW = true;
 			}
 			else
 			{
-				if (absDist < 180)
+				if (dist > 0)
 					isRotatingCCW = true;
 				else
 					isRotatingCCW = false;
@@ -335,23 +352,29 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 		{
 			float increment = (float)(Stopwatch.elapsedTimeMs() - rotTimeMs);
 			
-			if (angle <= endAngle + (rotSpeed / 5000 * increment) && angle >= endAngle - (rotSpeed / 5000 * increment))
-			{
-				this.setAngle(endAngle);
-				isRotating = false;
+			float dist = Math.abs(angle - endAngle);
+			
+			if (isRotatingCCW)
+			{	
+				if ((dist > 180 && angle < endAngle) || (dist < 180 && angle > endAngle))
+				{
+					this.setAngle(endAngle);
+					isRotating = false;
+				}
+				else
+					this.setAngle(angle + rotSpeed / 1000 * increment);
 			}
 			else
 			{
-				if (isRotatingCCW)
-				{	
-					this.setAngle(angle + rotSpeed / 1000 * increment);
+				if ((dist > 180 && angle > endAngle) || (dist < 180 && angle < endAngle))
+				{
+					this.setAngle(endAngle);
+					isRotating = false;
 				}
 				else
-				{
 					this.setAngle(angle - rotSpeed / 1000 * increment);
-				}	
-				rotTimeMs = Stopwatch.elapsedTimeMs();
-			}
+			}	
+			rotTimeMs = Stopwatch.elapsedTimeMs();
 			
 			Game.worldOutdated = true;
 		}
