@@ -12,7 +12,7 @@
 		<sclSpeed>0.0f</sclSpeed>
 		<isSolid>true</isSolid>
 		<circular>true</circular>
-		<color>yellow</color>
+		<color>1.0f,1.0f,1.0f,1.0f</color>
 		<willCollide>true</willCollide>
 		<posVec>1.0f,1.0f</posVec>
 		<directionVec>1.0f,1.0f</directionVec>
@@ -20,12 +20,12 @@
 		<msPassed>15</msPassed>
 		<isFlashing>yes</isFlashing>
 		<type>Patrol</type>
-		<!--<tilePosX>1</tilePosX>
-		<tilePosY>1</tilePosY>
-		<tilesetX>1</tilesetX>
-		<tilesetY>1</tilesetY>-->
+		<energyValue>3</energyValue>
+		<healthValue>4</healthValue>
+		<tileCoords>1,1</tileCoords>
+		<texture>tilesetcolors</texture>
 	</Entity>
-	<Tileset x="2" y="2">
+	<Tileset x="2" y="2" >
 		<TileRow>
 			<Tile>
 				<tileState>FLOOR</tileState>

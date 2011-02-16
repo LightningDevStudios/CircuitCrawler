@@ -275,8 +275,9 @@ public class Game
 		updateLocalTileset();	
 				
 		//Parser
-		Parser parser = new Parser(context);
+		Parser parser = new Parser(context, R.xml.tempdata);
 		
+		entList = parser.entList;
 		try 
 		{
 			parser.parseLevel();

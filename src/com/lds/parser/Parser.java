@@ -15,12 +15,13 @@ import com.lds.game.entity.PhysBlock;
 public class Parser //this is a perser
 {
 	public ArrayList<EntityData> parsedList = new ArrayList<EntityData>();
+	public ArrayList<Entity> entList = new ArrayList<Entity>();
 	
 	public XmlResourceParser xrp;  
 
-	public Parser(Context context)
+	public Parser(Context context, int res)
 	{
-		xrp = context.getResources().getXml(R.xml.tempdata);
+		xrp = context.getResources().getXml(res);
 	}
 	
 	public void parseLevel()
@@ -38,6 +39,11 @@ public class Parser //this is a perser
 					parseTileset();
 			}
 			xrp.next();
+		}
+		
+		for(EntityData ed : parsedList)
+		{
+			ed.createInst();
 		}
 	}
 	
@@ -91,14 +97,14 @@ public class Parser //this is a perser
 			xrp.next();
 			if (xrp.getEventType() == xrp.START_TAG && xrp.getName().equals("Tile"))
 			{
-				/*xrp.next();
+				/*xrp.next(); 
 				String tagName = xrp.getName();
 				xrp.next();
 				tileHashMap.put(tagName, xrp.getText());*/
 				xrp.next();
 				tileHashMap = parseTag(tileHashMap);
 				
-				tileset[curY][curX] = new TileData(tileHashMap, curX, curY, x, y);
+				tileset[curY][curX] = new TileData(tileHashMap, curX, curY);
 			}
 			
 			else if(xrp.getEventType() == xrp.END_TAG)
