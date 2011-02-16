@@ -12,7 +12,7 @@ import com.lds.game.R;
 import com.lds.game.entity.Entity;
 import com.lds.game.entity.PhysBlock;
  
-public class Parser
+public class Parser //this is a perser
 {
 	public ArrayList<EntityData> parsedList = new ArrayList<EntityData>();
 	
