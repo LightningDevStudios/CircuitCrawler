@@ -6,21 +6,22 @@ import com.lds.Stopwatch;
 public abstract class Character extends PhysEnt //all characters, including the protangonist and enemies
 {
 	protected int health;
-	protected boolean isFlashing;
+	protected boolean isFlashing, doneRotating;
 	protected int msPassed;
 	
-	public Character(float size, float xPos, float yPos, boolean circular, int health, float speed)
+	public Character(float size, float xPos, float yPos, boolean circular, int health, float rotSpeed)
 	{
-		this(size, xPos, yPos, 0.0f, 1.0f, 1.0f, circular, health, speed);
+		this(size, xPos, yPos, 0.0f, 1.0f, 1.0f, circular, health, rotSpeed);
 	}
 	
-	public Character(float size, float xPos, float yPos, float angle, float xScl, float yScl, boolean circular, int health, float speed)
+	public Character(float size, float xPos, float yPos, float angle, float xScl, float yScl, boolean circular, int health, float rotSpeed)
 	{
-		super(size, xPos, yPos, angle, xScl, yScl, true, circular, true, 25.0f, 360.0f, 1.0f);
+		super(size, xPos, yPos, angle, xScl, yScl, true, circular, true, 25.0f, rotSpeed, 1.0f);
 		this.enableColorMode(1.0f, 1.0f, 1.0f, 1.0f);
 		isFlashing = false;
 		msPassed = Stopwatch.elapsedTimeMs();
 		this.health = health;
+		doneRotating = false;
 	}
 	
 	@Override
@@ -67,5 +68,15 @@ public abstract class Character extends PhysEnt //all characters, including the 
 	public void die ()
 	{
 		 EntityManager.removeEntity(this);
+	}
+	
+	public boolean isDoneRotating()
+	{
+		return doneRotating;
+	}
+	
+	public void setDoneRotating(boolean doneRotating)
+	{
+		this.doneRotating = doneRotating;
 	}
 }

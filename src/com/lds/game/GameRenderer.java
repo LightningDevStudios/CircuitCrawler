@@ -286,7 +286,17 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 						
 						//move the player
 						//TODO move w/ time, use move()?
-						game.player.setAngle(newAngle + 90.0f);
+						if (game.player.getAngle() <= newAngle + 1.0f && game.player.getAngle() >= newAngle - 1.0f)
+						{
+							game.player.setDoneRotating(true);
+							game.player.setAngle(newAngle);
+						}
+						else
+						{
+							game.player.setDoneRotating(false);
+							game.player.rotateTo(newAngle);
+						}
+						
 						Vector2f moveVec = Vector2f.scale(tempMoveVec, 1.0f / 10);
 						game.player.setPos(Vector2f.add(game.player.getPos(), moveVec));
 						Game.worldOutdated = true;
