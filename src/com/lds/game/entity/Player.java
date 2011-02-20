@@ -72,12 +72,12 @@ public class Player extends Character //your character, protagonist
 
 	public void updateHeldObjectPosition()
 	{
-		float heldDistance = hObj.halfSize * hObj.getXScl() + this.halfSize + 10.0f;
-		Vector2f directionVec = new Vector2f(angle);
-		directionVec.scale(heldDistance).add(posVec);
+			float heldDistance = hObj.halfSize * hObj.getXScl() + this.halfSize + 10.0f;
+			Vector2f directionVec = new Vector2f(angle);
+			directionVec.scale(heldDistance).add(posVec);
 			
-		hObj.setPos(directionVec.getX(), directionVec.getY());
-		hObj.setAngle(angle);
+			hObj.setPos(directionVec.getX(), directionVec.getY());
+			hObj.setAngle(angle);
 	}
 	
 	@Override

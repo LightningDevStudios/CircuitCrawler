@@ -289,13 +289,23 @@ public abstract class Entity
 	
 	protected boolean isCircleCollidingWithCircle (Entity ent) //if both entities are circles
 	{
+		boolean output;
 		if (Vector2f.sub(this.posVec, ent.posVec).mag() < halfSize + ent.halfSize)
-			return true;
-		return false;
+			output = true;
+		else
+			output = false;
+		
+		if (output && this.doesCollide(ent) && ent.doesCollide(this))
+		{
+			this.circleBounce(ent);
+			ent.circleBounce(this);
+		}
+		return output;
 	}
 	
 	protected boolean isRectangleCollidingWithCircle (Entity ent) //if only ent is a circle
 	{
+		boolean output = true;
 		this.updateAbsolutePointLocations();
 		
 		Vector2f[] axes = new Vector2f[3];
@@ -341,14 +351,21 @@ public abstract class Entity
 			
 			if ((max1 > max2 || max1 < min2) && (max2 > max1 || max2 < min1))
 			{
-				return false;
+				output = false;
 			}
 		}
-		return true;
+		if (output && this.doesCollide(ent) && ent.doesCollide(this))
+		{
+			//TODO: Make these seperate methods that work
+			this.circleBounce(ent);
+			ent.rectangleBounce(this);
+		}
+		return output;
 	}
 	
 	protected boolean isRectangleCollidingWithRectangle (Entity ent) //if both entities are circles
 	{
+		boolean output = true;
 		this.updateAbsolutePointLocations();
 		ent.updateAbsolutePointLocations();
 		
@@ -388,11 +405,15 @@ public abstract class Entity
 			
 			if ((max1 > max2 || max1 < min2) && (max2 > max1 || max2 < min1))
 			{	
-				return false;
+				output = false;
 			}
 		}
-		
-		return true;
+		if (output && this.doesCollide(ent) && ent.doesCollide(this))
+		{
+			this.rectangleBounce(ent);
+			ent.rectangleBounce(this);
+		}
+		return output;
 	}
 	
 	//blank method, overridden by PhysEnt

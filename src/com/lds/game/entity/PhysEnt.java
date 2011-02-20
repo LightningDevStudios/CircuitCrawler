@@ -199,18 +199,6 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	//TODO: Rectangle vs. Circle, complicated physics, corner collision
 	
 	@Override
-	protected boolean isCircleCollidingWithCircle (Entity ent)
-	{
-		boolean output = super.isCircleCollidingWithCircle(ent);
-		if (output && this.doesCollide(ent))
-		{
-			this.circleBounce(ent);
-			ent.circleBounce(this);
-		}
-		return output;
-	}
-	
-	@Override
 	protected boolean isRectangleCollidingWithCircle (Entity ent) 
 	{
 		boolean output = super.isRectangleCollidingWithCircle(ent);
@@ -226,7 +214,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	protected boolean isRectangleCollidingWithRectangle (Entity ent)
 	{
 		boolean output = super.isRectangleCollidingWithRectangle(ent);
-		if (output && this.doesCollide(ent) && ent.doesCollide(this))
+		if (output && this.doesCollide(ent))
 		{
 			this.rectangleBounce(ent);
 			ent.rectangleBounce(this);

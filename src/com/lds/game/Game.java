@@ -148,14 +148,14 @@ public class Game
 		block.initGradientInterp(interpGM);
 		entList.add(block);
 		
-		blob1 = new Blob(-150.0f, -350.0f, AIType.PATROL);
+		/*blob1 = new Blob(-150.0f, -350.0f, AIType.PATROL);
 		blob1.enableTilesetMode(tilesetwire, 2, 2);
 		NodePath path = new NodePath();
 		path.add(new Node(-150.0f, -350.0f));
 		path.add(new Node(-50.0f, -350.0f));
 		path.add(new Node(-100.0f, -300.0f));
 		blob1.setPatrolPath(path);
-		entList.add(blob1);
+		entList.add(blob1);*/
 		
 		blob2 = new Blob(0.0f, 0.0f, AIType.TURRET);
 		blob2.enableTilesetMode(tilesetwire, 2, 2);
@@ -248,7 +248,7 @@ public class Game
 		btnB.enableColorMode(200, 65, 65, 100);
 		btnB.setIntervalTime(Stopwatch.elapsedTimeMs());
 		
-		joypad = new UIJoypad(100, 100, UIPosition.BOTTOMLEFT);
+		joypad = new UIJoypad(100, 100, UIPosition.BOTTOMLEFT, player.getAngle());
 		joypad.autoPadding(0.0f, 5.0f, 5.0f, 0.0f);
 		//joypad.setBlankMode();
 		
