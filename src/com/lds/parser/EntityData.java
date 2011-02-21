@@ -21,9 +21,11 @@ import android.content.res.XmlResourceParser;*/
 
 public class EntityData
 {
-	protected float size, xPos, yPos, xScl, yScl, angle, r, g, b, a;
 	private boolean isSolid, circular, willCollide;
+	protected String[] sepString;
+	protected int i;
 	private String color, tileCoords;
+	protected float size, xPos, yPos, xScl, yScl, angle, r, g, b, a;	
 	protected float[] rgba;
 	protected int[] xy;
 	protected Texture tex;
@@ -45,26 +47,15 @@ public class EntityData
 		{
 			color = entHM.get("color");
 			String tempColor = (entHM.get("color"));
-			int i = 0;
-			while(tempColor.indexOf(",") < 0)
-			{
-				if(tempColor.indexOf(",") == 0)
-				tempColor = tempColor.substring(tempColor.indexOf("," + 1));
-				i++;
-				if(tempColor.indexOf(",") > -1)
-					tempColor = tempColor.substring(tempColor.indexOf(","));
-			}
-		
+			csvSeperator(color);
 			rgba = new float[i];
-			for (float clr : rgba)
+			for(int j = 0; j < i; j++)
 			{
-				if(color.indexOf(",") == 0)
-					color = color.substring(color.indexOf("," + 1));
-				clr = Float.parseFloat(color.substring(0, color.indexOf("f") +1));
-				if(tempColor.indexOf(",") > -1)
-					color = color.substring(color.indexOf(","));
-			}  //if u want to enable color mode, use .enableColor(rgba[0], rgba[1], rgba[2], rgba[3]);
-		}
+				sepString[j] = sepString[j].replace(",", " ");
+				sepString[j] = sepString[j].trim();
+				rgba[j] = Float.parseFloat(sepString[j]);
+			}
+		} //if u want to enable color mode, use .enableColor(rgba[0], rgba[1], rgba[2], rgba[3]);
 		else 
 		{
 			rgba = null;
@@ -87,26 +78,12 @@ public class EntityData
 			else
 				System.out.println("You didn't input a real texture");
 			
-			int k = 0;
-			while(tempTileCoords.indexOf(",") < 0)
-			{
-				if(tempTileCoords.indexOf(",") == 0)
-					tempTileCoords = tempTileCoords.substring(tempTileCoords.indexOf("," + 1));
-				k++;
-				if(tempTileCoords.indexOf(",") > -1)
-					tempTileCoords = tempTileCoords.substring(tempTileCoords.indexOf(","));
-			}
+			csvSeperator(tileCoords);
 		
-			xy = new int[k];
-			for (float clr : rgba)
-			{
-				if(tileCoords.indexOf(",") == 0)
-					tileCoords = tileCoords.substring(tileCoords.indexOf("," + 1));
-				clr = Float.parseFloat(tileCoords.substring(0, tileCoords.indexOf("f") +1));
-				if(tempTileCoords.indexOf(",") > -1)
-					tileCoords = tileCoords.substring(tileCoords.indexOf(","));
-			}  //if u want to enable tilesetMode, use .enableTilesetMode(tex, xy[0], xy[1]);
-		}
+			xy = new int[i];
+			for (int j = 0; j < i; j++)
+				xy[j] = Integer.parseInt(sepString[j]);
+		}//if u want to enable tilesetMode, use .enableTilesetMode(tex, xy[0], xy[1]);
 		else 
 		{
 			tex = null;
@@ -144,5 +121,36 @@ public class EntityData
 	
 	public void createInst()
 	{
+	}
+	
+	public void csvSeperator(String tagValue)
+	{
+		String tempTagValue = tagValue;
+		i = 0;
+		while(tempTagValue.indexOf(",") < 0)
+		{
+			if(tempTagValue.indexOf(",") == 0)
+			tempTagValue = tempTagValue.substring(tempTagValue.indexOf("," + 1));
+			i++;
+			if(tempTagValue.indexOf(",") > -1)
+				tempTagValue = tempTagValue.substring(tempTagValue.indexOf(","));
+		}
+		
+		sepString = new String[i];
+		for (String temp : sepString)
+		{
+			if(tagValue.indexOf(",") > 0)
+				temp = tagValue.substring(0, tagValue.indexOf(","));
+			else if(tagValue.indexOf(",") == 0)
+			{
+				temp = tagValue.substring(1);
+				if(tagValue.indexOf(",") > 0)
+					temp = tagValue.substring(0, tagValue.indexOf(","));
+				else
+					temp = tagValue;
+			}
+			temp = temp.replace(",", " ");
+			temp = temp.trim();
+		} 
 	}
 }
