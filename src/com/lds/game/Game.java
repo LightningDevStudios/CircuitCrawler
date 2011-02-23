@@ -81,12 +81,34 @@ public class Game
 	public Game (Context context, GL10 gl) 
 	
 	{
+		//Parser
+		Parser parser = new Parser(context, R.xml.tempdata);
+		
+		entList = parser.entList;
+		try 
+		{
+			parser.parseLevel();
+		} 
+		catch (XmlPullParserException e) 
+		{
+			e.printStackTrace();
+		} 
+		catch (IOException e) 
+		{
+			e.printStackTrace();
+		}
+		
+		
+		
+		entList.addAll(parser.entList);
+		
+		
 		tilesetcolors = new Texture(R.drawable.tilesetcolors, 128, 128, 8, 8, context);
 		tilesetwire = new Texture(R.drawable.tilesetwire, 128, 128, 8, 8, context);
 		randomthings = new Texture(R.drawable.randomthings, 256, 256, 8, 8, context);
 		text = new Texture(R.drawable.text, 256, 256, 16, 8, context);
 		
-		entList = new ArrayList<Entity>();
+		//entList = new ArrayList<Entity>();
 		UIList = new ArrayList<UIEntity>();
 		triggerList = new ArrayList<Trigger>();
 		
@@ -129,6 +151,7 @@ public class Game
 			}
 		}	
 		
+		/*CAN DEAL WITH THIS SHIT
 		door = new Door (-108.0f, -180.0f);
 		door.enableTilesetMode(tilesetwire, 0, 2);
 		entList.add(door);
@@ -178,16 +201,19 @@ public class Game
 		block2.enableTilesetMode(tilesetwire, 2, 1);
 		entList.add(block2);
 		
+		*/
+		
 		spriteAnim = new Animation(tilesetwire, 0, 7, 7, 0, 3000);
 		spr = new Sprite(50, -100, 100, 45, 1, 1, spriteAnim);
 		spr.enableTextureMode(tilesetwire);
 		entList.add(spr);
 		
+		/*
 		box = new PuzzleBox(64.0f, -75.0f, 0.0f, false, true);
 		entList.add(box);
 		
 		//TODO NOPE LOL
-		/*circle = new PhysCircle(50.0f, -100.0f, -310.0f);
+		circle = new PhysCircle(50.0f, -100.0f, -310.0f);
 		circle.setTilesetMode(tilesetwire, 1, 2);
 		entList.add(circle);
 		circle.setWillCollideWithPlayer(true);
@@ -198,19 +224,20 @@ public class Game
 		entList.add(player);
 		player.enableUserControl();
 		
+		/*
 		health = new PickupHealth(50, -108.0f, -250.0f);
 		health.enableColorMode(0, 255, 255, 255);
 		entList.add(health);
-				
-		//spr = new Sprite(30.0f, -108.0f, -300.0f, 45.0f, 1.0f, 1.0f, 10, 90, 1, spriteAnim);
-		//entList.add(spr);
+		*/
+		spr = new Sprite(30.0f, -108.0f, -300.0f, 45.0f, 1.0f, 1.0f, 10, 90, 1, spriteAnim);
+		entList.add(spr);
 		
-		CauseAND bridgeAND = new CauseAND(new CauseButton(button1), new CauseButton(button2));
+	//	CauseAND bridgeAND = new CauseAND(new CauseButton(button1), new CauseButton(button2));
 		
-		triggerList.add(new Trigger(new CauseButton(button), new EffectDoor(door)));
-		triggerList.add(new Trigger(bridgeAND, new EffectRaiseBridge(tileset[4][6])));
+		//triggerList.add(new Trigger(new CauseButton(button), new EffectDoor(door)));
+	//	triggerList.add(new Trigger(bridgeAND, new EffectRaiseBridge(tileset[4][6])));
 		//triggerList.add(new Trigger(bridgeAND, new EffectRaiseBridge(tileset[4][7])));
-		triggerList.add(new Trigger(bridgeAND, new EffectRaiseBridge(tileset[5][6])));
+	//	triggerList.add(new Trigger(bridgeAND, new EffectRaiseBridge(tileset[5][6])));
 		//triggerList.add(new Trigger(bridgeAND, new EffectRaiseBridge(tileset[5][7])));
 		
 		healthBar = new UIHealthBar(200.0f, 30.0f, UIPosition.TOPLEFT, Direction.RIGHT, player);
@@ -272,26 +299,7 @@ public class Game
 		//TODO take into account AI, perhaps render every time it chooses a new point to go to?
 		updateCameraPosition();
 		updateLocalEntities();
-		updateLocalTileset();	
-				
-		//Parser
-		Parser parser = new Parser(context, R.xml.tempdata);
-		
-		//entList = parser.entList;
-		try 
-		{
-			parser.parseLevel();
-		} 
-		catch (XmlPullParserException e) 
-		{
-			e.printStackTrace();
-		} 
-		catch (IOException e) 
-		{
-			e.printStackTrace();
-		}
-		
-		//entList.addAll(parser.convertDataToEnts());
+		updateLocalTileset();
 	}
 	
 	public void updateLocalEntities()
@@ -603,6 +611,7 @@ public class Game
 		//move camera to follow player.
 		camPosX = player.getXPos();
 		camPosY = player.getYPos();
+		
 		
 		//camera can't go further than defined level bounds
 		if (camPosX < worldMinX)

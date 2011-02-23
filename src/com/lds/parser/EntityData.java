@@ -1,9 +1,11 @@
 package com.lds.parser;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import com.lds.Texture;
 import com.lds.game.Game;
+import com.lds.game.entity.Entity;
 
 /*import java.io.IOException;
 import java.io.Reader;
@@ -21,7 +23,9 @@ import android.content.res.XmlResourceParser;*/
 
 public class EntityData
 {
-	private boolean isSolid, circular, willCollide;
+	private boolean isSolid;
+	protected boolean circular;
+	protected boolean willCollide;
 	protected String[] sepString;
 	protected int i;
 	private String color, tileCoords;
@@ -31,12 +35,18 @@ public class EntityData
 	protected Texture tex;
 	public EntityData(HashMap<String, String> entHM)
 	{
-		size = Float.parseFloat(entHM.get("size"));
-		xPos = Float.parseFloat(entHM.get("xPos"));
-		yPos = Float.parseFloat(entHM.get("yPos"));
-		xScl = Float.parseFloat(entHM.get("xScl"));
-		yScl = Float.parseFloat(entHM.get("yScl"));
-		angle = Float.parseFloat(entHM.get("angle"));
+		if(entHM.get("size") != null)
+			size = Float.parseFloat(entHM.get("size"));
+		if(entHM.get("xPos") != null)
+			xPos = Float.parseFloat(entHM.get("xPos"));
+		if(entHM.get("yPos") != null)
+			yPos = Float.parseFloat(entHM.get("yPos"));
+		if(entHM.get("xScl") != null)
+			xScl = Float.parseFloat(entHM.get("xScl"));
+		if(entHM.get("yScl") != null)
+			yScl = Float.parseFloat(entHM.get("yScl"));
+		if(entHM.get("angle") != null)
+			angle = Float.parseFloat(entHM.get("angle"));
 		
 		isSolid = Boolean.parseBoolean(entHM.get("isSolid"));
 		circular = Boolean.parseBoolean(entHM.get("circular"));
@@ -119,7 +129,7 @@ public class EntityData
 	
 	public String getColor()		{return color;}
 	
-	public void createInst()
+	public void createInst(ArrayList<Entity> entData)
 	{
 	}
 	

@@ -18,6 +18,7 @@ public class Parser //this is a perser
 	public ArrayList<Entity> entList = new ArrayList<Entity>();
 	
 	public XmlResourceParser xrp;  
+	public HashMap <String, String> dataHashMap;
 
 	public Parser(Context context, int res)
 	{
@@ -33,38 +34,89 @@ public class Parser //this is a perser
 			if (xrp.getEventType() == xrp.START_TAG)
 			{
 				System.out.println(xrp.getName());
-				if(xrp.getName().equals("Entity"))
+				if(xrp.getName().equalsIgnoreCase("Entity"))
 					parseEntity();
-				else if(xrp.getName().equals("Tileset"))
+				else if(xrp.getName().equalsIgnoreCase("Tileset"))
 					parseTileset();
 			}
 			xrp.next();
-		}
-		
-		for(EntityData ed : parsedList)
-		{
-			ed.createInst();
 		}
 	}
 	
 	public void parseEntity() throws XmlPullParserException, IOException
 	{
+		dataHashMap = new HashMap<String, String>();
+		xrp.next();
+		while (!((xrp.getEventType() == xrp.END_TAG && xrp.getName().equals("Entity"))))
+		{
+			xrp.next();
+		
+			if(xrp.getEventType() == xrp.START_TAG && xrp.getName().equalsIgnoreCase("Door"))
+			{
+				parseObj("Door");
+				DoorData dd = new DoorData(dataHashMap);
+				dd.createInst(entList);
+			}
+			else if (xrp.getEventType() == xrp.START_TAG && xrp.getName().equalsIgnoreCase("Button"))
+			{
+				parseObj("Button");
+				ButtonData bd = new ButtonData(dataHashMap);
+				bd.createInst(entList);
+			}
+			else if (xrp.getEventType() == xrp.START_TAG && xrp.getName().equalsIgnoreCase("PhysBlock"))
+			{
+				parseObj("PhysBlock");
+				PhysBlockData pbd = new PhysBlockData(dataHashMap);
+				pbd.createInst(entList);
+			}
+			else if (xrp.getEventType() == xrp.START_TAG && xrp.getName().equalsIgnoreCase("Bloc"))
+			{
+				parseObj("Blob");
+				BlobData bd = new BlobData(dataHashMap);
+				bd.createInst(entList);
+			}
+			else if (xrp.getEventType() == xrp.START_TAG && xrp.getName().equalsIgnoreCase("PuzzleBox"))
+			{
+				parseObj("PuzzleBox");
+				PuzzleBoxData pbd = new PuzzleBoxData(dataHashMap);
+				pbd.createInst(entList);
+			}
+			else if (xrp.getEventType() == xrp.START_TAG && xrp.getName().equalsIgnoreCase("PhysCircle"))
+			{
+				parseObj("PhysCircle");
+				PhysCircleData pcd= new PhysCircleData(dataHashMap);
+				pcd.createInst(entList);
+			}
+			else if (xrp.getEventType() == xrp.START_TAG && xrp.getName().equalsIgnoreCase("Player"))
+			{
+				parseObj("Player");
+				PlayerData pd = new PlayerData(dataHashMap);
+				pd.createInst(entList);
+			}
+			else if (xrp.getEventType() == xrp.START_TAG && xrp.getName().equalsIgnoreCase("PickupHealth"))
+			{
+				parseObj("PickupHealth");
+				PickupHealthData phd = new PickupHealthData(dataHashMap);
+				phd.createInst(entList);
+			}
+	
+		}
+		
+	}
+	
+	public void parseObj(String tn) throws XmlPullParserException, IOException
+	{		
+		
 		xrp.next();
 		
-		
-		HashMap <String, String> dataHashMap = new HashMap<String, String>();		
-		
-		while (!((xrp.getEventType() == xrp.END_TAG && xrp.getName().equals("Entity")))) 
+		while (!((xrp.getEventType() == xrp.END_TAG && xrp.getName().equalsIgnoreCase(tn)))) 
 		{
-			dataHashMap = parseTag(dataHashMap);
-				
+			//dataHashMap = parseTag(dataHashMap);
+			parseTag(dataHashMap);	
+			
 			xrp.next(); 
 			xrp.next();
 		}
-		
-		
-		PhysBlockData pbd = new PhysBlockData(dataHashMap);
-		parsedList.add(pbd);
 	}
 	
 	public void parseTileset() throws XmlPullParserException, IOException
@@ -127,19 +179,4 @@ public class Parser //this is a perser
 		return map;
 	}
 	
-	public ArrayList<Entity> convertDataToEnts()
-	{
-		ArrayList<Entity> entList = new ArrayList<Entity>();
-		
-		for(EntityData ent : parsedList)
-		{
-			if (ent instanceof PhysBlockData)
-			{
-				PhysBlock phy = new PhysBlock(ent.getSize(), ent.getXPos(), ent.getYPos());
-				entList.add(phy);
-			}
-		}
-		
-		return entList;
-	}
 }
