@@ -40,7 +40,7 @@ public class Game
 	public ArrayList<Entity> entList;
 	public Tile[][] tileset;
 	public ArrayList<UIEntity> UIList;
-	public ArrayList<Trigger> triggerList;
+	//public ArrayList<Trigger> triggerList;
 	public EntityManager cleaner;
 		
 	//Camera data
@@ -66,14 +66,16 @@ public class Game
 	public UIJoypad joypad;
 	public UITextBox textbox;
 	public Player player;
+	/*
 	public PhysBlock block;
 	public PhysCircle circle;
 	public Button button;
 	public Door door;
-	public Sprite spr;
 	public Blob blob1, blob2;
 	public PuzzleBox box;
 	public PickupHealth health;
+	*/
+	public Sprite spr;
 	
 	public Animation spriteAnim;
 		
@@ -81,36 +83,15 @@ public class Game
 	public Game (Context context, GL10 gl) 
 	
 	{
-		//Parser
-		Parser parser = new Parser(context, R.xml.tempdata);
-		
-		entList = parser.entList;
-		try 
-		{
-			parser.parseLevel();
-		} 
-		catch (XmlPullParserException e) 
-		{
-			e.printStackTrace();
-		} 
-		catch (IOException e) 
-		{
-			e.printStackTrace();
-		}
-		
-		
-		
-		entList.addAll(parser.entList);
-		
-		
 		tilesetcolors = new Texture(R.drawable.tilesetcolors, 128, 128, 8, 8, context);
 		tilesetwire = new Texture(R.drawable.tilesetwire, 128, 128, 8, 8, context);
 		randomthings = new Texture(R.drawable.randomthings, 256, 256, 8, 8, context);
 		text = new Texture(R.drawable.text, 256, 256, 16, 8, context);
 		
+				
 		//entList = new ArrayList<Entity>();
 		UIList = new ArrayList<UIEntity>();
-		triggerList = new ArrayList<Trigger>();
+	//	triggerList = new ArrayList<Trigger>();
 		
 		tileset = new Tile[16][16];
 		cleaner = new EntityManager();
@@ -130,7 +111,7 @@ public class Game
 		tl.loadTexture(randomthings);
 		tl.loadTexture(someText);
 						
-		for (int i = 0; i < tileset.length; i++)
+/*		for (int i = 0; i < tileset.length; i++)
 		{
 			for (int j = 0; j < tileset[0].length; j++)
 			{
@@ -150,6 +131,26 @@ public class Game
 				}
 			}
 		}	
+*/		
+		//Parser
+		Parser parser = new Parser(context, R.xml.tempdata);
+		
+		entList = parser.entList;
+		try 
+		{
+			parser.parseLevel();
+		} 
+		catch (XmlPullParserException e) 
+		{
+			e.printStackTrace();
+		} 
+		catch (IOException e) 
+		{
+			e.printStackTrace();
+		}
+	
+		tileset = parser.tileset;
+		entList.addAll(parser.entList);
 		
 		/*CAN DEAL WITH THIS SHIT
 		door = new Door (-108.0f, -180.0f);
@@ -208,7 +209,7 @@ public class Game
 		spr.enableTextureMode(tilesetwire);
 		entList.add(spr);
 		
-		/*
+		/*s
 		box = new PuzzleBox(64.0f, -75.0f, 0.0f, false, true);
 		entList.add(box);
 		
@@ -299,7 +300,8 @@ public class Game
 		//TODO take into account AI, perhaps render every time it chooses a new point to go to?
 		updateCameraPosition();
 		updateLocalEntities();
-		updateLocalTileset();
+
+		 updateLocalTileset();
 	}
 	
 	public void updateLocalEntities()
@@ -334,6 +336,7 @@ public class Game
 	public void updateLocalTileset()
 	{
 		float minX, maxX, minY, maxY, tilesetHalfWidth, tilesetHalfHeight;
+		//TODO HAX, screen W/H are flipped for some reason
 		minX = camPosX - (screenW / 2);
 		maxX = camPosX + (screenW / 2);
 		minY = camPosY - (screenH / 2);
@@ -343,9 +346,9 @@ public class Game
 		tilesetHalfHeight = tileset.length * Tile.TILE_SIZE_F / 2;
 		
 		int minXBound = (int)(minX + tilesetHalfWidth) / Tile.TILE_SIZE;
-		int maxXBound = ((int)(Math.ceil(maxX + tilesetHalfWidth) - 1) / Tile.TILE_SIZE);
-		int minYBound = ((int)(Math.abs(maxY - tilesetHalfHeight) - 1) / Tile.TILE_SIZE);
-		int maxYBound = ((int)(Math.ceil(Math.abs(minY - tilesetHalfHeight)) - 1) / Tile.TILE_SIZE);
+		int maxXBound = (int)((Math.ceil(maxX + tilesetHalfWidth) - 1) / Tile.TILE_SIZE_F);
+		int minYBound = (int)((Math.abs(maxY - tilesetHalfHeight) - 1) / Tile.TILE_SIZE_F);
+		int maxYBound = (int)((Math.ceil(Math.abs(minY - tilesetHalfHeight)) - 1) / Tile.TILE_SIZE_F);
 
 		//set all to false
 		for (Tile[] ts : tileset)
@@ -605,7 +608,7 @@ public class Game
 			
 		}
 	}
-	
+
 	public void updateCameraPosition()
 	{
 		//move camera to follow player.
@@ -629,7 +632,7 @@ public class Game
 	
 	public void setGameOverEvent(OnGameOverListener listener)
 	{
-		triggerList.add(new Trigger(new CauseDoneScaling(player), new EffectEndGame(listener)));
-		triggerList.add(new Trigger(new CausePlayerHealth(0, player), new EffectEndGame(listener)));
+//		triggerList.add(new Trigger(new CauseDoneScaling(player), new EffectEndGame(listener)));
+//		triggerList.add(new Trigger(new CausePlayerHealth(0, player), new EffectEndGame(listener)));
 	}
 }

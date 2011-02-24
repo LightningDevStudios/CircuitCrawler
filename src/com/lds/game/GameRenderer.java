@@ -109,11 +109,11 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		Stopwatch.tick();
 				
 		//iterate through triggers
-		for (Trigger t : game.triggerList)
+/*		for (Trigger t : game.triggerList)
 		{
 			t.update();
 		}
-		
+*/
 		//remove entities that are queued for removal
 		game.cleaner.update(game.entList);
 		

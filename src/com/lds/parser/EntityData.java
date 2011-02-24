@@ -28,7 +28,7 @@ public class EntityData
 	protected boolean willCollide;
 	protected String[] sepString;
 	protected int i;
-	private String color, tileCoords;
+	private String color, tileCoords, id;
 	protected float size, xPos, yPos, xScl, yScl, angle, r, g, b, a;	
 	protected float[] rgba;
 	protected int[] xy;
@@ -47,6 +47,8 @@ public class EntityData
 			yScl = Float.parseFloat(entHM.get("yScl"));
 		if(entHM.get("angle") != null)
 			angle = Float.parseFloat(entHM.get("angle"));
+		if(entHM.get("id") != null)
+			id = entHM.get("id");
 		
 		isSolid = Boolean.parseBoolean(entHM.get("isSolid"));
 		circular = Boolean.parseBoolean(entHM.get("circular"));
@@ -56,11 +58,11 @@ public class EntityData
 		if(entHM.get("color") != null)
 		{
 			color = entHM.get("color");
-			String tempColor = (entHM.get("color"));
+			String tempColor = entHM.get("color");
 			csvSeperator(color);
 			rgba = new float[i];
 			for(int j = 0; j < i; j++)
-			{
+			{	
 				sepString[j] = sepString[j].replace(",", " ");
 				sepString[j] = sepString[j].trim();
 				rgba[j] = Float.parseFloat(sepString[j]);
@@ -71,7 +73,7 @@ public class EntityData
 			rgba = null;
 		}
 			//enableTilesetMode
-		if (entHM.get("tileCoords") != null && entHM.get("texture") != null)
+		if (entHM.get("texture") != null)
 		{
 			tileCoords = entHM.get("tileCoords");
 			String tempTileCoords = entHM.get("tileCoords");
@@ -85,10 +87,6 @@ public class EntityData
 				tex = Game.randomthings;
 			else if(texture.equalsIgnoreCase("text"))
 				tex = Game.text;
-			else
-				System.out.println("You didn't input a real texture");
-			
-			csvSeperator(tileCoords);
 		
 			xy = new int[i];
 			for (int j = 0; j < i; j++)
@@ -126,38 +124,60 @@ public class EntityData
 	
 	//String setters/getters
 	public void setColor(String newColor)	{color = newColor;}
+	public void setId(String newId)			{id = newId;}
 	
 	public String getColor()		{return color;}
+	public String getId()			{return id;}
 	
 	public void createInst(ArrayList<Entity> entData)
 	{
 	}
 	
-	public void csvSeperator(String tagValue)
+	public void csvSeperator(String tv)
 	{
-		String tempTagValue = tagValue;
-		i = 0;
-		while(tempTagValue.indexOf(",") < 0)
+		String ttv = tv;
+		i = 1;
+		//COUNTER!!!!!
+		while(ttv.contains(","))
 		{
-			if(tempTagValue.indexOf(",") == 0)
-			tempTagValue = tempTagValue.substring(tempTagValue.indexOf("," + 1));
 			i++;
-			if(tempTagValue.indexOf(",") > -1)
-				tempTagValue = tempTagValue.substring(tempTagValue.indexOf(","));
+			ttv = ttv.replaceFirst(",", "");
 		}
 		
 		sepString = new String[i];
+		for(int j = 0; j < i; j++)
+		{
+			if(tv.indexOf(",") == 0)
+			{
+				tv = tv.replaceFirst(",","");
+				if(tv.contains(","))
+				{
+					sepString[j] = tv.substring(0, tv.indexOf(","));
+					tv = tv.substring(tv.indexOf(","));
+				}
+				else
+				{
+					sepString[j] = tv;
+				}
+			}
+			else
+			{
+				sepString[j] = tv.substring(0, tv.indexOf(","));
+				tv = tv.substring(tv.indexOf(","));
+			}
+			System.out.println();
+		}
 		for (String temp : sepString)
 		{
-			if(tagValue.indexOf(",") > 0)
-				temp = tagValue.substring(0, tagValue.indexOf(","));
-			else if(tagValue.indexOf(",") == 0)
+			if(tv.indexOf(",") > 0)
+				temp = tv.substring(0, tv.indexOf(","));
+			else if(tv.indexOf(",") == 0)
 			{
-				temp = tagValue.substring(1);
-				if(tagValue.indexOf(",") > 0)
-					temp = tagValue.substring(0, tagValue.indexOf(","));
+				temp = tv.substring(1);
+				if(tv.indexOf(",") > 0)
+					temp = tv.substring(0, tv.indexOf(","));
 				else
-					temp = tagValue;
+					temp = tv;
 			}
 			temp = temp.replace(",", " ");
 			temp = temp.trim();
