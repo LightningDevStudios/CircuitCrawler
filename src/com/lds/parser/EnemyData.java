@@ -5,7 +5,7 @@ import com.lds.Enums.AIType;
 
 public class EnemyData extends CharacterData
 {
-	private AIType type;
+	protected AIType type;
 	
 	public EnemyData(HashMap<String, String> enemyHM)
 	{

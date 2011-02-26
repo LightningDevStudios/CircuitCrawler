@@ -49,6 +49,10 @@ public class Player extends Character //your character, protagonist
 			//see above
 			this.rectangleBounce(ent);
 		}
+		else if (ent instanceof PuzzleBox)
+		{
+			posVec.add(new Vector2f(-10, -10));
+		}
 	}
 	
 	public void onTileInteract(Tile tile)

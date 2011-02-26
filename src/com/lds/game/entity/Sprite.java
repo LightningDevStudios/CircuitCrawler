@@ -1,4 +1,4 @@
-package com.lds.game.entity;
+ package com.lds.game.entity;
 
 import com.lds.Animation;
 

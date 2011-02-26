@@ -2,14 +2,15 @@ package com.lds.puzzles.circuit;
 
 import com.lds.Enums.Direction;
 
+//TODO HAX, get a proper UP/DOWN on the angled types...
 public enum TileType 
 { 
 	VERTICAL(Direction.UP, Direction.DOWN, 0), 
 	HORIZONTAL(Direction.LEFT, Direction.RIGHT, 1),
-	TOPRIGHT(Direction.RIGHT, Direction.UP, 2),
-	BOTTOMRIGHT(Direction.RIGHT, Direction.DOWN, 3),
-	BOTTOMLEFT(Direction.LEFT, Direction.DOWN, 4),
-	TOPLEFT(Direction.UP, Direction.LEFT, 5);
+	TOPRIGHT(Direction.RIGHT, Direction.DOWN, 2),
+	BOTTOMRIGHT(Direction.RIGHT, Direction.UP, 3),
+	BOTTOMLEFT(Direction.LEFT, Direction.UP, 4),
+	TOPLEFT(Direction.DOWN, Direction.LEFT, 5);
 	
 	private Direction dir1, dir2;
 	private int value;

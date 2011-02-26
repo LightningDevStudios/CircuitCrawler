@@ -9,9 +9,15 @@
 	
     <application android:icon="@drawable/icon" android:label="@string/app_name" android:debuggable="true">
     
-        <activity android:name=".Run" android:label="@string/app_name" />
+        <activity 	android:name=".Run" 
+        			android:label="@string/app_name" 
+        			android:multiprocess="false" 
+        			android:configChanges="orientation|keyboardHidden" 
+        			android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+        			android:screenOrientation="landscape">
+</activity>
         <activity android:name=".menu.AboutScreen" />
-        <activity android:name=".puzzle.PuzzleActivity" />
+        <activity android:name=".puzzle.PuzzleActivity" android:alwaysRetainTaskState="true"/>
         <activity android:label="@string/app_name" android:name=".menu.MainMenu">
         	<intent-filter>
         		<action android:name="android.intent.action.MAIN" />

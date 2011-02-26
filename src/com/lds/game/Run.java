@@ -14,6 +14,8 @@ import com.lds.game.puzzle.PuzzleActivity;
 
 public class Run extends Activity implements OnGameOverListener, OnGameInitializedListener, OnPuzzleActivatedListener
 {
+	public static final int PUZZLE_ACTIVITY = 2;
+	
 	public Graphics glSurface;
 	public GameRenderer gameR;
 	
@@ -29,12 +31,21 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 		float screenY = (float)screen.heightPixels;
 		
 		//Enable fullscreen
-		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
-		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+		//this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+		//getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+		
+		//retrieve game if the activity restarts
+		final Object data = getLastNonConfigurationInstance();
 		
 		//set up OpenGL rendering
 		Object syncObj = new Object();
 		gameR = new GameRenderer(screenX, screenY, this, syncObj);
+		
+		if(data != null)
+		{
+			gameR.game = (Game)data;
+		}
+		
 		gameR.setGameInitializedEvent(this);
 		glSurface = new Graphics(this, gameR, syncObj);
 		setContentView(glSurface);
@@ -60,14 +71,25 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 		//glSurface.onPause();
 		Intent i = new Intent(Run.this, PuzzleActivity.class);
 		i.putExtra("PUZZLE_RENDERER", "circuit.CircuitPuzzle");
-		startActivityForResult(i, 1);
+		startActivityForResult(i, PUZZLE_ACTIVITY);
 	}
 	
-	/*@Override
-	public void onActivityResult(int requestCode, int resultCode, String strData, Bundle bundle)
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent intent)
 	{
-		
-	}*/
+		//glSurface.onResume();
+		//setContentView(glSurface);
+		switch(requestCode)
+		{
+		case PUZZLE_ACTIVITY:
+			if(resultCode == RESULT_OK)
+				glSurface.onPuzzleFailed();
+			else
+				glSurface.onPuzzleWon();
+			break;
+		default:
+		}
+	}
 	
 	@Override
 	protected void onResume ()
@@ -81,13 +103,19 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 	{
 		super.onPause();
 		glSurface.onPause();
-		finish();
+		//finish();
 	}
 	
 	@Override
 	protected void onDestroy()
 	{
 		super.onDestroy();
-		finish();
+	}
+	
+	@Override
+	public Object onRetainNonConfigurationInstance()
+	{
+		final Game game = gameR.game;
+		return game;
 	}
 }

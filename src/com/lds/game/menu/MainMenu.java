@@ -33,7 +33,7 @@ public class MainMenu extends Activity
 			public void onClick(View v)
 			{
 				Intent i = new Intent(MainMenu.this, AboutScreen.class);
-				startActivity(i);
+				MainMenu.this.startActivity(i);
 			}
 		});
 	}
