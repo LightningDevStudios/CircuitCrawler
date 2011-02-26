@@ -157,9 +157,9 @@ public class Game
 		blob1.setPatrolPath(path);
 		entList.add(blob1);*/
 		
-		blob2 = new Blob(0.0f, 0.0f, AIType.TURRET);
+		/*blob2 = new Blob(0.0f, 0.0f, AIType.TURRET);
 		blob2.enableTilesetMode(tilesetwire, 2, 2);
-		entList.add(blob2);
+		entList.add(blob2);*/
 				
 		Button button1 = new Button(108.0f, 0.0f);
 		button1.enableTilesetMode(randomthings, 0, 0);

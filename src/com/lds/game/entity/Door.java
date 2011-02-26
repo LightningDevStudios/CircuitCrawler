@@ -22,8 +22,11 @@ public class Door extends PhysEnt
 	}
 	
 	@Override
-	public void interact (Entity ent)
+	public boolean doesCollide (Entity ent)
 	{
-		
+		if (ent instanceof Tile)
+			return false;
+		else
+			return super.doesCollide(ent);
 	}
 }

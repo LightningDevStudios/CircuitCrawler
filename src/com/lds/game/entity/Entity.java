@@ -279,12 +279,7 @@ public abstract class Entity
 			return ent.isRectangleCollidingWithCircle(this);
 		
 		else
-			//return this.isRectangleCollidingWithRectangle(ent); TODO: Set this up so corner collision works better
-		{
-			if (this.isRectangleCollidingWithRectangle(ent) && ent.isRectangleCollidingWithRectangle(this))
-				return true;
-			return false;
-		}
+			return this.isRectangleCollidingWithRectangle(ent);
 	}
 	
 	protected boolean isCircleCollidingWithCircle (Entity ent) //if both entities are circles
@@ -303,10 +298,12 @@ public abstract class Entity
 		return output;
 	}
 	
+	//TODO: FIX
 	protected boolean isRectangleCollidingWithCircle (Entity ent) //if only ent is a circle
 	{
 		boolean output = true;
 		this.updateAbsolutePointLocations();
+		ent.updateAbsolutePointLocations();
 		
 		Vector2f[] axes = new Vector2f[3];
 		//set rectangle-based axes
@@ -651,6 +648,40 @@ public abstract class Entity
 			gradientTimeMs = Stopwatch.elapsedTimeMs();
 		}
 	}
+	
+	public boolean containsPoint(Vector2f v)
+	{
+		boolean output = true;
+		this.updateAbsolutePointLocations();
+		Vector2f[] axes = new Vector2f[2];
+		axes[0] = Vector2f.abs(Vector2f.sub(this.vertVecs[0], this.vertVecs[1]));
+		axes[1] = Vector2f.getNormal(axes[0]);
+		
+		for (Vector2f axis : axes)
+		{
+			axis.normalize();
+			
+			//get mins and maxes for entity
+			float min = axis.dot(this.vertVecs[0]);
+			float max = min;
+			for (int i = 1; i < this.vertVecs.length; i++)
+			{
+				float dotProd = axis.dot(this.vertVecs[i]);
+				if (dotProd > max)
+					max = dotProd;
+				if (dotProd < min)
+					min = dotProd;
+			}
+			
+			//gets projection of vector
+			float projection = axis.dot(v);
+			
+			if (projection < min || projection > max)
+				output = false;
+		}
+		return output;
+	}
+	
 	/**************************
 	 * Accessors and Mutators *
 	 **************************/

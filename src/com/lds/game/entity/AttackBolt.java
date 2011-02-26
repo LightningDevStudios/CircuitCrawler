@@ -27,6 +27,16 @@ public class AttackBolt extends PhysEnt
 	}
 	
 	@Override
+	public void tileInteract(Tile tile)
+	{
+		if (tile.isWall())
+		{
+			colList.remove(this);
+			EntityManager.removeEntity(this);
+		}
+	}
+	
+	@Override
 	public void update()
 	{
 		super.update();

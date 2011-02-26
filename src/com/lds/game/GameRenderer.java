@@ -23,7 +23,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	public Context context;
 	public Object syncObj;
 	public boolean windowOutdated, gameOver;
-	public int frameInterval, frameCount = 0;	
+	public int playerMoveTimeMs, frameInterval, frameCount = 0;	
 	public OnGameInitializedListener gameInitializedListener;
 	public OnPuzzleActivatedListener puzzleActivatedListener;
 	public OnGameOverListener gameOverListener;
@@ -56,6 +56,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		//start the timer and use an initial tick to prevent errors where elapsed time is a very large negative number
 		Stopwatch.restartTimer();
 		Stopwatch.tick();
+		playerMoveTimeMs = Stopwatch.elapsedTimeMs();
 		
 		game = new Game(context, gl);
 		
@@ -130,11 +131,13 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		
 		//move player and heldObject
 		game.player.setAngle(game.joypad.getInputAngle());
-		game.player.setPos(game.player.getPos().add(game.joypad.getInputVec()));
+		Vector2f playerMoveVec = Vector2f.scale(game.joypad.getInputVec(), (Stopwatch.elapsedTimeMs() - playerMoveTimeMs) * (game.player.getMoveSpeed() / 10000));
+		game.player.setMoveInterpVec(playerMoveVec);
+		game.player.setPos(Vector2f.add(game.player.getPos(), playerMoveVec));
 		game.joypad.clearInputVec();
 		if (game.player.isHoldingObject())
 			game.player.updateHeldObjectPosition();
-		
+
 		//update all entites
 		for (Entity ent : game.entList)
 		{
@@ -148,9 +151,6 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		 * Perform a Collision Check for all Entities *
 		 **********************************************/
 		
-		//TODO: RIGHT NOW!! TILE COLLISION
-		//TODO: RIGHT NOW!! FIX OTHER COLLISION
-		
 		//Iterates through all entities
 		for (int i = 0; i < game.entList.size(); i++)
 		{
@@ -159,6 +159,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 			//checks for collision with all other entities in entList if needed
 			if (Game.worldOutdated)
 			{
+				//checks collision and interacts with all other Entities
 				for (int j = i + 1; j < game.entList.size(); j++)
 				{
 					Entity colEnt = game.entList.get(j);
@@ -174,7 +175,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 					}
 					else if (ent.colList.contains(colEnt) || colEnt.colList.contains(ent))
 					{
-						System.out.println(ent.colList.size() + " " + colEnt.colList.size());
+						//System.out.println(ent.colList.size() + " " + colEnt.colList.size());
 						ent.colList.remove(colEnt);
 						colEnt.colList.remove(ent);
 						if (ent.colList.isEmpty())
@@ -188,14 +189,48 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 				if (ent instanceof PhysEnt)
 				{
 					PhysEnt physEnt = (PhysEnt)ent;
-					physEnt.setPos(physEnt.getPos().add(physEnt.getBounceVec()));
+					for (Tile[] ts : game.tileset)
+					{
+						for (Tile tile : ts)
+						{
+							if (tile.isRendered())
+							{
+								if (physEnt.isColliding(tile))
+								{
+									if (!physEnt.colList.contains(tile) && !tile.colList.contains(physEnt))
+									{
+										physEnt.colList.add(tile);
+										tile.colList.add(physEnt);
+										physEnt.tileInteract(tile);
+									}
+								}
+								else if (physEnt.colList.contains(tile) || tile.colList.contains(physEnt))
+								{
+									//System.out.println(ent.colList.size() + " " + colEnt.colList.size());
+									physEnt.colList.remove(tile);
+									tile.colList.remove(physEnt);
+									if (ent.colList.isEmpty())
+										physEnt.tileUninteract(tile);
+								}
+							}
+						}
+					}
+					
+					//interacts with nearest tile to the entity; the tile it is standing on
+					physEnt.onTileInteract(game.nearestTile(physEnt));
+					
+					//bounces PhysEnts appropriately, excluding objects held by the player
+					if (!game.player.isHoldingObject() || physEnt != game.player.getHeldObject())
+						physEnt.setPos(Vector2f.add(physEnt.getPos(), physEnt.getBounceVec()));
 				}
 				
+				//moves the player correctly based on heldObject's bounceVecs
 				if (ent == game.player && game.player.isHoldingObject())
 				{
-					game.player.setPos(game.player.getPos().add(game.player.getHeldObject().getBounceVec()));
+					game.player.setPos(Vector2f.add(game.player.getPos(), game.player.getHeldObject().getBounceVec()));
 					game.player.updateHeldObjectPosition();
 				}
+				//runs new AI code for enemies
 				else if (ent instanceof Enemy)
 				{
 					//TODO: recalculate new path for enemy to go on
@@ -326,28 +361,33 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	@Override
 	public void onTouchInput(MotionEvent e) 
 	{
+		playerMoveTimeMs = Stopwatch.elapsedTimeMs();
+		Stopwatch.tick();
 		for(int i = 0; i < e.getPointerCount(); i++)
 		{	
-			//TODO: RIGHT NOW! CHECK FOR ACTUAL TOUCHING OF UIENTITIES
+			Vector2f touchVec = new Vector2f(e.getX(i) - Game.screenW / 2, Game.screenH / 2 - e.getY(i));
 			for (UIEntity ent : game.UIList)
 			{
-				if (ent instanceof UIJoypad)
-				{
-					((UIJoypad)ent).setInputVec(e.getX(i) - Game.screenW / 2, Game.screenH / 2 - e.getY(i));
-					windowOutdated = true;		
-					Game.worldOutdated = true;	
-				}
-					
-				//UIButton specific code
-				if (ent instanceof UIButton)
-				{
-					UIButton btn = (UIButton)ent;
-					
-					//500ms delay between presses
-					if (btn.canPress(500))
-					{ 
-						((UIButton)ent).press();
-						btn.setIntervalTime(Stopwatch.elapsedTimeMs());
+				if (touchVec.getX() >= ent.getXPos() - ent.getXSize() / 2 && touchVec.getX() <= ent.getXPos() + ent.getXSize() / 2 && touchVec.getY() >= ent.getYPos() - ent.getYSize() / 2 && touchVec.getY() <= ent.getYPos() + ent.getYSize() / 2)
+				{				
+					if (ent instanceof UIJoypad)
+					{
+						((UIJoypad)ent).setInputVec(e.getX(i) - Game.screenW / 2, Game.screenH / 2 - e.getY(i));
+						windowOutdated = true;		
+						Game.worldOutdated = true;	
+					}
+						
+					//UIButton specific code
+					if (ent instanceof UIButton)
+					{
+						UIButton btn = (UIButton)ent;
+						
+						//500ms delay between presses
+						if (btn.canPress(500))
+						{ 
+							((UIButton)ent).press();
+							btn.setIntervalTime(Stopwatch.elapsedTimeMs());
+						}
 					}
 				}
 			}

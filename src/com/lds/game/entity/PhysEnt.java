@@ -3,6 +3,7 @@ package com.lds.game.entity;
 import java.util.ArrayList;
 
 import com.lds.game.Game;
+import com.lds.game.SoundPlayer;
 import com.lds.Stopwatch;
 import com.lds.Vector2f;
 
@@ -48,6 +49,32 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 		moveInterpolate();
 		rotateInterpolate();
 		scaleInterpolate();
+	}
+	
+	//happens upon touching a tile at all
+	public void tileInteract(Tile tile)
+	{
+		
+	}
+	
+	//happens upon ceasing to touch or be on a tile
+	public void tileUninteract(Tile tile)
+	{
+		
+	}
+	
+	//runs with the nearestTile only
+	public void onTileInteract(Tile tile)
+	{
+		if (tile != null)
+		{
+			if (tile.isPit())
+			{
+				this.scaleTo(0, 0);
+				this.moveTo(tile.getXPos(), tile.getYPos());
+				SoundPlayer.getInstance().playSound(SoundPlayer.PIT_FALL);
+			}
+		}
 	}
 	
 	public void renderNextFrame()
@@ -196,32 +223,6 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	 * Collision Methods *
 	 *********************/
 	
-	//TODO: Rectangle vs. Circle, complicated physics, corner collision
-	
-	@Override
-	protected boolean isRectangleCollidingWithCircle (Entity ent) 
-	{
-		boolean output = super.isRectangleCollidingWithCircle(ent);
-		if (output && this.doesCollide(ent))
-		{
-			this.circleBounce(ent);
-			ent.rectangleBounce(this);
-		}
-		return output;
-	}
-	
-	@Override
-	protected boolean isRectangleCollidingWithRectangle (Entity ent)
-	{
-		boolean output = super.isRectangleCollidingWithRectangle(ent);
-		if (output && this.doesCollide(ent))
-		{
-			this.rectangleBounce(ent);
-			ent.rectangleBounce(this);
-		}
-		return output;
-	}
-	
 	@Override
 	public void circleBounce (Entity ent)
 	{
@@ -235,32 +236,56 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	@Override
 	public void rectangleBounce (Entity ent)
 	{
-		//gets an array of all the vectors between this and the ent's vertices
-		Vector2f[] vertDistVecs = new Vector2f[4];
-		for (int i = 0; i < 4; i++)
+		//checks for corner collision
+		Vector2f colVec = new Vector2f();
+		boolean cornerColliding = false;
+		for (Vector2f vertVec : ent.vertVecs)
 		{
-			vertDistVecs[i] = Vector2f.sub(ent.vertVecs[i], this.posVec);
+			if (this.containsPoint(vertVec))
+			{
+				colVec = vertVec;
+				cornerColliding = true;
+			}
 		}
-		//goes through the vectors and sorts them from low to high (thanks Mr. Carlson)
-		int i, k, maxPos;
-		Vector2f temp = new Vector2f();
-	    for (k = vertDistVecs.length; k >= 2; k--)
-	    {
-	    	maxPos = 0; 
-	        for (i = 1; i < k; i++) 
-	        {
-	             if (vertDistVecs[i].mag() > vertDistVecs[maxPos].mag()) 
-	                  maxPos = i; 
-	        }
-	        temp.set(vertDistVecs[maxPos]); 
-	        vertDistVecs[maxPos].set(vertDistVecs[k-1]); 
-	        vertDistVecs[k-1].set(temp); 
-	    }
-	    //calculate the bouceVec
-		Vector2f bounceSide = Vector2f.normalize(Vector2f.sub(vertDistVecs[0], vertDistVecs[1]));
-		bounceSide.scale(this.moveInterpVec.dot(bounceSide));
-		Vector2f bounceVec = Vector2f.sub(bounceSide, this.moveInterpVec);
-		this.addBounceVec(Vector2f.sub(bounceSide, this.moveInterpVec));
+		
+		Vector2f bounceSide, bounceSideNormal;
+		
+		if (cornerColliding)
+		{
+			bounceSideNormal = Vector2f.normalize(Vector2f.sub(colVec, ent.getPos()));
+			bounceSide = Vector2f.getNormal(bounceSideNormal);
+		}
+		else
+		{
+			Vector2f[] vertDistVecs = new Vector2f[4];
+			for (int i = 0; i < 4; i++)
+				vertDistVecs[i] = Vector2f.sub(ent.vertVecs[i], this.posVec);
+			
+			//goes through the vectors and sorts them from low to high (thanks Mr. Carlson)
+			int i, k, maxPos;
+			Vector2f temp = new Vector2f();
+		    for (k = vertDistVecs.length; k >= 2; k--)
+		    {
+		    	maxPos = 0; 
+		        for (i = 1; i < k; i++) 
+		        {
+		             if (vertDistVecs[i].mag() > vertDistVecs[maxPos].mag()) 
+		                  maxPos = i; 
+		        }
+		        temp.set(vertDistVecs[maxPos]); 
+		        vertDistVecs[maxPos].set(vertDistVecs[k-1]); 
+		        vertDistVecs[k-1].set(temp);
+		    }
+		    
+		    bounceSide = Vector2f.normalize(Vector2f.sub(vertDistVecs[0], vertDistVecs[1]));
+		    bounceSideNormal = Vector2f.getNormal(bounceSide);
+		}
+		
+		//calculate the bounceVec
+	    Vector2f sideProj = Vector2f.scale(bounceSide, bounceSide.dot(this.moveInterpVec));
+	    Vector2f normalProj = Vector2f.scale(bounceSideNormal, bounceSideNormal.dot(this.moveInterpVec));
+	    Vector2f bounceVec = Vector2f.sub(sideProj, normalProj);
+	    this.addBounceVec(bounceVec);
 	}
 	
 	/**********************************
@@ -419,7 +444,6 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	{
 	 	if (bounceList.isEmpty())
 		{
-			System.out.println("Sorry, no bounceVecs found in bounceList");
 			return new Vector2f();
 		}
 		else
@@ -437,6 +461,16 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	public void addBounceVec (Vector2f v)
 	{
 		bounceList.add(v);
+	}
+	
+	public Vector2f getBounceVec(int index)
+	{
+		return bounceList.get(index);
+	}
+	
+	public int getBounceListSize()
+	{
+		return bounceList.size();
 	}
 	
 	public Vector2f getMoveInterpVec ()
@@ -462,5 +496,10 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	public void setIsScaling(boolean isScaling)
 	{
 		this.isScaling = isScaling;
+	}
+	
+	public float getMoveSpeed()
+	{
+		return moveSpeed;
 	}
 }
