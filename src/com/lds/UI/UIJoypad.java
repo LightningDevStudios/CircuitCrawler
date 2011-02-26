@@ -7,12 +7,14 @@ public class UIJoypad extends UIEntity
 {
 	Vector2f inputVec;
 	float inputAngle;
+	boolean active;
 	
 	public UIJoypad(float xSize, float ySize, UIPosition position, float inputAngle)
 	{
 		super(xSize, ySize, position);
 		inputVec = new Vector2f();
 		this.inputAngle = inputAngle;
+		active = false;
 	}
 	
 	public UIJoypad(float xSize, float ySize, float xRelative, float yRelative, float inputAngle)
@@ -20,6 +22,7 @@ public class UIJoypad extends UIEntity
 		super (xSize, ySize, xRelative, yRelative);
 		inputVec = new Vector2f();
 		this.inputAngle = inputAngle;
+		active = false;
 	}
 	
 	public UIJoypad(float xSize, float ySize, UIPosition position, float topPad, float leftPad, float bottomPad, float rightPad, float inputAngle) 
@@ -27,6 +30,7 @@ public class UIJoypad extends UIEntity
 		super(xSize, ySize, position, topPad, leftPad, bottomPad, rightPad);
 		inputVec = new Vector2f();
 		this.inputAngle = inputAngle;
+		active = false;
 	}
 	
 	public UIJoypad(float xSize, float ySize, float xRelative, float yRelative, float topPad, float leftPad, float bottomPad, float rightPad, float inputAngle)
@@ -34,11 +38,23 @@ public class UIJoypad extends UIEntity
 		super(xSize, ySize, xRelative, yRelative, topPad, leftPad, bottomPad, rightPad);
 		inputVec = new Vector2f();
 		this.inputAngle = inputAngle;
+		active = false;
 	}
 	
 	public void setInputVec(float rawX, float rawY)
 	{
 		inputVec.set(rawX - xPos, rawY - yPos);
+		inputAngle = inputVec.angleDeg();
+	}
+	
+	public void setInputVec(Vector2f rawVec)
+	{
+		this.setInputVec(rawVec.getX(), rawVec.getY());
+	}
+	
+	public void scaleInputVecTo(float scalar)
+	{
+		inputVec.normalize().scale(scalar);
 		inputAngle = inputVec.angleDeg();
 	}
 	
@@ -55,5 +71,15 @@ public class UIJoypad extends UIEntity
 	public float getInputAngle()
 	{
 		return inputAngle;
+	}
+	
+	public boolean isActive()
+	{
+		return active;
+	}
+	
+	public void setActive(boolean active)
+	{
+		this.active = active;
 	}
 }

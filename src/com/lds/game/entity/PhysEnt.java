@@ -236,6 +236,10 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	@Override
 	public void rectangleBounce (Entity ent)
 	{
+		//checks if this entity is moving; if it is not, do nothing
+		if (this.moveInterpVec.getX() == 0.0f && this.moveInterpVec.getY() == 0.0f)
+			return;
+		
 		//checks for corner collision
 		Vector2f colVec = new Vector2f();
 		boolean cornerColliding = false;
@@ -249,25 +253,19 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 		}
 		
 		Vector2f bounceSide, bounceSideNormal;
+		Vector2f[] vertDistVecs = new Vector2f[4];
 		
 		if (cornerColliding)
 		{
-			bounceSideNormal = Vector2f.normalize(Vector2f.sub(colVec, ent.getPos()));
-			bounceSide = Vector2f.getNormal(bounceSideNormal);
-		}
-		else
-		{
-			Vector2f[] vertDistVecs = new Vector2f[4];
 			for (int i = 0; i < 4; i++)
-				vertDistVecs[i] = Vector2f.sub(ent.vertVecs[i], this.posVec);
-			
+				vertDistVecs[i] = Vector2f.sub(colVec, this.vertVecs[i]);
 			//goes through the vectors and sorts them from low to high (thanks Mr. Carlson)
-			int i, k, maxPos;
+			int maxPos;
 			Vector2f temp = new Vector2f();
-		    for (k = vertDistVecs.length; k >= 2; k--)
+		    for (int k = vertDistVecs.length; k >= 2; k--)
 		    {
 		    	maxPos = 0; 
-		        for (i = 1; i < k; i++) 
+		        for (int i = 1; i < k; i++) 
 		        {
 		             if (vertDistVecs[i].mag() > vertDistVecs[maxPos].mag()) 
 		                  maxPos = i; 
@@ -279,13 +277,66 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 		    
 		    bounceSide = Vector2f.normalize(Vector2f.sub(vertDistVecs[0], vertDistVecs[1]));
 		    bounceSideNormal = Vector2f.getNormal(bounceSide);
+			
+			//calculate the bounceVec direction
+		    Vector2f sideProj = Vector2f.scale(bounceSide, bounceSide.dot(this.moveInterpVec));
+		    Vector2f normalProj = Vector2f.scale(bounceSideNormal, bounceSideNormal.dot(this.moveInterpVec));
+		    addBounceVec(Vector2f.sub(sideProj, normalProj));
 		}
+		else
+		{
+			for (int i = 0; i < 4; i++)
+				vertDistVecs[i] = Vector2f.sub(ent.vertVecs[i], Vector2f.add(posVec, moveInterpVec));
 		
-		//calculate the bounceVec
-	    Vector2f sideProj = Vector2f.scale(bounceSide, bounceSide.dot(this.moveInterpVec));
-	    Vector2f normalProj = Vector2f.scale(bounceSideNormal, bounceSideNormal.dot(this.moveInterpVec));
-	    Vector2f bounceVec = Vector2f.sub(sideProj, normalProj);
-	    this.addBounceVec(bounceVec);
+			//goes through the vectors and sorts them from low to high (thanks Mr. Carlson)
+			int maxPos;
+			Vector2f temp = new Vector2f();
+		    for (int k = vertDistVecs.length; k >= 2; k--)
+		    {
+		    	maxPos = 0; 
+		        for (int i = 1; i < k; i++) 
+		        {
+		             if (vertDistVecs[i].mag() > vertDistVecs[maxPos].mag()) 
+		                  maxPos = i; 
+		        }
+		        temp.set(vertDistVecs[maxPos]); 
+		        vertDistVecs[maxPos].set(vertDistVecs[k-1]); 
+		        vertDistVecs[k-1].set(temp);
+		    }
+		    
+		    bounceSide = Vector2f.normalize(Vector2f.sub(vertDistVecs[0], vertDistVecs[1]));
+		    bounceSideNormal = Vector2f.getNormal(bounceSide);
+			
+			//calculate the bounceVec direction
+		    Vector2f sideProj = Vector2f.scale(bounceSide, bounceSide.dot(this.moveInterpVec));
+		    Vector2f normalProj = Vector2f.scale(bounceSideNormal, bounceSideNormal.dot(this.moveInterpVec));
+		    Vector2f bounceVec = Vector2f.sub(sideProj, normalProj).normalize();
+			
+			//get min of projection of this entity
+			float thisMin = bounceSideNormal.dot(this.vertVecs[0]);
+			for (int i = 1; i < this.vertVecs.length; i++)
+			{
+				float dotProd1 = bounceSideNormal.dot(this.vertVecs[i]);
+				if (dotProd1 < thisMin)
+					thisMin = dotProd1;
+			}
+			
+			//get max of projection of ent
+			float entMax = bounceSideNormal.dot(ent.vertVecs[0]);
+			for (int i = 1; i < ent.vertVecs.length; i++)
+			{
+				float dotProd2 = bounceSideNormal.dot(ent.vertVecs[i]);
+				if (dotProd2 > entMax)
+					entMax = dotProd2;
+			}
+			
+			//find magnitude based on intersection
+			Vector2f outVec = Vector2f.scale(bounceSideNormal, entMax - thisMin);
+			Vector2f overVec = Vector2f.scale(Vector2f.getNormal(outVec), outVec.mag() * (float)Math.tan(bounceVec.angle(outVec)));
+			
+			//scale bounceVec by magnitude and add to bounceList
+			this.addBounceVec(Vector2f.add(outVec, overVec));
+		}
 	}
 	
 	/**********************************

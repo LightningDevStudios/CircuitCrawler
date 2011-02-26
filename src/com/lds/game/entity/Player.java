@@ -109,7 +109,8 @@ public class Player extends Character //your character, protagonist
 	
 	public void disableUserControl()
 	{
-		this.dropObject();
+		if (holdingObject)
+			this.dropObject();
 		controlled = false;
 	}
 	

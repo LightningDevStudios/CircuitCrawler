@@ -75,7 +75,10 @@ public class Vector2f
 	
 	public static Vector2f normalize (Vector2f v)
 	{
-		return Vector2f.scale(v, 1 / v.mag());
+		if (v.x != 0.0f || v.y != 0.0f)
+			return Vector2f.scale(v, 1 / v.mag());
+		else
+			return v;
 	}
 	
 	public static Vector2f getNormal (Vector2f v)
@@ -162,7 +165,8 @@ public class Vector2f
 	
 	public Vector2f normalize ()
 	{
-		scale(1 / mag());
+		if (x != 0.0f || y != 0.0f)
+			scale(1 / mag());
 		return this;
 	}
 	

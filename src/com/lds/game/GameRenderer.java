@@ -223,6 +223,15 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 										physEnt.colList.add(tile);
 										tile.colList.add(physEnt);
 										physEnt.tileInteract(tile);
+										if (!game.player.isHoldingObject() || physEnt != game.player.getHeldObject())
+										{
+											Vector2f tempVec = physEnt.getBounceVec();
+											if (!tempVec.equals(new Vector2f()))
+											{
+												physEnt.setPos(Vector2f.add(physEnt.getPos(), tempVec));
+												physEnt.setMoveInterpVec(tempVec);
+											}
+										}
 									}
 								}
 								else if (physEnt.colList.contains(tile) || tile.colList.contains(physEnt))
@@ -242,7 +251,14 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 					
 					//bounces PhysEnts appropriately, excluding objects held by the player
 					if (!game.player.isHoldingObject() || physEnt != game.player.getHeldObject())
-						physEnt.setPos(Vector2f.add(physEnt.getPos(), physEnt.getBounceVec()));
+					{
+						Vector2f tempVec = physEnt.getBounceVec();
+						if (!tempVec.equals(new Vector2f()))
+						{
+							physEnt.setPos(Vector2f.add(physEnt.getPos(), tempVec));
+							physEnt.setMoveInterpVec(tempVec);
+						}
+					}
 				}
 				
 				//moves the player correctly based on heldObject's bounceVecs
@@ -393,6 +409,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 				{				
 					if (ent instanceof UIJoypad)
 					{
+						((UIJoypad)ent).setActive(true);
 						((UIJoypad)ent).setInputVec(e.getX(i) - Game.screenW / 2, Game.screenH / 2 - e.getY(i));
 						windowOutdated = true;		
 						Game.worldOutdated = true;	
@@ -409,6 +426,19 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 							((UIButton)ent).press();
 							btn.setIntervalTime(Stopwatch.elapsedTimeMs());
 						}
+					}
+				}
+				else if (ent instanceof UIJoypad)
+				{
+					UIJoypad joypad = ((UIJoypad)ent);
+					if (e.getAction() == MotionEvent.ACTION_UP)
+						joypad.setActive(false);
+					else if (joypad.isActive())
+					{
+						Vector2f tempVec = new Vector2f(e.getX(i) - Game.screenW / 2, Game.screenH / 2 - e.getY(i));
+						joypad.setInputVec(tempVec);
+						if (tempVec.mag() > joypad.getXSize() / 2)
+							joypad.scaleInputVecTo(joypad.getXSize() / 2);
 					}
 				}
 			}
