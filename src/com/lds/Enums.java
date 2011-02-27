@@ -2,7 +2,7 @@ package com.lds;
 
 public class Enums 
 {
-	public static enum Direction  { UP, RIGHT, DOWN, LEFT }
+	public static enum Direction  { LEFT, RIGHT, UP, DOWN }
 	public static enum RenderMode { COLOR, GRADIENT, TEXTURE, TILESET}
 	public static enum TileState { FLOOR, WALL, PIT, BRIDGE }
 	public static enum AIType { STALKER, PATROL, TURRET }

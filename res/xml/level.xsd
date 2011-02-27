@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <!-- SIMPLE TYPES, used to make sure values are properly set-->
+
+  <xs:simpleType name="stringType">
+    <xs:restriction base="xs:string" />
+  </xs:simpleType>
+
+  <xs:simpleType name="floatType">
+    <xs:restriction base="xs:float" />
+  </xs:simpleType> 
+
+  <xs:simpleType name="intType">
+    <xs:restriction base="xs:int" />
+  </xs:simpleType>
+
+  <xs:simpleType name="tileStateType">
+    <xs:restriction base="xs:token">
+      <xs:enumeration value="FLOOR" />
+      <xs:enumeration value="WALL" />
+      <xs:enumeration value="PIT" />
+      <xs:enumeration value="BRIDGE" />
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="AIEnumType">
+    <xs:restriction base="xs:token">
+      <xs:enumeration value="STALKER" />
+      <xs:enumeration value="PATROL" />
+      <xs:enumeration value="TURRET" />
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="causeType">
+    <xs:restriction base="xs:token">
+      <xs:enumeration value="CauseNOT" />
+      <xs:enumeration value="CauseOR" />
+      <xs:enumeration value="CauseAND" />
+      <xs:enumeration value="CauseXOR" />
+      <xs:enumeration value="CauseButton" />
+      <xs:enumeration value="CauseDoneMoving" />
+      <xs:enumeration value="CauseDoneRotating" />
+      <xs:enumeration value="CauseDoneScaling" />
+      <xs:enumeration value="CauseEnemyCount" />
+      <xs:enumeration value="CauseLocation" />
+      <xs:enumeration value="CausePlayerHealth" />
+      <xs:enumeration value="CauseTimePassed" />
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="effectType">
+    <xs:restriction base="xs:token">
+      <xs:enumeration value="EffectDoor" />
+      <xs:enumeration value="EffectEndGame" />
+      <xs:enumeration value="EffectRaiseBridge" />
+      <xs:enumeration value="EffectRemoveEntity" />
+      <xs:enumeration value="EffectTriggerTimer" />
+    </xs:restriction>
+  </xs:simpleType>
+
+  <!-- COMPLEX TYPES, used to prevent rewriting elements into everything! -->
+
+  <xs:complexType name="EntityInfo">
+    <xs:sequence>
+      <xs:element name="id" type="stringType" />
+      <xs:element name="size" type="floatType" minOccurs="0" />
+      <xs:element name="xPos" type="floatType" />
+      <xs:element name="yPos" type="floatType" />
+      <xs:element name="renderMode">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="color" type="stringType" minOccurs="0" />
+            <xs:element name="gradient" type="stringType" minOccurs="0" />
+            <xs:element name="texture" minOccurs="0">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element name="texID" type="stringType"/>
+                  <xs:element name="coords" type="stringType" minOccurs="0" />
+                </xs:sequence>
+              </xs:complexType>
+            </xs:element>
+            <xs:element name="tileset" minOccurs="0" >
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element name="texID" type="stringType" />
+                  <xs:element name="x" type="intType" />
+                  <xs:element name="y" type="intType" />
+                </xs:sequence>
+              </xs:complexType>
+            </xs:element>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="CharacterInfo">
+    <xs:complexContent>
+      <xs:extension base="EntityInfo">
+        <xs:sequence>
+          <xs:element name="health" type="intType" />
+          <xs:element name="energy" type="intType" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  
+  <xs:complexType name="BlobInfo">
+    <xs:complexContent>
+      <xs:extension base="CharacterInfo">
+        <xs:sequence>
+          <xs:element name="AIType" type="AIEnumType"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="ButtonInfo">
+    <xs:complexContent>
+      <xs:extension base="EntityInfo" />
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="DoorInfo">
+    <xs:complexContent>
+      <xs:extension base="EntityInfo" />
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="PhysBlockInfo">
+    <xs:complexContent>
+      <xs:extension base="EntityInfo" />
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="PhysCircleInfo">
+    <xs:complexContent>
+      <xs:extension base="EntityInfo" />
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="PickupEnergyInfo">
+    <xs:complexContent>
+      <xs:extension base="EntityInfo">
+        <xs:sequence>
+          <xs:element name="energyValue" type="intType" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="PickupHealthInfo">
+    <xs:complexContent>
+      <xs:extension base="EntityInfo">
+        <xs:sequence>
+          <xs:element name="healthValue" type="intType" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="PlayerInfo">
+    <xs:complexContent>
+      <xs:extension base="CharacterInfo" />
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="PuzzleBoxInfo">
+    <xs:complexContent>
+      <xs:extension base="EntityInfo" />
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="SpriteInfo">
+    <xs:complexContent>
+      <xs:extension base="EntityInfo" />
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="TileInfo">
+    <xs:attribute name="state" type="tileStateType" use="required" />
+  </xs:complexType>
+  
+  <!-- LEVEL XSD -->
+
+   <xs:element name="Level">
+    <xs:complexType>
+      <xs:sequence> 
+        <xs:element name="Tileset">
+          <xs:complexType>
+            <xs:sequence>
+             <!-- <xs:element name="TileRow" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence> -->
+                    <xs:element name="Tile" type="TileInfo" maxOccurs="unbounded" />
+                  <!--</xs:sequence>
+                </xs:complexType>
+              </xs:element> -->
+            </xs:sequence>
+            <xs:attribute name="x" type="xs:integer" use="required"/>
+            <xs:attribute name="y" type="xs:integer" use="required"/>
+          </xs:complexType>
+        </xs:element>
+
+        <xs:element name="Entities">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="Blob" type="BlobInfo" minOccurs="0" maxOccurs="unbounded" />
+              <xs:element name="Button" type="ButtonInfo" minOccurs="0" maxOccurs="unbounded" />
+              <xs:element name="Door" type="DoorInfo" minOccurs="0" maxOccurs="unbounded" />
+              <xs:element name="PhysBlock" type="PhysBlockInfo" minOccurs="0" maxOccurs="unbounded" />
+              <xs:element name="PhysCircle" type="PhysCircleInfo" minOccurs="0" maxOccurs="unbounded" />
+              <xs:element name="PickupEnergy" type="PickupEnergyInfo" minOccurs="0" maxOccurs="unbounded" />
+              <xs:element name="PickupHealth" type="PickupHealthInfo" minOccurs="0" maxOccurs="unbounded" />
+              <xs:element name="Player" type="PlayerInfo" minOccurs="0" maxOccurs="unbounded" />
+              <xs:element name="PuzzleBox" type="PuzzleBoxInfo" minOccurs="0" maxOccurs="unbounded" />
+              <xs:element name="Sprite" type="SpriteInfo" minOccurs="0" maxOccurs="unbounded" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        
+        <xs:element name="Triggers">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="Trigger" minOccurs="0">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="Cause">
+                      <xs:complexType>
+                        <xs:attribute name="type" type="causeType" use="required" />
+                      </xs:complexType>
+                    </xs:element>
+                    <xs:element name="Effect">
+                      <xs:complexType>
+                        <xs:attribute name="type" type="effectType" use="required" />
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                  <xs:attribute name="id" type="stringType" />
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

@@ -7,7 +7,7 @@ android:orientation="vertical"
 android:stretchColumns="0"
 xmlns:android="http://schemas.android.com/apk/res/android">
 	<TableRow android:paddingBottom="100px">
-		<TextView android:text="Now with 100% less main menu art that the leading brand!" android:padding="5dip" android:singleLine="false" android:layout_height="wrap_content" android:layout_width="wrap_content" />
+		<TextView android:text="Now with 100% less main menu art than the leading brand!" android:padding="5dip" android:singleLine="false" android:layout_height="wrap_content" android:layout_width="wrap_content" />
 	</TableRow>
 	<TableRow>
 		<Button	android:id="@+id/Button1" android:text="Start!" android:layout_span="1" android:layout_height="wrap_content" android:layout_width="wrap_content"/>
