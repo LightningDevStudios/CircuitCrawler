@@ -150,8 +150,10 @@ public class Parser //this is a perser
 		while(!(xrp.getEventType() == xrp.END_TAG && xrp.getName().equals("Tileset")))
 		{
 			if(curX >= x)
+			{
 				curX = 0;
-			
+				curY++;
+			}
 			xrp.next();
 			if (xrp.getEventType() == xrp.START_TAG && xrp.getName().equals("Tile"))
 			{
@@ -165,9 +167,6 @@ public class Parser //this is a perser
 			{
 				if(xrp.getName().equals("Tile"))
 					curX++;
-				
-				else if(xrp.getName().equals("TileRow"))
-					curY++;
 			}
 		}
 		
