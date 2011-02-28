@@ -86,6 +86,11 @@ public class Vector2f
 		return new Vector2f(v.getY(), -v.getX());
 	}
 	
+	public static Vector2f getMidpoint (Vector2f v1, Vector2f v2)
+	{
+		return new Vector2f((v1.x + v2.x) / 2, (v1.y + v2.y) / 2);
+	}
+	
 	/************************************************************************************************************
 	 * Non-Static Methods - return and change vectors, calculate vector quantites (i.e. dot product, magnitude) *
 	 ************************************************************************************************************/
@@ -174,12 +179,12 @@ public class Vector2f
 	{
 	    float rad = ((float)Math.acos(Vector2f.normalize(this).dot(Vector2f.normalize(v))));
 	    //clamp angle between 0 and 360
-		if (rad == 360.0f)
+		if (rad == Math.PI * 2)
 			rad = 0.0f;
-		else if (rad > 360.0f)
-			rad -= 360 * (int)(rad / 360);
+		else if (rad > Math.PI * 2)
+			rad -= Math.PI * 2 * (int)(rad / Math.PI * 2);
 		else if (rad < 0.0f)
-			rad += 360;
+			rad += Math.PI * 2;
 		
 		return rad;
 	}

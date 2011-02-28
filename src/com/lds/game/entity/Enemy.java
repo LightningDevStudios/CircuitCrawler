@@ -25,7 +25,7 @@ public abstract class Enemy extends Character //enemies will fall under this cla
 	
 	public Enemy(float size, float xPos, float yPos, float angle, float xScl, float yScl, boolean circular, int health, AIType type)
 	{
-		super(size, xPos, yPos, angle, xScl, yScl, circular, health, 360.0f);
+		super(size, xPos, yPos, angle, xScl, yScl, circular, health, 25.0f, 360.0f);
 		this.type = type;
 		lastTime = Stopwatch.elapsedTimeMs();
 		randomTime = 500;

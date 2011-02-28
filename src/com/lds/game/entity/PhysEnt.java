@@ -240,103 +240,61 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 		if (this.moveInterpVec.getX() == 0.0f && this.moveInterpVec.getY() == 0.0f)
 			return;
 		
-		//checks for corner collision
-		Vector2f colVec = new Vector2f();
-		boolean cornerColliding = false;
-		for (Vector2f vertVec : ent.vertVecs)
-		{
-			if (this.containsPoint(vertVec))
-			{
-				colVec = vertVec;
-				cornerColliding = true;
-			}
-		}
-		
-		Vector2f bounceSide, bounceSideNormal;
 		Vector2f[] vertDistVecs = new Vector2f[4];
+
+		for (int i = 0; i < 4; i++)
+			vertDistVecs[i] = Vector2f.sub(ent.vertVecs[i], Vector2f.sub(posVec, moveInterpVec));
+	
+		//goes through the vectors and sorts them from low to high (thanks Mr. Carlson)
+		int maxPos;
+		Vector2f temp = new Vector2f();
+	    for (int k = vertDistVecs.length; k >= 2; k--)
+	    {
+	    	maxPos = 0; 
+	        for (int i = 1; i < k; i++) 
+	        {
+	             if (vertDistVecs[i].mag() > vertDistVecs[maxPos].mag()) 
+	                  maxPos = i; 
+	        }
+	        temp.set(vertDistVecs[maxPos]); 
+	        vertDistVecs[maxPos].set(vertDistVecs[k-1]); 
+	        vertDistVecs[k-1].set(temp);
+	    }
+	    
+	    Vector2f bounceNormal = Vector2f.sub(vertDistVecs[0], vertDistVecs[1]).setNormal().normalize();
+	    Vector2f mpDist = Vector2f.getMidpoint(vertDistVecs[0].add(this.posVec), vertDistVecs[1].add(this.posVec)).sub(ent.posVec);
+		if (mpDist.mag() > mpDist.add(bounceNormal).mag())
+			bounceNormal.neg();
+	    
+		//calculate the bounceVec direction
+		Vector2f bounceVec = Vector2f.getNormal(bounceNormal).scale(Vector2f.getNormal(bounceNormal).dot(this.moveInterpVec)).sub(Vector2f.scale(bounceNormal, bounceNormal.dot(this.moveInterpVec))).normalize();
 		
-		if (cornerColliding)
+		//get min of projection of this entity
+		float thisMin = bounceNormal.dot(this.vertVecs[0]);
+		float thisMax = thisMin;
+		for (int i = 1; i < this.vertVecs.length; i++)
 		{
-			for (int i = 0; i < 4; i++)
-				vertDistVecs[i] = Vector2f.sub(colVec, this.vertVecs[i]);
-			//goes through the vectors and sorts them from low to high (thanks Mr. Carlson)
-			int maxPos;
-			Vector2f temp = new Vector2f();
-		    for (int k = vertDistVecs.length; k >= 2; k--)
-		    {
-		    	maxPos = 0; 
-		        for (int i = 1; i < k; i++) 
-		        {
-		             if (vertDistVecs[i].mag() > vertDistVecs[maxPos].mag()) 
-		                  maxPos = i; 
-		        }
-		        temp.set(vertDistVecs[maxPos]); 
-		        vertDistVecs[maxPos].set(vertDistVecs[k-1]); 
-		        vertDistVecs[k-1].set(temp);
-		    }
-		    
-		    bounceSide = Vector2f.normalize(Vector2f.sub(vertDistVecs[0], vertDistVecs[1]));
-		    bounceSideNormal = Vector2f.getNormal(bounceSide);
-			
-			//calculate the bounceVec direction
-		    Vector2f sideProj = Vector2f.scale(bounceSide, bounceSide.dot(this.moveInterpVec));
-		    Vector2f normalProj = Vector2f.scale(bounceSideNormal, bounceSideNormal.dot(this.moveInterpVec));
-		    addBounceVec(Vector2f.sub(sideProj, normalProj));
+			float dotProd1 = bounceNormal.dot(this.vertVecs[i]);
+			if (dotProd1 < thisMin)
+				thisMin = dotProd1;
+			if (dotProd1 > thisMax)
+				thisMax = dotProd1;
 		}
-		else
-		{
-			for (int i = 0; i < 4; i++)
-				vertDistVecs[i] = Vector2f.sub(ent.vertVecs[i], Vector2f.add(posVec, moveInterpVec));
 		
-			//goes through the vectors and sorts them from low to high (thanks Mr. Carlson)
-			int maxPos;
-			Vector2f temp = new Vector2f();
-		    for (int k = vertDistVecs.length; k >= 2; k--)
-		    {
-		    	maxPos = 0; 
-		        for (int i = 1; i < k; i++) 
-		        {
-		             if (vertDistVecs[i].mag() > vertDistVecs[maxPos].mag()) 
-		                  maxPos = i; 
-		        }
-		        temp.set(vertDistVecs[maxPos]); 
-		        vertDistVecs[maxPos].set(vertDistVecs[k-1]); 
-		        vertDistVecs[k-1].set(temp);
-		    }
-		    
-		    bounceSide = Vector2f.normalize(Vector2f.sub(vertDistVecs[0], vertDistVecs[1]));
-		    bounceSideNormal = Vector2f.getNormal(bounceSide);
-			
-			//calculate the bounceVec direction
-		    Vector2f sideProj = Vector2f.scale(bounceSide, bounceSide.dot(this.moveInterpVec));
-		    Vector2f normalProj = Vector2f.scale(bounceSideNormal, bounceSideNormal.dot(this.moveInterpVec));
-		    Vector2f bounceVec = Vector2f.sub(sideProj, normalProj).normalize();
-			
-			//get min of projection of this entity
-			float thisMin = bounceSideNormal.dot(this.vertVecs[0]);
-			for (int i = 1; i < this.vertVecs.length; i++)
-			{
-				float dotProd1 = bounceSideNormal.dot(this.vertVecs[i]);
-				if (dotProd1 < thisMin)
-					thisMin = dotProd1;
-			}
-			
-			//get max of projection of ent
-			float entMax = bounceSideNormal.dot(ent.vertVecs[0]);
-			for (int i = 1; i < ent.vertVecs.length; i++)
-			{
-				float dotProd2 = bounceSideNormal.dot(ent.vertVecs[i]);
-				if (dotProd2 > entMax)
-					entMax = dotProd2;
-			}
-			
-			//find magnitude based on intersection
-			Vector2f outVec = Vector2f.scale(bounceSideNormal, entMax - thisMin);
-			Vector2f overVec = Vector2f.scale(Vector2f.getNormal(outVec), outVec.mag() * (float)Math.tan(bounceVec.angle(outVec)));
-			
-			//scale bounceVec by magnitude and add to bounceList
-			this.addBounceVec(Vector2f.add(outVec, overVec));
+		//get max of projection of ent
+		float entMax = bounceNormal.dot(ent.vertVecs[0]);
+		float entMin = entMax;
+		for (int i = 1; i < ent.vertVecs.length; i++)
+		{
+			float dotProd2 = bounceNormal.dot(ent.vertVecs[i]);
+			if (dotProd2 < entMin)
+				entMin = dotProd2;
+			if (dotProd2 > entMax)
+				entMax = dotProd2;
 		}
+		
+		//scale bounceVec by magnitude and add to bounceList
+		this.addBounceVec(bounceVec.scale((entMax - thisMin) / (float)Math.cos(bounceVec.angle(bounceNormal))));
 	}
 	
 	/**********************************
@@ -402,6 +360,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 				
 				if (moveVec.mag() - moveInterpVec.mag() * moveInterpCount <= moveInterpVec.mag() / 2)
 				{
+					moveInterpVec.set(0, 0);
 					posVec = endPosVec;
 					isMoving = false;
 					moveInterpCount = 0;
@@ -468,6 +427,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 				
 				if (sclVec.mag() - sclInterpVec.mag() * sclInterpCount <= sclInterpVec.mag())
 				{
+					sclInterpVec.set(0, 0);
 					scaleVec = endScaleVec;
 					isScaling = false;
 					sclInterpCount = 0;

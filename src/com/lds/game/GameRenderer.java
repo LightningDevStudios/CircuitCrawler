@@ -409,10 +409,13 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 				{				
 					if (ent instanceof UIJoypad)
 					{
-						((UIJoypad)ent).setActive(true);
-						((UIJoypad)ent).setInputVec(e.getX(i) - Game.screenW / 2, Game.screenH / 2 - e.getY(i));
+						UIJoypad joypad = (UIJoypad)ent;
+						joypad.setActive(true);
+						joypad.setInputVec(e.getX(i) - Game.screenW / 2, Game.screenH / 2 - e.getY(i));
 						windowOutdated = true;		
 						Game.worldOutdated = true;	
+						if (e.getAction() == MotionEvent.ACTION_UP)
+							joypad.setActive(false);
 					}
 						
 					//UIButton specific code
@@ -430,7 +433,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 				}
 				else if (ent instanceof UIJoypad)
 				{
-					UIJoypad joypad = ((UIJoypad)ent);
+					UIJoypad joypad = (UIJoypad)ent;
 					if (e.getAction() == MotionEvent.ACTION_UP)
 						joypad.setActive(false);
 					else if (joypad.isActive())
@@ -439,9 +442,11 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 						joypad.setInputVec(tempVec);
 						if (tempVec.mag() > joypad.getXSize() / 2)
 							joypad.scaleInputVecTo(joypad.getXSize() / 2);
+						windowOutdated = true;
+						Game.worldOutdated = true;
 					}
 				}
-			}
+			}		
 		}
 	}
 	//redraw the perspective

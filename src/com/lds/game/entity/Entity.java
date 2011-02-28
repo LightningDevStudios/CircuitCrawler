@@ -212,7 +212,7 @@ public abstract class Entity
 		Vector2f unscaledVec = Vector2f.scale(new Vector2f((float)Math.cos(Math.toRadians(angle)), (float)Math.sin(Math.toRadians(angle))), halfSize);
 		Vector2f xVec = Vector2f.scale(unscaledVec, getXScl());
 		Vector2f yVec = Vector2f.scale(Vector2f.getNormal(unscaledVec), getYScl());
-		 
+		 																 //these are assuming the entity is facing right: angle = 0.0f
 		vertVecs[0].set(Vector2f.add(posVec, Vector2f.add(xVec, yVec))); //top  right
 		vertVecs[1].set(Vector2f.add(posVec, Vector2f.sub(yVec, xVec))); //top left
 		vertVecs[2].set(Vector2f.add(posVec, Vector2f.add(Vector2f.neg(xVec), Vector2f.neg(yVec)))); //bottom left
