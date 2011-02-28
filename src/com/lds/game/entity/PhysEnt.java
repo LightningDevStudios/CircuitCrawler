@@ -3,6 +3,7 @@ package com.lds.game.entity;
 import java.util.ArrayList;
 
 import com.lds.game.Game;
+import com.lds.game.SoundPlayer;
 import com.lds.Stopwatch;
 import com.lds.Vector2f;
 
@@ -48,6 +49,32 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 		moveInterpolate();
 		rotateInterpolate();
 		scaleInterpolate();
+	}
+	
+	//happens upon touching a tile at all
+	public void tileInteract(Tile tile)
+	{
+		
+	}
+	
+	//happens upon ceasing to touch or be on a tile
+	public void tileUninteract(Tile tile)
+	{
+		
+	}
+	
+	//runs with the nearestTile only
+	public void onTileInteract(Tile tile)
+	{
+		if (tile != null)
+		{
+			if (tile.isPit())
+			{
+				this.scaleTo(0, 0);
+				this.moveTo(tile.getXPos(), tile.getYPos());
+				SoundPlayer.getInstance().playSound(SoundPlayer.PIT_FALL);
+			}
+		}
 	}
 	
 	public void renderNextFrame()
@@ -196,44 +223,6 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	 * Collision Methods *
 	 *********************/
 	
-	//TODO: Rectangle vs. Circle, complicated physics, corner collision
-	
-	@Override
-	protected boolean isCircleCollidingWithCircle (Entity ent)
-	{
-		boolean output = super.isCircleCollidingWithCircle(ent);
-		if (output && this.doesCollide(ent))
-		{
-			this.circleBounce(ent);
-			ent.circleBounce(this);
-		}
-		return output;
-	}
-	
-	@Override
-	protected boolean isRectangleCollidingWithCircle (Entity ent) 
-	{
-		boolean output = super.isRectangleCollidingWithCircle(ent);
-		if (output && this.doesCollide(ent))
-		{
-			this.circleBounce(ent);
-			ent.rectangleBounce(this);
-		}
-		return output;
-	}
-	
-	@Override
-	protected boolean isRectangleCollidingWithRectangle (Entity ent)
-	{
-		boolean output = super.isRectangleCollidingWithRectangle(ent);
-		if (output && this.doesCollide(ent) && ent.doesCollide(this))
-		{
-			this.rectangleBounce(ent);
-			ent.rectangleBounce(this);
-		}
-		return output;
-	}
-	
 	@Override
 	public void circleBounce (Entity ent)
 	{
@@ -247,32 +236,65 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	@Override
 	public void rectangleBounce (Entity ent)
 	{
-		//gets an array of all the vectors between this and the ent's vertices
+		//checks if this entity is moving; if it is not, do nothing
+		if (this.moveInterpVec.getX() == 0.0f && this.moveInterpVec.getY() == 0.0f)
+			return;
+		
 		Vector2f[] vertDistVecs = new Vector2f[4];
+
 		for (int i = 0; i < 4; i++)
-		{
-			vertDistVecs[i] = Vector2f.sub(ent.vertVecs[i], this.posVec);
-		}
+			vertDistVecs[i] = Vector2f.sub(ent.vertVecs[i], Vector2f.sub(posVec, moveInterpVec));
+	
 		//goes through the vectors and sorts them from low to high (thanks Mr. Carlson)
-		int i, k, maxPos;
+		int maxPos;
 		Vector2f temp = new Vector2f();
-	    for (k = vertDistVecs.length; k >= 2; k--)
+	    for (int k = vertDistVecs.length; k >= 2; k--)
 	    {
 	    	maxPos = 0; 
-	        for (i = 1; i < k; i++) 
+	        for (int i = 1; i < k; i++) 
 	        {
 	             if (vertDistVecs[i].mag() > vertDistVecs[maxPos].mag()) 
 	                  maxPos = i; 
 	        }
 	        temp.set(vertDistVecs[maxPos]); 
 	        vertDistVecs[maxPos].set(vertDistVecs[k-1]); 
-	        vertDistVecs[k-1].set(temp); 
+	        vertDistVecs[k-1].set(temp);
 	    }
-	    //calculate the bouceVec
-		Vector2f bounceSide = Vector2f.normalize(Vector2f.sub(vertDistVecs[0], vertDistVecs[1]));
-		bounceSide.scale(this.moveInterpVec.dot(bounceSide));
-		Vector2f bounceVec = Vector2f.sub(bounceSide, this.moveInterpVec);
-		this.addBounceVec(Vector2f.sub(bounceSide, this.moveInterpVec));
+	    
+	    Vector2f bounceNormal = Vector2f.sub(vertDistVecs[0], vertDistVecs[1]).setNormal().normalize();
+	    Vector2f mpDist = Vector2f.getMidpoint(vertDistVecs[0].add(this.posVec), vertDistVecs[1].add(this.posVec)).sub(ent.posVec);
+		if (mpDist.mag() > mpDist.add(bounceNormal).mag())
+			bounceNormal.neg();
+	    
+		//calculate the bounceVec direction
+		Vector2f bounceVec = Vector2f.getNormal(bounceNormal).scale(Vector2f.getNormal(bounceNormal).dot(this.moveInterpVec)).sub(Vector2f.scale(bounceNormal, bounceNormal.dot(this.moveInterpVec))).normalize();
+		
+		//get min of projection of this entity
+		float thisMin = bounceNormal.dot(this.vertVecs[0]);
+		float thisMax = thisMin;
+		for (int i = 1; i < this.vertVecs.length; i++)
+		{
+			float dotProd1 = bounceNormal.dot(this.vertVecs[i]);
+			if (dotProd1 < thisMin)
+				thisMin = dotProd1;
+			if (dotProd1 > thisMax)
+				thisMax = dotProd1;
+		}
+		
+		//get max of projection of ent
+		float entMax = bounceNormal.dot(ent.vertVecs[0]);
+		float entMin = entMax;
+		for (int i = 1; i < ent.vertVecs.length; i++)
+		{
+			float dotProd2 = bounceNormal.dot(ent.vertVecs[i]);
+			if (dotProd2 < entMin)
+				entMin = dotProd2;
+			if (dotProd2 > entMax)
+				entMax = dotProd2;
+		}
+		
+		//scale bounceVec by magnitude and add to bounceList
+		this.addBounceVec(bounceVec.scale((entMax - thisMin) / (float)Math.cos(bounceVec.angle(bounceNormal))));
 	}
 	
 	/**********************************
@@ -338,6 +360,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 				
 				if (moveVec.mag() - moveInterpVec.mag() * moveInterpCount <= moveInterpVec.mag() / 2)
 				{
+					moveInterpVec.set(0, 0);
 					posVec = endPosVec;
 					isMoving = false;
 					moveInterpCount = 0;
@@ -404,6 +427,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 				
 				if (sclVec.mag() - sclInterpVec.mag() * sclInterpCount <= sclInterpVec.mag())
 				{
+					sclInterpVec.set(0, 0);
 					scaleVec = endScaleVec;
 					isScaling = false;
 					sclInterpCount = 0;
@@ -431,7 +455,6 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	{
 	 	if (bounceList.isEmpty())
 		{
-			System.out.println("Sorry, no bounceVecs found in bounceList");
 			return new Vector2f();
 		}
 		else
@@ -449,6 +472,16 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	public void addBounceVec (Vector2f v)
 	{
 		bounceList.add(v);
+	}
+	
+	public Vector2f getBounceVec(int index)
+	{
+		return bounceList.get(index);
+	}
+	
+	public int getBounceListSize()
+	{
+		return bounceList.size();
 	}
 	
 	public Vector2f getMoveInterpVec ()
@@ -474,5 +507,10 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	public void setIsScaling(boolean isScaling)
 	{
 		this.isScaling = isScaling;
+	}
+	
+	public float getMoveSpeed()
+	{
+		return moveSpeed;
 	}
 }

@@ -11,15 +11,10 @@ public abstract class HoldObject extends PhysEnt //and object that is held (bloc
 	}
 	
 	@Override
-	public void update()
+	public void tileInteract(Tile tile)
 	{
-		super.update();
-	}
-	
-	@Override
-	public void collide(Entity ent)
-	{
-		
+		if (!held)
+			super.tileInteract(tile);
 	}
 	
 	public boolean isHeld ()

@@ -11,8 +11,8 @@ public class Vector2f
 	
 	public Vector2f ()
 	{
-		x = 0;
-		y = 0;
+		x = 0.0f;
+		y = 0.0f;
 	}
 	
 	public Vector2f (float x, float y)
@@ -75,12 +75,20 @@ public class Vector2f
 	
 	public static Vector2f normalize (Vector2f v)
 	{
-		return Vector2f.scale(v, 1 / v.mag());
+		if (v.x != 0.0f || v.y != 0.0f)
+			return Vector2f.scale(v, 1 / v.mag());
+		else
+			return v;
 	}
 	
 	public static Vector2f getNormal (Vector2f v)
 	{
 		return new Vector2f(v.getY(), -v.getX());
+	}
+	
+	public static Vector2f getMidpoint (Vector2f v1, Vector2f v2)
+	{
+		return new Vector2f((v1.x + v2.x) / 2, (v1.y + v2.y) / 2);
 	}
 	
 	/************************************************************************************************************
@@ -162,7 +170,8 @@ public class Vector2f
 	
 	public Vector2f normalize ()
 	{
-		scale(1 / mag());
+		if (x != 0.0f || y != 0.0f)
+			scale(1 / mag());
 		return this;
 	}
 	
@@ -170,12 +179,12 @@ public class Vector2f
 	{
 	    float rad = ((float)Math.acos(Vector2f.normalize(this).dot(Vector2f.normalize(v))));
 	    //clamp angle between 0 and 360
-		if (rad == 360.0f)
+		if (rad == Math.PI * 2)
 			rad = 0.0f;
-		else if (rad > 360.0f)
-			rad -= 360 * (int)(rad / 360);
+		else if (rad > Math.PI * 2)
+			rad -= Math.PI * 2 * (int)(rad / Math.PI * 2);
 		else if (rad < 0.0f)
-			rad += 360;
+			rad += Math.PI * 2;
 		
 		return rad;
 	}

@@ -2,6 +2,7 @@ package com.lds.game.entity;
 
 import com.lds.EntityManager;
 import com.lds.Vector2f;
+import com.lds.game.SoundPlayer;
 
 public class Player extends Character //your character, protagonist
 {
@@ -14,7 +15,7 @@ public class Player extends Character //your character, protagonist
 	public Player (float xPos, float yPos, float angle)
 	{
 		//initialize Character and Entity data
-		super(Entity.DEFAULT_SIZE, xPos, yPos, angle, 1.0f, 1.0f, false, 100, 540.0f);
+		super(Entity.DEFAULT_SIZE, xPos, yPos, angle, 1.0f, 1.0f, false, 100, 30.0f, 1.0f);
 		//initialize Player data
 		energy = 100;
 		nextAngle = angle;
@@ -54,6 +55,20 @@ public class Player extends Character //your character, protagonist
 		}
 	}
 	
+	public void onTileInteract(Tile tile)
+	{
+		if (tile != null)
+		{
+			if (tile.isPit() && controlled)
+			{
+				this.disableUserControl();
+				this.scaleTo(0, 0);
+				this.moveTo(tile.getXPos(), tile.getYPos());
+				SoundPlayer.getInstance().playSound(SoundPlayer.PIT_FALL);
+			}
+		}
+	}
+	
 	public void holdObject(HoldObject hObj)
 	{
 		holdingObject = true;
@@ -76,12 +91,12 @@ public class Player extends Character //your character, protagonist
 
 	public void updateHeldObjectPosition()
 	{
-		float heldDistance = hObj.halfSize * hObj.getXScl() + this.halfSize + 10.0f;
-		Vector2f directionVec = new Vector2f(angle);
-		directionVec.scale(heldDistance).add(posVec);
+			float heldDistance = hObj.halfSize * hObj.getXScl() + this.halfSize + 10.0f;
+			Vector2f directionVec = new Vector2f(angle);
+			directionVec.scale(heldDistance).add(posVec);
 			
-		hObj.setPos(directionVec.getX(), directionVec.getY());
-		hObj.setAngle(angle);
+			hObj.setPos(directionVec.getX(), directionVec.getY());
+			hObj.setAngle(angle);
 	}
 	
 	@Override
@@ -94,6 +109,8 @@ public class Player extends Character //your character, protagonist
 	
 	public void disableUserControl()
 	{
+		if (holdingObject)
+			this.dropObject();
 		controlled = false;
 	}
 	

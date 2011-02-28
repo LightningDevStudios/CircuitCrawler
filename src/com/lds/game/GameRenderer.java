@@ -25,7 +25,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	public Context context;
 	public Object syncObj;
 	public boolean windowOutdated, gameOver;
-	public int frameInterval, frameCount = 0;	
+	public int playerMoveTimeMs, frameInterval, frameCount = 0;	
 	public OnGameInitializedListener gameInitializedListener;
 	public OnPuzzleActivatedListener puzzleActivatedListener;
 	public OnGameOverListener gameOverListener;
@@ -58,6 +58,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		//start the timer and use an initial tick to prevent errors where elapsed time is a very large negative number
 		Stopwatch.restartTimer();
 		Stopwatch.tick();
+		playerMoveTimeMs = Stopwatch.elapsedTimeMs();
 		
 		if(game == null)
 			game = new Game(context, gl);
@@ -100,6 +101,10 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		if (frameCount == 100)
 			Debug.startMethodTracing("LDS_Game4");*/
 		
+		/*********************************
+		 * Update World and Render Tiles *
+		 *********************************/
+		
 		//clear the screen
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		
@@ -136,22 +141,38 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 				{
 					gl.glTranslatef(t.getXPos(), t.getYPos(), 0.0f);
 					t.draw(gl);
-					
 					gl.glLoadIdentity();
 				}
 			}
 		}
 		
-		//update all entites (before collision)
-		//also runs AI Code
+		/******************
+		 * Update Entites *
+		 ******************/
+		
+		//move player and heldObject
+		game.player.setAngle(game.joypad.getInputAngle());
+		Vector2f playerMoveVec = Vector2f.scale(game.joypad.getInputVec(), (Stopwatch.elapsedTimeMs() - playerMoveTimeMs) * (game.player.getMoveSpeed() / 10000));
+		game.player.setMoveInterpVec(playerMoveVec);
+		game.player.setPos(Vector2f.add(game.player.getPos(), playerMoveVec));
+		game.joypad.clearInputVec();
+		if (game.player.isHoldingObject())
+			game.player.updateHeldObjectPosition();
+
+		//update all entites
 		for (Entity ent : game.entList)
 		{
 			ent.update();
+			//run AI code for enemies
 			if (ent instanceof Enemy)
 				game.runAI((Enemy)ent);
 		}
 		
-		//Render all entities
+		/**********************************************
+		 * Perform a Collision Check for all Entities *
+		 **********************************************/
+		
+		//Iterates through all entities
 		for (int i = 0; i < game.entList.size(); i++)
 		{
 			Entity ent = game.entList.get(i);
@@ -159,6 +180,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 			//checks for collision with all other entities in entList if needed
 			if (Game.worldOutdated)
 			{
+				//checks collision and interacts with all other Entities
 				for (int j = i + 1; j < game.entList.size(); j++)
 				{
 					Entity colEnt = game.entList.get(j);
@@ -174,7 +196,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 					}
 					else if (ent.colList.contains(colEnt) || colEnt.colList.contains(ent))
 					{
-						System.out.println(ent.colList.size() + " " + colEnt.colList.size());
+						//System.out.println(ent.colList.size() + " " + colEnt.colList.size());
 						ent.colList.remove(colEnt);
 						colEnt.colList.remove(ent);
 						if (ent.colList.isEmpty())
@@ -182,11 +204,81 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 							ent.uninteract(colEnt);
 							colEnt.uninteract(ent);
 						}
-						//TODO may or may not work.
 					}
 				}
+				
+				if (ent instanceof PhysEnt)
+				{
+					PhysEnt physEnt = (PhysEnt)ent;
+					for (Tile[] ts : game.tileset)
+					{
+						for (Tile tile : ts)
+						{
+							if (tile.isRendered())
+							{
+								if (physEnt.isColliding(tile))
+								{
+									if (!physEnt.colList.contains(tile) && !tile.colList.contains(physEnt))
+									{
+										physEnt.colList.add(tile);
+										tile.colList.add(physEnt);
+										physEnt.tileInteract(tile);
+										if (!game.player.isHoldingObject() || physEnt != game.player.getHeldObject())
+										{
+											Vector2f tempVec = physEnt.getBounceVec();
+											if (!tempVec.equals(new Vector2f()))
+											{
+												physEnt.setPos(Vector2f.add(physEnt.getPos(), tempVec));
+												physEnt.setMoveInterpVec(tempVec);
+											}
+										}
+									}
+								}
+								else if (physEnt.colList.contains(tile) || tile.colList.contains(physEnt))
+								{
+									//System.out.println(ent.colList.size() + " " + colEnt.colList.size());
+									physEnt.colList.remove(tile);
+									tile.colList.remove(physEnt);
+									if (ent.colList.isEmpty())
+										physEnt.tileUninteract(tile);
+								}
+							}
+						}
+					}
+					
+					//interacts with nearest tile to the entity; the tile it is standing on
+					physEnt.onTileInteract(game.nearestTile(physEnt));
+					
+					//bounces PhysEnts appropriately, excluding objects held by the player
+					if (!game.player.isHoldingObject() || physEnt != game.player.getHeldObject())
+					{
+						Vector2f tempVec = physEnt.getBounceVec();
+						if (!tempVec.equals(new Vector2f()))
+						{
+							physEnt.setPos(Vector2f.add(physEnt.getPos(), tempVec));
+							physEnt.setMoveInterpVec(tempVec);
+						}
+					}
+				}
+				
+				//moves the player correctly based on heldObject's bounceVecs
+				if (ent == game.player && game.player.isHoldingObject())
+				{
+					game.player.setPos(Vector2f.add(game.player.getPos(), game.player.getHeldObject().getBounceVec()));
+					game.player.updateHeldObjectPosition();
+				}
+				//runs new AI code for enemies
+				else if (ent instanceof Enemy)
+				{
+					//TODO: recalculate new path for enemy to go on
+				}
 			}
+			
+			/***************************
+			 * Performs Button Actions *
+			 ***************************/
 	
+			//inside of ent for loop
 			//checks for whatever happens when B is pressed.
 			if (game.btnB.isPressed() && ent instanceof HoldObject)
 			{
@@ -204,24 +296,31 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 					game.btnB.unpress();
 				}
 			}
+		}
 			
-			//set btnA to speed up the player when pressed
-			if (game.btnA.isPressed())
+		//outside of ent for loop
+		//causes button A to shoot when pressed
+		if (game.btnA.isPressed())
+		{
+			if (!game.player.isHoldingObject() && game.player.getEnergy() != 0)
 			{
-				if (!game.player.isHoldingObject() && game.player.getEnergy() != 0)
-				{
-					Vector2f directionVec = new Vector2f(game.player.getAngle());
-					directionVec.scale(game.player.getHalfSize() + 20.0f);
-					AttackBolt attack = new AttackBolt(Vector2f.add(game.player.getPos(), directionVec), directionVec, game.player.getAngle());
-					vibrator(100);
-					EntityManager.addEntity(attack);
-					game.player.loseEnergy(10);
-					SoundPlayer.getInstance().playSound(2);
-				}
-				game.btnA.unpress();
+				Vector2f directionVec = new Vector2f(game.player.getAngle());
+				directionVec.scale(game.player.getHalfSize() + 20.0f);
+				AttackBolt attack = new AttackBolt(Vector2f.add(game.player.getPos(), directionVec), directionVec, game.player.getAngle());
+				vibrator(100);
+				EntityManager.addEntity(attack);
+				game.player.loseEnergy(10);
+				SoundPlayer.getInstance().playSound(2);
 			}
-						
-			//render it
+			game.btnA.unpress();
+		}
+		
+		/**********************
+		 * Render all Entites *
+		 **********************/
+					
+		for (Entity ent : game.entList)
+		{
 			if (ent.isRendered())
 			{								
 				gl.glTranslatef(ent.getXPos(), ent.getYPos(), 0.0f);
@@ -232,10 +331,12 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 				gl.glLoadIdentity();
 			}
 		}
+		
 		game.btnB.unpress();
 		
 		//moved this out here so that all entities / colEnts can be compared, not just the next ones
 		Game.worldOutdated = false;
+		game.updateCameraPosition();
 		
 		//Render UI, in the UI perspective
 		viewHUD(gl);
@@ -295,99 +396,28 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	}
 
 	@Override
-	//TODO move heldObj back when it collides with something
 	public void onTouchInput(MotionEvent e) 
 	{
-		//get raw input
-		/*float xInput = e.getRawX() - Game.screenW / 2;
-		float yInput = -e.getRawY() + Game.screenH / 2;*/
-
-		
+		playerMoveTimeMs = Stopwatch.elapsedTimeMs();
+		Stopwatch.tick();
 		for(int i = 0; i < e.getPointerCount(); i++)
-		{
+		{	
 			Vector2f touchVec = new Vector2f(e.getX(i) - Game.screenW / 2, Game.screenH / 2 - e.getY(i));
-		
 			for (UIEntity ent : game.UIList)
 			{
-				//loop through UIList, see if input is within UIEntity bounds
 				if (touchVec.getX() >= ent.getXPos() - ent.getXSize() / 2 && touchVec.getX() <= ent.getXPos() + ent.getXSize() / 2 && touchVec.getY() >= ent.getYPos() - ent.getYSize() / 2 && touchVec.getY() <= ent.getYPos() + ent.getYSize() / 2)
-				{
-					//Specific joypad code
-					//TODO move to UIEntity generic method
-					if (game.player.userHasControl() && ent instanceof UIJoypad)
+				{				
+					if (ent instanceof UIJoypad)
 					{
-						UIJoypad UIjp = (UIJoypad)ent;
-						
-						Tile test = game.nearestTile(game.player);
-						
-						if (test != null && test.isPit())
-						{
-							//game.textbox.setText("Yer a wizerd harry!");
-							game.player.disableUserControl();
-							game.player.scaleTo(0, 0);
-							game.player.moveTo(test.getXPos(), test.getYPos());
-							SoundPlayer.getInstance().playSound(SoundPlayer.PIT_FALL);
-						}
-						
-						//get the relative X and Y coordinates
-						Vector2f tempMoveVec = UIjp.getMovementVec(touchVec);
-						
-						//set the angle
-						float tempAngle = game.player.getAngle();
-						game.player.setAngle((float)tempMoveVec.angleDeg());
-						
-						//move the player
-						Vector2f moveVec = Vector2f.scale(tempMoveVec, 0.1f);
-						game.player.setPos(Vector2f.add(game.player.getPos(), moveVec));
-						
-						if (game.player.isHoldingObject())
-							game.player.updateHeldObjectPosition();
-						
-						Game.worldOutdated = true;
-						
-						boolean playerIsColliding = false;
-						//check collision and reverse motion if it's colliding with something solid
-						for (Entity colEnt : game.entList)
-						{
-								if ((colEnt != game.player && game.player.isColliding(colEnt)))
-								{
-										playerIsColliding = true;
-										game.player.interact(colEnt);
-								}
-								else if (game.player.getHeldObject() != null && colEnt != game.player.getHeldObject() && game.player.getHeldObject().isColliding(colEnt))
-								{
-									playerIsColliding = true;
-								}
-						}
-						
-						for (Tile[] ts : game.tileset)
-						{						
-							for (Tile t: ts)
-							{
-								if ((t.isRendered() && (game.player.isColliding(t))) || (game.player.getHeldObject() != null && game.player.getHeldObject().isColliding(t)))
-								{
-									playerIsColliding = true;
-								}
-							}
-						}
-						if (playerIsColliding)
-						{
-							//game.player.setAngle(tempAngle);
-							if (!game.player.isHoldingObject())
-							{
-								game.player.setPos(Vector2f.add(game.player.getPos(), game.player.getBounceVec()));
-							}
-							else
-							{
-								game.player.setPos(Vector2f.add(game.player.getPos(), game.player.getBounceVec()).add(game.player.getHeldObject().getBounceVec()));
-								game.player.updateHeldObjectPosition();
-							}
-						}
-						game.updateCameraPosition();
-						
-						windowOutdated = true;					
+						UIJoypad joypad = (UIJoypad)ent;
+						joypad.setActive(true);
+						joypad.setInputVec(e.getX(i) - Game.screenW / 2, Game.screenH / 2 - e.getY(i));
+						windowOutdated = true;		
+						Game.worldOutdated = true;	
+						if (e.getAction() == MotionEvent.ACTION_UP)
+							joypad.setActive(false);
 					}
-					
+						
 					//UIButton specific code
 					if (ent instanceof UIButton)
 					{
@@ -401,7 +431,22 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 						}
 					}
 				}
-			}
+				else if (ent instanceof UIJoypad)
+				{
+					UIJoypad joypad = (UIJoypad)ent;
+					if (e.getAction() == MotionEvent.ACTION_UP)
+						joypad.setActive(false);
+					else if (joypad.isActive())
+					{
+						Vector2f tempVec = new Vector2f(e.getX(i) - Game.screenW / 2, Game.screenH / 2 - e.getY(i));
+						joypad.setInputVec(tempVec);
+						if (tempVec.mag() > joypad.getXSize() / 2)
+							joypad.scaleInputVecTo(joypad.getXSize() / 2);
+						windowOutdated = true;
+						Game.worldOutdated = true;
+					}
+				}
+			}		
 		}
 	}
 	//redraw the perspective
