@@ -1,7 +1,6 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<Level>
-	<Tileset x="17" y="17">
-		<Tile state="FLOOR" />
+<?xml version="1.0" encoding="utf-8"?>
+<Level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Tileset x="17" y="17">
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
@@ -18,7 +17,6 @@
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
-
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
@@ -36,7 +34,6 @@
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
-
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
@@ -54,7 +51,6 @@
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
-
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
@@ -65,14 +61,15 @@
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
+    <Tile state="WALL" />
     <Tile state="FLOOR" />
+    <Tile state="WALL" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
-
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
@@ -80,7 +77,10 @@
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
+    <Tile state="WALL" />
     <Tile state="FLOOR" />
+    <Tile state="WALL" />
+    <Tile state="WALL" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
@@ -90,12 +90,14 @@
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
-
+    <Tile state="PIT" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
+    <Tile state="WALL" />
+    <Tile state="WALL" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
@@ -103,12 +105,15 @@
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
+    <Tile state="PIT" />
+    <Tile state="PIT" />
+    <Tile state="PIT" />
+    <Tile state="PIT" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
-
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
@@ -117,6 +122,9 @@
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
+    <Tile state="PIT" />
+    <Tile state="PIT" />
+    <Tile state="PIT" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
@@ -126,12 +134,14 @@
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
-
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
+    <Tile state="PIT" />
+    <Tile state="PIT" />
+    <Tile state="PIT" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
@@ -144,9 +154,11 @@
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
-
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
+    <Tile state="PIT" />
+    <Tile state="PIT" />
+    <Tile state="PIT" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
@@ -161,8 +173,10 @@
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
+    <Tile state="PIT" />
+    <Tile state="PIT" />
+    <Tile state="PIT" />
     <Tile state="FLOOR" />
-
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
@@ -176,11 +190,13 @@
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
+    <Tile state="PIT" />
+    <Tile state="PIT" />
+    <Tile state="PIT" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
-
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
@@ -191,6 +207,8 @@
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
+    <Tile state="PIT" />
+    <Tile state="PIT" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
@@ -198,7 +216,6 @@
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
-
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
@@ -207,6 +224,8 @@
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
+    <Tile state="PIT" />
+    <Tile state="PIT" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
@@ -216,13 +235,13 @@
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
-
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
+    <Tile state="PIT" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
@@ -234,7 +253,6 @@
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
-
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
@@ -252,7 +270,6 @@
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
-
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
@@ -270,162 +287,81 @@
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
-
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-	</Tileset>
-	<Entities>
+  </Tileset>
+  <Entities>
     <Blob>
-      <id>blob1</id>
-      <xPos>-150.0e0</xPos>
-      <yPos>-350.0</yPos>
+      <xPos>-150</xPos>
+      <yPos>-350</yPos>
       <renderMode>
         <color>1,0.5,0.5,0.5</color>
       </renderMode>
       <health>100</health>
-      <energy>100</energy>
+      <energy>0</energy>
       <AIType>PATROL</AIType>
     </Blob>
     <Blob>
-      <id>blob2</id>
-      <xPos>0.0</xPos>
-      <yPos>0.0</yPos>
-      <renderMode>
-        
-      </renderMode>
+      <xPos>0</xPos>
+      <yPos>0</yPos>
+      <renderMode />
       <health>100</health>
-      <energy>100</energy>
+      <energy>0</energy>
       <AIType>TURRET</AIType>
     </Blob>
-    
     <Button>
-      <id>button</id>
-      <xPos>36.0</xPos>
-      <yPos>-320.0</yPos>
-      <renderMode>
-        
-      </renderMode>
+      <xPos>36</xPos>
+      <yPos>-320</yPos>
+      <renderMode />
     </Button>
     <Button>
-      <id>button1</id>
-      <xPos>108.0</xPos>
-      <yPos>0.0</yPos>
-      <renderMode>
-        
-      </renderMode>
+      <xPos>108</xPos>
+      <yPos>0</yPos>
+      <renderMode />
     </Button>
     <Button>
-      <id>button2</id>
-      <xPos>-324.0</xPos>
-      <yPos>0.0</yPos>
-      <renderMode>
-        
-      </renderMode>
+      <xPos>-324</xPos>
+      <yPos>0</yPos>
+      <renderMode />
     </Button>
-    
-		<Door>
-      <id>door</id>
-      <xPos>-108.0</xPos>
-      <yPos>-108.0</yPos>
-      <renderMode>
-        
-      </renderMode>
+    <Door>
+      <xPos>-108</xPos>
+      <yPos>-108</yPos>
+      <renderMode />
     </Door>
-		
     <PhysBlock>
-      <id>block</id>
-      <size>32.0</size>
-      <xPos>-215.0</xPos>
-      <yPos>-350.0</yPos>
-      <renderMode>
-        
-      </renderMode>
+      <xPos>-215</xPos>
+      <yPos>-350</yPos>
+      <renderMode />
     </PhysBlock>
-		<PhysBlock>
-      <id>block1</id>
-			<size>50.0</size>
-			<xPos>0.0</xPos>
-			<yPos>108.0</yPos>
-      <renderMode>
-        
-      </renderMode>
-		</PhysBlock>
-		<PhysBlock>
-      <id>block2</id>
-      <size>50.0</size>
-      <xPos>-216.0</xPos>
-      <yPos>108.0</yPos>
-      <renderMode>
-        
-      </renderMode>
+    <PhysBlock>
+      <xPos>0</xPos>
+      <yPos>108</yPos>
+      <renderMode />
     </PhysBlock>
-
+    <PhysBlock>
+      <xPos>-216</xPos>
+      <yPos>108</yPos>
+      <renderMode />
+    </PhysBlock>
     <PhysCircle>
-      <id>circle</id>
-      <size>50.0</size>
-      <xPos>-100.0</xPos>
-      <yPos>-310.0</yPos>
-      <renderMode>
-        
-      </renderMode>
+      <xPos>-100</xPos>
+      <yPos>-310</yPos>
+      <renderMode />
     </PhysCircle>
-
     <PickupHealth>
-      <id>health</id>
-      <xPos>-108.0</xPos>
-      <yPos>-250.0</yPos>
+      <xPos>-108</xPos>
+      <yPos>-250</yPos>
       <renderMode>
-        <color>0.39,0.58,0.93,1.0</color>
+        <color>0.39,0.58,0.93,1</color>
       </renderMode>
-      <healthValue>50</healthValue>
+      <healthValue>0</healthValue>
     </PickupHealth>
-    
-		<PuzzleBox>
-      <id>box</id>
-			<size>64.0</size>
-			<xPos>-75.0</xPos>
-			<yPos>0.0</yPos>
-      <renderMode>
-        
-      </renderMode>
-		</PuzzleBox>
-		
-		
-	</Entities>
-	<Triggers>
-		
-	</Triggers>
+    <PuzzleBox>
+      <xPos>-75</xPos>
+      <yPos>0</yPos>
+      <renderMode />
+    </PuzzleBox>
+  </Entities>
 </Level>

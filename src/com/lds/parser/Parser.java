@@ -121,15 +121,19 @@ public class Parser //this is a perser
 	
 	public void parseObj(String tn) throws XmlPullParserException, IOException
 	{		
-		if(xrp.getEventType() == xrp.START_TAG && xrp.getName().equalsIgnoreCase("renderMode"))
-			parseRM();
+		
 		
 		xrp.next();
 		
 		while (!(xrp.getEventType() == xrp.END_TAG && xrp.getName().equalsIgnoreCase(tn))) 
 		{
-			//dataHM = parseTag(dataHM)
-			parseTag(dataHM);	
+			if(xrp.getEventType() == xrp.START_TAG && xrp.getName().equalsIgnoreCase("renderMode"))
+			{
+				parseRM();
+				xrp.next();
+			}
+			else
+				parseTag(dataHM);	
 			
 			xrp.next(); 
 			xrp.next();
@@ -186,7 +190,11 @@ public class Parser //this is a perser
 	{
 		while (!(xrp.getEventType() == xrp.END_TAG && xrp.getName().equalsIgnoreCase("renderMode")))
 		{
+			System.out.println(xrp.getName() + "," + xrp.getEventType());
 			xrp.next();
+			System.out.println(xrp.getName() + "," + xrp.getEventType());
+			if(xrp.getEventType() == xrp.END_TAG && xrp.getName().equalsIgnoreCase("renderMode"))
+				break;
 			
 			if(xrp.getName().equalsIgnoreCase("texture") || xrp.getName().equalsIgnoreCase("tileset"))
 			{
@@ -204,9 +212,9 @@ public class Parser //this is a perser
 				parseTag(dataHM);
 				xrp.next();
 				xrp.next();
-				parseTag(dataHM);
+				/*parseTag(dataHM);
 				xrp.next();
-				xrp.next();			
+				xrp.next();*/			
 			}
 		}
 	}
