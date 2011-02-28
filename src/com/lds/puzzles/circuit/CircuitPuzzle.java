@@ -48,7 +48,7 @@ public class CircuitPuzzle implements IPuzzle
 		gl.glEnable(GL10.GL_DITHER);
 		gl.glHint(GL10.GL_PERSPECTIVE_CORRECTION_HINT, GL10.GL_NICEST);
 		
-		tileTex = new Texture(R.drawable.circuitpuzzle, 128, 128, 8, 8, context);
+		tileTex = new Texture(R.drawable.circuitpuzzle, 128, 128, 8, 8, context, "circuitpuzzle");
 		TextureLoader tl = TextureLoader.getInstance();
 		tl.initialize(gl);
 		tl.loadTexture(tileTex);

@@ -36,8 +36,8 @@ public class Parser //this is a perser
 			if (xrp.getEventType() == xrp.START_TAG)
 			{
 				System.out.println(xrp.getName());
-				if(xrp.getName().equalsIgnoreCase("Entity"))
-					parseEntity();
+				if(xrp.getName().equalsIgnoreCase("Entities"))
+					parseEntities();
 				else if(xrp.getName().equalsIgnoreCase("Tileset"))
 					parseTileset();
 			}
@@ -45,57 +45,57 @@ public class Parser //this is a perser
 		}
 	}
 	
-	public void parseEntity() throws XmlPullParserException, IOException
+	public void parseEntities() throws XmlPullParserException, IOException
 	{
-		dataHM = new HashMap<String, String>();
 		xrp.next();
-		while (!((xrp.getEventType() == xrp.END_TAG && xrp.getName().equals("Entity"))))
+		while (!((xrp.getEventType() == xrp.END_TAG && xrp.getName().equals("Entities"))))
 		{
 			xrp.next();
 			
 			if(xrp.getEventType() == xrp.START_TAG)
 			{
+				dataHM = new HashMap<String, String>();
 				if(xrp.getName().equalsIgnoreCase("Door"))
 				{
 					parseObj("Door");
 					DoorData dd = new DoorData(dataHM);
 					dd.createInst(entList);
-					////dataHM = null;
+					//dataHM = null;
 				}
 				else if (xrp.getName().equalsIgnoreCase("Button"))
 				{
 					parseObj("Button");
 					ButtonData bd = new ButtonData(dataHM);
 					bd.createInst(entList);
-					////dataHM = null;
+					//dataHM = null;
 				}
 				else if (xrp.getName().equalsIgnoreCase("PhysBlock"))
 				{
 					parseObj("PhysBlock");
 					PhysBlockData pbd = new PhysBlockData(dataHM);
 					pbd.createInst(entList);
-					////dataHM = null;
+					//dataHM = null;
 				}
-				else if (xrp.getName().equalsIgnoreCase("Bloc"))
+				else if (xrp.getName().equalsIgnoreCase("Blob"))
 				{
 					parseObj("Blob");
 					BlobData bd = new BlobData(dataHM);
 					bd.createInst(entList);
-					////dataHM = null;
+					//dataHM = null;
 				}
 				else if (xrp.getName().equalsIgnoreCase("PuzzleBox"))
 				{
 					parseObj("PuzzleBox");
 					PuzzleBoxData pbd = new PuzzleBoxData(dataHM);
 					pbd.createInst(entList);
-					////dataHM = null;
+					//dataHM = null;
 				}
 				else if (xrp.getName().equalsIgnoreCase("PhysCircle"))
 				{
 					parseObj("PhysCircle");
 					PhysCircleData pcd= new PhysCircleData(dataHM);
 					pcd.createInst(entList);
-					////dataHM = null;
+					//dataHM = null;
 				}
 				else if (xrp.getName().equalsIgnoreCase("Player"))
 				{
@@ -110,6 +110,10 @@ public class Parser //this is a perser
 					PickupHealthData phd = new PickupHealthData(dataHM);
 					phd.createInst(entList);
 					//dataHM = null;
+				}
+				else
+				{
+					xrp.next();
 				}
 			}
 		}
@@ -146,27 +150,24 @@ public class Parser //this is a perser
 		
 		curX = 0;
 		curY = 0;
-		
+		xrp.next();
 		while(!(xrp.getEventType() == xrp.END_TAG && xrp.getName().equals("Tileset")))
 		{
-			if(curX >= x)
+			if(curX == x)
 			{
 				curX = 0;
 				curY++;
 			}
-			xrp.next();
-			if (xrp.getEventType() == xrp.START_TAG && xrp.getName().equals("Tile"))
-			{
-				xrp.next();
-				tileHashMap = parseTag(tileHashMap);
-				
-				tilesetData[curY][curX] = new TileData(tileHashMap, curX, curY, x, y);
-			}
 			
-			else if(xrp.getEventType() == xrp.END_TAG)
+			
+			
+			if (xrp.getName().equals("Tile"))
 			{
-				if(xrp.getName().equals("Tile"))
-					curX++;
+				tilesetData[curY][curX] = new TileData(xrp.getAttributeValue(0), curX, curY, x, y);
+				curX++;
+				
+				xrp.next();
+				xrp.next();
 			}
 		}
 		
@@ -180,25 +181,14 @@ public class Parser //this is a perser
 			}
 		}
 	}
-	
-	public HashMap<String, String> parseAttributes()
-	{
-		HashMap<String, String> map = new HashMap<String, String>();
-		for (int i = 0; i < xrp.getAttributeCount(); i++)
-		{
-			map.put(xrp.getAttributeName(i), xrp.getAttributeValue(i));
-		}
 		
-		return map;
-	}
-	
 	public void parseRM() throws XmlPullParserException, IOException
 	{
 		while (!(xrp.getEventType() == xrp.END_TAG && xrp.getName().equalsIgnoreCase("renderMode")))
 		{
 			xrp.next();
 			
-			if(xrp.getName().equalsIgnoreCase("texture"))
+			if(xrp.getName().equalsIgnoreCase("texture") || xrp.getName().equalsIgnoreCase("tileset"))
 			{
 				xrp.next();
 				parseTag(dataHM);
@@ -208,18 +198,7 @@ public class Parser //this is a perser
 				xrp.next();
 				xrp.next();
 			}
-			
-			else if(xrp.getName().equalsIgnoreCase("tileset"))
-			{
-				xrp.next();
-				parseTag(dataHM);
-				xrp.next();
-				xrp.next();
-				parseTag(dataHM);
-				xrp.next();
-				xrp.next();
-			}
-			
+						
 			else
 			{
 				parseTag(dataHM);
@@ -241,4 +220,67 @@ public class Parser //this is a perser
 		return map;
 	}
 	
+	public HashMap<String, String> parseAttributes()
+	{
+		HashMap<String, String> map = new HashMap<String, String>();
+		for (int i = 0; i < xrp.getAttributeCount(); i++)
+		{
+			map.put(xrp.getAttributeName(i), xrp.getAttributeValue(i));
+		}
+		
+		return map;
+	}
+	
+	/*public static String[] csvSeperator(String tv)
+	{
+		String ttv = tv;
+		int i = 1;
+		//COUNTER!!!!!
+		while(ttv.contains(","))
+		{
+			i++;
+			ttv = ttv.replaceFirst(",", "");
+		}
+		
+		String[] sepString = new String[i];
+		for(int j = 0; j < i; j++)
+		{
+			if(tv.indexOf(",") == 0)
+			{
+				tv = tv.replaceFirst(",","");
+				if(tv.contains(","))
+				{
+					sepString[j] = tv.substring(0, tv.indexOf(","));
+					tv = tv.substring(tv.indexOf(","));
+				}
+				else
+				{
+					sepString[j] = tv;
+				}
+			}
+			else
+			{
+				sepString[j] = tv.substring(0, tv.indexOf(","));
+				tv = tv.substring(tv.indexOf(","));
+			}
+			System.out.println();
+		}
+		for (String temp : sepString)
+		{
+			if(tv.indexOf(",") > 0)
+				temp = tv.substring(0, tv.indexOf(","));
+			else if(tv.indexOf(",") == 0)
+			{
+				temp = tv.substring(1);
+				if(tv.indexOf(",") > 0)
+					temp = tv.substring(0, tv.indexOf(","));
+				else
+					temp = tv;
+			}
+			temp = temp.replace(",", " ");
+			temp = temp.trim();
+		}
+		
+		return sepString;
+	}*/
 }

@@ -17,10 +17,23 @@ public class PuzzleBoxData extends StaticEntData
 	public void createInst(ArrayList<Entity> entData)
 	{
 		puzzleBoxRef = new PuzzleBox(size, xPos, yPos, circular, willCollide);
-		if (rgba != null)
-			puzzleBoxRef.enableColorMode(rgba[0],rgba[1],rgba[2],rgba[3]);
-		if (tex != null && xy != null)
-			puzzleBoxRef.enableTilesetMode(tex, xy[1], xy[2]);
+
+		//COLOR
+		if (color != null)
+			puzzleBoxRef.enableColorMode(color[0],color[1],color[2],color[3]);
+		
+		//GRADIENT
+		if (gradient != null)
+			puzzleBoxRef.enableGradientMode(gradient);
+		
+		//TEXTURE
+		if (textureModeEnabled)
+			puzzleBoxRef.enableTextureMode(tex, texture);
+		
+		//TILESET
+		if (tilesetModeEnabled)
+			puzzleBoxRef.enableTilesetMode(tex, tileX, tileY);
+		
 		entData.add(puzzleBoxRef);
 	}
 }

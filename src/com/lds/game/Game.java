@@ -83,10 +83,10 @@ public class Game
 	public Game (Context context, GL10 gl) 
 	
 	{
-		tilesetcolors = new Texture(R.drawable.tilesetcolors, 128, 128, 8, 8, context);
-		tilesetwire = new Texture(R.drawable.tilesetwire, 128, 128, 8, 8, context);
-		randomthings = new Texture(R.drawable.randomthings, 256, 256, 8, 8, context);
-		text = new Texture(R.drawable.text, 256, 256, 16, 8, context);
+		tilesetcolors = new Texture(R.drawable.tilesetcolors, 128, 128, 8, 8, context, "tilesetcolors");
+		tilesetwire = new Texture(R.drawable.tilesetwire, 128, 128, 8, 8, context, "tilesetwire");
+		randomthings = new Texture(R.drawable.randomthings, 256, 256, 8, 8, context, "randomthings");
+		text = new Texture(R.drawable.text, 256, 256, 16, 8, context, "text");
 		
 				
 		//entList = new ArrayList<Entity>();

@@ -17,10 +17,23 @@ public class PhysBlockData extends HoldObjectData
 	public void createInst(ArrayList<Entity> entData)
 	{
 		physBlockRef = new PhysBlock(size, xPos, yPos);
-		if (rgba != null)
-			physBlockRef.enableColorMode(rgba[0],rgba[1],rgba[2],rgba[3]);
-		if (tex != null && xy != null)
-			physBlockRef.enableTilesetMode(tex, xy[1], xy[2]);
+
+		//COLOR
+		if (color != null)
+			physBlockRef.enableColorMode(color[0],color[1],color[2],color[3]);
+		
+		//GRADIENT
+		if (gradient != null)
+			physBlockRef.enableGradientMode(gradient);
+		
+		//TEXTURE
+		if (textureModeEnabled)
+			physBlockRef.enableTextureMode(tex, texture);
+		
+		//TILESET
+		if (tilesetModeEnabled)
+			physBlockRef.enableTilesetMode(tex, tileX, tileY);
+		
 		entData.add(physBlockRef);
 	}
 }

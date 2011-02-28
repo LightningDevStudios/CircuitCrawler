@@ -17,10 +17,23 @@ public class DoorData extends PhysEntData
 	public void createInst(ArrayList<Entity> entData)
 	{
 		doorRef = new Door(xPos, yPos);
-		if (rgba != null)
-			doorRef.enableColorMode(rgba[0],rgba[1],rgba[2],rgba[3]);
-		if (tex != null && xy != null)
-			doorRef.enableTilesetMode(tex, xy[1], xy[2]);
+		
+		//COLOR
+		if (color != null)
+			doorRef.enableColorMode(color[0],color[1],color[2],color[3]);
+		
+		//GRADIENT
+		if (gradient != null)
+			doorRef.enableGradientMode(gradient);
+		
+		//TEXTURE
+		if (textureModeEnabled)
+			doorRef.enableTextureMode(tex, texture);
+		
+		//TILESET
+		if (tilesetModeEnabled)
+			doorRef.enableTilesetMode(tex, tileX, tileY);
+		
 		entData.add(doorRef);
 	}
 }

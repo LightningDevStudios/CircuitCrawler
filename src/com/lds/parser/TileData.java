@@ -12,7 +12,7 @@ public class TileData
 	private TileState state;
 	private Tile tile;
 	
-	public TileData(HashMap<String, String> tileHM, int x, int y, int tilesetX, int tilesetY)
+	public TileData(String state, int x, int y, int tilesetX, int tilesetY)
 	{
 		this.tilePosX = x;
 		this.tilePosY = y;
@@ -20,13 +20,13 @@ public class TileData
 		tile = new Tile(Tile.TILE_SIZE_F, x, y, tilesetY - 1, tilesetX - 1);
 		tile.enableTilesetMode(Game.tilesetwire, 0, 0);
 		
-		if(tileHM.get("tileState").equalsIgnoreCase("floor"))
+		if(state.equalsIgnoreCase("floor"))
 			tile.setAsFloor();
-		else if (tileHM.get("tileState").equalsIgnoreCase("wall"))
+		else if (state.equalsIgnoreCase("wall"))
 			tile.setAsWall();
-		else if (tileHM.get("tileState").equalsIgnoreCase("pit"))
+		else if (state.equalsIgnoreCase("pit"))
 			tile.setAsPit();
-		else if (tileHM.get("tileState").equalsIgnoreCase("bridge"))
+		else if (state.equalsIgnoreCase("bridge"))
 			tile.setAsBridge();
 		
 	}

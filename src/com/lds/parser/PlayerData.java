@@ -18,10 +18,23 @@ public class PlayerData extends CharacterData
 	public void createInst(ArrayList<Entity> entData)
 	{
 		playerRef = new Player(xPos, yPos, angle);
-		if (rgba != null)
-			playerRef.enableColorMode(rgba[0],rgba[1],rgba[2],rgba[3]);
-		if (tex != null && xy != null)
-			playerRef.enableTilesetMode(tex, xy[1], xy[2]);
+
+		//COLOR
+		if (color != null)
+			playerRef.enableColorMode(color[0],color[1],color[2],color[3]);
+		
+		//GRADIENT
+		if (gradient != null)
+			playerRef.enableGradientMode(gradient);
+		
+		//TEXTURE
+		if (textureModeEnabled)
+			playerRef.enableTextureMode(tex, texture);
+		
+		//TILESET
+		if (tilesetModeEnabled)
+			playerRef.enableTilesetMode(tex, tileX, tileY);
+		
 		entData.add(playerRef);
 	}
 }

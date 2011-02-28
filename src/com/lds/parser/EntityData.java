@@ -26,13 +26,13 @@ public class EntityData
 	private boolean isSolid;
 	protected boolean circular;
 	protected boolean willCollide;
-	protected String[] sepString;
-	protected int i;
-	private String color, tileCoords, id;
-	protected float size, xPos, yPos, xScl, yScl, angle, r, g, b, a;	
-	protected float[] rgba;
-	protected int[] xy;
+	protected boolean textureModeEnabled, tilesetModeEnabled;
+	private String tileCoordsStr, id;
+	protected float size, xPos, yPos, xScl, yScl, angle;	
+	protected float[] color, gradient, texture;
+	protected int tileX, tileY;
 	protected Texture tex;
+	
 	public EntityData(HashMap<String, String> entHM)
 	{
 		if(entHM.get("size") != null)
@@ -54,48 +54,63 @@ public class EntityData
 		circular = Boolean.parseBoolean(entHM.get("circular"));
 		willCollide = Boolean.parseBoolean(entHM.get("willCollide"));
 		
-		//enable colorMode
+		//COLOR
 		if(entHM.get("color") != null)
 		{
-			color = entHM.get("color");
-			String tempColor = entHM.get("color");
-			csvSeperator(color);
-			rgba = new float[i];
-			for(int j = 0; j < i; j++)
-			{	
-				sepString[j] = sepString[j].replace(",", " ");
-				sepString[j] = sepString[j].trim();
-				rgba[j] = Float.parseFloat(sepString[j]);
-			}
-		} //if u want to enable color mode, use .enableColor(rgba[0], rgba[1], rgba[2], rgba[3]);
-		else 
-		{
-			rgba = null;
+			String[] colorsStr = entHM.get("color").split(",");
+			color = new float[colorsStr.length];
+			for(int i = 0; i < colorsStr.length; i++)
+				color[i] = Float.parseFloat(colorsStr[i]);
 		}
-			//enableTilesetMode
+		
+		//GRADIENT
+		if (entHM.get("gradient") != null)
+		{
+			String[] gradientStr = entHM.get("gradient").split(",");
+			gradient = new float[gradientStr.length];
+			for (int i = 0; i < gradientStr.length; i++)
+				gradient[i] = Float.parseFloat(gradientStr[i]);
+		}
+		
+		//TEXTURE
 		if (entHM.get("texture") != null)
 		{
-			tileCoords = entHM.get("tileCoords");
-			String tempTileCoords = entHM.get("tileCoords");
-		
-			String texture = entHM.get("texture");
-			if(texture.equalsIgnoreCase("tilesetcolors"))
+			String texID = entHM.get("texID");
+			if(texID.equalsIgnoreCase("tilesetcolors"))
 				tex = Game.tilesetcolors;
-			else if(texture.equalsIgnoreCase("tilesetwire"))
+			else if(texID.equalsIgnoreCase("tilesetwire"))
 				tex = Game.tilesetwire;
-			else if(texture.equalsIgnoreCase("randomthings"))
+			else if(texID.equalsIgnoreCase("randomthings"))
 				tex = Game.randomthings;
-			else if(texture.equalsIgnoreCase("text"))
+			else if(texID.equalsIgnoreCase("text"))
 				tex = Game.text;
+			
+			String[] textureStr = entHM.get("coords").split(",");
+			texture = new float[textureStr.length];
+			for (int i = 0; i < textureStr.length; i++)
+				texture[i] = Float.parseFloat(textureStr[i]);
+			
+			textureModeEnabled = true;
+		}
 		
-			xy = new int[i];
-			for (int j = 0; j < i; j++)
-				xy[j] = Integer.parseInt(sepString[j]);
-		}//if u want to enable tilesetMode, use .enableTilesetMode(tex, xy[0], xy[1]);
-		else 
+		//TILESET
+		if (entHM.get("tileset") != null)
 		{
-			tex = null;
-			xy = null;
+			//TODO move textures to a different XML file, load dynamically
+			String texID = entHM.get("texID");
+			if(texID.equalsIgnoreCase("tilesetcolors"))
+				tex = Game.tilesetcolors;
+			else if(texID.equalsIgnoreCase("tilesetwire"))
+				tex = Game.tilesetwire;
+			else if(texID.equalsIgnoreCase("randomthings"))
+				tex = Game.randomthings;
+			else if(texID.equalsIgnoreCase("text"))
+				tex = Game.text;
+			
+			tileX = Integer.parseInt(entHM.get("x"));
+			tileY = Integer.parseInt(entHM.get("y"));
+			
+			tilesetModeEnabled = true;
 		}
 	}
 	
@@ -104,83 +119,24 @@ public class EntityData
 	public void setSize(float newSize) 			{size = newSize;}
 	public void setXPos (float newXPos)			{xPos = newXPos;}
 	public void setYPos (float newYPos)			{yPos = newYPos;}
-	public void setXScl(float newXScl)		{xScl = newXScl;}
-	public void setYScl(float newYScl)		{yScl = newYScl;}
-	public void setAngle(float newAngle)				{angle = newAngle;}
+	public void setXScl(float newXScl)			{xScl = newXScl;}
+	public void setYScl(float newYScl)			{yScl = newYScl;}
+	public void setAngle(float newAngle)		{angle = newAngle;}
+	public void setIsSolid(boolean newIsSolid) 	{isSolid = newIsSolid;}
+	public void setCircular(boolean newCircular){circular = newCircular;}
 	
-	public float getSize()			{return size;}
-	public float getXPos() 			{return xPos;}
-	public float getYPos()			{return yPos;}
+	public float getSize()		{return size;}
+	public float getXPos() 		{return xPos;}
+	public float getYPos()		{return yPos;}
 	public float getXScl()		{return xScl;}
 	public float getYScl()		{return yScl;}
-	public float getAngle()			{return angle;}
-	
-	//bool setters/getters
-	public void setIsSolid(boolean newIsSolid) 		{isSolid = newIsSolid;}
-	public void setCircular(boolean newCircular)	{circular = newCircular;}
-	
-	public boolean getIsSolid()		{return isSolid;}
-	public boolean getCircular()	{return circular;}
-	
-	//String setters/getters
-	public void setColor(String newColor)	{color = newColor;}
-	public void setId(String newId)			{id = newId;}
-	
-	public String getColor()		{return color;}
-	public String getId()			{return id;}
-	
+	public float getAngle()		{return angle;}
+	public boolean getIsSolid()	{return isSolid;}
+	public boolean getCircular(){return circular;}
+		
 	public void createInst(ArrayList<Entity> entData)
 	{
 	}
 	
-	public void csvSeperator(String tv)
-	{
-		String ttv = tv;
-		i = 1;
-		//COUNTER!!!!!
-		while(ttv.contains(","))
-		{
-			i++;
-			ttv = ttv.replaceFirst(",", "");
-		}
-		
-		sepString = new String[i];
-		for(int j = 0; j < i; j++)
-		{
-			if(tv.indexOf(",") == 0)
-			{
-				tv = tv.replaceFirst(",","");
-				if(tv.contains(","))
-				{
-					sepString[j] = tv.substring(0, tv.indexOf(","));
-					tv = tv.substring(tv.indexOf(","));
-				}
-				else
-				{
-					sepString[j] = tv;
-				}
-			}
-			else
-			{
-				sepString[j] = tv.substring(0, tv.indexOf(","));
-				tv = tv.substring(tv.indexOf(","));
-			}
-			System.out.println();
-		}
-		for (String temp : sepString)
-		{
-			if(tv.indexOf(",") > 0)
-				temp = tv.substring(0, tv.indexOf(","));
-			else if(tv.indexOf(",") == 0)
-			{
-				temp = tv.substring(1);
-				if(tv.indexOf(",") > 0)
-					temp = tv.substring(0, tv.indexOf(","));
-				else
-					temp = tv;
-			}
-			temp = temp.replace(",", " ");
-			temp = temp.trim();
-		} 
-	}
+	
 }

@@ -16,10 +16,23 @@ public class ButtonData extends StaticEntData
 	public void createInst(ArrayList<Entity> entData)
 	{
 		buttonRef = new Button(xPos, yPos);
-		if (rgba != null)
-			buttonRef.enableColorMode(rgba[0],rgba[1],rgba[2],rgba[3]);
-		if (tex != null && xy != null)
-			buttonRef.enableTilesetMode(tex, xy[1], xy[2]);
+		
+		//COLOR
+		if (color != null)
+			buttonRef.enableColorMode(color[0],color[1],color[2],color[3]);
+		
+		//GRADIENT
+		if (gradient != null)
+			buttonRef.enableGradientMode(gradient);
+		
+		//TEXTURE
+		if (textureModeEnabled)
+			buttonRef.enableTextureMode(tex, texture);
+		
+		//TILESET
+		if (tilesetModeEnabled)
+			buttonRef.enableTilesetMode(tex, tileX, tileY);
+		
 		entData.add(buttonRef);
 	}
 }

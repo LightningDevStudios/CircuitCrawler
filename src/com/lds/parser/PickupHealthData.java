@@ -26,10 +26,23 @@ public class PickupHealthData extends PickupData
 	public void createInst(ArrayList<Entity> entData)
 	{
 		pickupHealthRef = new PickupHealth(healthValue, xPos, yPos);
-		if (rgba != null)
-			pickupHealthRef.enableColorMode(rgba[0],rgba[1],rgba[2],rgba[3]);
-		if (tex != null && xy != null)
-			pickupHealthRef.enableTilesetMode(tex, xy[1], xy[2]);
+		
+		//COLOR
+		if (color != null)
+			pickupHealthRef.enableColorMode(color[0],color[1],color[2],color[3]);
+		
+		//GRADIENT
+		if (gradient != null)
+			pickupHealthRef.enableGradientMode(gradient);
+		
+		//TEXTURE
+		if (textureModeEnabled)
+			pickupHealthRef.enableTextureMode(tex, texture);
+		
+		//TILESET
+		if (tilesetModeEnabled)
+			pickupHealthRef.enableTilesetMode(tex, tileX, tileY);
+		
 		entData.add(pickupHealthRef);
 	}
 }

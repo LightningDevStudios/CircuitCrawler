@@ -313,9 +313,11 @@
       <xPos>-150.0e0</xPos>
       <yPos>-350.0</yPos>
       <renderMode>
-        <color>1,1,1,1</color>
+        <color>1,0.5,0.5,0.5</color>
       </renderMode>
-      <type>PATROL</type>
+      <health>100</health>
+      <energy>100</energy>
+      <AIType>PATROL</AIType>
     </Blob>
     <Blob>
       <id>blob2</id>
@@ -324,7 +326,9 @@
       <renderMode>
         
       </renderMode>
-      <type>TURRET</type>
+      <health>100</health>
+      <energy>100</energy>
+      <AIType>TURRET</AIType>
     </Blob>
     
     <Button>
@@ -405,12 +409,6 @@
       <yPos>-250.0</yPos>
       <renderMode>
         <color>0.39,0.58,0.93,1.0</color>
-        <gradient>6.0,6.0</gradient>
-        <tileset>
-          <texID>tilesetwire</texID>
-          <x>5</x>
-          <y>5</y>
-        </tileset>
       </renderMode>
       <healthValue>50</healthValue>
     </PickupHealth>
