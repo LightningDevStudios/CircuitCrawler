@@ -47,7 +47,7 @@ public class Parser //this is a perser
 	
 	public void parseEntities() throws XmlPullParserException, IOException
 	{
-		xrp.next();
+		//xrp.next();
 		while (!((xrp.getEventType() == xrp.END_TAG && xrp.getName().equals("Entities"))))
 		{
 			xrp.next();
@@ -111,10 +111,10 @@ public class Parser //this is a perser
 					phd.createInst(entList);
 					//dataHM = null;
 				}
-				else
+				/*else
 				{
 					xrp.next();
-				}
+				}*/
 			}
 		}
 	}
