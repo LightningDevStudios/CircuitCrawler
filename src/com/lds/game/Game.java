@@ -40,7 +40,7 @@ public class Game
 	public ArrayList<Entity> entList;
 	public Tile[][] tileset;
 	public ArrayList<UIEntity> UIList;
-	public ArrayList<Trigger> triggerList;
+	//public ArrayList<Trigger> triggerList;
 	public EntityManager cleaner;
 		
 	//Camera data
@@ -66,14 +66,16 @@ public class Game
 	public UIJoypad joypad;
 	public UITextBox textbox;
 	public Player player;
+	/*
 	public PhysBlock block;
 	public PhysCircle circle;
 	public Button button;
 	public Door door;
-	public Sprite spr;
 	public Blob blob1, blob2;
 	public PuzzleBox box;
 	public PickupHealth health;
+	*/
+	public Sprite spr;
 	
 	public Animation spriteAnim;
 		
@@ -81,14 +83,15 @@ public class Game
 	public Game (Context context, GL10 gl) 
 	
 	{
-		tilesetcolors = new Texture(R.drawable.tilesetcolors, 128, 128, 8, 8, context);
-		tilesetwire = new Texture(R.drawable.tilesetwire, 128, 128, 8, 8, context);
-		randomthings = new Texture(R.drawable.randomthings, 256, 256, 8, 8, context);
-		text = new Texture(R.drawable.text, 256, 256, 16, 8, context);
+		tilesetcolors = new Texture(R.drawable.tilesetcolors, 128, 128, 8, 8, context, "tilesetcolors");
+		tilesetwire = new Texture(R.drawable.tilesetwire, 128, 128, 8, 8, context, "tilesetwire");
+		randomthings = new Texture(R.drawable.randomthings, 256, 256, 8, 8, context, "randomthings");
+		text = new Texture(R.drawable.text, 256, 256, 16, 8, context, "text");
 		
-		entList = new ArrayList<Entity>();
+				
+		//entList = new ArrayList<Entity>();
 		UIList = new ArrayList<UIEntity>();
-		triggerList = new ArrayList<Trigger>();
+	//	triggerList = new ArrayList<Trigger>();
 		
 		tileset = new Tile[16][16];
 		cleaner = new EntityManager();
@@ -108,7 +111,7 @@ public class Game
 		tl.loadTexture(randomthings);
 		tl.loadTexture(someText);
 						
-		for (int i = 0; i < tileset.length; i++)
+/*		for (int i = 0; i < tileset.length; i++)
 		{
 			for (int j = 0; j < tileset[0].length; j++)
 			{
@@ -128,7 +131,28 @@ public class Game
 				}
 			}
 		}	
+*/		
+		//Parser
+		Parser parser = new Parser(context, R.xml.tempdata);
 		
+		entList = parser.entList;
+		try 
+		{
+			parser.parseLevel();
+		} 
+		catch (XmlPullParserException e) 
+		{
+			e.printStackTrace();
+		} 
+		catch (IOException e) 
+		{
+			e.printStackTrace();
+		}
+	
+		tileset = parser.tileset;
+		entList.addAll(parser.entList);
+		
+		/*CAN DEAL WITH THIS SHIT
 		door = new Door (-108.0f, -180.0f);
 		door.enableTilesetMode(tilesetwire, 0, 2);
 		entList.add(door);
@@ -159,7 +183,7 @@ public class Game
 		
 		/*blob2 = new Blob(0.0f, 0.0f, AIType.TURRET);
 		blob2.enableTilesetMode(tilesetwire, 2, 2);
-		entList.add(blob2);*/
+		entList.add(blob2);
 				
 		Button button1 = new Button(108.0f, 0.0f);
 		button1.enableTilesetMode(randomthings, 0, 0);
@@ -178,16 +202,19 @@ public class Game
 		block2.enableTilesetMode(tilesetwire, 2, 1);
 		entList.add(block2);
 		
+		*/
+		
 		spriteAnim = new Animation(tilesetwire, 0, 7, 7, 0, 3000);
 		spr = new Sprite(50, -100, 100, 45, 1, 1, spriteAnim);
 		spr.enableTextureMode(tilesetwire);
 		entList.add(spr);
 		
+		/*s
 		box = new PuzzleBox(64.0f, -75.0f, 0.0f, false, true);
 		entList.add(box);
 		
 		//TODO NOPE LOL
-		/*circle = new PhysCircle(50.0f, -100.0f, -310.0f);
+		circle = new PhysCircle(50.0f, -100.0f, -310.0f);
 		circle.setTilesetMode(tilesetwire, 1, 2);
 		entList.add(circle);
 		circle.setWillCollideWithPlayer(true);
@@ -198,19 +225,20 @@ public class Game
 		entList.add(player);
 		player.enableUserControl();
 		
+		/*
 		health = new PickupHealth(50, -108.0f, -250.0f);
 		health.enableColorMode(0, 255, 255, 255);
 		entList.add(health);
-				
-		//spr = new Sprite(30.0f, -108.0f, -300.0f, 45.0f, 1.0f, 1.0f, 10, 90, 1, spriteAnim);
-		//entList.add(spr);
+		*/
+		spr = new Sprite(30.0f, -108.0f, -300.0f, 45.0f, 1.0f, 1.0f, 10, 90, 1, spriteAnim);
+		entList.add(spr);
 		
-		CauseAND bridgeAND = new CauseAND(new CauseButton(button1), new CauseButton(button2));
+	//	CauseAND bridgeAND = new CauseAND(new CauseButton(button1), new CauseButton(button2));
 		
-		triggerList.add(new Trigger(new CauseButton(button), new EffectDoor(door)));
-		triggerList.add(new Trigger(bridgeAND, new EffectRaiseBridge(tileset[4][6])));
+		//triggerList.add(new Trigger(new CauseButton(button), new EffectDoor(door)));
+	//	triggerList.add(new Trigger(bridgeAND, new EffectRaiseBridge(tileset[4][6])));
 		//triggerList.add(new Trigger(bridgeAND, new EffectRaiseBridge(tileset[4][7])));
-		triggerList.add(new Trigger(bridgeAND, new EffectRaiseBridge(tileset[5][6])));
+	//	triggerList.add(new Trigger(bridgeAND, new EffectRaiseBridge(tileset[5][6])));
 		//triggerList.add(new Trigger(bridgeAND, new EffectRaiseBridge(tileset[5][7])));
 		
 		healthBar = new UIHealthBar(200.0f, 30.0f, UIPosition.TOPLEFT, Direction.RIGHT, player);
@@ -272,26 +300,8 @@ public class Game
 		//TODO take into account AI, perhaps render every time it chooses a new point to go to?
 		updateCameraPosition();
 		updateLocalEntities();
-		updateLocalTileset();	
-				
-		//Parser
-		Parser parser = new Parser(context, R.xml.tempdata);
-		
-		//entList = parser.entList;
-		try 
-		{
-			parser.parseLevel();
-		} 
-		catch (XmlPullParserException e) 
-		{
-			e.printStackTrace();
-		} 
-		catch (IOException e) 
-		{
-			e.printStackTrace();
-		}
-		
-		//entList.addAll(parser.convertDataToEnts());
+
+		 updateLocalTileset();
 	}
 	
 	public void updateLocalEntities()
@@ -326,6 +336,7 @@ public class Game
 	public void updateLocalTileset()
 	{
 		float minX, maxX, minY, maxY, tilesetHalfWidth, tilesetHalfHeight;
+		//TODO HAX, screen W/H are flipped for some reason
 		minX = camPosX - (screenW / 2);
 		maxX = camPosX + (screenW / 2);
 		minY = camPosY - (screenH / 2);
@@ -335,9 +346,9 @@ public class Game
 		tilesetHalfHeight = tileset.length * Tile.TILE_SIZE_F / 2;
 		
 		int minXBound = (int)(minX + tilesetHalfWidth) / Tile.TILE_SIZE;
-		int maxXBound = ((int)(Math.ceil(maxX + tilesetHalfWidth) - 1) / Tile.TILE_SIZE);
-		int minYBound = ((int)(Math.abs(maxY - tilesetHalfHeight) - 1) / Tile.TILE_SIZE);
-		int maxYBound = ((int)(Math.ceil(Math.abs(minY - tilesetHalfHeight)) - 1) / Tile.TILE_SIZE);
+		int maxXBound = (int)((Math.ceil(maxX + tilesetHalfWidth) - 1) / Tile.TILE_SIZE_F);
+		int minYBound = (int)((Math.abs(maxY - tilesetHalfHeight) - 1) / Tile.TILE_SIZE_F);
+		int maxYBound = (int)((Math.ceil(Math.abs(minY - tilesetHalfHeight)) - 1) / Tile.TILE_SIZE_F);
 
 		//set all to false
 		for (Tile[] ts : tileset)
@@ -597,12 +608,13 @@ public class Game
 			
 		}
 	}
-	
+
 	public void updateCameraPosition()
 	{
 		//move camera to follow player.
 		camPosX = player.getXPos();
 		camPosY = player.getYPos();
+		
 		
 		//camera can't go further than defined level bounds
 		if (camPosX < worldMinX)
@@ -620,7 +632,7 @@ public class Game
 	
 	public void setGameOverEvent(OnGameOverListener listener)
 	{
-		triggerList.add(new Trigger(new CauseDoneScaling(player), new EffectEndGame(listener)));
-		triggerList.add(new Trigger(new CausePlayerHealth(0, player), new EffectEndGame(listener)));
+//		triggerList.add(new Trigger(new CauseDoneScaling(player), new EffectEndGame(listener)));
+//		triggerList.add(new Trigger(new CausePlayerHealth(0, player), new EffectEndGame(listener)));
 	}
 }

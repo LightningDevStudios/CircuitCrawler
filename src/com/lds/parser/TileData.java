@@ -3,35 +3,37 @@ package com.lds.parser;
 import java.util.HashMap;
 
 import com.lds.Enums.TileState;
+import com.lds.game.Game;
+import com.lds.game.entity.Tile;
 
 public class TileData
 {
 	private int tilePosX, tilePosY;
 	private TileState state;
+	private Tile tile;
 	
-	public TileData(HashMap<String, String> tileHM, int x, int y)
+	public TileData(String state, int x, int y, int tilesetX, int tilesetY)
 	{
-		//super(tileHM);
-		
-		/*tilePosX = Integer.parseInt(tileHM.get("tilePosX"));
-		tilePzosY = Integer.parseInt(tileHM.get("tilePosY"));
-		tilesetX = Integer.parseInt(tileHM.get("tilesetX"));
-		tilesetY = Integer.parseInt(tileHM.get("tilesetY"));*/
 		this.tilePosX = x;
 		this.tilePosY = y;
 		
-		if(tileHM.get("tileState").equalsIgnoreCase("floor"))
-			state = TileState.FLOOR;
-		else if (tileHM.get("tileState").equalsIgnoreCase("wall"))
-			state = TileState.WALL;
-		else if (tileHM.get("tileState").equalsIgnoreCase("pit"))
-			state = TileState.PIT;
-		else if (tileHM.get("tileState").equalsIgnoreCase("bridge"))
-			state = TileState.BRIDGE;
+		tile = new Tile(Tile.TILE_SIZE_F, x, y, tilesetY - 1, tilesetX - 1);
+		tile.enableTilesetMode(Game.tilesetwire, 0, 0);
+		
+		if(state.equalsIgnoreCase("floor"))
+			tile.setAsFloor();
+		else if (state.equalsIgnoreCase("wall"))
+			tile.setAsWall();
+		else if (state.equalsIgnoreCase("pit"))
+			tile.setAsPit();
+		else if (state.equalsIgnoreCase("bridge"))
+			tile.setAsBridge();
+		
 	}
 	
 	public int getTilePosX() 	{return tilePosX;}
 	public int getTilePosY()	{return tilePosY;}
+	public Tile getTile()		{return tile;}
 
 	public void setTilePosX(int newTilePosX)	{tilePosX = newTilePosX;}
 	public void setTilePosY(int newTilePosY)	{tilePosY = newTilePosY;}

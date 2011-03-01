@@ -64,10 +64,10 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 			game = new Game(context, gl);
 		else
 		{
-			Game.tilesetcolors = new Texture(R.drawable.tilesetcolors, 128, 128, 8, 8, context);
-			Game.tilesetwire = new Texture(R.drawable.tilesetwire, 128, 128, 8, 8, context);
-			Game.randomthings = new Texture(R.drawable.randomthings, 256, 256, 8, 8, context);
-			Game.text = new Texture(R.drawable.text, 256, 256, 16, 8, context);
+			Game.tilesetcolors = new Texture(R.drawable.tilesetcolors, 128, 128, 8, 8, context, "tilesetcolors");
+			Game.tilesetwire = new Texture(R.drawable.tilesetwire, 128, 128, 8, 8, context, "tilesetwire");
+			Game.randomthings = new Texture(R.drawable.randomthings, 256, 256, 8, 8, context, "randomthings");
+			Game.text = new Texture(R.drawable.text, 256, 256, 16, 8, context, "text");
 			
 			TextureLoader.getInstance().initialize(gl);
 			TextureLoader tl = TextureLoader.getInstance();
@@ -114,11 +114,11 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		Stopwatch.tick();
 				
 		//iterate through triggers
-		for (Trigger t : game.triggerList)
+/*		for (Trigger t : game.triggerList)
 		{
 			t.update();
 		}
-		
+*/
 		//remove entities that are queued for removal
 		game.cleaner.update(game.entList);
 		

@@ -92,8 +92,8 @@ public class TilesetHelper
 	
 	public static void setInitialTileOffset(Tile tile, int y, int x, int length, int width)
 	{
-		tile.setXPos((-(float)width / 2 * Tile.TILE_SIZE_F) + (x * Tile.TILE_SIZE_F));
-		tile.setYPos(((float)length / 2 * Tile.TILE_SIZE_F) - (y * Tile.TILE_SIZE_F));
+		tile.setXPos((-(float)width / 2.0f * Tile.TILE_SIZE_F) + ((float)x * Tile.TILE_SIZE_F));
+		tile.setYPos(((float)length / 2.0f * Tile.TILE_SIZE_F) - ((float)y * Tile.TILE_SIZE_F));
 	}
 }
 

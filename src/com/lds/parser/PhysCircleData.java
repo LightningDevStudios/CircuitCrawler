@@ -17,10 +17,23 @@ public class PhysCircleData extends HoldObjectData
 	public void createInst(ArrayList<Entity> entData)
 	{
 		physCircleRef = new PhysCircle(size, xPos, yPos);
-		if (rgba != null)
-			physCircleRef.enableColorMode(rgba[0],rgba[1],rgba[2],rgba[3]);
-		if (tex != null && xy != null)
-			physCircleRef.enableTilesetMode(tex, xy[1], xy[2]);
+
+		//COLOR
+		if (color != null)
+			physCircleRef.enableColorMode(color[0],color[1],color[2],color[3]);
+		
+		//GRADIENT
+		if (gradient != null)
+			physCircleRef.enableGradientMode(gradient);
+		
+		//TEXTURE
+		if (textureModeEnabled)
+			physCircleRef.enableTextureMode(tex, texture);
+		
+		//TILESET
+		if (tilesetModeEnabled)
+			physCircleRef.enableTilesetMode(tex, tileX, tileY);
+		
 		entData.add(physCircleRef);
 	}
 }

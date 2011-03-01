@@ -4,15 +4,26 @@ import java.util.HashMap;
 
 public class PhysEntData extends EntityData
 {
-	private float moveSpeed, rotSpeed, sclSpeed;
+	protected float moveSpeed;
+	protected float rotSpeed;
+	protected float sclSpeed;
 	
 	public PhysEntData(HashMap<String, String> physEntHM)
 	{
 		super(physEntHM);
 		
-		moveSpeed = Float.parseFloat(physEntHM.get("moveSpeed")); 
-		rotSpeed = Float.parseFloat(physEntHM.get("rotSpeed"));
-		sclSpeed = Float.parseFloat(physEntHM.get("sclSpeed"));
+		if(physEntHM.get("moveSpeed") != null)
+			moveSpeed = Float.parseFloat(physEntHM.get("moveSpeed")); 
+		else
+			moveSpeed = 0.0f;
+		if(physEntHM.get("rotSpeed") != null)
+			rotSpeed = Float.parseFloat(physEntHM.get("rotSpeed"));
+		else
+			rotSpeed = 0.0f;
+		if(physEntHM.get("sclSpeed") != null)
+			sclSpeed = Float.parseFloat(physEntHM.get("sclSpeed"));
+		else
+			sclSpeed = 0.0f;
 	}
 	
 	    //int setters/getters

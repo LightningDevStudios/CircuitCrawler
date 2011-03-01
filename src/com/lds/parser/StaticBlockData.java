@@ -18,10 +18,23 @@ public class StaticBlockData extends StaticEntData
 	public void createInst(ArrayList<Entity> entData)
 	{
 		staticBlockRef = new StaticBlock(size, xPos, yPos);
-		if (rgba != null)
-			staticBlockRef.enableColorMode(rgba[0],rgba[1],rgba[2],rgba[3]);
-		if (tex != null && xy != null)
-			staticBlockRef.enableTilesetMode(tex, xy[1], xy[2]);
+
+		//COLOR
+		if (color != null)
+			staticBlockRef.enableColorMode(color[0],color[1],color[2],color[3]);
+		
+		//GRADIENT
+		if (gradient != null)
+			staticBlockRef.enableGradientMode(gradient);
+		
+		//TEXTURE
+		if (textureModeEnabled)
+			staticBlockRef.enableTextureMode(tex, texture);
+		
+		//TILESET
+		if (tilesetModeEnabled)
+			staticBlockRef.enableTilesetMode(tex, tileX, tileY);
+		
 		entData.add(staticBlockRef);
 	}
 }

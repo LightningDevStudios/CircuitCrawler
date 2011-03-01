@@ -18,10 +18,23 @@ public class BlobData extends EnemyData
 	public  void createInst(ArrayList<Entity> entData)
 	{
 		blobRef = new Blob(xPos, yPos, type);
-		if (rgba != null)
-			blobRef.enableColorMode(rgba[0],rgba[1],rgba[2],rgba[3]);
-		if (tex != null && xy != null)
-			blobRef.enableTilesetMode(tex, xy[1], xy[2]);
+		
+		//COLOR
+		if (color != null)
+			blobRef.enableColorMode(color[0],color[1],color[2],color[3]);
+		
+		//GRADIENT
+		if (gradient != null)
+			blobRef.enableGradientMode(gradient);
+		
+		//TEXTURE
+		if (textureModeEnabled)
+			blobRef.enableTextureMode(tex, texture);
+		
+		//TILESET
+		if (tilesetModeEnabled)
+			blobRef.enableTilesetMode(tex, tileX, tileY);
+		
 		entData.add(blobRef);
 	}
 }
