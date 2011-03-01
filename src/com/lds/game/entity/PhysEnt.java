@@ -243,7 +243,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 		Vector2f[] vertDistVecs = new Vector2f[4];
 
 		for (int i = 0; i < 4; i++)
-			vertDistVecs[i] = Vector2f.sub(ent.vertVecs[i], Vector2f.sub(posVec, moveInterpVec));
+			vertDistVecs[i] = Vector2f.sub(posVec, moveInterpVec).sub(ent.vertVecs[i]);
 	
 		//goes through the vectors and sorts them from low to high (thanks Mr. Carlson)
 		int maxPos;
@@ -265,36 +265,27 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	    Vector2f mpDist = Vector2f.getMidpoint(vertDistVecs[0].add(this.posVec), vertDistVecs[1].add(this.posVec)).sub(ent.posVec);
 		if (mpDist.mag() > mpDist.add(bounceNormal).mag())
 			bounceNormal.neg();
-	    
-		//calculate the bounceVec direction
-		Vector2f bounceVec = Vector2f.getNormal(bounceNormal).scale(Vector2f.getNormal(bounceNormal).dot(this.moveInterpVec)).sub(Vector2f.scale(bounceNormal, bounceNormal.dot(this.moveInterpVec))).normalize();
 		
 		//get min of projection of this entity
 		float thisMin = bounceNormal.dot(this.vertVecs[0]);
-		float thisMax = thisMin;
 		for (int i = 1; i < this.vertVecs.length; i++)
 		{
 			float dotProd1 = bounceNormal.dot(this.vertVecs[i]);
 			if (dotProd1 < thisMin)
 				thisMin = dotProd1;
-			if (dotProd1 > thisMax)
-				thisMax = dotProd1;
 		}
 		
 		//get max of projection of ent
 		float entMax = bounceNormal.dot(ent.vertVecs[0]);
-		float entMin = entMax;
 		for (int i = 1; i < ent.vertVecs.length; i++)
 		{
 			float dotProd2 = bounceNormal.dot(ent.vertVecs[i]);
-			if (dotProd2 < entMin)
-				entMin = dotProd2;
 			if (dotProd2 > entMax)
 				entMax = dotProd2;
 		}
 		
-		//scale bounceVec by magnitude and add to bounceList
-		this.addBounceVec(bounceVec.scale((entMax - thisMin) / (float)Math.cos(bounceVec.angle(bounceNormal))));
+		//scale the bounceNormal the the proper magnitude to get the entity out of collision
+		this.addBounceVec(bounceNormal.scale(entMax - thisMin));
 	}
 	
 	/**********************************
@@ -306,6 +297,14 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	{
 		moveInterpVec = Vector2f.sub(v, posVec);
 		posVec.set(v);
+		Game.worldOutdated = true;
+	}
+	
+	public void addPos (Vector2f v)
+	{
+		if (v.getX() != 0.0f || v.getY() != 0.0f)
+			moveInterpVec.set(v);
+		posVec.add(v);
 		Game.worldOutdated = true;
 	}
 	

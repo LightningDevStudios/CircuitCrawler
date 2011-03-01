@@ -152,9 +152,9 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		
 		//move player and heldObject
 		game.player.setAngle(game.joypad.getInputAngle());
-		Vector2f playerMoveVec = Vector2f.scale(game.joypad.getInputVec(), (Stopwatch.elapsedTimeMs() - playerMoveTimeMs) * (game.player.getMoveSpeed() / 10000));
-		game.player.setMoveInterpVec(playerMoveVec);
-		game.player.setPos(Vector2f.add(game.player.getPos(), playerMoveVec));
+		//Vector2f playerMoveVec = Vector2f.scale(game.joypad.getInputVec(), (Stopwatch.elapsedTimeMs() - playerMoveTimeMs) * (game.player.getMoveSpeed() / 10000));
+		//game.player.setMoveInterpVec(playerMoveVec);
+		game.player.addPos(Vector2f.scale(game.joypad.getInputVec(), (Stopwatch.elapsedTimeMs() - playerMoveTimeMs) * (game.player.getMoveSpeed() / 10000)));
 		game.joypad.clearInputVec();
 		if (game.player.isHoldingObject())
 			game.player.updateHeldObjectPosition();
@@ -223,20 +223,10 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 										physEnt.colList.add(tile);
 										tile.colList.add(physEnt);
 										physEnt.tileInteract(tile);
-										if (!game.player.isHoldingObject() || physEnt != game.player.getHeldObject())
-										{
-											Vector2f tempVec = physEnt.getBounceVec();
-											if (!tempVec.equals(new Vector2f()))
-											{
-												physEnt.setPos(Vector2f.add(physEnt.getPos(), tempVec));
-												physEnt.setMoveInterpVec(tempVec);
-											}
-										}
 									}
 								}
 								else if (physEnt.colList.contains(tile) || tile.colList.contains(physEnt))
 								{
-									//System.out.println(ent.colList.size() + " " + colEnt.colList.size());
 									physEnt.colList.remove(tile);
 									tile.colList.remove(physEnt);
 									if (ent.colList.isEmpty())
@@ -251,20 +241,13 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 					
 					//bounces PhysEnts appropriately, excluding objects held by the player
 					if (!game.player.isHoldingObject() || physEnt != game.player.getHeldObject())
-					{
-						Vector2f tempVec = physEnt.getBounceVec();
-						if (!tempVec.equals(new Vector2f()))
-						{
-							physEnt.setPos(Vector2f.add(physEnt.getPos(), tempVec));
-							physEnt.setMoveInterpVec(tempVec);
-						}
-					}
+						physEnt.addPos(physEnt.getBounceVec());
 				}
 				
 				//moves the player correctly based on heldObject's bounceVecs
 				if (ent == game.player && game.player.isHoldingObject())
 				{
-					game.player.setPos(Vector2f.add(game.player.getPos(), game.player.getHeldObject().getBounceVec()));
+					game.player.addPos(game.player.getHeldObject().getBounceVec());
 					game.player.updateHeldObjectPosition();
 				}
 				//runs new AI code for enemies
