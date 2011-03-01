@@ -13,7 +13,7 @@ import com.lds.game.entity.Entity;
 import com.lds.game.entity.PhysBlock;
 import com.lds.game.entity.Tile;
  
-public class Parser //this is a perser
+public class Parser //this is a parser
 {
 	public ArrayList<EntityData> parsedList = new ArrayList<EntityData>();
 	public ArrayList<Entity> entList = new ArrayList<Entity>();
@@ -27,8 +27,7 @@ public class Parser //this is a perser
 		xrp = context.getResources().getXml(res);
 	}
 	
-	public void parseLevel()
-		throws XmlPullParserException, IOException
+	public void parseLevel() throws XmlPullParserException, IOException
 	{
 	
 		while (xrp.getEventType() != xrp.END_DOCUMENT)
@@ -41,13 +40,14 @@ public class Parser //this is a perser
 				else if(xrp.getName().equalsIgnoreCase("Tileset"))
 					parseTileset();
 			}
+			
 			xrp.next();
 		}
 	}
 	
 	public void parseEntities() throws XmlPullParserException, IOException
 	{
-		xrp.next();
+		//xrp.next();
 		while (!((xrp.getEventType() == xrp.END_TAG && xrp.getName().equals("Entities"))))
 		{
 			xrp.next();
@@ -111,17 +111,20 @@ public class Parser //this is a perser
 					phd.createInst(entList);
 					//dataHM = null;
 				}
-				else
+			/*	else
 				{
 					xrp.next();
 				}
+			*/
 			}
 		}
 	}
 	
+/****************
+ Parse An Object
+*****************/
 	public void parseObj(String tn) throws XmlPullParserException, IOException
 	{		
-		
 		
 		xrp.next();
 		
@@ -133,13 +136,37 @@ public class Parser //this is a perser
 				xrp.next();
 			}
 			else
-				parseTag(dataHM);	
-			
-			xrp.next(); 
+			{
+				parseTag(dataHM);			
+				xrp.next(); 
+				xrp.next();
+			}
+		}
+	}
+	
+	public void parseRM() throws XmlPullParserException, IOException
+	{
+		xrp.next();
+		if(xrp.getEventType() == xrp.START_TAG && xrp.getName().equalsIgnoreCase("color"))
+		{
+			parseTag(dataHM);
+			xrp.next();
 			xrp.next();
 		}
 	}
 	
+	public HashMap<String, String> parseTag(HashMap<String, String> map) throws XmlPullParserException, IOException
+	{
+		String tagName = xrp.getName();
+		xrp.next();
+		map.put(tagName, xrp.getText());
+		
+		return map;
+	}
+	
+/***************
+Parse A Tileset
+***************/
 	public void parseTileset() throws XmlPullParserException, IOException
 	{
 		HashMap<String, String> tileHashMap = new HashMap<String, String>();
@@ -163,8 +190,6 @@ public class Parser //this is a perser
 				curY++;
 			}
 			
-			
-			
 			if (xrp.getName().equals("Tile"))
 			{
 				tilesetData[curY][curX] = new TileData(xrp.getAttributeValue(0), curX, curY, x, y);
@@ -185,48 +210,6 @@ public class Parser //this is a perser
 			}
 		}
 	}
-		
-	public void parseRM() throws XmlPullParserException, IOException
-	{
-		while (!(xrp.getEventType() == xrp.END_TAG && xrp.getName().equalsIgnoreCase("renderMode")))
-		{
-			System.out.println(xrp.getName() + "," + xrp.getEventType());
-			xrp.next();
-			System.out.println(xrp.getName() + "," + xrp.getEventType());
-			if(xrp.getEventType() == xrp.END_TAG && xrp.getName().equalsIgnoreCase("renderMode"))
-				break;
-			
-			if(xrp.getName().equalsIgnoreCase("texture") || xrp.getName().equalsIgnoreCase("tileset"))
-			{
-				xrp.next();
-				parseTag(dataHM);
-				xrp.next();
-				xrp.next();
-				parseTag(dataHM);
-				xrp.next();
-				xrp.next();
-			}
-						
-			else
-			{
-				parseTag(dataHM);
-				xrp.next();
-				xrp.next();
-				/*parseTag(dataHM);
-				xrp.next();
-				xrp.next();*/			
-			}
-		}
-	}
-	
-	public HashMap<String, String> parseTag(HashMap<String, String> map) throws XmlPullParserException, IOException
-	{
-		String tagName = xrp.getName();
-		xrp.next();
-		map.put(tagName, xrp.getText());
-		
-		return map;
-	}
 	
 	public HashMap<String, String> parseAttributes()
 	{
@@ -238,57 +221,5 @@ public class Parser //this is a perser
 		
 		return map;
 	}
-	
-	/*public static String[] csvSeperator(String tv)
-	{
-		String ttv = tv;
-		int i = 1;
-		//COUNTER!!!!!
-		while(ttv.contains(","))
-		{
-			i++;
-			ttv = ttv.replaceFirst(",", "");
-		}
-		
-		String[] sepString = new String[i];
-		for(int j = 0; j < i; j++)
-		{
-			if(tv.indexOf(",") == 0)
-			{
-				tv = tv.replaceFirst(",","");
-				if(tv.contains(","))
-				{
-					sepString[j] = tv.substring(0, tv.indexOf(","));
-					tv = tv.substring(tv.indexOf(","));
-				}
-				else
-				{
-					sepString[j] = tv;
-				}
-			}
-			else
-			{
-				sepString[j] = tv.substring(0, tv.indexOf(","));
-				tv = tv.substring(tv.indexOf(","));
-			}
-			System.out.println();
-		}
-		for (String temp : sepString)
-		{
-			if(tv.indexOf(",") > 0)
-				temp = tv.substring(0, tv.indexOf(","));
-			else if(tv.indexOf(",") == 0)
-			{
-				temp = tv.substring(1);
-				if(tv.indexOf(",") > 0)
-					temp = tv.substring(0, tv.indexOf(","));
-				else
-					temp = tv;
-			}
-			temp = temp.replace(",", " ");
-			temp = temp.trim();
-		}
-		
-		return sepString;
-	}*/
+
 }
