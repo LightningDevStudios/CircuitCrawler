@@ -13,7 +13,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	public float interpAngle, endAngle;
 	public int moveTimeMs, rotTimeMs, sclTimeMs;
 	protected float moveSpeed, rotSpeed, sclSpeed;
-	public boolean isMoving, isRotating, isScaling, isRotatingCCW;
+	public boolean isMoving, isRotating, isScaling, isRotatingCCW, falling;
 	protected Vector2f moveVec, moveInterpVec, endPosVec;
 	protected Vector2f sclVec, sclInterpVec, endScaleVec;
 	protected int moveInterpCount, sclInterpCount;
@@ -40,6 +40,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 		moveInterpCount = 0;
 		sclInterpCount = 0;
 		bounceList = new ArrayList<Vector2f>();
+		falling = false;
 	}
 	
 	@Override
@@ -72,8 +73,12 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 			{
 				this.scaleTo(0, 0);
 				this.moveTo(tile.getXPos(), tile.getYPos());
-				SoundPlayer.getInstance().playSound(SoundPlayer.PIT_FALL);
+				falling = true;
+				if (falling)
+					SoundPlayer.getInstance().playSound(SoundPlayer.PIT_FALL);
 			}
+			else
+				falling = false;
 		}
 	}
 	

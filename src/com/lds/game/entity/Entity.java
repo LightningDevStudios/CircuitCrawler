@@ -170,6 +170,8 @@ public abstract class Entity
 	
 	public void update()
 	{
+		if (scaleVec.mag() < 0.0001f)
+			this.remove(); //remove the entity
 		colorInterp();
 		gradientInterp();
 	}
@@ -576,7 +578,7 @@ public abstract class Entity
 		isColorInterp = true;
 		colorTimeMs = Stopwatch.elapsedTimeMs();
 	}
-	
+	 
 	public void colorInterp()
 	{
 		if (isColorInterp)
@@ -586,7 +588,7 @@ public abstract class Entity
 			double gNear = Math.abs(endColorG - colorG);
 			double bNear = Math.abs(endColorB - colorB);
 			double aNear = Math.abs(endColorA - colorA);
-			if (rNear < colorInterpSpeed && gNear < colorInterpSpeed && bNear < colorInterpSpeed && aNear < colorInterpSpeed)
+			if (rNear < colorInterp && gNear < colorInterp && bNear < colorInterp && aNear < colorInterp)
 			{
 				colorR = endColorR;
 				colorG = endColorG;
@@ -651,20 +653,16 @@ public abstract class Entity
 	{
 		boolean output = true;
 		this.updateAbsolutePointLocations();
-		Vector2f[] axes = new Vector2f[2];
-		axes[0] = Vector2f.abs(Vector2f.sub(this.vertVecs[0], this.vertVecs[1]));
-		axes[1] = Vector2f.getNormal(axes[0]);
+		Vector2f axis = Vector2f.sub(this.vertVecs[0], this.vertVecs[1]).abs();
 		
-		for (Vector2f axis : axes)
+		for (int i = 0; i < 2; i ++)
 		{
-			axis.normalize();
-			
 			//get mins and maxes for entity
 			float min = axis.dot(this.vertVecs[0]);
 			float max = min;
-			for (int i = 1; i < this.vertVecs.length; i++)
+			for (int j = 1; j < this.vertVecs.length; j++)
 			{
-				float dotProd = axis.dot(this.vertVecs[i]);
+				float dotProd = axis.dot(this.vertVecs[j]);
 				if (dotProd > max)
 					max = dotProd;
 				if (dotProd < min)
@@ -676,6 +674,8 @@ public abstract class Entity
 			
 			if (projection < min || projection > max)
 				output = false;
+			
+			axis.setNormal();
 		}
 		return output;
 	}

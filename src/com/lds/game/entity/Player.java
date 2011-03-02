@@ -1,6 +1,5 @@
 package com.lds.game.entity;
 
-import com.lds.EntityManager;
 import com.lds.Vector2f;
 import com.lds.game.SoundPlayer;
 
@@ -64,8 +63,12 @@ public class Player extends Character //your character, protagonist
 				this.disableUserControl();
 				this.scaleTo(0, 0);
 				this.moveTo(tile.getXPos(), tile.getYPos());
-				SoundPlayer.getInstance().playSound(SoundPlayer.PIT_FALL);
+				falling = true;
+				if (falling)
+					SoundPlayer.getInstance().playSound(SoundPlayer.PIT_FALL);
 			}
+			else
+				falling = false;
 		}
 	}
 	
