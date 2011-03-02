@@ -384,7 +384,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	{
 		playerMoveTimeMs = Stopwatch.elapsedTimeMs();
 		Stopwatch.tick();
-		for(int i = 0; i < e.getPointerCount(); i++)
+		for(int i = 0; i < e.getPointerCount() && game.player.userHasControl(); i++)
 		{	
 			Vector2f touchVec = new Vector2f(e.getX(i) - Game.screenW / 2, Game.screenH / 2 - e.getY(i));
 			for (UIEntity ent : game.UIList)
