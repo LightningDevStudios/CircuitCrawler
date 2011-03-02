@@ -113,6 +113,13 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		
 		//tick the stopwatch every frame, gives relatively stable intervals
 		Stopwatch.tick();
+		
+		//Triggered when the perspective needs to be redrawn
+		if (windowOutdated)
+		{
+			updateCamPosition(gl);
+			//windowOutdated = false;
+		}
 				
 		//iterate through triggers
 		for (Trigger t : game.triggerList)
@@ -167,12 +174,6 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 			game.joypad.clearInputVec();
 			if (game.player.isHoldingObject())
 				game.player.updateHeldObjectPosition();
-		}
-		
-		//Triggered when the perspective needs to be redrawn
-		if (windowOutdated)
-		{
-			updateCamPosition(gl);
 			windowOutdated = false;
 		}
 
