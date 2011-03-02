@@ -121,13 +121,6 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 
 		//remove entities that are queued for removal
 		game.cleaner.update(game.entList);
-		
-		//Triggered when the perspective needs to be redrawn
-		if (windowOutdated)
-		{
-			updateCamPosition(gl);
-			windowOutdated = false;
-		}
 				
 		//Update which entities are rendered
 		game.updateLocalEntities();
@@ -150,12 +143,22 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		 * Update Entites *
 		 ******************/
 		
-		//move player and heldObject
-		game.player.setAngle(game.joypad.getInputAngle());
-		game.player.addPos(Vector2f.scale(game.joypad.getInputVec(), (Stopwatch.elapsedTimeMs() - playerMoveTimeMs) * (game.player.getMoveSpeed() / 10000)));
-		game.joypad.clearInputVec();
-		if (game.player.isHoldingObject())
-			game.player.updateHeldObjectPosition();
+		//move player and heldObject if neccessary
+		if (windowOutdated)
+		{
+			game.player.setAngle(game.joypad.getInputAngle());
+			game.player.addPos(game.joypad.getInputVec().scale((Stopwatch.elapsedTimeMs() - playerMoveTimeMs) * (game.player.getMoveSpeed() / 10000)));
+			game.joypad.clearInputVec();
+			if (game.player.isHoldingObject())
+				game.player.updateHeldObjectPosition();
+		}
+		
+		//Triggered when the perspective needs to be redrawn
+		if (windowOutdated)
+		{
+			updateCamPosition(gl);
+			windowOutdated = false;
+		}
 
 		//update all entites
 		for (Entity ent : game.entList)
