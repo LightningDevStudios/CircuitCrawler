@@ -163,7 +163,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		if (windowOutdated)
 		{
 			game.player.setAngle(game.joypad.getInputAngle());
-			game.player.addPos(game.joypad.getInputVec().scale((Stopwatch.elapsedTimeMs() - playerMoveTimeMs) * (game.player.getMoveSpeed() / 10000)));
+			game.player.addPos(game.joypad.getInputVec().scale((Stopwatch.elapsedTimeMs() - playerMoveTimeMs) * (game.player.getMoveSpeed() / 1000)));
 			game.joypad.clearInputVec();
 			if (game.player.isHoldingObject())
 				game.player.updateHeldObjectPosition();
@@ -398,8 +398,6 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	@Override
 	public void onTouchInput(MotionEvent e) 
 	{
-		playerMoveTimeMs = Stopwatch.elapsedTimeMs();
-		Stopwatch.tick();
 		for(int i = 0; i < e.getPointerCount() && game.player.userHasControl(); i++)
 		{	
 			Vector2f touchVec = new Vector2f(e.getX(i) - Game.screenW / 2, Game.screenH / 2 - e.getY(i));
@@ -416,6 +414,8 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 						Game.worldOutdated = true;	
 						if (e.getAction() == MotionEvent.ACTION_UP)
 							joypad.setActive(false);
+						playerMoveTimeMs = Stopwatch.elapsedTimeMs();
+						Stopwatch.tick();
 					}
 						
 					//UIButton specific code
@@ -444,6 +444,8 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 							joypad.scaleInputVecTo(joypad.getXSize() / 2);
 						windowOutdated = true;
 						Game.worldOutdated = true;
+						playerMoveTimeMs = Stopwatch.elapsedTimeMs();
+						Stopwatch.tick();
 					}
 				}
 			}		
