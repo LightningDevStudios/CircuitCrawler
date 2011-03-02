@@ -24,19 +24,19 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 {
 	public Game game;
 	public Context context;
-	public Object syncObj;
+	//public Object syncObj;
 	public boolean windowOutdated, gameOver;
 	public int playerMoveTimeMs, frameInterval, frameCount = 0;	
 	public OnGameInitializedListener gameInitializedListener;
 	public OnPuzzleActivatedListener puzzleActivatedListener;
 	public OnGameOverListener gameOverListener;
 	
-	public GameRenderer (float screenW, float screenH, Context context, Object syncObj)
+	public GameRenderer (float screenW, float screenH, Context context/*, Object syncObj*/)
 	{
 		Game.screenW = screenW;
 		Game.screenH = screenH;
 		this.context = context;
-		this.syncObj = syncObj;
+		//this.syncObj = syncObj;
 		windowOutdated = false;
 		Game.worldOutdated = false;
 	}
@@ -133,30 +133,47 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		//Update which entities are rendered
 		game.updateLocalEntities();
 				
-		//Render tileset
-		for (int i = 0; i < game.tileset.length; i++) //Tile[] ts : game.tileset)
+		/******************
+		 * Render tileset *
+		 ******************/
+		
+		gl.glEnable(GL10.GL_TEXTURE_2D);
+		gl.glBindTexture(GL10.GL_TEXTURE_2D, Game.tilesetwire.getTexture());
+		
+		gl.glFrontFace(GL10.GL_CW);
+		gl.glEnable(GL10.GL_CULL_FACE);
+		gl.glCullFace(GL10.GL_BACK);
+		
+		gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
+		gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
+		
+		for (Tile[] ts : game.tileset)
 		{
-			for (int j = 0; j < game.tileset[0].length; j++) //Tile t : ts)
+			for (Tile t : ts)
 			{
-				if (game.tileset[i][j].isRendered())
+				if (t.isRendered())
 				{
-					game.tileset[i][j].draw(gl);
+					t.draw(gl);
 				}
 			}
 		}
+		
+		gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
+		gl.glDisableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
+		gl.glDisable(GL10.GL_TEXTURE_2D);
 		
 		/******************
 		 * Update Entites *
 		 ******************/
 		
-		//move player and heldObject
+		/*//move player and heldObject
 		game.player.setAngle(game.joypad.getInputAngle());
 		//Vector2f playerMoveVec = Vector2f.scale(game.joypad.getInputVec(), (Stopwatch.elapsedTimeMs() - playerMoveTimeMs) * (game.player.getMoveSpeed() / 10000));
 		//game.player.setMoveInterpVec(playerMoveVec);
 		game.player.addPos(Vector2f.scale(game.joypad.getInputVec(), (Stopwatch.elapsedTimeMs() - playerMoveTimeMs) * (game.player.getMoveSpeed() / 10000)));
 		game.joypad.clearInputVec();
 		if (game.player.isHoldingObject())
-			game.player.updateHeldObjectPosition();
+			game.player.updateHeldObjectPosition();*/
 
 		//update all entites
 		for (Entity ent : game.entList)
@@ -336,10 +353,10 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		viewWorld(gl);
 				
 		//poll for touch input
-		synchronized (syncObj)
+		/*synchronized (syncObj)
 		{
 			syncObj.notify();
-		}
+		}*/
 		
 		//framerate count
 		Log.d("LDS_Game", "FPS: " + (1000.0f / (Stopwatch.elapsedTimeMs() - frameInterval)));
