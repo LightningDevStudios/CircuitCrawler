@@ -30,5 +30,6 @@ public abstract class HoldObject extends PhysEnt //and object that is held (bloc
 	public void drop ()
 	{
 		held = false;
+		moveInterpVec.set(0, 0);
 	}
 }
