@@ -114,11 +114,11 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		Stopwatch.tick();
 				
 		//iterate through triggers
-/*		for (Trigger t : game.triggerList)
+		for (Trigger t : game.triggerList)
 		{
 			t.update();
 		}
-*/
+
 		//remove entities that are queued for removal
 		game.cleaner.update(game.entList);
 		
@@ -152,8 +152,6 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		
 		//move player and heldObject
 		game.player.setAngle(game.joypad.getInputAngle());
-		//Vector2f playerMoveVec = Vector2f.scale(game.joypad.getInputVec(), (Stopwatch.elapsedTimeMs() - playerMoveTimeMs) * (game.player.getMoveSpeed() / 10000));
-		//game.player.setMoveInterpVec(playerMoveVec);
 		game.player.addPos(Vector2f.scale(game.joypad.getInputVec(), (Stopwatch.elapsedTimeMs() - playerMoveTimeMs) * (game.player.getMoveSpeed() / 10000)));
 		game.joypad.clearInputVec();
 		if (game.player.isHoldingObject())

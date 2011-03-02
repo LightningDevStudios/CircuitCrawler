@@ -20,13 +20,20 @@ public class Button extends StaticEnt
 	
 	public void activate ()
 	{
-		active = true;
-		SoundPlayer.getInstance().playSound(SoundPlayer.SOUND_TEST);
+		if (!active)
+		{
+			active = true;
+			SoundPlayer.getInstance().playSound(SoundPlayer.SOUND_TEST);
+		}
 	}
 	
 	public void deactivate ()
 	{
-		active = false;
+		if (active)
+		{
+			active = false;
+			SoundPlayer.getInstance().playSound(SoundPlayer.SOUND_TEST);
+		}
 	}
 	
 	@Override

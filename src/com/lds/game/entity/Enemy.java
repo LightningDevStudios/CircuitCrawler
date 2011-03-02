@@ -7,7 +7,7 @@ import com.lds.Stopwatch;
 import com.lds.game.ai.NodePath;
 import com.lds.game.ai.Node;
 
-public abstract class Enemy extends Character //enemies will fall under this class
+public  abstract class Enemy extends Character //enemies will fall under this class
 {
 	private static int enemyCount = 0;
 	protected AIType type;
