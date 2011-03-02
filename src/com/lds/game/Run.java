@@ -38,8 +38,8 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 		final Object data = getLastNonConfigurationInstance();
 		
 		//set up OpenGL rendering
-		//Object syncObj = new Object();
-		gameR = new GameRenderer(screenX, screenY, this/*, syncObj*/);
+		Object syncObj = new Object();
+		gameR = new GameRenderer(screenX, screenY, this, syncObj);
 		
 		if(data != null)
 		{
@@ -47,7 +47,7 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 		}
 		
 		gameR.setGameInitializedEvent(this);
-		glSurface = new Graphics(this, gameR/*, syncObj*/);
+		glSurface = new Graphics(this, gameR, syncObj);
 		setContentView(glSurface);
 	}
 	

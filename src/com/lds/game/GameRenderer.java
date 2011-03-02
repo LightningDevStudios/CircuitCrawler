@@ -24,19 +24,19 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 {
 	public Game game;
 	public Context context;
-	//public Object syncObj;
+	public Object syncObj;
 	public boolean windowOutdated, gameOver;
 	public int playerMoveTimeMs, frameInterval, frameCount = 0;	
 	public OnGameInitializedListener gameInitializedListener;
 	public OnPuzzleActivatedListener puzzleActivatedListener;
 	public OnGameOverListener gameOverListener;
 	
-	public GameRenderer (float screenW, float screenH, Context context/*, Object syncObj*/)
+	public GameRenderer (float screenW, float screenH, Context context, Object syncObj)
 	{
 		Game.screenW = screenW;
 		Game.screenH = screenH;
 		this.context = context;
-		//this.syncObj = syncObj;
+		this.syncObj = syncObj;
 		windowOutdated = false;
 		Game.worldOutdated = false;
 	}
@@ -163,7 +163,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		if (windowOutdated)
 		{
 			game.player.setAngle(game.joypad.getInputAngle());
-			game.player.addPos(game.joypad.getInputVec().scale((Stopwatch.elapsedTimeMs() - playerMoveTimeMs) * (game.player.getMoveSpeed() / 10000)));
+			game.player.addPos(game.joypad.getInputVec().scale((Stopwatch.elapsedTimeMs() - frameInterval) * (game.player.getMoveSpeed() / 1000)));
 			game.joypad.clearInputVec();
 			if (game.player.isHoldingObject())
 				game.player.updateHeldObjectPosition();
@@ -354,10 +354,10 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		viewWorld(gl);
 				
 		//poll for touch input
-		/*synchronized (syncObj)
+		synchronized (syncObj)
 		{
 			syncObj.notify();
-		}*/
+		}
 		
 		//framerate count
 		Log.d("LDS_Game", "FPS: " + (1000.0f / (Stopwatch.elapsedTimeMs() - frameInterval)));
@@ -398,8 +398,8 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	@Override
 	public void onTouchInput(MotionEvent e) 
 	{
-		playerMoveTimeMs = Stopwatch.elapsedTimeMs();
-		Stopwatch.tick();
+		//playerMoveTimeMs = Stopwatch.elapsedTimeMs();
+		//Stopwatch.tick();
 		for(int i = 0; i < e.getPointerCount() && game.player.userHasControl(); i++)
 		{	
 			Vector2f touchVec = new Vector2f(e.getX(i) - Game.screenW / 2, Game.screenH / 2 - e.getY(i));

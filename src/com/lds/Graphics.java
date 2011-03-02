@@ -9,12 +9,12 @@ import android.view.MotionEvent;
 public class Graphics extends GLSurfaceView
 {
 	private Renderer renderer;
-	//private Object syncObj;
+	private Object syncObj;
 	
-	public Graphics(Context context, Renderer r/*, Object syncObj*/) 
+	public Graphics(Context context, Renderer r, Object syncObj) 
 	{
 		super(context);
-		//this.syncObj = syncObj;
+		this.syncObj = syncObj;
 		renderer = r;
 		setRenderer(r);
 	}
@@ -32,26 +32,26 @@ public class Graphics extends GLSurfaceView
 		});
 		
 		//sync with OpenGL thread
-		/*synchronized(syncObj)
+		synchronized(syncObj)
 		{
 			try
 			{
-				syncObj.wait(1000L);
+				syncObj.wait(16);
 			}
 			catch (InterruptedException e)
 			{
 				e.printStackTrace();
 			}
-		}*/
-		try 
+		}
+		/*try 
 		{
-			Thread.sleep(16);
+			Thread.sleep(8);
 		} 
 		catch (InterruptedException e) 
 		{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
+		}*/
 		return true;
 	}
 	
