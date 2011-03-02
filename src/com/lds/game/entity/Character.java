@@ -50,7 +50,7 @@ public abstract class Character extends PhysEnt //all characters, including the 
 		}
 		
 		if (health <= 0)
-			this.die();
+			this.die(); 
 	}
 	
 	public int getHealth ()

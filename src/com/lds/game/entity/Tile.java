@@ -20,6 +20,23 @@ public class Tile extends StaticEnt
 	{
 		super(size, 0, 0, false, true);
 		TilesetHelper.setInitialTileOffset(this, tilePosY, tilePosX, tilesetX, tilesetY);
+		for(int i = 0; i < vertices.length; i++)
+		{
+			if (i % 2 == 0)
+				vertices[i] += posVec.getX();
+			else
+				vertices[i] += posVec.getY();
+		}
+		
+		vertexBuffer = setBuffer(vertexBuffer, vertices);
+	}
+	
+	@Override
+	public void draw(GL10 gl)
+	{
+		gl.glVertexPointer(2, GL10.GL_FLOAT, 0, vertexBuffer);
+		gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, textureBuffer);
+		gl.glDrawElements(GL10.GL_TRIANGLE_STRIP, indices.length, GL10.GL_UNSIGNED_BYTE, indexBuffer);
 	}
 	
 	@Override
