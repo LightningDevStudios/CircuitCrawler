@@ -6,7 +6,6 @@ public class Sprite extends PhysEnt
 {
 	public Animation anim;
 	
-	//TODO pass in a texture, set renderMode manually
 	public Sprite(float size, float xPos, float yPos)
 	{
 		this(size, xPos, yPos, 0.0f, 0.0f, 0.0f, null);

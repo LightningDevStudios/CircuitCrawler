@@ -49,7 +49,6 @@ public class Graphics extends GLSurfaceView
 		} 
 		catch (InterruptedException e) 
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}*/
 		return true;
