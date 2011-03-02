@@ -6,6 +6,7 @@ import javax.microedition.khronos.opengles.GL10;
 import android.opengl.GLU;
 import android.os.Debug;
 import android.os.Vibrator;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.content.Context;
 
@@ -133,15 +134,13 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		game.updateLocalEntities();
 				
 		//Render tileset
-		for (Tile[] ts : game.tileset)
+		for (int i = 0; i < game.tileset.length; i++) //Tile[] ts : game.tileset)
 		{
-			for (Tile t : ts)
+			for (int j = 0; j < game.tileset[0].length; j++) //Tile t : ts)
 			{
-				if (t.isRendered())
+				if (game.tileset[i][j].isRendered())
 				{
-					gl.glTranslatef(t.getXPos(), t.getYPos(), 0.0f);
-					t.draw(gl);
-					gl.glLoadIdentity();
+					game.tileset[i][j].draw(gl);
 				}
 			}
 		}
@@ -343,7 +342,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		}
 		
 		//framerate count
-		//System.out.println("FPS: " + (1000 / (Stopwatch.elapsedTimeMs() - frameInterval)));
+		Log.d("LDS_Game", "FPS: " + (1000.0f / (Stopwatch.elapsedTimeMs() - frameInterval)));
 		
 		//TODO keep for later, if we want to see what's slowing down a frame.
 		/*if (frameCount == 101)

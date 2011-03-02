@@ -20,6 +20,15 @@ public class Tile extends StaticEnt
 	{
 		super(size, 0, 0, false, true);
 		TilesetHelper.setInitialTileOffset(this, tilePosY, tilePosX, tilesetX, tilesetY);
+		for(int i = 0; i < vertices.length; i++)
+		{
+			if (i % 2 == 0)
+				vertices[i] += posVec.getX();
+			else
+				vertices[i] += posVec.getY();
+		}
+		
+		vertexBuffer = setBuffer(vertexBuffer, vertices);
 	}
 	
 	@Override
