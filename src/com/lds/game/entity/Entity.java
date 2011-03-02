@@ -292,8 +292,8 @@ public abstract class Entity
 		
 		if (output && this.doesCollide(ent) && ent.doesCollide(this))
 		{
-			this.circleBounce(ent);
-			ent.circleBounce(this);
+			this.circleBounceAgainstRectangle(ent);
+			ent.circleBounceAgainstRectangle(this);
 		}
 		return output;
 	}
@@ -354,8 +354,8 @@ public abstract class Entity
 		if (output && this.doesCollide(ent) && ent.doesCollide(this))
 		{
 			//TODO: Make these seperate methods that work
-			this.circleBounce(ent);
-			ent.rectangleBounce(this);
+			this.circleBounceAgainstRectangle(ent);
+			ent.rectangleBounceAgainstRectangle(this);
 		}
 		return output;
 	}
@@ -407,17 +407,17 @@ public abstract class Entity
 		}
 		if (output && this.doesCollide(ent) && ent.doesCollide(this))
 		{
-			this.rectangleBounce(ent);
-			ent.rectangleBounce(this);
+			this.rectangleBounceAgainstRectangle(ent);
+			ent.rectangleBounceAgainstRectangle(this);
 		}
 		return output;
 	}
 	
 	//blank method, overridden by PhysEnt
-	public void circleBounce (Entity ent) 	{	}
+	public void circleBounceAgainstRectangle (Entity ent) 	{	}
 	
 	//blank method, overridden by PhysEnt
-	public void rectangleBounce (Entity ent){	}
+	public void rectangleBounceAgainstRectangle (Entity ent){	}
 	
 	//overriden for entity interaction
 	public void interact (Entity ent)		{	}

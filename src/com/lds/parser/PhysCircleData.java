@@ -3,12 +3,12 @@ package com.lds.parser;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import com.lds.game.entity.PhysCircle;
+import com.lds.game.entity.PhysBall;
 import com.lds.game.entity.Entity;
 
 public class PhysCircleData extends HoldObjectData
 {
-	private PhysCircle physCircleRef;
+	private PhysBall physCircleRef;
 	public PhysCircleData(HashMap<String, String> physCircleHM)
 	{
 		super(physCircleHM);
@@ -16,7 +16,7 @@ public class PhysCircleData extends HoldObjectData
 	
 	public void createInst(ArrayList<Entity> entData)
 	{
-		physCircleRef = new PhysCircle(size, xPos, yPos);
+		physCircleRef = new PhysBall(size, xPos, yPos);
 
 		//COLOR
 		if (color != null)

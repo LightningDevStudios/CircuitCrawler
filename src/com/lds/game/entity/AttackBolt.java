@@ -27,6 +27,12 @@ public class AttackBolt extends PhysEnt
 	}
 	
 	@Override
+	public void onTileInteract(Tile tile)
+	{
+		
+	}
+	
+	@Override
 	public void tileInteract(Tile tile)
 	{
 		if (tile.isWall())

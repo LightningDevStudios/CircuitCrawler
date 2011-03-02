@@ -68,7 +68,7 @@ public class Game
 	public Player player;
 	///*
 	public PhysBlock block;
-	public PhysCircle circle;
+	public PhysBall circle;
 	public Button button;
 	public Door door;
 	public Blob blob1, blob2;

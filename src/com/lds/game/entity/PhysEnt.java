@@ -229,18 +229,46 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	 *********************/
 	
 	@Override
-	public void circleBounce (Entity ent)
+	public void circleBounceAgainstRectangle (Entity ent)
 	{
-		Vector2f bounceSide = Vector2f.sub(this.posVec, ent.posVec);
-		bounceSide.setNormal();
-		bounceSide.normalize();
-		bounceSide.scale(2 * moveInterpVec.dot(bounceSide));
-		this.addBounceVec(Vector2f.sub(bounceSide, moveInterpVec));
+		 ent.updateAbsolutePointLocations();
+		 
+		//checks if this entity is moving; if it is not, do nothing
+		if (this.moveInterpVec.getX() == 0.0f && this.moveInterpVec.getY() == 0.0f)
+			return;
+		
+		Vector2f[] vertDistVecs = new Vector2f[4];
+
+		for (int i = 0; i < 4; i++)
+			vertDistVecs[i] = Vector2f.sub(posVec, moveInterpVec).sub(ent.vertVecs[i]);
+	
+		//goes through the vectors and sorts them from low to high (thanks Mr. Carlson)
+		int maxPos;
+		Vector2f temp = new Vector2f();
+	    for (int k = vertDistVecs.length; k >= 2; k--)
+	    {
+	    	maxPos = 0; 
+	        for (int i = 1; i < k; i++)
+	        {
+	             if (vertDistVecs[i].mag() > vertDistVecs[maxPos].mag()) 
+	                  maxPos = i; 
+	        }
+	        temp.set(vertDistVecs[maxPos]); 
+	        vertDistVecs[maxPos].set(vertDistVecs[k-1]); 
+	        vertDistVecs[k-1].set(temp);
+	    }
+	    
+	    Vector2f bounceSide = Vector2f.sub(vertDistVecs[0], vertDistVecs[1]).normalize();
+	    Vector2f bounceProj = bounceSide.scale(bounceSide.dot(this.moveInterpVec) * 2);
+	    this.moveInterpVec.set(bounceProj.add(moveInterpVec.neg()));
 	}
 
 	@Override
-	public void rectangleBounce (Entity ent)
+	public void rectangleBounceAgainstRectangle (Entity ent) 
 	{
+		this.updateAbsolutePointLocations();
+		ent.updateAbsolutePointLocations();
+		
 		//checks if this entity is moving; if it is not, do nothing
 		if (this.moveInterpVec.getX() == 0.0f && this.moveInterpVec.getY() == 0.0f)
 			return;
