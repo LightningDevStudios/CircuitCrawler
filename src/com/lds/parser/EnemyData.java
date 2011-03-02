@@ -6,6 +6,7 @@ import com.lds.Enums.AIType;
 public class EnemyData extends CharacterData
 {
 	protected AIType type;
+	//protected Node nodepath;
 	
 	public EnemyData(HashMap<String, String> enemyHM)
 	{

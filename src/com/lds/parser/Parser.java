@@ -133,7 +133,19 @@ public class Parser //this is a parser
 		{
 			if(xrp.getEventType() == xrp.START_TAG && xrp.getName().equalsIgnoreCase("renderMode"))
 			{
-				parseRM();
+				parseObj("renderMode");
+				xrp.next();
+			}
+			else if(xrp.getEventType() == xrp.START_TAG && xrp.getName().equalsIgnoreCase("tileset"))
+			{
+				dataHM.put("tileset", "0");
+				parseObj("tileset");
+				xrp.next();
+			}
+			else if(xrp.getEventType() == xrp.START_TAG && xrp.getName().equalsIgnoreCase("texture"))
+			{
+				dataHM.put("texture", "0");
+				parseObj("texture");
 				xrp.next();
 			}
 			else
@@ -142,17 +154,6 @@ public class Parser //this is a parser
 				xrp.next(); 
 				xrp.next();
 			}
-		}
-	}
-	
-	public void parseRM() throws XmlPullParserException, IOException
-	{
-		xrp.next();
-		if(xrp.getEventType() == xrp.START_TAG && xrp.getName().equalsIgnoreCase("color"))
-		{
-			parseTag(dataHM);
-			xrp.next();
-			xrp.next();
 		}
 	}
 	

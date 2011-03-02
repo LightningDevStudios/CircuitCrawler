@@ -297,6 +297,10 @@
       <yPos>-350</yPos>
       <renderMode>
         <color>1,0.5,0.5,0.5</color>
+        <tileset>
+        	<texID>tilesetwire</texID>
+        	<xy>6,8</xy>
+      	</tileset>
       </renderMode>
       <health>100</health>
       <energy>0</energy>

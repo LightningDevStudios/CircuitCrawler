@@ -21,7 +21,7 @@ import com.lds.Enums.RenderMode;
 import android.content.Context;
 import android.content.res.XmlResourceParser;*/
 
-public class EntityData
+public abstract class EntityData
 {
 	private boolean isSolid;
 	protected boolean circular;
@@ -137,6 +137,4 @@ public class EntityData
 	public void createInst(ArrayList<Entity> entData)
 	{
 	}
-	
-	
 }
