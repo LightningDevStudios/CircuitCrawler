@@ -36,13 +36,22 @@ public class Graphics extends GLSurfaceView
 		{
 			try
 			{
-				syncObj.wait(1000L);
+				syncObj.wait(16);
 			}
 			catch (InterruptedException e)
 			{
 				e.printStackTrace();
 			}
 		}
+		/*try 
+		{
+			Thread.sleep(8);
+		} 
+		catch (InterruptedException e) 
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}*/
 		return true;
 	}
 	

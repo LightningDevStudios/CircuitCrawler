@@ -40,7 +40,7 @@ public class Game
 	public ArrayList<Entity> entList;
 	public Tile[][] tileset;
 	public ArrayList<UIEntity> UIList;
-	//public ArrayList<Trigger> triggerList;
+	public ArrayList<Trigger> triggerList;
 	public EntityManager cleaner;
 		
 	//Camera data
@@ -66,7 +66,7 @@ public class Game
 	public UIJoypad joypad;
 	public UITextBox textbox;
 	public Player player;
-	/*
+	///*
 	public PhysBlock block;
 	public PhysCircle circle;
 	public Button button;
@@ -74,7 +74,7 @@ public class Game
 	public Blob blob1, blob2;
 	public PuzzleBox box;
 	public PickupHealth health;
-	*/
+	//*/
 	public Sprite spr;
 	
 	public Animation spriteAnim;
@@ -89,9 +89,9 @@ public class Game
 		text = new Texture(R.drawable.text, 256, 256, 16, 8, context, "text");
 		
 				
-		//entList = new ArrayList<Entity>();
+		entList = new ArrayList<Entity>();
 		UIList = new ArrayList<UIEntity>();
-	//	triggerList = new ArrayList<Trigger>();
+		triggerList = new ArrayList<Trigger>();
 		
 		tileset = new Tile[16][16];
 		cleaner = new EntityManager();
@@ -111,7 +111,8 @@ public class Game
 		tl.loadTexture(randomthings);
 		tl.loadTexture(someText);
 						
-/*		for (int i = 0; i < tileset.length; i++)
+		///*		
+ 		for (int i = 0; i < tileset.length; i++)
 		{
 			for (int j = 0; j < tileset[0].length; j++)
 			{
@@ -131,8 +132,8 @@ public class Game
 				}
 			}
 		}	
-*/		
-		//Parser
+ 		//*/		
+		/*//Parser
 		Parser parser = new Parser(context, R.xml.tempdata);
 		
 		entList = parser.entList;
@@ -147,12 +148,12 @@ public class Game
 		catch (IOException e) 
 		{
 			e.printStackTrace();
-		}
+		}*/
 	
-		tileset = parser.tileset;
-		entList.addAll(parser.entList);
+		/*tileset = parser.tileset;
+		entList.addAll(parser.entList);*/
 		
-		/*CAN DEAL WITH THIS SHIT
+		//  /*CAN DEAL WITH THIS SHIT
 		door = new Door (-108.0f, -180.0f);
 		door.enableTilesetMode(tilesetwire, 0, 2);
 		entList.add(door);
@@ -172,7 +173,8 @@ public class Game
 		block.initGradientInterp(interpGM);
 		entList.add(block);
 		
-		/*blob1 = new Blob(-150.0f, -350.0f, AIType.PATROL);
+		/*
+		blob1 = new Blob(-150.0f, -350.0f, AIType.PATROL);
 		blob1.enableTilesetMode(tilesetwire, 2, 2);
 		NodePath path = new NodePath();
 		path.add(new Node(-150.0f, -350.0f));
@@ -183,7 +185,7 @@ public class Game
 		
 		/*blob2 = new Blob(0.0f, 0.0f, AIType.TURRET);
 		blob2.enableTilesetMode(tilesetwire, 2, 2);
-		entList.add(blob2);
+		entList.add(blob2);*/
 				
 		Button button1 = new Button(108.0f, 0.0f);
 		button1.enableTilesetMode(randomthings, 0, 0);
@@ -201,8 +203,7 @@ public class Game
 		PhysBlock block2 = new PhysBlock(50, -216, 108);
 		block2.enableTilesetMode(tilesetwire, 2, 1);
 		entList.add(block2);
-		
-		*/
+
 		
 		spriteAnim = new Animation(tilesetwire, 0, 7, 7, 0, 3000);
 		spr = new Sprite(50, -100, 100, 45, 1, 1, spriteAnim);
@@ -233,13 +234,13 @@ public class Game
 		spr = new Sprite(30.0f, -108.0f, -300.0f, 45.0f, 1.0f, 1.0f, 10, 90, 1, spriteAnim);
 		entList.add(spr);
 		
-	//	CauseAND bridgeAND = new CauseAND(new CauseButton(button1), new CauseButton(button2));
+		CauseAND bridgeAND = new CauseAND(new CauseButton(button1), new CauseButton(button2));
 		
-		//triggerList.add(new Trigger(new CauseButton(button), new EffectDoor(door)));
-	//	triggerList.add(new Trigger(bridgeAND, new EffectRaiseBridge(tileset[4][6])));
-		//triggerList.add(new Trigger(bridgeAND, new EffectRaiseBridge(tileset[4][7])));
-	//	triggerList.add(new Trigger(bridgeAND, new EffectRaiseBridge(tileset[5][6])));
-		//triggerList.add(new Trigger(bridgeAND, new EffectRaiseBridge(tileset[5][7])));
+		triggerList.add(new Trigger(new CauseButton(button), new EffectDoor(door)));
+		triggerList.add(new Trigger(bridgeAND, new EffectRaiseBridge(tileset[4][6])));
+		triggerList.add(new Trigger(bridgeAND, new EffectRaiseBridge(tileset[4][7])));
+		triggerList.add(new Trigger(bridgeAND, new EffectRaiseBridge(tileset[5][6])));
+		triggerList.add(new Trigger(bridgeAND, new EffectRaiseBridge(tileset[5][7])));
 		
 		healthBar = new UIHealthBar(200.0f, 30.0f, UIPosition.TOPLEFT, Direction.RIGHT, player);
 		healthBar.setTopPad(5.0f);

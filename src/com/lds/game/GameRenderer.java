@@ -115,13 +115,59 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		Stopwatch.tick();
 				
 		//iterate through triggers
-/*		for (Trigger t : game.triggerList)
+		for (Trigger t : game.triggerList)
 		{
 			t.update();
 		}
-*/
+
 		//remove entities that are queued for removal
 		game.cleaner.update(game.entList);
+				
+		//Update which entities are rendered
+		game.updateLocalEntities();
+				
+		/******************
+		 * Render tileset *
+		 ******************/
+		
+		gl.glEnable(GL10.GL_TEXTURE_2D);
+		gl.glBindTexture(GL10.GL_TEXTURE_2D, Game.tilesetwire.getTexture());
+		
+		gl.glFrontFace(GL10.GL_CW);
+		gl.glEnable(GL10.GL_CULL_FACE);
+		gl.glCullFace(GL10.GL_BACK);
+		
+		gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
+		gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
+		
+		for (Tile[] ts : game.tileset)
+		{
+			for (Tile t : ts)
+			{
+				if (t.isRendered())
+				{
+					t.draw(gl);
+				}
+			}
+		}
+		
+		gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
+		gl.glDisableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
+		gl.glDisable(GL10.GL_TEXTURE_2D);
+		
+		/******************
+		 * Update Entites *
+		 ******************/
+		
+		//move player and heldObject if neccessary
+		if (windowOutdated)
+		{
+			game.player.setAngle(game.joypad.getInputAngle());
+			game.player.addPos(game.joypad.getInputVec().scale((Stopwatch.elapsedTimeMs() - frameInterval) * (game.player.getMoveSpeed() / 1000)));
+			game.joypad.clearInputVec();
+			if (game.player.isHoldingObject())
+				game.player.updateHeldObjectPosition();
+		}
 		
 		//Triggered when the perspective needs to be redrawn
 		if (windowOutdated)
@@ -129,34 +175,6 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 			updateCamPosition(gl);
 			windowOutdated = false;
 		}
-				
-		//Update which entities are rendered
-		game.updateLocalEntities();
-				
-		//Render tileset
-		for (int i = 0; i < game.tileset.length; i++) //Tile[] ts : game.tileset)
-		{
-			for (int j = 0; j < game.tileset[0].length; j++) //Tile t : ts)
-			{
-				if (game.tileset[i][j].isRendered())
-				{
-					game.tileset[i][j].draw(gl);
-				}
-			}
-		}
-		
-		/******************
-		 * Update Entites *
-		 ******************/
-		
-		//move player and heldObject
-		game.player.setAngle(game.joypad.getInputAngle());
-		//Vector2f playerMoveVec = Vector2f.scale(game.joypad.getInputVec(), (Stopwatch.elapsedTimeMs() - playerMoveTimeMs) * (game.player.getMoveSpeed() / 10000));
-		//game.player.setMoveInterpVec(playerMoveVec);
-		game.player.addPos(Vector2f.scale(game.joypad.getInputVec(), (Stopwatch.elapsedTimeMs() - playerMoveTimeMs) * (game.player.getMoveSpeed() / 10000)));
-		game.joypad.clearInputVec();
-		if (game.player.isHoldingObject())
-			game.player.updateHeldObjectPosition();
 
 		//update all entites
 		for (Entity ent : game.entList)
@@ -380,9 +398,9 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	@Override
 	public void onTouchInput(MotionEvent e) 
 	{
-		playerMoveTimeMs = Stopwatch.elapsedTimeMs();
-		Stopwatch.tick();
-		for(int i = 0; i < e.getPointerCount(); i++)
+		//playerMoveTimeMs = Stopwatch.elapsedTimeMs();
+		//Stopwatch.tick();
+		for(int i = 0; i < e.getPointerCount() && game.player.userHasControl(); i++)
 		{	
 			Vector2f touchVec = new Vector2f(e.getX(i) - Game.screenW / 2, Game.screenH / 2 - e.getY(i));
 			for (UIEntity ent : game.UIList)

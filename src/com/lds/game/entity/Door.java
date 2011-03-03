@@ -2,23 +2,23 @@ package com.lds.game.entity;
 
 public class Door extends PhysEnt
 {
-	private float closedX, closedY;
-	
 	public Door (float xPos, float yPos)
 	{
 		 super(72.0f, xPos, yPos, 0.0f, 1.0f, 0.5f, true, false, true, 100.0f, 100.0f, 0.0f);
-		 closedX = xPos;
-		 closedY = yPos;
+		 enableColorMode(1.0f, 1.0f, 1.0f, 1.0f);
+		 colorInterpSpeed = 1.0f;
 	}
 
 	public void open()
 	{
-		moveTo(closedX - size, closedY);
+		initColorInterp(0.0f, 0.0f, 0.0f, 0.0f);
+		isSolid = false;
 	}
 	
 	public void close()
 	{	
-		moveTo(closedX, closedY);
+		initColorInterp(1.0f, 1.0f, 1.0f, 1.0f);
+		isSolid = true;
 	}
 	
 	@Override
