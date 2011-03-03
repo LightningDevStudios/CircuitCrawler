@@ -115,7 +115,7 @@ public class Tile extends StaticEnt
 	public void setAsFloor()
 	{
 		state = TileState.FLOOR;
-		updateTileset(0, 0);
+		updateTileset((int)(Math.random() * 4), (int)(Math.random() * 4));
 		isSolid = false;
 		rotateTilesetCoords();
 	}
@@ -295,7 +295,7 @@ public class Tile extends StaticEnt
         rotateTilesetCoords();
     }
 
-    /*public void updateBordersWall(Tile[][] tileset, int x, int y)
+    public void updateBordersWall(Tile[][] tileset, int x, int y)
     {
         EnumSet<Direction> dirsCovered = EnumSet.noneOf(Direction.class);
 
@@ -327,36 +327,52 @@ public class Tile extends StaticEnt
             dirsCovered.add(Direction.DOWN);
         }
 
-        switch (dirsCovered)
+        if (dirsCovered.contains(Direction.LEFT))
         {
-            case Enums.Direction.LEFT:
-                leftInnerWallEdgeDetection(tileset, x, y);
-                break;
-            case Enums.Direction.RIGHT:
-                rightInnerWallEdgeDetection(tileset, x, y);
-                break;
-            case Enums.Direction.UP:
-                upInnerWallEdgeDetection(tileset, x, y);
-                break;
-            case Enums.Direction.DOWN:
-                downInnerWallEdgeDetection(tileset, x, y);
-                break;
-            case Enums.Direction.LEFT | Enums.Direction.RIGHT:
-                updateTileset(3, 5);
-                break;
-            case Enums.Direction.LEFT | Enums.Direction.UP:
-                if (x < tileset[0].length - 1 && y < tileset.length - 1)
-                {
-                    if (tileset[y + 1][x + 1].getTileState() == Enums.TileState.PIT || tileset[y + 1][x + 1].getTileState() == Enums.TileState.FLOOR)
-                        updateTileset(8, 4);
+        	if (dirsCovered.contains(Direction.RIGHT))
+        	{
+        		if (dirsCovered.contains(Direction.UP))
+        		{
+        			if (dirsCovered.contains(Direction.DOWN))
+        			{
+        				updateTileset(0, 4);
+        			}
+        			else
+        			{
+        				updateTileset(3, 4);
+        			}
+        		}
+        		else if (dirsCovered.contains(Direction.DOWN))
+        		{
+        			updateTileset(3, 6);
+        		}
+        		else
+        		{
+        			updateTileset(3, 5);
+        		}
+        	}
+        	else if (dirsCovered.contains(Direction.UP))
+        	{
+        		if (dirsCovered.contains(Direction.DOWN))
+        		{
+        			updateTileset(0, 7);
+        		}
+        		else
+        		{
+        			if (x < tileset[0].length - 1 && y < tileset.length - 1)
+                    {
+                        if (tileset[y + 1][x + 1].getTileState() == Enums.TileState.PIT || tileset[y + 1][x + 1].getTileState() == Enums.TileState.FLOOR)
+                            updateTileset(8, 4);
+                        else
+                            updateTileset(1, 5);
+                    }
                     else
                         updateTileset(1, 5);
-                }
-                else
-                    updateTileset(1, 5);
-                break;
-            case Enums.Direction.LEFT | Enums.Direction.DOWN:
-                if (x < tileset[0].length - 1 && y > 0)
+        		}
+        	}
+        	else if (dirsCovered.contains(Direction.DOWN))
+        	{
+        		if (x < tileset[0].length - 1 && y > 0)
                 {
                     if (tileset[y - 1][x + 1].getTileState() == Enums.TileState.PIT || tileset[y - 1][x + 1].getTileState() == Enums.TileState.FLOOR)
                         updateTileset(8, 5);
@@ -365,20 +381,36 @@ public class Tile extends StaticEnt
                 }
                 else
                     updateTileset(1, 6);
-                break;
-            case Enums.Direction.RIGHT | Enums.Direction.UP:
-                if (x > 0 && y < tileset.length - 1)
-                {
-                    if (tileset[y + 1][x - 1].getTileState() == Enums.TileState.PIT || tileset[y + 1][x - 1].getTileState() == Enums.TileState.FLOOR)
-                        updateTileset(9, 4);
+        	}
+        	else
+        	{
+        		leftInnerWallEdgeDetection(tileset, x, y);
+        	}
+        }
+        else if (dirsCovered.contains(Direction.RIGHT))
+        {
+        	if (dirsCovered.contains(Direction.UP))
+        	{
+        		if (dirsCovered.contains(Direction.DOWN))
+        		{
+        			updateTileset(2, 7);
+        		}
+        		else
+        		{
+        			if (x > 0 && y < tileset.length - 1)
+                    {
+                        if (tileset[y + 1][x - 1].getTileState() == Enums.TileState.PIT || tileset[y + 1][x - 1].getTileState() == Enums.TileState.FLOOR)
+                            updateTileset(9, 4);
+                        else
+                            updateTileset(2, 5);
+                    }
                     else
                         updateTileset(2, 5);
-                }
-                else
-                    updateTileset(2, 5);
-                break;
-            case Enums.Direction.RIGHT | Enums.Direction.DOWN:
-                if (x > 0 && y > 0)
+        		}
+        	}
+        	else if (dirsCovered.contains(Direction.DOWN))
+        	{
+        		if (x > 0 && y > 0)
                 {
                     if (tileset[y - 1][x - 1].getTileState() == Enums.TileState.PIT || tileset[y - 1][x - 1].getTileState() == Enums.TileState.FLOOR)
                         updateTileset(9, 5);
@@ -387,29 +419,31 @@ public class Tile extends StaticEnt
                 }
                 else
                     updateTileset(2, 6);
-                break;
-            case Enums.Direction.UP | Enums.Direction.DOWN:
-                updateTileset(1, 7);
-                break;
-            case Enums.Direction.LEFT | Enums.Direction.RIGHT | Enums.Direction.UP:
-                updateTileset(3, 4);
-                break;
-            case Enums.Direction.LEFT | Enums.Direction.RIGHT | Enums.Direction.DOWN:
-                updateTileset(3, 6);
-                break;
-            case Enums.Direction.LEFT | Enums.Direction.UP | Enums.Direction.DOWN:
-                updateTileset(0, 7);
-                break;
-            case Enums.Direction.RIGHT | Enums.Direction.UP | Enums.Direction.DOWN:
-                updateTileset(2, 7);
-                break;
-            case Enums.Direction.LEFT | Enums.Direction.RIGHT | Enums.Direction.UP | Enums.Direction.DOWN:
-                updateTileset(0, 4);
-                break;
-            default:
-                //updateTileset(3, 7);
-                noneInnerWallEdgeDetection(tileset, x, y);
-                break;
+        	}
+        	else
+        	{
+        		rightInnerWallEdgeDetection(tileset, x, y);
+        	}
+        }
+        else if (dirsCovered.contains(Direction.UP))
+        {
+        	if (dirsCovered.contains(Direction.DOWN))
+        	{
+        		updateTileset(1, 7);
+        	}
+        	else
+        	{
+        		upInnerWallEdgeDetection(tileset, x, y);
+        	}
+        }
+        else if (dirsCovered.contains(Direction.DOWN))
+        {
+        	downInnerWallEdgeDetection(tileset, x, y);
+        }
+        else
+        {
+        	//updateTileset(3, 7);
+            noneInnerWallEdgeDetection(tileset, x, y);
         }
 
         rotateTilesetCoords();
@@ -447,56 +481,92 @@ public class Tile extends StaticEnt
             dirsCovered.add(DiagDir.BOTTOMRIGHT);
         }
 
-        switch (dirsCovered)
+        //LEFT RIGHT UP DOWN
+        //TL   TR    BL BR
+        if (dirsCovered.contains(DiagDir.TOPLEFT))
         {
-            case DiagDir.BOTTOMLEFT:
-                updateTileset(5, 4);
-                break;
-            case DiagDir.BOTTOMRIGHT:
-                updateTileset(4, 4);
-                break;
-            case DiagDir.TOPLEFT:
-                updateTileset(5, 5);
-                break;
-            case DiagDir.TOPRIGHT:
-                updateTileset(4, 5);
-                break;
-            case DiagDir.BOTTOMLEFT | DiagDir.BOTTOMRIGHT:
-                updateTileset(4, 7);
-                break;
-            case DiagDir.BOTTOMLEFT | DiagDir.TOPLEFT:
-                updateTileset(5, 6);
-                break;
-            case DiagDir.BOTTOMLEFT | DiagDir.TOPRIGHT:
-                updateTileset(11, 6);
-                break;
-            case DiagDir.BOTTOMRIGHT | DiagDir.TOPLEFT:
-                updateTileset(11, 5);
-                break;
-            case DiagDir.BOTTOMRIGHT | DiagDir.TOPRIGHT:
-                updateTileset(4, 6);
-                break;
-            case DiagDir.TOPLEFT | DiagDir.TOPRIGHT:
-                updateTileset(5, 7);
-                break;
-            case DiagDir.BOTTOMLEFT | DiagDir.BOTTOMRIGHT | DiagDir.TOPLEFT:
-                updateTileset(7, 4);
-                break;
-            case DiagDir.BOTTOMLEFT | DiagDir.BOTTOMRIGHT | DiagDir.TOPRIGHT:
-                updateTileset(6, 4);
-                break;
-            case DiagDir.BOTTOMLEFT | DiagDir.TOPLEFT | DiagDir.TOPRIGHT:
-                updateTileset(7, 5);
-                break;
-            case DiagDir.BOTTOMRIGHT | DiagDir.TOPLEFT | DiagDir.TOPRIGHT:
-                updateTileset(6, 5);
-                break;
-            case DiagDir.BOTTOMLEFT | DiagDir.BOTTOMRIGHT | DiagDir.TOPLEFT | DiagDir.TOPRIGHT:
-                updateTileset(6, 6);
-                break;
-            default:
-                updateTileset(3, 7);
-                break;
+        	if (dirsCovered.contains(DiagDir.TOPRIGHT))
+        	{
+        		if (dirsCovered.contains(DiagDir.BOTTOMLEFT))
+        		{
+        			if (dirsCovered.contains(DiagDir.BOTTOMRIGHT))
+        			{
+        				updateTileset(6, 6);
+        			}
+        			else
+        			{
+        				updateTileset(7, 5);
+        			}
+        		}
+        		else if (dirsCovered.contains(DiagDir.BOTTOMRIGHT))
+        		{
+        			updateTileset(6, 5);
+        		}
+        		else
+        		{
+        			updateTileset(5, 7);
+        		}
+        	}
+        	else if (dirsCovered.contains(DiagDir.BOTTOMLEFT))
+        	{
+        		if (dirsCovered.contains(DiagDir.BOTTOMRIGHT))
+        		{
+        			updateTileset(7, 4);
+        		}
+        		else
+        		{
+        			updateTileset(5, 6);
+        		}
+        	}
+        	else if (dirsCovered.contains(DiagDir.BOTTOMRIGHT))
+        	{
+        		updateTileset(11, 5);
+        	}
+        	else
+        	{
+        		updateTileset(5, 5);
+        	}
+        }
+        else if (dirsCovered.contains(DiagDir.TOPRIGHT))
+        {
+        	if (dirsCovered.contains(DiagDir.BOTTOMLEFT))
+        	{
+        		if (dirsCovered.contains(DiagDir.BOTTOMRIGHT))
+        		{
+        			updateTileset(6, 4);
+        		}
+        		else
+        		{
+        			updateTileset(11, 6);
+        		}
+        	}
+        	else if (dirsCovered.contains(DiagDir.BOTTOMRIGHT))
+        	{
+        		updateTileset(4, 6);
+        	}
+        	else
+        	{
+        		updateTileset(4, 5);
+        	}
+        }
+        else if (dirsCovered.contains(DiagDir.BOTTOMLEFT))
+        {
+        	if (dirsCovered.contains(DiagDir.BOTTOMRIGHT))
+        	{
+        		updateTileset(4, 7);
+        	}
+        	else
+        	{
+        		updateTileset(5, 4);
+        	}
+        }
+        else if (dirsCovered.contains(DiagDir.BOTTOMRIGHT))
+        {
+        	updateTileset(4, 4);
+        }
+        else
+        {
+        	updateTileset(3, 7);
         }
     }
 
@@ -520,20 +590,24 @@ public class Tile extends StaticEnt
             dirsCovered.add(DiagDir.BOTTOMRIGHT);
         }
 
-        switch (dirsCovered)
+        if (dirsCovered.contains(DiagDir.BOTTOMRIGHT))
         {
-            case DiagDir.BOTTOMRIGHT:
-                updateTileset(7, 6);
-                break;
-            case DiagDir.TOPRIGHT:
-                updateTileset(7, 7);
-                break;
-            case DiagDir.BOTTOMRIGHT | DiagDir.TOPRIGHT:
-                updateTileset(6, 7);
-                break;
-            default:
-                updateTileset(1, 4);
-                break;
+        	if (dirsCovered.contains(DiagDir.TOPRIGHT))
+        	{
+        		updateTileset(6, 7);
+        	}
+        	else
+        	{
+        		updateTileset(7, 6);
+        	}
+        }
+        else if (dirsCovered.contains(DiagDir.TOPRIGHT))
+        {
+        	updateTileset(7, 7);
+        }
+        else
+        {
+        	updateTileset(1, 4);
         }
     }
 
@@ -557,26 +631,30 @@ public class Tile extends StaticEnt
             dirsCovered.add(DiagDir.BOTTOMLEFT);
         }
 
-        switch (dirsCovered)
+        if (dirsCovered.contains(DiagDir.BOTTOMLEFT))
         {
-            case DiagDir.BOTTOMLEFT:
-                updateTileset(8, 6);
-                break;
-            case DiagDir.TOPLEFT:
-                updateTileset(8, 7);
-                break;
-            case DiagDir.BOTTOMLEFT | DiagDir.TOPLEFT:
-                updateTileset(9, 7);
-                break;
-            default:
-                updateTileset(2, 4);
-                break;
+        	if (dirsCovered.contains(DiagDir.TOPLEFT))
+        	{
+        		updateTileset(9, 7);
+        	}
+        	else
+        	{
+        		updateTileset(8, 6);
+        	}
+        }
+        else if (dirsCovered.contains(DiagDir.TOPLEFT))
+        {
+        	updateTileset(8, 7);
+        }
+        else
+        {
+        	updateTileset(2, 4);
         }
     }
 
     private void downInnerWallEdgeDetection(Tile[][] tileset, int x, int y)
     {
-        EnumSet<DiagDir> dirsCovered = EnumSet.noneOf(EnumSet.class);
+        EnumSet<DiagDir> dirsCovered = EnumSet.noneOf(DiagDir.class);
 
         Tile TLTile = null, TRTile = null;
 
@@ -594,20 +672,24 @@ public class Tile extends StaticEnt
             dirsCovered.add(DiagDir.TOPRIGHT);
         }
 
-        switch (dirsCovered)
+        if (dirsCovered.contains(DiagDir.TOPRIGHT))
         {
-            case DiagDir.TOPRIGHT:
-                updateTileset(10, 7);
-                break;
-            case DiagDir.TOPLEFT:
-                updateTileset(10, 6);
-                break;
-            case DiagDir.TOPRIGHT | DiagDir.TOPLEFT:
-                updateTileset(9, 6);
-                break;
-            default:
-                updateTileset(0, 6);
-                break;
+        	if (dirsCovered.contains(DiagDir.TOPLEFT))
+        	{
+        		updateTileset(9, 6);
+        	}
+        	else
+        	{
+        		updateTileset(10, 7);
+        	}
+        }
+        else if (dirsCovered.contains(DiagDir.TOPLEFT))
+        {
+        	updateTileset(10, 6);
+        }
+        else
+        {
+        	updateTileset(0, 6);
         }
     }
 
@@ -631,20 +713,24 @@ public class Tile extends StaticEnt
             dirsCovered.add(DiagDir.BOTTOMRIGHT);
         }
 
-        switch (dirsCovered)
+        if (dirsCovered.contains(DiagDir.BOTTOMLEFT))
         {
-            case DiagDir.BOTTOMLEFT:
-                updateTileset(11, 7);
-                break;
-            case DiagDir.BOTTOMRIGHT:
-                updateTileset(10, 4);
-                break;
-            case DiagDir.BOTTOMLEFT | DiagDir.BOTTOMRIGHT:
-                updateTileset(10, 5);
-                break;
-            default:
-                updateTileset(0, 5);
-                break;
+        	if (dirsCovered.contains(DiagDir.BOTTOMRIGHT))
+        	{
+        		updateTileset(10, 5);
+        	}
+        	else
+        	{
+        		updateTileset(11, 7);
+        	}
         }
-    }*/
+        else if (dirsCovered.contains(DiagDir.BOTTOMRIGHT))
+        {
+        	updateTileset(10, 4);
+        }
+        else
+        {
+        	updateTileset(0, 5);
+        }
+    }
 }

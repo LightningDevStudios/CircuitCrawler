@@ -131,7 +131,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		 ******************/
 		
 		gl.glEnable(GL10.GL_TEXTURE_2D);
-		gl.glBindTexture(GL10.GL_TEXTURE_2D, Game.tilesetwire.getTexture());
+		gl.glBindTexture(GL10.GL_TEXTURE_2D, Game.tilesetworld.getTexture());
 		
 		gl.glFrontFace(GL10.GL_CW);
 		gl.glEnable(GL10.GL_CULL_FACE);
