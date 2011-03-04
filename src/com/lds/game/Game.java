@@ -55,6 +55,7 @@ public class Game
 	public static Texture tilesetwire;
 	public static Texture randomthings;
 	public static Texture text;
+	public static Texture tilesetworld;
 	public Texture someText;
 	
 	
@@ -87,6 +88,7 @@ public class Game
 		tilesetwire = new Texture(R.drawable.tilesetwire, 128, 128, 8, 8, context, "tilesetwire");
 		randomthings = new Texture(R.drawable.randomthings, 256, 256, 8, 8, context, "randomthings");
 		text = new Texture(R.drawable.text, 256, 256, 16, 8, context, "text");
+		tilesetworld = new Texture(R.drawable.tilesetworld, 512, 256, 16, 8, context, "tilesetworld");
 		
 				
 		entList = new ArrayList<Entity>();
@@ -110,6 +112,7 @@ public class Game
 		tl.loadTexture(tilesetwire);
 		tl.loadTexture(randomthings);
 		tl.loadTexture(someText);
+		tl.loadTexture(tilesetworld);
 						
 		///*		
  		for (int i = 0; i < tileset.length; i++)
@@ -117,7 +120,7 @@ public class Game
 			for (int j = 0; j < tileset[0].length; j++)
 			{
 				tileset[i][j] = new Tile(Tile.TILE_SIZE_F, j, i, tileset[0].length - 1, tileset.length - 1);
-				tileset[i][j].enableTilesetMode(tilesetwire, 0, 0);
+				tileset[i][j].enableTilesetMode(tilesetworld, 0, 0);
 				if (i == 0 || j == 0 || i == tileset.length - 1 || j == tileset[0].length - 1 || (i < 4 && (j < 4 || j > 8)) || (i == 10 && j != 6) || (i > 10 && (j < 4 || j > 8)))
 				{
 					tileset[i][j].setAsWall();
@@ -131,7 +134,18 @@ public class Game
 					tileset[i][j].setAsFloor();
 				}
 			}
-		}	
+		}
+ 		
+ 		for (int i = 0; i < tileset.length; i++)
+ 		{
+ 			for (int j = 0; j < tileset[0].length; j++)
+ 			{
+ 				if (tileset[i][j].isPit())
+ 					tileset[i][j].updateBordersPit(tileset, j, i);
+ 				else if (tileset[i][j].isWall())
+ 					tileset[i][j].updateBordersWall(tileset, j, i);
+ 			}
+ 		}
  		//*/		
 		/*//Parser
 		Parser parser = new Parser(context, R.xml.tempdata);
