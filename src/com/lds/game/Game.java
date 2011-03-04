@@ -69,9 +69,9 @@ public class Game
 	public PuzzleBox box;
 	public PickupHealth health;
 	//*/
-	public Sprite spr;
+	//public Sprite spr;
 	
-	public Animation spriteAnim;
+	//public Animation spriteAnim;
 		
 	//Constructors
 	public Game (Context context, GL10 gl) 
@@ -212,10 +212,10 @@ public class Game
 		entList.add(block2);
 
 		
-		spriteAnim = new Animation(tilesetwire, 0, 7, 7, 0, 3000);
+		/*spriteAnim = new Animation(tilesetwire, 0, 7, 7, 0, 3000);
 		spr = new Sprite(50, -100, 100, 45, 1, 1, spriteAnim);
 		spr.enableTextureMode(tilesetwire);
-		entList.add(spr);
+		entList.add(spr);*/
 		
 		/*s
 		box = new PuzzleBox(64.0f, -75.0f, 0.0f, false, true);
@@ -238,8 +238,8 @@ public class Game
 		health.enableColorMode(0, 255, 255, 255);
 		entList.add(health);
 		*/
-		spr = new Sprite(30.0f, -108.0f, -300.0f, 45.0f, 1.0f, 1.0f, 10, 90, 1, spriteAnim);
-		entList.add(spr);
+		//spr = new Sprite(30.0f, -108.0f, -300.0f, 45.0f, 1.0f, 1.0f, 10, 90, 1, spriteAnim);
+		//entList.add(spr);
 		
 		CauseAND bridgeAND = new CauseAND(new CauseButton(button1), new CauseButton(button2));
 		
@@ -309,9 +309,9 @@ public class Game
 		updateCameraPosition();
 		updateLocalEntities();
 
-		 updateLocalTileset();
+		updateLocalTileset();
 		 
-		 System.gc();
+		System.gc();
 	}
 	
 	public void updateLocalEntities()

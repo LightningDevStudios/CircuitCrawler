@@ -54,7 +54,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		gl.glDisable(GL10.GL_DEPTH_TEST);
 		gl.glDepthMask(false);
 		gl.glEnable(GL10.GL_DITHER);
-		gl.glHint(GL10.GL_PERSPECTIVE_CORRECTION_HINT, GL10.GL_NICEST);	
+		gl.glHint(GL10.GL_PERSPECTIVE_CORRECTION_HINT, GL10.GL_FASTEST);	
 		
 		//start the timer and use an initial tick to prevent errors where elapsed time is a very large negative number
 		Stopwatch.restartTimer();
@@ -98,8 +98,8 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	public void onDrawFrame(GL10 gl) 
 	{
 		//TODO keep so we can see what's slowing down a frame later.
-		/*frameCount++;
-		if (frameCount == 100)
+		frameCount++;
+		/*if (frameCount == 100)
 			Debug.startMethodTracing("LDS_Game4");*/
 		
 		/*********************************
@@ -350,9 +350,13 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		{
 			syncObj.notify();
 		}
-		
+		Thread.yield();
 		//framerate count
-		Log.d("LDS_Game", "FPS: " + (1000.0f / (Stopwatch.elapsedTimeMs() - frameInterval)));
+		if (frameCount >= 10)
+		{
+			Log.d("LDS_Game", "FPS: " + (1000.0f / (Stopwatch.elapsedTimeMs() - frameInterval)));
+			frameCount = 0;
+		}
 		
 		//TODO keep for later, if we want to see what's slowing down a frame.
 		/*if (frameCount == 101)
