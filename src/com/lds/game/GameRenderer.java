@@ -159,23 +159,21 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		 * Update Entites *
 		 ******************/
 		
-		//move player and heldObject if neccessary
+		//Triggered when the perspective needs to be redrawn
 		if (windowOutdated)
 		{
+			//move heldObj if necessary
 			game.player.setAngle(game.joypad.getInputAngle());
 			game.player.addPos(game.joypad.getInputVec().scale((Stopwatch.elapsedTimeMs() - frameInterval) * (game.player.getMoveSpeed() / 1000)));
 			game.joypad.clearInputVec();
 			if (game.player.isHoldingObject())
 				game.player.updateHeldObjectPosition();
-		}
-		
-		//Triggered when the perspective needs to be redrawn
-		if (windowOutdated)
-		{
+			
+			//redraw perspective
 			updateCamPosition(gl);
 			windowOutdated = false;
 		}
-
+		
 		//update all entites
 		for (Entity ent : game.entList)
 		{
@@ -192,7 +190,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		//Iterates through all entities
 		for (int i = 0; i < game.entList.size(); i++)
 		{
-			Entity ent = game.entList.get(i);
+			final Entity ent = game.entList.get(i);
 						
 			//checks for collision with all other entities in entList if needed
 			if (Game.worldOutdated)
@@ -200,7 +198,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 				//checks collision and interacts with all other Entities
 				for (int j = i + 1; j < game.entList.size(); j++)
 				{
-					Entity colEnt = game.entList.get(j);
+					final Entity colEnt = game.entList.get(j);
 					if (ent.isColliding(colEnt))
 					{
 						if(!ent.colList.contains(colEnt) && !colEnt.colList.contains(ent))
@@ -304,9 +302,9 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		{
 			if (!game.player.isHoldingObject() && game.player.getEnergy() != 0)
 			{
-				Vector2f directionVec = new Vector2f(game.player.getAngle());
+				final Vector2f directionVec = new Vector2f(game.player.getAngle());
 				directionVec.scale(game.player.getHalfSize() + 20.0f);
-				AttackBolt attack = new AttackBolt(Vector2f.add(game.player.getPos(), directionVec), directionVec, game.player.getAngle());
+				final AttackBolt attack = new AttackBolt(Vector2f.add(game.player.getPos(), directionVec), directionVec, game.player.getAngle());
 				vibrator(100);
 				EntityManager.addEntity(attack);
 				game.player.loseEnergy(10);
@@ -323,11 +321,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		{
 			if (ent.isRendered())
 			{								
-				gl.glTranslatef(ent.getXPos(), ent.getYPos(), 0.0f);
-				gl.glRotatef(ent.getAngle(), 0.0f, 0.0f, 1.0f);
-				gl.glScalef(ent.getXScl(), ent.getYScl(), 1.0f);
 				ent.draw(gl);
-				
 				gl.glLoadIdentity();
 			}
 		}
@@ -345,9 +339,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		{
 			ent.update();
 			
-			gl.glTranslatef(ent.getXPos(), ent.getYPos(), 0.0f);
 			ent.draw(gl);
-			
 			gl.glLoadIdentity();
 		}
 		
@@ -402,14 +394,14 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		//Stopwatch.tick();
 		for(int i = 0; i < e.getPointerCount() && game.player.userHasControl(); i++)
 		{	
-			Vector2f touchVec = new Vector2f(e.getX(i) - Game.screenW / 2, Game.screenH / 2 - e.getY(i));
+			final Vector2f touchVec = new Vector2f(e.getX(i) - Game.screenW / 2, Game.screenH / 2 - e.getY(i));
 			for (UIEntity ent : game.UIList)
 			{
 				if (touchVec.getX() >= ent.getXPos() - ent.getXSize() / 2 && touchVec.getX() <= ent.getXPos() + ent.getXSize() / 2 && touchVec.getY() >= ent.getYPos() - ent.getYSize() / 2 && touchVec.getY() <= ent.getYPos() + ent.getYSize() / 2)
 				{				
 					if (ent instanceof UIJoypad)
 					{
-						UIJoypad joypad = (UIJoypad)ent;
+						final UIJoypad joypad = (UIJoypad)ent;
 						joypad.setActive(true);
 						joypad.setInputVec(e.getX(i) - Game.screenW / 2, Game.screenH / 2 - e.getY(i));
 						windowOutdated = true;		
@@ -421,24 +413,24 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 					//UIButton specific code
 					if (ent instanceof UIButton)
 					{
-						UIButton btn = (UIButton)ent;
+						final UIButton btn = (UIButton)ent;
 						
 						//500ms delay between presses
 						if (btn.canPress(500))
 						{ 
-							((UIButton)ent).press();
+							btn.press();
 							btn.setIntervalTime(Stopwatch.elapsedTimeMs());
 						}
 					}
 				}
 				else if (ent instanceof UIJoypad)
 				{
-					UIJoypad joypad = (UIJoypad)ent;
+					final UIJoypad joypad = (UIJoypad)ent;
 					if (e.getAction() == MotionEvent.ACTION_UP)
 						joypad.setActive(false);
 					else if (joypad.isActive())
 					{
-						Vector2f tempVec = new Vector2f(e.getX(i) - Game.screenW / 2, Game.screenH / 2 - e.getY(i));
+						final Vector2f tempVec = new Vector2f(e.getX(i) - Game.screenW / 2, Game.screenH / 2 - e.getY(i));
 						joypad.setInputVec(tempVec);
 						if (tempVec.mag() > joypad.getXSize() / 2)
 							joypad.scaleInputVecTo(joypad.getXSize() / 2);

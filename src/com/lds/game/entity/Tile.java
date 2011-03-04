@@ -5,10 +5,7 @@ import java.util.EnumSet;
 import javax.microedition.khronos.opengles.GL10;
 
 import com.lds.Enums;
-import com.lds.Enums.DiagDir;
-import com.lds.Enums.Direction;
-import com.lds.Enums.RenderMode;
-import com.lds.Enums.TileState;
+import com.lds.Enums.*;
 import com.lds.Texture;
 import com.lds.TilesetHelper;
 

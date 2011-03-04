@@ -133,6 +133,7 @@ public class EntityData
 	public float getAngle()		{return angle;}
 	public boolean getIsSolid()	{return isSolid;}
 	public boolean getCircular(){return circular;}
+	public String getID()		{return id;}
 		
 	public void createInst(ArrayList<Entity> entData)
 	{

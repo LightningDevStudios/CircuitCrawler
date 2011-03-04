@@ -10,15 +10,8 @@ import org.xmlpull.v1.XmlPullParserException;
 import android.content.Context;
 
 import com.lds.Animation;
-import com.lds.EntityManager;
-import com.lds.Enums.Direction;
-import com.lds.Stopwatch;
-import com.lds.StringRenderer;
-import com.lds.Texture;
-import com.lds.TextureLoader;
-import com.lds.Vector2f;
-import com.lds.Enums.UIPosition;
-import com.lds.Enums.AIType;
+import com.lds.*;
+import com.lds.Enums.*;
 import com.lds.game.ai.Node;
 import com.lds.game.ai.NodePath;
 
@@ -317,6 +310,8 @@ public class Game
 		updateLocalEntities();
 
 		 updateLocalTileset();
+		 
+		 System.gc();
 	}
 	
 	public void updateLocalEntities()
@@ -409,11 +404,11 @@ public class Game
 	
 	public Tile nearestTile(Entity ent)
 	{	
-		float tilesetHalfWidth = tileset[0].length * Tile.TILE_SIZE_F / 2;
-		float tilesetHalfHeight = tileset.length * Tile.TILE_SIZE_F / 2;
+		final float tilesetHalfWidth = tileset[0].length * Tile.TILE_SIZE_F / 2;
+		final float tilesetHalfHeight = tileset.length * Tile.TILE_SIZE_F / 2;
 		
-		int x = (int)(ent.getXPos() + tilesetHalfWidth) / Tile.TILE_SIZE;
-		int y = (int)(Math.abs(ent.getYPos() - tilesetHalfHeight)) / Tile.TILE_SIZE;
+		final int x = (int)(ent.getXPos() + tilesetHalfWidth) / Tile.TILE_SIZE;
+		final int y = (int)(Math.abs(ent.getYPos() - tilesetHalfHeight)) / Tile.TILE_SIZE;
 		
 		if (x < tileset[0].length && x >= 0 && y < tileset.length && y >= 0)
 		{
@@ -647,7 +642,7 @@ public class Game
 	
 	public void setGameOverEvent(OnGameOverListener listener)
 	{
-//		triggerList.add(new Trigger(new CauseDoneScaling(player), new EffectEndGame(listener)));
-//		triggerList.add(new Trigger(new CausePlayerHealth(0, player), new EffectEndGame(listener)));
+		triggerList.add(new Trigger(new CauseDoneScaling(player), new EffectEndGame(listener)));
+		triggerList.add(new Trigger(new CausePlayerHealth(0, player), new EffectEndGame(listener)));
 	}
 }

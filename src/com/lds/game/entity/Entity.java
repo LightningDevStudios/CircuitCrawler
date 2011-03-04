@@ -117,6 +117,10 @@ public abstract class Entity
 	
 	public void draw(GL10 gl)
 	{
+		gl.glTranslatef(posVec.getX(), posVec.getY(), 0.0f);
+		gl.glRotatef(angle, 0.0f, 0.0f, 1.0f);
+		gl.glScalef(scaleVec.getX(), scaleVec.getY(), 1.0f);
+		
 		//Enable texturing and bind the current texture pointer (texturePtr) to GL_TEXTURE_2D
 		if (renderMode.contains(RenderMode.TEXTURE) || renderMode.contains(RenderMode.TILESET))
 		{
@@ -205,20 +209,20 @@ public abstract class Entity
 	public void initializeCollisionVariables ()
 	{
 		rad = Math.toRadians(angle);
-		diagonal = Math.sqrt(Math.pow(halfSize * getXScl(), 2) + Math.pow(halfSize * getYScl(), 2));	
+		diagonal = Math.sqrt((halfSize * getXScl()) * (halfSize * getXScl()) + (halfSize * getYScl()) * (halfSize * getYScl()));	
 	}
 	
 	//used to get the absolute, not relative, positions of the entity's 4 points in the XY Plane
 	public void updateAbsolutePointLocations ()
 	{	
-		Vector2f unscaledVec = Vector2f.scale(new Vector2f((float)Math.cos(Math.toRadians(angle)), (float)Math.sin(Math.toRadians(angle))), halfSize);
-		Vector2f xVec = Vector2f.scale(unscaledVec, getXScl());
-		Vector2f yVec = Vector2f.scale(Vector2f.getNormal(unscaledVec), getYScl());
+		final Vector2f unscaledVec = new Vector2f((float)Math.cos(Math.toRadians(angle)), (float)Math.sin(Math.toRadians(angle))).scale(halfSize);
+		final Vector2f xVec = Vector2f.scale(unscaledVec, getXScl());
+		final Vector2f yVec = Vector2f.scale(Vector2f.getNormal(unscaledVec), getYScl());
 		 																 //these are assuming the entity is facing right: angle = 0.0f
-		vertVecs[0].set(Vector2f.add(posVec, Vector2f.add(xVec, yVec))); //top  right
-		vertVecs[1].set(Vector2f.add(posVec, Vector2f.sub(yVec, xVec))); //top left
-		vertVecs[2].set(Vector2f.add(posVec, Vector2f.add(Vector2f.neg(xVec), Vector2f.neg(yVec)))); //bottom left
-		vertVecs[3].set(Vector2f.add(posVec, Vector2f.sub(xVec, yVec))); //bottom right
+		vertVecs[0].set(Vector2f.add(xVec, yVec).add(posVec)); //top  right
+		vertVecs[1].set(Vector2f.sub(yVec, xVec).add(posVec)); //top left
+		vertVecs[2].set(Vector2f.add(Vector2f.neg(xVec), Vector2f.neg(yVec)).add(posVec)); //bottom left
+		vertVecs[3].set(Vector2f.sub(xVec, yVec).add(posVec)); //bottom right
 	}
 	
 	public boolean closeEnough (Entity ent)
@@ -241,7 +245,7 @@ public abstract class Entity
 		else if (angleBetween < 0.0f)
 			angleBetween += 360;
 		
-		float angleDiff = (angle) - angleBetween;
+		float angleDiff = angle - angleBetween;
 		
 		if (angleDiff > 315.0f)
 			angleDiff -= 360.0f;
@@ -583,11 +587,11 @@ public abstract class Entity
 	{
 		if (isColorInterp)
 		{
-			float colorInterp = colorInterpSpeed / 1000 * (Stopwatch.elapsedTimeMs() - colorTimeMs);
-			double rNear = Math.abs(endColorR - colorR);
-			double gNear = Math.abs(endColorG - colorG);
-			double bNear = Math.abs(endColorB - colorB);
-			double aNear = Math.abs(endColorA - colorA);
+			final float colorInterp = colorInterpSpeed / 1000 * (Stopwatch.elapsedTimeMs() - colorTimeMs);
+			final double rNear = Math.abs(endColorR - colorR);
+			final double gNear = Math.abs(endColorG - colorG);
+			final double bNear = Math.abs(endColorB - colorB);
+			final double aNear = Math.abs(endColorA - colorA);
 			if (rNear < colorInterp && gNear < colorInterp && bNear < colorInterp && aNear < colorInterp)
 			{
 				colorR = endColorR;
@@ -626,7 +630,7 @@ public abstract class Entity
 	{
 		if (isGradientInterp)
 		{
-			float gradientInterp = colorInterpSpeed / 1000 * (Stopwatch.elapsedTimeMs() - gradientTimeMs);
+			final float gradientInterp = colorInterpSpeed / 1000 * (Stopwatch.elapsedTimeMs() - gradientTimeMs);
 			int nearCount = 0;
 			for (int i =0; i < color.length; i++)
 			{
