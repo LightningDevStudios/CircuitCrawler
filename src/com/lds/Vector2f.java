@@ -2,6 +2,7 @@ package com.lds;
 
 public class Vector2f
 {
+	public static final Vector2f empty = new Vector2f();
 	private float x;
 	private float y;
 	

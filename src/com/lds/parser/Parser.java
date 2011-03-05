@@ -4,13 +4,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import android.content.Context;
 import android.content.res.XmlResourceParser;
 
-import com.lds.game.R;
 import com.lds.game.entity.Entity;
-import com.lds.game.entity.PhysBlock;
 import com.lds.game.entity.Tile;
  
 public class Parser //this is a parser
@@ -21,6 +20,11 @@ public class Parser //this is a parser
 	
 	public XmlResourceParser xrp;  
 	public HashMap <String, String> dataHM;
+	
+	public static final int START_DOCUMENT = 0;
+	public static final int END_DOCUMENT = 1;
+	public static final int START_TAG = 2;
+	public static final int END_TAG = 3;
 
 	public Parser(Context context, int res)
 	{
@@ -29,10 +33,9 @@ public class Parser //this is a parser
 	
 	public void parseLevel() throws XmlPullParserException, IOException
 	{
-	
-		while (xrp.getEventType() != xrp.END_DOCUMENT)
+		while (xrp.getEventType() != END_DOCUMENT)
 		{
-			if (xrp.getEventType() == xrp.START_TAG)
+			if (xrp.getEventType() == START_TAG)
 			{
 				System.out.println(xrp.getName());
 				if(xrp.getName().equalsIgnoreCase("Entities"))
@@ -48,11 +51,11 @@ public class Parser //this is a parser
 	public void parseEntities() throws XmlPullParserException, IOException
 	{
 		//xrp.next();
-		while (!((xrp.getEventType() == xrp.END_TAG && xrp.getName().equals("Entities"))))
+		while (!((xrp.getEventType() == END_TAG && xrp.getName().equals("Entities"))))
 		{
 			xrp.next();
 			
-			if(xrp.getEventType() == xrp.START_TAG)
+			if(xrp.getEventType() == START_TAG)
 			{
 				dataHM = new HashMap<String, String>();
 				if(xrp.getName().equalsIgnoreCase("Door"))
@@ -129,9 +132,9 @@ public class Parser //this is a parser
 		
 		xrp.next();
 		
-		while (!(xrp.getEventType() == xrp.END_TAG && xrp.getName().equalsIgnoreCase(tn))) 
+		while (!(xrp.getEventType() == END_TAG && xrp.getName().equalsIgnoreCase(tn))) 
 		{
-			if(xrp.getEventType() == xrp.START_TAG && xrp.getName().equalsIgnoreCase("renderMode"))
+			if(xrp.getEventType() == START_TAG && xrp.getName().equalsIgnoreCase("renderMode"))
 			{
 				parseRM();
 				xrp.next();
@@ -148,7 +151,7 @@ public class Parser //this is a parser
 	public void parseRM() throws XmlPullParserException, IOException
 	{
 		xrp.next();
-		if(xrp.getEventType() == xrp.START_TAG && xrp.getName().equalsIgnoreCase("color"))
+		if(xrp.getEventType() == START_TAG && xrp.getName().equalsIgnoreCase("color"))
 		{
 			parseTag(dataHM);
 			xrp.next();
@@ -170,7 +173,6 @@ Parse A Tileset
 ***************/
 	public void parseTileset() throws XmlPullParserException, IOException
 	{
-		HashMap<String, String> tileHashMap = new HashMap<String, String>();
 		int x, y, curX, curY;
 		
 		HashMap<String, String> attributes = parseAttributes();
@@ -183,7 +185,7 @@ Parse A Tileset
 		curX = 0;
 		curY = 0;
 		xrp.next();
-		while(!(xrp.getEventType() == xrp.END_TAG && xrp.getName().equals("Tileset")))
+		while(!(xrp.getEventType() == END_TAG && xrp.getName().equals("Tileset")))
 		{
 			if(curX == x)
 			{

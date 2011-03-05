@@ -10,15 +10,8 @@ import org.xmlpull.v1.XmlPullParserException;
 import android.content.Context;
 
 import com.lds.Animation;
-import com.lds.EntityManager;
-import com.lds.Enums.Direction;
-import com.lds.Stopwatch;
-import com.lds.StringRenderer;
-import com.lds.Texture;
-import com.lds.TextureLoader;
-import com.lds.Vector2f;
-import com.lds.Enums.UIPosition;
-import com.lds.Enums.AIType;
+import com.lds.*;
+import com.lds.Enums.*;
 import com.lds.game.ai.Node;
 import com.lds.game.ai.NodePath;
 
@@ -76,9 +69,9 @@ public class Game
 	public PuzzleBox box;
 	public PickupHealth health;
 	//*/
-	public Sprite spr;
+	//public Sprite spr;
 	
-	public Animation spriteAnim;
+	//public Animation spriteAnim;
 		
 	//Constructors
 	public Game (Context context, GL10 gl) 
@@ -219,10 +212,10 @@ public class Game
 		entList.add(block2);
 
 		
-		spriteAnim = new Animation(tilesetwire, 0, 7, 7, 0, 3000);
+		/*spriteAnim = new Animation(tilesetwire, 0, 7, 7, 0, 3000);
 		spr = new Sprite(50, -100, 100, 45, 1, 1, spriteAnim);
 		spr.enableTextureMode(tilesetwire);
-		entList.add(spr);
+		entList.add(spr);*/
 		
 		/*s
 		box = new PuzzleBox(64.0f, -75.0f, 0.0f, false, true);
@@ -245,8 +238,8 @@ public class Game
 		health.enableColorMode(0, 255, 255, 255);
 		entList.add(health);
 		*/
-		spr = new Sprite(30.0f, -108.0f, -300.0f, 45.0f, 1.0f, 1.0f, 10, 90, 1, spriteAnim);
-		entList.add(spr);
+		//spr = new Sprite(30.0f, -108.0f, -300.0f, 45.0f, 1.0f, 1.0f, 10, 90, 1, spriteAnim);
+		//entList.add(spr);
 		
 		CauseAND bridgeAND = new CauseAND(new CauseButton(button1), new CauseButton(button2));
 		
@@ -316,7 +309,9 @@ public class Game
 		updateCameraPosition();
 		updateLocalEntities();
 
-		 updateLocalTileset();
+		updateLocalTileset();
+		 
+		System.gc();
 	}
 	
 	public void updateLocalEntities()
@@ -408,11 +403,11 @@ public class Game
 	
 	public Tile nearestTile(Entity ent)
 	{	
-		float tilesetHalfWidth = tileset[0].length * Tile.TILE_SIZE_F / 2;
-		float tilesetHalfHeight = tileset.length * Tile.TILE_SIZE_F / 2;
+		final float tilesetHalfWidth = tileset[0].length * Tile.TILE_SIZE_F / 2;
+		final float tilesetHalfHeight = tileset.length * Tile.TILE_SIZE_F / 2;
 		
-		int x = (int)(ent.getXPos() + tilesetHalfWidth) / Tile.TILE_SIZE;
-		int y = (int)(Math.abs(ent.getYPos() - tilesetHalfHeight)) / Tile.TILE_SIZE;
+		final int x = (int)(ent.getXPos() + tilesetHalfWidth) / Tile.TILE_SIZE;
+		final int y = (int)(Math.abs(ent.getYPos() - tilesetHalfHeight)) / Tile.TILE_SIZE;
 		
 		if (x < tileset[0].length && x >= 0 && y < tileset.length && y >= 0)
 		{
@@ -646,7 +641,7 @@ public class Game
 	
 	public void setGameOverEvent(OnGameOverListener listener)
 	{
-//		triggerList.add(new Trigger(new CauseDoneScaling(player), new EffectEndGame(listener)));
-//		triggerList.add(new Trigger(new CausePlayerHealth(0, player), new EffectEndGame(listener)));
+		triggerList.add(new Trigger(new CauseDoneScaling(player), new EffectEndGame(listener)));
+		triggerList.add(new Trigger(new CausePlayerHealth(0, player), new EffectEndGame(listener)));
 	}
 }
