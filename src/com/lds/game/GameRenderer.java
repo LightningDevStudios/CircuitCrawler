@@ -86,6 +86,25 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 			}
 		}
 		
+		//Use VBOs if available
+		Entity.genIndexBuffer(gl);
+		
+		if (Entity.useVBOs)
+		{
+			for (Entity ent: game.entList)
+			{
+				ent.genHardwareBuffers(gl);
+			}
+			
+			for (Tile[] ta : game.tileset)
+			{
+				for (Tile t : ta)
+				{
+					t.genHardwareBuffers(gl);
+				}
+			}
+		}
+		
 		if(gameInitializedListener != null)
 			gameInitializedListener.onGameInitialized();
 		
@@ -134,9 +153,9 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		gl.glEnable(GL10.GL_TEXTURE_2D);
 		gl.glBindTexture(GL10.GL_TEXTURE_2D, Game.tilesetworld.getTexture());
 		
-		gl.glFrontFace(GL10.GL_CW);
+		/*gl.glFrontFace(GL10.GL_CW);
 		gl.glEnable(GL10.GL_CULL_FACE);
-		gl.glCullFace(GL10.GL_BACK);
+		gl.glCullFace(GL10.GL_BACK);*/
 		
 		gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
 		gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
@@ -145,6 +164,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		{
 			for (Tile t : ts)
 			{
+				t.updateTextureVBO(gl);
 				t.draw(gl);
 			}
 		}
@@ -176,6 +196,9 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		for (Entity ent : game.entList)
 		{
 			ent.update();
+			ent.updateGradientVBO(gl);
+			ent.updateTextureVBO(gl);
+			
 			//run AI code for enemies
 			if (ent instanceof Enemy)
 				game.runAI((Enemy)ent);
@@ -303,9 +326,10 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 				final Vector2f directionVec = new Vector2f(game.player.getAngle());
 				directionVec.scale(game.player.getHalfSize() + 20.0f);
 				final AttackBolt attack = new AttackBolt(Vector2f.add(game.player.getPos(), directionVec), directionVec, game.player.getAngle());
-				vibrator(100);
+				attack.genHardwareBuffers(gl);
 				EntityManager.addEntity(attack);
 				game.player.loseEnergy(10);
+				vibrator(100);
 				SoundPlayer.getInstance().playSound(2);
 			}
 			game.btnA.unpress();
