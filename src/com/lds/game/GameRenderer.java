@@ -10,6 +10,7 @@ import android.view.MotionEvent;
 import android.content.Context;
 
 import com.lds.EntityManager;
+import com.lds.Finger;
 import com.lds.Stopwatch;
 import com.lds.Texture;
 import com.lds.TextureLoader;
@@ -24,7 +25,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	public Game game;
 	public Context context;
 	public Object syncObj;
-	public boolean windowOutdated, gameOver;
+	public boolean gameOver;
 	public int playerMoveTimeMs, frameInterval, frameCount = 0;	
 	public OnGameInitializedListener gameInitializedListener;
 	public OnPuzzleActivatedListener puzzleActivatedListener;
@@ -36,7 +37,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		Game.screenH = screenH;
 		this.context = context;
 		this.syncObj = syncObj;
-		windowOutdated = false;
+		Game.windowOutdated = false;
 		Game.worldOutdated = false;
 	}
 	
@@ -152,11 +153,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		
 		gl.glEnable(GL10.GL_TEXTURE_2D);
 		gl.glBindTexture(GL10.GL_TEXTURE_2D, Game.tilesetworld.getTexture());
-		
-		/*gl.glFrontFace(GL10.GL_CW);
-		gl.glEnable(GL10.GL_CULL_FACE);
-		gl.glCullFace(GL10.GL_BACK);*/
-		
+				
 		gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
 		gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
 		
@@ -178,7 +175,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		 ******************/
 		
 		//Triggered when the perspective needs to be redrawn
-		if (windowOutdated)
+		if (Game.windowOutdated)
 		{
 			//move heldObj if necessary
 			game.player.setAngle(game.joypad.getInputAngle());
@@ -189,7 +186,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 			
 			//redraw perspective
 			updateCamPosition(gl);
-			windowOutdated = false;
+			Game.windowOutdated = false;
 		}
 		
 		//update all entites
@@ -409,40 +406,28 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	@Override
 	public void onTouchInput(MotionEvent e) 
 	{
-		//playerMoveTimeMs = Stopwatch.elapsedTimeMs();
-		//Stopwatch.tick();
-		for(int i = 0; i < e.getPointerCount() && game.player.userHasControl(); i++)
-		{	
-			final Vector2f touchVec = new Vector2f(e.getX(i) - Game.screenW / 2, Game.screenH / 2 - e.getY(i));
-			for (UIEntity ent : game.UIList)
-			{
-				if (touchVec.getX() >= ent.getXPos() - ent.getXSize() / 2 && touchVec.getX() <= ent.getXPos() + ent.getXSize() / 2 && touchVec.getY() >= ent.getYPos() - ent.getYSize() / 2 && touchVec.getY() <= ent.getYPos() + ent.getYSize() / 2)
-				{				
-					if (ent instanceof UIJoypad)
+		switch(e.getAction())
+		{
+			case MotionEvent.ACTION_POINTER_DOWN:
+			case MotionEvent.ACTION_DOWN:
+				final Vector2f touchVec = new Vector2f(e.getX(e.getPointerCount() - 1) - Game.screenW / 2, e.getY(e.getPointerCount() - 1) - Game.screenH / 2);
+				for (int i = 0; i < game.UIList.size(); i++)
+				{
+					final UIEntity ent = game.UIList.get(i);
+					if (touchVec.getX() >= ent.getXPos() - ent.getXSize() / 2 && touchVec.getX() <= ent.getXPos() + ent.getXSize() / 2 && touchVec.getY() >= ent.getYPos() - ent.getYSize() / 2 && touchVec.getY() <= ent.getYPos() + ent.getYSize() / 2)
 					{
-						final UIJoypad joypad = (UIJoypad)ent;
-						joypad.setActive(true);
-						joypad.setInputVec(e.getX(i) - Game.screenW / 2, Game.screenH / 2 - e.getY(i));
-						windowOutdated = true;		
-						Game.worldOutdated = true;	
-						if (e.getAction() == MotionEvent.ACTION_UP)
-							joypad.setActive(false);
-					}
-						
-					//UIButton specific code
-					if (ent instanceof UIButton)
-					{
-						final UIButton btn = (UIButton)ent;
-						
-						//500ms delay between presses
-						if (btn.canPress(500))
-						{ 
-							btn.press();
-							btn.setIntervalTime(Stopwatch.elapsedTimeMs());
-						}
+						final Finger newFinger = new Finger(touchVec, ent);
+						newFinger.onStackPush();
+						game.fingerStack.push(newFinger);
 					}
 				}
-				else if (ent instanceof UIJoypad)
+				break;
+			case MotionEvent.ACTION_POINTER_UP:
+			case MotionEvent.ACTION_UP:
+				game.fingerStack.pop().onStackPop();
+				break;
+		}		
+		/*		else if (ent instanceof UIJoypad)
 				{
 					final UIJoypad joypad = (UIJoypad)ent;
 					if (e.getAction() == MotionEvent.ACTION_UP)
@@ -456,9 +441,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 						windowOutdated = true;
 						Game.worldOutdated = true;
 					}
-				}
-			}		
-		}
+				}	*/
 	}
 	//redraw the perspective
 	public void updateCamPosition(GL10 gl)

@@ -2,6 +2,7 @@ package com.lds.game;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Stack;
 
 import javax.microedition.khronos.opengles.GL10;
 
@@ -9,7 +10,6 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import android.content.Context;
 
-import com.lds.Animation;
 import com.lds.*;
 import com.lds.Enums.*;
 import com.lds.game.ai.Node;
@@ -28,14 +28,16 @@ public class Game
 	
 	//public Level[][] GameLevels;
 
-	public static boolean worldOutdated;
+	public static boolean worldOutdated, windowOutdated;
 	
 	public ArrayList<Entity> entList;
 	public Tile[][] tileset;
 	public ArrayList<UIEntity> UIList;
 	public ArrayList<Trigger> triggerList;
 	public EntityManager cleaner;
-		
+	
+	public Stack<Finger> fingerStack;
+	
 	//Camera data
 	public static float screenW, screenH;
 	public float camPosX;

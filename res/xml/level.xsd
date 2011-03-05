@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1" ?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
 
-  <!-- SIMPLE TYPES, used to make sure values are properly set-->
+  <!-- SIMPLE TYPES, used to make sure values are properly set -->
 
   <xs:simpleType name="stringType">
     <xs:restriction base="xs:string" />
@@ -14,6 +14,10 @@
   <xs:simpleType name="intType">
     <xs:restriction base="xs:int" />
   </xs:simpleType>
+
+	<xs:simpleType name="booleanType">
+		<xs:restriction base="xs:boolean" />
+	</xs:simpleType>
 
   <xs:simpleType name="tileStateType">
     <xs:restriction base="xs:token">
@@ -64,9 +68,12 @@
   <xs:complexType name="EntityInfo">
     <xs:sequence>
       <xs:element name="id" type="stringType" />
-      <xs:element name="size" type="floatType" minOccurs="0" />
+			<xs:element name="size" type="floatType" />
       <xs:element name="xPos" type="floatType" />
       <xs:element name="yPos" type="floatType" />
+			<xs:element name="angle" type="floatType" minOccurs="0" />
+			<xs:element name="xScl" type="floatType" minOccurs="0" />
+			<xs:element name="yScl" type="floatType" minOccurs="0" />
       <xs:element name="renderMode">
         <xs:complexType>
           <xs:sequence>
@@ -95,18 +102,35 @@
     </xs:sequence>
   </xs:complexType>
 
+	<xs:complexType name="PhysEntInfo">
+		<xs:complexContent>
+			<xs:extension base="EntityInfo">
+				<xs:sequence>
+					<xs:element name="moveSpeed" type="floatType" minOccurs="0" />
+					<xs:element name="rotSpeed" type="floatType" minOccurs="0" />
+					<xs:element name="sclSpeed" type="floatType" minOccurs="0" />
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="StaticEntInfo">
+		<xs:complexContent>
+			<xs:extension base="EntityInfo" />
+		</xs:complexContent>
+	</xs:complexType>
+	
   <xs:complexType name="CharacterInfo">
     <xs:complexContent>
-      <xs:extension base="EntityInfo">
+      <xs:extension base="PhysEntInfo">
         <xs:sequence>
           <xs:element name="health" type="intType" />
-          <xs:element name="energy" type="intType" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
   
-  <xs:complexType name="BlobInfo">
+  <xs:complexType name="EnemyInfo">
     <xs:complexContent>
       <xs:extension base="CharacterInfo">
         <xs:sequence>
@@ -116,47 +140,59 @@
     </xs:complexContent>
   </xs:complexType>
 
+	<xs:complexType name="BlobInfo">
+		<xs:complexContent>
+			<xs:extension base="EnemyInfo" />
+		</xs:complexContent>
+	</xs:complexType>
+
   <xs:complexType name="ButtonInfo">
     <xs:complexContent>
-      <xs:extension base="EntityInfo" />
+      <xs:extension base="StaticEntInfo" />
     </xs:complexContent>
   </xs:complexType>
 
   <xs:complexType name="DoorInfo">
     <xs:complexContent>
-      <xs:extension base="EntityInfo" />
+			<xs:extension base="StaticEntInfo">
+				<xs:sequence>
+					<xs:element name="startOpen" type="booleanType" />
+				</xs:sequence>
+			</xs:extension>
     </xs:complexContent>
   </xs:complexType>
 
   <xs:complexType name="PhysBlockInfo">
     <xs:complexContent>
-      <xs:extension base="EntityInfo" />
+      <xs:extension base="PhysEntInfo" />
     </xs:complexContent>
   </xs:complexType>
 
   <xs:complexType name="PhysCircleInfo">
     <xs:complexContent>
-      <xs:extension base="EntityInfo" />
+      <xs:extension base="PhysEntInfo" />
     </xs:complexContent>
   </xs:complexType>
 
-  <xs:complexType name="PickupEnergyInfo">
+  <xs:complexType name="PickupInfo">
     <xs:complexContent>
-      <xs:extension base="EntityInfo">
+      <xs:extension base="PhysEntInfo">
         <xs:sequence>
-          <xs:element name="energyValue" type="intType" />
+          <xs:element name="value" type="intType" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
 
+	<xs:complexType name="PickupEnergyInfo">
+		<xs:complexContent>
+			<xs:extension base="PickupInfo" />
+		</xs:complexContent>
+	</xs:complexType>
+	
   <xs:complexType name="PickupHealthInfo">
     <xs:complexContent>
-      <xs:extension base="EntityInfo">
-        <xs:sequence>
-          <xs:element name="healthValue" type="intType" />
-        </xs:sequence>
-      </xs:extension>
+      <xs:extension base="PickupInfo" />
     </xs:complexContent>
   </xs:complexType>
 
@@ -168,13 +204,13 @@
 
   <xs:complexType name="PuzzleBoxInfo">
     <xs:complexContent>
-      <xs:extension base="EntityInfo" />
+      <xs:extension base="StaticEntInfo" />
     </xs:complexContent>
   </xs:complexType>
 
   <xs:complexType name="SpriteInfo">
     <xs:complexContent>
-      <xs:extension base="EntityInfo" />
+      <xs:extension base="StaticEntInfo" />
     </xs:complexContent>
   </xs:complexType>
 
@@ -190,13 +226,7 @@
         <xs:element name="Tileset">
           <xs:complexType>
             <xs:sequence>
-             <!-- <xs:element name="TileRow" maxOccurs="unbounded">
-                <xs:complexType>
-                  <xs:sequence> -->
-                    <xs:element name="Tile" type="TileInfo" maxOccurs="unbounded" />
-                  <!--</xs:sequence>
-                </xs:complexType>
-              </xs:element> -->
+              <xs:element name="Tile" type="TileInfo" maxOccurs="unbounded" />
             </xs:sequence>
             <xs:attribute name="x" type="xs:integer" use="required"/>
             <xs:attribute name="y" type="xs:integer" use="required"/>
@@ -216,6 +246,7 @@
               <xs:element name="Player" type="PlayerInfo" minOccurs="0" maxOccurs="unbounded" />
               <xs:element name="PuzzleBox" type="PuzzleBoxInfo" minOccurs="0" maxOccurs="unbounded" />
               <xs:element name="Sprite" type="SpriteInfo" minOccurs="0" maxOccurs="unbounded" />
+							<!--<xs:element name="Player" type="PlayerInfo" />-->
             </xs:sequence>
           </xs:complexType>
         </xs:element>
