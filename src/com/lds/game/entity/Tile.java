@@ -36,9 +36,12 @@ public class Tile extends StaticEnt
 	@Override
 	public void draw(GL10 gl)
 	{
-		gl.glVertexPointer(2, GL10.GL_FLOAT, 0, vertexBuffer);
-		gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, textureBuffer);
-		gl.glDrawElements(GL10.GL_TRIANGLE_STRIP, indices.length, GL10.GL_UNSIGNED_BYTE, indexBuffer);
+		if (rendered)
+		{
+			gl.glVertexPointer(2, GL10.GL_FLOAT, 0, vertexBuffer);
+			gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, textureBuffer);
+			gl.glDrawElements(GL10.GL_TRIANGLE_STRIP, 4, GL10.GL_UNSIGNED_BYTE, indexBuffer);
+		}
 	}
 	
 	@Override

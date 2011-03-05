@@ -41,12 +41,12 @@ public abstract class Entity
 	protected float[] vertices;
 	protected float[] texture;
 	protected float[] color, endColor;
-	protected byte[] indices;
+	public static final byte[] indices = {0, 1, 2, 3};
 	
 	protected FloatBuffer vertexBuffer;
 	protected FloatBuffer textureBuffer;
 	protected FloatBuffer colorBuffer;
-	protected ByteBuffer indexBuffer;
+	public static ByteBuffer indexBuffer;
 	
 	//debug data
 	private int entID;
@@ -103,13 +103,6 @@ public abstract class Entity
 		vertices = initVerts;
 		this.vertexBuffer = setBuffer(vertexBuffer, vertices);
 		
-		byte[] initIndices = {	0, 1, 2, 3 };
-		indices = initIndices;
-		
-		indexBuffer = ByteBuffer.allocateDirect(indices.length);
-		indexBuffer.put(indices);
-		indexBuffer.position(0);
-		
 		renderMode = EnumSet.noneOf(RenderMode.class);
 	}
 	
@@ -121,8 +114,12 @@ public abstract class Entity
 		gl.glRotatef(angle, 0.0f, 0.0f, 1.0f);
 		gl.glScalef(scaleVec.getX(), scaleVec.getY(), 1.0f);
 		
+		final boolean containsColor = renderMode.contains(RenderMode.COLOR);
+		final boolean containsGradient = renderMode.contains(RenderMode.GRADIENT);
+		final boolean containsTextureOrTileset = renderMode.contains(RenderMode.TEXTURE) || renderMode.contains(RenderMode.TILESET);
+		
 		//Enable texturing and bind the current texture pointer (texturePtr) to GL_TEXTURE_2D
-		if (renderMode.contains(RenderMode.TEXTURE) || renderMode.contains(RenderMode.TILESET))
+		if (/*renderMode.contains(RenderMode.TILESET) || renderMode.contains(RenderMode.TEXTURE)*/ containsTextureOrTileset)
 		{
 			gl.glEnable(GL10.GL_TEXTURE_2D);
 			gl.glBindTexture(GL10.GL_TEXTURE_2D, tex.getTexture());
@@ -137,34 +134,34 @@ public abstract class Entity
 		
 		//Enable settings for this polygon
 		gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
-		if (renderMode.contains(RenderMode.TEXTURE) || renderMode.contains(RenderMode.TILESET)) {gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);}
-		if (renderMode.contains(RenderMode.GRADIENT)) {gl.glEnableClientState(GL10.GL_COLOR_ARRAY);}
+		if (/*renderMode.contains(RenderMode.TILESET) || renderMode.contains(RenderMode.TEXTURE)*/ containsTextureOrTileset) {gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);}
+		if (/*renderMode.contains(RenderMode.GRADIENT)*/ containsGradient) {gl.glEnableClientState(GL10.GL_COLOR_ARRAY);}
 		
 		//Bind vertices, texture coordinates, and/or color coordinates to the OpenGL system
 		gl.glVertexPointer(2, GL10.GL_FLOAT, 0, vertexBuffer);
-		if (renderMode.contains(RenderMode.TEXTURE) || renderMode.contains(RenderMode.TILESET)) {gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, textureBuffer);}
-		if (renderMode.contains(RenderMode.GRADIENT)) {gl.glColorPointer(4, GL10.GL_FLOAT, 0, colorBuffer);}
+		if (/*renderMode.contains(RenderMode.TILESET) || renderMode.contains(RenderMode.TEXTURE)*/ containsTextureOrTileset) {gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, textureBuffer);}
+		if (/*renderMode.contains(RenderMode.GRADIENT)*/ containsGradient) {gl.glColorPointer(4, GL10.GL_FLOAT, 0, colorBuffer);}
 		
 		//Sets color
-		if (renderMode.contains(RenderMode.COLOR)) {gl.glColor4f(colorR, colorG, colorB, colorA);}
+		if (/*renderMode.contains(RenderMode.COLOR)*/ containsColor) {gl.glColor4f(colorR, colorG, colorB, colorA);}
 		
 		//Draw the vertices
-		gl.glDrawElements(GL10.GL_TRIANGLE_STRIP, indices.length, GL10.GL_UNSIGNED_BYTE, indexBuffer);		
+		gl.glDrawElements(GL10.GL_TRIANGLE_STRIP, 4, GL10.GL_UNSIGNED_BYTE, indexBuffer);		
 		
 		//Disable things for next polygon
 		gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
-		if(renderMode.contains(RenderMode.GRADIENT)) {gl.glDisableClientState(GL10.GL_COLOR_ARRAY);}
+		if(/*renderMode.contains(RenderMode.GRADIENT)*/ containsGradient) {gl.glDisableClientState(GL10.GL_COLOR_ARRAY);}
 		gl.glDisable(GL10.GL_CULL_FACE);
 		
 		//Disable texturing for next polygon
-		if (renderMode.contains(RenderMode.TEXTURE) || renderMode.contains(RenderMode.TILESET))
+		if (/*renderMode.contains(RenderMode.TILESET) || renderMode.contains(RenderMode.TEXTURE)*/ containsTextureOrTileset)
 		{
 			gl.glDisableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
 			gl.glDisable(GL10.GL_TEXTURE_2D);
 		}
 		
 		//Reset color for next polygon.
-		if (renderMode.contains(RenderMode.COLOR) /*|| renderMode.contains(RenderMode.GRADIENT)*/) {gl.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);}
+		if (/*renderMode.contains(RenderMode.COLOR)*/ containsColor) {gl.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);}
 	}
 			
 	public void remove()
@@ -739,9 +736,10 @@ public abstract class Entity
 			colorBuffer = setBuffer(colorBuffer, color);
 		if(texture!= null)
 			textureBuffer = setBuffer(textureBuffer, texture);
-		
-		byte[] initIndices = {	0, 1, 2, 3 };
-		indices = initIndices;
+	}
+	
+	public static void resetIndexBuffer()
+	{
 		indexBuffer = ByteBuffer.allocateDirect(indices.length);
 		indexBuffer.put(indices);
 		indexBuffer.position(0);

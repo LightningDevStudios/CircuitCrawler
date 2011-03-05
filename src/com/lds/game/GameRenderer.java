@@ -4,7 +4,6 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 import android.opengl.GLU;
-import android.os.Debug;
 import android.os.Vibrator;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -47,7 +46,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		//openGL settings
 		gl.glShadeModel(GL10.GL_SMOOTH);
 		gl.glEnable(GL10.GL_BLEND);
-		gl.glBlendFunc(GL10.GL_ONE, GL10.GL_ONE_MINUS_SRC_ALPHA); //TODO change this later and make it per-poly?
+		gl.glBlendFunc(GL10.GL_ONE, GL10.GL_ONE_MINUS_SRC_ALPHA);
 
 		gl.glClearColor(0.39f, 0.58f, 0.93f, 1.0f);
 		
@@ -61,14 +60,18 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		Stopwatch.tick();
 		playerMoveTimeMs = Stopwatch.elapsedTimeMs();
 		
+		Entity.resetIndexBuffer();
+		
 		if(game == null)
 			game = new Game(context, gl);
+		
 		else
 		{
 			Game.tilesetcolors = new Texture(R.drawable.tilesetcolors, 128, 128, 8, 8, context, "tilesetcolors");
 			Game.tilesetwire = new Texture(R.drawable.tilesetwire, 128, 128, 8, 8, context, "tilesetwire");
 			Game.randomthings = new Texture(R.drawable.randomthings, 256, 256, 8, 8, context, "randomthings");
 			Game.text = new Texture(R.drawable.text, 256, 256, 16, 8, context, "text");
+			Game.tilesetworld = new Texture(R.drawable.tilesetworld, 512, 256, 16, 8, context, "tilesetworld");
 			
 			TextureLoader.getInstance().initialize(gl);
 			TextureLoader tl = TextureLoader.getInstance();
@@ -76,6 +79,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 			tl.loadTexture(Game.tilesetwire);
 			tl.loadTexture(Game.randomthings);
 			tl.loadTexture(Game.text);
+			tl.loadTexture(Game.tilesetworld);
 			for(Entity ent : game.entList)
 			{
 				ent.resetAllBuffers();
@@ -97,10 +101,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	@Override
 	public void onDrawFrame(GL10 gl) 
 	{
-		//TODO keep so we can see what's slowing down a frame later.
 		frameCount++;
-		/*if (frameCount == 100)
-			Debug.startMethodTracing("LDS_Game4");*/
 		
 		/*********************************
 		 * Update World and Render Tiles *
@@ -144,10 +145,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		{
 			for (Tile t : ts)
 			{
-				if (t.isRendered())
-				{
-					t.draw(gl);
-				}
+				t.draw(gl);
 			}
 		}
 		
@@ -357,13 +355,6 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 			Log.d("LDS_Game", "FPS: " + (1000.0f / (Stopwatch.elapsedTimeMs() - frameInterval)));
 			frameCount = 0;
 		}
-		
-		//TODO keep for later, if we want to see what's slowing down a frame.
-		/*if (frameCount == 101)
-		{
-			testDebug = false;
-			Debug.stopMethodTracing();
-		}*/
 	}
 
 	public void vibrator(int time)
