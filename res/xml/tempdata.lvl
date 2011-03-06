@@ -368,4 +368,14 @@
       <renderMode />
     </PuzzleBox>
   </Entities>
+  <Triggers>
+  	<Trigger>
+  	  <cause type="CauseNOT">puzBlock1</cause>
+  	  <effect type="EffectDoor">puzBlock1</effect>
+	</Trigger>
+	<Trigger>
+  	  <cause type="CauseNOT">puzBlock1</cause>
+  	  <effect type="EffectDoor">puzBlock1</effect>
+	</Trigger>
+  </Triggers>
 </Level>

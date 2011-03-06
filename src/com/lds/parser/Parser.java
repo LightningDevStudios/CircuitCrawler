@@ -12,6 +12,7 @@ import com.lds.game.R;
 import com.lds.game.entity.Entity;
 import com.lds.game.entity.PhysBlock;
 import com.lds.game.entity.Tile;
+import com.lds.trigger.*;
  
 public class Parser //this is a parser
 {
@@ -27,9 +28,12 @@ public class Parser //this is a parser
 		xrp = context.getResources().getXml(res);
 	}
 	
+/***********************
+ General parsing methods
+ **********************/
+	
 	public void parseLevel() throws XmlPullParserException, IOException
 	{
-	
 		while (xrp.getEventType() != xrp.END_DOCUMENT)
 		{
 			if (xrp.getEventType() == xrp.START_TAG)
@@ -39,6 +43,8 @@ public class Parser //this is a parser
 					parseEntities();
 				else if(xrp.getName().equalsIgnoreCase("Tileset"))
 					parseTileset();
+				else if(xrp.getName().equalsIgnoreCase("Triggers"));
+					parseTriggers();
 			}
 			
 			xrp.next();
@@ -59,66 +65,80 @@ public class Parser //this is a parser
 				{
 					parseObj("Door");
 					DoorData dd = new DoorData(dataHM);
+					parsedList.add(dd);
 					dd.createInst(entList);
-					//dataHM = null;
 				}
 				else if (xrp.getName().equalsIgnoreCase("Button"))
 				{
 					parseObj("Button");
 					ButtonData bd = new ButtonData(dataHM);
+					parsedList.add(bd);
 					bd.createInst(entList);
-					//dataHM = null;
 				}
 				else if (xrp.getName().equalsIgnoreCase("PhysBlock"))
 				{
 					parseObj("PhysBlock");
 					PhysBlockData pbd = new PhysBlockData(dataHM);
+					parsedList.add(pbd);
 					pbd.createInst(entList);
-					//dataHM = null;
 				}
 				else if (xrp.getName().equalsIgnoreCase("Blob"))
 				{
 					parseObj("Blob");
 					BlobData bd = new BlobData(dataHM);
+					parsedList.add(bd);
 					bd.createInst(entList);
-					//dataHM = null;
 				}
 				else if (xrp.getName().equalsIgnoreCase("PuzzleBox"))
 				{
 					parseObj("PuzzleBox");
 					PuzzleBoxData pbd = new PuzzleBoxData(dataHM);
+					parsedList.add(pbd);
 					pbd.createInst(entList);
-					//dataHM = null;
 				}
 				else if (xrp.getName().equalsIgnoreCase("PhysCircle"))
 				{
 					parseObj("PhysCircle");
 					PhysCircleData pcd= new PhysCircleData(dataHM);
+					parsedList.add(pcd);
 					pcd.createInst(entList);
-					//dataHM = null;
 				}
 				else if (xrp.getName().equalsIgnoreCase("Player"))
 				{
 					parseObj("Player");
 					PlayerData pd = new PlayerData(dataHM);
+					parsedList.add(pd);
 					pd.createInst(entList);
-					//dataHM = null;
 				}
 				else if (xrp.getName().equalsIgnoreCase("PickupHealth"))
 				{
 					parseObj("PickupHealth");
-					PickupHealthData phd = new PickupHealthData(dataHM);
-					phd.createInst(entList);
-					//dataHM = null;
+					PickupHealthData phD = new PickupHealthData(dataHM);
+					parsedList.add(phD);
+					phD.createInst(entList);
 				}
-			/*	
-			    else
-				{
-					xrp.next();
-				}
-			*/
 			}
 		}
+	}
+	
+	public HashMap<String, String> parseTag(HashMap<String, String> map) throws XmlPullParserException, IOException
+	{
+		String tagName = xrp.getName();
+		xrp.next();
+		map.put(tagName, xrp.getText());
+		
+		return map;
+	}
+	
+	public HashMap<String, String> parseAttributes()
+	{
+		HashMap<String, String> map = new HashMap<String, String>();
+		for (int i = 0; i < xrp.getAttributeCount(); i++)
+		{
+			map.put(xrp.getAttributeName(i), xrp.getAttributeValue(i));
+		}
+		
+		return map;
 	}
 	
 /****************
@@ -156,16 +176,6 @@ public class Parser //this is a parser
 			}
 		}
 	}
-	
-	public HashMap<String, String> parseTag(HashMap<String, String> map) throws XmlPullParserException, IOException
-	{
-		String tagName = xrp.getName();
-		xrp.next();
-		map.put(tagName, xrp.getText());
-		
-		return map;
-	}
-	
 /***************
 Parse A Tileset
 ***************/
@@ -213,15 +223,48 @@ Parse A Tileset
 		}
 	}
 	
-	public HashMap<String, String> parseAttributes()
+/************
+Parse Triggas
+************/
+	
+	public void parseTriggers() throws XmlPullParserException, IOException
 	{
-		HashMap<String, String> map = new HashMap<String, String>();
-		for (int i = 0; i < xrp.getAttributeCount(); i++)
+		while(!(xrp.getEventType() == xrp.END_TAG && xrp.getName().equals("Triggers")))
 		{
-			map.put(xrp.getAttributeName(i), xrp.getAttributeValue(i));
+			xrp.next();
+			
+			while(!(xrp.getEventType() == xrp.END_TAG && xrp.getName().equals("Trigger")))
+			{
+				xrp.next();
+				
+				String causeSTR = xrp.getAttributeValue(0); //picks up a cause
+				xrp.next();
+				
+				String ids = xrp.getName();
+				String[] causeID = ids.split(","); //picks and splits cause IDs
+				
+				xrp.next();
+				xrp.next();
+				
+				String effectSTR = xrp.getAttributeValue(0); //picks up an effect
+				xrp.next();
+				
+				ids = xrp.getName();
+				String[] effectID = ids.split(","); //picks and splits effect IDs
+				
+				/*************************
+				sets the causes and effects
+				**************************/
+				Cause cause;
+				
+				if(causeSTR.equalsIgnoreCase("CauseButton"))
+				{
+					//FILL STUFF IN HERE
+				}
+				
+				xrp.next();
+				xrp.next();
+			}
 		}
-		
-		return map;
 	}
-
 }

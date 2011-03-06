@@ -210,10 +210,11 @@ public class Game
 		spr.enableTextureMode(tilesetwire);
 		entList.add(spr);
 		
-		/*s
+		
 		box = new PuzzleBox(64.0f, -75.0f, 0.0f, false, true);
 		entList.add(box);
 		
+		/*
 		//TODO NOPE LOL
 		circle = new PhysCircle(50.0f, -100.0f, -310.0f);
 		circle.setTilesetMode(tilesetwire, 1, 2);
