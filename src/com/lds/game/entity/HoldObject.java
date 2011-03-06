@@ -1,6 +1,7 @@
 package com.lds.game.entity;
 
 import com.lds.Vector2f;
+import com.lds.game.SoundPlayer;
 
 public abstract class HoldObject extends PhysEnt //and object that is held (blocks, balls, etc.)
 {
@@ -16,7 +17,23 @@ public abstract class HoldObject extends PhysEnt //and object that is held (bloc
 	public void onTileInteract(Tile tile)
 	{
 		if (!held)
-			super.onTileInteract(tile);
+		{
+			if (moveInterpVec.mag() < 1.0f && moveInterpVec.mag() > 0.0f)
+			{
+				if (tile.isPit())
+				{
+					//this.stop();
+					this.scaleTo(0, 0);
+					falling = true;
+					if (falling)
+						SoundPlayer.getInstance().playSound(SoundPlayer.PIT_FALL);
+				}
+				else
+					falling = false;
+			}
+			else if (!gettingPushed)
+				super.onTileInteract(tile);
+		}
 	}
 	
 	public boolean isHeld ()
