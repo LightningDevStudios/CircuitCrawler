@@ -459,10 +459,9 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 						joypad.setActive(false);
 					else if (joypad.isActive())
 					{
-						final Vector2f tempVec = new Vector2f(e.getX(i) - Game.screenW / 2, Game.screenH / 2 - e.getY(i));
-						joypad.setInputVec(tempVec);
-						if (tempVec.mag() > joypad.getXSize() / 2)
-							joypad.scaleInputVecTo(joypad.getXSize() / 2);
+						final Vector2f rawVec = new Vector2f(e.getX(i) - Game.screenW / 2, Game.screenH / 2 - e.getY(i));
+						joypad.setInputVec(rawVec);
+						
 						windowOutdated = true;
 						Game.worldOutdated = true;
 						//playerMoveTimeMs = Stopwatch.elapsedTimeMs();

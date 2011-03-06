@@ -13,19 +13,20 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	public float interpAngle, endAngle;
 	public int moveTimeMs, rotTimeMs, sclTimeMs;
 	protected float moveSpeed, rotSpeed, sclSpeed;
-	public boolean isMoving, isRotating, isScaling, isRotatingCCW, falling;
+	public boolean isMoving, isRotating, isScaling, isRotatingCCW, falling, gettingPushed;
 	protected Vector2f moveVec, moveInterpVec, endPosVec;
 	protected Vector2f sclVec, sclInterpVec, endScaleVec;
 	protected int moveInterpCount, sclInterpCount;
 	protected ArrayList<Vector2f> bounceList;
+	protected float friction;
 	
 	
-	public PhysEnt(float size, float xPos, float yPos, boolean circular, boolean willCollide, float moveSpeed, float rotSpeed, float sclSpeed)
+	public PhysEnt(float size, float xPos, float yPos, boolean circular, boolean willCollide, float moveSpeed, float rotSpeed, float sclSpeed, float friction)
 	{
-		this(size, xPos, yPos, 0.0f, 1.0f, 1.0f, true, circular, willCollide, moveSpeed, rotSpeed, sclSpeed);
+		this(size, xPos, yPos, 0.0f, 1.0f, 1.0f, true, circular, willCollide, moveSpeed, rotSpeed, sclSpeed, friction);
 	}
 	
-	public PhysEnt(float size, float xPos, float yPos, float angle, float xScl, float yScl, boolean isSolid, boolean circular, boolean willCollide, float moveSpeed, float rotSpeed, float sclSpeed)
+	public PhysEnt(float size, float xPos, float yPos, float angle, float xScl, float yScl, boolean isSolid, boolean circular, boolean willCollide, float moveSpeed, float rotSpeed, float sclSpeed, float friction)
 	{
 		super(size, xPos, yPos, angle, xScl, yScl, isSolid, circular, willCollide);
 		
@@ -34,13 +35,16 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 		this.moveSpeed = moveSpeed;
 		this.rotSpeed = rotSpeed;
 		this.sclSpeed = sclSpeed;
+		this.friction = friction;
 		moveVec = new Vector2f();
 		sclVec = new Vector2f();
 		moveInterpVec = new Vector2f();
+		sclInterpVec = new Vector2f();
 		moveInterpCount = 0;
 		sclInterpCount = 0;
 		bounceList = new ArrayList<Vector2f>();
 		falling = false;
+		gettingPushed = false;
 	}
 	
 	@Override
@@ -71,6 +75,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 		{
 			if (tile.isPit())
 			{
+				this.stop();
 				this.scaleTo(0, 0);
 				this.moveTo(tile.getXPos(), tile.getYPos());
 				falling = true;
@@ -107,6 +112,20 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	public void moveTo (final Vector2f moveToVec)
 	{
 		this.moveTo(moveToVec.getX(), moveToVec.getY());
+	}
+	
+	public void push (final float x, final float y)
+	{
+		gettingPushed = true;
+		moveInterpVec.set(x, y);
+		isMoving = true;
+		moveTimeMs = Stopwatch.elapsedTimeMs();
+		Game.worldOutdated = true;
+	}
+	
+	public void push (final Vector2f initVec)
+	{
+		push(initVec.getX(), initVec.getY());
 	}
 	
 	//sets angle of an entity to a new value
@@ -377,7 +396,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	{	
 		//if the object needs to be interpolated
 		if (isMoving)
-		{
+		{	
 			if(moveSpeed <= 0)
 			{
 				moveSpeed = 0;
@@ -386,11 +405,17 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 			}
 			else
 			{
-				moveInterpCount++;
-				moveInterpVec = Vector2f.normalize(moveVec).scale(moveSpeed / 1000 * (Stopwatch.elapsedTimeMs() - moveTimeMs));
-				Game.worldOutdated = true;
+				if (gettingPushed)
+				{
+					moveInterpVec.scaleTo(moveInterpVec.mag() - friction);
+				}
+				else
+				{
+					moveInterpCount++;
+					moveInterpVec = Vector2f.normalize(moveVec).scale(moveSpeed / 1000 * (Stopwatch.elapsedTimeMs() - moveTimeMs));
+				}
 				
-				if (moveVec.mag() - moveInterpVec.mag() * moveInterpCount <= moveInterpVec.mag() / 2)
+				if (!gettingPushed && moveVec.mag() - moveInterpVec.mag() * moveInterpCount <= moveInterpVec.mag() / 2)
 				{
 					moveInterpVec.set(0, 0);
 					posVec = endPosVec;
@@ -399,9 +424,13 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 				}
 				else
 				{
-					posVec.add(moveInterpVec);
-					Game.worldOutdated = true;
+					if (moveInterpVec.mag() > 0)
+						posVec.add(moveInterpVec);
+					else
+						stop();
 				}
+				
+				Game.worldOutdated = true;
 			}
 				
 			moveTimeMs = Stopwatch.elapsedTimeMs();
@@ -478,9 +507,12 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	
 	public void stop()
 	{
+		sclInterpVec.set(0, 0);
+		moveInterpVec.set(0, 0);
 		isMoving = false;
 		isRotating = false;
 		isScaling = false;
+		gettingPushed = false;
 	}
 	
 	public Vector2f getBounceVec()

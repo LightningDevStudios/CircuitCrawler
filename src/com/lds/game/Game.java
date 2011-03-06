@@ -61,7 +61,7 @@ public class Game
 	public UITextBox textbox;
 	public Player player;
 	///*
-	public PhysBlock block;
+	public PhysBall block;
 	public PhysBall circle;
 	public Button button;
 	public Door door;
@@ -169,7 +169,7 @@ public class Game
 		button.enableTilesetMode(randomthings, 0, 0);
 		entList.add(button);
 		
-		block = new PhysBlock(Entity.DEFAULT_SIZE, -215.0f, -350.0f);
+		block = new PhysBall(Entity.DEFAULT_SIZE, -215.0f, -350.0f);
 		block.enableTilesetMode(tilesetwire, 2, 1);
 		//block.enableColorMode(1.0f, 1.0f, 1.0f, 0.5f);
 		float[] initGM = {1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f};
