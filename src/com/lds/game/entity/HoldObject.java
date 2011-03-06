@@ -32,12 +32,12 @@ public abstract class HoldObject extends PhysEnt //and object that is held (bloc
 	public void drop ()
 	{
 		held = false;
-		push(new Vector2f (angle).scale(4));
+		stop();
 	}
 	
 	public void push ()
 	{
 		held = false;
-		stop();
+		push(new Vector2f (angle).scale(4));
 	}
 }

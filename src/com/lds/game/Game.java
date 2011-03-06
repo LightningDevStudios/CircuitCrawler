@@ -203,11 +203,11 @@ public class Game
 		entList.add(button2);
 		
 
-		PhysBlock block1 = new PhysBlock(50, 0, 108);
+		PhysBall block1 = new PhysBall(50, 0, 108);
 		block1.enableTilesetMode(tilesetwire, 2, 1);
 		entList.add(block1);
 		 
-		PhysBlock block2 = new PhysBlock(50, -216, 108);
+		PhysBall block2 = new PhysBall(50, -216, 108);
 		block2.enableTilesetMode(tilesetwire, 2, 1);
 		entList.add(block2);
 

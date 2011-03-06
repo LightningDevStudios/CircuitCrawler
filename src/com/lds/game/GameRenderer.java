@@ -315,12 +315,14 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 					{
 						game.player.holdObject((HoldObject)ent);
 						game.btnB.unpress();
+						vibrator(100);
 					}
 				}
 				else //holding object, button pressed
 				{
 					game.player.dropObject();
 					game.btnB.unpress();
+					vibrator(100);
 				}
 			}
 		}
@@ -329,17 +331,26 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		//causes button A to shoot when pressed
 		if (game.btnA.isPressed())
 		{
-			if (!game.player.isHoldingObject() && game.player.getEnergy() != 0)
+			if (!game.player.isHoldingObject())
 			{
-				final Vector2f directionVec = new Vector2f(game.player.getAngle());
-				directionVec.scale(game.player.getHalfSize() + 20.0f);
-				final AttackBolt attack = new AttackBolt(Vector2f.add(game.player.getPos(), directionVec), directionVec, game.player.getAngle());
-				attack.genHardwareBuffers(gl);
-				EntityManager.addEntity(attack);
-				game.player.loseEnergy(10);
-				vibrator(100);
-				SoundPlayer.getInstance().playSound(2);
+				if (game.player.getEnergy() != 0)
+				{
+					final Vector2f directionVec = new Vector2f(game.player.getAngle());
+					directionVec.scale(game.player.getHalfSize() + 20.0f);
+					final AttackBolt attack = new AttackBolt(Vector2f.add(game.player.getPos(), directionVec), directionVec, game.player.getAngle());
+					attack.genHardwareBuffers(gl);
+					EntityManager.addEntity(attack);
+					game.player.loseEnergy(10);
+					vibrator(100);
+					SoundPlayer.getInstance().playSound(2);
+				}
 			}
+			else
+			{
+				game.player.throwObject();
+				vibrator(100);
+			}
+			
 			game.btnA.unpress();
 		}
 		
