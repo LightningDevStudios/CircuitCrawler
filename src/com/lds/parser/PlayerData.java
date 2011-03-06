@@ -36,5 +36,6 @@ public class PlayerData extends CharacterData
 			playerRef.enableTilesetMode(tex, tileX, tileY);
 		
 		entData.add(playerRef);
+		ent = playerRef;
 	}
 }

@@ -34,5 +34,6 @@ public class ButtonData extends StaticEntData
 			buttonRef.enableTilesetMode(tex, tileX, tileY);
 		
 		entData.add(buttonRef);
+		ent = buttonRef;
 	}
 }

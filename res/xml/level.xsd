@@ -168,7 +168,7 @@
     </xs:complexContent>
   </xs:complexType>
 
-  <xs:complexType name="PhysCircleInfo">
+  <xs:complexType name="PhysBallInfo">
     <xs:complexContent>
       <xs:extension base="PhysEntInfo" />
     </xs:complexContent>
@@ -240,13 +240,12 @@
               <xs:element name="Button" type="ButtonInfo" minOccurs="0" maxOccurs="unbounded" />
               <xs:element name="Door" type="DoorInfo" minOccurs="0" maxOccurs="unbounded" />
               <xs:element name="PhysBlock" type="PhysBlockInfo" minOccurs="0" maxOccurs="unbounded" />
-              <xs:element name="PhysCircle" type="PhysCircleInfo" minOccurs="0" maxOccurs="unbounded" />
+              <xs:element name="PhysBall" type="PhysBallInfo" minOccurs="0" maxOccurs="unbounded" />
               <xs:element name="PickupEnergy" type="PickupEnergyInfo" minOccurs="0" maxOccurs="unbounded" />
               <xs:element name="PickupHealth" type="PickupHealthInfo" minOccurs="0" maxOccurs="unbounded" />
               <xs:element name="Player" type="PlayerInfo" minOccurs="0" maxOccurs="unbounded" />
               <xs:element name="PuzzleBox" type="PuzzleBoxInfo" minOccurs="0" maxOccurs="unbounded" />
               <xs:element name="Sprite" type="SpriteInfo" minOccurs="0" maxOccurs="unbounded" />
-							<!--<xs:element name="Player" type="PlayerInfo" />-->
             </xs:sequence>
           </xs:complexType>
         </xs:element>

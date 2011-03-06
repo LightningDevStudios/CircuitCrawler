@@ -220,7 +220,7 @@ public class Game
 		spr.enableTextureMode(tilesetwire);
 		entList.add(spr);*/
 		
-		/*s
+		
 		box = new PuzzleBox(64.0f, -75.0f, 0.0f, false, true);
 		entList.add(box);
 		
