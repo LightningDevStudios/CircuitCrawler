@@ -203,8 +203,8 @@ public class Game
 		entList.add(button2);
 		
 
-		PhysBlock block1 = new PhysBlock(50, 0, 108);
-		block1.enableTilesetMode(tilesetwire, 2, 1);
+		Spikes block1 = new Spikes(0, 108, 90);
+		block1.enableTilesetMode(tilesetwire, 2, 2);
 		entList.add(block1);
 		 
 		PhysBlock block2 = new PhysBlock(50, -216, 108);

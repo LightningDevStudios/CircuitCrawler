@@ -9,12 +9,12 @@ public class AttackBolt extends PhysEnt
 	
 	public AttackBolt(Vector2f posVec, Vector2f directionVec, float angle)
 	{
-		super(20.0f, posVec.getX(), posVec.getY(), false, false, 100.0f, 100.0f, 0.0f, 0.0f);
+		super(20.0f, posVec.getX(), posVec.getY(), false, false, 150.0f, 100.0f, 0.0f, 0.0f);
 		this.directionVec = directionVec;
 		this.angle = angle;
 		this.move(directionVec.getX() * 5.0f, directionVec.getY() * 5.0f);
 		this.enableColorMode(1.0f, 0.0f, 0.0f, 1.0f);
-		this.setColorInterpSpeed(0.6f);
+		this.setColorInterpSpeed(1.3f);
 		this.initColorInterp(0.0f, 0.0f, 0.0f, 0.0f);
 	}
 	

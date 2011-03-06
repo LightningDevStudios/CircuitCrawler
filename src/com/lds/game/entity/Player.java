@@ -33,6 +33,7 @@ public class Player extends Character //your character, protagonist
 			takeDamage(5);
 			//move the player back further upon collision; copy this line to make it bounce back further
 			this.rectangleBounceAgainstRectangle(ent);
+			bounceList.get(bounceList.size() - 1).scale(10.0f);
 		}
 		else if (ent instanceof PickupEnergy)
 		{
@@ -42,11 +43,12 @@ public class Player extends Character //your character, protagonist
 		{
 			health += ((PickupHealth)ent).getHealthValue();
 		}
-		else if (ent instanceof Enemy)
+		else if (ent instanceof Enemy || ent instanceof Spikes)
 		{
 			takeDamage(25);
 			//see above
 			this.rectangleBounceAgainstRectangle(ent);
+			bounceList.get(bounceList.size() - 1).scale(10.0f);
 		}
 		else if (ent instanceof PuzzleBox)
 		{
