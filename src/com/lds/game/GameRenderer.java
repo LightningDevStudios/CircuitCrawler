@@ -134,7 +134,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		
 		//tick the stopwatch every frame, gives relatively stable intervals
 		Stopwatch.tick();
-				
+						
 		//iterate through triggers
 		for (Trigger t : game.triggerList)
 		{
@@ -177,13 +177,14 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		//Triggered when the perspective needs to be redrawn
 		if (Game.windowOutdated)
 		{
-			//move heldObj if necessary
+			//move player
 			game.player.setAngle(game.joypad.getInputAngle());
 			game.player.addPos(game.joypad.getInputVec().scale((Stopwatch.elapsedTimeMs() - frameInterval) * (game.player.getMoveSpeed() / 1000)));
 			game.joypad.clearInputVec();
+			
+			//move heldObject if neccessary
 			if (game.player.isHoldingObject())
 				game.player.updateHeldObjectPosition();
-			
 			//redraw perspective
 			updateCamPosition(gl);
 			Game.windowOutdated = false;
@@ -406,11 +407,12 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	@Override
 	public void onTouchInput(MotionEvent e) 
 	{
+		Log.d("LDS_Game", e.toString());
+		final Vector2f touchVec = new Vector2f(e.getX(e.getPointerCount() - 1) - Game.screenW / 2, Game.screenH / 2 - e.getY(e.getPointerCount() - 1));
 		switch(e.getAction())
 		{
 			case MotionEvent.ACTION_POINTER_DOWN:
 			case MotionEvent.ACTION_DOWN:
-				final Vector2f touchVec = new Vector2f(e.getX(e.getPointerCount() - 1) - Game.screenW / 2, e.getY(e.getPointerCount() - 1) - Game.screenH / 2);
 				for (int i = 0; i < game.UIList.size(); i++)
 				{
 					final UIEntity ent = game.UIList.get(i);
@@ -422,26 +424,20 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 					}
 				}
 				break;
+			case MotionEvent.ACTION_MOVE:
+				for(int i = 0; i < e.getPointerCount(); i++)
+				{
+					final Vector2f fingerVec = new Vector2f(e.getX(i) - Game.screenW / 2, Game.screenH / 2 - e.getY(i));
+					if (game.fingerStack.size() > i)
+						game.fingerStack.get(i).update(fingerVec);
+				}
+				break;
 			case MotionEvent.ACTION_POINTER_UP:
 			case MotionEvent.ACTION_UP:
-				game.fingerStack.pop().onStackPop();
+				if (!game.fingerStack.isEmpty())
+					game.fingerStack.pop().onStackPop();
 				break;
-		}		
-		/*		else if (ent instanceof UIJoypad)
-				{
-					final UIJoypad joypad = (UIJoypad)ent;
-					if (e.getAction() == MotionEvent.ACTION_UP)
-						joypad.setActive(false);
-					else if (joypad.isActive())
-					{
-						final Vector2f tempVec = new Vector2f(e.getX(i) - Game.screenW / 2, Game.screenH / 2 - e.getY(i));
-						joypad.setInputVec(tempVec);
-						if (tempVec.mag() > joypad.getXSize() / 2)
-							joypad.scaleInputVecTo(joypad.getXSize() / 2);
-						windowOutdated = true;
-						Game.worldOutdated = true;
-					}
-				}	*/
+		}
 	}
 	//redraw the perspective
 	public void updateCamPosition(GL10 gl)

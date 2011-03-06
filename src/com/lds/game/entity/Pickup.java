@@ -6,7 +6,7 @@ public abstract class Pickup extends PhysEnt //pickup objects are picked up, suc
 {	
 	public Pickup (float xPos, float yPos)
 	{
-		super(10.0f, xPos, yPos, false, false, 50.0f, 90.0f, 0.1f);
+		super(10.0f, xPos, yPos, false, false, 50.0f, 90.0f, 0.1f, 0.0f);
 	}
 	
 	@Override

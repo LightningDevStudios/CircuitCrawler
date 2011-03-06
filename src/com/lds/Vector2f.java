@@ -159,6 +159,13 @@ public class Vector2f
 		return this;
 	}
 	
+	public Vector2f scaleTo (float scalar)
+	{
+		normalize();
+		scale(scalar);
+		return this;
+	}
+	
 	public float mag ()
 	{
 		return (float)Math.sqrt(x*x + y*y);

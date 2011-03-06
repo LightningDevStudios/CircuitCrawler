@@ -55,7 +55,6 @@ public class CircuitPuzzle implements IPuzzle
 		
 		initializePuzzle();
 		
-		//TODO stopwatches cross threads, how do they work?
 		//Stopwatch.restartTimer();
 		Stopwatch.tick();
 		

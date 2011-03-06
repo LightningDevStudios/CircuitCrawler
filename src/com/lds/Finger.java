@@ -29,7 +29,7 @@ public class Finger
 		{
 			UIJoypad joypad = (UIJoypad)ent;
 			joypad.setActive(true);
-			joypad.setInputVec(position);
+			joypad.setInputVec(touchInput);
 			Game.windowOutdated = true;
 			Game.worldOutdated = true;
 		}

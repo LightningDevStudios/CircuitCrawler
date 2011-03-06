@@ -332,12 +332,12 @@ public abstract class Entity
 		
 		if (output && this.doesCollide(ent) && ent.doesCollide(this))
 		{
-			this.circleBounce(ent);
-			ent.circleBounce(this);
+			this.circleBounceAgainstCircle(ent);
+			ent.circleBounceAgainstCircle(this);
 		}
 		return output;
 	}
-	
+
 	//TODO: FIX
 	protected boolean isRectangleCollidingWithCircle (Entity ent) //if only ent is a circle
 	{
@@ -394,8 +394,8 @@ public abstract class Entity
 		if (output && this.doesCollide(ent) && ent.doesCollide(this))
 		{
 			//TODO: Make these seperate methods that work
-			this.circleBounce(ent);
-			ent.rectangleBounce(this);
+			this.rectangleBounceAgainstCircle(ent);
+			ent.circleBounceAgainstRectangle(this);
 		}
 		return output;
 	}
@@ -447,17 +447,23 @@ public abstract class Entity
 		}
 		if (output && this.doesCollide(ent) && ent.doesCollide(this))
 		{
-			this.rectangleBounce(ent);
-			ent.rectangleBounce(this);
+			this.rectangleBounceAgainstRectangle(ent);
+			ent.rectangleBounceAgainstRectangle(this);
 		}
 		return output;
 	}
 	
 	//blank method, overridden by PhysEnt
-	public void circleBounce (Entity ent) 	{	}
+	public void circleBounceAgainstRectangle (Entity ent) 	{	}
 	
 	//blank method, overridden by PhysEnt
-	public void rectangleBounce (Entity ent){	}
+	public void circleBounceAgainstCircle (Entity ent) {  }
+	
+	//blank method, overridden by PhysEnt
+	public void rectangleBounceAgainstCircle (Entity ent) {  }
+	
+	//blank method, overridden by PhysEnt
+	public void rectangleBounceAgainstRectangle (Entity ent){	}
 	
 	//overriden for entity interaction
 	public void interact (Entity ent)		{	}
