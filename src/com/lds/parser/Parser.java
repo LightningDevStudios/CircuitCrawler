@@ -259,7 +259,7 @@ Parse Triggas
 				
 				if(causeSTR.equalsIgnoreCase("CauseButton"))
 				{
-					//FILL STUFF IN HERE
+					//FILL STUFF IN
 				}
 				
 				xrp.next();
