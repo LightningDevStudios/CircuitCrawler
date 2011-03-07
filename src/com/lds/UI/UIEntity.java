@@ -98,6 +98,8 @@ public abstract class UIEntity
 	
 	public void draw(GL10 gl)
 	{
+		gl.glTranslatef(xPos, yPos, 0.0f);
+		
 		//Enable texturing and bind the current texture pointer (texturePtr) to GL_TEXTURE_2D
 		if (renderMode.contains(RenderMode.TEXTURE) || renderMode.contains(RenderMode.TILESET))
 		{

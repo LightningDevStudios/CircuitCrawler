@@ -2,6 +2,7 @@ package com.lds;
 
 public class Vector2f
 {
+	public static final Vector2f empty = new Vector2f();
 	private float x;
 	private float y;
 	
@@ -155,6 +156,13 @@ public class Vector2f
 	{
 		x *= scalar;
 		y *= scalar;
+		return this;
+	}
+	
+	public Vector2f scaleTo (float scalar)
+	{
+		normalize();
+		scale(scalar);
 		return this;
 	}
 	

@@ -36,22 +36,13 @@ public class Graphics extends GLSurfaceView
 		{
 			try
 			{
-				syncObj.wait(16);
+				syncObj.wait(100);
 			}
 			catch (InterruptedException e)
 			{
 				e.printStackTrace();
 			}
 		}
-		/*try 
-		{
-			Thread.sleep(8);
-		} 
-		catch (InterruptedException e) 
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}*/
 		return true;
 	}
 	
@@ -76,39 +67,6 @@ public class Graphics extends GLSurfaceView
 			}
 		});
 	}
-	
-	/*public void setGameOverEvent(final OnGameOverListener listener)
-	{
-		queueEvent(new Runnable()
-		{
-			public void run()
-			{
-				renderer.setGameOverEvent(listener);
-			}
-		});
-	}
-	
-	public void setGameInitializedEvent(final OnGameInitializedListener listener)
-	{
-		queueEvent(new Runnable()
-		{
-			public void run()
-			{
-				renderer.setGameInitializedEvent(listener);
-			}
-		});
-	}
-	
-	public void setPuzzleActivatedEvent(final OnPuzzleActivatedListener listener)
-	{
-		queueEvent(new Runnable()
-		{
-			public void run()
-			{
-				renderer.setPuzzleActivatedEvent(listener);
-			}
-		});
-	}*/
 			
 	public interface Renderer extends GLSurfaceView.Renderer
 	{

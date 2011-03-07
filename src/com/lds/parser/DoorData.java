@@ -35,5 +35,6 @@ public class DoorData extends PhysEntData
 			doorRef.enableTilesetMode(tex, tileX, tileY);
 		
 		entData.add(doorRef);
+		ent = doorRef;
 	}
 }

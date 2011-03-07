@@ -9,7 +9,7 @@ public class AttackBolt extends PhysEnt
 	
 	public AttackBolt(Vector2f posVec, Vector2f directionVec, float angle)
 	{
-		super(20.0f, posVec.getX(), posVec.getY(), false, false, 100.0f, 100.0f, 0.0f);
+		super(20.0f, posVec.getX(), posVec.getY(), false, false, 100.0f, 100.0f, 0.0f, 0.0f);
 		this.directionVec = directionVec;
 		this.angle = angle;
 		this.move(directionVec.getX() * 5.0f, directionVec.getY() * 5.0f);
@@ -24,6 +24,12 @@ public class AttackBolt extends PhysEnt
 		ent.colList.remove(this);
 		if (this.doesCollide(ent))
 			EntityManager.removeEntity(this);
+	}
+	
+	@Override
+	public void onTileInteract(Tile tile)
+	{
+		
 	}
 	
 	@Override

@@ -36,5 +36,6 @@ public class BlobData extends EnemyData
 			blobRef.enableTilesetMode(tex, tileX, tileY);
 		
 		entData.add(blobRef);
+		ent = blobRef;
 	}
 }

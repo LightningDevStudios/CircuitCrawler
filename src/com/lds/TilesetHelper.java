@@ -18,21 +18,21 @@ public class TilesetHelper
 	{
 		if (x >= minX && x <= maxX && y >= minY && y <= maxY)
 		{
-			float intervalX = 1.0f/(float)(maxX - minX + 1);
-			float intervalY = 1.0f/(float)(maxY - minY + 1);
+			final float intervalX = 1.0f/(float)(maxX - minX + 1);
+			final float intervalY = 1.0f/(float)(maxY - minY + 1);
 			
-			float negX = x * intervalX;
+			final float negX = x * intervalX;
 			float posX = (x + 1) * intervalX;
 			
-			float negY = y * intervalY;
-			float posY = (y + 1) * intervalY;
+			final float negY = y * intervalY;
+			final float posY = (y + 1) * intervalY;
 			
 			/*float[] coords = { 	posX, negY,
 								posX, posY,
 								negX, negY,
 								negX, posY };*/
 			
-			float[] coords = { 	negX, negY,
+			final float[] coords = { 	negX, negY,
 					posX, negY,
 					negX, posY,
 					posX, posY };
@@ -46,18 +46,18 @@ public class TilesetHelper
 	
 	public static float[] getTextureVertices(Texture tex, int tileID)
 	{
-		int y = tileID / tex.getXTiles();
-		int x = tileID - (tex.getXTiles() * y);
+		final int y = tileID / tex.getXTiles();
+		final int x = tileID - (tex.getXTiles() * y);
 		
 		return getTextureVertices(x, y, 0, tex.getXTiles() - 1, 0, tex.getYTiles() - 1);
 	}
 	
 	public static int getTilesetIndex(float[] vertices, int min, int max)
 	{
-		float interval = (1.0f / (float)(max - min + 1));
+		final float interval = (1.0f / (float)(max - min + 1));
 		
-		int x = (int)(vertices[4] / interval);
-		int y = (int)(vertices[1] / interval);
+		final int x = (int)(vertices[4] / interval);
+		final int y = (int)(vertices[1] / interval);
 		
 		return (y * (max - min + 1) + x);
 	}
@@ -79,7 +79,7 @@ public class TilesetHelper
 	
 	public static void setInitialTilesetOffset(Tile[][] tileset)
 	{
-		int length = tileset.length, width = tileset[0].length;
+		final int length = tileset.length, width = tileset[0].length;
 		for (int i = 0; i < length; i++)
 		{
 			for (int j = 0; j < width; j++)

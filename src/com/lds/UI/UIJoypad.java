@@ -8,6 +8,7 @@ public class UIJoypad extends UIEntity
 	Vector2f inputVec;
 	float inputAngle;
 	boolean active;
+	public static final float MAX_SCALAR = 10;
 	
 	public UIJoypad(float xSize, float ySize, UIPosition position, float inputAngle)
 	{
@@ -45,17 +46,17 @@ public class UIJoypad extends UIEntity
 	{
 		inputVec.set(rawX - xPos, rawY - yPos);
 		inputAngle = inputVec.angleDeg();
+		
+		//scale vector properly
+		if (inputVec.mag() > xSize / 2)
+			inputVec.scaleTo(xSize / 2);
+		
+		inputVec.scaleTo(inputVec.mag() * MAX_SCALAR / xSize);
 	}
 	
 	public void setInputVec(Vector2f rawVec)
 	{
 		this.setInputVec(rawVec.getX(), rawVec.getY());
-	}
-	
-	public void scaleInputVecTo(float scalar)
-	{
-		inputVec.normalize().scale(scalar);
-		inputAngle = inputVec.angleDeg();
 	}
 	
 	public void clearInputVec()

@@ -44,5 +44,6 @@ public class PickupHealthData extends PickupData
 			pickupHealthRef.enableTilesetMode(tex, tileX, tileY);
 		
 		entData.add(pickupHealthRef);
+		ent = pickupHealthRef;
 	}
 }
