@@ -105,6 +105,11 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 					t.genHardwareBuffers(gl);
 				}
 			}
+			
+			for (UIEntity ent : game.UIList)
+			{
+				ent.genHardwareBuffers(gl);
+			}
 		}
 		
 		if(gameInitializedListener != null)
@@ -158,6 +163,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
 		gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
 		
+		//TODO don't iterate through all and check if visible, have bounds available
 		for (Tile[] ts : game.tileset)
 		{
 			for (Tile t : ts)
@@ -359,7 +365,9 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		for (UIEntity ent : game.UIList)
 		{
 			ent.update();
-			
+			ent.updateVertexVBO(gl);
+			ent.updateGradientVBO(gl);
+			ent.updateTextureVBO(gl);
 			ent.draw(gl);
 			gl.glLoadIdentity();
 		}
