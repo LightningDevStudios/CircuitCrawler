@@ -416,7 +416,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	@Override
 	public void onTouchInput(MotionEvent e) 
 	{
-		Log.d("LDS_Game", e.toString());
+		//Log.d("LDS_Game", e.toString());
 		final Vector2f touchVec = new Vector2f(e.getX(e.getPointerCount() - 1) - Game.screenW / 2, Game.screenH / 2 - e.getY(e.getPointerCount() - 1));
 		switch(e.getAction())
 		{
