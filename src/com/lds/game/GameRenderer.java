@@ -379,7 +379,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		{
 			syncObj.notify();
 		}
-		Thread.yield();
+		//Thread.yield();
 		//framerate count
 		if (frameCount >= 10)
 		{
@@ -417,11 +417,22 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	public void onTouchInput(MotionEvent e) 
 	{
 		//Log.d("LDS_Game", e.toString());
-		final Vector2f touchVec = new Vector2f(e.getX(e.getPointerCount() - 1) - Game.screenW / 2, Game.screenH / 2 - e.getY(e.getPointerCount() - 1));
-		switch(e.getAction())
+		//final Vector2f touchVec = new Vector2f(e.getX(e.getPointerCount() - 1) - Game.screenW / 2, Game.screenH / 2 - e.getY(e.getPointerCount() - 1));
+		if (!game.fingerStack.isEmpty())
+		{
+			for (int i = 0; i < game.fingerStack.size(); i++)
+			{
+				final Vector2f touchInput = new Vector2f(e.getX(i) - Game.screenW / 2, Game.screenH / 2 - e.getY(i));
+				game.fingerStack.get(i).update(touchInput);
+			}
+		}
+		
+		switch(e.getAction() & MotionEvent.ACTION_MASK)
 		{
 			case MotionEvent.ACTION_POINTER_DOWN:
+				Log.d("LDS_Game", "MULTITOUCHLOL");
 			case MotionEvent.ACTION_DOWN:
+				final Vector2f touchVec = new Vector2f(e.getX(e.getPointerCount() - 1) - Game.screenW / 2, Game.screenH / 2 - e.getY(e.getPointerCount() - 1));
 				for (int i = 0; i < game.UIList.size(); i++)
 				{
 					final UIEntity ent = game.UIList.get(i);
@@ -433,20 +444,16 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 					}
 				}
 				break;
-			case MotionEvent.ACTION_MOVE:
-				for(int i = 0; i < e.getPointerCount(); i++)
-				{
-					final Vector2f fingerVec = new Vector2f(e.getX(i) - Game.screenW / 2, Game.screenH / 2 - e.getY(i));
-					if (game.fingerStack.size() > i)
-						game.fingerStack.get(i).update(fingerVec);
-				}
-				break;
 			case MotionEvent.ACTION_POINTER_UP:
 			case MotionEvent.ACTION_UP:
 				if (!game.fingerStack.isEmpty())
+				{
 					game.fingerStack.pop().onStackPop();
+				}
 				break;
 		}
+		
+		
 	}
 	//redraw the perspective
 	public void updateCamPosition(GL10 gl)

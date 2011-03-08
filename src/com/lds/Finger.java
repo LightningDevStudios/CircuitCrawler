@@ -33,10 +33,17 @@ public class Finger
 			Game.windowOutdated = true;
 			Game.worldOutdated = true;
 		}
+		else if (ent instanceof UIButton)
+		{
+			ent.updateColor(0.3f, 0.5f, 0.6f, 1.0f);
+		}
 	}
 	
 	public void onStackPop()
 	{
-		
+		if (ent instanceof UIButton)
+		{
+			ent.updateColor(1.0f, 1.0f, 1.0f, 1.0f);
+		}
 	}
 }
