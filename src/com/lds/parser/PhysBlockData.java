@@ -35,5 +35,6 @@ public class PhysBlockData extends HoldObjectData
 			physBlockRef.enableTilesetMode(tex, tileX, tileY);
 		
 		entData.add(physBlockRef);
+		ent = physBlockRef;
 	}
 }

@@ -14,7 +14,7 @@ public class Player extends Character //your character, protagonist
 	public Player (float xPos, float yPos, float angle)
 	{
 		//initialize Character and Entity data
-		super(Entity.DEFAULT_SIZE, xPos, yPos, angle, 1.0f, 1.0f, false, 100, 3.0f, 1.0f);
+		super(Entity.DEFAULT_SIZE, xPos, yPos, angle, 1.0f, 1.0f, false, 100, 30.0f, 1.0f);
 		//initialize Player data
 		energy = 100;
 		nextAngle = angle;
@@ -32,7 +32,7 @@ public class Player extends Character //your character, protagonist
 		{
 			takeDamage(5);
 			//move the player back further upon collision; copy this line to make it bounce back further
-			this.rectangleBounce(ent);
+			this.rectangleBounceAgainstRectangle(ent);
 		}
 		else if (ent instanceof PickupEnergy)
 		{
@@ -46,7 +46,7 @@ public class Player extends Character //your character, protagonist
 		{
 			takeDamage(25);
 			//see above
-			this.rectangleBounce(ent);
+			this.rectangleBounceAgainstRectangle(ent);
 		}
 		else if (ent instanceof PuzzleBox)
 		{

@@ -7,20 +7,6 @@ import com.lds.Texture;
 import com.lds.game.Game;
 import com.lds.game.entity.Entity;
 
-/*import java.io.IOException;
-import java.io.Reader;
-import java.io.StringReader;
-
-import org.xmlpull.v1.XmlPullParser;
-import org.xmlpull.v1.XmlPullParserException;
-import org.xmlpull.v1.XmlPullParserFactory;
-
-import com.lds.game.R;
-import com.lds.Enums.RenderMode;
-
-import android.content.Context;
-import android.content.res.XmlResourceParser;*/
-
 public abstract class EntityData
 {
 	private boolean isSolid;
@@ -32,6 +18,8 @@ public abstract class EntityData
 	protected float[] color, gradient, texture;
 	protected int tileX, tileY;
 	protected Texture tex;
+	
+	protected Entity ent;
 	
 	public EntityData(HashMap<String, String> entHM)
 	{
@@ -133,6 +121,8 @@ public abstract class EntityData
 	public float getAngle()		{return angle;}
 	public boolean getIsSolid()	{return isSolid;}
 	public boolean getCircular(){return circular;}
+	public String getID()		{return id;}
+	public Entity getEnt()		{return ent;}
 		
 	public void createInst(ArrayList<Entity> entData)
 	{

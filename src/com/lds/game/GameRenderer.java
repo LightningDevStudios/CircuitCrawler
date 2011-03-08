@@ -4,13 +4,13 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 import android.opengl.GLU;
-import android.os.Debug;
 import android.os.Vibrator;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.content.Context;
 
 import com.lds.EntityManager;
+import com.lds.Finger;
 import com.lds.Stopwatch;
 import com.lds.Texture;
 import com.lds.TextureLoader;
@@ -25,7 +25,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	public Game game;
 	public Context context;
 	public Object syncObj;
-	public boolean windowOutdated, gameOver;
+	public boolean gameOver;
 	public int playerMoveTimeMs, frameInterval, frameCount = 0;	
 	public OnGameInitializedListener gameInitializedListener;
 	public OnPuzzleActivatedListener puzzleActivatedListener;
@@ -37,7 +37,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		Game.screenH = screenH;
 		this.context = context;
 		this.syncObj = syncObj;
-		windowOutdated = false;
+		Game.windowOutdated = false;
 		Game.worldOutdated = false;
 	}
 	
@@ -47,28 +47,32 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		//openGL settings
 		gl.glShadeModel(GL10.GL_SMOOTH);
 		gl.glEnable(GL10.GL_BLEND);
-		gl.glBlendFunc(GL10.GL_ONE, GL10.GL_ONE_MINUS_SRC_ALPHA); //TODO change this later and make it per-poly?
+		gl.glBlendFunc(GL10.GL_ONE, GL10.GL_ONE_MINUS_SRC_ALPHA);
 
 		gl.glClearColor(0.39f, 0.58f, 0.93f, 1.0f);
 		
 		gl.glDisable(GL10.GL_DEPTH_TEST);
 		gl.glDepthMask(false);
 		gl.glEnable(GL10.GL_DITHER);
-		gl.glHint(GL10.GL_PERSPECTIVE_CORRECTION_HINT, GL10.GL_NICEST);	
+		gl.glHint(GL10.GL_PERSPECTIVE_CORRECTION_HINT, GL10.GL_FASTEST);	
 		
 		//start the timer and use an initial tick to prevent errors where elapsed time is a very large negative number
 		Stopwatch.restartTimer();
 		Stopwatch.tick();
 		playerMoveTimeMs = Stopwatch.elapsedTimeMs();
 		
+		Entity.resetIndexBuffer();
+		
 		if(game == null)
 			game = new Game(context, gl);
+		
 		else
 		{
 			Game.tilesetcolors = new Texture(R.drawable.tilesetcolors, 128, 128, 8, 8, context, "tilesetcolors");
 			Game.tilesetwire = new Texture(R.drawable.tilesetwire, 128, 128, 8, 8, context, "tilesetwire");
 			Game.randomthings = new Texture(R.drawable.randomthings, 256, 256, 8, 8, context, "randomthings");
 			Game.text = new Texture(R.drawable.text, 256, 256, 16, 8, context, "text");
+			Game.tilesetworld = new Texture(R.drawable.tilesetworld, 512, 256, 16, 8, context, "tilesetworld");
 			
 			TextureLoader.getInstance().initialize(gl);
 			TextureLoader tl = TextureLoader.getInstance();
@@ -76,9 +80,29 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 			tl.loadTexture(Game.tilesetwire);
 			tl.loadTexture(Game.randomthings);
 			tl.loadTexture(Game.text);
+			tl.loadTexture(Game.tilesetworld);
 			for(Entity ent : game.entList)
 			{
 				ent.resetAllBuffers();
+			}
+		}
+		
+		//Use VBOs if available
+		Entity.genIndexBuffer(gl);
+		
+		if (Entity.useVBOs)
+		{
+			for (Entity ent: game.entList)
+			{
+				ent.genHardwareBuffers(gl);
+			}
+			
+			for (Tile[] ta : game.tileset)
+			{
+				for (Tile t : ta)
+				{
+					t.genHardwareBuffers(gl);
+				}
 			}
 		}
 		
@@ -97,10 +121,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	@Override
 	public void onDrawFrame(GL10 gl) 
 	{
-		//TODO keep so we can see what's slowing down a frame later.
-		/*frameCount++;
-		if (frameCount == 100)
-			Debug.startMethodTracing("LDS_Game4");*/
+		frameCount++;
 		
 		/*********************************
 		 * Update World and Render Tiles *
@@ -113,7 +134,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		
 		//tick the stopwatch every frame, gives relatively stable intervals
 		Stopwatch.tick();
-				
+						
 		//iterate through triggers
 		for (Trigger t : game.triggerList)
 		{
@@ -131,12 +152,8 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		 ******************/
 		
 		gl.glEnable(GL10.GL_TEXTURE_2D);
-		gl.glBindTexture(GL10.GL_TEXTURE_2D, Game.tilesetwire.getTexture());
-		
-		gl.glFrontFace(GL10.GL_CW);
-		gl.glEnable(GL10.GL_CULL_FACE);
-		gl.glCullFace(GL10.GL_BACK);
-		
+		gl.glBindTexture(GL10.GL_TEXTURE_2D, Game.tilesetworld.getTexture());
+				
 		gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
 		gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
 		
@@ -144,10 +161,8 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		{
 			for (Tile t : ts)
 			{
-				if (t.isRendered())
-				{
-					t.draw(gl);
-				}
+				t.updateTextureVBO(gl);
+				t.draw(gl);
 			}
 		}
 		
@@ -159,27 +174,29 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		 * Update Entites *
 		 ******************/
 		
-		//move player and heldObject if neccessary
-		if (windowOutdated)
+		//Triggered when the perspective needs to be redrawn
+		if (Game.windowOutdated)
 		{
+			//move player
 			game.player.setAngle(game.joypad.getInputAngle());
 			game.player.addPos(game.joypad.getInputVec().scale((Stopwatch.elapsedTimeMs() - frameInterval) * (game.player.getMoveSpeed() / 1000)));
 			game.joypad.clearInputVec();
+			
+			//move heldObject if neccessary
 			if (game.player.isHoldingObject())
 				game.player.updateHeldObjectPosition();
+			//redraw perspective
+			updateCamPosition(gl);
+			Game.windowOutdated = false;
 		}
 		
-		//Triggered when the perspective needs to be redrawn
-		if (windowOutdated)
-		{
-			updateCamPosition(gl);
-			windowOutdated = false;
-		}
-
 		//update all entites
 		for (Entity ent : game.entList)
 		{
 			ent.update();
+			ent.updateGradientVBO(gl);
+			ent.updateTextureVBO(gl);
+			
 			//run AI code for enemies
 			if (ent instanceof Enemy)
 				game.runAI((Enemy)ent);
@@ -192,7 +209,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		//Iterates through all entities
 		for (int i = 0; i < game.entList.size(); i++)
 		{
-			Entity ent = game.entList.get(i);
+			final Entity ent = game.entList.get(i);
 						
 			//checks for collision with all other entities in entList if needed
 			if (Game.worldOutdated)
@@ -200,7 +217,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 				//checks collision and interacts with all other Entities
 				for (int j = i + 1; j < game.entList.size(); j++)
 				{
-					Entity colEnt = game.entList.get(j);
+					final Entity colEnt = game.entList.get(j);
 					if (ent.isColliding(colEnt))
 					{
 						if(!ent.colList.contains(colEnt) && !colEnt.colList.contains(ent))
@@ -304,12 +321,13 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		{
 			if (!game.player.isHoldingObject() && game.player.getEnergy() != 0)
 			{
-				Vector2f directionVec = new Vector2f(game.player.getAngle());
+				final Vector2f directionVec = new Vector2f(game.player.getAngle());
 				directionVec.scale(game.player.getHalfSize() + 20.0f);
-				AttackBolt attack = new AttackBolt(Vector2f.add(game.player.getPos(), directionVec), directionVec, game.player.getAngle());
-				vibrator(100);
+				final AttackBolt attack = new AttackBolt(Vector2f.add(game.player.getPos(), directionVec), directionVec, game.player.getAngle());
+				attack.genHardwareBuffers(gl);
 				EntityManager.addEntity(attack);
 				game.player.loseEnergy(10);
+				vibrator(100);
 				SoundPlayer.getInstance().playSound(2);
 			}
 			game.btnA.unpress();
@@ -323,11 +341,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		{
 			if (ent.isRendered())
 			{								
-				gl.glTranslatef(ent.getXPos(), ent.getYPos(), 0.0f);
-				gl.glRotatef(ent.getAngle(), 0.0f, 0.0f, 1.0f);
-				gl.glScalef(ent.getXScl(), ent.getYScl(), 1.0f);
 				ent.draw(gl);
-				
 				gl.glLoadIdentity();
 			}
 		}
@@ -345,9 +359,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		{
 			ent.update();
 			
-			gl.glTranslatef(ent.getXPos(), ent.getYPos(), 0.0f);
 			ent.draw(gl);
-			
 			gl.glLoadIdentity();
 		}
 		
@@ -358,16 +370,13 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		{
 			syncObj.notify();
 		}
-		
+		Thread.yield();
 		//framerate count
-		Log.d("LDS_Game", "FPS: " + (1000.0f / (Stopwatch.elapsedTimeMs() - frameInterval)));
-		
-		//TODO keep for later, if we want to see what's slowing down a frame.
-		/*if (frameCount == 101)
+		if (frameCount >= 10)
 		{
-			testDebug = false;
-			Debug.stopMethodTracing();
-		}*/
+			Log.d("LDS_Game", "FPS: " + (1000.0f / (Stopwatch.elapsedTimeMs() - frameInterval)));
+			frameCount = 0;
+		}
 	}
 
 	public void vibrator(int time)
@@ -398,55 +407,36 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	@Override
 	public void onTouchInput(MotionEvent e) 
 	{
-		//playerMoveTimeMs = Stopwatch.elapsedTimeMs();
-		//Stopwatch.tick();
-		for(int i = 0; i < e.getPointerCount() && game.player.userHasControl(); i++)
-		{	
-			Vector2f touchVec = new Vector2f(e.getX(i) - Game.screenW / 2, Game.screenH / 2 - e.getY(i));
-			for (UIEntity ent : game.UIList)
-			{
-				if (touchVec.getX() >= ent.getXPos() - ent.getXSize() / 2 && touchVec.getX() <= ent.getXPos() + ent.getXSize() / 2 && touchVec.getY() >= ent.getYPos() - ent.getYSize() / 2 && touchVec.getY() <= ent.getYPos() + ent.getYSize() / 2)
-				{				
-					if (ent instanceof UIJoypad)
-					{
-						UIJoypad joypad = (UIJoypad)ent;
-						joypad.setActive(true);
-						joypad.setInputVec(e.getX(i) - Game.screenW / 2, Game.screenH / 2 - e.getY(i));
-						windowOutdated = true;		
-						Game.worldOutdated = true;	
-						if (e.getAction() == MotionEvent.ACTION_UP)
-							joypad.setActive(false);
-					}
-						
-					//UIButton specific code
-					if (ent instanceof UIButton)
-					{
-						UIButton btn = (UIButton)ent;
-						
-						//500ms delay between presses
-						if (btn.canPress(500))
-						{ 
-							((UIButton)ent).press();
-							btn.setIntervalTime(Stopwatch.elapsedTimeMs());
-						}
-					}
-				}
-				else if (ent instanceof UIJoypad)
+		Log.d("LDS_Game", e.toString());
+		final Vector2f touchVec = new Vector2f(e.getX(e.getPointerCount() - 1) - Game.screenW / 2, Game.screenH / 2 - e.getY(e.getPointerCount() - 1));
+		switch(e.getAction())
+		{
+			case MotionEvent.ACTION_POINTER_DOWN:
+			case MotionEvent.ACTION_DOWN:
+				for (int i = 0; i < game.UIList.size(); i++)
 				{
-					UIJoypad joypad = (UIJoypad)ent;
-					if (e.getAction() == MotionEvent.ACTION_UP)
-						joypad.setActive(false);
-					else if (joypad.isActive())
+					final UIEntity ent = game.UIList.get(i);
+					if (touchVec.getX() >= ent.getXPos() - ent.getXSize() / 2 && touchVec.getX() <= ent.getXPos() + ent.getXSize() / 2 && touchVec.getY() >= ent.getYPos() - ent.getYSize() / 2 && touchVec.getY() <= ent.getYPos() + ent.getYSize() / 2)
 					{
-						Vector2f tempVec = new Vector2f(e.getX(i) - Game.screenW / 2, Game.screenH / 2 - e.getY(i));
-						joypad.setInputVec(tempVec);
-						if (tempVec.mag() > joypad.getXSize() / 2)
-							joypad.scaleInputVecTo(joypad.getXSize() / 2);
-						windowOutdated = true;
-						Game.worldOutdated = true;
+						final Finger newFinger = new Finger(touchVec, ent);
+						newFinger.onStackPush();
+						game.fingerStack.push(newFinger);
 					}
 				}
-			}		
+				break;
+			case MotionEvent.ACTION_MOVE:
+				for(int i = 0; i < e.getPointerCount(); i++)
+				{
+					final Vector2f fingerVec = new Vector2f(e.getX(i) - Game.screenW / 2, Game.screenH / 2 - e.getY(i));
+					if (game.fingerStack.size() > i)
+						game.fingerStack.get(i).update(fingerVec);
+				}
+				break;
+			case MotionEvent.ACTION_POINTER_UP:
+			case MotionEvent.ACTION_UP:
+				if (!game.fingerStack.isEmpty())
+					game.fingerStack.pop().onStackPop();
+				break;
 		}
 	}
 	//redraw the perspective

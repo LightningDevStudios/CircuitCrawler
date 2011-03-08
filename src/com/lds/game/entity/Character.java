@@ -16,7 +16,7 @@ public abstract class Character extends PhysEnt //all characters, including the 
 	
 	public Character(float size, float xPos, float yPos, float angle, float xScl, float yScl, boolean circular, int health, float moveSpeed, float rotSpeed)
 	{
-		super(size, xPos, yPos, angle, xScl, yScl, true, circular, true, moveSpeed, rotSpeed, 1.0f);
+		super(size, xPos, yPos, angle, xScl, yScl, true, circular, true, moveSpeed, rotSpeed, 1.0f, 0.0f);
 		this.enableColorMode(1.0f, 1.0f, 1.0f, 1.0f);
 		isFlashing = false;
 		msPassed = Stopwatch.elapsedTimeMs();

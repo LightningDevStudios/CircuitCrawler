@@ -2,6 +2,7 @@ package com.lds.game;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Stack;
 
 import javax.microedition.khronos.opengles.GL10;
 
@@ -9,16 +10,8 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import android.content.Context;
 
-import com.lds.Animation;
-import com.lds.EntityManager;
-import com.lds.Enums.Direction;
-import com.lds.Stopwatch;
-import com.lds.StringRenderer;
-import com.lds.Texture;
-import com.lds.TextureLoader;
-import com.lds.Vector2f;
-import com.lds.Enums.UIPosition;
-import com.lds.Enums.AIType;
+import com.lds.*;
+import com.lds.Enums.*;
 import com.lds.game.ai.Node;
 import com.lds.game.ai.NodePath;
 
@@ -35,14 +28,16 @@ public class Game
 	
 	//public Level[][] GameLevels;
 
-	public static boolean worldOutdated;
+	public static boolean worldOutdated, windowOutdated;
 	
 	public ArrayList<Entity> entList;
 	public Tile[][] tileset;
 	public ArrayList<UIEntity> UIList;
 	public ArrayList<Trigger> triggerList;
 	public EntityManager cleaner;
-		
+	
+	public Stack<Finger> fingerStack;
+	
 	//Camera data
 	public static float screenW, screenH;
 	public float camPosX;
@@ -55,6 +50,7 @@ public class Game
 	public static Texture tilesetwire;
 	public static Texture randomthings;
 	public static Texture text;
+	public static Texture tilesetworld;
 	public Texture someText;
 	
 	
@@ -67,26 +63,28 @@ public class Game
 	public UITextBox textbox;
 	public Player player;
 	///*
-	public PhysBlock block;
-	public PhysCircle circle;
+	public PhysBall block;
+	public PhysBall circle;
 	public Button button;
 	public Door door;
 	public Blob blob1, blob2;
 	public PuzzleBox box;
 	public PickupHealth health;
 	//*/
-	public Sprite spr;
+	//public Sprite spr;
 	
-	public Animation spriteAnim;
+	//public Animation spriteAnim;
 		
 	//Constructors
 	public Game (Context context, GL10 gl) 
-	
 	{
+		fingerStack = new Stack<Finger>();
+		
 		tilesetcolors = new Texture(R.drawable.tilesetcolors, 128, 128, 8, 8, context, "tilesetcolors");
 		tilesetwire = new Texture(R.drawable.tilesetwire, 128, 128, 8, 8, context, "tilesetwire");
 		randomthings = new Texture(R.drawable.randomthings, 256, 256, 8, 8, context, "randomthings");
 		text = new Texture(R.drawable.text, 256, 256, 16, 8, context, "text");
+		tilesetworld = new Texture(R.drawable.tilesetworld, 512, 256, 16, 8, context, "tilesetworld");
 		
 				
 		entList = new ArrayList<Entity>();
@@ -110,6 +108,7 @@ public class Game
 		tl.loadTexture(tilesetwire);
 		tl.loadTexture(randomthings);
 		tl.loadTexture(someText);
+		tl.loadTexture(tilesetworld);
 						
 		///*		
  		for (int i = 0; i < tileset.length; i++)
@@ -117,7 +116,7 @@ public class Game
 			for (int j = 0; j < tileset[0].length; j++)
 			{
 				tileset[i][j] = new Tile(Tile.TILE_SIZE_F, j, i, tileset[0].length - 1, tileset.length - 1);
-				tileset[i][j].enableTilesetMode(tilesetwire, 0, 0);
+				tileset[i][j].enableTilesetMode(tilesetworld, 0, 0);
 				if (i == 0 || j == 0 || i == tileset.length - 1 || j == tileset[0].length - 1 || (i < 4 && (j < 4 || j > 8)) || (i == 10 && j != 6) || (i > 10 && (j < 4 || j > 8)))
 				{
 					tileset[i][j].setAsWall();
@@ -131,7 +130,18 @@ public class Game
 					tileset[i][j].setAsFloor();
 				}
 			}
-		}	
+		}
+ 		
+ 		for (int i = 0; i < tileset.length; i++)
+ 		{
+ 			for (int j = 0; j < tileset[0].length; j++)
+ 			{
+ 				if (tileset[i][j].isPit())
+ 					tileset[i][j].updateBordersPit(tileset, j, i);
+ 				else if (tileset[i][j].isWall())
+ 					tileset[i][j].updateBordersWall(tileset, j, i);
+ 			}
+ 		}
  		//*/		
 		/*//Parser
 		Parser parser = new Parser(context, R.xml.tempdata);
@@ -162,7 +172,7 @@ public class Game
 		button.enableTilesetMode(randomthings, 0, 0);
 		entList.add(button);
 		
-		block = new PhysBlock(Entity.DEFAULT_SIZE, -215.0f, -350.0f);
+		block = new PhysBall(Entity.DEFAULT_SIZE, -215.0f, -350.0f);
 		block.enableTilesetMode(tilesetwire, 2, 1);
 		//block.enableColorMode(1.0f, 1.0f, 1.0f, 0.5f);
 		float[] initGM = {1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f};
@@ -205,17 +215,16 @@ public class Game
 		entList.add(block2);
 
 		
-		spriteAnim = new Animation(tilesetwire, 0, 7, 7, 0, 3000);
+		/*spriteAnim = new Animation(tilesetwire, 0, 7, 7, 0, 3000);
 		spr = new Sprite(50, -100, 100, 45, 1, 1, spriteAnim);
 		spr.enableTextureMode(tilesetwire);
-		entList.add(spr);
+		entList.add(spr);*/
 		
 		
 		box = new PuzzleBox(64.0f, -75.0f, 0.0f, false, true);
 		entList.add(box);
 		
 		/*
-		//TODO NOPE LOL
 		circle = new PhysCircle(50.0f, -100.0f, -310.0f);
 		circle.setTilesetMode(tilesetwire, 1, 2);
 		entList.add(circle);
@@ -232,8 +241,8 @@ public class Game
 		health.enableColorMode(0, 255, 255, 255);
 		entList.add(health);
 		*/
-		spr = new Sprite(30.0f, -108.0f, -300.0f, 45.0f, 1.0f, 1.0f, 10, 90, 1, spriteAnim);
-		entList.add(spr);
+		//spr = new Sprite(30.0f, -108.0f, -300.0f, 45.0f, 1.0f, 1.0f, 10, 90, 1, spriteAnim);
+		//entList.add(spr);
 		
 		CauseAND bridgeAND = new CauseAND(new CauseButton(button1), new CauseButton(button2));
 		
@@ -303,7 +312,9 @@ public class Game
 		updateCameraPosition();
 		updateLocalEntities();
 
-		 updateLocalTileset();
+		updateLocalTileset();
+		 
+		System.gc();
 	}
 	
 	public void updateLocalEntities()
@@ -338,7 +349,6 @@ public class Game
 	public void updateLocalTileset()
 	{
 		float minX, maxX, minY, maxY, tilesetHalfWidth, tilesetHalfHeight;
-		//TODO HAX, screen W/H are flipped for some reason
 		minX = camPosX - (screenW / 2);
 		maxX = camPosX + (screenW / 2);
 		minY = camPosY - (screenH / 2);
@@ -396,11 +406,11 @@ public class Game
 	
 	public Tile nearestTile(Entity ent)
 	{	
-		float tilesetHalfWidth = tileset[0].length * Tile.TILE_SIZE_F / 2;
-		float tilesetHalfHeight = tileset.length * Tile.TILE_SIZE_F / 2;
+		final float tilesetHalfWidth = tileset[0].length * Tile.TILE_SIZE_F / 2;
+		final float tilesetHalfHeight = tileset.length * Tile.TILE_SIZE_F / 2;
 		
-		int x = (int)(ent.getXPos() + tilesetHalfWidth) / Tile.TILE_SIZE;
-		int y = (int)(Math.abs(ent.getYPos() - tilesetHalfHeight)) / Tile.TILE_SIZE;
+		final int x = (int)(ent.getXPos() + tilesetHalfWidth) / Tile.TILE_SIZE;
+		final int y = (int)(Math.abs(ent.getYPos() - tilesetHalfHeight)) / Tile.TILE_SIZE;
 		
 		if (x < tileset[0].length && x >= 0 && y < tileset.length && y >= 0)
 		{
@@ -634,7 +644,7 @@ public class Game
 	
 	public void setGameOverEvent(OnGameOverListener listener)
 	{
-//		triggerList.add(new Trigger(new CauseDoneScaling(player), new EffectEndGame(listener)));
-//		triggerList.add(new Trigger(new CausePlayerHealth(0, player), new EffectEndGame(listener)));
+		triggerList.add(new Trigger(new CauseDoneScaling(player), new EffectEndGame(listener)));
+		triggerList.add(new Trigger(new CausePlayerHealth(0, player), new EffectEndGame(listener)));
 	}
 }
