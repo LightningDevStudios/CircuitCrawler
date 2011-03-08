@@ -173,7 +173,7 @@ public class Game
 		entList.add(button);
 		
 		block = new PhysBall(Entity.DEFAULT_SIZE, -215.0f, -350.0f);
-		block.enableTilesetMode(tilesetwire, 2, 1);
+		block.enableTilesetMode(tilesetwire, 1, 2);
 		//block.enableColorMode(1.0f, 1.0f, 1.0f, 0.5f);
 		float[] initGM = {1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f};
 		float[] interpGM = {0.1f, 0.1f, 0.1f, 1.0f, 0.3f, 0.8f, 0.9f, 1.0f, 0.1f, 0.8f, 0.1f, 1.0f, 0.9f, 0.2f, 0.1f, 1.0f};

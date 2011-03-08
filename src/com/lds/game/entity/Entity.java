@@ -454,10 +454,10 @@ public abstract class Entity
 	}
 	
 	//blank method, overridden by PhysEnt
-	public void circleBounceAgainstRectangle (Entity ent) 	{	}
+	public void circleBounceAgainstCircle (Entity ent) {  }
 	
 	//blank method, overridden by PhysEnt
-	public void circleBounceAgainstCircle (Entity ent) {  }
+	public void circleBounceAgainstRectangle (Entity ent) 	{	}
 	
 	//blank method, overridden by PhysEnt
 	public void rectangleBounceAgainstCircle (Entity ent) {  }

@@ -91,6 +91,16 @@ public class Player extends Character //your character, protagonist
 		hObj = new PhysBlock(0.0f, 0.0f, 0.0f);
 		hObj = null;
 	}
+	
+	public void throwObject()
+	{
+		holdingObject = false;
+		colIgnoreList.remove(hObj);
+		hObj.colIgnoreList.remove(this);
+		hObj.push();
+		hObj = new PhysBlock(0.0f, 0.0f, 0.0f);
+		hObj = null;
+	}
 
 	public void updateHeldObjectPosition()
 	{

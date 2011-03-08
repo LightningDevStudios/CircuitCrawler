@@ -81,6 +81,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 			tl.loadTexture(Game.randomthings);
 			tl.loadTexture(Game.text);
 			tl.loadTexture(Game.tilesetworld);
+			
 			for(Entity ent : game.entList)
 			{
 				ent.resetAllBuffers();
@@ -103,6 +104,11 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 				{
 					t.genHardwareBuffers(gl);
 				}
+			}
+			
+			for (UIEntity ent : game.UIList)
+			{
+				ent.genHardwareBuffers(gl);
 			}
 		}
 		
@@ -157,6 +163,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
 		gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
 		
+		//TODO don't iterate through all and check if visible, have bounds available
 		for (Tile[] ts : game.tileset)
 		{
 			for (Tile t : ts)
@@ -305,12 +312,14 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 					{
 						game.player.holdObject((HoldObject)ent);
 						game.btnB.unpress();
+						vibrator(100);
 					}
 				}
 				else //holding object, button pressed
 				{
 					game.player.dropObject();
 					game.btnB.unpress();
+					vibrator(100);
 				}
 			}
 		}
@@ -319,17 +328,26 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		//causes button A to shoot when pressed
 		if (game.btnA.isPressed())
 		{
-			if (!game.player.isHoldingObject() && game.player.getEnergy() != 0)
+			if (!game.player.isHoldingObject())
 			{
-				final Vector2f directionVec = new Vector2f(game.player.getAngle());
-				directionVec.scale(game.player.getHalfSize() + 20.0f);
-				final AttackBolt attack = new AttackBolt(Vector2f.add(game.player.getPos(), directionVec), directionVec, game.player.getAngle());
-				attack.genHardwareBuffers(gl);
-				EntityManager.addEntity(attack);
-				game.player.loseEnergy(10);
-				vibrator(100);
-				SoundPlayer.getInstance().playSound(2);
+				if (game.player.getEnergy() != 0)
+				{
+					final Vector2f directionVec = new Vector2f(game.player.getAngle());
+					directionVec.scale(game.player.getHalfSize() + 20.0f);
+					final AttackBolt attack = new AttackBolt(Vector2f.add(game.player.getPos(), directionVec), directionVec, game.player.getAngle());
+					attack.genHardwareBuffers(gl);
+					EntityManager.addEntity(attack);
+					game.player.loseEnergy(10);
+					vibrator(100);
+					SoundPlayer.getInstance().playSound(2);
+				}
 			}
+			else
+			{
+				game.player.throwObject();
+				vibrator(100);
+			}
+			
 			game.btnA.unpress();
 		}
 		
@@ -358,7 +376,9 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		for (UIEntity ent : game.UIList)
 		{
 			ent.update();
-			
+			ent.updateVertexVBO(gl);
+			ent.updateGradientVBO(gl);
+			ent.updateTextureVBO(gl);
 			ent.draw(gl);
 			gl.glLoadIdentity();
 		}
@@ -370,7 +390,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		{
 			syncObj.notify();
 		}
-		Thread.yield();
+		//Thread.yield();
 		//framerate count
 		if (frameCount >= 10)
 		{
@@ -407,12 +427,23 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	@Override
 	public void onTouchInput(MotionEvent e) 
 	{
-		Log.d("LDS_Game", e.toString());
-		final Vector2f touchVec = new Vector2f(e.getX(e.getPointerCount() - 1) - Game.screenW / 2, Game.screenH / 2 - e.getY(e.getPointerCount() - 1));
-		switch(e.getAction())
+		//Log.d("LDS_Game", e.toString());
+		//final Vector2f touchVec = new Vector2f(e.getX(e.getPointerCount() - 1) - Game.screenW / 2, Game.screenH / 2 - e.getY(e.getPointerCount() - 1));
+		if (!game.fingerStack.isEmpty())
+		{
+			for (int i = 0; i < game.fingerStack.size(); i++)
+			{
+				final Vector2f touchInput = new Vector2f(e.getX(i) - Game.screenW / 2, Game.screenH / 2 - e.getY(i));
+				game.fingerStack.get(i).update(touchInput);
+			}
+		}
+		
+		switch(e.getAction() & MotionEvent.ACTION_MASK)
 		{
 			case MotionEvent.ACTION_POINTER_DOWN:
+				Log.d("LDS_Game", "MULTITOUCHLOL");
 			case MotionEvent.ACTION_DOWN:
+				final Vector2f touchVec = new Vector2f(e.getX(e.getPointerCount() - 1) - Game.screenW / 2, Game.screenH / 2 - e.getY(e.getPointerCount() - 1));
 				for (int i = 0; i < game.UIList.size(); i++)
 				{
 					final UIEntity ent = game.UIList.get(i);
@@ -424,20 +455,16 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 					}
 				}
 				break;
-			case MotionEvent.ACTION_MOVE:
-				for(int i = 0; i < e.getPointerCount(); i++)
-				{
-					final Vector2f fingerVec = new Vector2f(e.getX(i) - Game.screenW / 2, Game.screenH / 2 - e.getY(i));
-					if (game.fingerStack.size() > i)
-						game.fingerStack.get(i).update(fingerVec);
-				}
-				break;
 			case MotionEvent.ACTION_POINTER_UP:
 			case MotionEvent.ACTION_UP:
 				if (!game.fingerStack.isEmpty())
+				{
 					game.fingerStack.pop().onStackPop();
+				}
 				break;
 		}
+		
+		
 	}
 	//redraw the perspective
 	public void updateCamPosition(GL10 gl)
