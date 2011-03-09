@@ -83,15 +83,10 @@ public class Player extends Character //your character, protagonist
 			{
 				this.disableUserControl();
 				this.moveTo(moveVec);
-				leavingIce = true;
+				//leavingIce = true;
 			}
 			else
 			{
-				if(leavingIce)
-				{
-					setMoveSpeed(0);
-				}
-				setMoveSpeed(30);
 				this.stop();
 				this.enableUserControl();
 			}

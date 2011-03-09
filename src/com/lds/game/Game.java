@@ -222,6 +222,10 @@ public class Game
 		//wall.scale(1.0f,2.0f);
 		entList.add(wall);
 		
+		Cannon cannon = new Cannon(35, -100, -300, 90, 1, 1, true, false, true, 5);
+		cannon.enableTilesetMode(tilesetwire, 2, 1);
+		entList.add(cannon);
+		
 		/*
 		MovingWall wall2 = new MovingWall(35, -150, -300, true, true, 5, 500, 0.0f, 0.0f, -112.5f, -300, -1);
 		wall2.enableTilesetMode(tilesetwire, 1, 3);
