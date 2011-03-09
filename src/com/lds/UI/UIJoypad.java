@@ -42,7 +42,7 @@ public class UIJoypad extends UIEntity
 		active = false;
 	}
 	
-	public void setInputVec(float rawX, float rawY)
+	public void setInputVec(final float rawX, final float rawY)
 	{
 		inputVec.set(rawX - xPos, rawY - yPos);
 		inputAngle = inputVec.angleDeg();
@@ -54,7 +54,7 @@ public class UIJoypad extends UIEntity
 		inputVec.scaleTo(inputVec.mag() * MAX_SCALAR / xSize);
 	}
 	
-	public void setInputVec(Vector2f rawVec)
+	public void setInputVec(final Vector2f rawVec)
 	{
 		this.setInputVec(rawVec.getX(), rawVec.getY());
 	}

@@ -36,7 +36,7 @@ public class Game
 	public ArrayList<Trigger> triggerList;
 	public EntityManager cleaner;
 	
-	public Stack<Finger> fingerStack;
+	public ArrayList<Finger> fingerList;
 	
 	//Camera data
 	public static float screenW, screenH;
@@ -78,7 +78,7 @@ public class Game
 	//Constructors
 	public Game (Context context, GL10 gl) 
 	{
-		fingerStack = new Stack<Finger>();
+		fingerList = new ArrayList<Finger>();
 		
 		tilesetcolors = new Texture(R.drawable.tilesetcolors, 128, 128, 8, 8, context, "tilesetcolors");
 		tilesetwire = new Texture(R.drawable.tilesetwire, 128, 128, 8, 8, context, "tilesetwire");

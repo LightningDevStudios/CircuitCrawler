@@ -7,11 +7,13 @@ public class Finger
 {
 	private Vector2f position;
 	private UIEntity ent;
+	private int ptrId;
 	
-	public Finger(Vector2f position, UIEntity ent)
+	public Finger(Vector2f position, UIEntity ent, int ptrId)
 	{
 		this.position = position;
 		this.ent = ent;
+		this.ptrId = ptrId;
 	}
 	
 	public void onStackPush()
@@ -45,5 +47,10 @@ public class Finger
 		{
 			ent.updateColor(1.0f, 1.0f, 1.0f, 1.0f);
 		}
+	}
+	
+	public int getPointerId()
+	{
+		return ptrId;
 	}
 }

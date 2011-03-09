@@ -429,39 +429,61 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	{
 		//Log.d("LDS_Game", e.toString());
 		//final Vector2f touchVec = new Vector2f(e.getX(e.getPointerCount() - 1) - Game.screenW / 2, Game.screenH / 2 - e.getY(e.getPointerCount() - 1));
-		if (!game.fingerStack.isEmpty())
+		if (!game.fingerList.isEmpty())
 		{
-			for (int i = 0; i < game.fingerStack.size(); i++)
+			for (int i = 0; i < game.fingerList.size(); i++)
 			{
 				final Vector2f touchInput = new Vector2f(e.getX(i) - Game.screenW / 2, Game.screenH / 2 - e.getY(i));
-				game.fingerStack.get(i).update(touchInput);
+				game.fingerList.get(i).update(touchInput);
 			}
 		}
 		
 		switch(e.getAction() & MotionEvent.ACTION_MASK)
 		{
 			case MotionEvent.ACTION_POINTER_DOWN:
-				Log.d("LDS_Game", "MULTITOUCHLOL");
 			case MotionEvent.ACTION_DOWN:
+				final int fingerIndex = e.getPointerId(e.getActionIndex());
 				final Vector2f touchVec = new Vector2f(e.getX(e.getPointerCount() - 1) - Game.screenW / 2, Game.screenH / 2 - e.getY(e.getPointerCount() - 1));
+				boolean onEnt = false;
 				for (int i = 0; i < game.UIList.size(); i++)
 				{
 					final UIEntity ent = game.UIList.get(i);
 					if (touchVec.getX() >= ent.getXPos() - ent.getXSize() / 2 && touchVec.getX() <= ent.getXPos() + ent.getXSize() / 2 && touchVec.getY() >= ent.getYPos() - ent.getYSize() / 2 && touchVec.getY() <= ent.getYPos() + ent.getYSize() / 2)
 					{
-						final Finger newFinger = new Finger(touchVec, ent);
+						final Finger newFinger = new Finger(touchVec, ent, e.getPointerId(fingerIndex));
 						newFinger.onStackPush();
-						game.fingerStack.push(newFinger);
+						game.fingerList.add(newFinger);
+						onEnt = true;
+						break;
+					}
+				}
+				if (!onEnt)
+				{
+					final Finger newFinger = new Finger(null, null, e.getPointerId(fingerIndex));
+					game.fingerList.add(newFinger);
+				}
+				
+				break;
+			case MotionEvent.ACTION_UP:
+			case MotionEvent.ACTION_POINTER_UP:
+				if(!game.fingerList.isEmpty())
+				{
+					final int fIndex = e.getPointerId(e.getActionIndex());
+					for(int i = 0; i < game.fingerList.size(); i++)
+					{
+						final Finger f = game.fingerList.get(i);
+						if (fIndex == f.getPointerId())
+							game.fingerList.remove(i).onStackPop();
 					}
 				}
 				break;
-			case MotionEvent.ACTION_POINTER_UP:
-			case MotionEvent.ACTION_UP:
-				if (!game.fingerStack.isEmpty())
+				
+				/*for(Finger f : game.fingerList)
 				{
-					game.fingerStack.pop().onStackPop();
+					f.onStackPop();
 				}
-				break;
+				game.fingerList.clear();
+				break;*/
 		}
 		
 		
