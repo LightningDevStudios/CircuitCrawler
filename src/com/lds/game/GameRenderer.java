@@ -336,7 +336,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 					final AttackBolt attack = new AttackBolt(Vector2f.add(game.player.getPos(), directionVec), directionVec, game.player.getAngle());
 					attack.genHardwareBuffers(gl);
 					EntityManager.addEntity(attack);
-					game.player.loseEnergy(10);
+					game.player.loseEnergy(5);
 					vibrator(100);
 					SoundPlayer.getInstance().playSound(2);
 				}
