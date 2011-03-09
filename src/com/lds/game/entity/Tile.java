@@ -21,6 +21,9 @@ public class Tile extends StaticEnt
 	private TileState state;
 	public int tileX, tileY, tileID;
 	
+	private boolean tempBridge;
+	private int origTileX, origTileY;
+	
 	public Tile(float size, int tilePosX, int tilePosY, int tilesetX, int tilesetY)
 	{
 		super(size, 0, 0, false, true);
@@ -134,7 +137,15 @@ public class Tile extends StaticEnt
 	public void setAsWall()
 	{
 		state = TileState.WALL;
-		updateTileset(2, 0);
+		if (tempBridge)
+		{
+			updateTileset(origTileX, origTileY);
+			tempBridge = false;
+		}
+		else
+		{
+			updateTileset(2, 0);
+		}
 		isSolid = true;
 		rotateTilesetCoords();
 	}
@@ -150,7 +161,15 @@ public class Tile extends StaticEnt
 	public void setAsPit()
 	{
 		state = TileState.PIT;
-		updateTileset(0, 1);
+		if (tempBridge)
+		{
+			updateTileset(origTileX, origTileY);
+			tempBridge = false;
+		}
+		else
+		{
+			updateTileset(7, 3);
+		}
 		isSolid = false;
 		rotateTilesetCoords();
 	}
@@ -158,9 +177,22 @@ public class Tile extends StaticEnt
 	public void setAsBridge()
 	{
 		state = TileState.BRIDGE;
-		updateTileset(1, 1);
+		
+		if (tempBridge)
+		{
+			updateTileset(origTileX, origTileY);
+			tempBridge = false;
+		}
+		else
+		{
+			origTileX = tileX;
+			origTileY = tileY;
+			updateTileset(1, 1);
+			tempBridge = true;
+		}
 		isSolid = false;
 		rotateTilesetCoords();
+		
 	}
 	
 	public boolean isWall()

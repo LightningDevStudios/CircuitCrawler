@@ -26,7 +26,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	public Context context;
 	public Object syncObj;
 	public boolean gameOver;
-	public int playerMoveTimeMs, frameInterval, frameCount = 0;	
+	public int playerMoveTimeMs, frameCount = 0;	
 	public OnGameInitializedListener gameInitializedListener;
 	public OnPuzzleActivatedListener puzzleActivatedListener;
 	public OnGameOverListener gameOverListener;
@@ -127,74 +127,22 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	@Override
 	public void onDrawFrame(GL10 gl) 
 	{
-		frameCount++;
-		
-		/*********************************
-		 * Update World and Render Tiles *
-		 *********************************/
-		
-		//clear the screen
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-		
-		frameInterval = Stopwatch.elapsedTimeMs();
-		
-		//tick the stopwatch every frame, gives relatively stable intervals
-		Stopwatch.tick();
-						
-		//iterate through triggers
-		for (Trigger t : game.triggerList)
-		{
-			t.update();
-		}
 
-		//remove entities that are queued for removal
+		frameCount++;
+		game.frameInterval = Stopwatch.elapsedTimeMs();
+		Stopwatch.tick();
+
+		game.updateTriggers();
+		game.updateRenderedEnts();
 		game.cleaner.update(game.entList);
-				
-		//Update which entities are rendered
-		game.updateLocalEntities();
-				
-		/******************
-		 * Render tileset *
-		 ******************/
 		
-		gl.glEnable(GL10.GL_TEXTURE_2D);
-		gl.glBindTexture(GL10.GL_TEXTURE_2D, Game.tilesetworld.getTexture());
-				
-		gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
-		gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
-		
-		//TODO don't iterate through all and check if visible, have bounds available
-		for (Tile[] ts : game.tileset)
-		{
-			for (Tile t : ts)
-			{
-				t.updateTextureVBO(gl);
-				t.draw(gl);
-			}
-		}
-		
-		gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
-		gl.glDisableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
-		gl.glDisable(GL10.GL_TEXTURE_2D);
-		
-		/******************
-		 * Update Entites *
-		 ******************/
-		
-		
-		
+		game.renderTileset(gl);
+
 		//Triggered when the perspective needs to be redrawn
 		if (Game.windowOutdated)
 		{
-			//move player
-			game.player.setAngle(game.joypad.getInputAngle());
-			game.player.addPos(game.joypad.getInputVec().scale((Stopwatch.elapsedTimeMs() - frameInterval) * (game.player.getMoveSpeed() / 1000)));
-			game.joypad.clearInputVec();
-			
-			//move heldObject if neccessary
-			if (game.player.isHoldingObject())
-				game.player.updateHeldObjectPosition();
-			//redraw perspective
+			game.updatePlayerPos();
 			updateCamPosition(gl);
 			Game.windowOutdated = false;
 		}
@@ -398,7 +346,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		//framerate count
 		if (frameCount >= 10)
 		{
-			Log.d("LDS_Game", "FPS: " + (1000.0f / (Stopwatch.elapsedTimeMs() - frameInterval)));
+			Log.d("LDS_Game", "FPS: " + (1000.0f / (Stopwatch.elapsedTimeMs() - game.frameInterval)));
 			frameCount = 0;
 		}
 	}
@@ -492,7 +440,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		gl.glMatrixMode(GL10.GL_MODELVIEW);
 		gl.glLoadIdentity();
 		
-		game.updateLocalTileset();
+		game.updateRenderedTileset();
 	}
 	
 	//draw a screen-based perspective, push the world perspective onto the OpenGL matrix stack

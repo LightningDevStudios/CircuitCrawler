@@ -28,6 +28,7 @@ public class Game
 	
 	//public Level[][] GameLevels;
 
+	public int frameInterval;
 	public static boolean worldOutdated, windowOutdated;
 	
 	public ArrayList<Entity> entList;
@@ -174,17 +175,14 @@ public class Game
 		
 		block = new PhysBall(Entity.DEFAULT_SIZE, -215.0f, -350.0f);
 		block.enableTilesetMode(tilesetwire, 1, 2);
-		//block.enableColorMode(1.0f, 1.0f, 1.0f, 0.5f);
 		float[] initGM = {1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f};
 		float[] interpGM = {0.1f, 0.1f, 0.1f, 1.0f, 0.3f, 0.8f, 0.9f, 1.0f, 0.1f, 0.8f, 0.1f, 1.0f, 0.9f, 0.2f, 0.1f, 1.0f};
 		block.enableGradientMode(initGM);
 		block.setColorInterpSpeed(0.01f);
-		//block.initColorInterp(0.5f, 0.7f, 0.3f, 0.5f);
 		block.initGradientInterp(interpGM);
 		entList.add(block);
 		
-		/*
-		blob1 = new Blob(-150.0f, -350.0f, AIType.PATROL);
+		/*blob1 = new Blob(-150.0f, -350.0f, AIType.PATROL);
 		blob1.enableTilesetMode(tilesetwire, 2, 2);
 		NodePath path = new NodePath();
 		path.add(new Node(-150.0f, -350.0f));
@@ -213,36 +211,15 @@ public class Game
 		PhysBlock block2 = new PhysBlock(50, -216, 108);
 		block2.enableTilesetMode(tilesetwire, 2, 1);
 		entList.add(block2);
-
-		
-		/*spriteAnim = new Animation(tilesetwire, 0, 7, 7, 0, 3000);
-		spr = new Sprite(50, -100, 100, 45, 1, 1, spriteAnim);
-		spr.enableTextureMode(tilesetwire);
-		entList.add(spr);*/
-		
 		
 		box = new PuzzleBox(64.0f, -75.0f, 0.0f, false, true);
 		entList.add(box);
-		
-		/*
-		circle = new PhysCircle(50.0f, -100.0f, -310.0f);
-		circle.setTilesetMode(tilesetwire, 1, 2);
-		entList.add(circle);
-		circle.setWillCollideWithPlayer(true);
-		*/
+
 		
 		player = new Player(-108.0f, -450.0f, 0.0f);
 		player.enableTilesetMode(tilesetwire, 1, 0);
 		entList.add(player);
 		player.enableUserControl();
-		
-		/*
-		health = new PickupHealth(50, -108.0f, -250.0f);
-		health.enableColorMode(0, 255, 255, 255);
-		entList.add(health);
-		*/
-		//spr = new Sprite(30.0f, -108.0f, -300.0f, 45.0f, 1.0f, 1.0f, 10, 90, 1, spriteAnim);
-		//entList.add(spr);
 		
 		CauseAND bridgeAND = new CauseAND(new CauseButton(button1), new CauseButton(button2));
 		
@@ -289,7 +266,6 @@ public class Game
 		
 		joypad = new UIJoypad(100, 100, UIPosition.BOTTOMLEFT, player.getAngle());
 		joypad.autoPadding(0.0f, 5.0f, 5.0f, 0.0f);
-		//joypad.setBlankMode();
 		
 		textbox = new UITextBox(112, 32, UIPosition.TOPLEFT);
 		textbox.autoPadding(5.0f, 5.0f, 0.0f, 0.0f);
@@ -303,21 +279,21 @@ public class Game
 		UIList.add(joypad);
 		UIList.add(textbox);
 				
-		worldMinX = (-Tile.TILE_SIZE_F * (tileset[0].length / 2)) + (screenW / 2);
+		worldMinX = (-Tile.TILE_SIZE_F * (tileset[0].length / 2)) + (screenW / 2); //TODO fix odd-number tilesets by changing the array length to a float before dividing.
 		worldMinY = (-Tile.TILE_SIZE_F * (tileset.length / 2)) + (screenH / 2);
 		worldMaxX = (Tile.TILE_SIZE_F * (tileset[0].length / 2)) - (screenW / 2);
 		worldMaxY = (Tile.TILE_SIZE_F * (tileset.length / 2)) - (screenH / 2);
 		
 		//TODO take into account AI, perhaps render every time it chooses a new point to go to?
 		updateCameraPosition();
-		updateLocalEntities();
+		updateRenderedEnts();
 
-		updateLocalTileset();
+		updateRenderedTileset();
 		 
 		System.gc();
 	}
 	
-	public void updateLocalEntities()
+	public void updateRenderedEnts()
 	{
 		//define current screen bounds
 		float minX, maxX, minY, maxY;
@@ -346,7 +322,7 @@ public class Game
 		}
 	}
 	
-	public void updateLocalTileset()
+	public void updateRenderedTileset()
 	{
 		float minX, maxX, minY, maxY, tilesetHalfWidth, tilesetHalfHeight;
 		minX = camPosX - (screenW / 2);
@@ -381,27 +357,25 @@ public class Game
 		}
 	}
 	
-	public void updateLocal(Entity ent)
+	public void updateCameraPosition()
 	{
-		float minX, maxX, minY, maxY;
-		minX = camPosX - (screenW / 2);
-		maxX = camPosX + (screenW / 2);
-		minY = camPosY - (screenH / 2);
-		maxY = camPosY + (screenH / 2);
-		float entMinX = ent.getXPos() - (float)ent.getDiagonal();
-		float entMaxX = ent.getXPos() + (float)ent.getDiagonal();
-		float entMinY = ent.getYPos() - (float)ent.getDiagonal();
-		float entMaxY = ent.getYPos() + (float)ent.getDiagonal();
+		//move camera to follow player.
+		camPosX = player.getXPos();
+		camPosY = player.getYPos();
+		
+		
+		//camera can't go further than defined level bounds
+		if (camPosX < worldMinX)
+			camPosX = worldMinX;
 			
-		//values are opposite for entMin/Max because only the far tips have to be inside the screen (leftmost point on right border of screen)
-		if (entMinX <= maxX && entMaxX >= minX && entMinY <= maxY && entMaxY >= minY)
-		{
-			ent.setRendered(true);
-		}
-		else
-		{
-			ent.setRendered(false);
-		}
+		else if (camPosX > worldMaxX)
+			camPosX = worldMaxX;
+		
+		if (camPosY < worldMinY)
+			camPosY = worldMinY;
+		
+		else if (camPosY > worldMaxY)
+			camPosY = worldMaxY;
 	}
 	
 	public Tile nearestTile(Entity ent)
@@ -620,27 +594,6 @@ public class Game
 			
 		}
 	}
-
-	public void updateCameraPosition()
-	{
-		//move camera to follow player.
-		camPosX = player.getXPos();
-		camPosY = player.getYPos();
-		
-		
-		//camera can't go further than defined level bounds
-		if (camPosX < worldMinX)
-			camPosX = worldMinX;
-			
-		else if (camPosX > worldMaxX)
-			camPosX = worldMaxX;
-		
-		if (camPosY < worldMinY)
-			camPosY = worldMinY;
-		
-		else if (camPosY > worldMaxY)
-			camPosY = worldMaxY;
-	}
 	
 	public void setGameOverEvent(OnGameOverListener listener)
 	{
@@ -650,9 +603,53 @@ public class Game
 	
 	public void updateFingers()
 	{
-		for(Finger f : fingerList)
+		if(player.userHasControl())
 		{
-			f.update();
+			for(Finger f : fingerList)
+			{
+				f.update();
+			}
 		}
+	}
+	
+	public void updateTriggers()
+	{
+		for (Trigger t : triggerList)
+			t.update();
+	}
+	
+	public void updatePlayerPos()
+	{
+		//move player
+		player.setAngle(joypad.getInputAngle());
+		player.addPos(joypad.getInputVec().scale((Stopwatch.elapsedTimeMs() - frameInterval) * (player.getMoveSpeed() / 1000)));
+		joypad.clearInputVec();
+		
+		//move heldObject if neccessary
+		if (player.isHoldingObject())
+			player.updateHeldObjectPosition();
+	}
+	
+	public void renderTileset(GL10 gl)
+	{
+		gl.glEnable(GL10.GL_TEXTURE_2D);
+		gl.glBindTexture(GL10.GL_TEXTURE_2D, tilesetworld.getTexture());
+				
+		gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
+		gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
+		
+		//TODO don't iterate through all and check if visible, have bounds available
+		for (Tile[] ts : tileset)
+		{
+			for (Tile t : ts)
+			{
+				t.updateTextureVBO(gl);
+				t.draw(gl);
+			}
+		}
+		
+		gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
+		gl.glDisableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
+		gl.glDisable(GL10.GL_TEXTURE_2D);
 	}
 }
