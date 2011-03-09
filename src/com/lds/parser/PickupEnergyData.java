@@ -43,5 +43,6 @@ public class PickupEnergyData extends PickupData
 			pickupEnergyRef.enableTilesetMode(tex, tileX, tileY);
 		
 		entData.add(pickupEnergyRef);
+		ent = pickupEnergyRef;
 	}
 }

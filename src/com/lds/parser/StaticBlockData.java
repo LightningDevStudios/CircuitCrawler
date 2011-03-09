@@ -36,5 +36,6 @@ public class StaticBlockData extends StaticEntData
 			staticBlockRef.enableTilesetMode(tex, tileX, tileY);
 		
 		entData.add(staticBlockRef);
+		ent = staticBlockRef;
 	}
 }

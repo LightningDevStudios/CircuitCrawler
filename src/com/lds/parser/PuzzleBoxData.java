@@ -35,5 +35,6 @@ public class PuzzleBoxData extends StaticEntData
 			puzzleBoxRef.enableTilesetMode(tex, tileX, tileY);
 		
 		entData.add(puzzleBoxRef);
+		ent = puzzleBoxRef;
 	}
 }

@@ -127,6 +127,7 @@ public abstract class UIProgressBar extends UIEntity
 		
 		this.vertices = initVerts;
 		this.vertexBuffer = setBuffer(vertexBuffer, initVerts);
+		needToUpdateVertexVBO = true;
 		
 	}
 	

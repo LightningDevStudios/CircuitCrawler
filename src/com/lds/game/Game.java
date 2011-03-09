@@ -2,6 +2,7 @@ package com.lds.game;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Stack;
 
 import javax.microedition.khronos.opengles.GL10;
 
@@ -9,7 +10,6 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import android.content.Context;
 
-import com.lds.Animation;
 import com.lds.*;
 import com.lds.Enums.*;
 import com.lds.game.ai.Node;
@@ -28,14 +28,16 @@ public class Game
 	
 	//public Level[][] GameLevels;
 
-	public static boolean worldOutdated;
+	public static boolean worldOutdated, windowOutdated;
 	
 	public ArrayList<Entity> entList;
 	public Tile[][] tileset;
 	public ArrayList<UIEntity> UIList;
 	public ArrayList<Trigger> triggerList;
 	public EntityManager cleaner;
-		
+	
+	public ArrayList<Finger> fingerList;
+	
 	//Camera data
 	public static float screenW, screenH;
 	public float camPosX;
@@ -75,8 +77,9 @@ public class Game
 		
 	//Constructors
 	public Game (Context context, GL10 gl) 
-	
 	{
+		fingerList = new ArrayList<Finger>();
+		
 		tilesetcolors = new Texture(R.drawable.tilesetcolors, 128, 128, 8, 8, context, "tilesetcolors");
 		tilesetwire = new Texture(R.drawable.tilesetwire, 128, 128, 8, 8, context, "tilesetwire");
 		randomthings = new Texture(R.drawable.randomthings, 256, 256, 8, 8, context, "randomthings");
@@ -217,7 +220,7 @@ public class Game
 		spr.enableTextureMode(tilesetwire);
 		entList.add(spr);*/
 		
-		/*s
+		
 		box = new PuzzleBox(64.0f, -75.0f, 0.0f, false, true);
 		entList.add(box);
 		
@@ -644,5 +647,13 @@ public class Game
 	{
 		triggerList.add(new Trigger(new CauseDoneScaling(player), new EffectEndGame(listener)));
 		triggerList.add(new Trigger(new CausePlayerHealth(0, player), new EffectEndGame(listener)));
+	}
+	
+	public void updateFingers()
+	{
+		for(Finger f : fingerList)
+		{
+			f.update();
+		}
 	}
 }

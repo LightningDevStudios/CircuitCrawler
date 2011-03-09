@@ -6,8 +6,12 @@ import java.nio.FloatBuffer;
 import java.util.EnumSet;
 
 import javax.microedition.khronos.opengles.GL10;
+import javax.microedition.khronos.opengles.GL11;
+
+import android.util.Log;
 
 import com.lds.game.Game;
+import com.lds.game.entity.Entity;
 import com.lds.Enums.RenderMode;
 import com.lds.Enums.UIPosition;
 import com.lds.Texture;
@@ -38,12 +42,13 @@ public abstract class UIEntity
 	protected float[] vertices;
 	protected float[] texture;
 	protected float[] color;
-	private byte[] indices;
 	
 	protected FloatBuffer vertexBuffer;
 	protected FloatBuffer textureBuffer;
 	protected FloatBuffer colorBuffer;
-	private ByteBuffer indexBuffer;
+	
+	protected int VBOVertPtr, VBOGradientPtr, VBOTexturePtr;
+	protected boolean needToUpdateTexVBO, needToUpdateGradientVBO, needToUpdateVertexVBO;
 	
 	//constructors
 	public UIEntity(float xSize, float ySize, UIPosition position)
@@ -84,19 +89,97 @@ public abstract class UIEntity
 		
 		this.vertices = initVerts;
 		this.vertexBuffer = setBuffer(vertexBuffer, vertices);
-		
-		byte[] initIndices = { 0, 1, 2, 3 };
-		indices = initIndices;
+		needToUpdateVertexVBO = true;
 				
-		indexBuffer = ByteBuffer.allocateDirect(indices.length);
-		indexBuffer.put(indices);
-		indexBuffer.position(0);
-		
 		renderMode = EnumSet.allOf(RenderMode.class);
 		renderMode.clear();
 	}
 	
 	public void draw(GL10 gl)
+	{
+		gl.glTranslatef(xPos, yPos, 0.0f);		
+		
+		final boolean containsColor = renderMode.contains(RenderMode.COLOR);
+		final boolean containsGradient = renderMode.contains(RenderMode.GRADIENT);
+		final boolean containsTexture = renderMode.contains(RenderMode.TEXTURE);
+		final boolean containsTileset = renderMode.contains(RenderMode.TILESET);
+		
+		//Enable texturing and bind the current texture pointer (texturePtr) to GL_TEXTURE_2D
+		if (containsTexture || containsTileset)
+		{
+			gl.glEnable(GL10.GL_TEXTURE_2D);
+			gl.glBindTexture(GL10.GL_TEXTURE_2D, tex.getTexture());
+		}
+		
+		//Backface culling
+		gl.glFrontFace(GL10.GL_CW);
+		gl.glEnable(GL10.GL_CULL_FACE);
+		gl.glCullFace(GL10.GL_BACK);
+		
+		//Enable settings for this polygon
+		gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
+		if (containsTexture || containsTileset) {gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);}
+		if (containsGradient) {gl.glEnableClientState(GL10.GL_COLOR_ARRAY);}
+		
+		//Sets color
+		if (containsColor) {gl.glColor4f(colorR, colorG, colorB, colorA);}
+		
+		//Bind vertices, texture coordinates, and/or color coordinates to the OpenGL system
+		if(!Entity.useVBOs)
+		{
+			gl.glVertexPointer(2, GL10.GL_FLOAT, 0, vertexBuffer);
+			if (containsTexture || containsTileset) {gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, textureBuffer);}
+			if (containsGradient) {gl.glColorPointer(4, GL10.GL_FLOAT, 0, colorBuffer);}
+			
+			//Draw the vertices
+			gl.glDrawElements(GL10.GL_TRIANGLE_STRIP, 4, GL10.GL_UNSIGNED_BYTE, Entity.indexBuffer);	
+		}
+		else
+		{
+			GL11 gl11 = (GL11)gl;
+			gl11.glBindBuffer(GL11.GL_ARRAY_BUFFER, VBOVertPtr);
+			gl11.glVertexPointer(2, GL11.GL_FLOAT, 0, 0);
+			
+			if (containsTexture || containsTileset)
+			{
+				gl11.glBindBuffer(GL11.GL_ARRAY_BUFFER, VBOTexturePtr);
+				gl11.glTexCoordPointer(2, GL11.GL_FLOAT, 0, 0);
+			}
+			if (containsGradient)
+			{
+				gl11.glBindBuffer(GL11.GL_ARRAY_BUFFER, VBOGradientPtr);
+				gl11.glColorPointer(4, GL11.GL_FLOAT, 0, 0);
+			}
+			gl11.glBindBuffer(GL11.GL_ELEMENT_ARRAY_BUFFER, Entity.VBOIndexPtr);
+			gl11.glDrawElements(GL11.GL_TRIANGLE_STRIP, 4, GL11.GL_UNSIGNED_BYTE, 0);
+			
+			gl11.glBindBuffer(GL11.GL_ARRAY_BUFFER, 0);
+			gl11.glBindBuffer(GL11.GL_ELEMENT_ARRAY_BUFFER, 0);
+			
+			final int error = gl11.glGetError();
+			if (error != GL11.GL_NO_ERROR)
+			{
+				Log.e("LDS_Game", "Entity rendering generates GL_ERROR: " + error);
+			}
+		}
+				
+		//Disable things for next polygon
+		gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
+		if(containsGradient) {gl.glDisableClientState(GL10.GL_COLOR_ARRAY);}
+		gl.glDisable(GL10.GL_CULL_FACE);
+		
+		//Disable texturing for next polygon
+		if (containsTexture || containsTileset)
+		{
+			gl.glDisableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
+			gl.glDisable(GL10.GL_TEXTURE_2D);
+		}
+		
+		//Reset color for next polygon.
+		if (containsColor) {gl.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);}
+	}
+	
+	/*public void draw(GL10 gl)
 	{
 		gl.glTranslatef(xPos, yPos, 0.0f);
 		
@@ -128,7 +211,7 @@ public abstract class UIEntity
 		if (renderMode.contains(RenderMode.COLOR)) {gl.glColor4f(colorR, colorG, colorB, colorA);}
 		
 		//Draw the vertices
-		gl.glDrawElements(GL10.GL_TRIANGLE_STRIP, indices.length, GL10.GL_UNSIGNED_BYTE, indexBuffer);		
+		gl.glDrawElements(GL10.GL_TRIANGLE_STRIP, Entity.indices.length, GL10.GL_UNSIGNED_BYTE, Entity.indexBuffer);		
 		
 		//Disable things for next polygon
 		gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
@@ -143,8 +226,8 @@ public abstract class UIEntity
 		}
 		
 		//Reset color for next polygon.
-		if (renderMode.contains(RenderMode.COLOR) /*|| renderMode.contains(RenderMode.GRADIENT)*/) {gl.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);}
-	}
+		if (renderMode.contains(RenderMode.COLOR)) {gl.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);}
+	}*/
 	
 	public void update()
 	{
@@ -290,6 +373,7 @@ public abstract class UIEntity
 	{
 			this.color = color;
 			this.colorBuffer = setBuffer(colorBuffer, color);
+			needToUpdateGradientVBO = true;
 	}
 	
 	public void disableGradientMode()
@@ -327,6 +411,7 @@ public abstract class UIEntity
 			this.tex = tex;
 			this.texture = texture;
 			this.textureBuffer = setBuffer(textureBuffer, texture);
+			needToUpdateTexVBO = true;
 	}
 	
 	public void disableTextureMode()
@@ -360,6 +445,7 @@ public abstract class UIEntity
 		this.tex = tex;
 		texture = TilesetHelper.getTextureVertices(tex, tileID);
 		this.textureBuffer = setBuffer(textureBuffer, texture);
+		needToUpdateTexVBO = true;
 	}
 	
 	public void updateTileset(int x, int y)
@@ -407,4 +493,82 @@ public abstract class UIEntity
 	public void setLeftPad(float leftPad)		{ this.leftPad = leftPad; }
 	public void setBottomPad(float bottomPad)	{ this.bottomPad = bottomPad; }
 	public void setRightPad(float rightPad)		{ this.rightPad = rightPad; }
+	
+	public void genHardwareBuffers(GL10 gl)
+	{
+		if (gl instanceof GL11)
+		{
+			
+			final GL11 gl11 = (GL11)gl;
+			
+			int[] tempPtr = new int[1];
+			
+			//VERTEX
+			gl11.glGenBuffers(1, tempPtr, 0);
+			VBOVertPtr = tempPtr[0];
+			
+			gl11.glBindBuffer(GL11.GL_ARRAY_BUFFER, VBOVertPtr);
+			final int vertSize = vertexBuffer.capacity() * 4;
+			gl11.glBufferData(GL11.GL_ARRAY_BUFFER, vertSize, vertexBuffer, GL11.GL_STATIC_DRAW); //TODO choose static/draw settings..?
+			
+			if(renderMode.contains(RenderMode.GRADIENT))
+			{
+				gl11.glGenBuffers(1, tempPtr, 0);
+				VBOGradientPtr = tempPtr[0];
+				needToUpdateGradientVBO = true;
+				updateGradientVBO(gl);
+			}
+			if (renderMode.contains(RenderMode.TEXTURE) || renderMode.contains(RenderMode.TILESET))
+			{
+				gl11.glGenBuffers(1, tempPtr, 0);
+				VBOTexturePtr = tempPtr[0];
+				needToUpdateTexVBO = true;
+				updateTextureVBO(gl);
+			}
+			
+			gl11.glBindBuffer(GL11.GL_ARRAY_BUFFER, 0);
+			
+			final int error = gl11.glGetError();
+			if (error != GL11.GL_NO_ERROR)
+			{
+				Log.e("LDS_Game", "Buffers generate GL_ERROR: " + error);
+			}
+		}
+	}
+	
+	public void updateTextureVBO(GL10 gl)
+	{
+		if(Entity.useVBOs && needToUpdateTexVBO)
+		{
+			GL11 gl11 = (GL11)gl;
+			gl11.glBindBuffer(GL11.GL_ARRAY_BUFFER, VBOTexturePtr);
+			final int textureSize = textureBuffer.capacity() * 4;
+			gl11.glBufferData(GL11.GL_ARRAY_BUFFER, textureSize, textureBuffer, GL11.GL_STATIC_DRAW);
+		}
+		needToUpdateTexVBO = false;
+	}
+	
+	public void updateGradientVBO(GL10 gl)
+	{
+		if(Entity.useVBOs && needToUpdateGradientVBO)
+		{
+			GL11 gl11 = (GL11)gl;
+			gl11.glBindBuffer(GL11.GL_ARRAY_BUFFER, VBOGradientPtr);
+			final int gradientSize = colorBuffer.capacity() * 4;
+			gl11.glBufferData(GL11.GL_ARRAY_BUFFER, gradientSize, colorBuffer, GL11.GL_STATIC_DRAW);
+		}
+		needToUpdateGradientVBO = false;
+	}
+
+	public void updateVertexVBO(GL10 gl) 
+	{
+		if(Entity.useVBOs && needToUpdateVertexVBO)
+		{
+			GL11 gl11 = (GL11)gl;
+			gl11.glBindBuffer(GL11.GL_ARRAY_BUFFER, VBOVertPtr);
+			final int vertSize = vertexBuffer.capacity() * 4;
+			gl11.glBufferData(GL11.GL_ARRAY_BUFFER, vertSize, vertexBuffer, GL11.GL_STATIC_DRAW); //TODO choose static/draw settings..?
+		}
+		needToUpdateVertexVBO = false;
+	}
 }
