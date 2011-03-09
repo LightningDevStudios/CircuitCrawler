@@ -403,6 +403,7 @@ public class Game
 	
 	public Tile nearestTile(Entity ent)
 	{	
+		//TODO Fix return null when offscreen
 		final float tilesetHalfWidth = tileset[0].length * Tile.TILE_SIZE_F / 2;
 		final float tilesetHalfHeight = tileset.length * Tile.TILE_SIZE_F / 2;
 		

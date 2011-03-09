@@ -56,6 +56,7 @@ public class Player extends Character //your character, protagonist
 		}
 	}
 	
+	@Override
 	public void onTileInteract(Tile tile)
 	{
 		if (tile != null)
@@ -117,7 +118,7 @@ public class Player extends Character //your character, protagonist
 	@Override
 	public boolean isColliding(Entity ent)
 	{
-		if (ent == this.getHeldObject())
+		if (ent == this.getHeldObject() || ent instanceof Tile && !((Tile)ent).isRendered())
 			return false;
 		return super.isColliding(ent);
 	}
