@@ -14,6 +14,7 @@ public class Player extends Character //your character, protagonist
 	private boolean controlled;
 	private float nextAngle;
 	protected Context context;
+	protected boolean leavingIce;
 	
 	public Player (float xPos, float yPos, float angle)
 	{
@@ -78,8 +79,22 @@ public class Player extends Character //your character, protagonist
 				if (falling)
 					SoundPlayer.getInstance().playSound(SoundPlayer.PIT_FALL);
 			}
+			else if (tile.isSlipperyTile())
+			{
+				this.disableUserControl();
+				this.moveTo(moveVec);
+				leavingIce = true;
+			}
 			else
-				falling = false;
+			{
+				if(leavingIce)
+				{
+					setMoveSpeed(0);
+				}
+				setMoveSpeed(30);
+				this.stop();
+				this.enableUserControl();
+			}
 		}
 	}
 	

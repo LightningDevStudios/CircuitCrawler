@@ -147,6 +147,14 @@ public class Tile extends StaticEnt
 		rotateTilesetCoords();
 	}
 	
+	public void setAsSlipperyTile()
+	{
+		state = TileState.SlipperyTile;
+		updateTileset(15,0);
+		isSolid = false;
+		rotateTilesetCoords();
+	}
+	
 	public void setAsPit()
 	{
 		state = TileState.PIT;
@@ -180,6 +188,13 @@ public class Tile extends StaticEnt
 	public boolean isPit()
 	{
 		if (state == TileState.PIT)
+			return true;
+		return false;
+	}
+	
+	public boolean isSlipperyTile()
+	{
+		if (state == TileState.SlipperyTile)
 			return true;
 		return false;
 	}

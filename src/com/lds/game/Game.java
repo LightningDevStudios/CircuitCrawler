@@ -131,6 +131,9 @@ public class Game
 				}
 			}
 		}
+		tileset[12][6].setAsSlipperyTile();
+		tileset[13][6].setAsSlipperyTile();
+		tileset[11][6].setAsSlipperyTile();
  		
  		for (int i = 0; i < tileset.length; i++)
  		{

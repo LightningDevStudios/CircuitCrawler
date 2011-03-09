@@ -610,6 +610,11 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 		gettingPushed = false;
 	}
 	
+	public void setMoveSpeed(float num)
+	{
+		moveSpeed = num;
+	}
+	
 	public Vector2f getBounceVec()
 	{
 	 	if (bounceList.isEmpty())
