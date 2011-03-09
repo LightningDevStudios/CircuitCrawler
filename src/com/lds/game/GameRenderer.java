@@ -181,6 +181,8 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		 * Update Entites *
 		 ******************/
 		
+		
+		
 		//Triggered when the perspective needs to be redrawn
 		if (Game.windowOutdated)
 		{
@@ -390,7 +392,9 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		{
 			syncObj.notify();
 		}
-		//Thread.yield();
+		
+		game.updateFingers();
+		
 		//framerate count
 		if (frameCount >= 10)
 		{
@@ -427,65 +431,55 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	@Override
 	public void onTouchInput(MotionEvent e) 
 	{
-		//Log.d("LDS_Game", e.toString());
-		//final Vector2f touchVec = new Vector2f(e.getX(e.getPointerCount() - 1) - Game.screenW / 2, Game.screenH / 2 - e.getY(e.getPointerCount() - 1));
-		if (!game.fingerList.isEmpty())
+		if(game.player.userHasControl())
 		{
 			for (int i = 0; i < game.fingerList.size(); i++)
 			{
-				final Vector2f touchInput = new Vector2f(e.getX(i) - Game.screenW / 2, Game.screenH / 2 - e.getY(i));
-				game.fingerList.get(i).update(touchInput);
+				final Vector2f touchInput = new Vector2f(e.getX(game.fingerList.get(i).getPointerId()) - Game.screenW / 2, Game.screenH / 2 - e.getY(game.fingerList.get(i).getPointerId()));
+				game.fingerList.get(i).setPosition(touchInput);
+			}
+			
+			switch(e.getAction() & MotionEvent.ACTION_MASK)
+			{
+				case MotionEvent.ACTION_POINTER_DOWN:
+				case MotionEvent.ACTION_DOWN:
+					final int fingerIndex = e.getPointerId(e.getActionIndex());
+					final Vector2f touchVec = new Vector2f(e.getX(e.getPointerCount() - 1) - Game.screenW / 2, Game.screenH / 2 - e.getY(e.getPointerCount() - 1));
+					boolean onEnt = false;
+					for (int i = 0; i < game.UIList.size(); i++)
+					{
+						final UIEntity ent = game.UIList.get(i);
+						if (touchVec.getX() >= ent.getXPos() - ent.getXSize() / 2 && touchVec.getX() <= ent.getXPos() + ent.getXSize() / 2 && touchVec.getY() >= ent.getYPos() - ent.getYSize() / 2 && touchVec.getY() <= ent.getYPos() + ent.getYSize() / 2)
+						{
+							final Finger newFinger = new Finger(touchVec, ent, e.getPointerId(fingerIndex));
+							newFinger.onStackPush();
+							game.fingerList.add(newFinger);
+							onEnt = true;
+							break;
+						}
+					}
+					if (!onEnt)
+					{
+						final Finger newFinger = new Finger(null, null, e.getPointerId(fingerIndex));
+						game.fingerList.add(newFinger);
+					}
+					
+					break;
+				case MotionEvent.ACTION_UP:
+				case MotionEvent.ACTION_POINTER_UP:
+					if(!game.fingerList.isEmpty())
+					{
+						final int fIndex = e.getPointerId(e.getActionIndex());
+						for(int i = 0; i < game.fingerList.size(); i++)
+						{
+							final Finger f = game.fingerList.get(i);
+							if (fIndex == f.getPointerId())
+								game.fingerList.remove(i).onStackPop();
+						}
+					}
+					break;
 			}
 		}
-		
-		switch(e.getAction() & MotionEvent.ACTION_MASK)
-		{
-			case MotionEvent.ACTION_POINTER_DOWN:
-			case MotionEvent.ACTION_DOWN:
-				final int fingerIndex = e.getPointerId(e.getActionIndex());
-				final Vector2f touchVec = new Vector2f(e.getX(e.getPointerCount() - 1) - Game.screenW / 2, Game.screenH / 2 - e.getY(e.getPointerCount() - 1));
-				boolean onEnt = false;
-				for (int i = 0; i < game.UIList.size(); i++)
-				{
-					final UIEntity ent = game.UIList.get(i);
-					if (touchVec.getX() >= ent.getXPos() - ent.getXSize() / 2 && touchVec.getX() <= ent.getXPos() + ent.getXSize() / 2 && touchVec.getY() >= ent.getYPos() - ent.getYSize() / 2 && touchVec.getY() <= ent.getYPos() + ent.getYSize() / 2)
-					{
-						final Finger newFinger = new Finger(touchVec, ent, e.getPointerId(fingerIndex));
-						newFinger.onStackPush();
-						game.fingerList.add(newFinger);
-						onEnt = true;
-						break;
-					}
-				}
-				if (!onEnt)
-				{
-					final Finger newFinger = new Finger(null, null, e.getPointerId(fingerIndex));
-					game.fingerList.add(newFinger);
-				}
-				
-				break;
-			case MotionEvent.ACTION_UP:
-			case MotionEvent.ACTION_POINTER_UP:
-				if(!game.fingerList.isEmpty())
-				{
-					final int fIndex = e.getPointerId(e.getActionIndex());
-					for(int i = 0; i < game.fingerList.size(); i++)
-					{
-						final Finger f = game.fingerList.get(i);
-						if (fIndex == f.getPointerId())
-							game.fingerList.remove(i).onStackPop();
-					}
-				}
-				break;
-				
-				/*for(Finger f : game.fingerList)
-				{
-					f.onStackPop();
-				}
-				game.fingerList.clear();
-				break;*/
-		}
-		
 		
 	}
 	//redraw the perspective

@@ -25,19 +25,19 @@ public class Finger
 		}
 	}
 	
-	public void update(Vector2f touchInput)
+	public void update()
 	{
 		if (ent instanceof UIJoypad)
 		{
 			UIJoypad joypad = (UIJoypad)ent;
 			joypad.setActive(true);
-			joypad.setInputVec(touchInput);
+			joypad.setInputVec(position);
 			Game.windowOutdated = true;
 			Game.worldOutdated = true;
 		}
 		else if (ent instanceof UIButton)
 		{
-			ent.updateColor(0.3f, 0.5f, 0.6f, 1.0f);
+			//ent.updateColor(0.3f, 0.5f, 0.6f, 1.0f);
 		}
 	}
 	
@@ -45,12 +45,17 @@ public class Finger
 	{
 		if (ent instanceof UIButton)
 		{
-			ent.updateColor(1.0f, 1.0f, 1.0f, 1.0f);
+			//ent.updateColor(1.0f, 1.0f, 1.0f, 1.0f);
 		}
 	}
 	
 	public int getPointerId()
 	{
 		return ptrId;
+	}
+	
+	public void setPosition(final Vector2f input)
+	{
+		position = input;
 	}
 }

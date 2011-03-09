@@ -647,4 +647,12 @@ public class Game
 		triggerList.add(new Trigger(new CauseDoneScaling(player), new EffectEndGame(listener)));
 		triggerList.add(new Trigger(new CausePlayerHealth(0, player), new EffectEndGame(listener)));
 	}
+	
+	public void updateFingers()
+	{
+		for(Finger f : fingerList)
+		{
+			f.update();
+		}
+	}
 }
