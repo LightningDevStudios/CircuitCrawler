@@ -213,7 +213,18 @@ public class Game
 		PhysBlock block2 = new PhysBlock(50, -216, 108);
 		block2.enableTilesetMode(tilesetwire, 2, 1);
 		entList.add(block2);
-
+		
+		SpikeBall wall = new SpikeBall(35, -200, -250, true, true, 15, 500, 0.0f, 0.0f, 0, -300, 1);
+		wall.enableTilesetMode(tilesetwire, 1, 2);
+		//wall.scale(1.0f,2.0f);
+		entList.add(wall);
+		
+		/*
+		MovingWall wall2 = new MovingWall(35, -150, -300, true, true, 5, 500, 0.0f, 0.0f, -112.5f, -300, -1);
+		wall2.enableTilesetMode(tilesetwire, 1, 3);
+		//wall2.scale(1.0f,2.0f);
+		entList.add(wall2);
+	    */
 		
 		/*spriteAnim = new Animation(tilesetwire, 0, 7, 7, 0, 3000);
 		spr = new Sprite(50, -100, 100, 45, 1, 1, spriteAnim);
