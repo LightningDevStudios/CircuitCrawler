@@ -68,6 +68,7 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 	@Override
 	public void onPuzzleActivated()
 	{
+		gameR.clearTouchInput();
 		//glSurface.onPause();
 		Intent i = new Intent(Run.this, PuzzleActivity.class);
 		i.putExtra("PUZZLE_RENDERER", "circuit.CircuitPuzzle");

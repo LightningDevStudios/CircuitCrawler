@@ -45,6 +45,7 @@ public class Game
 	public float camPosY;
 	
 	public float worldMinX, worldMinY, worldMaxX, worldMaxY;
+	public int tilesetMinX, tilesetMinY, tilesetMaxX, tilesetMaxY;
 	
 	//Texture data
 	public static Texture tilesetcolors;
@@ -175,11 +176,11 @@ public class Game
 		
 		block = new PhysBall(Entity.DEFAULT_SIZE, -215.0f, -350.0f);
 		block.enableTilesetMode(tilesetwire, 1, 2);
-		float[] initGM = {1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f};
-		float[] interpGM = {0.1f, 0.1f, 0.1f, 1.0f, 0.3f, 0.8f, 0.9f, 1.0f, 0.1f, 0.8f, 0.1f, 1.0f, 0.9f, 0.2f, 0.1f, 1.0f};
-		block.enableGradientMode(initGM);
-		block.setColorInterpSpeed(0.01f);
-		block.initGradientInterp(interpGM);
+		//float[] initGM = {1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f};
+		//float[] interpGM = {0.1f, 0.1f, 0.1f, 1.0f, 0.3f, 0.8f, 0.9f, 1.0f, 0.1f, 0.8f, 0.1f, 1.0f, 0.9f, 0.2f, 0.1f, 1.0f};
+		//block.enableGradientMode(initGM);
+		//block.setColorInterpSpeed(0.01f);
+		//block.initGradientInterp(interpGM);
 		entList.add(block);
 		
 		/*blob1 = new Blob(-150.0f, -350.0f, AIType.PATROL);
@@ -333,28 +334,10 @@ public class Game
 		tilesetHalfWidth = tileset[0].length * Tile.TILE_SIZE_F / 2;
 		tilesetHalfHeight = tileset.length * Tile.TILE_SIZE_F / 2;
 		
-		int minXBound = (int)(minX + tilesetHalfWidth) / Tile.TILE_SIZE;
-		int maxXBound = (int)((Math.ceil(maxX + tilesetHalfWidth) - 1) / Tile.TILE_SIZE_F);
-		int minYBound = (int)((Math.abs(maxY - tilesetHalfHeight) - 1) / Tile.TILE_SIZE_F);
-		int maxYBound = (int)((Math.ceil(Math.abs(minY - tilesetHalfHeight)) - 1) / Tile.TILE_SIZE_F);
-
-		//set all to false
-		for (Tile[] ts : tileset)
-		{
-			for(Tile t : ts)
-			{
-				t.setRendered(false);
-			}
-		}
-		
-		//only set values in bounds to true
-		for (int i = minYBound; i <= maxYBound; i++)
-		{
-			for (int j = minXBound; j <= maxXBound; j++)
-			{
-					tileset[i][j].setRendered(true);
-			}
-		}
+		tilesetMinX = (int)(minX + tilesetHalfWidth) / Tile.TILE_SIZE;
+		tilesetMaxX = (int)((Math.ceil(maxX + tilesetHalfWidth) - 1) / Tile.TILE_SIZE_F);
+		tilesetMinY = (int)((Math.abs(maxY - tilesetHalfHeight) - 1) / Tile.TILE_SIZE_F);
+		tilesetMaxY = (int)((Math.ceil(Math.abs(minY - tilesetHalfHeight)) - 1) / Tile.TILE_SIZE_F);
 	}
 	
 	public void updateCameraPosition()
@@ -639,12 +622,12 @@ public class Game
 		gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
 		
 		//TODO don't iterate through all and check if visible, have bounds available
-		for (Tile[] ts : tileset)
+		for (int i = tilesetMinY; i <= tilesetMaxY; i++)
 		{
-			for (Tile t : ts)
+			for (int j = tilesetMinX; j <= tilesetMaxX; j++)
 			{
-				t.updateTextureVBO(gl);
-				t.draw(gl);
+				tileset[i][j].updateTextureVBO(gl);
+				tileset[i][j].draw(gl);
 			}
 		}
 		

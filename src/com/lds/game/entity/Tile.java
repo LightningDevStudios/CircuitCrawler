@@ -42,35 +42,26 @@ public class Tile extends StaticEnt
 	@Override
 	public void draw(GL10 gl)
 	{
-		if (rendered)
+		if(!useVBOs)
 		{
-			if(!useVBOs)
-			{
-				gl.glVertexPointer(2, GL10.GL_FLOAT, 0, vertexBuffer);
-				gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, textureBuffer);
-				gl.glDrawElements(GL10.GL_TRIANGLE_STRIP, 4, GL10.GL_UNSIGNED_BYTE, indexBuffer);
-			}
-			else
-			{
-				GL11 gl11 = (GL11)gl;
-				gl11.glBindBuffer(GL11.GL_ARRAY_BUFFER, VBOVertPtr);
-				gl11.glVertexPointer(2, GL11.GL_FLOAT, 0, 0);
-				
-				gl11.glBindBuffer(GL11.GL_ARRAY_BUFFER, VBOTexturePtr);
-				gl11.glTexCoordPointer(2, GL11.GL_FLOAT, 0, 0);
-				
-				gl11.glBindBuffer(GL11.GL_ELEMENT_ARRAY_BUFFER, VBOIndexPtr);
-				gl11.glDrawElements(GL11.GL_TRIANGLE_STRIP, 4, GL11.GL_UNSIGNED_BYTE, 0);
-				
-				gl11.glBindBuffer(GL11.GL_ARRAY_BUFFER, 0);
-				gl11.glBindBuffer(GL11.GL_ELEMENT_ARRAY_BUFFER, 0);
-				
-				final int error = gl11.glGetError();
-				if (error != GL11.GL_NO_ERROR)
-				{
-					Log.e("LDS_Game", "Tile rendering generates GL_ERROR: " + error);
-				}
-			}
+			gl.glVertexPointer(2, GL10.GL_FLOAT, 0, vertexBuffer);
+			gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, textureBuffer);
+			gl.glDrawElements(GL10.GL_TRIANGLE_STRIP, 4, GL10.GL_UNSIGNED_BYTE, indexBuffer);
+		}
+		else
+		{
+			GL11 gl11 = (GL11)gl;
+			gl11.glBindBuffer(GL11.GL_ARRAY_BUFFER, VBOVertPtr);
+			gl11.glVertexPointer(2, GL11.GL_FLOAT, 0, 0);
+			
+			gl11.glBindBuffer(GL11.GL_ARRAY_BUFFER, VBOTexturePtr);
+			gl11.glTexCoordPointer(2, GL11.GL_FLOAT, 0, 0);
+			
+			gl11.glBindBuffer(GL11.GL_ELEMENT_ARRAY_BUFFER, VBOIndexPtr);
+			gl11.glDrawElements(GL11.GL_TRIANGLE_STRIP, 4, GL11.GL_UNSIGNED_BYTE, 0);
+			
+			gl11.glBindBuffer(GL11.GL_ARRAY_BUFFER, 0);
+			gl11.glBindBuffer(GL11.GL_ELEMENT_ARRAY_BUFFER, 0);
 		}
 	}
 	

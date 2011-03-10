@@ -205,25 +205,25 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 					{
 						for (Tile tile : ts)
 						{
-							if (tile.isRendered())
+							//if (tile.isRendered())
+							//{
+							if (physEnt.isColliding(tile))
 							{
-								if (physEnt.isColliding(tile))
+								if (!physEnt.colList.contains(tile) && !tile.colList.contains(physEnt))
 								{
-									if (!physEnt.colList.contains(tile) && !tile.colList.contains(physEnt))
-									{
-										physEnt.colList.add(tile);
-										tile.colList.add(physEnt);
-										physEnt.tileInteract(tile);
-									}
-								}
-								else if (physEnt.colList.contains(tile) || tile.colList.contains(physEnt))
-								{
-									physEnt.colList.remove(tile);
-									tile.colList.remove(physEnt);
-									if (ent.colList.isEmpty())
-										physEnt.tileUninteract(tile);
+									physEnt.colList.add(tile);
+									tile.colList.add(physEnt);
+									physEnt.tileInteract(tile);
 								}
 							}
+							else if (physEnt.colList.contains(tile) || tile.colList.contains(physEnt))
+							{
+								physEnt.colList.remove(tile);
+								tile.colList.remove(physEnt);
+								if (ent.colList.isEmpty())
+									physEnt.tileUninteract(tile);
+							}
+							//}
 						}
 					}
 					
@@ -498,5 +498,10 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	public void gameOver ()
 	{
 		gameOverListener.onGameOver();
+	}
+	
+	public void clearTouchInput()
+	{
+		game.fingerList.clear();
 	}
 }
