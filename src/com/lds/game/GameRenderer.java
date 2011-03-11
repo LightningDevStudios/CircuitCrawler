@@ -148,7 +148,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		}
 
 		//remove entities that are queued for removal
-		game.cleaner.update(game.entList);
+		game.cleaner.update(game.entList, gl);
 				
 		//Update which entities are rendered
 		game.updateLocalEntities();
