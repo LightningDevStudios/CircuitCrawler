@@ -221,7 +221,7 @@ public class Game
 		entList.add(spr);*/
 		
 		
-		box = new PuzzleBox(64.0f, -75.0f, 0.0f, false, true);
+		box = new PuzzleBox(-120.0f, -400.0f, 0.0f, false, true);
 		entList.add(box);
 		
 		/*

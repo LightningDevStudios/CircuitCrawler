@@ -30,7 +30,7 @@ public class Parser //this is a parser
 	{
 		xrp = context.getResources().getXml(res);
 	}
-	
+
 /***********************
  General parsing methods
  **********************/

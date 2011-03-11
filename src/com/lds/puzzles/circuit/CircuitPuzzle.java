@@ -133,6 +133,7 @@ public class CircuitPuzzle implements IPuzzle
 			//second touch
 			else
 			{
+				boolean correctTouch = false;
 				for (int i = 0; i < grid.length; i++)
 				{
 					for (int j = 0; j < grid[0].length; j++)
@@ -145,20 +146,24 @@ public class CircuitPuzzle implements IPuzzle
 							t.isHightlighted())
 						{
 							swapTiles(t, grid[selectedY][selectedX]);
+							correctTouch = true;
 						}
 					}
 				}
-								
-				selected = false;
-				//grid[selectedY][selectedX].deselect();
-				/*for (Tile[] ta : grid)
+				if(!correctTouch)
 				{
-					for (Tile t : ta)
+					grid[selectedY][selectedX].deselect();
+					for (Tile[] ta : grid)
 					{
-						if(t.isHightlighted())
-							t.dehighlight();
+						for (Tile t : ta)
+						{
+							if(t.isHightlighted())
+								t.dehighlight();
+						}
 					}
-				}*/
+				}
+				
+				selected = false;
 			}
 		}
 	}
