@@ -136,6 +136,9 @@ public class Game
 				}
 			}
 		}
+		tileset[12][6].setAsSlipperyTile();
+		tileset[13][6].setAsSlipperyTile();
+		tileset[11][6].setAsSlipperyTile();
  		
  		for (int i = 0; i < tileset.length; i++)
  		{
@@ -208,14 +211,35 @@ public class Game
 		entList.add(button2);
 		
 
-		PhysBlock block1 = new PhysBlock(50, 0, 108);
-		block1.enableTilesetMode(tilesetwire, 2, 1);
+		Spikes block1 = new Spikes(0, 108, 90);
+		block1.enableTilesetMode(tilesetwire, 2, 2);
 		entList.add(block1);
 		 
 		PhysBlock block2 = new PhysBlock(50, -216, 108);
 		block2.enableTilesetMode(tilesetwire, 2, 1);
 		entList.add(block2);
 		
+		SpikeBall wall = new SpikeBall(35, -200, -250, true, true, 15, 500, 0.0f, 0.0f, 0, -300, 1);
+		wall.enableTilesetMode(tilesetwire, 1, 2);
+		//wall.scale(1.0f,2.0f);
+		entList.add(wall);
+		
+		Cannon cannon = new Cannon(35, -100, -300, 90, 1, 1, true, false, true, 5);
+		cannon.enableTilesetMode(tilesetwire, 2, 1);
+		entList.add(cannon);
+		
+		/*
+		MovingWall wall2 = new MovingWall(35, -150, -300, true, true, 5, 500, 0.0f, 0.0f, -112.5f, -300, -1);
+		wall2.enableTilesetMode(tilesetwire, 1, 3);
+		//wall2.scale(1.0f,2.0f);
+		entList.add(wall2);
+	    */
+		
+		/*spriteAnim = new Animation(tilesetwire, 0, 7, 7, 0, 3000);
+		spr = new Sprite(50, -100, 100, 45, 1, 1, spriteAnim);
+		spr.enableTextureMode(tilesetwire);
+		entList.add(spr);*/
+				
 		box = new PuzzleBox(64.0f, -75.0f, 0.0f, false, true);
 		entList.add(box);
 
@@ -366,6 +390,7 @@ public class Game
 	
 	public Tile nearestTile(Entity ent)
 	{	
+		//TODO Fix return null when offscreen
 		final float tilesetHalfWidth = tileset[0].length * Tile.TILE_SIZE_F / 2;
 		final float tilesetHalfHeight = tileset.length * Tile.TILE_SIZE_F / 2;
 		

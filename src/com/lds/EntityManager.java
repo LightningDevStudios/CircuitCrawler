@@ -2,6 +2,8 @@ package com.lds;
 
 import java.util.ArrayList;
 
+import javax.microedition.khronos.opengles.GL10;
+
 import com.lds.game.entity.Entity;
 
 public class EntityManager 
@@ -27,16 +29,18 @@ public class EntityManager
 			addList.add(ent);
 	}
 	
-	public void update(ArrayList<Entity> entList)
+	public void update(ArrayList<Entity> entList, GL10 gl)
 	{
 		for (Entity ent : trashList)
 		{
+			//TODO free hardware buffers
 			entList.remove(ent);
 			ent = null;
 		}
 		
 		for (Entity ent : addList)
 		{
+			ent.genHardwareBuffers(gl);
 			entList.add(ent);
 		}
 		

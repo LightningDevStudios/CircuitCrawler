@@ -136,8 +136,9 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		Stopwatch.tick();
 
 		game.updateTriggers();
+		game.updateFingers();
 		game.updateRenderedEnts();
-		game.cleaner.update(game.entList);
+		game.cleaner.update(game.entList, gl);
 		
 		game.renderTileset(gl);
 
@@ -209,9 +210,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 					{
 						for (final Tile tile : ts)
 						{
-							//if (tile.isRendered())
-							//{
-							if (physEnt.isColliding(tile))
+							if (tile.isColliding(physEnt))
 							{
 								if (!physEnt.colList.contains(tile) && !tile.colList.contains(physEnt))
 								{
@@ -227,7 +226,13 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 								if (ent.colList.isEmpty())
 									physEnt.tileUninteract(tile);
 							}
-							//}
+							/*else if (physEnt.colList.contains(tile) || tile.colList.contains(physEnt))
+							{
+								physEnt.colList.remove(tile);
+								tile.colList.remove(physEnt);
+								if (ent.colList.isEmpty())
+									physEnt.tileUninteract(tile);
+							}*/
 						}
 					}
 					
@@ -291,7 +296,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 					final AttackBolt attack = new AttackBolt(Vector2f.add(game.player.getPos(), directionVec), directionVec, game.player.getAngle());
 					attack.genHardwareBuffers(gl);
 					EntityManager.addEntity(attack);
-					game.player.loseEnergy(10);
+					game.player.loseEnergy(5);
 					vibrator(100);
 					SoundPlayer.getInstance().playSound(2);
 				}
@@ -344,9 +349,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		{
 			syncObj.notify();
 		}
-		
-		game.updateFingers();
-		
+				
 		//framerate count
 		if (frameCount >= 10)
 		{
