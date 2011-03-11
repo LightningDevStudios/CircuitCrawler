@@ -14,7 +14,6 @@ public class Player extends Character //your character, protagonist
 	private boolean controlled;
 	private float nextAngle;
 	protected Context context;
-	protected boolean leavingIce;
 	
 	public Player (float xPos, float yPos, float angle)
 	{
@@ -63,6 +62,10 @@ public class Player extends Character //your character, protagonist
 			//vibrator(2000);
 			takeDamage(25);
 		}
+		else if (ent instanceof CannonShell)
+		{
+			takeDamage(5);
+		}
 	}
 	
 	@Override
@@ -82,8 +85,7 @@ public class Player extends Character //your character, protagonist
 			else if (tile.isSlipperyTile())
 			{
 				this.disableUserControl();
-				this.moveTo(moveVec);
-				//leavingIce = true;
+				this.push(moveInterpVec);
 			}
 			else
 			{

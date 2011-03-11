@@ -26,8 +26,8 @@ public class Cannon extends StaticEnt
 		if(Stopwatch.elapsedTimeMs() - time > 5000)
 		{
 			time = Stopwatch.elapsedTimeMs();
-			PhysBall cannonShot = new PhysBall(15, cannonXPos, cannonYPos);
-			cannonShot.enableTilesetMode(Game.tilesetwire, 1, 2);
+			CannonShell cannonShot = new CannonShell(15, cannonXPos, cannonYPos, angle, 0.0f, 0.0f, true, true, true, speed, 0.0f, 0.0f, 0.07f);
+			cannonShot.enableTilesetMode(Game.tilesetwire, 1, 3);
 			cannonShot.push(new Vector2f(angle).scale(speed));
 			EntityManager.addEntity(cannonShot);
 		}
