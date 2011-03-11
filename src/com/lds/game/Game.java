@@ -254,12 +254,12 @@ public class Game
 		entList.add(block2);
 
 		
-		SpikeBall wall = new SpikeBall(35, -200, -250, true, true, 15, 500, 0.0f, 0.0f, 0, -300, 1);
-		wall.enableTilesetMode(tilesetwire, 1, 2);
-		//wall.scale(1.0f,2.0f);
-		entList.add(wall);
+		/*
+		SpikeBall spiky = new SpikeBall(15, -200, -300, true, true, 15, 1000, 0.0f, 0.0f, 0, -300, 1);
+		spiky.enableTilesetMode(tilesetwire, 1, 2);
+		entList.add(spiky); */
 		
-		Cannon cannon = new Cannon(35, -100, -300, 90, 1, 1, true, false, true, 5);
+		Cannon cannon = new Cannon(35, -150, -340, 90, 1, 1, true, false, true, 5);
 		cannon.enableTilesetMode(tilesetwire, 2, 1);
 		entList.add(cannon);*/
 		

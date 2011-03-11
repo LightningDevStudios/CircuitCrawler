@@ -7,15 +7,15 @@ import com.lds.game.Game;
 
 public class Cannon extends StaticEnt
 {
-	protected float speed, xPos, yPos;
+	protected float speed, cannonXPos, cannonYPos;
 	protected int time;
 	
-	public Cannon(float size, float xPos, float yPos, float angle, float xScl, float yScl, boolean isSolid, boolean circular, boolean willCollide, float speed)
+	public Cannon(float size, float xPos, float yPos, float angle, float xScl, float yScl, boolean isSolid, boolean circular, boolean willCollide, float fireSpeed)
 	{
 		super(size, xPos, yPos, angle, xScl, yScl, isSolid, circular, willCollide);
-		this.speed = speed;
-		this.xPos = xPos;
-		this.yPos = yPos;
+		speed = fireSpeed;
+		cannonXPos = xPos;
+		cannonYPos = yPos;
 		time = Stopwatch.elapsedTimeMs();		
 	}
 
@@ -26,8 +26,8 @@ public class Cannon extends StaticEnt
 		if(Stopwatch.elapsedTimeMs() - time > 5000)
 		{
 			time = Stopwatch.elapsedTimeMs();
-			PhysBall cannonShot = new PhysBall(15, xPos, yPos, 0.005f);
-			cannonShot.enableTilesetMode(Game.tilesetwire, 1, 2);
+			CannonShell cannonShot = new CannonShell(15, cannonXPos, cannonYPos, angle, 0.0f, 0.0f, true, true, true, speed, 0.0f, 0.0f, 0.07f);
+			cannonShot.enableTilesetMode(Game.tilesetwire, 1, 3);
 			cannonShot.push(new Vector2f(angle).scale(speed));
 			EntityManager.addEntity(cannonShot);
 		}

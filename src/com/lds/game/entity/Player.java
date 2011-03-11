@@ -8,21 +8,19 @@ import com.lds.game.SoundPlayer;
 
 public class Player extends Character //your character, protagonist
 {
-	public static final int ENERGY_LIMIT = 100, HEALTH_LIMIT = 100;
 	private int energy;
 	private boolean holdingObject;
 	private HoldObject hObj;
 	private boolean controlled;
 	private float nextAngle;
 	protected Context context;
-	protected boolean leavingIce;
 	
 	public Player (float xPos, float yPos, float angle)
 	{
 		//initialize Character and Entity data
-		super(Entity.DEFAULT_SIZE, xPos, yPos, angle, 1.0f, 1.0f, false, HEALTH_LIMIT, 30.0f, 1.0f);
+		super(Entity.DEFAULT_SIZE, xPos, yPos, angle, 1.0f, 1.0f, false, 100, 30.0f, 1.0f);
 		//initialize Player data
-		energy = ENERGY_LIMIT;
+		energy = 100;
 		nextAngle = angle;
 	}
 	
@@ -34,28 +32,40 @@ public class Player extends Character //your character, protagonist
 	@Override
 	public void interact (Entity ent)
 	{
-		super.interact(ent);
-		if (ent instanceof PickupEnergy)
+		if (ent instanceof AttackBolt)
+		{
+			takeDamage(5);
+			//move the player back further upon collision; copy this line to make it bounce back further
+			this.rectangleBounceAgainstRectangle(ent);
+			bounceList.get(bounceList.size() - 1).scale(30.0f);
+		}
+		else if (ent instanceof PickupEnergy)
 		{
 			energy += ((PickupEnergy)ent).getEnergyValue();
-			if (energy > ENERGY_LIMIT)
-				energy = ENERGY_LIMIT;
 		}
 		else if (ent instanceof PickupHealth)
 		{
 			health += ((PickupHealth)ent).getHealthValue();
-			if (health > HEALTH_LIMIT)
-				health = HEALTH_LIMIT;
 		}
-		else if (ent instanceof Enemy || ent instanceof Spike)
+		else if (ent instanceof Enemy || ent instanceof Spikes)
 		{
 			takeDamage(25);
+			//see above
+			bounceList.get(bounceList.size() - 1).scale(30.0f);
+		}
+		else if (ent instanceof PuzzleBox)
+		{
+			posVec.add(new Vector2f(-10, -10));
 		}
 		else if (ent instanceof SpikeBall)
 		{
 			//vibrator(2000);
 			takeDamage(25);
-		} 
+		}
+		else if (ent instanceof CannonShell)
+		{
+			takeDamage(5);
+		}
 	}
 	
 	@Override
@@ -68,17 +78,18 @@ public class Player extends Character //your character, protagonist
 				this.disableUserControl();
 				this.scaleTo(0, 0);
 				this.moveTo(tile.getXPos(), tile.getYPos());
-				if (!falling)
-					SoundPlayer.getInstance().playSound(SoundPlayer.PIT_FALL);
 				falling = true;
+				if (falling)
+					SoundPlayer.getInstance().playSound(SoundPlayer.PIT_FALL);
 			}
-			/*else if (tile.isSlipperyTile())
+			else if (tile.isSlipperyTile())
 			{
-				//this.disableUserControl();
-				this.push(moveVec);
-			}*/
-			else 
+				this.disableUserControl();
+				this.push(moveInterpVec);
+			}
+			else
 			{
+				this.stop();
 				this.enableUserControl();
 			}
 		}
@@ -99,10 +110,8 @@ public class Player extends Character //your character, protagonist
 		holdingObject = false;
 		colIgnoreList.remove(hObj);
 		hObj.colIgnoreList.remove(this);
-		final Vector2f addVec = new Vector2f(angle).scale(10);
-		hObj.addPos(addVec);
 		hObj.drop();
-		hObj = new PhysBlock(0.0f, 0.0f, 0.0f, 0.03f);
+		hObj = new PhysBlock(0.0f, 0.0f, 0.0f);
 		hObj = null;
 	}
 	
@@ -111,10 +120,8 @@ public class Player extends Character //your character, protagonist
 		holdingObject = false;
 		colIgnoreList.remove(hObj);
 		hObj.colIgnoreList.remove(this);
-		final Vector2f addVec = new Vector2f(angle).scale(10);
-		hObj.addPos(addVec);
 		hObj.push();
-		hObj = new PhysBlock(0.0f, 0.0f, 0.0f, 0.03f);
+		hObj = new PhysBlock(0.0f, 0.0f, 0.0f);
 		hObj = null;
 	}
 	
@@ -139,11 +146,12 @@ public class Player extends Character //your character, protagonist
 
 	public void updateHeldObjectPosition()
 	{
-		float heldDistance = hObj.halfSize * hObj.getXScl() + this.halfSize + 10.0f;
-		Vector2f directionVec = new Vector2f(angle);
-		directionVec.scale(heldDistance).add(posVec);
-		hObj.setPos(directionVec.getX(), directionVec.getY());
-		hObj.setAngle(angle);
+			float heldDistance = hObj.halfSize * hObj.getXScl() + this.halfSize + 10.0f;
+			Vector2f directionVec = new Vector2f(angle);
+			directionVec.scale(heldDistance).add(posVec);
+			
+			hObj.setPos(directionVec.getX(), directionVec.getY());
+			hObj.setAngle(angle);
 	}
 	
 	@Override
