@@ -17,6 +17,8 @@ public  abstract class Enemy extends Character //enemies will fall under this cl
 	protected NodePath patrolPath;
 	protected int pathLocation;
 	protected boolean onPatrol;
+	//Pathfinding stuff
+	protected NodePath pathToPlayer;
 
 	public Enemy(float size, float xPos, float yPos, boolean circular, int health, AIType type)
 	{

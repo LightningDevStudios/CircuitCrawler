@@ -47,7 +47,7 @@ public class Player extends Character //your character, protagonist
 		{
 			takeDamage(25);
 			//see above
-			bounceList.get(bounceList.size() - 1).scale(30.0f);
+			bounceList.get(bounceList.size() - 1).scale(25.0f);
 		}
 		else if (ent instanceof PuzzleBox)
 		{

@@ -13,6 +13,7 @@ import android.content.Context;
 import com.lds.*;
 import com.lds.Enums.*;
 import com.lds.game.ai.Node;
+import com.lds.game.ai.NodeLink;
 import com.lds.game.ai.NodePath;
 
 
@@ -34,6 +35,7 @@ public class Game
 	public Tile[][] tileset;
 	public ArrayList<UIEntity> UIList;
 	public ArrayList<Trigger> triggerList;
+	public ArrayList<Node> nodeList;
 	public EntityManager cleaner;
 	
 	public ArrayList<Finger> fingerList;
@@ -183,15 +185,10 @@ public class Game
 		block.initGradientInterp(interpGM);
 		entList.add(block);
 		
-		/*
-		blob1 = new Blob(-150.0f, -350.0f, AIType.PATROL);
+		
+		blob1 = new Blob(-150.0f, -350.0f, AIType.STALKER);
 		blob1.enableTilesetMode(tilesetwire, 2, 2);
-		NodePath path = new NodePath();
-		path.add(new Node(-150.0f, -350.0f));
-		path.add(new Node(-50.0f, -350.0f));
-		path.add(new Node(-100.0f, -300.0f));
-		blob1.setPatrolPath(path);
-		entList.add(blob1);*/
+		entList.add(blob1);
 		
 		/*blob2 = new Blob(0.0f, 0.0f, AIType.TURRET);
 		blob2.enableTilesetMode(tilesetwire, 2, 2);
@@ -206,14 +203,13 @@ public class Game
 		entList.add(button2);
 		
 
-		Spikes block1 = new Spikes(0, 108, 90);
+		PhysBlock block1 = new PhysBlock(50, -200, 90);
 		block1.enableTilesetMode(tilesetwire, 2, 2);
 		entList.add(block1);
 		 
-		PhysBlock block2 = new PhysBlock(50, -216, 108);
+		PhysBlock block2 = new PhysBlock(50, 0, 90);
 		block2.enableTilesetMode(tilesetwire, 2, 1);
 		entList.add(block2);
-
 		
 		/*spriteAnim = new Animation(tilesetwire, 0, 7, 7, 0, 3000);
 		spr = new Sprite(50, -100, 100, 45, 1, 1, spriteAnim);
@@ -243,6 +239,32 @@ public class Game
 		*/
 		//spr = new Sprite(30.0f, -108.0f, -300.0f, 45.0f, 1.0f, 1.0f, 10, 90, 1, spriteAnim);
 		//entList.add(spr);
+		
+		nodeList = new ArrayList<Node>();
+		nodeList.add(new Node(-105.0f, -225.0f));
+		nodeList.add(new Node(-105.0f, -145.0f));
+		nodeList.add(new Node(-200.0f, 0.0f));
+		nodeList.add(new Node(30.0f, 0.0f));
+		nodeList.add(new Node(-105.0f, 130.0f));
+		nodeList.add(new Node(-105.0f, 320.0f));
+		nodeList.get(0).addNodeLink(nodeList.get(1));
+		nodeList.get(1).addNodeLink(nodeList.get(2));
+		nodeList.get(1).addNodeLink(nodeList.get(3));
+		nodeList.get(2).addNodeLink(nodeList.get(4));
+		nodeList.get(3).addNodeLink(nodeList.get(4));
+		nodeList.get(4).addNodeLink(nodeList.get(5));
+		
+		Sprite sprite = new Sprite(15.0f, -200, 40, 100.0f, 0, 0, null);
+		entList.add(sprite);
+		sprite.setNodePath(getPathToPlayer(sprite));
+		
+		//TODO Test code for nodes
+		ArrayList<Sprite> spriteList = new ArrayList<Sprite>();
+		for (Node node : nodeList)
+		{
+			spriteList.add(new Sprite (5.0f, node.getXPos(), node.getYPos()));
+			entList.add(spriteList.get(spriteList.size() - 1));
+		}
 		
 		CauseAND bridgeAND = new CauseAND(new CauseButton(button1), new CauseButton(button2));
 		
@@ -655,5 +677,155 @@ public class Game
 		{
 			f.update();
 		}
+	}
+	
+	public NodePath getPathToPlayer (Entity ent)
+	{
+		Node goalNode = new Node(player.getPos());
+		Node startNode = new Node(ent.getPos());
+		
+		//if enemy can go straight towards player
+		if (pathIsClear(startNode, goalNode))
+			return new NodePath(startNode, goalNode);
+		
+		//checks if player is reachable
+		boolean goalReachable = false;
+		boolean startConnected = false;
+		for (Node node : nodeList)
+		{
+			if (pathIsClear(goalNode, node))
+			{
+				goalNode.addNodeLink(node);
+				goalReachable = true;
+			}
+			if (pathIsClear(startNode, node))
+			{
+				goalNode.addNodeLink(node);
+				startConnected = true;
+			}
+		}
+		if (!goalReachable || !startConnected)
+			return null;
+
+		int previousListSize = 1;
+		ArrayList<Node> openList = new ArrayList<Node>();
+		ArrayList<Node> closedList = new ArrayList<Node>();
+		Node lowestF = startNode;
+		closedList.add(startNode);
+		
+		while (!openList.contains(goalNode))
+		{
+			for (int i = 0; i < lowestF.getNodeCount(); i++)
+			{
+				if (lowestF.getNodeLink(i).isActive())
+				{
+					Node node = lowestF.getNodeLink(i).getLinkedNode();
+					if (openList.contains(node))
+					{
+						float newG = lowestF.getG() + lowestF.getNodeLink(i).getNodeVec().mag();
+						if (node.getG() > newG)
+						{
+							node.setG(newG);
+							node.setParentNode(lowestF);
+						}
+					}
+					node.setG(lowestF.getG() + lowestF.getNodeLink(i).getNodeVec().mag());
+					node.setH(Vector2f.sub(node.getPos(), goalNode.getPos()).mag());
+					node.setF(node.getG() + node.getH());
+					node.setParentNode(lowestF);
+					openList.add(node);
+				}
+			}
+			lowestF = openList.get(0);
+			for (int i = 1; i < openList.size(); i++)
+			{
+				if (openList.get(i).getF() < lowestF.getF())
+					lowestF = openList.get(i);
+			}
+			openList.remove(lowestF);
+			closedList.add(lowestF);
+			
+			if (previousListSize == openList.size() + closedList.size())
+				break;
+			else
+				previousListSize = openList.size() + closedList.size();
+		}
+		
+		if (openList.contains(goalNode))
+		{
+			//find nodePath from goal to start
+			NodePath path = new NodePath(goalNode);
+			Node currentNode = goalNode;
+			while (currentNode != startNode)
+			{
+				currentNode = currentNode.getParentNode();
+				path.add(currentNode);
+			}
+			//reverse path
+			path.reverse();
+			return path;
+		}
+		else
+			return null;
+	}
+	
+	public boolean pathIsClear(Node startNode, Node endNode)
+	{
+		Vector2f rayPos = new Vector2f(startNode.getPos());
+		Vector2f pathVec = Vector2f.sub(endNode.getPos(), startNode.getPos()).scaleTo(10);
+		boolean pathClear = true;
+		while (pathClear && Vector2f.sub(rayPos, endNode.getPos()).mag() > 2.0)
+		{
+			for (Entity ent : entList)
+			{
+				if (ent.isSolid() && ent.containsPoint(rayPos))
+				{
+					pathClear = false;
+				}
+			}
+			
+			for (Tile[] tileArray : tileset)
+			{
+				for (Tile tile : tileArray)
+				{
+					if ((tile.isWall() || tile.isPit()) && tile.containsPoint(rayPos))
+					{
+						pathClear = false;
+					}
+				}
+			}
+			rayPos.add(pathVec);
+		}
+		return pathClear;
+	}
+	
+	public boolean pathIsClear(NodeLink link)
+	{
+		Vector2f rayPos = new Vector2f(link.getThisNode().getPos());
+		Vector2f pathVec = new Vector2f(link.getNodeVec()).scaleTo(10);
+		boolean pathClear = true;
+		while (pathClear && Vector2f.sub(rayPos, link.getLinkedNode().getPos()).mag() > 2.0)
+		{
+			for (Entity ent : entList)
+			{
+				if (ent.isSolid() && ent.containsPoint(rayPos))
+				{
+					pathClear = false;
+				}
+			}
+			
+			for (Tile[] tileArray : tileset)
+			{
+				for (Tile tile : tileArray)
+				{
+					if ((tile.isWall() || tile.isPit()) && tile.containsPoint(rayPos))
+					{
+						pathClear = false;
+					}
+				}
+			}
+			rayPos.add(pathVec);
+		}
+		return pathClear;
 	}
 }
