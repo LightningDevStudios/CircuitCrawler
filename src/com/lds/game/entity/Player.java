@@ -1,5 +1,8 @@
 package com.lds.game.entity;
 
+import android.content.Context;
+import android.os.Vibrator;
+
 import com.lds.Vector2f;
 import com.lds.game.SoundPlayer;
 
@@ -10,6 +13,8 @@ public class Player extends Character //your character, protagonist
 	private HoldObject hObj;
 	private boolean controlled;
 	private float nextAngle;
+	protected Context context;
+	protected boolean leavingIce;
 	
 	public Player (float xPos, float yPos, float angle)
 	{
@@ -33,6 +38,7 @@ public class Player extends Character //your character, protagonist
 			takeDamage(5);
 			//move the player back further upon collision; copy this line to make it bounce back further
 			this.rectangleBounceAgainstRectangle(ent);
+			bounceList.get(bounceList.size() - 1).scale(30.0f);
 		}
 		else if (ent instanceof PickupEnergy)
 		{
@@ -42,18 +48,24 @@ public class Player extends Character //your character, protagonist
 		{
 			health += ((PickupHealth)ent).getHealthValue();
 		}
-		else if (ent instanceof Enemy)
+		else if (ent instanceof Enemy || ent instanceof Spikes)
 		{
 			takeDamage(25);
 			//see above
-			this.rectangleBounceAgainstRectangle(ent);
+			bounceList.get(bounceList.size() - 1).scale(30.0f);
 		}
 		else if (ent instanceof PuzzleBox)
 		{
 			posVec.add(new Vector2f(-10, -10));
 		}
+		else if (ent instanceof SpikeBall)
+		{
+			//vibrator(2000);
+			takeDamage(25);
+		}
 	}
 	
+	@Override
 	public void onTileInteract(Tile tile)
 	{
 		if (tile != null)
@@ -67,8 +79,17 @@ public class Player extends Character //your character, protagonist
 				if (falling)
 					SoundPlayer.getInstance().playSound(SoundPlayer.PIT_FALL);
 			}
+			else if (tile.isSlipperyTile())
+			{
+				this.disableUserControl();
+				this.moveTo(moveVec);
+				//leavingIce = true;
+			}
 			else
-				falling = false;
+			{
+				this.stop();
+				this.enableUserControl();
+			}
 		}
 	}
 	
@@ -101,6 +122,25 @@ public class Player extends Character //your character, protagonist
 		hObj = new PhysBlock(0.0f, 0.0f, 0.0f);
 		hObj = null;
 	}
+	
+	public void vibrator(int time)
+	{
+		Vibrator vibrator = null; 
+		try 
+		{ 
+			vibrator=(Vibrator)context.getSystemService(Context.VIBRATOR_SERVICE); 
+		} 
+		catch (Exception e) {}
+		
+		if (vibrator != null)
+		{ 
+		  try 
+		  { 
+			  vibrator.vibrate(((long)time)); 
+		  } 
+		  catch (Exception e) {} 
+		} 
+	}
 
 	public void updateHeldObjectPosition()
 	{
@@ -115,7 +155,7 @@ public class Player extends Character //your character, protagonist
 	@Override
 	public boolean isColliding(Entity ent)
 	{
-		if (ent == this.getHeldObject())
+		if (ent == this.getHeldObject() || ent instanceof Tile && !((Tile)ent).isRendered())
 			return false;
 		return super.isColliding(ent);
 	}

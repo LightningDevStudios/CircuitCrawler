@@ -26,7 +26,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	public Context context;
 	public Object syncObj;
 	public boolean gameOver;
-	public int playerMoveTimeMs, frameInterval, frameCount = 0;	
+	public int playerMoveTimeMs, frameCount = 0;	
 	public OnGameInitializedListener gameInitializedListener;
 	public OnPuzzleActivatedListener puzzleActivatedListener;
 	public OnGameOverListener gameOverListener;
@@ -73,6 +73,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 			Game.randomthings = new Texture(R.drawable.randomthings, 256, 256, 8, 8, context, "randomthings");
 			Game.text = new Texture(R.drawable.text, 256, 256, 16, 8, context, "text");
 			Game.tilesetworld = new Texture(R.drawable.tilesetworld, 512, 256, 16, 8, context, "tilesetworld");
+			Game.tilesetentities = new Texture(R.drawable.tilesetentities, 256, 256, 8, 8, context, "tilesetentities");
 			
 			TextureLoader.getInstance().initialize(gl);
 			TextureLoader tl = TextureLoader.getInstance();
@@ -81,6 +82,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 			tl.loadTexture(Game.randomthings);
 			tl.loadTexture(Game.text);
 			tl.loadTexture(Game.tilesetworld);
+			tl.loadTexture(Game.tilesetentities);
 			
 			for(Entity ent : game.entList)
 			{
@@ -127,72 +129,23 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	@Override
 	public void onDrawFrame(GL10 gl) 
 	{
-		frameCount++;
-		
-		/*********************************
-		 * Update World and Render Tiles *
-		 *********************************/
-		
-		//clear the screen
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-		
-		frameInterval = Stopwatch.elapsedTimeMs();
-		
-		//tick the stopwatch every frame, gives relatively stable intervals
-		Stopwatch.tick();
-						
-		//iterate through triggers
-		for (Trigger t : game.triggerList)
-		{
-			t.update();
-		}
 
-		//remove entities that are queued for removal
-		game.cleaner.update(game.entList);
-				
-		//Update which entities are rendered
-		game.updateLocalEntities();
-				
-		/******************
-		 * Render tileset *
-		 ******************/
+		frameCount++;
+		game.frameInterval = Stopwatch.elapsedTimeMs();
+		Stopwatch.tick();
+
+		game.updateTriggers();
+		game.updateFingers();
+		game.updateRenderedEnts();
+		game.cleaner.update(game.entList, gl);
 		
-		gl.glEnable(GL10.GL_TEXTURE_2D);
-		gl.glBindTexture(GL10.GL_TEXTURE_2D, Game.tilesetworld.getTexture());
-				
-		gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
-		gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
-		
-		//TODO don't iterate through all and check if visible, have bounds available
-		for (Tile[] ts : game.tileset)
-		{
-			for (Tile t : ts)
-			{
-				t.updateTextureVBO(gl);
-				t.draw(gl);
-			}
-		}
-		
-		gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
-		gl.glDisableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
-		gl.glDisable(GL10.GL_TEXTURE_2D);
-		
-		/******************
-		 * Update Entites *
-		 ******************/
-		
+		game.renderTileset(gl);
+
 		//Triggered when the perspective needs to be redrawn
 		if (Game.windowOutdated)
 		{
-			//move player
-			game.player.setAngle(game.joypad.getInputAngle());
-			game.player.addPos(game.joypad.getInputVec().scale((Stopwatch.elapsedTimeMs() - frameInterval) * (game.player.getMoveSpeed() / 1000)));
-			game.joypad.clearInputVec();
-			
-			//move heldObject if neccessary
-			if (game.player.isHoldingObject())
-				game.player.updateHeldObjectPosition();
-			//redraw perspective
+			game.updatePlayerPos();
 			updateCamPosition(gl);
 			Game.windowOutdated = false;
 		}
@@ -214,7 +167,8 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		 **********************************************/
 		
 		//Iterates through all entities
-		for (int i = 0; i < game.entList.size(); i++)
+		final int size = game.entList.size();
+		for (int i = 0; i < size; i++)
 		{
 			final Entity ent = game.entList.get(i);
 						
@@ -222,7 +176,8 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 			if (Game.worldOutdated)
 			{
 				//checks collision and interacts with all other Entities
-				for (int j = i + 1; j < game.entList.size(); j++)
+				
+				for (int j = i + 1; j < size; j++)
 				{
 					final Entity colEnt = game.entList.get(j);
 					if (ent.isColliding(colEnt))
@@ -250,30 +205,34 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 				
 				if (ent instanceof PhysEnt)
 				{
-					PhysEnt physEnt = (PhysEnt)ent;
-					for (Tile[] ts : game.tileset)
+					final PhysEnt physEnt = (PhysEnt)ent;
+					for (final Tile[] ts : game.tileset)
 					{
-						for (Tile tile : ts)
+						for (final Tile tile : ts)
 						{
-							if (tile.isRendered())
+							if (tile.isColliding(physEnt))
 							{
-								if (physEnt.isColliding(tile))
+								if (!physEnt.colList.contains(tile) && !tile.colList.contains(physEnt))
 								{
-									if (!physEnt.colList.contains(tile) && !tile.colList.contains(physEnt))
-									{
-										physEnt.colList.add(tile);
-										tile.colList.add(physEnt);
-										physEnt.tileInteract(tile);
-									}
-								}
-								else if (physEnt.colList.contains(tile) || tile.colList.contains(physEnt))
-								{
-									physEnt.colList.remove(tile);
-									tile.colList.remove(physEnt);
-									if (ent.colList.isEmpty())
-										physEnt.tileUninteract(tile);
+									physEnt.colList.add(tile);
+									tile.colList.add(physEnt);
+									physEnt.tileInteract(tile);
 								}
 							}
+							else if (physEnt.colList.contains(tile) || tile.colList.contains(physEnt))
+							{
+								physEnt.colList.remove(tile);
+								tile.colList.remove(physEnt);
+								if (ent.colList.isEmpty())
+									physEnt.tileUninteract(tile);
+							}
+							/*else if (physEnt.colList.contains(tile) || tile.colList.contains(physEnt))
+							{
+								physEnt.colList.remove(tile);
+								tile.colList.remove(physEnt);
+								if (ent.colList.isEmpty())
+									physEnt.tileUninteract(tile);
+							}*/
 						}
 					}
 					
@@ -337,7 +296,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 					final AttackBolt attack = new AttackBolt(Vector2f.add(game.player.getPos(), directionVec), directionVec, game.player.getAngle());
 					attack.genHardwareBuffers(gl);
 					EntityManager.addEntity(attack);
-					game.player.loseEnergy(10);
+					game.player.loseEnergy(5);
 					vibrator(100);
 					SoundPlayer.getInstance().playSound(2);
 				}
@@ -390,11 +349,11 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		{
 			syncObj.notify();
 		}
-		//Thread.yield();
+				
 		//framerate count
 		if (frameCount >= 10)
 		{
-			Log.d("LDS_Game", "FPS: " + (1000.0f / (Stopwatch.elapsedTimeMs() - frameInterval)));
+			Log.d("LDS_Game", "FPS: " + (1000.0f / (Stopwatch.elapsedTimeMs() - game.frameInterval)));
 			frameCount = 0;
 		}
 	}
@@ -427,43 +386,58 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	@Override
 	public void onTouchInput(MotionEvent e) 
 	{
-		//Log.d("LDS_Game", e.toString());
-		//final Vector2f touchVec = new Vector2f(e.getX(e.getPointerCount() - 1) - Game.screenW / 2, Game.screenH / 2 - e.getY(e.getPointerCount() - 1));
-		if (!game.fingerStack.isEmpty())
+		if(game.player.userHasControl())
 		{
-			for (int i = 0; i < game.fingerStack.size(); i++)
+			for (int i = 0; i < game.fingerList.size(); i++)
 			{
-				final Vector2f touchInput = new Vector2f(e.getX(i) - Game.screenW / 2, Game.screenH / 2 - e.getY(i));
-				game.fingerStack.get(i).update(touchInput);
+				final Finger f = game.fingerList.get(i);
+				final Vector2f touchInput = new Vector2f(e.getX(f.getPointerId()) - Game.screenW / 2, Game.screenH / 2 - e.getY(f.getPointerId()));
+				f.setPosition(touchInput);
+			}
+			
+			switch(e.getAction() & MotionEvent.ACTION_MASK)
+			{
+				case MotionEvent.ACTION_POINTER_DOWN:
+				case MotionEvent.ACTION_DOWN:
+					final int fingerIndex = e.getPointerId(e.getActionIndex());
+					final Vector2f touchVec = new Vector2f(e.getX(e.getPointerCount() - 1) - Game.screenW / 2, Game.screenH / 2 - e.getY(e.getPointerCount() - 1));
+					boolean onEnt = false;
+					for (int i = 0; i < game.UIList.size(); i++)
+					{
+						final UIEntity ent = game.UIList.get(i);
+						if (touchVec.getX() >= ent.getXPos() - ent.getXSize() / 2 && touchVec.getX() <= ent.getXPos() + ent.getXSize() / 2 && touchVec.getY() >= ent.getYPos() - ent.getYSize() / 2 && touchVec.getY() <= ent.getYPos() + ent.getYSize() / 2)
+						{
+							final Finger newFinger = new Finger(touchVec, ent, e.getPointerId(fingerIndex));
+							newFinger.onStackPush();
+							game.fingerList.add(newFinger);
+							onEnt = true;
+							break;
+						}
+					}
+					if (!onEnt)
+					{
+						final Finger newFinger = new Finger(null, null, e.getPointerId(fingerIndex));
+						game.fingerList.add(newFinger);
+					}
+					
+					break;
+				case MotionEvent.ACTION_UP:
+					game.fingerList.clear();
+					break;
+				case MotionEvent.ACTION_POINTER_UP:
+					if(!game.fingerList.isEmpty())
+					{
+						final int fIndex = e.getPointerId(e.getActionIndex());
+						for(int i = 0; i < game.fingerList.size(); i++)
+						{
+							final Finger f = game.fingerList.get(i);
+							if (fIndex == f.getPointerId())
+								game.fingerList.remove(i).onStackPop();
+						}
+					}
+					break;
 			}
 		}
-		
-		switch(e.getAction() & MotionEvent.ACTION_MASK)
-		{
-			case MotionEvent.ACTION_POINTER_DOWN:
-				Log.d("LDS_Game", "MULTITOUCHLOL");
-			case MotionEvent.ACTION_DOWN:
-				final Vector2f touchVec = new Vector2f(e.getX(e.getPointerCount() - 1) - Game.screenW / 2, Game.screenH / 2 - e.getY(e.getPointerCount() - 1));
-				for (int i = 0; i < game.UIList.size(); i++)
-				{
-					final UIEntity ent = game.UIList.get(i);
-					if (touchVec.getX() >= ent.getXPos() - ent.getXSize() / 2 && touchVec.getX() <= ent.getXPos() + ent.getXSize() / 2 && touchVec.getY() >= ent.getYPos() - ent.getYSize() / 2 && touchVec.getY() <= ent.getYPos() + ent.getYSize() / 2)
-					{
-						final Finger newFinger = new Finger(touchVec, ent);
-						newFinger.onStackPush();
-						game.fingerStack.push(newFinger);
-					}
-				}
-				break;
-			case MotionEvent.ACTION_POINTER_UP:
-			case MotionEvent.ACTION_UP:
-				if (!game.fingerStack.isEmpty())
-				{
-					game.fingerStack.pop().onStackPop();
-				}
-				break;
-		}
-		
 		
 	}
 	//redraw the perspective
@@ -476,7 +450,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		gl.glMatrixMode(GL10.GL_MODELVIEW);
 		gl.glLoadIdentity();
 		
-		game.updateLocalTileset();
+		game.updateRenderedTileset();
 	}
 	
 	//draw a screen-based perspective, push the world perspective onto the OpenGL matrix stack
@@ -534,5 +508,10 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	public void gameOver ()
 	{
 		gameOverListener.onGameOver();
+	}
+	
+	public void clearTouchInput()
+	{
+		game.fingerList.clear();
 	}
 }
