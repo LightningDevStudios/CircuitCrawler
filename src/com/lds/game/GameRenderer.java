@@ -73,6 +73,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 			Game.randomthings = new Texture(R.drawable.randomthings, 256, 256, 8, 8, context, "randomthings");
 			Game.text = new Texture(R.drawable.text, 256, 256, 16, 8, context, "text");
 			Game.tilesetworld = new Texture(R.drawable.tilesetworld, 512, 256, 16, 8, context, "tilesetworld");
+			Game.tilesetentities = new Texture(R.drawable.tilesetentities, 256, 256, 8, 8, context, "tilesetentities");
 			
 			TextureLoader.getInstance().initialize(gl);
 			TextureLoader tl = TextureLoader.getInstance();
@@ -81,6 +82,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 			tl.loadTexture(Game.randomthings);
 			tl.loadTexture(Game.text);
 			tl.loadTexture(Game.tilesetworld);
+			tl.loadTexture(Game.tilesetentities);
 			
 			for(Entity ent : game.entList)
 			{
@@ -164,7 +166,8 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		 **********************************************/
 		
 		//Iterates through all entities
-		for (int i = 0; i < game.entList.size(); i++)
+		final int size = game.entList.size();
+		for (int i = 0; i < size; i++)
 		{
 			final Entity ent = game.entList.get(i);
 						
@@ -172,7 +175,8 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 			if (Game.worldOutdated)
 			{
 				//checks collision and interacts with all other Entities
-				for (int j = i + 1; j < game.entList.size(); j++)
+				
+				for (int j = i + 1; j < size; j++)
 				{
 					final Entity colEnt = game.entList.get(j);
 					if (ent.isColliding(colEnt))
@@ -200,10 +204,10 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 				
 				if (ent instanceof PhysEnt)
 				{
-					PhysEnt physEnt = (PhysEnt)ent;
-					for (Tile[] ts : game.tileset)
+					final PhysEnt physEnt = (PhysEnt)ent;
+					for (final Tile[] ts : game.tileset)
 					{
-						for (Tile tile : ts)
+						for (final Tile tile : ts)
 						{
 							//if (tile.isRendered())
 							//{
@@ -383,8 +387,9 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		{
 			for (int i = 0; i < game.fingerList.size(); i++)
 			{
-				final Vector2f touchInput = new Vector2f(e.getX(game.fingerList.get(i).getPointerId()) - Game.screenW / 2, Game.screenH / 2 - e.getY(game.fingerList.get(i).getPointerId()));
-				game.fingerList.get(i).setPosition(touchInput);
+				final Finger f = game.fingerList.get(i);
+				final Vector2f touchInput = new Vector2f(e.getX(f.getPointerId()) - Game.screenW / 2, Game.screenH / 2 - e.getY(f.getPointerId()));
+				f.setPosition(touchInput);
 			}
 			
 			switch(e.getAction() & MotionEvent.ACTION_MASK)
@@ -414,6 +419,8 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 					
 					break;
 				case MotionEvent.ACTION_UP:
+					game.fingerList.clear();
+					break;
 				case MotionEvent.ACTION_POINTER_UP:
 					if(!game.fingerList.isEmpty())
 					{

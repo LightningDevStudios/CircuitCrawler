@@ -53,6 +53,7 @@ public class Game
 	public static Texture randomthings;
 	public static Texture text;
 	public static Texture tilesetworld;
+	public static Texture tilesetentities;
 	public Texture someText;
 	
 	
@@ -87,6 +88,7 @@ public class Game
 		randomthings = new Texture(R.drawable.randomthings, 256, 256, 8, 8, context, "randomthings");
 		text = new Texture(R.drawable.text, 256, 256, 16, 8, context, "text");
 		tilesetworld = new Texture(R.drawable.tilesetworld, 512, 256, 16, 8, context, "tilesetworld");
+		tilesetentities = new Texture(R.drawable.tilesetentities, 256, 256, 8, 8, context, "tilesetentities");
 		
 				
 		entList = new ArrayList<Entity>();
@@ -111,6 +113,7 @@ public class Game
 		tl.loadTexture(randomthings);
 		tl.loadTexture(someText);
 		tl.loadTexture(tilesetworld);
+		tl.loadTexture(tilesetentities);
 						
 		///*		
  		for (int i = 0; i < tileset.length; i++)
