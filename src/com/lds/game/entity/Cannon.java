@@ -23,7 +23,7 @@ public class Cannon extends StaticEnt
 	public void update()
 	{
 		super.update();
-		if(Stopwatch.elapsedTimeMs() - time > 5000)
+		if(Stopwatch.elapsedTimeMs() - time > 5000) // Time loop
 		{
 			time = Stopwatch.elapsedTimeMs();
 			CannonShell cannonShot = new CannonShell(15, cannonXPos, cannonYPos, angle, 0.0f, 0.0f, true, true, true, speed, 0.0f, 0.0f, 0.07f);
