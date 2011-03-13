@@ -1,5 +1,8 @@
 package com.lds.game.entity;
 
+import android.content.Context;
+import android.os.Vibrator;
+
 import com.lds.Vector2f;
 import com.lds.game.SoundPlayer;
 
@@ -10,6 +13,8 @@ public class Player extends Character //your character, protagonist
 	private HoldObject hObj;
 	private boolean controlled;
 	private float nextAngle;
+	protected Context context;
+	protected boolean leavingIce;
 	
 	public Player (float xPos, float yPos, float angle)
 	{
@@ -53,6 +58,11 @@ public class Player extends Character //your character, protagonist
 		{
 			posVec.add(new Vector2f(-10, -10));
 		}
+		else if (ent instanceof SpikeBall)
+		{
+			//vibrator(2000);
+			takeDamage(25);
+		}
 	}
 	
 	@Override
@@ -69,8 +79,17 @@ public class Player extends Character //your character, protagonist
 				if (falling)
 					SoundPlayer.getInstance().playSound(SoundPlayer.PIT_FALL);
 			}
+			else if (tile.isSlipperyTile())
+			{
+				this.disableUserControl();
+				this.moveTo(moveVec);
+				//leavingIce = true;
+			}
 			else
-				falling = false;
+			{
+				this.stop();
+				this.enableUserControl();
+			}
 		}
 	}
 	
@@ -102,6 +121,25 @@ public class Player extends Character //your character, protagonist
 		hObj.push();
 		hObj = new PhysBlock(0.0f, 0.0f, 0.0f);
 		hObj = null;
+	}
+	
+	public void vibrator(int time)
+	{
+		Vibrator vibrator = null; 
+		try 
+		{ 
+			vibrator=(Vibrator)context.getSystemService(Context.VIBRATOR_SERVICE); 
+		} 
+		catch (Exception e) {}
+		
+		if (vibrator != null)
+		{ 
+		  try 
+		  { 
+			  vibrator.vibrate(((long)time)); 
+		  } 
+		  catch (Exception e) {} 
+		} 
 	}
 
 	public void updateHeldObjectPosition()

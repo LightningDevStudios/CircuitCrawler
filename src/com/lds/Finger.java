@@ -9,7 +9,7 @@ public class Finger
 	private UIEntity ent;
 	private int ptrId;
 	
-	public Finger(Vector2f position, UIEntity ent, int ptrId)
+	public Finger(final Vector2f position, final UIEntity ent, final int ptrId)
 	{
 		this.position = position;
 		this.ent = ent;
@@ -20,7 +20,7 @@ public class Finger
 	{
 		if (ent instanceof UIButton)
 		{
-			UIButton button = (UIButton)ent;
+			final UIButton button = (UIButton)ent;
 			button.press();
 		}
 	}
@@ -29,7 +29,7 @@ public class Finger
 	{
 		if (ent instanceof UIJoypad)
 		{
-			UIJoypad joypad = (UIJoypad)ent;
+			final UIJoypad joypad = (UIJoypad)ent;
 			joypad.setActive(true);
 			joypad.setInputVec(position);
 			Game.windowOutdated = true;
