@@ -254,18 +254,6 @@ public class Game
 		nodeList.get(3).addNodeLink(nodeList.get(4));
 		nodeList.get(4).addNodeLink(nodeList.get(5));
 		
-		Sprite sprite = new Sprite(15.0f, -200, 40, 100.0f, 0, 0, null);
-		entList.add(sprite);
-		sprite.setNodePath(getPathToPlayer(sprite));
-		
-		//TODO Test code for nodes
-		ArrayList<Sprite> spriteList = new ArrayList<Sprite>();
-		for (Node node : nodeList)
-		{
-			spriteList.add(new Sprite (5.0f, node.getXPos(), node.getYPos()));
-			entList.add(spriteList.get(spriteList.size() - 1));
-		}
-		
 		CauseAND bridgeAND = new CauseAND(new CauseButton(button1), new CauseButton(button2));
 		
 		triggerList.add(new Trigger(new CauseButton(button), new EffectDoor(door)));
@@ -468,7 +456,6 @@ public class Game
 		{
 			if (enemy.isDoneRotating())
 			{
-				//TODO: A* Pathfinding Algorithm
 				enemy.moveTo(player.getXPos(), player.getYPos());
 				enemy.setAngle((float)Vector2f.sub(player.getPos(), enemy.getPos()).angleDeg());
 			}
@@ -700,7 +687,7 @@ public class Game
 			}
 			if (pathIsClear(startNode, node))
 			{
-				goalNode.addNodeLink(node);
+				startNode.addNodeLink(node);
 				startConnected = true;
 			}
 		}
@@ -712,14 +699,16 @@ public class Game
 		ArrayList<Node> closedList = new ArrayList<Node>();
 		Node lowestF = startNode;
 		closedList.add(startNode);
+		startNode.setH(Vector2f.sub(startNode.getPos(), goalNode.getPos()).mag());
+		startNode.setF(startNode.getH());
 		
 		while (!openList.contains(goalNode))
 		{
 			for (int i = 0; i < lowestF.getNodeCount(); i++)
 			{
-				if (lowestF.getNodeLink(i).isActive())
+				Node node = lowestF.getLinkedNode(i);
+				if (!closedList.contains(node) && lowestF.getNodeLink(i).isActive())
 				{
-					Node node = lowestF.getNodeLink(i).getLinkedNode();
 					if (openList.contains(node))
 					{
 						float newG = lowestF.getG() + lowestF.getNodeLink(i).getNodeVec().mag();
@@ -769,63 +758,36 @@ public class Game
 			return null;
 	}
 	
-	public boolean pathIsClear(Node startNode, Node endNode)
+	public boolean pathIsClear(final NodeLink link)
 	{
-		Vector2f rayPos = new Vector2f(startNode.getPos());
-		Vector2f pathVec = Vector2f.sub(endNode.getPos(), startNode.getPos()).scaleTo(10);
-		boolean pathClear = true;
-		while (pathClear && Vector2f.sub(rayPos, endNode.getPos()).mag() > 2.0)
+		Vector2f pathVec = link.getNodeVec().normalize();
+		Vector2f pathNormal = Vector2f.getNormal(pathVec);
+		float normProj = link.getThisNode().getPos().dot(pathNormal);
+		float startProj = link.getThisNode().getPos().dot(pathVec);
+		float endProj = link.getLinkedNode().getPos().dot(pathVec);
+		
+		for (final Entity ent : entList)
 		{
-			for (Entity ent : entList)
-			{
-				if (ent.isSolid() && ent.containsPoint(rayPos))
-				{
-					pathClear = false;
-				}
-			}
-			
-			for (Tile[] tileArray : tileset)
-			{
-				for (Tile tile : tileArray)
-				{
-					if ((tile.isWall() || tile.isPit()) && tile.containsPoint(rayPos))
-					{
-						pathClear = false;
-					}
-				}
-			}
-			rayPos.add(pathVec);
+			float entProj = ent.getPos().dot(pathVec);
+			if (ent.isSolid() && Math.abs(ent.getPos().dot(pathNormal) - normProj) < ent.getHalfSize() && ((entProj > startProj && entProj < endProj) || (entProj < startProj && entProj > endProj)))
+				return false;
 		}
-		return pathClear;
+		for (final Tile[] ta : tileset)
+		{
+			for (final Tile tile : ta)
+			{
+				float tileProj = tile.getPos().dot(pathVec);
+				if ((tile.isWall() || tile.isPit())&& Math.abs(tile.getPos().dot(pathNormal) - normProj) < tile.getHalfSize() && ((tileProj > startProj && tileProj < endProj) || (tileProj < startProj && tileProj > endProj)))
+					return false;
+			}
+		}
+		
+		
+		return true;
 	}
 	
-	public boolean pathIsClear(NodeLink link)
+	public boolean pathIsClear(final Node startNode, final Node endNode)
 	{
-		Vector2f rayPos = new Vector2f(link.getThisNode().getPos());
-		Vector2f pathVec = new Vector2f(link.getNodeVec()).scaleTo(10);
-		boolean pathClear = true;
-		while (pathClear && Vector2f.sub(rayPos, link.getLinkedNode().getPos()).mag() > 2.0)
-		{
-			for (Entity ent : entList)
-			{
-				if (ent.isSolid() && ent.containsPoint(rayPos))
-				{
-					pathClear = false;
-				}
-			}
-			
-			for (Tile[] tileArray : tileset)
-			{
-				for (Tile tile : tileArray)
-				{
-					if ((tile.isWall() || tile.isPit()) && tile.containsPoint(rayPos))
-					{
-						pathClear = false;
-					}
-				}
-			}
-			rayPos.add(pathVec);
-		}
-		return pathClear;
+		return pathIsClear(new NodeLink(startNode, endNode));
 	}
 }

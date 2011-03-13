@@ -44,7 +44,7 @@ public class NodePath
 	public void reverse()
 	{
 		ArrayList<Node> reversedList = new ArrayList<Node>();
-		for (int i = nodeList.size() - 1; i <= 0; i++)
+		for (int i = nodeList.size() - 1; i >= 0; i--)
 		{
 			reversedList.add(nodeList.get(i));
 		}

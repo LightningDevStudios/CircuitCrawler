@@ -15,6 +15,7 @@ import com.lds.Stopwatch;
 import com.lds.Texture;
 import com.lds.TextureLoader;
 import com.lds.Vector2f;
+import com.lds.game.ai.Node;
 import com.lds.game.entity.*;
 import com.lds.game.event.*;
 import com.lds.trigger.*;
@@ -135,7 +136,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		
 		//clear the screen
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-		
+				
 		frameInterval = Stopwatch.elapsedTimeMs();
 		
 		//tick the stopwatch every frame, gives relatively stable intervals
