@@ -7,11 +7,36 @@ public class Node
 {
 	private Vector2f posVec;
 	private ArrayList<NodeLink> linkList;
+	private NodeLink parentNodeLink;
+	private float f, g, h;
 
 	public Node(float xPos, float yPos)
 	{
 		posVec = new Vector2f(xPos, yPos);
 		linkList = new ArrayList<NodeLink>();
+		f = 0;
+		g = 0;
+		h = 0;
+	}
+	
+	public Node(Vector2f posVec)
+	{
+		this(posVec.getX(), posVec.getY());
+	}
+	
+	public void setParentNode(Node parent)
+	{
+		parentNodeLink = new NodeLink(this, parent);
+	}
+	
+	public Node getParentNode()
+	{
+		return parentNodeLink.getLinkedNode();
+	}
+	
+	public NodeLink getParentNodeLink()
+	{
+		return parentNodeLink;
 	}
 	
 	public void addNodeLink(Node node)
@@ -37,13 +62,17 @@ public class Node
 	
 	public Vector2f getLinkVector(Node node)
 	{
-		Vector2f linkVec = new Vector2f();
+		return getNodeLink(node).getNodeVec();
+	}
+	
+	public NodeLink getNodeLink(Node node)
+	{
 		for (NodeLink link : linkList)
 		{
 			if (link.getLinkedNode() == node)
-				linkVec = link.getNodeVec();
+				return link;
 		}
-		return linkVec;
+		return null;
 	}
 	
 	public NodeLink getNodeLink(int index)
@@ -71,6 +100,11 @@ public class Node
 		return vecList;
 	}
 	
+	public int getNodeCount()
+	{
+		return linkList.size();
+	}
+	
 	public ArrayList<NodeLink> getLinkList()
 	{
 		return linkList;
@@ -89,5 +123,33 @@ public class Node
 	public float getYPos()
 	{
 		return posVec.getY();
+	}
+	
+	public float getF ()
+	{
+		return f;
+	}
+	
+	public void setF (float f)
+	{
+		this.f = f;
+	}
+	public float getG ()
+	{
+		return g;
+	}
+	
+	public void setG (float g)
+	{
+		this.g = g;
+	}
+	public float getH ()
+	{
+		return h;
+	}
+	
+	public void setH (float h)
+	{
+		this.h = h;
 	}
 }

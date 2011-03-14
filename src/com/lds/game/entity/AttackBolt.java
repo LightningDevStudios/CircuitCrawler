@@ -6,6 +6,7 @@ import com.lds.EntityManager;
 public class AttackBolt extends PhysEnt
 {
 	Vector2f directionVec;
+	private boolean canHurtPlayer;
 	
 	public AttackBolt(Vector2f posVec, Vector2f directionVec, float angle)
 	{
@@ -13,18 +14,22 @@ public class AttackBolt extends PhysEnt
 		this.directionVec = directionVec;
 		this.angle = angle;
 		//this.move(directionVec.getX() * 5.0f, directionVec.getY() * 5.0f);
-		this.push(directionVec.scale(0.3f));
+		this.push(directionVec.scale(0.5f));
 		this.enableColorMode(1.0f, 0.0f, 0.0f, 1.0f);
 		this.setColorInterpSpeed(1.4f);
 		this.initColorInterp(0.0f, 0.0f, 0.0f, 0.0f);
+		canHurtPlayer = true;
 	}
 	
 	@Override
 	public void interact(Entity ent)
 	{
-		ent.colList.remove(this);
-		if (this.doesCollide(ent))
-			EntityManager.removeEntity(this);
+		if (!(ent instanceof Player) || canHurtPlayer)
+		{
+			ent.colList.remove(this);
+			if (this.doesCollide(ent))
+				EntityManager.removeEntity(this);
+		}
 	}
 	
 	@Override
@@ -51,5 +56,15 @@ public class AttackBolt extends PhysEnt
 		{
 			EntityManager.removeEntity(this);
 		}
+	}
+	
+	public boolean canHurtPlayer()
+	{
+		return canHurtPlayer;
+	}
+	
+	public void setCanHurtPlayer(boolean canHurtPlayer)
+	{
+		this.canHurtPlayer = canHurtPlayer;
 	}
 }

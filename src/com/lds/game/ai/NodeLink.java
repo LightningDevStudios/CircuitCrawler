@@ -1,4 +1,4 @@
-package com.lds.game.ai;
+ package com.lds.game.ai;
 
 import com.lds.Vector2f;
 
@@ -39,5 +39,15 @@ public class NodeLink
 	public boolean isActive()
 	{
 		return active;
+	}
+	
+	public void activate()
+	{
+		active = true;
+	}
+	
+	public void deactivate()
+	{
+		active = false;
 	}
 }
