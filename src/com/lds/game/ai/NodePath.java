@@ -65,4 +65,9 @@ public class NodePath
 	{
 		return nodeList;
 	}
+	
+	public Node getNode(int index)
+	{
+		return nodeList.get(index);
+	}
 }

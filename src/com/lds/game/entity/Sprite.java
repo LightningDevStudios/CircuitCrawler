@@ -30,8 +30,7 @@ public class Sprite extends PhysEnt
 	@Override
 	public void update()
 	{
-		super.update();
-		
+		super.update();	
 	}
 	
 	@Override

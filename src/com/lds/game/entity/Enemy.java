@@ -15,10 +15,11 @@ public  abstract class Enemy extends Character //enemies will fall under this cl
 	protected int lastTime, randomTime;
 	//Patrol stuff
 	protected NodePath patrolPath;
-	protected int pathLocation;
+	protected int patrolPathLocation;
 	protected boolean onPatrol;
 	//Pathfinding stuff
 	protected NodePath pathToPlayer;
+	protected int playerPathLocation;
 
 	public Enemy(float size, float xPos, float yPos, boolean circular, int health, AIType type)
 	{
@@ -66,7 +67,7 @@ public  abstract class Enemy extends Character //enemies will fall under this cl
 	{
 		type = AIType.PATROL;
 		this.patrolPath = patrolPath;
-		pathLocation = 0;
+		patrolPathLocation = 0;
 	}
 	
 	public NodePath getPatrolPath()
@@ -89,9 +90,9 @@ public  abstract class Enemy extends Character //enemies will fall under this cl
 		return patrolPath.getClosestNode(this);
 	}
 	
-	public int getPathLocation()
+	public int getPatrolPathLocation()
 	{
-		return pathLocation;
+		return patrolPathLocation;
 	}
 	
 	public boolean isOnPatrol()
@@ -99,9 +100,9 @@ public  abstract class Enemy extends Character //enemies will fall under this cl
 		return onPatrol;
 	}
 	
-	public void setPathLocation(int pathLocation)
+	public void setPatrolPathLocation(int patrolPathLocation)
 	{
-		this.pathLocation = pathLocation;
+		this.patrolPathLocation = patrolPathLocation;
 	}
 	
 	public void setOnPatrol(boolean onPatrol)
@@ -149,5 +150,25 @@ public  abstract class Enemy extends Character //enemies will fall under this cl
 	public void setLastTime(int lastTime)
 	{
 		this.lastTime = lastTime;
+	}
+	
+	public void setPathToPlayer(NodePath np)
+	{
+		pathToPlayer = np;
+	}
+	
+	public NodePath getPathToPlayer()
+	{
+		return pathToPlayer;
+	}
+	
+	public int getPlayerPathLocation()
+	{
+		return playerPathLocation;
+	}
+	
+	public void setPlayerPathLocation(int playerPathLocation)
+	{
+		this.playerPathLocation = playerPathLocation;
 	}
 }

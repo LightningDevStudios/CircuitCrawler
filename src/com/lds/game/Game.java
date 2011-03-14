@@ -191,7 +191,7 @@ public class Game
 		//block.initGradientInterp(interpGM);
 		entList.add(block);
 		
-		blob1 = new Blob(-150.0f, -350.0f, AIType.STALKER);
+		blob1 = new Blob(-300.0f, 0.0f, AIType.STALKER);
 		blob1.enableTilesetMode(tilesetwire, 2, 2);
 		entList.add(blob1);
 		
@@ -217,14 +217,14 @@ public class Game
 		entList.add(block2);
 
 		
-		SpikeBall wall = new SpikeBall(35, -200, -250, true, true, 15, 500, 0.0f, 0.0f, 0, -300, 1);
+		/*SpikeBall wall = new SpikeBall(35, -200, -250, true, true, 15, 500, 0.0f, 0.0f, 0, -300, 1);
 		wall.enableTilesetMode(tilesetwire, 1, 2);
 		//wall.scale(1.0f,2.0f);
-		entList.add(wall);
+		entList.add(wall);*/
 		
-		Cannon cannon = new Cannon(35, -100, -300, 90, 1, 1, true, false, true, 5);
+		/*Cannon cannon = new Cannon(35, -100, -300, 90, 1, 1, true, false, true, 5);
 		cannon.enableTilesetMode(tilesetwire, 2, 1);
-		entList.add(cannon);
+		entList.add(cannon);*/
 		
 		/*
 		MovingWall wall2 = new MovingWall(35, -150, -300, true, true, 5, 500, 0.0f, 0.0f, -112.5f, -300, -1);
@@ -428,7 +428,7 @@ public class Game
 	
 	public void runAI(Enemy enemy)
 	{
-		if (Vector2f.sub(enemy.getPos(), player.getPos()).mag() < 100.0f)
+		if (Vector2f.sub(enemy.getPos(), player.getPos()).mag() < 500.0f)
 		{
 			if (enemy.isAgressive())
 				runAgressiveAI(enemy);
@@ -448,27 +448,22 @@ public class Game
 	{
 		if (enemy.getType() == AIType.STALKER)
 		{
-			if (enemy.isDoneRotating())
+			if (enemy.getPathToPlayer() != null)
 			{
-				enemy.moveTo(player.getXPos(), player.getYPos());
-				enemy.setAngle((float)Vector2f.sub(player.getPos(), enemy.getPos()).angleDeg());
-			}
-			else
-			{
-				runBecomeAgressiveAI(enemy);
+				if (enemy.isDoneRotating())
+				{
+					enemy.moveTo(enemy.getPathToPlayer().getNode(enemy.getPlayerPathLocation() + 1).getPos());
+					enemy.setAngle((float)Vector2f.sub(enemy.getPathToPlayer().getNode(enemy.getPlayerPathLocation() + 1).getPos(), enemy.getPos()).angleDeg());
+				}
+				else
+				{
+					runBecomeAgressiveAI(enemy);
+				}
 			}
 		}
 		else if (enemy.getType() == AIType.PATROL)
 		{
-			if (enemy.isDoneRotating())
-			{
-				enemy.moveTo(player.getXPos(), player.getYPos());
-				enemy.setAngle((float)Vector2f.sub(player.getPos(), enemy.getPos()).angleDeg());
-			}
-			else
-			{
-				runBecomeAgressiveAI(enemy);
-			}
+			
 		}
 		else if (enemy.getType() == AIType.TURRET)
 		{
@@ -495,20 +490,8 @@ public class Game
 		enemy.setAgressive(true);
 		enemy.setOnPatrol(false);
 		if (enemy.getType() == AIType.STALKER)
-		{
-			enemy.stop();
-			float angleToPlayer = (float)Vector2f.sub(player.getPos(), enemy.getPos()).angleDeg();
-			if (enemy.getAngle() == angleToPlayer)
-			{
-				enemy.setAngle(angleToPlayer);
-				enemy.moveTo(player.getPos());
-				enemy.setDoneRotating(true);
-			}
-			else
-			{
-				enemy.rotateTo(angleToPlayer);
-				enemy.setDoneRotating(false);
-			}
+		{	
+			
 		}
 		else if (enemy.getType() == AIType.PATROL)
 		{
@@ -543,18 +526,18 @@ public class Game
 			if (enemy.isOnPatrol())
 			{
 				Node nextNode;
-				if (enemy.getPathLocation() == enemy.getPatrolPath().getSize() - 1)
+				if (enemy.getPatrolPathLocation() == enemy.getPatrolPath().getSize() - 1)
 					nextNode = enemy.getPatrolPathNode(0);
 				else
-					nextNode = enemy.getPatrolPathNode(enemy.getPathLocation() + 1);
+					nextNode = enemy.getPatrolPathNode(enemy.getPatrolPathLocation() + 1);
 				
 				if (enemy.getPos().equals(nextNode.getPos()))
 				{
 					enemy.setDoneRotating(false);
-					if (enemy.getPathLocation() == enemy.getPatrolPath().getSize() - 1)
-						enemy.setPathLocation(0);
+					if (enemy.getPatrolPathLocation() == enemy.getPatrolPath().getSize() - 1)
+						enemy.setPatrolPathLocation(0);
 					else
-						enemy.setPathLocation(enemy.getPathLocation() + 1);
+						enemy.setPatrolPathLocation(enemy.getPatrolPathLocation() + 1);
 				}
 				
 				float angleToNode = (float)Vector2f.sub(nextNode.getPos(), enemy.getPos()).angleDeg();
@@ -591,7 +574,7 @@ public class Game
 		enemy.setAgressive(false);
 		if (enemy.getType() == AIType.STALKER)
 		{
-			
+			enemy.stop();
 		}
 		else if (enemy.getType() == AIType.PATROL)
 		{
@@ -601,7 +584,7 @@ public class Game
 			if (enemy.getPos().equals(closestNode.getPos()))
 			{
 				enemy.setOnPatrol(true);
-				enemy.setPathLocation(enemy.getClosestPatrolPathNodeIndex());
+				enemy.setPatrolPathLocation(enemy.getClosestPatrolPathNodeIndex());
 			}
 			else
 			{
@@ -745,7 +728,7 @@ public class Game
 		for (final Entity ent : entList)
 		{
 			float entProj = ent.getPos().dot(pathVec);
-			if (ent.isSolid() && Math.abs(ent.getPos().dot(pathNormal) - normProj) < ent.getHalfSize() && ((entProj > startProj && entProj < endProj) || (entProj < startProj && entProj > endProj)))
+			if (ent.isSolid() && ent.willCollide() && Math.abs(ent.getPos().dot(pathNormal) - normProj) < ent.getHalfSize() && ((entProj > startProj && entProj < endProj) || (entProj < startProj && entProj > endProj)))
 				return false;
 		}
 		for (final Tile[] ta : tileset)
