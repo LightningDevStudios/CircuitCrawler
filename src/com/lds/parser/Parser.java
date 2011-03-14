@@ -8,6 +8,7 @@ import org.xmlpull.v1.XmlPullParserException;
 import android.content.Context;
 import android.content.res.XmlResourceParser;
 
+import com.lds.game.ai.Node;
 import com.lds.game.entity.*;
 import com.lds.trigger.*;
  
@@ -16,6 +17,7 @@ public class Parser //this is a parser
 	public ArrayList<EntityData> parsedList = new ArrayList<EntityData>();
 	public ArrayList<Entity> entList = new ArrayList<Entity>();
 	public ArrayList<Trigger> triggerList = new ArrayList<Trigger>();
+	public ArrayList<Node> nodeList = new ArrayList<Node>();
 	public Tile[][] tileset;
 	
 	public XmlResourceParser xrp;  
@@ -46,8 +48,13 @@ public class Parser //this is a parser
 					parseEntities();
 				else if(xrp.getName().equalsIgnoreCase("Tileset"))
 					parseTileset();
-				else if(xrp.getName().equalsIgnoreCase("Triggers"));
+				else if(xrp.getName().equalsIgnoreCase("Triggers"))
 					parseTriggers();
+				else if(xrp.getName().equalsIgnoreCase("Nodes"))
+					parseNodes();
+				else if(xrp.getName().equalsIgnoreCase("NodeLinks"))
+					parseNodeLinks();
+					
 			}
 			
 			xrp.next();
@@ -345,4 +352,45 @@ Parse Triggas
 		}
 		return null;
 	}
+	
+	/*********************
+	Parse Nodes/Node Lists
+	**********************/
+	public void parseNodes() throws XmlPullParserException, IOException
+	{
+		xrp.next();
+		String[] nodes = (xrp.getText()).split(";");
+		
+		for(String node : nodes)
+		{
+			String[] temp = node.split(",");
+			Node tempNode = new Node(Float.parseFloat(temp[0]), Float.parseFloat(temp[1]));
+			nodeList.add(tempNode);
+		}
+		
+		xrp.next();
+		xrp.next();
+		
+		//to make nodes in game, goto game constructor and nodeList = parser.nodeList
+	}
+	
+	public void parseNodeLinks() throws XmlPullParserException, IOException
+	{
+		xrp.next();
+		String[] nodeLinks = (xrp.getText()).split(";");
+		
+		for(String nodeLink : nodeLinks)
+		{
+			String[] temp = nodeLink.split(",");
+			if(temp.length == 2)
+				(nodeList.get(Integer.parseInt(temp[0]))).addNodeLink(nodeList.get(Integer.parseInt(temp[1])));
+			else if(temp.length == 3)
+				(nodeList.get(Integer.parseInt(temp[0]))).addNodeLink(nodeList.get(Integer.parseInt(temp[1])), Boolean.parseBoolean(temp[3]));
+		}
+		
+		xrp.next();
+		xrp.next();
+	}
 }
+
+	
