@@ -760,6 +760,7 @@ public abstract class Entity
 	public boolean isCircular()			{ return circular; }
 	public boolean isRendered()			{ return rendered; }
 	public EnumSet<RenderMode> getRenderMode()	{ return renderMode; }
+	public boolean isSolid()			{ return isSolid; }
 	
 	public void setSize(float size)		{ this.size = size; this.halfSize = size / 2; }
 	public void setAngle(float angle)	{ this.angle = angle; }

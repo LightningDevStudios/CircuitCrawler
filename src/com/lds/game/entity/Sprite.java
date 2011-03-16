@@ -2,6 +2,8 @@
 
 import com.lds.Animation;
 
+import com.lds.game.ai.*;
+
 public class Sprite extends PhysEnt
 {
 	public Animation anim;
@@ -19,25 +21,22 @@ public class Sprite extends PhysEnt
 	public Sprite(float size, float xPos, float yPos, float angle, float xScl, float yScl, float moveSpeed, float rotSpeed, float sclSpeed, Animation anim)
 	{
 		super(size, xPos, yPos, angle, xScl, yScl, false, false, true, moveSpeed, rotSpeed, sclSpeed, 0.0f);
-
 		this.anim = anim;
-		texture = anim.getCurrentFrame();
+		//texture = anim.getCurrentFrame();
 
-		this.textureBuffer = setBuffer(textureBuffer, texture);
+		//this.textureBuffer = setBuffer(textureBuffer, texture);
 	}
 	
 	@Override
 	public void update()
 	{
-		super.update();
-		anim.update();
-		renderNextFrame();
+		super.update();	
 	}
 	
 	@Override
 	public void renderNextFrame()
 	{
-		this.texture = anim.getCurrentFrame();
-		this.textureBuffer = setBuffer(textureBuffer, texture);
+		//this.texture = anim.getCurrentFrame();
+		//this.textureBuffer = setBuffer(textureBuffer, texture);
 	}
 }

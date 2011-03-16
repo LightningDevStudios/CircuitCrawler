@@ -15,6 +15,7 @@ import com.lds.Stopwatch;
 import com.lds.Texture;
 import com.lds.TextureLoader;
 import com.lds.Vector2f;
+import com.lds.game.ai.Node;
 import com.lds.game.entity.*;
 import com.lds.game.event.*;
 import com.lds.trigger.*;
@@ -130,9 +131,8 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	public void onDrawFrame(GL10 gl) 
 	{
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-
 		//remove entities that are queued for removal
-		
+		//tick the stopwatch every frame, gives relatively stable intervals
 		frameCount++;
 		game.frameInterval = Stopwatch.elapsedTimeMs();
 		Stopwatch.tick();
@@ -286,8 +286,9 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 				if (game.player.getEnergy() != 0)
 				{
 					final Vector2f directionVec = new Vector2f(game.player.getAngle());
-					directionVec.scale(game.player.getHalfSize() + 20.0f);
-					final AttackBolt attack = new AttackBolt(Vector2f.add(game.player.getPos(), directionVec), directionVec, game.player.getAngle());
+					directionVec.scale(game.player.getHalfSize());
+					final  AttackBolt attack = new AttackBolt(Vector2f.add(game.player.getPos(), directionVec), directionVec, game.player.getAngle());
+					attack.setCanHurtPlayer(false);
 					attack.genHardwareBuffers(gl);
 					EntityManager.addEntity(attack);
 					game.player.loseEnergy(5);

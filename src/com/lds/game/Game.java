@@ -13,6 +13,7 @@ import android.content.Context;
 import com.lds.*;
 import com.lds.Enums.*;
 import com.lds.game.ai.Node;
+import com.lds.game.ai.NodeLink;
 import com.lds.game.ai.NodePath;
 
 
@@ -35,6 +36,7 @@ public class Game
 	public Tile[][] tileset;
 	public ArrayList<UIEntity> UIList;
 	public ArrayList<Trigger> triggerList;
+	public ArrayList<Node> nodeList;
 	public EntityManager cleaner;
 	
 	public ArrayList<Finger> fingerList;
@@ -189,14 +191,9 @@ public class Game
 		//block.initGradientInterp(interpGM);
 		entList.add(block);
 		
-		/*blob1 = new Blob(-150.0f, -350.0f, AIType.PATROL);
+		blob1 = new Blob(-300.0f, 0.0f, AIType.STALKER);
 		blob1.enableTilesetMode(tilesetwire, 2, 2);
-		NodePath path = new NodePath();
-		path.add(new Node(-150.0f, -350.0f));
-		path.add(new Node(-50.0f, -350.0f));
-		path.add(new Node(-100.0f, -300.0f));
-		blob1.setPatrolPath(path);
-		entList.add(blob1);*/
+		entList.add(blob1);
 		
 		/*blob2 = new Blob(0.0f, 0.0f, AIType.TURRET);
 		blob2.enableTilesetMode(tilesetwire, 2, 2);
@@ -211,22 +208,25 @@ public class Game
 		entList.add(button2);
 		
 
-		Spikes block1 = new Spikes(0, 108, 90);
+		PhysBlock block1 = new PhysBlock(50, -200, 90);
 		block1.enableTilesetMode(tilesetwire, 2, 2);
 		entList.add(block1);
 		 
-		PhysBlock block2 = new PhysBlock(50, -216, 108);
+		PhysBlock block2 = new PhysBlock(50, 0, 90);
 		block2.enableTilesetMode(tilesetwire, 2, 1);
 		entList.add(block2);
-		
-		/*
-		SpikeBall spiky = new SpikeBall(15, -200, -300, true, true, 15, 1000, 0.0f, 0.0f, 0, -300, 1);
-		spiky.enableTilesetMode(tilesetwire, 1, 2);
-		entList.add(spiky); */
+
+		/*SpikeBall wall = new SpikeBall(35, -200, -250, true, true, 15, 500, 0.0f, 0.0f, 0, -300, 1);
+		wall.enableTilesetMode(tilesetwire, 1, 2);
+		//wall.scale(1.0f,2.0f);
+		entList.add(wall);*/
 		
 		Cannon cannon = new Cannon(35, -150, -340, 90, 1, 1, true, false, true, 5);
+		
+		/*Cannon cannon = new Cannon(35, -100, -300, 90, 1, 1, true, false, true, 5);
+>>>>>>> refs/remotes/origin/devin_reed_master
 		cannon.enableTilesetMode(tilesetwire, 2, 1);
-		entList.add(cannon);
+		entList.add(cannon);*/
 		
 		/*
 		MovingWall wall2 = new MovingWall(35, -150, -300, true, true, 5, 500, 0.0f, 0.0f, -112.5f, -300, -1);
@@ -248,6 +248,28 @@ public class Game
 		player.enableTilesetMode(tilesetwire, 1, 0);
 		entList.add(player);
 		player.enableUserControl();
+		
+		/*
+		health = new PickupHealth(50, -108.0f, -250.0f);
+		health.enableColorMode(0, 255, 255, 255);
+		entList.add(health);
+		*/
+		//spr = new Sprite(30.0f, -108.0f, -300.0f, 45.0f, 1.0f, 1.0f, 10, 90, 1, spriteAnim);
+		//entList.add(spr);
+		
+		nodeList = new ArrayList<Node>();
+		nodeList.add(new Node(-105.0f, -225.0f));
+		nodeList.add(new Node(-105.0f, -145.0f));
+		nodeList.add(new Node(-200.0f, 0.0f));
+		nodeList.add(new Node(30.0f, 0.0f));
+		nodeList.add(new Node(-105.0f, 130.0f));
+		nodeList.add(new Node(-105.0f, 320.0f));
+		nodeList.get(0).addNodeLink(nodeList.get(1));
+		nodeList.get(1).addNodeLink(nodeList.get(2));
+		nodeList.get(1).addNodeLink(nodeList.get(3));
+		nodeList.get(2).addNodeLink(nodeList.get(4));
+		nodeList.get(3).addNodeLink(nodeList.get(4));
+		nodeList.get(4).addNodeLink(nodeList.get(5));
 		
 		CauseAND bridgeAND = new CauseAND(new CauseButton(button1), new CauseButton(button2));
 		
@@ -408,7 +430,7 @@ public class Game
 	
 	public void runAI(Enemy enemy)
 	{
-		if (Vector2f.sub(enemy.getPos(), player.getPos()).mag() < 100.0f)
+		if (Vector2f.sub(enemy.getPos(), player.getPos()).mag() < 500.0f)
 		{
 			if (enemy.isAgressive())
 				runAgressiveAI(enemy);
@@ -428,28 +450,22 @@ public class Game
 	{
 		if (enemy.getType() == AIType.STALKER)
 		{
-			if (enemy.isDoneRotating())
+			if (enemy.getPathToPlayer() != null)
 			{
-				//TODO: A* Pathfinding Algorithm
-				enemy.moveTo(player.getXPos(), player.getYPos());
-				enemy.setAngle((float)Vector2f.sub(player.getPos(), enemy.getPos()).angleDeg());
-			}
-			else
-			{
-				runBecomeAgressiveAI(enemy);
+				if (enemy.isDoneRotating())
+				{
+					enemy.moveTo(enemy.getPathToPlayer().getNode(enemy.getPlayerPathLocation() + 1).getPos());
+					enemy.setAngle((float)Vector2f.sub(enemy.getPathToPlayer().getNode(enemy.getPlayerPathLocation() + 1).getPos(), enemy.getPos()).angleDeg());
+				}
+				else
+				{
+					runBecomeAgressiveAI(enemy);
+				}
 			}
 		}
 		else if (enemy.getType() == AIType.PATROL)
 		{
-			if (enemy.isDoneRotating())
-			{
-				enemy.moveTo(player.getXPos(), player.getYPos());
-				enemy.setAngle((float)Vector2f.sub(player.getPos(), enemy.getPos()).angleDeg());
-			}
-			else
-			{
-				runBecomeAgressiveAI(enemy);
-			}
+			
 		}
 		else if (enemy.getType() == AIType.TURRET)
 		{
@@ -476,20 +492,8 @@ public class Game
 		enemy.setAgressive(true);
 		enemy.setOnPatrol(false);
 		if (enemy.getType() == AIType.STALKER)
-		{
-			enemy.stop();
-			float angleToPlayer = (float)Vector2f.sub(player.getPos(), enemy.getPos()).angleDeg();
-			if (enemy.getAngle() == angleToPlayer)
-			{
-				enemy.setAngle(angleToPlayer);
-				enemy.moveTo(player.getPos());
-				enemy.setDoneRotating(true);
-			}
-			else
-			{
-				enemy.rotateTo(angleToPlayer);
-				enemy.setDoneRotating(false);
-			}
+		{	
+			
 		}
 		else if (enemy.getType() == AIType.PATROL)
 		{
@@ -524,18 +528,18 @@ public class Game
 			if (enemy.isOnPatrol())
 			{
 				Node nextNode;
-				if (enemy.getPathLocation() == enemy.getPatrolPath().getSize() - 1)
+				if (enemy.getPatrolPathLocation() == enemy.getPatrolPath().getSize() - 1)
 					nextNode = enemy.getPatrolPathNode(0);
 				else
-					nextNode = enemy.getPatrolPathNode(enemy.getPathLocation() + 1);
+					nextNode = enemy.getPatrolPathNode(enemy.getPatrolPathLocation() + 1);
 				
 				if (enemy.getPos().equals(nextNode.getPos()))
 				{
 					enemy.setDoneRotating(false);
-					if (enemy.getPathLocation() == enemy.getPatrolPath().getSize() - 1)
-						enemy.setPathLocation(0);
+					if (enemy.getPatrolPathLocation() == enemy.getPatrolPath().getSize() - 1)
+						enemy.setPatrolPathLocation(0);
 					else
-						enemy.setPathLocation(enemy.getPathLocation() + 1);
+						enemy.setPatrolPathLocation(enemy.getPatrolPathLocation() + 1);
 				}
 				
 				float angleToNode = (float)Vector2f.sub(nextNode.getPos(), enemy.getPos()).angleDeg();
@@ -572,7 +576,7 @@ public class Game
 		enemy.setAgressive(false);
 		if (enemy.getType() == AIType.STALKER)
 		{
-			
+			enemy.stop();
 		}
 		else if (enemy.getType() == AIType.PATROL)
 		{
@@ -582,7 +586,7 @@ public class Game
 			if (enemy.getPos().equals(closestNode.getPos()))
 			{
 				enemy.setOnPatrol(true);
-				enemy.setPathLocation(enemy.getClosestPatrolPathNodeIndex());
+				enemy.setPatrolPathLocation(enemy.getClosestPatrolPathNodeIndex());
 			}
 			else
 			{
@@ -623,6 +627,131 @@ public class Game
 		}
 	}
 	
+	public NodePath getPathToPlayer (Entity ent)
+	{
+		Node goalNode = new Node(player.getPos());
+		Node startNode = new Node(ent.getPos());
+		
+		//if enemy can go straight towards player
+		if (pathIsClear(startNode, goalNode))
+			return new NodePath(startNode, goalNode);
+		
+		//checks if player is reachable
+		boolean goalReachable = false;
+		boolean startConnected = false;
+		for (Node node : nodeList)
+		{
+			if (pathIsClear(goalNode, node))
+			{
+				goalNode.addNodeLink(node);
+				goalReachable = true;
+			}
+			if (pathIsClear(startNode, node))
+			{
+				startNode.addNodeLink(node);
+				startConnected = true;
+			}
+		}
+		if (!goalReachable || !startConnected)
+			return null;
+
+		int previousListSize = 1;
+		ArrayList<Node> openList = new ArrayList<Node>();
+		ArrayList<Node> closedList = new ArrayList<Node>();
+		Node lowestF = startNode;
+		closedList.add(startNode);
+		startNode.setH(Vector2f.sub(startNode.getPos(), goalNode.getPos()).mag());
+		startNode.setF(startNode.getH());
+		
+		while (!openList.contains(goalNode))
+		{
+			for (int i = 0; i < lowestF.getNodeCount(); i++)
+			{
+				Node node = lowestF.getLinkedNode(i);
+				if (!closedList.contains(node) && lowestF.getNodeLink(i).isActive())
+				{
+					if (openList.contains(node))
+					{
+						float newG = lowestF.getG() + lowestF.getNodeLink(i).getNodeVec().mag();
+						if (node.getG() > newG)
+						{
+							node.setG(newG);
+							node.setParentNode(lowestF);
+						}
+					}
+					node.setG(lowestF.getG() + lowestF.getNodeLink(i).getNodeVec().mag());
+					node.setH(Vector2f.sub(node.getPos(), goalNode.getPos()).mag());
+					node.setF(node.getG() + node.getH());
+					node.setParentNode(lowestF);
+					openList.add(node);
+				}
+			}
+			lowestF = openList.get(0);
+			for (int i = 1; i < openList.size(); i++)
+			{
+				if (openList.get(i).getF() < lowestF.getF())
+					lowestF = openList.get(i);
+			}
+			openList.remove(lowestF);
+			closedList.add(lowestF);
+			
+			if (previousListSize == openList.size() + closedList.size())
+				break;
+			else
+				previousListSize = openList.size() + closedList.size();
+		}
+		
+		if (openList.contains(goalNode))
+		{
+			//find nodePath from goal to start
+			NodePath path = new NodePath(goalNode);
+			Node currentNode = goalNode;
+			while (currentNode != startNode)
+			{
+				currentNode = currentNode.getParentNode();
+				path.add(currentNode);
+			}
+			//reverse path
+			path.reverse();
+			return path;
+		}
+		else
+			return null;
+	}
+	
+	public boolean pathIsClear(final NodeLink link)
+	{
+		Vector2f pathVec = link.getNodeVec().normalize();
+		Vector2f pathNormal = Vector2f.getNormal(pathVec);
+		float normProj = link.getThisNode().getPos().dot(pathNormal);
+		float startProj = link.getThisNode().getPos().dot(pathVec);
+		float endProj = link.getLinkedNode().getPos().dot(pathVec);
+		
+		for (final Entity ent : entList)
+		{
+			float entProj = ent.getPos().dot(pathVec);
+			if (ent.isSolid() && ent.willCollide() && Math.abs(ent.getPos().dot(pathNormal) - normProj) < ent.getHalfSize() && ((entProj > startProj && entProj < endProj) || (entProj < startProj && entProj > endProj)))
+				return false;
+		}
+		for (final Tile[] ta : tileset)
+		{
+			for (final Tile tile : ta)
+			{
+				float tileProj = tile.getPos().dot(pathVec);
+				if ((tile.isWall() || tile.isPit())&& Math.abs(tile.getPos().dot(pathNormal) - normProj) < tile.getHalfSize() && ((tileProj > startProj && tileProj < endProj) || (tileProj < startProj && tileProj > endProj)))
+					return false;
+			}
+		}
+		
+		
+		return true;
+	}
+	
+	public boolean pathIsClear(final Node startNode, final Node endNode)
+	{
+		return pathIsClear(new NodeLink(startNode, endNode));
+	}
+		
 	public void updateTriggers()
 	{
 		for (Trigger t : triggerList)
