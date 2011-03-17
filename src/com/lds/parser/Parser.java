@@ -7,6 +7,7 @@ import java.util.HashMap;
 import org.xmlpull.v1.XmlPullParserException;
 import android.content.Context;
 import android.content.res.XmlResourceParser;
+import android.util.Log;
 
 import com.lds.game.ai.Node;
 import com.lds.game.entity.*;
@@ -19,6 +20,7 @@ public class Parser //this is a parser
 	public ArrayList<Trigger> triggerList = new ArrayList<Trigger>();
 	public ArrayList<Node> nodeList = new ArrayList<Node>();
 	public Tile[][] tileset;
+	public Player player;
 	
 	public XmlResourceParser xrp;  
 	public HashMap <String, String> dataHM;
@@ -118,7 +120,9 @@ public class Parser //this is a parser
 					parseObj("Player");
 					PlayerData pd = new PlayerData(dataHM);
 					parsedList.add(pd);
-					pd.createInst(entList);
+					ArrayList<Entity> tempPlayerList = new ArrayList<Entity>();
+					pd.createInst(tempPlayerList);
+					player = (Player)tempPlayerList.get(0);
 				}
 				else if (xrp.getName().equalsIgnoreCase("PickupHealth"))
 				{
@@ -241,16 +245,15 @@ Parse Triggas
 	{
 		while(!(xrp.getEventType() == END_TAG && xrp.getName().equals("Triggers")))
 		{
-			xrp.next();
-			
 			while(!(xrp.getEventType() == END_TAG && xrp.getName().equals("Trigger")))
 			{
 				xrp.next();
-				
+				xrp.next();
 				String causeSTR = xrp.getAttributeValue(0); //picks up a cause
+				
 				xrp.next();
 				
-				String ids = xrp.getName();
+				String ids = xrp.getText();
 				String[] causeID = ids.split(","); //picks and splits cause IDs
 				
 				xrp.next();
@@ -259,7 +262,7 @@ Parse Triggas
 				String effectSTR = xrp.getAttributeValue(0); //picks up an effect
 				xrp.next();
 				
-				ids = xrp.getName();
+				ids = xrp.getText();
 				String[] effectID = ids.split(","); //picks and splits effect IDs
 				
 				/*************************
@@ -336,7 +339,11 @@ Parse Triggas
 				}
 				xrp.next();
 				xrp.next();
+				
+				Log.d("LDS_Game", "Current tag:" + xrp.getEventType() + ", " + xrp.getName() + ", " + xrp.getText());
 			}
+			
+			xrp.next();
 		}
 	}
 	

@@ -117,7 +117,7 @@ public class Game
 		tl.loadTexture(tilesetworld);
 		tl.loadTexture(tilesetentities);
 						
-		///*		
+		/*		
  		for (int i = 0; i < tileset.length; i++)
 		{
 			for (int j = 0; j < tileset[0].length; j++)
@@ -152,9 +152,9 @@ public class Game
  					tileset[i][j].updateBordersWall(tileset, j, i);
  			}
  		}
- 		//*/		
-		/*//Parser
-		Parser parser = new Parser(context, R.xml.tempdata);
+ 		*/		
+		//Parser
+		Parser parser = new Parser(context, R.xml.tutorial);
 		
 		entList = parser.entList;
 		try 
@@ -168,12 +168,14 @@ public class Game
 		catch (IOException e) 
 		{
 			e.printStackTrace();
-		}*/
+		}
 	
-		/*tileset = parser.tileset;
-		entList.addAll(parser.entList);*/
+		tileset = parser.tileset;
+		entList.addAll(parser.entList);
+		player = parser.player;
+		entList.add(player);
 		
-		//  /*CAN DEAL WITH THIS SHIT
+		/*CAN DEAL WITH THIS SHIT
 		door = new Door (-108.0f, -180.0f);
 		door.enableTilesetMode(tilesetwire, 0, 2);
 		entList.add(door);
@@ -195,9 +197,9 @@ public class Game
 		blob1.enableTilesetMode(tilesetwire, 2, 2);
 		entList.add(blob1);
 		
-		/*blob2 = new Blob(0.0f, 0.0f, AIType.TURRET);
+		blob2 = new Blob(0.0f, 0.0f, AIType.TURRET);
 		blob2.enableTilesetMode(tilesetwire, 2, 2);
-		entList.add(blob2);*/
+		entList.add(blob2);
 				
 		Button button1 = new Button(108.0f, 0.0f);
 		button1.enableTilesetMode(randomthings, 0, 0);
@@ -217,26 +219,26 @@ public class Game
 		entList.add(block2);
 
 		
-		/*SpikeBall wall = new SpikeBall(35, -200, -250, true, true, 15, 500, 0.0f, 0.0f, 0, -300, 1);
+		SpikeBall wall = new SpikeBall(35, -200, -250, true, true, 15, 500, 0.0f, 0.0f, 0, -300, 1);
 		wall.enableTilesetMode(tilesetwire, 1, 2);
 		//wall.scale(1.0f,2.0f);
-		entList.add(wall);*/
+		entList.add(wall);
 		
-		/*Cannon cannon = new Cannon(35, -100, -300, 90, 1, 1, true, false, true, 5);
+		Cannon cannon = new Cannon(35, -100, -300, 90, 1, 1, true, false, true, 5);
 		cannon.enableTilesetMode(tilesetwire, 2, 1);
-		entList.add(cannon);*/
+		entList.add(cannon);
 		
-		/*
+		
 		MovingWall wall2 = new MovingWall(35, -150, -300, true, true, 5, 500, 0.0f, 0.0f, -112.5f, -300, -1);
 		wall2.enableTilesetMode(tilesetwire, 1, 3);
 		//wall2.scale(1.0f,2.0f);
 		entList.add(wall2);
-	    */
+	    
 		
-		/*spriteAnim = new Animation(tilesetwire, 0, 7, 7, 0, 3000);
+		spriteAnim = new Animation(tilesetwire, 0, 7, 7, 0, 3000);
 		spr = new Sprite(50, -100, 100, 45, 1, 1, spriteAnim);
 		spr.enableTextureMode(tilesetwire);
-		entList.add(spr);*/
+		entList.add(spr);
 
 		box = new PuzzleBox(-120.0f, -400.0f, 0.0f, false, true);
 		entList.add(box);
@@ -255,7 +257,7 @@ public class Game
 		//spr = new Sprite(30.0f, -108.0f, -300.0f, 45.0f, 1.0f, 1.0f, 10, 90, 1, spriteAnim);
 		//entList.add(spr);
 		
-		nodeList = new ArrayList<Node>();
+		/*nodeList = new ArrayList<Node>();
 		nodeList.add(new Node(-105.0f, -225.0f));
 		nodeList.add(new Node(-105.0f, -145.0f));
 		nodeList.add(new Node(-200.0f, 0.0f));
@@ -275,7 +277,7 @@ public class Game
 		triggerList.add(new Trigger(bridgeAND, new EffectRaiseBridge(tileset[4][6])));
 		triggerList.add(new Trigger(bridgeAND, new EffectRaiseBridge(tileset[4][7])));
 		triggerList.add(new Trigger(bridgeAND, new EffectRaiseBridge(tileset[5][6])));
-		triggerList.add(new Trigger(bridgeAND, new EffectRaiseBridge(tileset[5][7])));
+		triggerList.add(new Trigger(bridgeAND, new EffectRaiseBridge(tileset[5][7])));*/
 		
 		healthBar = new UIHealthBar(200.0f, 30.0f, UIPosition.TOPLEFT, Direction.RIGHT, player);
 		healthBar.setTopPad(5.0f);

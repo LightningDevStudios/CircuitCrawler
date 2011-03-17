@@ -72,6 +72,8 @@ public abstract class EntityData
 				tex = Game.randomthings;
 			else if(texID.equalsIgnoreCase("text"))
 				tex = Game.text;
+			else if(texID.equalsIgnoreCase("tilesetentities"))
+				tex = Game.tilesetentities;
 			
 			String[] textureStr = entHM.get("coords").split(",");
 			texture = new float[textureStr.length];
@@ -94,6 +96,8 @@ public abstract class EntityData
 				tex = Game.randomthings;
 			else if(texID.equalsIgnoreCase("text"))
 				tex = Game.text;
+			else if (texID.equalsIgnoreCase("tilesetentities"))
+				tex = Game.tilesetentities;
 			
 			tileX = Integer.parseInt(entHM.get("x"));
 			tileY = Integer.parseInt(entHM.get("y"));
