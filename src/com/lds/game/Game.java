@@ -221,10 +221,19 @@ public class Game
 		//wall.scale(1.0f,2.0f);
 		entList.add(wall);*/
 		
-		Cannon cannon = new Cannon(35, -150, -340, 90, 1, 1, true, false, true, 5);
+		//Cannon cannon = new Cannon(35, -150, -340, 90, 1, 1, true, false, true, 5, 5);
+		//cannon.enableTilesetMode(tilesetwire, 2, 1);
+		//entList.add(cannon);
+		
+		Teleporter tele1 = new Teleporter(50,-150,-340,0,0,0,true,false,false,-300,-340);
+		tele1.enableTilesetMode(tilesetwire, 2, 1);
+		entList.add(tele1);
+		
+		Teleporter tele2 = new Teleporter(50,-300,-340,0,0,0,true,false,false,-150,-340);
+		tele2.enableTilesetMode(tilesetwire, 2, 1);
+		entList.add(tele2);
 		
 		/*Cannon cannon = new Cannon(35, -100, -300, 90, 1, 1, true, false, true, 5);
->>>>>>> refs/remotes/origin/devin_reed_master
 		cannon.enableTilesetMode(tilesetwire, 2, 1);
 		entList.add(cannon);*/
 		
