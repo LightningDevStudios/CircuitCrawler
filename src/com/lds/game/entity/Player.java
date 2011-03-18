@@ -3,7 +3,9 @@ package com.lds.game.entity;
 import android.content.Context;
 import android.os.Vibrator;
 
+import com.lds.EntityManager;
 import com.lds.Vector2f;
+import com.lds.UI.UIJoypad;
 import com.lds.game.SoundPlayer;
 
 public class Player extends Character //your character, protagonist
@@ -66,6 +68,11 @@ public class Player extends Character //your character, protagonist
 		{
 			takeDamage(5);
 		}
+		else if (ent instanceof Teleporter)
+		{
+			this.setXPos(((Teleporter) ent).teleportX());
+			this.setYPos(((Teleporter) ent).teleportY());
+		}
 	}
 	
 	@Override
@@ -84,8 +91,8 @@ public class Player extends Character //your character, protagonist
 			}
 			else if (tile.isSlipperyTile())
 			{
-				this.disableUserControl();
-				this.push(moveInterpVec);
+				Vector2f newMoveVec = new Vector2f(/*Something in here*/);
+				this.push(newMoveVec);
 			}
 			else
 			{
