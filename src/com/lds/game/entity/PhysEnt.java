@@ -528,7 +528,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 				}
 				else
 				{
-					if (moveInterpVec.mag() > 0)
+					if (moveInterpVec.mag() > 0.1)
 					{
 						posVec.add(moveInterpVec);
 						movedVec.add(moveInterpVec);

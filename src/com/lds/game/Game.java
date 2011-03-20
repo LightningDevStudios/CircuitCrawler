@@ -728,8 +728,8 @@ public class Game
 			return null;
 
 		//int previousListSize = 1;
-		ArrayList<Node> openList = new ArrayList<Node>();
-		ArrayList<Node> closedList = new ArrayList<Node>();
+		final ArrayList<Node> openList = new ArrayList<Node>();
+		final ArrayList<Node> closedList = new ArrayList<Node>();
 		Node lowestF = startNode;
 		closedList.add(startNode);
 		final Vector2f startHVec = Vector2f.sub(startNode.getPos(), goalNode.getPos());
@@ -783,7 +783,7 @@ public class Game
 		if (openList.contains(goalNode) || closedList.contains(goalNode))
 		{
 			//find nodePath from goal to start
-			NodePath path = new NodePath(goalNode);
+			final NodePath path = new NodePath(goalNode);
 			Node currentNode = goalNode;
 			while (currentNode != startNode)
 			{
