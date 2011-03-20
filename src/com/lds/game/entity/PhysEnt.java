@@ -14,7 +14,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	public int moveTimeMs, rotTimeMs, sclTimeMs;
 	protected float moveSpeed, rotSpeed, sclSpeed;
 	public boolean isMoving, isRotating, isScaling, isRotatingCCW, falling, gettingPushed;
-	protected Vector2f moveVec, moveInterpVec, endPosVec;
+	protected Vector2f moveVec, moveInterpVec, endPosVec, movedVec;
 	protected Vector2f sclVec, sclInterpVec, endScaleVec;
 	protected int moveInterpCount, sclInterpCount;
 	protected ArrayList<Vector2f> bounceList;
@@ -45,6 +45,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 		bounceList = new ArrayList<Vector2f>();
 		falling = false;
 		gettingPushed = false;
+		movedVec = new Vector2f();
 	}
 	
 	@Override
@@ -99,6 +100,9 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	//sets position to to new x and y and interpolates
 	public void moveTo (final float x, final float y)
 	{
+		moveInterpVec.set(0, 0);
+		isMoving = false;
+		movedVec.set(0, 0);
 		if (!(posVec.getX() == x && posVec.getY() == y))
 		{
 			moveInterpCount = 0;
@@ -107,6 +111,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 			moveTimeMs = Stopwatch.elapsedTimeMs();
 			endPosVec = new Vector2f(x, y);
 		}
+		movedVec.set(0, 0);
 	}
 	
 	public void moveTo (final Vector2f moveToVec)
@@ -208,6 +213,9 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	//much like moveTo, but instead of going to a specific point, move() moves relative to the current position
 	public void move (final float x, final float y)
 	{
+		moveInterpVec.set(0, 0);
+		isMoving = false;
+		movedVec.set(0, 0);
 		if (!(x == 0 && y == 0))
 		{
 			moveInterpCount = 0;
@@ -217,6 +225,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 			endPosVec = Vector2f.add(moveVec, posVec);
 			Game.worldOutdated = true;
 		}
+
 	}
 	
 	public void moveBy (final Vector2f moveByVec)
@@ -497,6 +506,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 				moveSpeed = 0;
 				isMoving = false;
 				moveInterpCount = 0;
+				movedVec.set(0, 0);
 			}
 			else
 			{
@@ -510,17 +520,21 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 					moveInterpVec = Vector2f.normalize(moveVec).scale(moveSpeed / 1000 * (Stopwatch.elapsedTimeMs() - moveTimeMs));
 				}
 				
-				if (!gettingPushed && moveVec.mag() - moveInterpVec.mag() * moveInterpCount <= moveInterpVec.mag() / 2)
+				if (!gettingPushed && movedVec.mag() > moveVec.mag())
 				{
 					moveInterpVec.set(0, 0);
 					posVec = endPosVec;
 					isMoving = false;
 					moveInterpCount = 0;
+					movedVec.set(0, 0);
 				}
 				else
 				{
 					if (moveInterpVec.mag() > 0)
+					{
 						posVec.add(moveInterpVec);
+						movedVec.add(moveInterpVec);
+					}
 					else
 						stop();
 				}
@@ -608,6 +622,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 		isRotating = false;
 		isScaling = false;
 		gettingPushed = false;
+		movedVec.set(0, 0);
 	}
 	
 	public void setMoveSpeed(float num)
@@ -629,6 +644,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 				bounceVec.add(bounceList.get(i));
 			}
 			bounceList.clear();
+			movedVec.add(bounceVec);
 			return bounceVec;
 		}
 	}

@@ -4,7 +4,7 @@ public class Door extends StaticEnt
 {
 	public Door (float xPos, float yPos)
 	{
-		 super(72.0f, xPos, yPos, 0.0f, 1.0f, 0.5f, true, false, true);
+		 super(72.0f, xPos, yPos, 90.0f, 0.5f, 1.0f, true, false, true);
 		 enableColorMode(1.0f, 1.0f, 1.0f, 1.0f);
 		 colorInterpSpeed = 1.0f;
 	}

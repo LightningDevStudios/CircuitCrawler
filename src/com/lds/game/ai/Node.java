@@ -26,7 +26,10 @@ public class Node
 	
 	public void setParentNode(Node parent)
 	{
-		parentNodeLink = new NodeLink(this, parent);
+		if (parent == null)
+			parentNodeLink = null;
+		else
+			parentNodeLink = new NodeLink(this, parent);
 	}
 	
 	public Node getParentNode()
@@ -65,6 +68,15 @@ public class Node
 		return getNodeLink(node).getNodeVec();
 	}
 	
+	public void clearLinks()
+	{
+		for (NodeLink nl : linkList)
+		{
+			nl.getLinkedNode().linkList.remove(nl.getLinkedNode().getLink(this));
+		}
+		linkList.clear();
+	}
+	
 	public NodeLink getNodeLink(Node node)
 	{
 		for (NodeLink link : linkList)
@@ -98,6 +110,40 @@ public class Node
 			vecList.add(link.getNodeVec());
 		}
 		return vecList;
+	}
+	
+	public NodeLink getLink(Node node)
+	{
+		for (NodeLink link : linkList)
+		{
+			if (link.getLinkedNode() == node)
+				return link;
+		}
+		return null;
+	}
+	
+	public void activateLinks(Node node)
+	{
+		for (NodeLink nl : linkList)
+		{
+			if (nl.getLinkedNode() == node)
+			{
+				nl.activate();
+				node.getLink(this).activate();
+			}
+		}
+	}
+	
+	public void deactivateLinks(Node node)
+	{
+		for (NodeLink nl : linkList)
+		{
+			if (nl.getLinkedNode() == node)
+			{
+				nl.deactivate();
+				node.getLink(this).deactivate();
+			}
+		}
 	}
 	
 	public int getNodeCount()

@@ -16,7 +16,7 @@ public class PhysBlockData extends HoldObjectData
 	}
 	public void createInst(ArrayList<Entity> entData)
 	{
-		physBlockRef = new PhysBlock(size, xPos, yPos);
+		physBlockRef = new PhysBlock(size, xPos, yPos, 0.03f); //friction
 
 		//COLOR
 		if (color != null)
