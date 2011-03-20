@@ -58,7 +58,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	}
 	
 	//happens upon touching a tile at all
-	public void tileInteract(Tile tile)
+	public void tileInteract (Tile tile)
 	{
 		
 	}
@@ -79,12 +79,10 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 				this.stop();
 				this.scaleTo(0, 0);
 				this.moveTo(tile.getXPos(), tile.getYPos());
-				falling = true;
-				if (falling)
+				if (!falling)
 					SoundPlayer.getInstance().playSound(SoundPlayer.PIT_FALL);
+				falling = true;
 			}
-			else
-				falling = false;
 		}
 	}
 	

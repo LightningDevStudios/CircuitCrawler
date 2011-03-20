@@ -68,9 +68,9 @@ public class Player extends Character //your character, protagonist
 				this.disableUserControl();
 				this.scaleTo(0, 0);
 				this.moveTo(tile.getXPos(), tile.getYPos());
-				falling = true;
-				if (falling)
+				if (!falling)
 					SoundPlayer.getInstance().playSound(SoundPlayer.PIT_FALL);
+				falling = true;
 			}
 			else if (tile.isSlipperyTile())
 			{
