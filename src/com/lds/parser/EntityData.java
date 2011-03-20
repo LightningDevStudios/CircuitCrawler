@@ -9,7 +9,7 @@ import com.lds.game.entity.Entity;
 
 public abstract class EntityData
 {
-	private boolean isSolid;
+	protected boolean isSolid;
 	protected boolean circular;
 	protected boolean willCollide;
 	protected boolean textureModeEnabled, tilesetModeEnabled;

@@ -299,6 +299,12 @@
       <yPos>-292</yPos>
       <renderMode />
     </Sprite>
+    <Player>
+      <size>50</size>
+      <xPos>-287</xPos>
+      <yPos>-218</yPos>
+      <renderMode />
+    </Player>
   </Entities>
   <Triggers>
     <Trigger>

@@ -48,7 +48,7 @@ public class Player extends Character //your character, protagonist
 		{
 			health += ((PickupHealth)ent).getHealthValue();
 		}
-		else if (ent instanceof Enemy || ent instanceof Spikes)
+		else if (ent instanceof Enemy || ent instanceof Spike)
 		{
 			takeDamage(25);
 			//see above

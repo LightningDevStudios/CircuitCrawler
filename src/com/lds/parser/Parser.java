@@ -131,6 +131,37 @@ public class Parser //this is a parser
 					parsedList.add(phD);
 					phD.createInst(entList);
 				}
+				else if (xrp.getName().equalsIgnoreCase("Cannon"))
+				{
+					parseObj("Cannon");
+					CannonData cd = new CannonData(dataHM);
+					parsedList.add(cd);
+					cd.createInst(entList);
+				}
+				
+				else if (xrp.getName().equalsIgnoreCase("SpikeBall"))
+				{
+					parseObj("SpikeBall");
+					SpikeBallData sbd = new SpikeBallData(dataHM);
+					parsedList.add(sbd);
+					sbd.createInst(entList);
+				}
+				
+				else if (xrp.getName().equalsIgnoreCase("Spike"))
+				{
+					parseObj("Spike");
+					SpikeData sd = new SpikeData(dataHM);
+					parsedList.add(sd);
+					sd.createInst(entList);
+				}
+				
+				else if (xrp.getName().equalsIgnoreCase("WallButton"))
+				{
+					parseObj("WallButton");
+					WallButtonData wbd = new WallButtonData(dataHM);
+					parsedList.add(wbd);
+					wbd.createInst(entList);
+				}
 			}
 		}
 	}
