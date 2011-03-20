@@ -52,7 +52,6 @@ public class Player extends Character //your character, protagonist
 		}
 		else if (ent instanceof SpikeBall)
 		{
-			//vibrator(2000);
 			takeDamage(25);
 		}
 		else if (ent instanceof CannonShell)

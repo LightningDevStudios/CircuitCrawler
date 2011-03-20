@@ -191,6 +191,7 @@ public class Game
 		//block.initGradientInterp(interpGM);
 		entList.add(block);
 		
+		/*
 		blob1 = new Blob(-250.0f, 0.0f, AIType.STALKER);
 		blob1.enableTilesetMode(tilesetwire, 2, 1);
 		entList.add(blob1);
@@ -203,7 +204,7 @@ public class Game
 		np.add(new Node(-215, -300));
 		np.add(new Node(-100, -300));
 		blob2.setPatrolPath(np);
-				
+		*/		
 		Button button1 = new Button(108.0f, 0.0f);
 		button1.enableTilesetMode(tilesetentities, 0, 0);
 		entList.add(button1);
@@ -226,15 +227,15 @@ public class Game
 		//wall.scale(1.0f,2.0f);
 		entList.add(wall);*/
 		
-		//Cannon cannon = new Cannon(35, -150, -340, 90, 1, 1, true, false, true, 5, 5);
-		//cannon.enableTilesetMode(tilesetwire, 2, 1);
-		//entList.add(cannon);
+		/*Cannon cannon = new Cannon(35, -150, -340, 90, 1, 1, true, false, true, 5, 5);
+		cannon.enableTilesetMode(tilesetwire, 2, 1);
+		entList.add(cannon);*/
 		
-		Teleporter tele1 = new Teleporter(50,-150,-340,0,0,0,true,false,false,-300,-340);
+		Teleporter tele1 = new Teleporter(40,-100,-340,-300,-340);
 		tele1.enableTilesetMode(tilesetwire, 2, 1);
 		entList.add(tele1);
 		
-		Teleporter tele2 = new Teleporter(50,-300,-340,0,0,0,true,false,false,-150,-340);
+		Teleporter tele2 = new Teleporter(40,-200,-340,-150,-340);
 		tele2.enableTilesetMode(tilesetwire, 2, 1);
 		entList.add(tele2);
 		
