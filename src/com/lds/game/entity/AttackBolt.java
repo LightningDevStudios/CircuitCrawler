@@ -1,12 +1,14 @@
 package com.lds.game.entity;
 
+import java.util.ArrayList;
+
 import com.lds.Vector2f;
 import com.lds.EntityManager;
 
 public class AttackBolt extends PhysEnt
 {
 	Vector2f directionVec;
-	private boolean canHurtPlayer;
+	ArrayList<Entity> ignoreList;
 	
 	public AttackBolt(Vector2f posVec, Vector2f directionVec, float angle)
 	{
@@ -18,13 +20,13 @@ public class AttackBolt extends PhysEnt
 		this.enableColorMode(1.0f, 0.0f, 0.0f, 1.0f);
 		this.setColorInterpSpeed(1.4f);
 		this.initColorInterp(0.0f, 0.0f, 0.0f, 0.0f);
-		canHurtPlayer = true;
+		ignoreList = new ArrayList<Entity>();
 	}
 	
 	@Override
 	public void interact(Entity ent)
 	{
-		if (!(ent instanceof Player) || canHurtPlayer)
+		if (!ignoreList.contains(ent))
 		{
 			ent.colList.remove(this);
 			if (this.doesCollide(ent))
@@ -58,13 +60,13 @@ public class AttackBolt extends PhysEnt
 		}
 	}
 	
-	public boolean canHurtPlayer()
+	public void ignore (Entity ent)
 	{
-		return canHurtPlayer;
+		ignoreList.add(ent);
 	}
 	
-	public void setCanHurtPlayer(boolean canHurtPlayer)
+	public boolean doesIgnore (Entity ent)
 	{
-		this.canHurtPlayer = canHurtPlayer;
+		return ignoreList.contains(ent);
 	}
 }

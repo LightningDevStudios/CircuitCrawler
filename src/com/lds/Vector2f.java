@@ -145,6 +145,15 @@ public class Vector2f
 		return false;
 	}
 	
+	public boolean approxEquals (Vector2f v, float marginOfError)
+	{
+		if (Math.abs(x - v.x) < marginOfError && Math.abs(y - v.y) < marginOfError)
+		{
+			return true;
+		}
+		return false;
+	}
+	
 	public Vector2f neg ()
 	{
 		x *= -1;

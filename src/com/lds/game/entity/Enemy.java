@@ -9,9 +9,10 @@ import com.lds.game.ai.Node;
 
 public  abstract class Enemy extends Character //enemies will fall under this class
 {
+	public static final int OUTER_RADIUS = 100, INNER_RADIUS = 50;
 	private static int enemyCount = 0;
 	protected AIType type;
-	protected boolean agressive;
+	protected boolean agressive, colliding;
 	protected int lastTime, randomTime;
 	//Patrol stuff
 	protected NodePath patrolPath;
@@ -28,13 +29,14 @@ public  abstract class Enemy extends Character //enemies will fall under this cl
 	
 	public Enemy(float size, float xPos, float yPos, float angle, float xScl, float yScl, boolean circular, int health, AIType type)
 	{
-		super(size, xPos, yPos, angle, xScl, yScl, circular, health, 25.0f, 360.0f);
+		super(size, xPos, yPos, angle, xScl, yScl, circular, health, 75.0f, 360.0f);
 		this.type = type;
 		lastTime = Stopwatch.elapsedTimeMs();
 		randomTime = 500;
 		enemyCount++;
 		agressive = false;
 		onPatrol = false;
+		colliding = false;
 	}
 	
 	@Override
@@ -47,19 +49,30 @@ public  abstract class Enemy extends Character //enemies will fall under this cl
 	public void die()
 	{
 		enemyCount--;
-		EntityManager.removeEntity(this);
 		SoundPlayer.getInstance().playSound(3);
+		if ((int)(Math.random() * 2) == 1)
+		{
+			PickupEnergy pe = new PickupEnergy((int)(Math.random() * 75) + 25, this.getXPos(), this.getYPos());
+			EntityManager.addEntity(pe);
+		}
+		else
+		{
+			PickupHealth ph = new PickupHealth((int)(Math.random() * 50) + 25, this.getXPos(), this.getYPos());
+			EntityManager.addEntity(ph);
+		}
+
+		EntityManager.removeEntity(this);
 	}
 	
-	@Override
+	/*@Override
 	public void interact(Entity ent)
 	{
-		if (ent instanceof AttackBolt)
+		if (ent instanceof AttackBolt && !((AttackBolt)ent).doesIgnore(this))
 		{
 			takeDamage(25);
 			agressive = true;
 		}
-	}
+	}*/
 	
 	//Patrol stuff
 	
@@ -111,6 +124,16 @@ public  abstract class Enemy extends Character //enemies will fall under this cl
 	}
 	
 	//General Stuff
+	
+	public boolean isColliding()
+	{
+		return colliding;
+	}
+	
+	public void setColliding(boolean colliding)
+	{
+		this.colliding = colliding;
+	}
 	
 	public AIType getType()
 	{

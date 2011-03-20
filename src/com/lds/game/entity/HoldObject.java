@@ -9,7 +9,7 @@ public abstract class HoldObject extends PhysEnt //and object that is held (bloc
 	
 	public HoldObject (float size, float xPos, float yPos, float angle, float xScl, float yScl, boolean isSolid, boolean circular, float friction)
 	{
-		super(size, xPos, yPos, angle, xScl, yScl, isSolid, circular, true, 100.0f, 90.0f, 2.0f, friction);
+		super(size, xPos, yPos, angle, xScl, yScl, isSolid, circular, true, 10.0f, 90.0f, 2.0f, friction);
 		held = false;
 	}
 	
@@ -24,12 +24,10 @@ public abstract class HoldObject extends PhysEnt //and object that is held (bloc
 				{
 					//this.stop();
 					this.scaleTo(0, 0);
-					falling = true;
-					if (falling)
+					if (!falling)
 						SoundPlayer.getInstance().playSound(SoundPlayer.PIT_FALL);
+					falling = true;
 				}
-				else
-					falling = false;
 			}
 			else if (!gettingPushed)
 				super.onTileInteract(tile);
