@@ -9,6 +9,12 @@ public class Teleporter extends StaticEnt
 		teleLinkXPos = newLinkXPos;
 		teleLinkYPos = newLinkYPos;
 	}
+	public Teleporter(float size, float xPos, float yPos, float newLinkXPos, float newLinkYPos) 
+	{
+		super(size, xPos, yPos, 0.0f, 1.0f, 1.0f, true, false, false);
+		teleLinkXPos = newLinkXPos;
+		teleLinkYPos = newLinkYPos;
+	}
 	public float teleportX()
 	{
 		return teleLinkXPos;
