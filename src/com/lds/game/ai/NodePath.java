@@ -14,6 +14,29 @@ public class NodePath
 		this.nodeList = new ArrayList<Node>();
 	}
 	
+	public NodePath(Node node)
+	{
+		this();
+		add(node);
+	}
+	
+	public NodePath(Node node1, Node node2)
+	{
+		this();
+		add(node1);
+		add(node2);
+	}
+	
+	public void activateLink(int index1, int index2)
+	{
+		nodeList.get(index1).deactivateLinks(nodeList.get(index2));
+	}
+	
+	public void deactivateLink(int index1, int index2)
+	{
+		nodeList.get(index1).activateLinks(nodeList.get(index2));
+	}
+	
 	public Node getClosestNode(Entity ent)
 	{
 		Node closestNode = nodeList.get(0);
@@ -26,6 +49,16 @@ public class NodePath
 				closestNode = node;
 		}
 		return closestNode;
+	}
+	
+	public void reverse()
+	{
+		ArrayList<Node> reversedList = new ArrayList<Node>();
+		for (int i = nodeList.size() - 1; i >= 0; i--)
+		{
+			reversedList.add(nodeList.get(i));
+		}
+		nodeList = reversedList;
 	}
 	
 	public int getSize()
@@ -41,5 +74,10 @@ public class NodePath
 	public ArrayList<Node> getNodeList()
 	{
 		return nodeList;
+	}
+	
+	public Node getNode(int index)
+	{
+		return nodeList.get(index);
 	}
 }

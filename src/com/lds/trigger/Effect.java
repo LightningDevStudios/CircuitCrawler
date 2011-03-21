@@ -7,10 +7,7 @@ public abstract class Effect
 		
 	}
 	
-	public void fireOutput()
-	{
-		
-	}
+	public abstract void fireOutput();
 	
 	public void unfireOutput()
 	{

@@ -15,6 +15,7 @@ import com.lds.Stopwatch;
 import com.lds.Texture;
 import com.lds.TextureLoader;
 import com.lds.Vector2f;
+import com.lds.game.ai.Node;
 import com.lds.game.entity.*;
 import com.lds.game.event.*;
 import com.lds.trigger.*;
@@ -128,9 +129,10 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	
 	@Override
 	public void onDrawFrame(GL10 gl) 
-	{
+	{		
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 
+		//tick the stopwatch every frame, gives relatively stable intervals
 		frameCount++;
 		game.frameInterval = Stopwatch.elapsedTimeMs();
 		Stopwatch.tick();
@@ -188,6 +190,10 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 							colEnt.colList.add(ent);
 							ent.interact(colEnt);
 							colEnt.interact(ent);
+							if (ent instanceof Enemy)
+								((Enemy)ent).setColliding(true);
+							if (colEnt instanceof Enemy)
+								((Enemy)colEnt).setColliding(true);
 						}
 					}
 					else if (ent.colList.contains(colEnt) || colEnt.colList.contains(ent))
@@ -263,22 +269,34 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	
 			//inside of ent for loop
 			//checks for whatever happens when B is pressed.
-			if (game.btnB.isPressed() && ent instanceof HoldObject)
+			if (game.btnB.isPressed())
 			{
-				if (!game.player.isHoldingObject()) //not holding anything and is close enough
+				if (ent instanceof HoldObject)
+				{
+					if (!game.player.isHoldingObject()) //not holding anything and is close enough
+					{
+						if (game.player.closeEnough(ent) && game.player.isFacing(ent))
+						{
+							game.player.holdObject((HoldObject)ent);
+							vibrator(100);
+							game.btnB.unpress();
+						}
+					}
+					else //holding object, button pressed
+					{
+						game.player.dropObject();
+						vibrator(100);
+						game.btnB.unpress();
+					}
+				}
+				else if (ent instanceof PuzzleBox)
 				{
 					if (game.player.closeEnough(ent) && game.player.isFacing(ent))
 					{
-						game.player.holdObject((HoldObject)ent);
-						game.btnB.unpress();
+						((PuzzleBox)ent).run();
 						vibrator(100);
 					}
-				}
-				else //holding object, button pressed
-				{
-					game.player.dropObject();
 					game.btnB.unpress();
-					vibrator(100);
 				}
 			}
 		}
@@ -292,8 +310,8 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 				if (game.player.getEnergy() != 0)
 				{
 					final Vector2f directionVec = new Vector2f(game.player.getAngle());
-					directionVec.scale(game.player.getHalfSize() + 20.0f);
-					final AttackBolt attack = new AttackBolt(Vector2f.add(game.player.getPos(), directionVec), directionVec, game.player.getAngle());
+					final AttackBolt attack = new AttackBolt(Vector2f.add(game.player.getPos(), directionVec), directionVec.scale(20), game.player.getAngle());
+					attack.ignore(game.player);
 					attack.genHardwareBuffers(gl);
 					EntityManager.addEntity(attack);
 					game.player.loseEnergy(5);

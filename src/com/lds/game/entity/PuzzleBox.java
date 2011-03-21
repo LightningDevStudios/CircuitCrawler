@@ -21,13 +21,9 @@ public class PuzzleBox extends StaticEnt
 		this.listener = listener;
 	}
 	
-	@Override
-	public void interact(Entity ent)
+	public void run()
 	{
-		if (ent instanceof Player)
-		{
-			if (listener != null)
-				listener.onPuzzleActivated();
-		}
+		if (listener != null)
+			listener.onPuzzleActivated();
 	}
 }
