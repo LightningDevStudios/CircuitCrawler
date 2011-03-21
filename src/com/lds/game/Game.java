@@ -78,6 +78,9 @@ public class Game
 	//*/
 	//public Sprite spr;
 	
+	//AI data
+	public static int aiCheckInterval;
+	
 	//public Animation spriteAnim;
 		
 	//Constructors
@@ -116,6 +119,8 @@ public class Game
 		tl.loadTexture(someText);
 		tl.loadTexture(tilesetworld);
 		tl.loadTexture(tilesetentities);
+		
+		aiCheckInterval = Stopwatch.elapsedTimeMs();
 						
 		///*		
  		for (int i = 0; i < tileset.length; i++)
@@ -194,8 +199,12 @@ public class Game
 		blob1 = new Blob(-250.0f, 0.0f, AIType.STALKER);
 		blob1.enableTilesetMode(tilesetwire, 2, 1);
 		entList.add(blob1);
+		//final NodePath np = new NodePath();
+		//np.add(new Node(-250.0f, 0.0f));
+		//blob1.setPatrolPath(np);
 		
-		blob2 = new Blob(-215.0f, -400.0f, AIType.TURRET);
+		
+		blob2 = new Blob(-215.0f, -400.0f, AIType.STALKER);
 		blob2.enableTilesetMode(tilesetwire, 2, 2);
 		entList.add(blob2);
 		final NodePath np = new NodePath();
@@ -247,7 +256,7 @@ public class Game
 		entList.add(box);
 
 		
-		player = new Player(-108.0f, -450.0f, 0.0f);
+		player = new Player(-50.0f, -450.0f, 0.0f);
 		player.enableTilesetMode(tilesetwire, 1, 0);
 		entList.add(player);
 		player.enableUserControl();
@@ -496,17 +505,26 @@ public class Game
 						enemy.setRandomTime((int)(Math.random() * 500) + 500);
 						enemy.setLastTime(Stopwatch.elapsedTimeMs());
 					}
-					//move to player
+					
+					//move and/or rotate to player
+					final float angleToPlayer = Vector2f.sub(player.getPos(), enemy.getPos()).angleDeg();
 					if (Vector2f.sub(enemy.getPos(), player.getPos()).mag() <  Enemy.INNER_RADIUS)
 					{
 						enemy.stop();
+						if (enemy.getAngle() > angleToPlayer + 2 || enemy.getAngle() < angleToPlayer - 2)
+							enemy.rotateTo(angleToPlayer);
 					}
 					else
 					{
-						enemy.stop();
-						enemy.rotateTo(Vector2f.sub(player.getPos(), enemy.getPos()).angleDeg());
-						enemy.moveTo(player.getPos());
-						runBecomeAgressiveAI(enemy);
+						if (enemy.getAngle() > angleToPlayer + 2 || enemy.getAngle() < angleToPlayer - 2)
+							enemy.rotateTo(angleToPlayer);
+						else
+							enemy.moveTo(player.getPos());
+						//if (Stopwatch.elapsedTimeMs() - aiCheckInterval > 100.0f)
+						//{
+							runBecomeAgressiveAI(enemy);
+							//aiCheckInterval = Stopwatch.elapsedTimeMs();
+						//}
 					}
 				}
 				else//if not close to player yet
@@ -515,7 +533,7 @@ public class Game
 					if (enemy.getPos().approxEquals(enemy.getPathToPlayer().getNode(enemy.getPlayerPathLocation() + 1).getPos(), 2.0f))
 					{
 						enemy.stop();
-						if (enemy.getPlayerPathLocation() + 1 == enemy.getPathToPlayer().getSize() - 1)
+						if (enemy.getPlayerPathLocation() == enemy.getPathToPlayer().getSize() - 2)
 						{
 							runBecomeAgressiveAI(enemy);
 							return;
@@ -523,9 +541,12 @@ public class Game
 						else
 							enemy.setPlayerPathLocation(enemy.getPlayerPathLocation() + 1);
 					}
-					Vector2f nextNodePos = enemy.getPathToPlayer().getNode(enemy.getPlayerPathLocation() + 1).getPos();
-					enemy.moveTo(nextNodePos);
-					enemy.rotateTo(Vector2f.sub(nextNodePos, enemy.getPos()).angleDeg());
+					final Vector2f nextNodePos = enemy.getPathToPlayer().getNode(enemy.getPlayerPathLocation() + 1).getPos();
+					final float angleToNextNode = Vector2f.sub(nextNodePos, enemy.getPos()).angleDeg();
+					if (enemy.getAngle() > angleToNextNode + 2 || enemy.getAngle() < angleToNextNode - 2)
+						enemy.rotateTo(angleToNextNode);
+					else
+						enemy.moveTo(nextNodePos);
 				}
 			}
 			else
@@ -557,29 +578,8 @@ public class Game
 	{
 		enemy.setAgressive(true);
 		enemy.setOnPatrol(false);
-		if (enemy.getType() == AIType.STALKER)
+		if (enemy.getType() == AIType.STALKER || enemy.getType() == AIType.PATROL)
 		{	
-			enemy.setPathToPlayer(getPathToPlayer(enemy));
-			enemy.setPlayerPathLocation(0);
-		}
-		else if (enemy.getType() == AIType.PATROL)
-		{
-			enemy.stop();
-			float angleToPlayer = (float)Vector2f.sub(player.getPos(), enemy.getPos()).angleDeg();
-			if (enemy.getAngle() == angleToPlayer)
-			{
-				enemy.setAngle(angleToPlayer);
-				if (!enemy.isMoving)
-					enemy.moveTo(player.getPos());
-				enemy.setDoneRotating(true);
-			}
-			else
-			{
-				enemy.rotateTo(angleToPlayer);
-				enemy.setDoneRotating(false);
-			}
-			
-			//pathfinding stuff
 			enemy.setPathToPlayer(getPathToPlayer(enemy));
 			enemy.setPlayerPathLocation(0);
 		}
