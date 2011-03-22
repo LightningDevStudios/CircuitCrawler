@@ -48,6 +48,12 @@ public class Node
 		node.linkList.add(new NodeLink(node, this));
 	}
 	
+	public void addNodeLink(Node node, boolean active)
+	{
+		linkList.add(new NodeLink(this, node, active));
+		node.linkList.add(new NodeLink(node, this, active));
+	}
+	
 	public void addOneWayNodeLink(Node node)
 	{
 		linkList.add(new NodeLink(this, node));
