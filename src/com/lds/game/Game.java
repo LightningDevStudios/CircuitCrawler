@@ -520,11 +520,11 @@ public class Game
 							enemy.rotateTo(angleToPlayer);
 						else
 							enemy.moveTo(player.getPos());
-						//if (Stopwatch.elapsedTimeMs() - aiCheckInterval > 100.0f)
-						//{
+						if (Stopwatch.elapsedTimeMs() - aiCheckInterval > 1000)
+						{
 							runBecomeAgressiveAI(enemy);
-							//aiCheckInterval = Stopwatch.elapsedTimeMs();
-						//}
+							aiCheckInterval = Stopwatch.elapsedTimeMs();
+						}
 					}
 				}
 				else//if not close to player yet

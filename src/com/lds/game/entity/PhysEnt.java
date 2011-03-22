@@ -436,7 +436,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 		}
 		
 		//scale the bounceNormal the the proper magnitude to get the entity out of collision
-		addBounceVec(bounceNormal.scale(entMax - thisMin + 2.5f));
+		addBounceVec(bounceNormal.scale(entMax - thisMin));
 		
 		if (gettingPushed)
 			this.moveInterpVec.set(bounceSide.scale(bounceSide.dot(this.moveInterpVec) * 2).sub(moveInterpVec));
