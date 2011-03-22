@@ -7,7 +7,9 @@ import java.util.HashMap;
 import org.xmlpull.v1.XmlPullParserException;
 import android.content.Context;
 import android.content.res.XmlResourceParser;
+import android.util.Log;
 
+import com.lds.game.ai.Node;
 import com.lds.game.entity.*;
 import com.lds.trigger.*;
  
@@ -16,7 +18,9 @@ public class Parser //this is a parser
 	public ArrayList<EntityData> parsedList = new ArrayList<EntityData>();
 	public ArrayList<Entity> entList = new ArrayList<Entity>();
 	public ArrayList<Trigger> triggerList = new ArrayList<Trigger>();
+	public ArrayList<Node> nodeList = new ArrayList<Node>();
 	public Tile[][] tileset;
+	public Player player;
 	
 	public XmlResourceParser xrp;  
 	public HashMap <String, String> dataHM;
@@ -30,7 +34,7 @@ public class Parser //this is a parser
 	{
 		xrp = context.getResources().getXml(res);
 	}
-	
+
 /***********************
  General parsing methods
  **********************/
@@ -46,8 +50,13 @@ public class Parser //this is a parser
 					parseEntities();
 				else if(xrp.getName().equalsIgnoreCase("Tileset"))
 					parseTileset();
-				else if(xrp.getName().equalsIgnoreCase("Triggers"));
+				else if(xrp.getName().equalsIgnoreCase("Triggers"))
 					parseTriggers();
+				else if(xrp.getName().equalsIgnoreCase("Nodes"))
+					parseNodes();
+				else if(xrp.getName().equalsIgnoreCase("NodeLinks"))
+					parseNodeLinks();
+					
 			}
 			
 			xrp.next();
@@ -111,7 +120,9 @@ public class Parser //this is a parser
 					parseObj("Player");
 					PlayerData pd = new PlayerData(dataHM);
 					parsedList.add(pd);
-					pd.createInst(entList);
+					ArrayList<Entity> tempPlayerList = new ArrayList<Entity>();
+					pd.createInst(tempPlayerList);
+					player = (Player)tempPlayerList.get(0);
 				}
 				else if (xrp.getName().equalsIgnoreCase("PickupHealth"))
 				{
@@ -119,6 +130,37 @@ public class Parser //this is a parser
 					PickupHealthData phD = new PickupHealthData(dataHM);
 					parsedList.add(phD);
 					phD.createInst(entList);
+				}
+				else if (xrp.getName().equalsIgnoreCase("Cannon"))
+				{
+					parseObj("Cannon");
+					CannonData cd = new CannonData(dataHM);
+					parsedList.add(cd);
+					cd.createInst(entList);
+				}
+				
+				else if (xrp.getName().equalsIgnoreCase("SpikeBall"))
+				{
+					parseObj("SpikeBall");
+					SpikeBallData sbd = new SpikeBallData(dataHM);
+					parsedList.add(sbd);
+					sbd.createInst(entList);
+				}
+				
+				else if (xrp.getName().equalsIgnoreCase("Spike"))
+				{
+					parseObj("Spike");
+					SpikeData sd = new SpikeData(dataHM);
+					parsedList.add(sd);
+					sd.createInst(entList);
+				}
+				
+				else if (xrp.getName().equalsIgnoreCase("WallButton"))
+				{
+					parseObj("WallButton");
+					WallButtonData wbd = new WallButtonData(dataHM);
+					parsedList.add(wbd);
+					wbd.createInst(entList);
 				}
 			}
 		}
@@ -234,16 +276,15 @@ Parse Triggas
 	{
 		while(!(xrp.getEventType() == END_TAG && xrp.getName().equals("Triggers")))
 		{
-			xrp.next();
-			
 			while(!(xrp.getEventType() == END_TAG && xrp.getName().equals("Trigger")))
 			{
 				xrp.next();
-				
+				xrp.next();
 				String causeSTR = xrp.getAttributeValue(0); //picks up a cause
+				
 				xrp.next();
 				
-				String ids = xrp.getName();
+				String ids = xrp.getText();
 				String[] causeID = ids.split(","); //picks and splits cause IDs
 				
 				xrp.next();
@@ -252,7 +293,7 @@ Parse Triggas
 				String effectSTR = xrp.getAttributeValue(0); //picks up an effect
 				xrp.next();
 				
-				ids = xrp.getName();
+				ids = xrp.getText();
 				String[] effectID = ids.split(","); //picks and splits effect IDs
 				
 				/*************************
@@ -329,7 +370,11 @@ Parse Triggas
 				}
 				xrp.next();
 				xrp.next();
+				
+				Log.d("LDS_Game", "Current tag:" + xrp.getEventType() + ", " + xrp.getName() + ", " + xrp.getText());
 			}
+			
+			xrp.next();
 		}
 	}
 	
@@ -338,11 +383,52 @@ Parse Triggas
 	{
 		for(EntityData entD : parsedList)
 		{
-			if (entD.getID() == id)
+			if (entD.getID().equalsIgnoreCase(id))
 			{
 				return (T)entD.getEnt();
 			}
 		}
 		return null;
 	}
+	
+	/*********************
+	Parse Nodes/Node Lists
+	**********************/
+	public void parseNodes() throws XmlPullParserException, IOException
+	{
+		xrp.next();
+		String[] nodes = (xrp.getText()).split(";");
+		
+		for(String node : nodes)
+		{
+			String[] temp = node.split(",");
+			Node tempNode = new Node(Float.parseFloat(temp[0]), Float.parseFloat(temp[1]));
+			nodeList.add(tempNode);
+		}
+		
+		xrp.next();
+		xrp.next();
+		
+		//to make nodes in game, goto game constructor and nodeList = parser.nodeList
+	}
+	
+	public void parseNodeLinks() throws XmlPullParserException, IOException
+	{
+		xrp.next();
+		String[] nodeLinks = (xrp.getText()).split(";");
+		
+		for(String nodeLink : nodeLinks)
+		{
+			String[] temp = nodeLink.split(",");
+			if(temp.length == 2)
+				(nodeList.get(Integer.parseInt(temp[0]))).addNodeLink(nodeList.get(Integer.parseInt(temp[1])));
+			else if(temp.length == 3)
+				(nodeList.get(Integer.parseInt(temp[0]))).addNodeLink(nodeList.get(Integer.parseInt(temp[1])), Boolean.parseBoolean(temp[3]));
+		}
+		
+		xrp.next();
+		xrp.next();
+	}
 }
+
+	

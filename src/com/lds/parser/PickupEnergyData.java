@@ -10,21 +10,15 @@ public class PickupEnergyData extends PickupData
 {
 	PickupEnergy pickupEnergyRef;
 	
-	private int energyValue;
 	
 	public PickupEnergyData(HashMap<String, String> pickupEnergyHM)
 	{
 		super(pickupEnergyHM);
-		
-		energyValue = Integer.parseInt(pickupEnergyHM.get("energyValue"));
 	}
-	
-	public void setEnergyValue(int newEnergyValue)		{energyValue = newEnergyValue;}
-	public int getEnergyValue()		{return energyValue;}
 	
 	public void createInst(ArrayList<Entity> entData)
 	{
-		pickupEnergyRef = new PickupEnergy(energyValue, xPos, yPos);
+		pickupEnergyRef = new PickupEnergy(value, xPos, yPos);
 
 		//COLOR
 		if (color != null)

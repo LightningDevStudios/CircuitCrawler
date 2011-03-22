@@ -7,6 +7,7 @@ public class PhysEntData extends EntityData
 	protected float moveSpeed;
 	protected float rotSpeed;
 	protected float sclSpeed;
+	protected float friction;
 	
 	public PhysEntData(HashMap<String, String> physEntHM)
 	{
@@ -24,6 +25,10 @@ public class PhysEntData extends EntityData
 			sclSpeed = Float.parseFloat(physEntHM.get("sclSpeed"));
 		else
 			sclSpeed = 0.0f;
+		if(physEntHM.get("friction") != null)
+			friction = Float.parseFloat(physEntHM.get("friction"));
+		else
+			friction = 0.02f;
 	}
 	
 	    //int setters/getters
