@@ -72,15 +72,13 @@ public class Player extends Character //your character, protagonist
 					SoundPlayer.getInstance().playSound(SoundPlayer.PIT_FALL);
 				falling = true;
 			}
-			else if (tile.isSlipperyTile())
+			/*else if (tile.isSlipperyTile())
 			{
-				this.disableUserControl();
-				this.moveTo(moveVec);
-				//leavingIce = true;
-			}
-			else
+				//this.disableUserControl();
+				this.push(moveVec);
+			}*/
+			else 
 			{
-				this.stop();
 				this.enableUserControl();
 			}
 		}
