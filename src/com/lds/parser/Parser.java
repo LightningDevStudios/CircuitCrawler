@@ -15,10 +15,13 @@ import com.lds.trigger.*;
  
 public class Parser //this is a parser
 {
-	public ArrayList<EntityData> parsedList = new ArrayList<EntityData>();
-	public ArrayList<Entity> entList = new ArrayList<Entity>();
-	public ArrayList<Trigger> triggerList = new ArrayList<Trigger>();
-	public ArrayList<Node> nodeList = new ArrayList<Node>();
+	public ArrayList<EntityData> parsedList;
+	public ArrayList<Entity> entList;
+	public ArrayList<Trigger> triggerList;
+	public ArrayList<Node> nodeList;
+	public ArrayList<CauseData> causeDataList;
+	public ArrayList<EffectData> effectDataList;
+	
 	public Tile[][] tileset;
 	public Player player;
 	
@@ -33,6 +36,13 @@ public class Parser //this is a parser
 	public Parser(Context context, int res)
 	{
 		xrp = context.getResources().getXml(res);
+		
+		parsedList = new ArrayList<EntityData>();
+		entList = new ArrayList<Entity>();
+		triggerList = new ArrayList<Trigger>();
+		nodeList = new ArrayList<Node>();
+		causeDataList = new ArrayList<CauseData>();
+		effectDataList = new ArrayList<EffectData>();
 	}
 
 /***********************
@@ -268,117 +278,157 @@ Parse A Tileset
 		}
 	}
 	
-/************
-Parse Triggas
-************/
+	/******************
+	 * Parse Triggers *
+	 ******************/
 	
 	public void parseTriggers() throws XmlPullParserException, IOException
 	{
+		xrp.next();
 		while(!(xrp.getEventType() == END_TAG && xrp.getName().equals("Triggers")))
 		{
-			while(!(xrp.getEventType() == END_TAG && xrp.getName().equals("Trigger")))
+			if(xrp.getName().equalsIgnoreCase("Cause"))
 			{
+				String causeId= xrp.getAttributeValue(0);
+				String causeType = xrp.getAttributeValue(1);
 				xrp.next();
+				String[] causeParameters = xrp.getText().split(",");
+				causeDataList.add(new CauseData(causeInitializer(causeType, causeParameters), causeId));
+			}
+			else if(xrp.getName().equalsIgnoreCase("Effect"))
+			{
+				String effectId= xrp.getAttributeValue(0);
+				String effectType = xrp.getAttributeValue(1);
 				xrp.next();
-				String causeSTR = xrp.getAttributeValue(0); //picks up a cause
-				
-				xrp.next();
-				
-				String ids = xrp.getText();
-				String[] causeID = ids.split(","); //picks and splits cause IDs
-				
-				xrp.next();
-				xrp.next();
-				
-				String effectSTR = xrp.getAttributeValue(0); //picks up an effect
-				xrp.next();
-				
-				ids = xrp.getText();
-				String[] effectID = ids.split(","); //picks and splits effect IDs
-				
-				/*************************
-				sets the causes and effects
-				**************************/
-				Cause cause = null;
-				Effect effect = null;
-				
-				//TODO NOT/AND/OR/XOR causes TriggerTimer effect
-				if(causeSTR.equalsIgnoreCase("CauseButton"))
-				{
-					cause = new CauseButton(this.<Button>stringToSubEntity(causeID[0]));
-				}
-				else if(causeSTR.equalsIgnoreCase("CauseDoneMoving"))
-				{
-					cause = new CauseDoneMoving(this.<PhysEnt>stringToSubEntity(causeID[0]));
-				}
-				else if(causeSTR.equalsIgnoreCase("CauseDoneRotating"))
-				{
-					cause = new CauseDoneRotating(this.<PhysEnt>stringToSubEntity(causeID[0]));
-				}
-				else if(causeSTR.equalsIgnoreCase("CauseDoneScaling"))
-				{
-					cause = new CauseDoneScaling(this.<PhysEnt>stringToSubEntity(causeID[0]));
-				}
-				else if(causeSTR.equalsIgnoreCase("CauseEnemyCount"))
-				{
-					cause = new CauseEnemyCount(Integer.parseInt(causeID[0]));
-				}
-				else if(causeSTR.equalsIgnoreCase("CauseLocation"))
-				{
-					cause = new CauseLocation(this.<Player>stringToSubEntity(causeID[0]), 
-							Integer.parseInt(causeID[1]), 
-							Integer.parseInt(causeID[2]), 
-							Integer.parseInt(causeID[3]), 
-							Integer.parseInt(causeID[4]));
-				}
-				else if(causeSTR.equalsIgnoreCase("CausePlayerHealth"))
-				{
-					cause = new CausePlayerHealth(Integer.parseInt(causeID[0]), this.<Player>stringToSubEntity(causeID[1]));
-				}
-				else if(causeSTR.equalsIgnoreCase("CauseTimePassed"))
-				{
-					if(causeID.length == 2)
-						cause = new CauseTimePassed(Integer.parseInt(causeID[0]), Boolean.parseBoolean(causeID[1]));
-					else
-						cause = new CauseTimePassed(Integer.parseInt(causeID[0]));
-				}
-				
-				if(effectSTR.equalsIgnoreCase("EffectDoor"))
-				{
-					effect = new EffectDoor(this.<Door>stringToSubEntity(effectID[0]));
-				}
-				else if (effectSTR.equalsIgnoreCase("EffectEndGame"))
-				{
-					effect = new EffectEndGame(null);
-				}
-				else if (effectSTR.equalsIgnoreCase("EffectRaiseBridge"))
-				{
-					effect = new EffectRaiseBridge(tileset[Integer.parseInt(effectID[0])][Integer.parseInt(effectID[1])]);
-				}
-				else if (effectSTR.equalsIgnoreCase("EffectRemoveEntity"))
-				{
-					effect = new EffectRemoveEntity(this.<Entity>stringToSubEntity(effectID[0]));
-				}
-				/*else if (effectSTR.equalsIgnoreCase("EffectTriggerTimer"))
-				{
-					effect = new EffectTriggerTimer();
-				}*/
+				String[] effectParameters = xrp.getText().split(",");
+				effectDataList.add(new EffectData(effectInitializer(effectType, effectParameters), effectId));
+			}
+			else if(xrp.getName().equalsIgnoreCase("Trigger"))
+			{			
+				Cause cause = causeFromID(xrp.getAttributeValue(0));
+				Effect effect = effectFromID(xrp.getAttributeValue(1)); 
 				
 				if (cause != null && effect != null)
 				{
 					triggerList.add(new Trigger(cause, effect));
 				}
-				xrp.next();
-				xrp.next();
-				
-				Log.d("LDS_Game", "Current tag:" + xrp.getEventType() + ", " + xrp.getName() + ", " + xrp.getText());
 			}
-			
+			xrp.next();
 			xrp.next();
 		}
 	}
 	
-	@SuppressWarnings("unchecked")
+	public Cause causeFromID (String causeID)
+	{
+		for(CauseData cd : causeDataList)
+		{
+			if(cd.getID().equalsIgnoreCase(causeID))
+				return cd.getCause();
+		}
+		
+		return null;
+	}
+	public Effect effectFromID (String effectID)
+	{
+		for(EffectData ed : effectDataList)
+		{
+			if(ed.getID().equalsIgnoreCase(effectID))
+				return ed.getEffect();
+		}
+		
+		return null;
+	}
+	
+	public Cause causeInitializer(String type, String[] parameters)
+	{
+		Cause cause = null;
+		if(type.equalsIgnoreCase("CauseNOT"))
+		{
+			cause = new CauseNOT(causeFromID(parameters[0]));
+		}
+		else if(type.equalsIgnoreCase("CauseAND"))
+		{
+			cause = new CauseAND(causeFromID(parameters[0]), causeFromID(parameters[1]));
+		}
+		else if(type.equalsIgnoreCase("CauseOR"))
+		{
+			cause = new CauseOR(causeFromID(parameters[0]), causeFromID(parameters[1]));
+		}
+		else if(type.equalsIgnoreCase("CauseXOR"))
+		{
+			cause = new CauseXOR(causeFromID(parameters[0]), causeFromID(parameters[1]));
+		}
+		else if(type.equalsIgnoreCase("CauseButton"))
+		{
+			cause = new CauseButton(this.<Button>stringToSubEntity(parameters[0]));
+		}
+		else if(type.equalsIgnoreCase("CauseDoneMoving"))
+		{
+			cause = new CauseDoneMoving(this.<PhysEnt>stringToSubEntity(parameters[0]));
+		}
+		else if(type.equalsIgnoreCase("CauseDoneRotating"))
+		{
+			cause = new CauseDoneRotating(this.<PhysEnt>stringToSubEntity(parameters[0]));
+		}
+		else if(type.equalsIgnoreCase("CauseDoneScaling"))
+		{
+			cause = new CauseDoneScaling(this.<PhysEnt>stringToSubEntity(parameters[0]));
+		}
+		else if(type.equalsIgnoreCase("CauseEnemyCount"))
+		{
+			cause = new CauseEnemyCount(Integer.parseInt(parameters[0]));
+		}
+		else if(type.equalsIgnoreCase("CauseLocation"))
+		{
+			cause = new CauseLocation(this.<Player>stringToSubEntity(parameters[0]), 
+					Integer.parseInt(parameters[1]), 
+					Integer.parseInt(parameters[2]), 
+					Integer.parseInt(parameters[3]), 
+					Integer.parseInt(parameters[4]));
+		}
+		else if(type.equalsIgnoreCase("CausePlayerHealth"))
+		{
+			cause = new CausePlayerHealth(Integer.parseInt(parameters[0]), this.<Player>stringToSubEntity(parameters[1]));
+		}
+		else if(type.equalsIgnoreCase("CauseTimePassed"))
+		{
+			if(parameters.length == 2)
+				cause = new CauseTimePassed(Integer.parseInt(parameters[0]), Boolean.parseBoolean(parameters[1]));
+			else
+				cause = new CauseTimePassed(Integer.parseInt(parameters[0]));
+		}
+		
+		return cause;
+	}
+	
+	public Effect effectInitializer(String type, String[] parameters)
+	{
+		Effect effect = null;
+		if(type.equalsIgnoreCase("EffectDoor"))
+		{
+			effect = new EffectDoor(this.<Door>stringToSubEntity(parameters[0]));
+		}
+		else if (type.equalsIgnoreCase("EffectEndGame"))
+		{
+			effect = new EffectEndGame(null);
+		}
+		else if (type.equalsIgnoreCase("EffectRaiseBridge"))
+		{
+			effect = new EffectRaiseBridge(tileset[Integer.parseInt(parameters[0])][Integer.parseInt(parameters[1])]);
+		}
+		else if(type.equalsIgnoreCase("EffectRemoveEntity"))
+		{
+			effect = new EffectRemoveEntity(this.<Entity>stringToSubEntity(parameters[0]));
+		}
+		else if (type.equalsIgnoreCase("EffectTriggerTimer"))
+		{
+			//TODO pass in an actual boolean for this
+			effect = new EffectTriggerTimer((CauseTimePassed)causeFromID(parameters[0]), false);
+		}
+		
+		return effect;
+	}
+
 	public <T> T stringToSubEntity(String id)
 	{
 		for(EntityData entD : parsedList)
@@ -402,14 +452,11 @@ Parse Triggas
 		for(String node : nodes)
 		{
 			String[] temp = node.split(",");
-			Node tempNode = new Node(Float.parseFloat(temp[0]), Float.parseFloat(temp[1]));
-			nodeList.add(tempNode);
+			nodeList.add(new Node(Float.parseFloat(temp[0]), Float.parseFloat(temp[1])));
 		}
 		
 		xrp.next();
 		xrp.next();
-		
-		//to make nodes in game, goto game constructor and nodeList = parser.nodeList
 	}
 	
 	public void parseNodeLinks() throws XmlPullParserException, IOException
@@ -421,9 +468,9 @@ Parse Triggas
 		{
 			String[] temp = nodeLink.split(",");
 			if(temp.length == 2)
-				(nodeList.get(Integer.parseInt(temp[0]))).addNodeLink(nodeList.get(Integer.parseInt(temp[1])));
+				nodeList.get(Integer.parseInt(temp[0])).addNodeLink(nodeList.get(Integer.parseInt(temp[1])));
 			else if(temp.length == 3)
-				(nodeList.get(Integer.parseInt(temp[0]))).addNodeLink(nodeList.get(Integer.parseInt(temp[1])), Boolean.parseBoolean(temp[3]));
+				nodeList.get(Integer.parseInt(temp[0])).addNodeLink(nodeList.get(Integer.parseInt(temp[1])), Boolean.parseBoolean(temp[3]));
 		}
 		
 		xrp.next();

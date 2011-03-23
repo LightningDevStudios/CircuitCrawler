@@ -9,8 +9,8 @@
     <Tile state="WALL" />
     <Tile state="WALL" />
     <Tile state="WALL" />
-    <Tile state="PIT" />
-    <Tile state="PIT" />
+    <Tile state="WALL" />
+    <Tile state="FLOOR" />
     <Tile state="WALL" />
     <Tile state="WALL" />
     <Tile state="WALL" />
@@ -152,6 +152,9 @@
       <size>64</size>
       <xPos>124</xPos>
       <yPos>214</yPos>
+      <angle>0</angle>
+      <xScl>1</xScl>
+      <yScl>1</yScl>
       <renderMode>
         <tileset>
           <texID>tilesetwire</texID>
@@ -167,6 +170,9 @@
       <size>64</size>
       <xPos>-358</xPos>
       <yPos>181</yPos>
+      <angle>0</angle>
+      <xScl>1</xScl>
+      <yScl>1</yScl>
       <renderMode>
         <tileset>
           <texID>tilesetwire</texID>
@@ -182,6 +188,9 @@
       <size>64</size>
       <xPos>-364</xPos>
       <yPos>-293</yPos>
+      <angle>0</angle>
+      <xScl>1</xScl>
+      <yScl>1</yScl>
       <renderMode>
         <tileset>
           <texID>tilesetentities</texID>
@@ -195,6 +204,9 @@
       <size>64</size>
       <xPos>288</xPos>
       <yPos>-293</yPos>
+      <angle>0</angle>
+      <xScl>1</xScl>
+      <yScl>1</yScl>
       <renderMode>
         <tileset>
           <texID>tilesetentities</texID>
@@ -208,6 +220,9 @@
       <size>64</size>
       <xPos>-363</xPos>
       <yPos>361</yPos>
+      <angle>0</angle>
+      <xScl>1</xScl>
+      <yScl>1</yScl>
       <renderMode>
         <tileset>
           <texID>tilesetentities</texID>
@@ -219,8 +234,28 @@
     <Door>
       <id>door1</id>
       <size>72</size>
-      <xPos>-71</xPos>
-      <yPos>-66</yPos>
+      <xPos>215</xPos>
+      <yPos>422</yPos>
+      <angle>90</angle>
+      <xScl>1</xScl>
+      <yScl>0.5</yScl>
+      <renderMode>
+        <tileset>
+          <texID>tilesetentities</texID>
+          <x>2</x>
+          <y>1</y>
+        </tileset>
+      </renderMode>
+      <startOpen>false</startOpen>
+    </Door>
+    <Door>
+      <id>door0</id>
+      <size>72</size>
+      <xPos>-74</xPos>
+      <yPos>-88</yPos>
+      <angle>90</angle>
+      <xScl>1</xScl>
+      <yScl>0.5</yScl>
       <renderMode>
         <tileset>
           <texID>tilesetentities</texID>
@@ -235,6 +270,9 @@
       <size>50</size>
       <xPos>-364</xPos>
       <yPos>-2</yPos>
+      <angle>0</angle>
+      <xScl>1</xScl>
+      <yScl>1</yScl>
       <renderMode>
         <tileset>
           <texID>tilesetentities</texID>
@@ -248,6 +286,9 @@
       <size>50</size>
       <xPos>216</xPos>
       <yPos>-147</yPos>
+      <angle>0</angle>
+      <xScl>1</xScl>
+      <yScl>1</yScl>
       <renderMode>
         <tileset>
           <texID>tilesetentities</texID>
@@ -261,6 +302,9 @@
       <size>50</size>
       <xPos>-218</xPos>
       <yPos>280</yPos>
+      <angle>0</angle>
+      <xScl>1</xScl>
+      <yScl>1</yScl>
       <renderMode>
         <tileset>
           <texID>tilesetentities</texID>
@@ -273,6 +317,9 @@
       <size>10</size>
       <xPos>-4</xPos>
       <yPos>116</yPos>
+      <angle>0</angle>
+      <xScl>1</xScl>
+      <yScl>1</yScl>
       <renderMode>
         <color>0,0,0.8039216,1</color>
       </renderMode>
@@ -282,6 +329,9 @@
       <size>10</size>
       <xPos>20</xPos>
       <yPos>91</yPos>
+      <angle>0</angle>
+      <xScl>1</xScl>
+      <yScl>1</yScl>
       <renderMode>
         <color>0.3921569,0.5843138,0.9294118,1</color>
       </renderMode>
@@ -291,26 +341,31 @@
       <size>50</size>
       <xPos>-71</xPos>
       <yPos>-13</yPos>
+      <angle>0</angle>
+      <xScl>1</xScl>
+      <yScl>1</yScl>
       <renderMode />
     </PuzzleBox>
-    <Sprite>
-      <size>50</size>
-      <xPos>-81</xPos>
-      <yPos>-292</yPos>
-      <renderMode />
-    </Sprite>
     <Player>
       <size>50</size>
       <xPos>-287</xPos>
       <yPos>-218</yPos>
+      <angle>0</angle>
+      <xScl>1</xScl>
+      <yScl>1</yScl>
       <renderMode />
+      <health>100</health>
     </Player>
   </Entities>
   <Triggers>
-    <Trigger>
-      <Cause type="CauseButton">button0</Cause>
-      <Effect type="EffectDoor">door1</Effect>
-    </Trigger>
+    <Cause id="BTN2" type="CauseButton">button2</Cause>
+    <Cause id="BTN1" type="CauseButton">button1</Cause>
+    <Cause id="BTN0" type="CauseButton">button0</Cause>
+    <Cause id="BTN12" type="CauseAND">BTN1,BTN2</Cause>
+    <Effect id="DR1" type="EffectDoor">door1</Effect>
+    <Effect id="DR0" type="EffectDoor">door0</Effect>
+    <Trigger cause="BTN0" effect="DR0" />
+    <Trigger cause="BTN12" effect="DR1" />
   </Triggers>
   <Nodes>-67,31;-86,240;179,-33;-166,352;299,-116;284,194;126,214;116,349;-66,-188;103,-290;-233,-162;-324,116</Nodes>
   <NodeLinks>0,1,True;0,2,True;2,4,True;1,3,True;3,7,True;1,7,True;0,6,True;2,6,True;1,6,True;2,5,True;4,5,True;6,7,True;5,6,True;0,5,True;0,7,True;0,8,False;8,9,True;8,10,True;10,11,True;5,7,True</NodeLinks>

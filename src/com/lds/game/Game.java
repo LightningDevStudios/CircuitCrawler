@@ -95,12 +95,12 @@ public class Game
 		tilesetworld = new Texture(R.drawable.tilesetworld, 512, 256, 16, 8, context, "tilesetworld");
 		tilesetentities = new Texture(R.drawable.tilesetentities, 256, 256, 8, 8, context, "tilesetentities");
 		
-				
+		tileset = new Tile[16][16];
 		entList = new ArrayList<Entity>();
 		UIList = new ArrayList<UIEntity>();
 		triggerList = new ArrayList<Trigger>();
+		nodeList = new ArrayList<Node>();
 		
-		tileset = new Tile[16][16];
 		cleaner = new EntityManager();
 		StringRenderer sr = StringRenderer.getInstance();
 		TextureLoader.getInstance().initialize(gl);
@@ -123,7 +123,7 @@ public class Game
 		aiCheckInterval = Stopwatch.elapsedTimeMs();
 						
 		
- 		for (int i = 0; i < tileset.length; i++)
+ 		/*for (int i = 0; i < tileset.length; i++)
 		{
 			for (int j = 0; j < tileset[0].length; j++)
 			{
@@ -158,7 +158,7 @@ public class Game
  			}
  		}
  			
-		/*//Parser
+		*///Parser
 		Parser parser = new Parser(context, R.xml.tutorial);
 		
 		entList = parser.entList;
@@ -176,9 +176,23 @@ public class Game
 		}
 	
 		tileset = parser.tileset;
-		entList.addAll(parser.entList);
 		player = parser.player;
-		entList.add(player);*/
+		player.enableUserControl();
+		entList.add(player);
+		entList.addAll(parser.entList);
+		triggerList.addAll(parser.triggerList);
+		nodeList.addAll(parser.nodeList);
+		
+		for (int i = 0; i < tileset.length; i++)
+ 		{
+ 			for (int j = 0; j < tileset[0].length; j++)
+ 			{
+ 				if (tileset[i][j].isPit())
+ 					tileset[i][j].updateBordersPit(tileset, j, i);
+ 				else if (tileset[i][j].isWall())
+ 					tileset[i][j].updateBordersWall(tileset, j, i);
+ 			}
+ 		}/*
 		
 		//CAN DEAL WITH THIS SHIT
 		door = new Door (-108.0f, -180.0f);
@@ -255,7 +269,7 @@ public class Game
 		entList.add(spr);
 
 		box = new PuzzleBox(-120.0f, -400.0f, 0.0f, false, true);
-		entList.add(box);*/
+		entList.add(box);
 
 		
 		player = new Player(-50.0f, -450.0f, 0.0f);
@@ -288,7 +302,7 @@ public class Game
 		triggerList.add(new Trigger(bridgeAND, new EffectRaiseBridge(tileset[4][6])));
 		triggerList.add(new Trigger(bridgeAND, new EffectRaiseBridge(tileset[4][7])));
 		triggerList.add(new Trigger(bridgeAND, new EffectRaiseBridge(tileset[5][6])));
-		triggerList.add(new Trigger(bridgeAND, new EffectRaiseBridge(tileset[5][7])));
+		triggerList.add(new Trigger(bridgeAND, new EffectRaiseBridge(tileset[5][7])));*/
 		
 		healthBar = new UIHealthBar(200.0f, 30.0f, UIPosition.TOPLEFT, Direction.RIGHT, player);
 		healthBar.setTopPad(5.0f);
