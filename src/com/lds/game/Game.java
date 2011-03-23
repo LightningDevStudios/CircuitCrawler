@@ -171,9 +171,23 @@ public class Game
 		}
 	
 		tileset = parser.tileset;
-		entList.addAll(parser.entList);
 		player = parser.player;
 		entList.add(player);
+		entList.addAll(parser.entList);
+		triggerList.addAll(parser.triggerList);
+		//TODO nodeLinks!
+		//nodeList.addAll(parser.nodeList);
+		
+		for (int i = 0; i < tileset.length; i++)
+ 		{
+ 			for (int j = 0; j < tileset[0].length; j++)
+ 			{
+ 				if (tileset[i][j].isPit())
+ 					tileset[i][j].updateBordersPit(tileset, j, i);
+ 				else if (tileset[i][j].isWall())
+ 					tileset[i][j].updateBordersWall(tileset, j, i);
+ 			}
+ 		}
 		
 		/*CAN DEAL WITH THIS SHIT
 		door = new Door (-108.0f, -180.0f);
