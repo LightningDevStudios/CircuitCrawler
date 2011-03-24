@@ -48,7 +48,7 @@ public class Player extends Character //your character, protagonist
 			if (health > HEALTH_LIMIT)
 				health = HEALTH_LIMIT;
 		}
-		else if (ent instanceof Enemy || ent instanceof Spikes)
+		else if (ent instanceof Enemy || ent instanceof Spike)
 		{
 			takeDamage(25);
 		}
