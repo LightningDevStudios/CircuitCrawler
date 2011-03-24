@@ -215,7 +215,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 					{
 						for (final Tile tile : ts)
 						{
-							if (physEnt.isColliding(tile))
+							if (tile.isColliding(physEnt))
 							{
 								if (!physEnt.colList.contains(tile) && !tile.colList.contains(physEnt))
 								{
