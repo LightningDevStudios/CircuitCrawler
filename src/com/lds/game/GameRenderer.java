@@ -129,16 +129,15 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	
 	@Override
 	public void onDrawFrame(GL10 gl) 
-	{		
+	{
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-
+		//remove entities that are queued for removal
 		//tick the stopwatch every frame, gives relatively stable intervals
 		frameCount++;
 		game.frameInterval = Stopwatch.elapsedTimeMs();
 		Stopwatch.tick();
 
 		game.updateTriggers();
-		game.updateFingers();
 		game.updateRenderedEnts();
 		game.cleaner.update(game.entList, gl);
 		
@@ -216,7 +215,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 					{
 						for (final Tile tile : ts)
 						{
-							if (tile.isColliding(physEnt))
+							if (physEnt.isColliding(tile))
 							{
 								if (!physEnt.colList.contains(tile) && !tile.colList.contains(physEnt))
 								{
@@ -232,13 +231,6 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 								if (ent.colList.isEmpty())
 									physEnt.tileUninteract(tile);
 							}
-							/*else if (physEnt.colList.contains(tile) || tile.colList.contains(physEnt))
-							{
-								physEnt.colList.remove(tile);
-								tile.colList.remove(physEnt);
-								if (ent.colList.isEmpty())
-									physEnt.tileUninteract(tile);
-							}*/
 						}
 					}
 					
@@ -367,7 +359,9 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		{
 			syncObj.notify();
 		}
-				
+		
+		game.updateFingers();
+		
 		//framerate count
 		if (frameCount >= 10)
 		{

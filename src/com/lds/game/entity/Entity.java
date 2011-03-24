@@ -297,7 +297,7 @@ public abstract class Entity
 			return false;
 		
 		//checks to see if either object is not solid
-		if (!this.isSolid || !ent.isSolid)
+		if (this.isSolid == false || ent.isSolid == false)
 			return false;
 		
 		if (colIgnoreList.contains(ent))
