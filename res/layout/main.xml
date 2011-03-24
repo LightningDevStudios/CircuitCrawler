@@ -1,18 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TableLayout
-android:id="@+id/MM_TableLayout"
+<LinearLayout
+android:id="@+id/MM_Main"
 android:layout_width="fill_parent"
 android:layout_height="fill_parent"
-android:orientation="vertical"
+android:orientation="horizontal"
 android:stretchColumns="0"
 xmlns:android="http://schemas.android.com/apk/res/android">
-	<TableRow android:paddingBottom="100px">
-		<TextView android:text="Now with 100% less main menu art than the leading brand!" android:padding="5dip" android:singleLine="false" android:layout_height="wrap_content" android:layout_width="wrap_content" />
-	</TableRow>
-	<TableRow>
-		<Button	android:id="@+id/Button1" android:text="Start!" android:layout_span="1" android:layout_height="wrap_content" android:layout_width="wrap_content"/>
-	</TableRow>
-	<TableRow>
-		<Button	android:id="@+id/Button2" android:text="About..." android:layout_span="1" android:layout_height="wrap_content" android:layout_width="wrap_content"/>
-	</TableRow>
-</TableLayout>
+	<RelativeLayout
+		android:id="@+id/MM_LeftParent"
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent"
+		android:layout_weight=".34">
+			<ImageView
+					android:id="@+id/CircuitCrawlerLogo"
+					android:layout_width="fill_parent"
+					android:layout_height="fill_parent"		
+					android:src="@drawable/tilesetworld"/>
+	</RelativeLayout>
+	<ScrollView android:layout_weight=".66" 
+		android:id="@+id/MM_ButtonScroll" 
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent">
+			<LinearLayout android:id="@+id/MM_RightSide"
+				android:layout_width="fill_parent"
+				android:layout_height="fill_parent"
+				android:orientation="vertical">
+					<Button android:text="Start"
+						android:id="@+id/MM_StartButton" 
+						android:layout_width="fill_parent" 
+						android:layout_height="wrap_content"/>
+					<Button android:text="Tutorial"
+						android:id="@+id/MM_TutorialButton" 
+						android:layout_width="fill_parent" 
+						android:layout_height="wrap_content"/>
+					<Button android:text="About"
+						android:id="@+id/MM_AboutButton" 
+						android:layout_width="fill_parent" 
+						android:layout_height="wrap_content"/>
+					<Button android:text="YTF"
+						android:id="@+id/MM_YTFButton" 
+						android:layout_width="fill_parent" 
+						android:layout_height="wrap_content"/>
+					<Button android:text="Donate"
+						android:id="@+id/MM_DonateButton" 
+						android:layout_width="fill_parent" 
+						android:layout_height="wrap_content"/>
+					<Button android:text="Settings"
+						android:id="@+id/MM_SettingsButton" 
+						android:layout_width="fill_parent" 
+						android:layout_height="wrap_content"/>
+			</LinearLayout>
+	</ScrollView>
+</LinearLayout>

@@ -24,9 +24,17 @@ public final class R {
         public static final int tilesetworld=0x7f020007;
     }
     public static final class id {
-        public static final int Button1=0x7f080002;
-        public static final int Button2=0x7f080003;
-        public static final int MM_TableLayout=0x7f080001;
+        public static final int CircuitCrawlerLogo=0x7f080003;
+        public static final int MM_AboutButton=0x7f080008;
+        public static final int MM_ButtonScroll=0x7f080004;
+        public static final int MM_DonateButton=0x7f08000a;
+        public static final int MM_LeftParent=0x7f080002;
+        public static final int MM_Main=0x7f080001;
+        public static final int MM_RightSide=0x7f080005;
+        public static final int MM_SettingsButton=0x7f08000b;
+        public static final int MM_StartButton=0x7f080006;
+        public static final int MM_TutorialButton=0x7f080007;
+        public static final int MM_YTFButton=0x7f080009;
         public static final int TextView01=0x7f080000;
     }
     public static final class layout {
@@ -45,5 +53,6 @@ public final class R {
     public static final class xml {
         public static final int level=0x7f040000;
         public static final int tempdata=0x7f040001;
+        public static final int tutorial=0x7f040002;
     }
 }

@@ -4,16 +4,16 @@ public class SpikeBall extends PhysEnt
 {
 	protected float moveX, moveY;
 	protected float oldXPos, oldYPos;
-	protected float rotateDirection;
+	protected float rotateDir;
 	
-	public SpikeBall(float size, float xPos, float yPos, boolean circular, boolean willCollide, float moveSpeed, float rotSpeed, float sclSpeed, float friction, float newMoveX, float newMoveY, float rotateDir) 
+	public SpikeBall(float size, float xPos, float yPos, boolean circular, boolean willCollide, float moveSpeed, float rotSpeed, float sclSpeed, float friction, float moveX, float moveY, float rotateDir) 
 	{
 		super(size, xPos, yPos, circular, willCollide, moveSpeed, rotSpeed, sclSpeed, friction);
-		moveX = newMoveX;
-		moveY = newMoveY;
+		this.moveX = moveX;
+		this.moveY = moveY;
 		oldXPos = xPos;
 		oldYPos = yPos;
-		rotateDirection = rotateDir;
+		this.rotateDir = rotateDir;
 	}
 	
 	@Override
@@ -30,7 +30,7 @@ public class SpikeBall extends PhysEnt
 			this.push(moveX, moveY);
 		}
 		else {}
-		this.rotate(10 * rotateDirection); // negative 1 or positive 1.
+		this.rotate(10 * rotateDir); // negative 1 or positive 1.
 	}
 	
 }

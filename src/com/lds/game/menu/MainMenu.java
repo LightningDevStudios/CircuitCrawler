@@ -17,7 +17,7 @@ public class MainMenu extends Activity
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
-		Button b = (Button)findViewById(R.id.Button1);
+		Button b = (Button)findViewById(R.id.MM_StartButton); //start
 		b.setOnClickListener(new OnClickListener() 
 		{
 			public void onClick(View v) 
@@ -27,7 +27,7 @@ public class MainMenu extends Activity
 			}
 		});
 		
-		Button about = (Button)findViewById(R.id.Button2);
+		Button about = (Button)findViewById(R.id.MM_AboutButton);
 		about.setOnClickListener(new OnClickListener()
 		{
 			public void onClick(View v)

@@ -9,7 +9,7 @@ import com.lds.game.ai.Node;
 
 public  abstract class Enemy extends Character //enemies will fall under this class
 {
-	public static final int OUTER_RADIUS = 100, INNER_RADIUS = 50;
+	public static int OUTER_RADIUS = 200, INNER_RADIUS = 75;
 	private static int enemyCount = 0;
 	protected AIType type;
 	protected boolean agressive, colliding;
@@ -193,5 +193,5 @@ public  abstract class Enemy extends Character //enemies will fall under this cl
 	public void setPlayerPathLocation(int playerPathLocation)
 	{
 		this.playerPathLocation = playerPathLocation;
-	}
+	}	
 }
