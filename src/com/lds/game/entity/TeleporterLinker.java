@@ -21,12 +21,16 @@ public class TeleporterLinker
 	{
 		if(ent3 == entTele1)
 		{
+			((Teleporter) entTele1).setActive(true);
+			((Teleporter) entTele2).setActive(false);
 			return link2Pos;
 		}
 		else if(ent3 == entTele2)
 		{
+			((Teleporter) entTele2).setActive(true);
+			((Teleporter) entTele1).setActive(false);
 			return link1Pos;
 		}
-		else {return link1Pos;}
+		else {return new Vector2f(0,0);}
 	}
 }

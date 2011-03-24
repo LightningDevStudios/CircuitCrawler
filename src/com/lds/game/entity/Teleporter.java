@@ -27,7 +27,7 @@ public class Teleporter extends StaticEnt
 		{
 			((PhysEnt) ent).setPos(TeleporterLinker.getLinkedPos(this).getX(), TeleporterLinker.getLinkedPos(this).getY());
 		}
-		//active = true;
+		active = true;
 	}
 	
 	@Override
@@ -37,5 +37,10 @@ public class Teleporter extends StaticEnt
 		{
 			active = false;
 		}
+	}
+	
+	public void setActive(boolean bool)
+	{
+		active = bool;
 	}
 }
