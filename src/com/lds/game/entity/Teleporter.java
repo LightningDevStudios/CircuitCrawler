@@ -1,26 +1,41 @@
 package com.lds.game.entity;
 
+import com.lds.Vector2f;
+
 public class Teleporter extends StaticEnt
 {
-	protected float teleLinkXPos, teleLinkYPos;
-	public Teleporter(float size, float xPos, float yPos, float angle, float xScl, float yScl, boolean isSolid, boolean circular, boolean willCollide, float newLinkXPos, float newLinkYPos) 
+	protected boolean active;
+	public Teleporter(float size, float xPos, float yPos, float angle, float xScl, float yScl, boolean isSolid, boolean circular, boolean willCollide) 
 	{
 		super(size, xPos, yPos, angle, xScl, yScl, isSolid, circular, willCollide);
-		teleLinkXPos = newLinkXPos;
-		teleLinkYPos = newLinkYPos;
+		active = false;
 	}
-	public Teleporter(float size, float xPos, float yPos, float newLinkXPos, float newLinkYPos) 
+	public Teleporter(float size, float xPos, float yPos) 
 	{
 		super(size, xPos, yPos, 0.0f, 1.0f, 1.0f, true, false, false);
-		teleLinkXPos = newLinkXPos;
-		teleLinkYPos = newLinkYPos;
+		active = false;
 	}
-	public float teleportX()
+	public  Vector2f getPos()
 	{
-		return teleLinkXPos;
+		return new Vector2f(getXPos(),getYPos());
 	}
-	public float teleportY()
+	
+	@Override
+	public void interact (Entity ent)
 	{
-		return teleLinkYPos;
+		if(active == false)
+		{
+			((PhysEnt) ent).setPos(TeleporterLinker.getLinkedPos(this).getX(), TeleporterLinker.getLinkedPos(this).getY());
+		}
+		//active = true;
+	}
+	
+	@Override
+	public void uninteract (Entity ent)		
+	{
+		if (ent instanceof Teleporter)
+		{
+			active = false;
+		}
 	}
 }
