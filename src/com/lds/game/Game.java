@@ -143,11 +143,18 @@ public class Game
 				}
 			}
 		}
-		//tileset[12][6].setAsSlipperyTile();
-		//tileset[13][6].setAsSlipperyTile();
-		//tileset[11][6].setAsSlipperyTile();
  		
- 		for (int i = 0; i < tileset.length; i++)
+		/*tileset[12][6].setAsSlipperyTile();
+		tileset[13][6].setAsSlipperyTile();
+		tileset[11][6].setAsSlipperyTile();
+		tileset[12][7].setAsSlipperyTile();
+		tileset[13][7].setAsSlipperyTile();
+		tileset[11][7].setAsSlipperyTile();
+		tileset[12][5].setAsSlipperyTile();
+		tileset[13][5].setAsSlipperyTile();
+		tileset[11][5].setAsSlipperyTile();*/
+ 		
+ 		/*for (int i = 0; i < tileset.length; i++)
  		{
  			for (int j = 0; j < tileset[0].length; j++)
  			{
@@ -156,9 +163,9 @@ public class Game
  				else if (tileset[i][j].isWall())
  					tileset[i][j].updateBordersWall(tileset, j, i);
  			}
- 		}
+ 		}*/
  			
-		*///Parser
+		//Parser
 		Parser parser = new Parser(context, R.xml.tutorial);
 		
 		entList = parser.entList;
@@ -212,14 +219,14 @@ public class Game
 		//block.initGradientInterp(interpGM);
 		entList.add(block);
 		
-		blob1 = new Blob(-250.0f, 0.0f, AIType.STALKER);
+		/*blob1 = new Blob(-250.0f, 0.0f, AIType.STALKER);
 		blob1.enableTilesetMode(tilesetwire, 2, 1);
 		entList.add(blob1);
 		//final NodePath np = new NodePath();
 		//np.add(new Node(-250.0f, 0.0f));
 		//blob1.setPatrolPath(np);
 				
-		blob2 = new Blob(-215.0f, -400.0f, AIType.STALKER);
+		blob2 = new Blob(-215.0f, -400.0f, AIType.TURRET);
 		blob2.enableTilesetMode(tilesetwire, 2, 2);
 		entList.add(blob2);
 		
@@ -254,8 +261,7 @@ public class Game
 		
 		Cannon cannon = new Cannon(35, -100, -300, 90, 1, 1, true, false, true, 5);
 		cannon.enableTilesetMode(tilesetwire, 2, 1);
-		entList.add(cannon);
-		
+		entList.add(cannon);*/
 		
 		/*MovingWall wall2 = new MovingWall(35, -150, -300, true, true, 5, 500, 0.0f, 0.0f, -112.5f, -300, -1);
 		wall2.enableTilesetMode(tilesetwire, 1, 3);
@@ -477,32 +483,6 @@ public class Game
 		{
 			if (enemy.getPathToPlayer() != null)
 			{
-				/*if (enemy.isColliding())
-				{
-					if (enemy.getPlayerPathLocation() >= enemy.getPathToPlayer().getSize() - 2)
-					{
-						enemy.stop();
-						runBecomeAgressiveAI(enemy);
-						if (enemy.getPathToPlayer() == null)
-							return;
-					}
-					else
-					{
-						enemy.stop();
-						Node lastNode = enemy.getPathToPlayer().getNode(enemy.getPlayerPathLocation());
-						Node nextNode = enemy.getPathToPlayer().getNode(enemy.getPlayerPathLocation() + 1);
-						//lastNode.deactivateLinks(nextNode);
-						runBecomeAgressiveAI(enemy);
-						if (enemy.getPathToPlayer() == null)
-							return;
-						//lastNode.activateLinks(nextNode);
-					}
-					enemy.stop();
-					runBecomeAgressiveAI(enemy);
-					if (enemy.getPathToPlayer() == null)
-						return;
-					enemy.setColliding(false);
-				}*/
 				//if close enough to player, move towards him. hang back and shoot if too close enough
 				if (enemy.getPathToPlayer().getSize() == 2 || pathIsClear(new Node(enemy.getPos()), new Node(player.getPos())))
 				{
@@ -531,11 +511,11 @@ public class Game
 							enemy.rotateTo(angleToPlayer);
 						else
 							enemy.moveTo(player.getPos());
-						//if (Stopwatch.elapsedTimeMs() - aiCheckInterval > 100.0f)
-						//{
+						if (Stopwatch.elapsedTimeMs() - aiCheckInterval > 1000)
+						{
 							runBecomeAgressiveAI(enemy);
-							//aiCheckInterval = Stopwatch.elapsedTimeMs();
-						//}
+							aiCheckInterval = Stopwatch.elapsedTimeMs();
+						}
 					}
 				}
 				else//if not close to player yet
@@ -562,7 +542,11 @@ public class Game
 			}
 			else
 			{
-				runBecomeAgressiveAI(enemy);
+				if (Stopwatch.elapsedTimeMs() - aiCheckInterval > 1000)
+				{
+					runBecomeAgressiveAI(enemy);
+					aiCheckInterval = Stopwatch.elapsedTimeMs();
+				}
 			}
 		}
 		else if (enemy.getType() == AIType.TURRET)
