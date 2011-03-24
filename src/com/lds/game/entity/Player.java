@@ -3,6 +3,7 @@ package com.lds.game.entity;
 import android.content.Context;
 import android.os.Vibrator;
 
+import com.lds.Stopwatch;
 import com.lds.Vector2f;
 import com.lds.game.SoundPlayer;
 
@@ -12,7 +13,7 @@ public class Player extends Character //your character, protagonist
 	private int energy;
 	private boolean holdingObject;
 	private HoldObject hObj;
-	private boolean controlled;
+	private boolean controlled, test;
 	private float nextAngle;
 	protected Context context;
 	
@@ -23,6 +24,7 @@ public class Player extends Character //your character, protagonist
 		//initialize Player data
 		energy = ENERGY_LIMIT;
 		nextAngle = angle;
+		test = true;
 	}
 	
 	public void attack ()

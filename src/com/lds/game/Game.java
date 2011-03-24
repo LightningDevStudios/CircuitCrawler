@@ -231,24 +231,13 @@ public class Game
 		cannon.enableTilesetMode(tilesetwire, 2, 1);
 		entList.add(cannon);*/
 		
-		Teleporter tele1 = new Teleporter(40,-100,-340,-300,-340);
+		Teleporter tele1 = new Teleporter(40,-100,-340,-200,-340);
 		tele1.enableTilesetMode(tilesetwire, 2, 1);
 		entList.add(tele1);
 		
-		Teleporter tele2 = new Teleporter(40,-200,-340,-150,-340);
+		Teleporter tele2 = new Teleporter(40,-200,-340,-100,-340);
 		tele2.enableTilesetMode(tilesetwire, 2, 1);
 		entList.add(tele2);
-		
-		/*Cannon cannon = new Cannon(35, -100, -300, 90, 1, 1, true, false, true, 5);
-		cannon.enableTilesetMode(tilesetwire, 2, 1);
-		entList.add(cannon);*/
-		
-		/*
-		MovingWall wall2 = new MovingWall(35, -150, -300, true, true, 5, 500, 0.0f, 0.0f, -112.5f, -300, -1);
-		wall2.enableTilesetMode(tilesetwire, 1, 3);
-		//wall2.scale(1.0f,2.0f);
-		entList.add(wall2);
-	    */
 		
 		/*spriteAnim = new Animation(tilesetwire, 0, 7, 7, 0, 3000);
 		spr = new Sprite(50, -100, 100, 45, 1, 1, spriteAnim);
