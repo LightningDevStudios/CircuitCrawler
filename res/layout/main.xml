@@ -15,7 +15,7 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 					android:id="@+id/CircuitCrawlerLogo"
 					android:layout_width="fill_parent"
 					android:layout_height="fill_parent"		
-					android:src="@drawable/tilesetworld"/>
+					android:src="@drawable/mainmenulogo"/>
 	</RelativeLayout>
 	<ScrollView android:layout_weight=".66" 
 		android:id="@+id/MM_ButtonScroll" 
