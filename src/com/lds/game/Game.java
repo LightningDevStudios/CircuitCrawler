@@ -239,7 +239,7 @@ public class Game
 		tele2.enableTilesetMode(tilesetwire, 2, 1);
 		entList.add(tele2);
 		
-		TeleporterLinker teleLink= new TeleporterLinker(tele1, tele2);
+		TeleporterLinker teleLink = new TeleporterLinker(tele1, tele2);
 		
 		/*spriteAnim = new Animation(tilesetwire, 0, 7, 7, 0, 3000);
 		spr = new Sprite(50, -100, 100, 45, 1, 1, spriteAnim);

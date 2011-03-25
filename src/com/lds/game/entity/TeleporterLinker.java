@@ -31,6 +31,6 @@ public class TeleporterLinker
 			((Teleporter) entTele1).setActive(true);
 			return link1Pos;
 		}
-		else {return link1Pos;}
+		else {return null;}
 	}
 }
