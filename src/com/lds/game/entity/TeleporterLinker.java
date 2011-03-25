@@ -14,23 +14,23 @@ public class TeleporterLinker
 		link1Pos = new Vector2f(((Teleporter) ent).getPos());
 		link2Pos = new Vector2f(((Teleporter) ent2).getPos());
 		entTele1 = ent;
-		entTele1 = ent2;
+		entTele2 = ent2;
 	}
 	
 	public static  Vector2f getLinkedPos(Object ent3)
 	{
-		if(ent3 == entTele1)
+		if(ent3.equals(entTele1))
 		{
-			((Teleporter) entTele1).setActive(true);
-			((Teleporter) entTele2).setActive(false);
+			((Teleporter) entTele1).setActive(false);
+			((Teleporter) entTele2).setActive(true);
 			return link2Pos;
 		}
-		else if(ent3 == entTele2)
+		else if(ent3.equals(entTele2))
 		{
-			((Teleporter) entTele2).setActive(true);
-			((Teleporter) entTele1).setActive(false);
+			((Teleporter) entTele2).setActive(false);
+			((Teleporter) entTele1).setActive(true);
 			return link1Pos;
 		}
-		else {return new Vector2f(0,0);}
+		else {return link1Pos;}
 	}
 }

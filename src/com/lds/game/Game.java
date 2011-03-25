@@ -235,7 +235,7 @@ public class Game
 		tele1.enableTilesetMode(tilesetwire, 2, 1);
 		entList.add(tele1);
 		
-		Teleporter tele2 = new Teleporter(40,-200,-340);
+		Teleporter tele2 = new Teleporter(40,-200,-100);
 		tele2.enableTilesetMode(tilesetwire, 2, 1);
 		entList.add(tele2);
 		
