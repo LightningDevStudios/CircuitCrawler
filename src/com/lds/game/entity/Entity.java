@@ -117,8 +117,8 @@ public abstract class Entity
 	public void draw(GL10 gl)
 	{
 		gl.glTranslatef(posVec.getX(), posVec.getY(), 0.0f);
-		gl.glRotatef(angle, 0.0f, 0.0f, 1.0f);
 		gl.glScalef(scaleVec.getX(), scaleVec.getY(), 1.0f);
+		gl.glRotatef(angle, 0.0f, 0.0f, 1.0f);
 		
 		
 		final boolean containsColor = renderMode.contains(RenderMode.COLOR);
@@ -297,7 +297,7 @@ public abstract class Entity
 			return false;
 		
 		//checks to see if either object is not solid
-		if (this.isSolid == false || ent.isSolid == false)
+		if (!this.isSolid || !ent.isSolid)
 			return false;
 		
 		if (colIgnoreList.contains(ent))

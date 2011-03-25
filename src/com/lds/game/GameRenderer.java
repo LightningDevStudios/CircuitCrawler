@@ -140,7 +140,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		game.updateTriggers();
 		game.updateRenderedEnts();
 		game.cleaner.update(game.entList, gl);
-		
+		game.updateFingers();
 		game.renderTileset(gl);
 
 		//Triggered when the perspective needs to be redrawn
@@ -215,7 +215,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 					{
 						for (final Tile tile : ts)
 						{
-							if (physEnt.isColliding(tile))
+							if (tile.isColliding(physEnt))
 							{
 								if (!physEnt.colList.contains(tile) && !tile.colList.contains(physEnt))
 								{
@@ -359,9 +359,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		{
 			syncObj.notify();
 		}
-		
-		game.updateFingers();
-		
+				
 		//framerate count
 		if (frameCount >= 10)
 		{
