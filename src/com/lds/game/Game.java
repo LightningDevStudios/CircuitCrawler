@@ -182,7 +182,7 @@ public class Game
 		button.enableTilesetMode(tilesetentities, 0, 0);
 		entList.add(button);
 		
-		block = new PhysBall(Entity.DEFAULT_SIZE, -215.0f, -350.0f, 0.003f);
+		block = new PhysBall(Entity.DEFAULT_SIZE, -215.0f, -425.0f, 0.003f);
 		block.enableTilesetMode(tilesetentities, 2, 0);
 		//float[] initGM = {1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f};
 		//float[] interpGM = {0.1f, 0.1f, 0.1f, 1.0f, 0.3f, 0.8f, 0.9f, 1.0f, 0.1f, 0.8f, 0.1f, 1.0f, 0.9f, 0.2f, 0.1f, 1.0f};
@@ -235,7 +235,7 @@ public class Game
 		tele1.enableTilesetMode(tilesetwire, 2, 1);
 		entList.add(tele1);
 		
-		Teleporter tele2 = new Teleporter(40,-200,-100);
+		Teleporter tele2 = new Teleporter(40,-250,-340);
 		tele2.enableTilesetMode(tilesetwire, 2, 1);
 		entList.add(tele2);
 		
