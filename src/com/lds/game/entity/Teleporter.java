@@ -24,7 +24,7 @@ public class Teleporter extends StaticEnt
 	@Override
 	public void interact (Entity ent)
 	{
-		if(active == false)
+		if(!active)
 		{
 			((PhysEnt) ent).setPos(TeleporterLinker.getLinkedPos(this).getX(), TeleporterLinker.getLinkedPos(this).getY());
 		}
