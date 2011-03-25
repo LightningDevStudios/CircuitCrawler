@@ -73,4 +73,9 @@ public class TeleporterLinker
 	{
 		oneWay = bool;
 	}
+	
+	public void setThreeWay(boolean bool)
+	{
+		threeWay = bool;
+	}
 }
