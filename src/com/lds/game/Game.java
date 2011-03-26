@@ -205,7 +205,7 @@ public class Game
 		//block.initGradientInterp(interpGM);
 		entList.add(block);
 		
-		/*blob1 = new Blob(-250.0f, 0.0f, AIType.STALKER);
+		blob1 = new Blob(-250.0f, 0.0f, AIType.STALKER);
 		blob1.enableTilesetMode(tilesetwire, 2, 1);
 		entList.add(blob1);
 		//final NodePath np = new NodePath();
@@ -220,7 +220,7 @@ public class Game
 		np.add(new Node(-215, -400));
 		np.add(new Node(-215, -300));
 		np.add(new Node(-100, -300));
-		blob2.setPatrolPath(np);*/
+		blob2.setPatrolPath(np);
 				
 		Button button1 = new Button(108.0f, 0.0f);
 		button1.enableTilesetMode(tilesetentities, 0, 0);
@@ -705,6 +705,7 @@ public class Game
 				startConnected = true;
 			}
 		}
+		
 		if (!goalReachable || !startConnected)
 			return null;
 
@@ -864,5 +865,16 @@ public class Game
 		gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
 		gl.glDisableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
 		gl.glDisable(GL10.GL_TEXTURE_2D);
+	}
+	
+	public static boolean arrayListContains(ArrayList<Entity> entList, Entity ent)
+	{
+		final int size = entList.size();
+		for (int i = 0; i < size; i++)
+		{
+			if (ent == entList.get(i))
+				return true;
+		}
+		return false;
 	}
 }

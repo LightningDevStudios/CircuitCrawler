@@ -182,9 +182,10 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 				for (int j = i + 1; j < size; j++)
 				{
 					final Entity colEnt = game.entList.get(j);
+					final boolean colListContains = Game.arrayListContains(ent.colList, colEnt) || Game.arrayListContains(colEnt.colList, ent);
 					if (ent.isColliding(colEnt))
 					{
-						if(!ent.colList.contains(colEnt) && !colEnt.colList.contains(ent))
+						if(!colListContains)
 						{
 							ent.colList.add(colEnt);
 							colEnt.colList.add(ent);
@@ -196,7 +197,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 								((Enemy)colEnt).setColliding(true);
 						}
 					}
-					else if (ent.colList.contains(colEnt) || colEnt.colList.contains(ent))
+					else if (colListContains)
 					{
 						//System.out.println(ent.colList.size() + " " + colEnt.colList.size());
 						ent.colList.remove(colEnt);
@@ -212,33 +213,31 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 				if (ent instanceof PhysEnt)
 				{
 					final PhysEnt physEnt = (PhysEnt)ent;
-					for (final Tile[] ts : game.tileset)
+					
+					final int tilesetSize = game.tileset.length;
+					final int tileRowSize = game.tileset[0].length;
+					for (int j = 0; j < tilesetSize; j++)
 					{
-						for (final Tile tile : ts)
+						for (int k = 0; k < tileRowSize; k++)
 						{
+							Tile tile = game.tileset[j][k];
+							final boolean physColListContains = Game.arrayListContains(physEnt.colList, tile) || Game.arrayListContains(tile.colList, physEnt);
 							if (tile.isColliding(physEnt))
 							{
-								if (!physEnt.colList.contains(tile) && !tile.colList.contains(physEnt))
+								if (!physColListContains)
 								{
 									physEnt.colList.add(tile);
 									tile.colList.add(physEnt);
 									physEnt.tileInteract(tile);
 								}
 							}
-							else if (physEnt.colList.contains(tile) || tile.colList.contains(physEnt))
+							else if (physColListContains)
 							{
-								physEnt.colList.remove(tile);
+								physEnt.colList.remove(physEnt.colList.indexOf(tile));
 								tile.colList.remove(physEnt);
 								if (ent.colList.isEmpty())
 									physEnt.tileUninteract(tile);
 							}
-							/*else if (physEnt.colList.contains(tile) || tile.colList.contains(physEnt))
-							{
-								physEnt.colList.remove(tile);
-								tile.colList.remove(physEnt);
-								if (ent.colList.isEmpty())
-									physEnt.tileUninteract(tile);
-							}*/
 						}
 					}
 					
@@ -255,11 +254,6 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 				{
 					game.player.addPos(game.player.getHeldObject().getBounceVec());
 					game.player.updateHeldObjectPosition();
-				}
-				//runs new AI code for enemies
-				else if (ent instanceof Enemy)
-				{
-					//TODO: recalculate new path for enemy to go on
 				}
 			}
 			

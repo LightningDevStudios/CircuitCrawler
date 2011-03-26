@@ -4,7 +4,6 @@ import com.lds.game.entity.Enemy;
 
 public class CauseEnemyCount extends Cause
 {
-	
 	private int count;
 	
 	public CauseEnemyCount(int count)
@@ -16,7 +15,7 @@ public class CauseEnemyCount extends Cause
 	@Override
 	public void update()
 	{
-		if (Enemy.getEnemyCount() == count)
+		if (Enemy.getEnemyCount() <= count)
 			trigger();
 
 		else
