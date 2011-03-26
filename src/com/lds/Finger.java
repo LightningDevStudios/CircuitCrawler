@@ -21,12 +21,8 @@ public class Finger
 		if (ent instanceof UIButton)
 		{
 			final UIButton button = (UIButton)ent;
+			button.enableColorMode(1.0f, 0.0f, 0.0f, 1.0f);
 			button.press();
-		}
-		else if (ent instanceof UIJoypad)
-		{
-			final UIJoypad joypad = (UIJoypad)ent;
-			joypad.setFingerState(true);
 		}
 	}
 	
@@ -40,22 +36,19 @@ public class Finger
 			Game.windowOutdated = true;
 			Game.worldOutdated = true;
 		}
-		else if (ent instanceof UIButton)
-		{
-			//ent.updateColor(0.3f, 0.5f, 0.6f, 1.0f);
-		}
 	}
 	
 	public void onStackPop()
 	{
 		if (ent instanceof UIButton)
 		{
-			//ent.updateColor(1.0f, 1.0f, 1.0f, 1.0f);
+			ent.disableColorMode();
 		}
 		else if (ent instanceof UIJoypad)
 		{
 			final UIJoypad joypad = (UIJoypad)ent;
-			joypad.setFingerState(false);
+			joypad.getFingerCircle().setXPos(0);
+			joypad.getFingerCircle().setYPos(0);
 		}
 	}
 	
