@@ -317,7 +317,7 @@ public class Game
 		healthBar.setTopPad(9.0f);
 		healthBar.setRightPad(9.0f);
 		healthBar.autoPadding(9, 0, 0, 9);
-		healthBar.enableColorMode(1.0f, 0.0f, 0.0f, 1.0f);
+		healthBar.enableColorMode(0.8f, 0.0f, 0.0f, 0.9f);
 		healthBar.setValue(100);
 		
 		UIImage healthBarCover = new UIImage(256, 16, UIPosition.TOPRIGHT);
@@ -336,7 +336,7 @@ public class Game
 		energyBar.setTopPad(30.0f);
 		energyBar.setRightPad(9.0f);
 		energyBar.autoPadding(30, 0, 0, 9);
-		energyBar.enableColorMode(0.0f, 0.0f, 1.0f, 1.0f);
+		energyBar.enableColorMode(0.0f, 0.0f, 0.8f, 0.9f);
 		energyBar.setValue(100);
 		
 		UIImage energyBarCover = new UIImage(192, 16, UIPosition.TOPRIGHT);
