@@ -58,6 +58,8 @@ public class Game
 	public static Texture tilesetentities;
 	public static Texture joystickout;
 	public static Texture joystickin;
+	public static Texture buttona;
+	public static Texture buttonb;
 	public Texture someText;
 	
 	
@@ -95,6 +97,8 @@ public class Game
 		tilesetentities = new Texture(R.drawable.tilesetentities, 256, 256, 8, 8, context, "tilesetentities");
 		joystickout = new Texture(R.raw.joystickout, 64, 64, 1, 1, context, "joystickout");
 		joystickin = new Texture(R.raw.joystickin, 32, 32, 1, 1, context, "joystickin");
+		buttona = new Texture(R.raw.buttona, 32, 32, 1, 1, context, "buttona");
+		buttonb = new Texture(R.raw.buttonb, 32, 32, 1, 1, context, "buttonb");
 		
 				
 		entList = new ArrayList<Entity>();
@@ -122,6 +126,8 @@ public class Game
 		tl.loadTexture(tilesetentities);
 		tl.loadTexture(joystickout);
 		tl.loadTexture(joystickin);
+		tl.loadTexture(buttona);
+		tl.loadTexture(buttonb);
 						
 		///*		
  		for (int i = 0; i < tileset.length; i++)
@@ -318,12 +324,14 @@ public class Game
 		
 		btnA = new UIButton(80.0f, 80.0f, UIPosition.BOTTOMRIGHT);
 		btnA.autoPadding(0.0f, 0.0f, 5.0f, 90.0f);
-		btnA.enableColorMode(65, 200, 65, 128);
+		//btnA.enableColorMode(65, 200, 65, 128);
+		btnA.enableTextureMode(buttona);
 		btnA.setIntervalTime(Stopwatch.elapsedTimeMs());
 		
 		btnB = new UIButton(80.0f, 80.0f, UIPosition.BOTTOMRIGHT);
 		btnB.autoPadding(0.0f, 0.0f, 90.0f, 5.0f);
-		btnB.enableColorMode(200, 65, 65, 100);
+		//btnB.enableColorMode(200, 65, 65, 100);
+		btnB.enableTextureMode(buttonb);
 		btnB.setIntervalTime(Stopwatch.elapsedTimeMs());
 		
 		joypad = new UIJoypad(.45f, .45f, UIPosition.BOTTOMLEFT, player.getAngle());

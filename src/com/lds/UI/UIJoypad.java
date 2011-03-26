@@ -13,7 +13,6 @@ public class UIJoypad extends UIEntity
 	private boolean active;
 	
 	private UIImage fingerCircle;
-	private boolean usingFinger;
 	
 	public static final float MAX_SCALAR = 10;
 	
@@ -25,7 +24,6 @@ public class UIJoypad extends UIEntity
 		active = false;
 		fingerCircle = new UIImage(this.xSize / 2, this.ySize / 2, 0, 0);
 		fingerCircle.enableTextureMode(Game.joystickin);
-		usingFinger = false;
 	}
 	
 	public UIJoypad(float xSize, float ySize, float xRelative, float yRelative, float inputAngle)
@@ -57,13 +55,10 @@ public class UIJoypad extends UIEntity
 	{
 		super.draw(gl);
 		
-		if (usingFinger)
-		{
-			fingerCircle.updateVertexVBO(gl);
-			fingerCircle.updateTextureVBO(gl);
-			fingerCircle.updateGradientVBO(gl);
-			fingerCircle.draw(gl);
-		}
+		fingerCircle.updateVertexVBO(gl);
+		fingerCircle.updateTextureVBO(gl);
+		fingerCircle.updateGradientVBO(gl);
+		fingerCircle.draw(gl);
 	}
 	
 	public void setInputVec(final float rawX, final float rawY)
@@ -110,12 +105,7 @@ public class UIJoypad extends UIEntity
 	{
 		this.active = active;
 	}
-	
-	public void setFingerState(boolean state)
-	{
-		usingFinger = state;
-	}
-	
+		
 	public void genHardwareBuffers(GL10 gl)
 	{
 		super.genHardwareBuffers(gl);
@@ -139,4 +129,6 @@ public class UIJoypad extends UIEntity
 		super.updateTextureVBO(gl);
 		fingerCircle.updateTextureVBO(gl);
 	}
+	
+	public UIImage getFingerCircle() { return fingerCircle; }
 }
