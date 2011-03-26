@@ -75,6 +75,8 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 			Game.text = new Texture(R.drawable.text, 256, 256, 16, 8, context, "text");
 			Game.tilesetworld = new Texture(R.drawable.tilesetworld, 512, 256, 16, 8, context, "tilesetworld");
 			Game.tilesetentities = new Texture(R.drawable.tilesetentities, 256, 256, 8, 8, context, "tilesetentities");
+			Game.joystickout = new Texture(R.raw.joystickout, 64, 64, 1, 1, context, "joystickout");
+			Game.joystickin = new Texture(R.raw.joystickin, 32, 32, 1, 1, context, "joystickin");
 			
 			TextureLoader.getInstance().initialize(gl);
 			TextureLoader tl = TextureLoader.getInstance();
@@ -84,6 +86,8 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 			tl.loadTexture(Game.text);
 			tl.loadTexture(Game.tilesetworld);
 			tl.loadTexture(Game.tilesetentities);
+			tl.loadTexture(Game.joystickout);
+			tl.loadTexture(Game.joystickin);
 			
 			for(Entity ent : game.entList)
 			{

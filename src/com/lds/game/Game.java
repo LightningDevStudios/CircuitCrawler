@@ -56,6 +56,8 @@ public class Game
 	public static Texture text;
 	public static Texture tilesetworld;
 	public static Texture tilesetentities;
+	public static Texture joystickout;
+	public static Texture joystickin;
 	public Texture someText;
 	
 	
@@ -91,6 +93,8 @@ public class Game
 		text = new Texture(R.drawable.text, 256, 256, 16, 8, context, "text");
 		tilesetworld = new Texture(R.drawable.tilesetworld, 512, 256, 16, 8, context, "tilesetworld");
 		tilesetentities = new Texture(R.drawable.tilesetentities, 256, 256, 8, 8, context, "tilesetentities");
+		joystickout = new Texture(R.raw.joystickout, 64, 64, 1, 1, context, "joystickout");
+		joystickin = new Texture(R.raw.joystickin, 32, 32, 1, 1, context, "joystickin");
 		
 				
 		entList = new ArrayList<Entity>();
@@ -116,6 +120,8 @@ public class Game
 		tl.loadTexture(someText);
 		tl.loadTexture(tilesetworld);
 		tl.loadTexture(tilesetentities);
+		tl.loadTexture(joystickout);
+		tl.loadTexture(joystickin);
 						
 		///*		
  		for (int i = 0; i < tileset.length; i++)
@@ -320,8 +326,9 @@ public class Game
 		btnB.enableColorMode(200, 65, 65, 100);
 		btnB.setIntervalTime(Stopwatch.elapsedTimeMs());
 		
-		joypad = new UIJoypad(100, 100, UIPosition.BOTTOMLEFT, player.getAngle());
+		joypad = new UIJoypad(.45f, .45f, UIPosition.BOTTOMLEFT, player.getAngle());
 		joypad.autoPadding(0.0f, 5.0f, 5.0f, 0.0f);
+		joypad.enableTextureMode(joystickout);
 		
 		textbox = new UITextBox(112, 32, UIPosition.TOPLEFT);
 		textbox.autoPadding(5.0f, 5.0f, 0.0f, 0.0f);
