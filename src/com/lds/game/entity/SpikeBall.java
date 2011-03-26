@@ -21,6 +21,7 @@ public class SpikeBall extends PhysEnt
 	{
 		super.update();
 		
+		//TODO clean it up!
 		if(this.getXPos() == moveX && this.getYPos() == moveY)
 		{
 			this.push(oldXPos, oldYPos);

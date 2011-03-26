@@ -187,6 +187,8 @@ public class Game
 		
 		//  /*CAN DEAL WITH THIS SHIT
 		door = new Door (-108.0f, -180.0f);
+		door.setAngle(90.0f);
+		door.setYScl(0.5f);
 		door.enableTilesetMode(tilesetentities, 2, 1);
 		entList.add(door);
 		
@@ -233,13 +235,13 @@ public class Game
 		block2.enableTilesetMode(tilesetentities, 3, 0);
 		entList.add(block2);
 
-		SpikeBall wall = new SpikeBall(35, -200, -250, true, true, 15, 500, 0.0f, 0.0f, 0, -300, 1);
+		/*SpikeBall wall = new SpikeBall(35, -200, -250, true, true, 15, 500, 0.0f, 0.0f, 0, -300, 1);
 		wall.enableTilesetMode(tilesetwire, 1, 2);
-		entList.add(wall);
+		entList.add(wall);*/
 		
-		Cannon cannon = new Cannon(35, -100, -425, 90, 1, 1, true, false, true, 5, 5);
+		/*Cannon cannon = new Cannon(35, -100, -425, 90, 1, 1, true, false, true, 5, 5);
 		cannon.enableTilesetMode(tilesetwire, 2, 1);
-		entList.add(cannon);
+		entList.add(cannon);*/
 		
 		Teleporter tele1 = new Teleporter(40,-100,-340);
 		tele1.enableTilesetMode(tilesetwire, 2, 1);

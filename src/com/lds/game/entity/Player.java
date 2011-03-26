@@ -70,8 +70,8 @@ public class Player extends Character //your character, protagonist
 			if (tile.isPit() && controlled)
 			{
 				this.disableUserControl();
-				this.scaleTo(0, 0);
 				this.moveTo(tile.getXPos(), tile.getYPos());
+				this.scaleTo(0, 0);
 				if (!falling)
 					SoundPlayer.getInstance().playSound(SoundPlayer.PIT_FALL);
 				falling = true;

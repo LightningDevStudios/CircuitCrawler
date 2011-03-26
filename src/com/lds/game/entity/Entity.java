@@ -209,7 +209,7 @@ public abstract class Entity
 	
 	public void update()
 	{
-		if (scaleVec.mag() < 0.0001f)
+		if (scaleVec.mag() <= 0.0f)
 			this.remove(); //remove the entity
 		colorInterp();
 		gradientInterp();
