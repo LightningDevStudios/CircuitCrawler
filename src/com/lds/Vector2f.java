@@ -87,6 +87,11 @@ public class Vector2f
 		return new Vector2f(v.getY(), -v.getX());
 	}
 	
+	public static Vector2f scaleTo (Vector2f v, float scalar)
+	{
+		return Vector2f.normalize(v).scale(scalar);
+	}
+	
 	public static Vector2f getMidpoint (Vector2f v1, Vector2f v2)
 	{
 		return new Vector2f((v1.x + v2.x) / 2, (v1.y + v2.y) / 2);

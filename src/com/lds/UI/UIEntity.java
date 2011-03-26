@@ -16,6 +16,7 @@ import com.lds.Enums.RenderMode;
 import com.lds.Enums.UIPosition;
 import com.lds.Texture;
 import com.lds.TilesetHelper;
+import com.lds.Vector2f;
 
 //TODO allow relative sizing to scale for multiple monitors
 public abstract class UIEntity
@@ -516,6 +517,12 @@ public abstract class UIEntity
 	public float[] getGradientCoords()	{ return color; }
 	public float[] getTextureCoords()	{ return texture; }
 	public EnumSet<RenderMode> getRenderMode()	{ return renderMode; }
+	
+	public void setPos(Vector2f posVec)
+	{
+		xPos = posVec.getX();
+		yPos = posVec.getY();
+	}
 	
 	public void setXSize(float xSize)			{ this.xSize = xSize; }
 	public void setYSize(float ySize)			{ this.ySize = ySize; }
