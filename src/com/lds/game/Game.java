@@ -60,6 +60,9 @@ public class Game
 	public static Texture joystickin;
 	public static Texture buttona;
 	public static Texture buttonb;
+	public static Texture baricons;
+	public static Texture energybarborder;
+	public static Texture healthbarborder;
 	public Texture someText;
 	
 	
@@ -99,6 +102,9 @@ public class Game
 		joystickin = new Texture(R.raw.joystickin, 32, 32, 1, 1, context, "joystickin");
 		buttona = new Texture(R.raw.buttona, 32, 32, 1, 1, context, "buttona");
 		buttonb = new Texture(R.raw.buttonb, 32, 32, 1, 1, context, "buttonb");
+		baricons = new Texture (R.raw.baricons, 32, 16, 2, 1, context, "baricons");
+		energybarborder = new Texture (R.raw.energybarborder, 192, 16, 1, 1, context, "energybarborder");
+		healthbarborder = new Texture(R.raw.healthbarborder, 256, 32, 1, 1, context, "healthbarborder");
 		
 				
 		entList = new ArrayList<Entity>();
@@ -128,6 +134,9 @@ public class Game
 		tl.loadTexture(joystickin);
 		tl.loadTexture(buttona);
 		tl.loadTexture(buttonb);
+		tl.loadTexture(baricons);
+		tl.loadTexture(energybarborder);
+		tl.loadTexture(healthbarborder);
 						
 		///*		
  		for (int i = 0; i < tileset.length; i++)
@@ -303,30 +312,28 @@ public class Game
 		triggerList.add(new Trigger(bridgeAND, new EffectRaiseBridge(tileset[5][6])));
 		triggerList.add(new Trigger(bridgeAND, new EffectRaiseBridge(tileset[5][7])));
 		
-		healthBar = new UIHealthBar(200.0f, 30.0f, UIPosition.TOPLEFT, Direction.RIGHT, player);
-		healthBar.setTopPad(5.0f);
-		healthBar.setLeftPad(5.0f);
-		healthBar.autoPadding(5, 5, 0, 0);
-				
-		//						Red	  Green	Blue  Alpha
-		float[] healthColor = {	0.0f, 1.0f, 0.0f, 0.9f,		//top right
-								0.0f, 1.0f, 0.0f, 0.9f, 	//bottom right
-								1.0f, 0.0f, 0.0f, 1.0f, 	//top left
-								1.0f, 0.0f, 0.0f, 1.0f};	//bottom left
-		healthBar.enableGradientMode(healthColor);
-		healthBar.setValue(99);
+		//TODO UIHealthBar is a UIEntity sub that contains 2 UIImages and a UIProgressBar (which will no longer be abstract)
+		healthBar = new UIHealthBar(256.0f, 24.0f, UIPosition.TOPRIGHT, Direction.LEFT, player);
+		healthBar.setTopPad(9.0f);
+		healthBar.setRightPad(5.0f);
+		healthBar.autoPadding(9, 0, 0, 5);
+		healthBar.enableColorMode(1.0f, 0.0f, 0.0f, 1.0f);
+		healthBar.setValue(100);
+		
+		UIImage healthBarCover = new UIImage(256, 32, UIPosition.TOPRIGHT);
+		healthBarCover.setTopPad(5.0f);
+		healthBarCover.setRightPad(5.0f);
+		healthBarCover.autoPadding(5, 0, 0, 5);
+		healthBarCover.enableTextureMode(healthbarborder);
+		
+		
 		
 		energyBar = new UIEnergyBar(150.0f, 15.0f, UIPosition.TOPRIGHT, Direction.LEFT, player);
-		energyBar.setTopPad(5.0f);
+		energyBar.setTopPad(42.0f);
 		energyBar.setRightPad(5.0f);
-		energyBar.autoPadding(5, 0, 0, 5);
-		
-		float[] energyColor = {	0.0f, 0.0f, 0.3f, 1.0f,
-								0.0f, 0.0f, 0.3f, 1.0f,
-								0.0f, 0.0f, 1.0f, 0.9f,
-								0.0f, 0.0f, 1.0f, 0.9f };
-		energyBar.enableGradientMode(energyColor);
-		energyBar.setValue(99);
+		energyBar.autoPadding(42, 0, 0, 5);
+		energyBar.enableColorMode(0.0f, 0.0f, 1.0f, 1.0f);
+		energyBar.setValue(100);
 		
 		btnA = new UIButton(80.0f, 80.0f, UIPosition.BOTTOMRIGHT);
 		btnA.autoPadding(0.0f, 0.0f, 5.0f, 90.0f);
@@ -350,6 +357,7 @@ public class Game
 		textbox.setText("Testing!");
 		
 		UIList.add(healthBar);
+		UIList.add(healthBarCover);
 		UIList.add(energyBar);
 		UIList.add(btnA);
 		UIList.add(btnB);

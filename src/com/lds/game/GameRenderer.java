@@ -79,6 +79,9 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 			Game.joystickin = new Texture(R.raw.joystickin, 32, 32, 1, 1, context, "joystickin");
 			Game.buttona = new Texture(R.raw.buttona, 32, 32, 1, 1, context, "buttona");
 			Game.buttonb = new Texture(R.raw.buttonb, 32, 32, 1, 1, context, "buttonb");
+			Game.baricons = new Texture (R.raw.baricons, 32, 16, 2, 1, context, "baricons");
+			Game.energybarborder = new Texture (R.raw.energybarborder, 192, 16, 1, 1, context, "energybarborder");
+			Game.healthbarborder = new Texture(R.raw.healthbarborder, 256, 32, 1, 1, context, "healthbarborder");
 			
 			TextureLoader.getInstance().initialize(gl);
 			TextureLoader tl = TextureLoader.getInstance();
@@ -92,6 +95,9 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 			tl.loadTexture(Game.joystickin);
 			tl.loadTexture(Game.buttona);
 			tl.loadTexture(Game.buttonb);
+			tl.loadTexture(Game.baricons);
+			tl.loadTexture(Game.energybarborder);
+			tl.loadTexture(Game.healthbarborder);
 			
 			for(Entity ent : game.entList)
 			{

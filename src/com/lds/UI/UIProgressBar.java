@@ -1,5 +1,6 @@
 package com.lds.UI;
 
+import com.lds.Enums.RenderMode;
 import com.lds.Enums.UIPosition;
 import com.lds.Enums.Direction;
 
@@ -50,7 +51,9 @@ public abstract class UIProgressBar extends UIEntity
 	{
 		if (this.value != this.originalValue)
 		{
-			updateGradientProgress();
+			if (renderMode.contains(RenderMode.GRADIENT))
+					updateGradientProgress();
+			
 			updateVertices();
 			autoPadding(originalTopPad, originalLeftPad, originalBottomPad, originalRightPad);
 			updatePosition();
