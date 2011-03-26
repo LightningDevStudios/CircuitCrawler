@@ -436,6 +436,10 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 					
 					break;
 				case MotionEvent.ACTION_UP:
+					for (final Finger f : game.fingerList)
+					{
+						f.onStackPop();
+					}
 					game.fingerList.clear();
 					break;
 				case MotionEvent.ACTION_POINTER_UP:

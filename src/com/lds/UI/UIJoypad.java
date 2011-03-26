@@ -23,7 +23,7 @@ public class UIJoypad extends UIEntity
 		inputVec = new Vector2f();
 		this.inputAngle = inputAngle;
 		active = false;
-		fingerCircle = new UIImage(xSize / 2, ySize / 2, 0, 0);
+		fingerCircle = new UIImage(this.xSize / 2, this.ySize / 2, 0, 0);
 		fingerCircle.enableTextureMode(Game.joystickin);
 		usingFinger = false;
 	}
@@ -75,9 +75,10 @@ public class UIJoypad extends UIEntity
 		if (inputVec.mag() > xSize / 2)
 			inputVec.scaleTo(xSize / 2);
 		
-		inputVec.scaleTo(inputVec.mag() * MAX_SCALAR / xSize);
 		fingerCircle.setXPos(inputVec.getX());
 		fingerCircle.setYPos(inputVec.getY());
+		
+		inputVec.scaleTo(inputVec.mag() * MAX_SCALAR / xSize);
 	}
 	
 	public void setInputVec(final Vector2f rawVec)
