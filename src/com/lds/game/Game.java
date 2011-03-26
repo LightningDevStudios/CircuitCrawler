@@ -313,10 +313,10 @@ public class Game
 		triggerList.add(new Trigger(bridgeAND, new EffectRaiseBridge(tileset[5][7])));
 		
 		//TODO UIHealthBar is a UIEntity sub that contains 2 UIImages and a UIProgressBar (which will no longer be abstract)
-		healthBar = new UIHealthBar(256.0f, 24.0f, UIPosition.TOPRIGHT, Direction.LEFT, player);
+		healthBar = new UIHealthBar(248.0f, 24.0f, UIPosition.TOPRIGHT, Direction.LEFT, player);
 		healthBar.setTopPad(9.0f);
-		healthBar.setRightPad(5.0f);
-		healthBar.autoPadding(9, 0, 0, 5);
+		healthBar.setRightPad(9.0f);
+		healthBar.autoPadding(9, 0, 0, 9);
 		healthBar.enableColorMode(1.0f, 0.0f, 0.0f, 1.0f);
 		healthBar.setValue(100);
 		
