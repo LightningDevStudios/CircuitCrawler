@@ -407,6 +407,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	{
 		if(game.player.userHasControl())
 		{
+			Game.worldOutdated = true;
 			for (int i = 0; i < game.fingerList.size(); i++)
 			{
 				final Finger f = game.fingerList.get(i);

@@ -233,13 +233,13 @@ public class Game
 		block2.enableTilesetMode(tilesetentities, 3, 0);
 		entList.add(block2);
 
-		SpikeBall wall = new SpikeBall(35, -200, -250, true, true, 15, 500, 0.0f, 0.0f, 0, -300, 1);
+		/*SpikeBall wall = new SpikeBall(35, -200, -250, true, true, 15, 500, 0.0f, 0.0f, 0, -300, 1);
 		wall.enableTilesetMode(tilesetwire, 1, 2);
-		entList.add(wall);
+		entList.add(wall);*/
 		
-		Cannon cannon = new Cannon(35, -100, -425, 90, 1, 1, true, false, true, 5, 5);
+		/*Cannon cannon = new Cannon(35, -100, -425, 90, 1, 1, true, false, true, 5, 5);
 		cannon.enableTilesetMode(tilesetwire, 2, 1);
-		entList.add(cannon);
+		entList.add(cannon);*/
 		
 		Teleporter tele1 = new Teleporter(40,-100,-340);
 		tele1.enableTilesetMode(tilesetwire, 2, 1);
@@ -260,8 +260,8 @@ public class Game
 		spr.enableTextureMode(tilesetwire);
 		entList.add(spr);*/
 
-		box = new PuzzleBox(-120.0f, -400.0f, 0.0f, false, true);
-		entList.add(box);
+		/*box = new PuzzleBox(-120.0f, -400.0f, 0.0f, false, true);
+		entList.add(box);*/
 
 		
 		player = new Player(-108.0f, -450.0f, 0.0f);

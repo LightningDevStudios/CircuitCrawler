@@ -22,7 +22,6 @@ public abstract class HoldObject extends PhysEnt //and object that is held (bloc
 			{
 				if (tile.isPit())
 				{
-					//this.stop();
 					this.scaleTo(0, 0);
 					if (!falling)
 						SoundPlayer.getInstance().playSound(SoundPlayer.PIT_FALL);

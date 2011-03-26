@@ -118,9 +118,8 @@ public abstract class Entity
 	public void draw(GL10 gl)
 	{
 		gl.glTranslatef(posVec.getX(), posVec.getY(), 0.0f);
-		gl.glScalef(scaleVec.getX(), scaleVec.getY(), 1.0f);
 		gl.glRotatef(angle, 0.0f, 0.0f, 1.0f);
-		
+		gl.glScalef(scaleVec.getX(), scaleVec.getY(), 1.0f);
 		
 		final boolean containsColor = renderMode.contains(RenderMode.COLOR);
 		final boolean containsGradient = renderMode.contains(RenderMode.GRADIENT);

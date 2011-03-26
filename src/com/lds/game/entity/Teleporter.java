@@ -26,7 +26,7 @@ public class Teleporter extends StaticEnt
 	{
 		if(!active)
 		{
-			((PhysEnt) ent).setPos(TeleporterLinker.getLinkedPos(this).getX(), TeleporterLinker.getLinkedPos(this).getY());
+			((PhysEnt) ent).setPosNoInterp(TeleporterLinker.getLinkedPos(this).getX(), TeleporterLinker.getLinkedPos(this).getY());
 		}
 	}
 	

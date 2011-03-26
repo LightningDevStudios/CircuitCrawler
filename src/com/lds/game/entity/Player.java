@@ -104,6 +104,8 @@ public class Player extends Character //your character, protagonist
 		holdingObject = false;
 		colIgnoreList.remove(hObj);
 		hObj.colIgnoreList.remove(this);
+		final Vector2f addVec = new Vector2f(angle).scale(10);
+		hObj.addPos(addVec);
 		hObj.drop();
 		hObj = new PhysBlock(0.0f, 0.0f, 0.0f, 0.03f);
 		hObj = null;
@@ -114,6 +116,8 @@ public class Player extends Character //your character, protagonist
 		holdingObject = false;
 		colIgnoreList.remove(hObj);
 		hObj.colIgnoreList.remove(this);
+		final Vector2f addVec = new Vector2f(angle).scale(10);
+		hObj.addPos(addVec);
 		hObj.push();
 		hObj = new PhysBlock(0.0f, 0.0f, 0.0f, 0.03f);
 		hObj = null;
@@ -143,8 +147,7 @@ public class Player extends Character //your character, protagonist
 			float heldDistance = hObj.halfSize * hObj.getXScl() + this.halfSize + 10.0f;
 			Vector2f directionVec = new Vector2f(angle);
 			directionVec.scale(heldDistance).add(posVec);
-			
-			hObj.setPos(directionVec.getX(), directionVec.getY());
+			hObj.setPos(directionVec);
 			hObj.setAngle(angle);
 	}
 	
