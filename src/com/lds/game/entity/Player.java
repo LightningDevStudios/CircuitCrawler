@@ -60,11 +60,6 @@ public class Player extends Character //your character, protagonist
 		{
 			takeDamage(5);
 		}
-		else if (ent instanceof Teleporter)
-		{
-			this.setXPos(((Teleporter) ent).teleportX());
-			this.setYPos(((Teleporter) ent).teleportY());
-		}
 	}
 	
 	@Override

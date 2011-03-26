@@ -463,14 +463,7 @@ public abstract class Entity
 	public void rectangleBounceAgainstRectangle (Entity ent){	}
 	
 	//overriden for entity interaction
-	public void interact (Entity ent)		
-	{
-		if (ent instanceof Teleporter)
-		{
-			this.setXPos(((Teleporter) ent).teleportX());
-			this.setYPos(((Teleporter) ent).teleportY());
-		}
-	}
+	public void interact (Entity ent)		{	}
 	
 	//overriden for entity uninteraction
 	public void uninteract (Entity ent)		{	}

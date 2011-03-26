@@ -194,7 +194,7 @@ public class Game
 		button.enableTilesetMode(tilesetentities, 0, 0);
 		entList.add(button);
 		
-		block = new PhysBall(Entity.DEFAULT_SIZE, -215.0f, -350.0f, 0.003f);
+		block = new PhysBall(Entity.DEFAULT_SIZE, -215.0f, -425.0f, 0.003f);
 		block.enableTilesetMode(tilesetentities, 2, 0);
 		//float[] initGM = {1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f};
 		//float[] interpGM = {0.1f, 0.1f, 0.1f, 1.0f, 0.3f, 0.8f, 0.9f, 1.0f, 0.1f, 0.8f, 0.1f, 1.0f, 0.9f, 0.2f, 0.1f, 1.0f};
@@ -233,22 +233,27 @@ public class Game
 		block2.enableTilesetMode(tilesetentities, 3, 0);
 		entList.add(block2);
 
-		/*SpikeBall wall = new SpikeBall(35, -200, -250, true, true, 15, 500, 0.0f, 0.0f, 0, -300, 1);
+		SpikeBall wall = new SpikeBall(35, -200, -250, true, true, 15, 500, 0.0f, 0.0f, 0, -300, 1);
 		wall.enableTilesetMode(tilesetwire, 1, 2);
-		//wall.scale(1.0f,2.0f);
-		entList.add(wall);*/
+		entList.add(wall);
 		
-		/*Cannon cannon = new Cannon(35, -150, -340, 90, 1, 1, true, false, true, 5, 5);
+		Cannon cannon = new Cannon(35, -100, -425, 90, 1, 1, true, false, true, 5, 5);
 		cannon.enableTilesetMode(tilesetwire, 2, 1);
-		entList.add(cannon);*/
+		entList.add(cannon);
 		
-		Teleporter tele1 = new Teleporter(40,-100,-340,-200,-340);
+		Teleporter tele1 = new Teleporter(40,-100,-340);
 		tele1.enableTilesetMode(tilesetwire, 2, 1);
 		entList.add(tele1);
 		
-		Teleporter tele2 = new Teleporter(40,-200,-340,-100,-340);
+		Teleporter tele2 = new Teleporter(40,-250,-340);
 		tele2.enableTilesetMode(tilesetwire, 2, 1);
 		entList.add(tele2);
+		
+		Teleporter tele3 = new Teleporter(40,-250,-100);
+		tele3.enableTilesetMode(tilesetwire, 2, 1);
+		entList.add(tele3);
+		
+		TeleporterLinker teleLink = new TeleporterLinker(tele1, tele2, tele3, false, true);
 		
 		/*spriteAnim = new Animation(tilesetwire, 0, 7, 7, 0, 3000);
 		spr = new Sprite(50, -100, 100, 45, 1, 1, spriteAnim);
