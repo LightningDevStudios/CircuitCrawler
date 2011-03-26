@@ -76,9 +76,6 @@ public class UIJoypad extends UIEntity
 			inputVec.scaleTo(xSize / 2);
 		
 		fingerCircle.setPos(Vector2f.scaleTo(inputVec, inputVec.mag() - fingerCircle.xSize / 2));
-		/*final float newMag = (inputVec.mag() - fingerCircle.xSize / 2);
-		fingerCircle.setXPos(inputVec.getX() * newMag);
-		fingerCircle.setYPos(inputVec.getY() * newMag);*/
 		
 		inputVec.scaleTo(inputVec.mag() * MAX_SCALAR / xSize);
 	}
@@ -140,5 +137,10 @@ public class UIJoypad extends UIEntity
 	{
 		super.updateTextureVBO(gl);
 		fingerCircle.updateTextureVBO(gl);
+	}
+	
+	public UIImage getfingerCircle()
+	{
+		return fingerCircle;
 	}
 }
