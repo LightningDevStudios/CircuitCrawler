@@ -3,6 +3,7 @@ package com.lds.game.entity;
 import android.content.Context;
 import android.os.Vibrator;
 
+import com.lds.Stopwatch;
 import com.lds.Vector2f;
 import com.lds.game.SoundPlayer;
 
@@ -12,10 +13,9 @@ public class Player extends Character //your character, protagonist
 	private int energy;
 	private boolean holdingObject;
 	private HoldObject hObj;
-	private boolean controlled;
+	private boolean controlled, test;
 	private float nextAngle;
 	protected Context context;
-	protected boolean leavingIce;
 	
 	public Player (float xPos, float yPos, float angle)
 	{
@@ -24,6 +24,7 @@ public class Player extends Character //your character, protagonist
 		//initialize Player data
 		energy = ENERGY_LIMIT;
 		nextAngle = angle;
+		test = true;
 	}
 	
 	public void attack ()
@@ -53,9 +54,17 @@ public class Player extends Character //your character, protagonist
 		}
 		else if (ent instanceof SpikeBall)
 		{
-			//vibrator(2000);
 			takeDamage(25);
-		} 
+		}
+		else if (ent instanceof CannonShell)
+		{
+			takeDamage(5);
+		}
+		else if (ent instanceof Teleporter)
+		{
+			this.setXPos(((Teleporter) ent).teleportX());
+			this.setYPos(((Teleporter) ent).teleportY());
+		}
 	}
 	
 	@Override
@@ -74,11 +83,12 @@ public class Player extends Character //your character, protagonist
 			}
 			/*else if (tile.isSlipperyTile())
 			{
-				//this.disableUserControl();
-				this.push(moveVec);
+				Vector2f newMoveVec = new Vector2f(Something in here);
+				this.push(newMoveVec);
 			}*/
-			else 
+			else
 			{
+				this.stop();
 				this.enableUserControl();
 			}
 		}
@@ -99,8 +109,6 @@ public class Player extends Character //your character, protagonist
 		holdingObject = false;
 		colIgnoreList.remove(hObj);
 		hObj.colIgnoreList.remove(this);
-		final Vector2f addVec = new Vector2f(angle).scale(10);
-		hObj.addPos(addVec);
 		hObj.drop();
 		hObj = new PhysBlock(0.0f, 0.0f, 0.0f, 0.03f);
 		hObj = null;
@@ -111,8 +119,6 @@ public class Player extends Character //your character, protagonist
 		holdingObject = false;
 		colIgnoreList.remove(hObj);
 		hObj.colIgnoreList.remove(this);
-		final Vector2f addVec = new Vector2f(angle).scale(10);
-		hObj.addPos(addVec);
 		hObj.push();
 		hObj = new PhysBlock(0.0f, 0.0f, 0.0f, 0.03f);
 		hObj = null;
@@ -139,11 +145,12 @@ public class Player extends Character //your character, protagonist
 
 	public void updateHeldObjectPosition()
 	{
-		float heldDistance = hObj.halfSize * hObj.getXScl() + this.halfSize + 10.0f;
-		Vector2f directionVec = new Vector2f(angle);
-		directionVec.scale(heldDistance).add(posVec);
-		hObj.setPos(directionVec.getX(), directionVec.getY());
-		hObj.setAngle(angle);
+			float heldDistance = hObj.halfSize * hObj.getXScl() + this.halfSize + 10.0f;
+			Vector2f directionVec = new Vector2f(angle);
+			directionVec.scale(heldDistance).add(posVec);
+			
+			hObj.setPos(directionVec.getX(), directionVec.getY());
+			hObj.setAngle(angle);
 	}
 	
 	@Override

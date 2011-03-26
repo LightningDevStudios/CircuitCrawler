@@ -23,6 +23,11 @@ public class Finger
 			final UIButton button = (UIButton)ent;
 			button.press();
 		}
+		else if (ent instanceof UIJoypad)
+		{
+			final UIJoypad joypad = (UIJoypad)ent;
+			joypad.setFingerState(true);
+		}
 	}
 	
 	public void update()
@@ -46,6 +51,11 @@ public class Finger
 		if (ent instanceof UIButton)
 		{
 			//ent.updateColor(1.0f, 1.0f, 1.0f, 1.0f);
+		}
+		else if (ent instanceof UIJoypad)
+		{
+			final UIJoypad joypad = (UIJoypad)ent;
+			joypad.setFingerState(false);
 		}
 	}
 	

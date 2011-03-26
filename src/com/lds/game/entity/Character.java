@@ -31,6 +31,19 @@ public abstract class Character extends PhysEnt //all characters, including the 
 		{
 			takeDamage(5);
 		}
+		else if (ent instanceof SpikeBall)
+		{
+			takeDamage(25);
+		}
+		else if (ent instanceof CannonShell)
+		{
+			takeDamage(5);
+		}
+		else if (ent instanceof Teleporter)
+		{
+			this.setXPos(((Teleporter) ent).teleportX());
+			this.setYPos(((Teleporter) ent).teleportY());
+		}
 	}
 	
 	@Override

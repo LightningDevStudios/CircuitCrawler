@@ -75,6 +75,8 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 			Game.text = new Texture(R.drawable.text, 256, 256, 16, 8, context, "text");
 			Game.tilesetworld = new Texture(R.drawable.tilesetworld, 512, 256, 16, 8, context, "tilesetworld");
 			Game.tilesetentities = new Texture(R.drawable.tilesetentities, 256, 256, 8, 8, context, "tilesetentities");
+			Game.joystickout = new Texture(R.raw.joystickout, 64, 64, 1, 1, context, "joystickout");
+			Game.joystickin = new Texture(R.raw.joystickin, 32, 32, 1, 1, context, "joystickin");
 			
 			TextureLoader.getInstance().initialize(gl);
 			TextureLoader tl = TextureLoader.getInstance();
@@ -84,6 +86,8 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 			tl.loadTexture(Game.text);
 			tl.loadTexture(Game.tilesetworld);
 			tl.loadTexture(Game.tilesetentities);
+			tl.loadTexture(Game.joystickout);
+			tl.loadTexture(Game.joystickin);
 			
 			for(Entity ent : game.entList)
 			{
@@ -129,19 +133,18 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	
 	@Override
 	public void onDrawFrame(GL10 gl) 
-	{		
+	{
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-
+		//remove entities that are queued for removal
 		//tick the stopwatch every frame, gives relatively stable intervals
 		frameCount++;
 		game.frameInterval = Stopwatch.elapsedTimeMs();
 		Stopwatch.tick();
 
 		game.updateTriggers();
-		game.updateFingers();
 		game.updateRenderedEnts();
 		game.cleaner.update(game.entList, gl);
-		
+		game.updateFingers();
 		game.renderTileset(gl);
 
 		//Triggered when the perspective needs to be redrawn
@@ -434,6 +437,10 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 					
 					break;
 				case MotionEvent.ACTION_UP:
+					for (final Finger f : game.fingerList)
+					{
+						f.onStackPop();
+					}
 					game.fingerList.clear();
 					break;
 				case MotionEvent.ACTION_POINTER_UP:

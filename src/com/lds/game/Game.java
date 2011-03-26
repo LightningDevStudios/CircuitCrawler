@@ -56,6 +56,8 @@ public class Game
 	public static Texture text;
 	public static Texture tilesetworld;
 	public static Texture tilesetentities;
+	public static Texture joystickout;
+	public static Texture joystickin;
 	public Texture someText;
 	
 	
@@ -78,9 +80,6 @@ public class Game
 	//*/
 	//public Sprite spr;
 	
-	//AI data
-	public static int aiCheckInterval;
-	
 	//public Animation spriteAnim;
 		
 	//Constructors
@@ -94,6 +93,8 @@ public class Game
 		text = new Texture(R.drawable.text, 256, 256, 16, 8, context, "text");
 		tilesetworld = new Texture(R.drawable.tilesetworld, 512, 256, 16, 8, context, "tilesetworld");
 		tilesetentities = new Texture(R.drawable.tilesetentities, 256, 256, 8, 8, context, "tilesetentities");
+		joystickout = new Texture(R.raw.joystickout, 64, 64, 1, 1, context, "joystickout");
+		joystickin = new Texture(R.raw.joystickin, 32, 32, 1, 1, context, "joystickin");
 		
 				
 		entList = new ArrayList<Entity>();
@@ -119,10 +120,10 @@ public class Game
 		tl.loadTexture(someText);
 		tl.loadTexture(tilesetworld);
 		tl.loadTexture(tilesetentities);
-		
-		aiCheckInterval = Stopwatch.elapsedTimeMs();
+		tl.loadTexture(joystickout);
+		tl.loadTexture(joystickin);
 						
-		
+		///*		
  		for (int i = 0; i < tileset.length; i++)
 		{
 			for (int j = 0; j < tileset[0].length; j++)
@@ -143,16 +144,9 @@ public class Game
 				}
 			}
 		}
- 		
-		/*tileset[12][6].setAsSlipperyTile();
-		tileset[13][6].setAsSlipperyTile();
-		tileset[11][6].setAsSlipperyTile();
-		tileset[12][7].setAsSlipperyTile();
-		tileset[13][7].setAsSlipperyTile();
-		tileset[11][7].setAsSlipperyTile();
-		tileset[12][5].setAsSlipperyTile();
-		tileset[13][5].setAsSlipperyTile();
-		tileset[11][5].setAsSlipperyTile();*/
+		//tileset[12][6].setAsSlipperyTile();
+		//tileset[13][6].setAsSlipperyTile();
+		//tileset[11][6].setAsSlipperyTile();
  		
  		for (int i = 0; i < tileset.length; i++)
  		{
@@ -164,9 +158,9 @@ public class Game
  					tileset[i][j].updateBordersWall(tileset, j, i);
  			}
  		}
- 			
+ 		//*/		
 		/*//Parser
-		Parser parser = new Parser(context, R.xml.tutorial);
+		Parser parser = new Parser(context, R.xml.tempdata);
 		
 		entList = parser.entList;
 		try 
@@ -180,14 +174,12 @@ public class Game
 		catch (IOException e) 
 		{
 			e.printStackTrace();
-		}
+		}*/
 	
-		tileset = parser.tileset;
-		entList.addAll(parser.entList);
-		player = parser.player;
-		entList.add(player);*/
+		/*tileset = parser.tileset;
+		entList.addAll(parser.entList);*/
 		
-		//CAN DEAL WITH THIS SHIT
+		//  /*CAN DEAL WITH THIS SHIT
 		door = new Door (-108.0f, -180.0f);
 		door.enableTilesetMode(tilesetentities, 2, 1);
 		entList.add(door);
@@ -205,23 +197,19 @@ public class Game
 		//block.initGradientInterp(interpGM);
 		entList.add(block);
 		
-		blob1 = new Blob(-250.0f, 0.0f, AIType.STALKER);
+		/*blob1 = new Blob(-250.0f, 0.0f, AIType.STALKER);
 		blob1.enableTilesetMode(tilesetwire, 2, 1);
 		entList.add(blob1);
-		//final NodePath np = new NodePath();
-		//np.add(new Node(-250.0f, 0.0f));
-		//blob1.setPatrolPath(np);
-				
+		
 		blob2 = new Blob(-215.0f, -400.0f, AIType.TURRET);
 		blob2.enableTilesetMode(tilesetwire, 2, 2);
 		entList.add(blob2);
-		
 		final NodePath np = new NodePath();
 		np.add(new Node(-215, -400));
 		np.add(new Node(-215, -300));
 		np.add(new Node(-100, -300));
-		blob2.setPatrolPath(np);
-				
+		blob2.setPatrolPath(np);*/
+
 		Button button1 = new Button(108.0f, 0.0f);
 		button1.enableTilesetMode(tilesetentities, 0, 0);
 		entList.add(button1);
@@ -239,36 +227,42 @@ public class Game
 		block2.enableTilesetMode(tilesetentities, 3, 0);
 		entList.add(block2);
 
-		
 		/*SpikeBall wall = new SpikeBall(35, -200, -250, true, true, 15, 500, 0.0f, 0.0f, 0, -300, 1);
 		wall.enableTilesetMode(tilesetwire, 1, 2);
 		//wall.scale(1.0f,2.0f);
-		entList.add(wall);
+		entList.add(wall);*/
 		
-		Cannon cannon = new Cannon(35, -100, -300, 90, 1, 1, true, false, true, 5);
+		/*Cannon cannon = new Cannon(35, -150, -340, 90, 1, 1, true, false, true, 5, 5);
 		cannon.enableTilesetMode(tilesetwire, 2, 1);
 		entList.add(cannon);*/
 		
-		/*MovingWall wall2 = new MovingWall(35, -150, -300, true, true, 5, 500, 0.0f, 0.0f, -112.5f, -300, -1);
-		wall2.enableTilesetMode(tilesetwire, 1, 3);
-		//wall2.scale(1.0f,2.0f);
-		entList.add(wall2);
-	    
+		Teleporter tele1 = new Teleporter(40,-100,-340,-200,-340);
+		tele1.enableTilesetMode(tilesetwire, 2, 1);
+		entList.add(tele1);
 		
-		spriteAnim = new Animation(tilesetwire, 0, 7, 7, 0, 3000);
+		Teleporter tele2 = new Teleporter(40,-200,-340,-100,-340);
+		tele2.enableTilesetMode(tilesetwire, 2, 1);
+		entList.add(tele2);
+		
+		/*spriteAnim = new Animation(tilesetwire, 0, 7, 7, 0, 3000);
 		spr = new Sprite(50, -100, 100, 45, 1, 1, spriteAnim);
 		spr.enableTextureMode(tilesetwire);
-		entList.add(spr);
+		entList.add(spr);*/
 
 		box = new PuzzleBox(-120.0f, -400.0f, 0.0f, false, true);
-		entList.add(box);*/
+		entList.add(box);
 
 		
-		player = new Player(-50.0f, -450.0f, 0.0f);
+		player = new Player(-108.0f, -450.0f, 0.0f);
 		player.enableTilesetMode(tilesetwire, 1, 0);
 		entList.add(player);
 		player.enableUserControl();
-
+		
+		/*
+		health = new PickupHealth(50, -108.0f, -250.0f);
+		health.enableColorMode(0, 255, 255, 255);
+		entList.add(health);
+		*/
 		//spr = new Sprite(30.0f, -108.0f, -300.0f, 45.0f, 1.0f, 1.0f, 10, 90, 1, spriteAnim);
 		//entList.add(spr);
 		
@@ -331,8 +325,9 @@ public class Game
 		btnB.enableColorMode(200, 65, 65, 100);
 		btnB.setIntervalTime(Stopwatch.elapsedTimeMs());
 		
-		joypad = new UIJoypad(100, 100, UIPosition.BOTTOMLEFT, player.getAngle());
+		joypad = new UIJoypad(.45f, .45f, UIPosition.BOTTOMLEFT, player.getAngle());
 		joypad.autoPadding(0.0f, 5.0f, 5.0f, 0.0f);
+		joypad.enableTextureMode(joystickout);
 		
 		textbox = new UITextBox(112, 32, UIPosition.TOPLEFT);
 		textbox.autoPadding(5.0f, 5.0f, 0.0f, 0.0f);
@@ -469,6 +464,32 @@ public class Game
 		{
 			if (enemy.getPathToPlayer() != null)
 			{
+				/*if (enemy.isColliding())
+				{
+					if (enemy.getPlayerPathLocation() >= enemy.getPathToPlayer().getSize() - 2)
+					{
+						enemy.stop();
+						runBecomeAgressiveAI(enemy);
+						if (enemy.getPathToPlayer() == null)
+							return;
+					}
+					else
+					{
+						enemy.stop();
+						Node lastNode = enemy.getPathToPlayer().getNode(enemy.getPlayerPathLocation());
+						Node nextNode = enemy.getPathToPlayer().getNode(enemy.getPlayerPathLocation() + 1);
+						//lastNode.deactivateLinks(nextNode);
+						runBecomeAgressiveAI(enemy);
+						if (enemy.getPathToPlayer() == null)
+							return;
+						//lastNode.activateLinks(nextNode);
+					}
+					enemy.stop();
+					runBecomeAgressiveAI(enemy);
+					if (enemy.getPathToPlayer() == null)
+						return;
+					enemy.setColliding(false);
+				}*/
 				//if close enough to player, move towards him. hang back and shoot if too close enough
 				if (enemy.getPathToPlayer().getSize() == 2 || pathIsClear(new Node(enemy.getPos()), new Node(player.getPos())))
 				{
@@ -482,26 +503,17 @@ public class Game
 						enemy.setRandomTime((int)(Math.random() * 500) + 500);
 						enemy.setLastTime(Stopwatch.elapsedTimeMs());
 					}
-					
-					//move and/or rotate to player
-					final float angleToPlayer = Vector2f.sub(player.getPos(), enemy.getPos()).angleDeg();
+					//move to player
 					if (Vector2f.sub(enemy.getPos(), player.getPos()).mag() <  Enemy.INNER_RADIUS)
 					{
 						enemy.stop();
-						if (enemy.getAngle() > angleToPlayer + 2 || enemy.getAngle() < angleToPlayer - 2)
-							enemy.rotateTo(angleToPlayer);
 					}
 					else
 					{
-						if (enemy.getAngle() > angleToPlayer + 2 || enemy.getAngle() < angleToPlayer - 2)
-							enemy.rotateTo(angleToPlayer);
-						else
-							enemy.moveTo(player.getPos());
-						if (Stopwatch.elapsedTimeMs() - aiCheckInterval > 1000)
-						{
-							runBecomeAgressiveAI(enemy);
-							aiCheckInterval = Stopwatch.elapsedTimeMs();
-						}
+						enemy.stop();
+						enemy.rotateTo(Vector2f.sub(player.getPos(), enemy.getPos()).angleDeg());
+						enemy.moveTo(player.getPos());
+						runBecomeAgressiveAI(enemy);
 					}
 				}
 				else//if not close to player yet
@@ -510,7 +522,7 @@ public class Game
 					if (enemy.getPos().approxEquals(enemy.getPathToPlayer().getNode(enemy.getPlayerPathLocation() + 1).getPos(), 2.0f))
 					{
 						enemy.stop();
-						if (enemy.getPlayerPathLocation() == enemy.getPathToPlayer().getSize() - 2)
+						if (enemy.getPlayerPathLocation() + 1 == enemy.getPathToPlayer().getSize() - 1)
 						{
 							runBecomeAgressiveAI(enemy);
 							return;
@@ -518,21 +530,14 @@ public class Game
 						else
 							enemy.setPlayerPathLocation(enemy.getPlayerPathLocation() + 1);
 					}
-					final Vector2f nextNodePos = enemy.getPathToPlayer().getNode(enemy.getPlayerPathLocation() + 1).getPos();
-					final float angleToNextNode = Vector2f.sub(nextNodePos, enemy.getPos()).angleDeg();
-					if (enemy.getAngle() > angleToNextNode + 2 || enemy.getAngle() < angleToNextNode - 2)
-						enemy.rotateTo(angleToNextNode);
-					else
-						enemy.moveTo(nextNodePos);
+					Vector2f nextNodePos = enemy.getPathToPlayer().getNode(enemy.getPlayerPathLocation() + 1).getPos();
+					enemy.moveTo(nextNodePos);
+					enemy.rotateTo(Vector2f.sub(nextNodePos, enemy.getPos()).angleDeg());
 				}
 			}
 			else
 			{
-				if (Stopwatch.elapsedTimeMs() - aiCheckInterval > 1000)
-				{
-					runBecomeAgressiveAI(enemy);
-					aiCheckInterval = Stopwatch.elapsedTimeMs();
-				}
+				runBecomeAgressiveAI(enemy);
 			}
 		}
 		else if (enemy.getType() == AIType.TURRET)
@@ -559,8 +564,29 @@ public class Game
 	{
 		enemy.setAgressive(true);
 		enemy.setOnPatrol(false);
-		if (enemy.getType() == AIType.STALKER || enemy.getType() == AIType.PATROL)
+		if (enemy.getType() == AIType.STALKER)
 		{	
+			enemy.setPathToPlayer(getPathToPlayer(enemy));
+			enemy.setPlayerPathLocation(0);
+		}
+		else if (enemy.getType() == AIType.PATROL)
+		{
+			enemy.stop();
+			float angleToPlayer = (float)Vector2f.sub(player.getPos(), enemy.getPos()).angleDeg();
+			if (enemy.getAngle() == angleToPlayer)
+			{
+				enemy.setAngle(angleToPlayer);
+				if (!enemy.isMoving)
+					enemy.moveTo(player.getPos());
+				enemy.setDoneRotating(true);
+			}
+			else
+			{
+				enemy.rotateTo(angleToPlayer);
+				enemy.setDoneRotating(false);
+			}
+			
+			//pathfinding stuff
 			enemy.setPathToPlayer(getPathToPlayer(enemy));
 			enemy.setPlayerPathLocation(0);
 		}
@@ -710,8 +736,8 @@ public class Game
 			return null;
 
 		//int previousListSize = 1;
-		final ArrayList<Node> openList = new ArrayList<Node>();
-		final ArrayList<Node> closedList = new ArrayList<Node>();
+		ArrayList<Node> openList = new ArrayList<Node>();
+		ArrayList<Node> closedList = new ArrayList<Node>();
 		Node lowestF = startNode;
 		closedList.add(startNode);
 		final Vector2f startHVec = Vector2f.sub(startNode.getPos(), goalNode.getPos());
@@ -765,7 +791,7 @@ public class Game
 		if (openList.contains(goalNode) || closedList.contains(goalNode))
 		{
 			//find nodePath from goal to start
-			final NodePath path = new NodePath(goalNode);
+			NodePath path = new NodePath(goalNode);
 			Node currentNode = goalNode;
 			while (currentNode != startNode)
 			{

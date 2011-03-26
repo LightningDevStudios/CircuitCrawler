@@ -118,8 +118,8 @@ public abstract class Entity
 	public void draw(GL10 gl)
 	{
 		gl.glTranslatef(posVec.getX(), posVec.getY(), 0.0f);
-		gl.glRotatef(angle, 0.0f, 0.0f, 1.0f);
 		gl.glScalef(scaleVec.getX(), scaleVec.getY(), 1.0f);
+		gl.glRotatef(angle, 0.0f, 0.0f, 1.0f);
 		
 		
 		final boolean containsColor = renderMode.contains(RenderMode.COLOR);
@@ -463,7 +463,14 @@ public abstract class Entity
 	public void rectangleBounceAgainstRectangle (Entity ent){	}
 	
 	//overriden for entity interaction
-	public void interact (Entity ent)		{	}
+	public void interact (Entity ent)		
+	{
+		if (ent instanceof Teleporter)
+		{
+			this.setXPos(((Teleporter) ent).teleportX());
+			this.setYPos(((Teleporter) ent).teleportY());
+		}
+	}
 	
 	//overriden for entity uninteraction
 	public void uninteract (Entity ent)		{	}
