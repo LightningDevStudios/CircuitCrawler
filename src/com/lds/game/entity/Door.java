@@ -24,9 +24,6 @@ public class Door extends StaticEnt
 	@Override
 	public boolean doesCollide (Entity ent)
 	{
-		if (ent instanceof Tile)
-			return false;
-		else
-			return super.doesCollide(ent);
+		return (ent instanceof Tile) ? false : true;
 	}
 }

@@ -70,7 +70,9 @@ public class UIJoypad extends UIEntity
 		if (inputVec.mag() > xSize / 2)
 			inputVec.scaleTo(xSize / 2);
 		
-		fingerCircle.setPos(Vector2f.scaleTo(inputVec, inputVec.mag() - fingerCircle.xSize / 2));
+		//TODO choose one method of moving inner circle
+		//fingerCircle.setPos(Vector2f.scaleTo(inputVec, inputVec.mag() - fingerCircle.xSize / 2));
+		fingerCircle.setPos(inputVec);
 		
 		inputVec.scaleTo(inputVec.mag() * MAX_SCALAR / xSize);
 	}
