@@ -61,8 +61,9 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 	@Override
 	public void onGameOver()
 	{
-		Intent i = new Intent(Run.this, MainMenu.class);
-		startActivity(i);
+		//Intent i = new Intent(Run.this, MainMenu.class);
+		//startActivity(i);
+		finish();
 	}
 	
 	@Override
