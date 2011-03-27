@@ -15,6 +15,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 public class MainMenu extends Activity
@@ -49,7 +50,7 @@ public class MainMenu extends Activity
 				{
 					//Show About Screen
 					Intent i = new Intent(MainMenu.this, AboutScreen.class);
-					MainMenu.this.startActivity(i);
+					startActivity(i);
 				}
 				else if (position == 3)
 				{

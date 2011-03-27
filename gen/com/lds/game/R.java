@@ -20,19 +20,21 @@ public final class R {
         public static final int circuitpuzzle=0x7f020000;
         public static final int icon=0x7f020001;
         public static final int mainmenulogo=0x7f020002;
-        public static final int randomthings=0x7f020003;
-        public static final int text=0x7f020004;
-        public static final int tilesetcolors=0x7f020005;
-        public static final int tilesetentities=0x7f020006;
-        public static final int tilesetwire=0x7f020007;
-        public static final int tilesetworld=0x7f020008;
+        public static final int mmdivider=0x7f020003;
+        public static final int randomthings=0x7f020004;
+        public static final int text=0x7f020005;
+        public static final int tilesetcolors=0x7f020006;
+        public static final int tilesetentities=0x7f020007;
+        public static final int tilesetwire=0x7f020008;
+        public static final int tilesetworld=0x7f020009;
     }
     public static final class id {
-        public static final int CircuitCrawlerLogo=0x7f090003;
-        public static final int MM_LeftParent=0x7f090002;
-        public static final int MM_Main=0x7f090001;
-        public static final int MM_RightListView=0x7f090004;
-        public static final int TextView01=0x7f090000;
+        public static final int AB_Main=0x7f090000;
+        public static final int CircuitCrawlerLogo=0x7f090004;
+        public static final int MM_LeftParent=0x7f090003;
+        public static final int MM_Main=0x7f090002;
+        public static final int MM_RightListView=0x7f090005;
+        public static final int TextView01=0x7f090001;
     }
     public static final class layout {
         public static final int about=0x7f030000;
