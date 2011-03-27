@@ -27,7 +27,7 @@ import com.lds.parser.Parser;
 public class Game
 {
 	
-	//public Level[][] GameLevels;
+	public Level[] levels;
 
 	public int frameInterval;
 	public static boolean worldOutdated, windowOutdated;

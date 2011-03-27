@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
+xmlns:android="http://schemas.android.com/apk/res/android"
 android:id="@+id/MM_Main"
 android:layout_width="fill_parent"
 android:layout_height="fill_parent"
 android:orientation="horizontal"
-android:stretchColumns="0"
-xmlns:android="http://schemas.android.com/apk/res/android">
+android:stretchColumns="0">
+
 	<RelativeLayout
 		android:id="@+id/MM_LeftParent"
 		android:layout_width="fill_parent"
@@ -17,38 +18,10 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 					android:layout_height="fill_parent"		
 					android:src="@drawable/mainmenulogo"/>
 	</RelativeLayout>
-	<ScrollView android:layout_weight=".66" 
-		android:id="@+id/MM_ButtonScroll" 
-		android:layout_width="fill_parent"
+	<ListView android:id="@+id/MM_RightListView"
+		android:layout_width="fill_parent" 
+		android:layout_weight=".66"
 		android:layout_height="fill_parent">
-			<LinearLayout android:id="@+id/MM_RightSide"
-				android:layout_width="fill_parent"
-				android:layout_height="fill_parent"
-				android:orientation="vertical">
-					<Button android:text="Start"
-						android:id="@+id/MM_StartButton" 
-						android:layout_width="fill_parent" 
-						android:layout_height="wrap_content"/>
-					<Button android:text="Tutorial"
-						android:id="@+id/MM_TutorialButton" 
-						android:layout_width="fill_parent" 
-						android:layout_height="wrap_content"/>
-					<Button android:text="About"
-						android:id="@+id/MM_AboutButton" 
-						android:layout_width="fill_parent" 
-						android:layout_height="wrap_content"/>
-					<Button android:text="YTF"
-						android:id="@+id/MM_YTFButton" 
-						android:layout_width="fill_parent" 
-						android:layout_height="wrap_content"/>
-					<Button android:text="Donate"
-						android:id="@+id/MM_DonateButton" 
-						android:layout_width="fill_parent" 
-						android:layout_height="wrap_content"/>
-					<Button android:text="Settings"
-						android:id="@+id/MM_SettingsButton" 
-						android:layout_width="fill_parent" 
-						android:layout_height="wrap_content"/>
-			</LinearLayout>
-	</ScrollView>
+</ListView>
+
 </LinearLayout>
