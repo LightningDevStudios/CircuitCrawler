@@ -4,18 +4,15 @@ import com.lds.game.R;
 import com.lds.game.Run;
 
 import android.app.Activity;
-import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.*;
-import android.view.View.*;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.ViewAnimator;
 
 public class MainMenu extends Activity
@@ -34,11 +31,17 @@ public class MainMenu extends Activity
 		adapter.setNotifyOnChange(true);
 		list.setAdapter(adapter);
 		
-		//set up ViewAnimator
+		//set up ViewAnimator with animations
 		final ViewAnimator animator = (ViewAnimator)findViewById(R.id.MM_LeftViewAnimator);
-		View ccLogo = View.inflate(this, R.layout.circuit_crawler_logo, null);
+		final Animation fadeIn = AnimationUtils.loadAnimation(this, R.anim.fade_in);
+		animator.setInAnimation(fadeIn);
+		final Animation fadeOut = AnimationUtils.loadAnimation(this, R.anim.fade_out);
+		animator.setOutAnimation(fadeOut);
+		animator.setAnimateFirstView(true);
+		//add views to ViewAnimator
+		final View ccLogo = View.inflate(this, R.layout.circuit_crawler_logo, null);
 		animator.addView(ccLogo, 0);
-		View aboutScreen = View.inflate(this, R.layout.about, null);
+		final View aboutScreen = View.inflate(this, R.layout.about, null);
 		animator.addView(aboutScreen, 1);
 		
 		list.setOnItemClickListener(new OnItemClickListener()

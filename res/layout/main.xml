@@ -6,7 +6,6 @@ android:layout_width="fill_parent"
 android:layout_height="fill_parent"
 android:orientation="horizontal"
 android:stretchColumns="0">
-
 	<RelativeLayout
 		android:id="@+id/MM_LeftParent"
 		android:layout_width="fill_parent"
@@ -22,6 +21,5 @@ android:stretchColumns="0">
 		android:layout_width="fill_parent" 
 		android:layout_weight=".66"
 		android:layout_height="fill_parent">
-</ListView>
-
+	</ListView>
 </LinearLayout>
