@@ -103,7 +103,7 @@ public class Game
 		buttona = new Texture(R.raw.buttona, 32, 32, 1, 1, context, "buttona");
 		buttonb = new Texture(R.raw.buttonb, 32, 32, 1, 1, context, "buttonb");
 		baricons = new Texture (R.raw.baricons, 32, 16, 2, 1, context, "baricons");
-		energybarborder = new Texture (R.raw.energybarborder, 192, 16, 1, 1, context, "energybarborder");
+		energybarborder = new Texture (R.raw.energybarborder, 128, 16, 1, 1, context, "energybarborder");
 		healthbarborder = new Texture(R.raw.healthbarborder, 256, 16, 1, 1, context, "healthbarborder");
 		
 				
@@ -197,7 +197,7 @@ public class Game
 		//  /*CAN DEAL WITH THIS SHIT
 		door = new Door (-108.0f, -180.0f);
 		door.setAngle(90.0f);
-		door.setYScl(0.5f);
+		door.setXScl(0.5f);
 		door.enableTilesetMode(tilesetentities, 2, 1);
 		entList.add(door);
 		
@@ -252,7 +252,7 @@ public class Game
 		cannon.enableTilesetMode(tilesetwire, 2, 1);
 		entList.add(cannon);*/
 		
-		Teleporter tele1 = new Teleporter(40,-100,-340);
+		Teleporter tele1 = new Teleporter(40,0,-340);
 		tele1.enableTilesetMode(tilesetwire, 2, 1);
 		entList.add(tele1);
 		
