@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.ViewAnimator;
 
 public class MainMenu extends Activity
 {
@@ -25,13 +26,22 @@ public class MainMenu extends Activity
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.main);
+		
+		//set up ListView
 		String[] items = getResources().getStringArray(R.array.menu_items);
-		ListView myListView = (ListView)findViewById(R.id.MM_RightListView);
+		ListView list = (ListView)findViewById(R.id.MM_RightListView);
 		final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.list_item, items);
 		adapter.setNotifyOnChange(true);
-		myListView.setAdapter(adapter);
+		list.setAdapter(adapter);
 		
-		myListView.setOnItemClickListener(new OnItemClickListener()
+		//set up ViewAnimator
+		final ViewAnimator animator = (ViewAnimator)findViewById(R.id.MM_LeftViewAnimator);
+		View ccLogo = View.inflate(this, R.layout.circuit_crawler_logo, null);
+		animator.addView(ccLogo, 0);
+		View aboutScreen = View.inflate(this, R.layout.about, null);
+		animator.addView(aboutScreen, 1);
+		
+		list.setOnItemClickListener(new OnItemClickListener()
 		{
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id)
 			{
@@ -44,12 +54,13 @@ public class MainMenu extends Activity
 				else if (position == 1)
 				{
 					//Run Tutorial Level
+					//for now, just takes us back to logo
+					animator.setDisplayedChild(0);
 				}
 				else if (position == 2)
 				{
 					//Show About Screen
-					Intent i = new Intent(MainMenu.this, AboutScreen.class);
-					MainMenu.this.startActivity(i);
+					animator.setDisplayedChild(1);
 				}
 				else if (position == 3)
 				{
@@ -66,7 +77,7 @@ public class MainMenu extends Activity
 			}	
 		});
 	}
-	
+
 	@Override
 	protected void onResume()
 	{

@@ -12,11 +12,11 @@ android:stretchColumns="0">
 		android:layout_width="fill_parent"
 		android:layout_height="fill_parent"
 		android:layout_weight=".34">
-			<ImageView
-					android:id="@+id/CircuitCrawlerLogo"
+			<ViewAnimator
+					android:id="@+id/MM_LeftViewAnimator"
 					android:layout_width="fill_parent"
-					android:layout_height="fill_parent"		
-					android:src="@drawable/mainmenulogo"/>
+					android:layout_height="fill_parent">
+			</ViewAnimator>
 	</RelativeLayout>
 	<ListView android:id="@+id/MM_RightListView"
 		android:layout_width="fill_parent" 
