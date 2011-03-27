@@ -1,7 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-  xmlns:android="http://schemas.android.com/apk/res/android"
-  android:layout_width="fill_parent"
-  android:layout_height="fill_parent">
-<TextView android:text="Some about menu text goes here." android:id="@+id/About" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
-</LinearLayout>
+<ScrollView
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:id="@+id/About" 
+	android:layout_width="fill_parent"
+	android:layout_height ="fill_parent">
+	<RelativeLayout
+  		android:layout_width="fill_parent"
+ 		android:layout_height="wrap_content">
+		<TextView
+			android:layout_width="wrap_content" 
+			android:layout_height="wrap_content"
+			android:gravity="left"
+			android:layout_gravity="center_vertical|left"
+			android:text=
+			"About us\n\n\n
+			Lightning Development Studios\n\n
+			LDS is a group of five high school students at Sage Hill School in Newport Coast, California. We are all learning Java, and for most of us, Circuit Crawler is our first game design project. Our goal is to use this game to support the Youth For Technology Foundation, as well as increase awareness about it. 100% of the profits from Circuit Crawler will go to YTF. Expect more from us in the future!\n
+			More about LDS: http://lightningdevelopment.wordpress.com\n\n
+			Youth For Technology Foundation\n\n
+			YTF is a non-profit organization dedicated to bringing technological literacy to underprivleged communities, both in developing countries and in the United States. With a special focus on youth, YTF helps bring the modern, digital world to communities around the world, and inspire innovation among the members of these communities.\n
+			More about YTF: http://www.youthfortechnology.org">
+		</TextView>
+		<TextView
+			android:layout_width="wrap_content" 
+			android:layout_height="wrap_content"
+			android:gravity="left"
+			android:layout_gravity="center_vertical|left"
+			android:text=
+			"About us\n\n\n
+			Lightning Development Studios\n\n
+			LDS is a group of five high school students at Sage Hill School in Newport Coast, California. We are all learning Java, and for most of us, Circuit Crawler is our first game design project. Our goal is to use this game to support the Youth For Technology Foundation, as well as increase awareness about it. 100% of the profits from Circuit Crawler will go to YTF. Expect more from us in the future!\n
+			More about LDS: http://lightningdevelopment.wordpress.com\n\n
+			Youth For Technology Foundation\n\n
+			YTF is a non-profit organization dedicated to bringing technological literacy to underprivleged communities, both in developing countries and in the United States. With a special focus on youth, YTF helps bring the modern, digital world to communities around the world, and inspire innovation among the members of these communities.\n
+			More about YTF: http://www.youthfortechnology.org">
+		</TextView>
+			<!--  Credits\n\n\n
+			AI\n\n
+			Devin Reed\n\n
+			Art\n\n
+			Lauren Burke, Robert Rouhani\n\n
+			Level Design\n\n
+			Zayd Simjee, Devin Reed, Matt Masarik, Robert Rouhani\n\n
+			Tools Development\n\n
+			Robert Rouhani\n\n
+			Menus\n\n
+			Robert Rouhani, Devin Reed, Matt Masarik\n\n
+			Music\n\n
+			Jack Heffron, Brandon Rayhaun\n\n
+			Parsing\n\n
+			Zayd Simjee, Robert Rouhani\n\n
+			Physics\n\n
+			Devin Reed\n\n
+			PR\n\n
+			Michael Yorita\n\n
+			Sound Effects\n\n
+			Robert Rouhani, Devin Reed, with help from SFXR\n\n
+			Telporters, Cannons, and other fun features\n\n
+			Matt Masarik\n\n
+			User Interface\n\n
+			Robert Rouhani\n\n
+			And special thanks to our families and friends; without them this would not have been possible.">-->
+	</RelativeLayout>
+</ScrollView>
