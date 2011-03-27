@@ -52,7 +52,9 @@ public final class R {
     }
     public static final class xml {
         public static final int level=0x7f040000;
-        public static final int tempdata=0x7f040001;
-        public static final int tutorial=0x7f040002;
+        public static final int level1=0x7f040001;
+        public static final int level2=0x7f040002;
+        public static final int tempdata=0x7f040003;
+        public static final int tutorial=0x7f040004;
     }
 }

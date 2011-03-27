@@ -154,7 +154,7 @@ public class Game
  		}
  		*/		
 		//Parser
-		Parser parser = new Parser(context, R.xml.tutorial);
+		Parser parser = new Parser(context, R.xml.level2);
 		
 		entList = parser.entList;
 		try 
