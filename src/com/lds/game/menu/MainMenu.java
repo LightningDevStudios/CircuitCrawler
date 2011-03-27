@@ -48,34 +48,30 @@ public class MainMenu extends Activity
 		{
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id)
 			{
-				if (position == 0)
+				switch (position)
 				{
-					//Run Game
-					Intent i = new Intent(MainMenu.this, Run.class);
-					startActivity(i);
-				}
-				else if (position == 1)
-				{
-					//Run Tutorial Level
-					//for now, just takes us back to logo
-					animator.setDisplayedChild(0);
-				}
-				else if (position == 2)
-				{
-					//Show About Screen
-					animator.setDisplayedChild(1);
-				}
-				else if (position == 3)
-				{
-					//Show YTF Screen
-				}
-				else if (position == 4)
-				{
-					//Donate Button
-				}
-				else
-				{
-					//Settings Menu
+					case 0:
+						//Run Game
+						Intent i = new Intent(MainMenu.this, Run.class);
+						startActivity(i);
+						break;
+					case 1:
+						//Run Tutorial Level
+						//for now, just takes us back to logo
+						animator.setDisplayedChild(0);
+						break;
+					case 2:
+						//Show About Screen
+						animator.setDisplayedChild(1);
+						break;
+					case 3:
+						//show YTF screen
+						break;
+					case 4:
+						//Donate Button
+						break;
+					case 5:
+						//Settings Menu
 				}
 			}	
 		});

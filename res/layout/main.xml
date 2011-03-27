@@ -20,6 +20,14 @@ android:stretchColumns="0">
 	<ListView android:id="@+id/MM_RightListView"
 		android:layout_width="fill_parent" 
 		android:layout_weight=".66"
+<<<<<<< HEAD
 		android:layout_height="fill_parent">
 	</ListView>
+=======
+		android:layout_height="fill_parent"
+		android:divider="@drawable/mmdivider"
+		android:dividerHeight="1dp">
+</ListView>
+
+>>>>>>> refs/remotes/origin/robert_rouhani_master
 </LinearLayout>

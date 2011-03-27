@@ -11,31 +11,26 @@ public class TilesetHelper
 	
 	public static float[] getTextureVertices(Texture tex, int x, int y)
 	{
-		return getTextureVertices(x, y, 0, tex.getXTiles() - 1, 0, tex.getYTiles() - 1);
+		return getTextureVertices(x, y, 0, tex.getXTiles() - 1, 0, tex.getYTiles() - 1, tex.getOffsetX(), tex.getOffsetY());
 	}
 	
-	public static float[] getTextureVertices(int x, int y, int minX, int maxX, int minY, int maxY)
+	public static float[] getTextureVertices(int x, int y, int minX, int maxX, int minY, int maxY, float offsetX, float offsetY)
 	{
 		if (x >= minX && x <= maxX && y >= minY && y <= maxY)
 		{
 			final float intervalX = 1.0f/(float)(maxX - minX + 1);
 			final float intervalY = 1.0f/(float)(maxY - minY + 1);
 			
-			final float negX = x * intervalX;
-			float posX = (x + 1) * intervalX;
+			final float negX = x * intervalX + offsetX;
+			final float posX = (x + 1) * intervalX - offsetX;
 			
-			final float negY = y * intervalY;
-			final float posY = (y + 1) * intervalY;
-			
-			/*float[] coords = { 	posX, negY,
-								posX, posY,
-								negX, negY,
-								negX, posY };*/
+			final float negY = y * intervalY + offsetY;
+			final float posY = (y + 1) * intervalY - offsetY;
 			
 			final float[] coords = { 	negX, negY,
-					posX, negY,
-					negX, posY,
-					posX, posY };
+										posX, negY,
+										negX, posY,
+										posX, posY };
 			
 			return coords;
 								
@@ -49,7 +44,7 @@ public class TilesetHelper
 		final int y = tileID / tex.getXTiles();
 		final int x = tileID - (tex.getXTiles() * y);
 		
-		return getTextureVertices(x, y, 0, tex.getXTiles() - 1, 0, tex.getYTiles() - 1);
+		return getTextureVertices(x, y, 0, tex.getXTiles() - 1, 0, tex.getYTiles() - 1, tex.getOffsetX(), tex.getOffsetY());
 	}
 	
 	public static int getTilesetIndex(float[] vertices, int min, int max)
