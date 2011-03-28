@@ -72,9 +72,9 @@ public class SoundPlayer
 	{
 		if(enableMusic)
 		{
-			AudioManager mgr = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
-			float streamVolumeCurrent = mgr.getStreamVolume(AudioManager.STREAM_MUSIC);
-			float streamVolumeMax = mgr.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
+			AudioManager mgr2 = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
+			float streamVolumeCurrent = mgr2.getStreamVolume(AudioManager.STREAM_MUSIC);
+			float streamVolumeMax = mgr2.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
 			float volume = streamVolumeCurrent / streamVolumeMax * effectVolume;
 		
 			pool.play(poolMap.get(sound), volume, volume, 1, 0, 1.0f);

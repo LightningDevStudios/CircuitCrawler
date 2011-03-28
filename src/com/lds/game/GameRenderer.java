@@ -3,6 +3,7 @@ package com.lds.game;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
+import android.media.MediaPlayer;
 import android.opengl.GLU;
 import android.os.Vibrator;
 import android.util.Log;
@@ -33,7 +34,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	public OnPuzzleActivatedListener puzzleActivatedListener;
 	public OnGameOverListener gameOverListener;
 	public float time, timer, timer2;
-	public boolean songOver;
+	public boolean test;
 	
 	public GameRenderer (float screenW, float screenH, Context context, Object syncObj)
 	{
@@ -43,7 +44,8 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		this.syncObj = syncObj;
 		Game.windowOutdated = false;
 		Game.worldOutdated = false;
-		songOver = true;
+		test = true;
+		SoundPlayer.getInstance().initialize(context);
 	}
 	
 	
@@ -151,38 +153,20 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	{
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		//remove entities that are queued for removal
-		//tick the stopwatch every frame, gives relatively stable intervals
+		//tick the stop watch every frame, gives relatively stable intervals
 		frameCount++;
 		
 		game.frameInterval = Stopwatch.elapsedTimeMs();
 		timer2 = Stopwatch.elapsedTimeMs();
 		Stopwatch.tick();
 		
-		if(songOver)
+		if(test)
 		{
-			SoundPlayer.getInstance().playSound(5);
-			songOver = false;
-			/*
-			//int song = ((int)(Math.random()* 2 + 5));
-			int song = 5;
-			SoundPlayer.getInstance().playMusic(song);
-			if(song == 5)
-			{
-				time = 196000;
-			}
-			else
-			{
-				time = 85000;
-			}
-			timer = 0;*/
+			MediaPlayer mp = MediaPlayer.create(context, R.raw.song2);
+		    mp.start();
+		    //mp.setLooping(true);
+			test = false;
 		}
-		/*
-		if(timer > time)
-		{
-			songOver = true;
-		}*/
-		
-		//timer += Stopwatch.elapsedTimeMs() - timer2;
 
 		game.updateTriggers();
 		game.updateRenderedEnts();
