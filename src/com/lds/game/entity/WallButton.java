@@ -29,4 +29,9 @@ public class WallButton extends StaticEnt
 			}
 		}
 	}
+	
+	public boolean isActive()
+	{
+		return active;
+	}
 }

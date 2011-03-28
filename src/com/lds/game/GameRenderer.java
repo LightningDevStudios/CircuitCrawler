@@ -229,7 +229,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 				if (ent instanceof PhysEnt)
 				{
 					final PhysEnt physEnt = (PhysEnt)ent;
-					final Tile nearestTile = game.nearestTile(physEnt);
+					final Tile nearestTile = Game.nearestTile(physEnt, game.tileset);
 					final int nearestTileX = nearestTile.xIndex;
 					final int nearestTileY = nearestTile.yIndex;
 					
@@ -262,7 +262,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 					}
 					
 					//interacts with nearest tile to the entity; the tile it is standing on
-					physEnt.onTileInteract(game.nearestTile(physEnt));
+					physEnt.onTileInteract(Game.nearestTile(physEnt, game.tileset));
 					
 					//bounces PhysEnts appropriately, excluding objects held by the player
 					if (!game.player.isHoldingObject() || physEnt != game.player.getHeldObject())

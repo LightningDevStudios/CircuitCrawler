@@ -467,7 +467,7 @@ public class Game
 			camPosY = worldMaxY;
 	}
 	
-	public Tile nearestTile(Entity ent)
+	public static Tile nearestTile(Entity ent, Tile[][] tileset)
 	{	
 		//TODO Fix return null when offscreen
 		final float tilesetHalfWidth = tileset[0].length * Tile.TILE_SIZE_F / 2;
