@@ -118,7 +118,7 @@ public class Game
 		
 		sr.loadTextTileset(text);
 		
-		someText = new Texture("", sr);
+		someText = new Texture("Testing!", sr);
 		
 		SoundPlayer.getInstance().initialize(context);
 		
@@ -367,10 +367,11 @@ public class Game
 		joypad.autoPadding(0.0f, 5.0f, 5.0f, 0.0f);
 		joypad.enableTextureMode(joystickout);
 		
+		/*
 		textbox = new UITextBox(112, 32, UIPosition.TOPLEFT);
 		textbox.autoPadding(5.0f, 5.0f, 0.0f, 0.0f);
 		textbox.enableTextureMode(someText);
-		textbox.setText("Testing!");
+		textbox.setText("Testing!");*/
 		
 		UIList.add(healthBar);
 		UIList.add(healthBarCover);
