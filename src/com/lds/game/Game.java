@@ -135,7 +135,7 @@ public class Game
 		tl.loadTexture(energybarborder);
 		tl.loadTexture(healthbarborder);
 						
-		///*		
+		/*		
  		for (int i = 0; i < tileset.length; i++)
 		{
 			for (int j = 0; j < tileset[0].length; j++)
@@ -155,24 +155,14 @@ public class Game
 					tileset[i][j].setAsFloor();
 				}
 			}
-		}
+		}*/
 		//tileset[12][6].setAsSlipperyTile();
 		//tileset[13][6].setAsSlipperyTile();
 		//tileset[11][6].setAsSlipperyTile();
  		
- 		for (int i = 0; i < tileset.length; i++)
- 		{
- 			for (int j = 0; j < tileset[0].length; j++)
- 			{
- 				if (tileset[i][j].isPit())
- 					tileset[i][j].updateBordersPit(tileset, j, i);
- 				else if (tileset[i][j].isWall())
- 					tileset[i][j].updateBordersWall(tileset, j, i);
- 			}
- 		}
- 		//*/		
-		/*//Parser
-		Parser parser = new Parser(context, R.xml.tempdata);
+		//Parser
+		Parser parser = new Parser(context, R.xml.level2);
+
 		
 		entList = parser.entList;
 		try 
@@ -186,12 +176,28 @@ public class Game
 		catch (IOException e) 
 		{
 			e.printStackTrace();
-		}*/
+		}
 	
-		/*tileset = parser.tileset;
-		entList.addAll(parser.entList);*/
+		tileset = parser.tileset;
+		entList.addAll(parser.entList);
+		triggerList.addAll(parser.triggerList);
 		
-		//  /*CAN DEAL WITH THIS SHIT
+		player = parser.player;
+		player.enableUserControl();
+		entList.add(player);
+		
+		for (int i = 0; i < tileset.length; i++)
+ 		{
+ 			for (int j = 0; j < tileset[0].length; j++)
+ 			{
+ 				if (tileset[i][j].isPit())
+ 					tileset[i][j].updateBordersPit(tileset, j, i);
+ 				else if (tileset[i][j].isWall())
+ 					tileset[i][j].updateBordersWall(tileset, j, i);
+ 			}
+ 		}
+		
+		/*CAN DEAL WITH THIS SHIT
 		door = new Door (-108.0f, -180.0f);
 		door.setAngle(90.0f);
 		door.setXScl(0.5f);
@@ -222,7 +228,7 @@ public class Game
 		np.add(new Node(-215, -400));
 		np.add(new Node(-215, -300));
 		np.add(new Node(-100, -300));
-		blob2.setPatrolPath(np);*/
+		blob2.setPatrolPath(np);
 
 		Button button1 = new Button(108.0f, 0.0f);
 		button1.enableTilesetMode(tilesetentities, 0, 0);
@@ -247,7 +253,7 @@ public class Game
 		
 		/*Cannon cannon = new Cannon(35, -100, -425, 90, 1, 1, true, false, true, 5, 5);
 		cannon.enableTilesetMode(tilesetwire, 2, 1);
-		entList.add(cannon);*/
+		entList.add(cannon);
 		
 		Teleporter tele1 = new Teleporter(40,0,-340);
 		tele1.enableTilesetMode(tilesetwire, 2, 1);
@@ -266,10 +272,10 @@ public class Game
 		/*spriteAnim = new Animation(tilesetwire, 0, 7, 7, 0, 3000);
 		spr = new Sprite(50, -100, 100, 45, 1, 1, spriteAnim);
 		spr.enableTextureMode(tilesetwire);
-		entList.add(spr);*/
+		entList.add(spr);
 
 		/*box = new PuzzleBox(-120.0f, -400.0f, 0.0f, false, true);
-		entList.add(box);*/
+		entList.add(box);
 
 		
 		player = new Player(-108.0f, -450.0f, 0.0f);
@@ -277,11 +283,11 @@ public class Game
 		entList.add(player);
 		player.enableUserControl();
 		
-		/*
+		
 		health = new PickupHealth(50, -108.0f, -250.0f);
 		health.enableColorMode(0, 255, 255, 255);
 		entList.add(health);
-		*/
+		
 		//spr = new Sprite(30.0f, -108.0f, -300.0f, 45.0f, 1.0f, 1.0f, 10, 90, 1, spriteAnim);
 		//entList.add(spr);
 		
@@ -307,7 +313,7 @@ public class Game
 		triggerList.add(new Trigger(bridgeAND, new EffectRaiseBridge(tileset[4][6])));
 		triggerList.add(new Trigger(bridgeAND, new EffectRaiseBridge(tileset[4][7])));
 		triggerList.add(new Trigger(bridgeAND, new EffectRaiseBridge(tileset[5][6])));
-		triggerList.add(new Trigger(bridgeAND, new EffectRaiseBridge(tileset[5][7])));
+		triggerList.add(new Trigger(bridgeAND, new EffectRaiseBridge(tileset[5][7]))); */
 		
 		//TODO UIHealthBar is a UIEntity sub that contains 2 UIImages and a UIProgressBar (which will no longer be abstract)
 		healthBar = new UIHealthBar(246.0f, 8.0f, UIPosition.TOPRIGHT, Direction.LEFT, player);

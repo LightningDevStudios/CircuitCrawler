@@ -74,7 +74,8 @@ public final class R {
     }
     public static final class xml {
         public static final int level=0x7f050000;
-        public static final int tempdata=0x7f050001;
-        public static final int tutorial=0x7f050002;
+        public static final int level1=0x7f050001;
+        public static final int level2=0x7f050002;
+        public static final int tutorial=0x7f050003;
     }
 }
