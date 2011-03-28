@@ -373,7 +373,7 @@ public class Game
 		textbox = new UITextBox(112, 32, UIPosition.TOPLEFT);
 		textbox.autoPadding(5.0f, 5.0f, 0.0f, 0.0f);
 		textbox.enableTextureMode(someText);
-		textbox.setText("Testing!");
+		textbox.setText("");
 		
 		UIList.add(healthBar);
 		UIList.add(healthBarCover);

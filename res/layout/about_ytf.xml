@@ -23,7 +23,7 @@
 			android:paddingRight="40dp"
 			android:paddingBottom="40dp"
 			android:text=
-			"YTF is a non-profit organization dedicated to bringing technological literacy to underprivleged communities, both in developing countries and in the United States. With a special focus on youth, YTF helps bring the modern, digital world to communities around the world, and inspire innovation among the members of these communities.">
+			"YTF is a non-profit organization dedicated to bringing technological literacy to underprivleged communities, both in developing countries and in the United States. With a special focus on youth, YTF helps bring the modern, digital world to communities around the world, and inspire innovation among the members of these communities.\n">
 		</TextView>
 		<Button
 			android:id="@+id/YTF_Button"

@@ -1,41 +1,45 @@
 package com.lds.game.menu;
 
-import com.lds.game.Game;
-import com.lds.game.GameRenderer;
-import com.lds.game.R;
-import com.lds.game.Run;
-import com.lds.game.SoundPlayer;
-
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Vibrator;
-import android.view.*;
-import android.view.View.OnClickListener;
+import android.text.Editable;
+import android.view.View;
+import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
-import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
-import android.widget.ScrollView;
 import android.widget.ViewAnimator;
+
+import com.lds.game.Game;
+import com.lds.game.GameRenderer;
+import com.lds.game.R;
+import com.lds.game.Run;
+import com.lds.game.SoundPlayer;
+import com.lds.game.entity.Player;
 
 
 public class MainMenu extends Activity
 {	
 	public boolean vibrateSettingMain = true;
 	public Context context;
-	SeekBar mSeekBar;
+	public SeekBar mSeekBar;
     
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -58,6 +62,7 @@ public class MainMenu extends Activity
 		final Animation fadeOut = AnimationUtils.loadAnimation(this, R.anim.fade_out);
 		animator.setOutAnimation(fadeOut);
 		animator.setAnimateFirstView(true);
+		
 		//add views to ViewAnimator
 		final View ccLogo = View.inflate(this, R.layout.circuit_crawler_logo, null);
 		animator.addView(ccLogo, 0);
@@ -73,17 +78,90 @@ public class MainMenu extends Activity
 		//Boxes n' Shit
 		final CheckBox vibrationCheckbox = (CheckBox) findViewById(R.id.checkbox);
 		final CheckBox volumeCheckbox = (CheckBox) findViewById(R.id.volumeCheckbox);
+		final CheckBox enableMusic = (CheckBox) findViewById(R.id.EnableMusic);
 		final CheckBox enableShaders = (CheckBox) findViewById(R.id.enableShaders);
-		mSeekBar = (SeekBar)findViewById(R.id.seek);
+		final SeekBar mSeekBar = (SeekBar)findViewById(R.id.seek);
+		final SeekBar volumeControl = (SeekBar)findViewById(R.id.volume);
 		final Button ldsButton = (Button)findViewById(R.id.LDS_Button);
 		final Button ytfButton = (Button)findViewById(R.id.YTF_Button);
+		final Button cheatButton = (Button)findViewById(R.id.Cheats);
+		final TextView seekBarValue = (TextView)findViewById(R.id.volumeText);
+		final TextView antiTextbar = (TextView)findViewById(R.id.antiText);
+		final AlertDialog.Builder alert = new AlertDialog.Builder(this);
+		final EditText input = new EditText(this);
+		final CheckBox godMode = (CheckBox) findViewById(R.id.god);
+		final CheckBox noclip = (CheckBox) findViewById(R.id.noclip);
+		final TextView cheatText = (TextView)findViewById(R.id.cheatText);
+		godMode.setVisibility(View.INVISIBLE);
+		noclip.setVisibility(View.INVISIBLE);
+		
+		//suffs
+		volumeControl.setMax(100);
+		volumeControl.setProgress(1);
+		mSeekBar.setMax(100);
+		mSeekBar.setProgress(1);
 		
 		//Action Suffs
         mSeekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener()
         {
-        	public void onProgressChanged(SeekBar seekBar, int progress, boolean fromTouch)	{	}
+        	public void onProgressChanged(SeekBar seekBar, int progress, boolean fromTouch)	
+        	{	
+        		antiTextbar.setText("Anti Aliasing: " + String.valueOf(progress) + "%");
+        		System.out.println("TROLOLOLOLOLOLOLOLOLOLOL");
+        	}
             public void onStartTrackingTouch(SeekBar seekBar)	{	}
             public void onStopTrackingTouch(SeekBar seekBar)	{	}	
+        });
+        
+        cheatButton.setOnClickListener(new View.OnClickListener()
+		{
+			public void onClick(View v) 
+			{
+				alert.setTitle("Cheat");
+				alert.setMessage("Input Code");
+
+				// Set an EditText view to get user input 
+				alert.setView(input);
+
+				alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() 
+				{
+					public void onClick(DialogInterface dialog, int whichButton) 
+					{
+						Editable value = input.getText();
+						if(value.toString().compareTo("PASSW0rd;") == 0) // DONT LOOK AT THIS!
+								{
+									godMode.setVisibility(View.VISIBLE);
+									noclip.setVisibility(View.VISIBLE);
+									cheatText.setVisibility(View.VISIBLE);
+									cheatText.setText("Correct!");
+								}
+						else
+						{
+							cheatText.setVisibility(View.VISIBLE);
+							cheatText.setText("Wrong!");
+						}
+					}
+				});
+
+				alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener()
+				{
+				  public void onClick(DialogInterface dialog, int whichButton) {	}
+				});
+
+				alert.show();
+			}
+		});      
+        
+        volumeControl.setOnSeekBarChangeListener(new OnSeekBarChangeListener()
+        {
+        	public void onProgressChanged(SeekBar volumeControl, int progress, boolean fromTouch)	
+        	{	
+        		seekBarValue.setText("Volume: " + String.valueOf(progress) + "%");
+        		SoundPlayer.effectVolume = ((float)(Integer.parseInt(String.valueOf(progress))))/100;
+        		System.out.println(SoundPlayer.effectVolume);
+        	}
+            public void onStartTrackingTouch(SeekBar volumeControl)	{	}
+            public void onStopTrackingTouch(SeekBar volumeControl)	{	}	
         });
        	
 		vibrationCheckbox.setOnCheckedChangeListener(new OnCheckedChangeListener()
@@ -105,6 +183,36 @@ public class MainMenu extends Activity
 		    }
 		});
 		
+		noclip.setOnCheckedChangeListener(new OnCheckedChangeListener()
+		{
+		    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
+		    {
+		        if ( isChecked )
+		        {
+		        	Player.noclip = true;
+		        }
+		        else
+		        {
+		        	Player.noclip = false;
+		        }
+		    }
+		});
+		
+		godMode.setOnCheckedChangeListener(new OnCheckedChangeListener()
+		{
+		    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
+		    {
+		        if ( isChecked )
+		        {
+		        	Player.godMode = true;
+		        }
+		        else
+		        {
+		        	Player.godMode = false;
+		        }
+		    }
+		});
+		
 		enableShaders.setOnCheckedChangeListener(new OnCheckedChangeListener()
 		{
 		    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
@@ -116,6 +224,23 @@ public class MainMenu extends Activity
 		        else
 		        {
 		        	vibrator(100);
+		        }
+		    }
+		});
+		
+		enableMusic.setOnCheckedChangeListener(new OnCheckedChangeListener()
+		{
+		    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
+		    {
+		        if ( isChecked )
+		        {
+		        	vibrator(100);
+		        	SoundPlayer.enableMusic = true;
+		        }
+		        else
+		        {
+		        	vibrator(100);
+		        	SoundPlayer.enableMusic = false;
 		        }
 		    }
 		});
@@ -147,7 +272,8 @@ public class MainMenu extends Activity
 			}
 		});
 			
-		//YTF Button	
+		//YTF Button
+		
 		ytfButton.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)
@@ -155,7 +281,7 @@ public class MainMenu extends Activity
 				Intent browserIntent = new Intent("android.intent.action.VIEW", Uri.parse("http://www.youthfortechnology.org"));
 				startActivity(browserIntent);
 			}
-		});
+		}); 
 		list.setOnItemClickListener(new OnItemClickListener()
 		{
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id)

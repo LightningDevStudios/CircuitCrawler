@@ -5,7 +5,7 @@ import com.lds.Stopwatch;
 
 public abstract class Character extends PhysEnt //all characters, including the protangonist and enemies
 {
-	protected int health;
+	public int health;
 	protected boolean isFlashing, doneRotating;
 	protected int msPassed;
 	

@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+<ScrollView>
 <LinearLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	android:orientation="vertical"
@@ -14,20 +15,70 @@
         android:layout_height="wrap_content"
         android:text="Enable Sound"  
         android:checked="true"/>
+    <CheckBox android:id="@+id/EnableMusic"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Enable Music" 
+        android:checked="true"/>
     <CheckBox android:id="@+id/enableShaders"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Enable Shaders" 
         android:checked="true"/>
     <TextView
+    	android:id="@+id/antiText"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:text="\nAnti Aliasing">
+		android:text="\nAnti Aliasing:  5%"
+		android:max="100"
+   		android:progress="5">
 	</TextView>
-    <SeekBar
+	<SeekBar
  		android:id="@+id/seek"
  		android:layout_width="fill_parent"
  		android:layout_height="wrap_content"
 		android:layout_margin="10px"
- />
+	/>
+	<TextView
+		android:id="@+id/volumeText"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="\nVolume:  5%">
+	</TextView>
+	<SeekBar
+ 		android:id="@+id/volume"
+ 		android:layout_width="fill_parent"
+ 		android:layout_height="wrap_content"
+		android:layout_margin="10px"
+		android:max="100"
+   		android:progress="5"
+	/>   
+	<Button
+		android:id="@+id/Cheats"
+		android:layout_height="wrap_content"
+		android:layout_width="wrap_content"
+		android:text="Cheats">
+	</Button>
+	<TextView
+		android:id="@+id/cheatText"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="Wrong!"
+		android:visibility="invisible">
+	</TextView>
+	<CheckBox 
+		android:id="@+id/god"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Enable God Mode" 
+        android:checked="false"
+        android:visibility="invisible"/>
+    <CheckBox 
+		android:id="@+id/noclip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Enable Noclip" 
+        android:checked="false"
+        android:visibility="invisible"/>
 </LinearLayout>
+</ScrollView>

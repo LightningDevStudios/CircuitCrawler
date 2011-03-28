@@ -3,6 +3,7 @@ package com.lds.game;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
+import android.media.MediaPlayer;
 import android.opengl.GLU;
 import android.os.Vibrator;
 import android.util.Log;
@@ -33,6 +34,8 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	public OnPuzzleActivatedListener puzzleActivatedListener;
 	public OnGameOverListener gameOverListener;
 	public int levelId;
+	public float time, timer, timer2;
+	public boolean test;
 	
 	public GameRenderer (float screenW, float screenH, Context context, Object syncObj, int levelId)
 	{
@@ -43,7 +46,10 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		Game.windowOutdated = false;
 		Game.worldOutdated = false;
 		this.levelId = levelId;
+		test = true;
+		SoundPlayer.getInstance().initialize(context);
 	}
+	
 	
 	@Override
 	public void onSurfaceCreated(GL10 gl, EGLConfig config)
@@ -149,10 +155,20 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	{		
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		//remove entities that are queued for removal
-		//tick the stopwatch every frame, gives relatively stable intervals
+		//tick the stop watch every frame, gives relatively stable intervals
 		frameCount++;
+		
 		game.frameInterval = Stopwatch.elapsedTimeMs();
+		timer2 = Stopwatch.elapsedTimeMs();
 		Stopwatch.tick();
+		
+		if(test)
+		{
+			MediaPlayer mp = MediaPlayer.create(context, R.raw.song2);
+		    mp.start();
+		    //mp.setLooping(true);
+			test = false;
+		}
 
 		game.updateTriggers();
 		game.updateRenderedEnts();
