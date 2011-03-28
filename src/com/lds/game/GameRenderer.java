@@ -146,7 +146,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	
 	@Override
 	public void onDrawFrame(GL10 gl) 
-	{
+	{		
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		//remove entities that are queued for removal
 		//tick the stopwatch every frame, gives relatively stable intervals
@@ -229,30 +229,34 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 				if (ent instanceof PhysEnt)
 				{
 					final PhysEnt physEnt = (PhysEnt)ent;
+					final Tile nearestTile = game.nearestTile(physEnt);
+					final int nearestTileX = nearestTile.xIndex;
+					final int nearestTileY = nearestTile.yIndex;
 					
-					final int tilesetSize = game.tileset.length;
-					final int tileRowSize = game.tileset[0].length;
-					for (int j = 0; j < tilesetSize; j++)
+					for (int j = nearestTileY - 1; j < nearestTileY + 1; j++)
 					{
-						for (int k = 0; k < tileRowSize; k++)
+						for (int k = nearestTileX - 1; k < nearestTileX + 1; k++)
 						{
-							Tile tile = game.tileset[j][k];
-							final boolean physColListContains = Game.arrayListContains(physEnt.colList, tile) || Game.arrayListContains(tile.colList, physEnt);
-							if (tile.isColliding(physEnt))
+							if (j < game.tileset.length && j >= 0 && k < game.tileset[0].length && k >= 0)
 							{
-								if (!physColListContains)
+								Tile tile = game.tileset[j][k];
+								final boolean physColListContains = Game.arrayListContains(physEnt.colList, tile) || Game.arrayListContains(tile.colList, physEnt);
+								if (tile.isColliding(physEnt))
 								{
-									physEnt.colList.add(tile);
-									tile.colList.add(physEnt);
-									physEnt.tileInteract(tile);
+									if (!physColListContains)
+									{
+										physEnt.colList.add(tile);
+										tile.colList.add(physEnt);
+										physEnt.tileInteract(tile);
+									}
 								}
-							}
-							else if (physColListContains)
-							{
-								physEnt.colList.remove(physEnt.colList.indexOf(tile));
-								tile.colList.remove(physEnt);
-								if (ent.colList.isEmpty())
-									physEnt.tileUninteract(tile);
+								else if (physColListContains)
+								{
+									physEnt.colList.remove(physEnt.colList.indexOf(tile));
+									tile.colList.remove(physEnt);
+									if (ent.colList.isEmpty())
+										physEnt.tileUninteract(tile);
+								}
 							}
 						}
 					}
