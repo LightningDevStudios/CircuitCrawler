@@ -53,5 +53,18 @@
 		android:max="100"
    		android:progress="5"
 	/>   
+	<Button
+		android:id="@+id/Cheats"
+		android:layout_height="wrap_content"
+		android:layout_width="wrap_content"
+		android:text="Cheats">
+	</Button>
+	<CheckBox 
+		android:id="@+id/god"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Enable God Mode" 
+        android:checked="false"
+        android:visibility="invisible"/>
 </LinearLayout>
 </ScrollView>

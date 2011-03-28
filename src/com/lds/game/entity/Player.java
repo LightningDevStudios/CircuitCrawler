@@ -13,8 +13,9 @@ public class Player extends Character //your character, protagonist
 	private int energy;
 	private boolean holdingObject;
 	private HoldObject hObj;
-	private boolean controlled, test;
+	private boolean controlled;
 	private float nextAngle;
+	private static float test;
 	protected Context context;
 	
 	public Player (float xPos, float yPos, float angle)
@@ -24,7 +25,6 @@ public class Player extends Character //your character, protagonist
 		//initialize Player data
 		energy = ENERGY_LIMIT;
 		nextAngle = angle;
-		test = true;
 	}
 	
 	public void attack ()
@@ -185,7 +185,7 @@ public class Player extends Character //your character, protagonist
 	{
 		return energy;
 	}
-
+	
 	public boolean isHoldingObject()
 	{
 		return holdingObject;

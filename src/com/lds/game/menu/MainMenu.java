@@ -1,34 +1,38 @@
 package com.lds.game.menu;
 
-import com.lds.game.Game;
-import com.lds.game.GameRenderer;
-import com.lds.game.R;
-import com.lds.game.Run;
-import com.lds.game.SoundPlayer;
-
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Vibrator;
-import android.view.*;
-import android.view.View.OnClickListener;
+import android.text.Editable;
+import android.view.View;
+import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
-import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
-import android.widget.ScrollView;
 import android.widget.ViewAnimator;
+
+import com.lds.game.Game;
+import com.lds.game.GameRenderer;
+import com.lds.game.R;
+import com.lds.game.Run;
+import com.lds.game.SoundPlayer;
+import com.lds.game.entity.Player;
 
 
 public class MainMenu extends Activity
@@ -80,8 +84,13 @@ public class MainMenu extends Activity
 		final SeekBar volumeControl = (SeekBar)findViewById(R.id.volume);
 		final Button ldsButton = (Button)findViewById(R.id.LDS_Button);
 		final Button ytfButton = (Button)findViewById(R.id.YTF_Button);
+		final Button cheatButton = (Button)findViewById(R.id.Cheats);
 		final TextView seekBarValue = (TextView)findViewById(R.id.volumeText);
 		final TextView antiTextbar = (TextView)findViewById(R.id.antiText);
+		final AlertDialog.Builder alert = new AlertDialog.Builder(this);
+		final EditText input = new EditText(this);
+		final CheckBox godMode = (CheckBox) findViewById(R.id.god);
+		godMode.setVisibility(View.INVISIBLE);
 		
 		//suffs
 		volumeControl.setMax(100);
@@ -100,6 +109,37 @@ public class MainMenu extends Activity
             public void onStartTrackingTouch(SeekBar seekBar)	{	}
             public void onStopTrackingTouch(SeekBar seekBar)	{	}	
         });
+        
+        cheatButton.setOnClickListener(new View.OnClickListener()
+		{
+			public void onClick(View v) 
+			{
+				alert.setTitle("Cheat");
+				alert.setMessage("Input Code");
+
+				// Set an EditText view to get user input 
+				alert.setView(input);
+
+				alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() 
+				{
+					public void onClick(DialogInterface dialog, int whichButton) 
+					{
+						Editable value = input.getText();
+						if(value.toString().compareTo("PASSW0rd;") == 0)
+								{
+									godMode.setVisibility(View.VISIBLE);
+								}
+					}
+				});
+
+				alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener()
+				{
+				  public void onClick(DialogInterface dialog, int whichButton) {	}
+				});
+
+				alert.show();
+			}
+		});      
         
         volumeControl.setOnSeekBarChangeListener(new OnSeekBarChangeListener()
         {
@@ -128,6 +168,21 @@ public class MainMenu extends Activity
 		        	vibrator(100);
 		        	GameRenderer.vibrateSetting = false;
 		        	System.out.println("FALSE IS VIBRATING");
+		        }
+		    }
+		});
+		
+		godMode.setOnCheckedChangeListener(new OnCheckedChangeListener()
+		{
+		    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
+		    {
+		        if ( isChecked )
+		        {
+		        	Player.health = 999999;
+		        }
+		        else
+		        {
+		        	Player.health = Player.getHealth();
 		        }
 		    }
 		});
@@ -191,7 +246,8 @@ public class MainMenu extends Activity
 			}
 		});
 			
-		//YTF Button	
+		//YTF Button
+		
 		ytfButton.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)
@@ -199,7 +255,7 @@ public class MainMenu extends Activity
 				Intent browserIntent = new Intent("android.intent.action.VIEW", Uri.parse("http://www.youthfortechnology.org"));
 				startActivity(browserIntent);
 			}
-		});
+		}); 
 		list.setOnItemClickListener(new OnItemClickListener()
 		{
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id)
