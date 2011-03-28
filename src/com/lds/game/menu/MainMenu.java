@@ -65,17 +65,17 @@ public class MainMenu extends Activity
 		animator.addView(settings, 1);
 		final View aboutYTF = View.inflate(this, R.layout.about_ytf, null);
 		animator.addView(aboutYTF, 2);
-		//final View aboutLDS = View.inflate(this, R.layout.about_lds, null);
-		//animator.addView(aboutLDS, 3);
-		//final View credits = View.inflate(this, R.layout.credits, null);
-		//animator.addView(credits, 4);
+		final View aboutLDS = View.inflate(this, R.layout.about_lds, null);
+		animator.addView(aboutLDS, 3);
+		final View credits = View.inflate(this, R.layout.credits, null);
+		animator.addView(credits, 4);
 		
 		//Boxes n' Shit
 		final CheckBox checkbox = (CheckBox) findViewById(R.id.checkbox);
 		final CheckBox volumeCheckbox = (CheckBox) findViewById(R.id.volumeCheckbox);
 		final CheckBox enableShaders = (CheckBox) findViewById(R.id.enableShaders);
 		mSeekBar = (SeekBar)findViewById(R.id.seek);
-		//final Button ldsButton = (Button)findViewById(R.id.LDS_Button);
+		final Button ldsButton = (Button)findViewById(R.id.LDS_Button);
 		final Button ytfButton = (Button)findViewById(R.id.YTF_Button);
 		
 		//Action Suffs
@@ -138,14 +138,14 @@ public class MainMenu extends Activity
 		});
 		    
 		//LDS Button
-		/*ldsButton.setOnClickListener(new View.OnClickListener()
+		ldsButton.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v) 
 			{
 				Intent browserIntent = new Intent("android.intent.action.VIEW", Uri.parse("http://lightningdevelopment.wordpress.com"));
 				startActivity(browserIntent);
 			}
-		});*/
+		});
 			
 		//YTF Button	
 		ytfButton.setOnClickListener(new View.OnClickListener()

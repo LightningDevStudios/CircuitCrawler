@@ -34,23 +34,26 @@ public final class R {
     }
     public static final class id {
         public static final int About=0x7f0a0000;
-        public static final int CircuitCrawlerLogo=0x7f0a0002;
-        public static final int MM_LeftParent=0x7f0a0004;
-        public static final int MM_LeftViewAnimator=0x7f0a0005;
-        public static final int MM_Main=0x7f0a0003;
-        public static final int MM_RightListView=0x7f0a0006;
-        public static final int YTF_Button=0x7f0a0001;
-        public static final int checkbox=0x7f0a0007;
-        public static final int enableShaders=0x7f0a0009;
-        public static final int seek=0x7f0a000a;
-        public static final int volumeCheckbox=0x7f0a0008;
+        public static final int CircuitCrawlerLogo=0x7f0a0003;
+        public static final int LDS_Button=0x7f0a0001;
+        public static final int MM_LeftParent=0x7f0a0005;
+        public static final int MM_LeftViewAnimator=0x7f0a0006;
+        public static final int MM_Main=0x7f0a0004;
+        public static final int MM_RightListView=0x7f0a0007;
+        public static final int YTF_Button=0x7f0a0002;
+        public static final int checkbox=0x7f0a0008;
+        public static final int enableShaders=0x7f0a000a;
+        public static final int seek=0x7f0a000b;
+        public static final int volumeCheckbox=0x7f0a0009;
     }
     public static final class layout {
-        public static final int about_ytf=0x7f030000;
-        public static final int circuit_crawler_logo=0x7f030001;
-        public static final int list_item=0x7f030002;
-        public static final int main=0x7f030003;
-        public static final int settings=0x7f030004;
+        public static final int about_lds=0x7f030000;
+        public static final int about_ytf=0x7f030001;
+        public static final int circuit_crawler_logo=0x7f030002;
+        public static final int credits=0x7f030003;
+        public static final int list_item=0x7f030004;
+        public static final int main=0x7f030005;
+        public static final int settings=0x7f030006;
     }
     public static final class raw {
         public static final int baricons=0x7f060000;
