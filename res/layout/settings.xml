@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="vertical"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent">
+	<CheckBox android:id="@+id/checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Enable Vibration" 
+        android:checked="true"/>
+    <CheckBox android:id="@+id/volumeCheckbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Enable Sound"  
+        android:checked="true"/>
+    <CheckBox android:id="@+id/enableShaders"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Enable Shaders" 
+        android:checked="true"/>
+    <TextView
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="\nAnti Aliasing">
+	</TextView>
+    <SeekBar
+ 		android:id="@+id/seek"
+ 		android:layout_width="fill_parent"
+ 		android:layout_height="wrap_content"
+		android:layout_margin="10px"
+ />
+</LinearLayout>

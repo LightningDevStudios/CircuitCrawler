@@ -27,6 +27,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	public Context context;
 	public Object syncObj;
 	public boolean gameOver;
+	public static boolean vibrateSetting = true;
 	public int playerMoveTimeMs, frameCount = 0;	
 	public OnGameInitializedListener gameInitializedListener;
 	public OnPuzzleActivatedListener puzzleActivatedListener;
@@ -80,7 +81,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 			Game.buttona = new Texture(R.raw.buttona, 32, 32, 1, 1, context, "buttona");
 			Game.buttonb = new Texture(R.raw.buttonb, 32, 32, 1, 1, context, "buttonb");
 			Game.baricons = new Texture (R.raw.baricons, 32, 16, 2, 1, context, "baricons");
-			Game.energybarborder = new Texture (R.raw.energybarborder, 192, 16, 1, 1, context, "energybarborder");
+			Game.energybarborder = new Texture (R.raw.energybarborder, 128, 16, 1, 1, context, "energybarborder");
 			Game.healthbarborder = new Texture(R.raw.healthbarborder, 256, 16, 1, 1, context, "healthbarborder");
 			
 			TextureLoader.getInstance().initialize(gl);
@@ -385,21 +386,24 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 
 	public void vibrator(int time)
 	{
-		Vibrator vibrator = null; 
-		try 
-		{ 
-			vibrator=(Vibrator)context.getSystemService(Context.VIBRATOR_SERVICE); 
-		} 
-		catch (Exception e) {}
-		
-		if (vibrator != null)
-		{ 
-		  try 
-		  { 
-			  vibrator.vibrate(((long)time)); 
-		  } 
-		  catch (Exception e) {} 
-		} 
+		if(vibrateSetting)
+		{
+			Vibrator vibrator = null; 
+			try 
+			{ 
+				vibrator=(Vibrator)context.getSystemService(Context.VIBRATOR_SERVICE); 
+			} 
+			catch (Exception e) {}
+			
+			if (vibrator != null)
+			{ 
+			  try 
+			  { 
+				  vibrator.vibrate(((long)time)); 
+			  } 
+			  catch (Exception e) {} 
+			} 
+		}
 	}
 	
 	@Override
@@ -413,6 +417,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	{
 		if(game.player.userHasControl())
 		{
+			Game.worldOutdated = true;
 			for (int i = 0; i < game.fingerList.size(); i++)
 			{
 				final Finger f = game.fingerList.get(i);

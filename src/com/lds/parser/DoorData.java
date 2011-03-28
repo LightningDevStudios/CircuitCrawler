@@ -5,7 +5,7 @@ import java.util.HashMap;
 import com.lds.game.entity.Door;
 import com.lds.game.entity.Entity;
 
-public class DoorData extends PhysEntData
+public class DoorData extends StaticEntData
 {
 	private Door doorRef;
 	
@@ -17,6 +17,10 @@ public class DoorData extends PhysEntData
 	public void createInst(ArrayList<Entity> entData)
 	{
 		doorRef = new Door(xPos, yPos);
+		doorRef.setAngle(angle);
+		doorRef.setXScl(xScl);
+		doorRef.setYScl(yScl);
+		
 		
 		//COLOR
 		if (color != null)

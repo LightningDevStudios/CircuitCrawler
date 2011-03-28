@@ -26,9 +26,6 @@ import com.lds.parser.Parser;
 
 public class Game
 {
-	
-	//public Level[][] GameLevels;
-
 	public int frameInterval;
 	public static boolean worldOutdated, windowOutdated;
 	
@@ -103,7 +100,7 @@ public class Game
 		buttona = new Texture(R.raw.buttona, 32, 32, 1, 1, context, "buttona");
 		buttonb = new Texture(R.raw.buttonb, 32, 32, 1, 1, context, "buttonb");
 		baricons = new Texture (R.raw.baricons, 32, 16, 2, 1, context, "baricons");
-		energybarborder = new Texture (R.raw.energybarborder, 192, 16, 1, 1, context, "energybarborder");
+		energybarborder = new Texture (R.raw.energybarborder, 128, 16, 1, 1, context, "energybarborder");
 		healthbarborder = new Texture(R.raw.healthbarborder, 256, 16, 1, 1, context, "healthbarborder");
 		
 				
@@ -138,7 +135,7 @@ public class Game
 		tl.loadTexture(energybarborder);
 		tl.loadTexture(healthbarborder);
 						
-		///*		
+		/*		
  		for (int i = 0; i < tileset.length; i++)
 		{
 			for (int j = 0; j < tileset[0].length; j++)
@@ -158,21 +155,11 @@ public class Game
 					tileset[i][j].setAsFloor();
 				}
 			}
-		}
+		}*/
 		//tileset[12][6].setAsSlipperyTile();
 		//tileset[13][6].setAsSlipperyTile();
 		//tileset[11][6].setAsSlipperyTile();
  		
- 		for (int i = 0; i < tileset.length; i++)
- 		{
- 			for (int j = 0; j < tileset[0].length; j++)
- 			{
- 				if (tileset[i][j].isPit())
- 					tileset[i][j].updateBordersPit(tileset, j, i);
- 				else if (tileset[i][j].isWall())
- 					tileset[i][j].updateBordersWall(tileset, j, i);
- 			}
- 		}
 		//Parser
 		Parser parser = new Parser(context, R.xml.level2);
 
@@ -193,11 +180,27 @@ public class Game
 	
 		tileset = parser.tileset;
 		entList.addAll(parser.entList);
+		triggerList.addAll(parser.triggerList);
+		
+		player = parser.player;
+		player.enableUserControl();
+		entList.add(player);
+		
+		for (int i = 0; i < tileset.length; i++)
+ 		{
+ 			for (int j = 0; j < tileset[0].length; j++)
+ 			{
+ 				if (tileset[i][j].isPit())
+ 					tileset[i][j].updateBordersPit(tileset, j, i);
+ 				else if (tileset[i][j].isWall())
+ 					tileset[i][j].updateBordersWall(tileset, j, i);
+ 			}
+ 		}
 		
 		/*CAN DEAL WITH THIS SHIT
 		door = new Door (-108.0f, -180.0f);
 		door.setAngle(90.0f);
-		door.setYScl(0.5f);
+		door.setXScl(0.5f);
 		door.enableTilesetMode(tilesetentities, 2, 1);
 		entList.add(door);
 		
@@ -252,7 +255,7 @@ public class Game
 		cannon.enableTilesetMode(tilesetwire, 2, 1);
 		entList.add(cannon);
 		
-		Teleporter tele1 = new Teleporter(40,-100,-340);
+		Teleporter tele1 = new Teleporter(40,0,-340);
 		tele1.enableTilesetMode(tilesetwire, 2, 1);
 		entList.add(tele1);
 		
@@ -271,7 +274,7 @@ public class Game
 		spr.enableTextureMode(tilesetwire);
 		entList.add(spr);
 
-		box = new PuzzleBox(-120.0f, -400.0f, 0.0f, false, true);
+		/*box = new PuzzleBox(-120.0f, -400.0f, 0.0f, false, true);
 		entList.add(box);
 
 		
@@ -280,7 +283,7 @@ public class Game
 		entList.add(player);
 		player.enableUserControl();
 		
-		/*
+		
 		health = new PickupHealth(50, -108.0f, -250.0f);
 		health.enableColorMode(0, 255, 255, 255);
 		entList.add(health);
@@ -313,10 +316,10 @@ public class Game
 		triggerList.add(new Trigger(bridgeAND, new EffectRaiseBridge(tileset[5][7]))); */
 		
 		//TODO UIHealthBar is a UIEntity sub that contains 2 UIImages and a UIProgressBar (which will no longer be abstract)
-		healthBar = new UIHealthBar(248.0f, 8.0f, UIPosition.TOPRIGHT, Direction.LEFT, player);
+		healthBar = new UIHealthBar(246.0f, 8.0f, UIPosition.TOPRIGHT, Direction.LEFT, player);
 		healthBar.setTopPad(9.0f);
-		healthBar.setRightPad(9.0f);
-		healthBar.autoPadding(9, 0, 0, 9);
+		healthBar.setRightPad(10.0f);
+		healthBar.autoPadding(9, 0, 0, 10);
 		healthBar.enableColorMode(0.8f, 0.0f, 0.0f, 0.9f);
 		healthBar.setValue(100);
 		
@@ -332,14 +335,14 @@ public class Game
 		healthIcon.autoPadding(5, 0, 0, 266);
 		healthIcon.enableTilesetMode(baricons, 0, 0);
 		
-		energyBar = new UIEnergyBar(184.0f, 8.0f, UIPosition.TOPRIGHT, Direction.LEFT, player);
+		energyBar = new UIEnergyBar(118.0f, 8.0f, UIPosition.TOPRIGHT, Direction.LEFT, player);
 		energyBar.setTopPad(30.0f);
-		energyBar.setRightPad(9.0f);
-		energyBar.autoPadding(30, 0, 0, 9);
+		energyBar.setRightPad(10.0f);
+		energyBar.autoPadding(30, 0, 0, 10);
 		energyBar.enableColorMode(0.0f, 0.0f, 0.8f, 0.9f);
 		energyBar.setValue(100);
 		
-		UIImage energyBarCover = new UIImage(192, 16, UIPosition.TOPRIGHT);
+		UIImage energyBarCover = new UIImage(128, 16, UIPosition.TOPRIGHT);
 		energyBarCover.setTopPad(26.0f);
 		energyBarCover.setRightPad(5.0f);
 		energyBarCover.autoPadding(26, 0, 0, 5);
@@ -347,8 +350,8 @@ public class Game
 		
 		UIImage energyIcon = new UIImage (16, 16, UIPosition.TOPRIGHT);
 		energyIcon.setTopPad(26.0f);
-		energyIcon.setRightPad(202.0f);
-		energyIcon.autoPadding(26, 0, 0, 202);
+		energyIcon.setRightPad(138.0f);
+		energyIcon.autoPadding(26, 0, 0, 138);
 		energyIcon.enableTilesetMode(baricons, 1, 0);
 		
 		btnA = new UIButton(80.0f, 80.0f, UIPosition.BOTTOMRIGHT);

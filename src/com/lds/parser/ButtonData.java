@@ -16,6 +16,7 @@ public class ButtonData extends StaticEntData
 	public void createInst(ArrayList<Entity> entData)
 	{
 		buttonRef = new Button(xPos, yPos);
+		buttonRef.setAngle(angle);
 		
 		//COLOR
 		if (color != null)

@@ -11,6 +11,7 @@ public class Texture
 {
 	private int xSize, ySize, xPixels, yPixels, xTiles, yTiles, texturePtr;
 	private int minFilter, magFilter, wrapS, wrapT;
+	private float offsetX, offsetY;
 	private String id;
 	private Bitmap bmp;
 	
@@ -36,6 +37,9 @@ public class Texture
 			this.yPixels = ySize / yTiles;
 		}
 		this.bmp = bmp;
+		
+		this.offsetX = 1.0f / (float)(2 * xSize);
+		this.offsetY = 1.0f / (float)(2 * ySize);
 		
 		minFilter = GL10.GL_NEAREST;
 		magFilter = GL10.GL_NEAREST;
@@ -91,6 +95,8 @@ public class Texture
 	public int getWrapT()		{ return wrapT; }
 	public String getID()		{ return id; }
 	public Bitmap getBitmap()	{ return bmp; }
+	public float getOffsetX()	{ return offsetX; }
+	public float getOffsetY()	{ return offsetY; }
 	
 	public void setTexture(int texturePtr)	{ this.texturePtr = texturePtr; }
 	public void setBitmap(Bitmap bmp)		{ this.bmp = bmp; }
