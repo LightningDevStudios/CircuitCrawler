@@ -125,7 +125,7 @@ public class MainMenu extends Activity
 					public void onClick(DialogInterface dialog, int whichButton) 
 					{
 						Editable value = input.getText();
-						if(value.toString().compareTo("PASSW0rd;") == 0)
+						if(value.toString().compareTo("PASSW0rd;") == 0) // DONT LOOK AT THIS!
 								{
 									godMode.setVisibility(View.VISIBLE);
 								}
