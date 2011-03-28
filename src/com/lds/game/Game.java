@@ -118,7 +118,7 @@ public class Game
 		
 		sr.loadTextTileset(text);
 		
-		someText = new Texture("Testing!", sr);
+		//someText = new Texture("Testing!", sr);
 		
 		SoundPlayer.getInstance().initialize(context);
 		
