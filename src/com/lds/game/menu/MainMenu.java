@@ -35,7 +35,7 @@ public class MainMenu extends Activity
 {	
 	public boolean vibrateSettingMain = true;
 	public Context context;
-	SeekBar mSeekBar;
+	public SeekBar mSeekBar;
     
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -58,6 +58,7 @@ public class MainMenu extends Activity
 		final Animation fadeOut = AnimationUtils.loadAnimation(this, R.anim.fade_out);
 		animator.setOutAnimation(fadeOut);
 		animator.setAnimateFirstView(true);
+		
 		//add views to ViewAnimator
 		final View ccLogo = View.inflate(this, R.layout.circuit_crawler_logo, null);
 		animator.addView(ccLogo, 0);
