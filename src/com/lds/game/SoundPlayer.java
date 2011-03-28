@@ -12,6 +12,7 @@ public class SoundPlayer
 	public static final int SHOOT_SOUND = 2;
 	public static final int ENEMY_DEATH = 3;
 	public static final int PIT_FALL = 4;
+	public static boolean enableSound = true;
 	
 	private static SoundPlayer p_sp;
 	
@@ -51,11 +52,14 @@ public class SoundPlayer
 	
 	public void playSound(int sound)
 	{
-		AudioManager mgr = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
-		float streamVolumeCurrent = mgr.getStreamVolume(AudioManager.STREAM_MUSIC);
-		float streamVolumeMax = mgr.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
-		float volume = streamVolumeCurrent / streamVolumeMax;
+		if(enableSound)
+		{
+			AudioManager mgr = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
+			float streamVolumeCurrent = mgr.getStreamVolume(AudioManager.STREAM_MUSIC);
+			float streamVolumeMax = mgr.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
+			float volume = streamVolumeCurrent / streamVolumeMax;
 		
-		pool.play(poolMap.get(sound), volume, volume, 1, 0, 1.0f);
+			pool.play(poolMap.get(sound), volume, volume, 1, 0, 1.0f);
+		}
 	}
 }
