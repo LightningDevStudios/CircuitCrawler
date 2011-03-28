@@ -178,11 +178,11 @@ public class MainMenu extends Activity
 		    {
 		        if ( isChecked )
 		        {
-		        	Player.health = 999999;
+		        	Player.godMode = true;
 		        }
 		        else
 		        {
-		        	Player.health = Player.getHealth();
+		        	Player.godMode = false;
 		        }
 		    }
 		});

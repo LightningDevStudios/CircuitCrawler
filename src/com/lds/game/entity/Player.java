@@ -15,7 +15,7 @@ public class Player extends Character //your character, protagonist
 	private HoldObject hObj;
 	private boolean controlled;
 	private float nextAngle;
-	private static float test;
+	public static boolean godMode;
 	protected Context context;
 	
 	public Player (float xPos, float yPos, float angle)
@@ -25,6 +25,10 @@ public class Player extends Character //your character, protagonist
 		//initialize Player data
 		energy = ENERGY_LIMIT;
 		nextAngle = angle;
+		if(godMode)
+		{
+			health = 9999999;//LOLS
+		}
 	}
 	
 	public void attack ()
