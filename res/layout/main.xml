@@ -20,6 +20,8 @@ android:stretchColumns="0">
 	<ListView android:id="@+id/MM_RightListView"
 		android:layout_width="fill_parent" 
 		android:layout_weight=".66"
-		android:layout_height="fill_parent">
-	</ListView>
+		android:layout_height="fill_parent"
+		android:divider="@drawable/mmdivider"
+		android:dividerHeight="1dp">
+</ListView>
 </LinearLayout>

@@ -3,9 +3,9 @@ package com.lds.game.menu;
 import android.content.Context;
 import android.widget.ArrayAdapter;
 
-public class NonselectableListAdapter<T> extends ArrayAdapter<T>
+public class NonselectableArrayAdapter<T> extends ArrayAdapter<T>
 {
-	public NonselectableListAdapter(Context context, int textViewResourceId, T[] objects)
+	public NonselectableArrayAdapter(Context context, int textViewResourceId, T[] objects)
 	{
 		super(context, textViewResourceId, objects);
 	}

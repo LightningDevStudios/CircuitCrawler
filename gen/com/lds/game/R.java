@@ -24,26 +24,31 @@ public final class R {
         public static final int circuitpuzzle=0x7f020000;
         public static final int icon=0x7f020001;
         public static final int mainmenulogo=0x7f020002;
-        public static final int randomthings=0x7f020003;
-        public static final int text=0x7f020004;
-        public static final int tilesetcolors=0x7f020005;
-        public static final int tilesetentities=0x7f020006;
-        public static final int tilesetwire=0x7f020007;
-        public static final int tilesetworld=0x7f020008;
+        public static final int mmdivider=0x7f020003;
+        public static final int randomthings=0x7f020004;
+        public static final int text=0x7f020005;
+        public static final int tilesetcolors=0x7f020006;
+        public static final int tilesetentities=0x7f020007;
+        public static final int tilesetwire=0x7f020008;
+        public static final int tilesetworld=0x7f020009;
     }
     public static final class id {
         public static final int About=0x7f0a0000;
-        public static final int CircuitCrawlerLogo=0x7f0a0001;
-        public static final int MM_LeftParent=0x7f0a0003;
-        public static final int MM_LeftViewAnimator=0x7f0a0004;
-        public static final int MM_Main=0x7f0a0002;
-        public static final int MM_RightListView=0x7f0a0005;
+        public static final int CircuitCrawlerLogo=0x7f0a0003;
+        public static final int LDS_Button=0x7f0a0001;
+        public static final int MM_LeftParent=0x7f0a0005;
+        public static final int MM_LeftViewAnimator=0x7f0a0006;
+        public static final int MM_Main=0x7f0a0004;
+        public static final int MM_RightListView=0x7f0a0007;
+        public static final int YTF_Button=0x7f0a0002;
     }
     public static final class layout {
-        public static final int about=0x7f030000;
-        public static final int circuit_crawler_logo=0x7f030001;
-        public static final int list_item=0x7f030002;
-        public static final int main=0x7f030003;
+        public static final int about_lds=0x7f030000;
+        public static final int about_ytf=0x7f030001;
+        public static final int circuit_crawler_logo=0x7f030002;
+        public static final int credits=0x7f030003;
+        public static final int list_item=0x7f030004;
+        public static final int main=0x7f030005;
     }
     public static final class raw {
         public static final int baricons=0x7f060000;
