@@ -192,7 +192,7 @@ public class MainMenu extends Activity
 					case 6:
 						//Credits
 						animator.setDisplayedChild(4);
-				}
+						}
 			}	
 		});
 	}

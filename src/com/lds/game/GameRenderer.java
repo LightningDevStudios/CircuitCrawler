@@ -32,8 +32,9 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	public OnGameInitializedListener gameInitializedListener;
 	public OnPuzzleActivatedListener puzzleActivatedListener;
 	public OnGameOverListener gameOverListener;
+	public int levelId;
 	
-	public GameRenderer (float screenW, float screenH, Context context, Object syncObj)
+	public GameRenderer (float screenW, float screenH, Context context, Object syncObj, int levelId)
 	{
 		Game.screenW = screenW;
 		Game.screenH = screenH;
@@ -41,6 +42,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		this.syncObj = syncObj;
 		Game.windowOutdated = false;
 		Game.worldOutdated = false;
+		this.levelId = levelId;
 	}
 	
 	@Override
@@ -66,7 +68,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		Entity.resetIndexBuffer();
 		
 		if(game == null)
-			game = new Game(context, gl);
+			game = new Game(context, gl, levelId);
 		
 		else
 		{

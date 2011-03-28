@@ -16,6 +16,7 @@ import com.lds.game.puzzle.PuzzleActivity;
 public class Run extends Activity implements OnGameOverListener, OnGameInitializedListener, OnPuzzleActivatedListener
 {
 	public static final int PUZZLE_ACTIVITY = 2;
+	public static int levelId;
 	
 	public Graphics glSurface;
 	public GameRenderer gameR;
@@ -24,6 +25,7 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
+		levelId = R.xml.level; //TODO: make this change
 		
 		//Grab screen information
 		DisplayMetrics screen = new DisplayMetrics();
@@ -39,7 +41,7 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 		
 		//set up OpenGL rendering
 		Object syncObj = new Object();
-		gameR = new GameRenderer(screenX, screenY, this, syncObj);
+		gameR = new GameRenderer(screenX, screenY, this, syncObj, levelId);
 		
 		if(data != null)
 		{

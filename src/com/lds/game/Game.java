@@ -26,9 +26,6 @@ import com.lds.parser.Parser;
 
 public class Game
 {
-	
-	public Level[] levels;
-
 	public int frameInterval;
 	public static boolean worldOutdated, windowOutdated;
 	
@@ -88,7 +85,7 @@ public class Game
 	//public Animation spriteAnim;
 		
 	//Constructors
-	public Game (Context context, GL10 gl) 
+	public Game (Context context, GL10 gl, int levelId) 
 	{
 		fingerList = new ArrayList<Finger>();
 		
