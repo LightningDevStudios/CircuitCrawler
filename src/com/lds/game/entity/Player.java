@@ -15,7 +15,7 @@ public class Player extends Character //your character, protagonist
 	private HoldObject hObj;
 	private boolean controlled;
 	private float nextAngle;
-	public static boolean godMode;
+	public static boolean godMode, noclip;
 	protected Context context;
 	
 	public Player (float xPos, float yPos, float angle)
@@ -28,6 +28,10 @@ public class Player extends Character //your character, protagonist
 		if(godMode)
 		{
 			health = 9999999;//LOLS
+		}
+		if(noclip)
+		{
+			this.isSolid = false;
 		}
 	}
 	

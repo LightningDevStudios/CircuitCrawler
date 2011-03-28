@@ -66,5 +66,12 @@
         android:text="Enable God Mode" 
         android:checked="false"
         android:visibility="invisible"/>
+    <CheckBox 
+		android:id="@+id/noclip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Enable Noclip" 
+        android:checked="false"
+        android:visibility="invisible"/>
 </LinearLayout>
 </ScrollView>

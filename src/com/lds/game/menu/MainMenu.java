@@ -90,7 +90,9 @@ public class MainMenu extends Activity
 		final AlertDialog.Builder alert = new AlertDialog.Builder(this);
 		final EditText input = new EditText(this);
 		final CheckBox godMode = (CheckBox) findViewById(R.id.god);
+		final CheckBox noclip = (CheckBox) findViewById(R.id.noclip);
 		godMode.setVisibility(View.INVISIBLE);
+		noclip.setVisibility(View.INVISIBLE);
 		
 		//suffs
 		volumeControl.setMax(100);
@@ -128,6 +130,7 @@ public class MainMenu extends Activity
 						if(value.toString().compareTo("PASSW0rd;") == 0) // DONT LOOK AT THIS!
 								{
 									godMode.setVisibility(View.VISIBLE);
+									noclip.setVisibility(View.VISIBLE);
 								}
 					}
 				});
@@ -168,6 +171,21 @@ public class MainMenu extends Activity
 		        	vibrator(100);
 		        	GameRenderer.vibrateSetting = false;
 		        	System.out.println("FALSE IS VIBRATING");
+		        }
+		    }
+		});
+		
+		noclip.setOnCheckedChangeListener(new OnCheckedChangeListener()
+		{
+		    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
+		    {
+		        if ( isChecked )
+		        {
+		        	Player.noclip = true;
+		        }
+		        else
+		        {
+		        	Player.noclip = false;
 		        }
 		    }
 		});
