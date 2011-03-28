@@ -20,24 +20,24 @@
     <Tile state="WALL" />
     <Tile state="WALL" />
     <Tile state="FLOOR" />
+    <Tile state="FLOOR" />
+    <Tile state="FLOOR" />
+    <Tile state="FLOOR" />
+    <Tile state="FLOOR" />
+    <Tile state="FLOOR" />
+    <Tile state="FLOOR" />
+    <Tile state="FLOOR" />
+    <Tile state="FLOOR" />
+    <Tile state="FLOOR" />
+    <Tile state="FLOOR" />
+    <Tile state="FLOOR" />
+    <Tile state="FLOOR" />
+    <Tile state="WALL" />
+    <Tile state="WALL" />
+    <Tile state="WALL" />
+    <Tile state="WALL" />
+    <Tile state="WALL" />
     <Tile state="PIT" />
-    <Tile state="PIT" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="WALL" />
-    <Tile state="WALL" />
-    <Tile state="WALL" />
-    <Tile state="WALL" />
-    <Tile state="WALL" />
-    <Tile state="FLOOR" />
     <Tile state="WALL" />
     <Tile state="WALL" />
     <Tile state="WALL" />
@@ -314,7 +314,7 @@
       <AIType>PATROL</AIType>
     </Blob>
     <Blob>
-      <id>blob3</id>
+      <id>turretfordoor</id>
       <size>64</size>
       <xPos>-284.237518</xPos>
       <yPos>221.945816</yPos>
@@ -372,6 +372,24 @@
       <size>64</size>
       <xPos>428.099762</xPos>
       <yPos>290.050323</yPos>
+      <angle>90</angle>
+      <xScl>1</xScl>
+      <yScl>1</yScl>
+      <renderMode>
+        <tileset>
+          <texID>tilesetwire</texID>
+          <x>2</x>
+          <y>2</y>
+        </tileset>
+      </renderMode>
+      <health>100</health>
+      <AIType>PATROL</AIType>
+    </Blob>
+    <Blob>
+      <id>blobforpit</id>
+      <size>64</size>
+      <xPos>-431</xPos>
+      <yPos>508</yPos>
       <angle>90</angle>
       <xScl>1</xScl>
       <yScl>1</yScl>
@@ -727,15 +745,6 @@
         </tileset>
       </renderMode>
     </PhysBall>
-    <WallButton>
-      <size>64</size>
-      <xPos>-435.416626</xPos>
-      <yPos>501.916626</yPos>
-      <angle>0</angle>
-      <xScl>1</xScl>
-      <yScl>1</yScl>
-      <renderMode />
-    </WallButton>
     <Player>
       <id>player</id>
       <size>64</size>
@@ -755,20 +764,27 @@
     </Player>
   </Entities>
   <Triggers>
-    <Cause id="deadTurret" type="CauseEnemyCount">6</Cause>
-    <Cause id="trueBTN" type="CauseButton">truebutton1</Cause>
+    <Cause id="deadBlob" type="CauseEnemyCount">7</Cause>
     <Cause id="ENDBTN" type="CauseButton">finalbutton</Cause>
+    <Cause id="trueBTN" type="CauseButton">truebutton1</Cause>
+    <Cause id="deadTurret" type="CauseEnemyCount">6</Cause>
     <Cause id="OPENEVERYTHING" type="CauseAND">ENDBTN,trueBTN</Cause>
-    <Effect id="toBTNfield" type="EffectDoor">buttonfieldDR</Effect>
+    <Effect id="firstpit" type="EffectRaiseBridge">4,2</Effect>
+    <Effect id="doornode1" type="EffectActivateNodeLink">1</Effect>
+    <Effect id="secondpitnode" type="EffectActivateNodeLink">2</Effect>
+    <Effect id="finalblob" type="EffectActivateNodeLink">0</Effect>
+    <Effect id="highestblob" type="EffectActivateNodeLink">5</Effect>
+    <Effect id="middleblob" type="EffectActivateNodeLink">4</Effect>
+    <Effect id="lowestblob" type="EffectActivateNodeLink">3</Effect>
     <Effect id="tofinalBTN" type="EffectRaiseBridge">10,14</Effect>
-    <Effect id="enemyDR4" type="EffectDoor">enemydoor4</Effect>
-    <Effect id="enemyDR3" type="EffectDoor">enemydoor3</Effect>
-    <Effect id="enemyDR2" type="EffectDoor">enemydoor2</Effect>
-    <Effect id="enemyDR1" type="EffectDoor">enemydoor1</Effect>
-    <Effect id="finalDR" type="EffectDoor">finaldoor</Effect>
-    <Effect id="ENEMYANDFINALDRS" type="EffectList">finalDR,enemyDR1,enemyDR2,enemyDR3,enemyDR4</Effect>
-    <Trigger cause="OPENEVERYTHING" effect="ENEMYANDFINALDRS" />
-    <Trigger cause="trueBTN" effect="tofinalBTN" />
+    <Effect id="toBTNfield" type="EffectDoor">buttonfieldDR</Effect>
+    <Effect id="killturret" type="EffectList">doornode1,toBTNfield</Effect>
+    <Effect id="secondpit" type="EffectList">tofinalBTN,secondpitnode</Effect>
+    <Effect id="last" type="EffectList">enemyDR3,enemyDR2,enemyDR1,enemyDR4,finalDR,lowestblob,middleblob,highestblob,finalblob</Effect>
+    <Trigger cause="trueBTN" effect="secondpit" />
     <Trigger cause="deadTurret" effect="toBTNfield" />
+    <Trigger cause="OPENEVERYTHING" effect="last" />
   </Triggers>
+  <Nodes>430,288;258,291;-290,70;-289,-58;67,-429;220,-422;62.5,362.5;62.5,215.5;67,74.5;-69.5,80.5;-57.5,209.5;-66.5,362.5;-288.5,361;-287,505;247,499;254.5,134.5;259,8.5</Nodes>
+  <NodeLinks>0,1,False;2,3,False;4,5,False;8,9,False;7,10,False;6,11,False;3,4,True;2,12,True;2,10,True;10,12,True;11,12,True;2,9,True;9,12,True;2,11,True;12,13,True;13,14,True;1,14,True;15,16,True;1,15,True</NodeLinks>
 </Level>

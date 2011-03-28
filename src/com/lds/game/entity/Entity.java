@@ -11,6 +11,7 @@ import com.lds.Texture;
 import com.lds.TilesetHelper;
 import com.lds.Enums.RenderMode;
 import com.lds.Vector2f;
+import com.lds.game.Game;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -114,8 +115,6 @@ public abstract class Entity
 		renderMode = EnumSet.noneOf(RenderMode.class);
 	}
 	
-	
-	
 	public void draw(GL10 gl)
 	{
 		gl.glTranslatef(posVec.getX(), posVec.getY(), 0.0f);
@@ -210,7 +209,7 @@ public abstract class Entity
 	
 	public void update()
 	{
-		if (scaleVec.mag() < 0.0001f)
+		if (scaleVec.mag() <= 0.0f)
 			this.remove(); //remove the entity
 		colorInterp();
 		gradientInterp();
@@ -302,7 +301,7 @@ public abstract class Entity
 		if (!this.isSolid || !ent.isSolid)
 			return false;
 		
-		if (colIgnoreList.contains(ent))
+		if (Game.arrayListContains(colIgnoreList, ent))
 			return false;
 		
 		//makes sure the entities are close enough so that collision testing is actually necessary
@@ -338,7 +337,6 @@ public abstract class Entity
 		return output;
 	}
 
-	//TODO: FIX
 	protected boolean isRectangleCollidingWithCircle (Entity ent) //if only ent is a circle
 	{
 		boolean output = true;
@@ -393,7 +391,6 @@ public abstract class Entity
 		}
 		if (output && this.doesCollide(ent) && ent.doesCollide(this))
 		{
-			//TODO: Make these seperate methods that work
 			this.rectangleBounceAgainstCircle(ent);
 			ent.circleBounceAgainstRectangle(this);
 		}

@@ -1,25 +1,27 @@
 package com.lds.trigger;
 
+import com.lds.game.ai.Node;
 import com.lds.game.ai.NodeLink;
 
 public class EffectActivateNodeLink extends Effect
 {
-	private NodeLink link;
+	private Node node1, node2;
 	
-	public EffectActivateNodeLink (NodeLink link)
+	public EffectActivateNodeLink (Node node1, Node node2)
 	{
-		this.link = link;
+		this.node1 = node1;
+		this.node2 = node2;
 	}
 	
 	@Override
 	public void fireOutput()
 	{
-		link.activate();
+		node1.activateLinks(node2);
 	}
 	
 	@Override
 	public void unfireOutput()
 	{
-		link.deactivate();
+		node1.deactivateLinks(node2);
 	}
 }

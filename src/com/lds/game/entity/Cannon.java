@@ -7,27 +7,28 @@ import com.lds.game.Game;
 
 public class Cannon extends StaticEnt
 {
-	protected float speed, xPos, yPos;
+	protected float speed, cannonXPos, cannonYPos, shotsPerSecond;
 	protected int time;
 	
-	public Cannon(float size, float xPos, float yPos, float angle, float xScl, float yScl, boolean isSolid, boolean circular, boolean willCollide, float speed)
+	public Cannon(float size, float xPos, float yPos, float angle, float xScl, float yScl, boolean isSolid, boolean circular, boolean willCollide, float fireSpeed, float newShotsPerSecond)
 	{
 		super(size, xPos, yPos, angle, xScl, yScl, isSolid, circular, willCollide);
-		this.speed = speed;
-		this.xPos = xPos;
-		this.yPos = yPos;
-		time = Stopwatch.elapsedTimeMs();		
+		speed = fireSpeed;
+		cannonXPos = xPos;
+		cannonYPos = yPos;
+		time = Stopwatch.elapsedTimeMs();
+		shotsPerSecond = newShotsPerSecond;
 	}
 
 	@Override
 	public void update()
 	{
 		super.update();
-		if(Stopwatch.elapsedTimeMs() - time > 5000)
+		if(Stopwatch.elapsedTimeMs() - time > shotsPerSecond * 1000) // Time loop
 		{
 			time = Stopwatch.elapsedTimeMs();
-			PhysBall cannonShot = new PhysBall(15, xPos, yPos);
-			cannonShot.enableTilesetMode(Game.tilesetwire, 1, 2);
+			CannonShell cannonShot = new CannonShell(15, cannonXPos, cannonYPos, angle, 0.0f, 0.0f, true, true, true, speed, 0.0f, 0.0f, 0.07f);
+			cannonShot.enableTilesetMode(Game.tilesetwire, 1, 3);
 			cannonShot.push(new Vector2f(angle).scale(speed));
 			EntityManager.addEntity(cannonShot);
 		}

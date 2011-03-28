@@ -2,6 +2,7 @@ package com.lds.game;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.Window;
@@ -23,16 +24,15 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-				
-		//Grab screen information to initialize local entity ArrayList
+		
+		//Grab screen information
 		DisplayMetrics screen = new DisplayMetrics();
 		getWindowManager().getDefaultDisplay().getMetrics(screen);
 		float screenX = (float)screen.widthPixels;
 		float screenY = (float)screen.heightPixels;
 		
-		//Enable fullscreen
-		//this.requestWindowFeature(Window.FEATURE_NO_TITLE);
-		//getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+		//set proper volume to adjust with +/- buttons
+		setVolumeControlStream(AudioManager.STREAM_MUSIC);
 		
 		//retrieve game if the activity restarts
 		final Object data = getLastNonConfigurationInstance();

@@ -21,13 +21,14 @@ public class SpikeBall extends PhysEnt
 	{
 		super.update();
 		
+		//TODO clean it up!
 		if(this.getXPos() == moveX && this.getYPos() == moveY)
 		{
-			this.moveTo(oldXPos, oldYPos);
+			this.push(oldXPos, oldYPos);
 		}
 		else if(this.getXPos() == oldXPos && this.getYPos() == oldYPos)
 		{
-			this.moveTo(moveX, moveY);
+			this.push(moveX, moveY);
 		}
 		else {}
 		this.rotate(10 * rotateDir); // negative 1 or positive 1.

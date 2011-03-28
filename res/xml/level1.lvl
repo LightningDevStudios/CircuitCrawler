@@ -498,20 +498,34 @@
     </Player>
   </Entities>
   <Triggers>
-    <Cause id="BTN1" type="CauseButton">button1</Cause>
-    <Cause id="BTN0" type="CauseButton">button0</Cause>
-    <Cause id="BTN2" type="CauseButton">button2</Cause>
     <Cause id="ENEMYCOUNT0" type="CauseEnemyCount">0</Cause>
+    <Cause id="BTN2" type="CauseButton">button2</Cause>
+    <Cause id="BTN0" type="CauseButton">button0</Cause>
+    <Cause id="BTN1" type="CauseButton">button1</Cause>
     <Cause id="BTNS02" type="CauseAND">BTN2,BTN0</Cause>
-    <Effect id="DR1" type="EffectDoor">door1</Effect>
-    <Effect id="DR0" type="EffectDoor">door0</Effect>
-    <Effect id="RAISEBRIDGE1" type="EffectRaiseBridge">14,0</Effect>
     <Effect id="RAISEBRIDGE0" type="EffectRaiseBridge">13,0</Effect>
+    <Effect id="RAISEBRIDGE1" type="EffectRaiseBridge">14,0</Effect>
+    <Effect id="DR0" type="EffectDoor">door0</Effect>
+    <Effect id="DR1" type="EffectDoor">door1</Effect>
+    <Effect id="finalDR" type="EffectDoor">finaldoor</Effect>
+    <Effect id="enemyDR1" type="EffectDoor">enemydoor1</Effect>
+    <Effect id="enemyDR2" type="EffectDoor">enemydoor2</Effect>
+    <Effect id="enemyDR3" type="EffectDoor">enemydoor3</Effect>
+    <Effect id="enemyDR4" type="EffectDoor">enemydoor4</Effect>
+    <Effect id="tofinalBTN" type="EffectRaiseBridge">10,14</Effect>
+    <Effect id="toBTNfield" type="EffectDoor">buttonfieldDR</Effect>
+    <Effect id="finalDR" type="EffectDoor">finaldoor</Effect>
+    <Effect id="enemyDR1" type="EffectDoor">enemydoor1</Effect>
+    <Effect id="enemyDR2" type="EffectDoor">enemydoor2</Effect>
+    <Effect id="enemyDR3" type="EffectDoor">enemydoor3</Effect>
+    <Effect id="enemyDR4" type="EffectDoor">enemydoor4</Effect>
+    <Effect id="tofinalBTN" type="EffectRaiseBridge">10,14</Effect>
+    <Effect id="toBTNfield" type="EffectDoor">buttonfieldDR</Effect>
     <Trigger cause="ENEMYCOUNT0" effect="RAISEBRIDGE0" />
     <Trigger cause="ENEMYCOUNT0" effect="RAISEBRIDGE1" />
     <Trigger cause="BTN1" effect="DR0" />
     <Trigger cause="BTNS02" effect="DR1" />
   </Triggers>
-  <Nodes>-283,70;110,70;-284,-197;-144,-197;-145,-422;64,-422;-299,-363;109,-7;423,-354;214,-354;213,-213;300,-7;424,-7</Nodes>
-  <NodeLinks>4,6,True;4,5,True;3,4,True;2,3,True;0,2,True;0,1,True;1,7,True;8,9,True;9,10,True;7,11,True;11,12,True;8,12,True</NodeLinks>
+  <Nodes>-283,70;110,70;-284,-197;-144,-197;-145,-422;64,-422;-299,-363;109,-7;423,-354;214,-354;213,-213;300,-7;424,-7;-417.5,-362.5</Nodes>
+  <NodeLinks>4,6,True;4,5,True;3,4,True;2,3,True;0,2,True;0,1,True;1,7,True;8,9,True;9,10,True;7,11,True;11,12,True;8,12,True;6,13,True</NodeLinks>
 </Level>

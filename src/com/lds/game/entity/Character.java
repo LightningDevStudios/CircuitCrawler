@@ -27,9 +27,17 @@ public abstract class Character extends PhysEnt //all characters, including the 
 	@Override
 	public void interact(Entity ent)
 	{
-		if (ent instanceof AttackBolt)
+		if (ent instanceof AttackBolt && !((AttackBolt)ent).doesIgnore(this))
+		{
+			takeDamage(5);
+		}
+		else if (ent instanceof SpikeBall)
 		{
 			takeDamage(25);
+		}
+		else if (ent instanceof CannonShell)
+		{
+			takeDamage(5);
 		}
 	}
 	

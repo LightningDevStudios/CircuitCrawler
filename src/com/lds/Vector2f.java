@@ -87,6 +87,11 @@ public class Vector2f
 		return new Vector2f(v.getY(), -v.getX());
 	}
 	
+	public static Vector2f scaleTo (Vector2f v, float scalar)
+	{
+		return Vector2f.normalize(v).scale(scalar);
+	}
+	
 	public static Vector2f getMidpoint (Vector2f v1, Vector2f v2)
 	{
 		return new Vector2f((v1.x + v2.x) / 2, (v1.y + v2.y) / 2);
@@ -139,6 +144,15 @@ public class Vector2f
 	public boolean equals (Vector2f v)
 	{
 		if (x == v.getX() && y == v.getY())
+		{
+			return true;
+		}
+		return false;
+	}
+	
+	public boolean approxEquals (Vector2f v, float marginOfError)
+	{
+		if (Math.abs(x - v.x) < marginOfError && Math.abs(y - v.y) < marginOfError)
 		{
 			return true;
 		}

@@ -27,6 +27,16 @@ public class NodePath
 		add(node2);
 	}
 	
+	public void activateLink(int index1, int index2)
+	{
+		nodeList.get(index1).deactivateLinks(nodeList.get(index2));
+	}
+	
+	public void deactivateLink(int index1, int index2)
+	{
+		nodeList.get(index1).activateLinks(nodeList.get(index2));
+	}
+	
 	public Node getClosestNode(Entity ent)
 	{
 		Node closestNode = nodeList.get(0);

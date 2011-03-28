@@ -75,6 +75,13 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 			Game.text = new Texture(R.drawable.text, 256, 256, 16, 8, context, "text");
 			Game.tilesetworld = new Texture(R.drawable.tilesetworld, 512, 256, 16, 8, context, "tilesetworld");
 			Game.tilesetentities = new Texture(R.drawable.tilesetentities, 256, 256, 8, 8, context, "tilesetentities");
+			Game.joystickout = new Texture(R.raw.joystickout, 64, 64, 1, 1, context, "joystickout");
+			Game.joystickin = new Texture(R.raw.joystickin, 32, 32, 1, 1, context, "joystickin");
+			Game.buttona = new Texture(R.raw.buttona, 32, 32, 1, 1, context, "buttona");
+			Game.buttonb = new Texture(R.raw.buttonb, 32, 32, 1, 1, context, "buttonb");
+			Game.baricons = new Texture (R.raw.baricons, 32, 16, 2, 1, context, "baricons");
+			Game.energybarborder = new Texture (R.raw.energybarborder, 192, 16, 1, 1, context, "energybarborder");
+			Game.healthbarborder = new Texture(R.raw.healthbarborder, 256, 16, 1, 1, context, "healthbarborder");
 			
 			TextureLoader.getInstance().initialize(gl);
 			TextureLoader tl = TextureLoader.getInstance();
@@ -84,6 +91,13 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 			tl.loadTexture(Game.text);
 			tl.loadTexture(Game.tilesetworld);
 			tl.loadTexture(Game.tilesetentities);
+			tl.loadTexture(Game.joystickout);
+			tl.loadTexture(Game.joystickin);
+			tl.loadTexture(Game.buttona);
+			tl.loadTexture(Game.buttonb);
+			tl.loadTexture(Game.baricons);
+			tl.loadTexture(Game.energybarborder);
+			tl.loadTexture(Game.healthbarborder);
 			
 			for(Entity ent : game.entList)
 			{
@@ -131,17 +145,16 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	public void onDrawFrame(GL10 gl) 
 	{
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-
+		//remove entities that are queued for removal
 		//tick the stopwatch every frame, gives relatively stable intervals
 		frameCount++;
 		game.frameInterval = Stopwatch.elapsedTimeMs();
 		Stopwatch.tick();
 
 		game.updateTriggers();
-		game.updateFingers();
 		game.updateRenderedEnts();
 		game.cleaner.update(game.entList, gl);
-		
+		game.updateFingers();
 		game.renderTileset(gl);
 
 		//Triggered when the perspective needs to be redrawn
@@ -182,17 +195,22 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 				for (int j = i + 1; j < size; j++)
 				{
 					final Entity colEnt = game.entList.get(j);
+					final boolean colListContains = Game.arrayListContains(ent.colList, colEnt) || Game.arrayListContains(colEnt.colList, ent);
 					if (ent.isColliding(colEnt))
 					{
-						if(!ent.colList.contains(colEnt) && !colEnt.colList.contains(ent))
+						if(!colListContains)
 						{
 							ent.colList.add(colEnt);
 							colEnt.colList.add(ent);
 							ent.interact(colEnt);
 							colEnt.interact(ent);
+							if (ent instanceof Enemy)
+								((Enemy)ent).setColliding(true);
+							if (colEnt instanceof Enemy)
+								((Enemy)colEnt).setColliding(true);
 						}
 					}
-					else if (ent.colList.contains(colEnt) || colEnt.colList.contains(ent))
+					else if (colListContains)
 					{
 						//System.out.println(ent.colList.size() + " " + colEnt.colList.size());
 						ent.colList.remove(colEnt);
@@ -208,33 +226,31 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 				if (ent instanceof PhysEnt)
 				{
 					final PhysEnt physEnt = (PhysEnt)ent;
-					for (final Tile[] ts : game.tileset)
+					
+					final int tilesetSize = game.tileset.length;
+					final int tileRowSize = game.tileset[0].length;
+					for (int j = 0; j < tilesetSize; j++)
 					{
-						for (final Tile tile : ts)
+						for (int k = 0; k < tileRowSize; k++)
 						{
+							Tile tile = game.tileset[j][k];
+							final boolean physColListContains = Game.arrayListContains(physEnt.colList, tile) || Game.arrayListContains(tile.colList, physEnt);
 							if (tile.isColliding(physEnt))
 							{
-								if (!physEnt.colList.contains(tile) && !tile.colList.contains(physEnt))
+								if (!physColListContains)
 								{
 									physEnt.colList.add(tile);
 									tile.colList.add(physEnt);
 									physEnt.tileInteract(tile);
 								}
 							}
-							else if (physEnt.colList.contains(tile) || tile.colList.contains(physEnt))
+							else if (physColListContains)
 							{
-								physEnt.colList.remove(tile);
+								physEnt.colList.remove(physEnt.colList.indexOf(tile));
 								tile.colList.remove(physEnt);
 								if (ent.colList.isEmpty())
 									physEnt.tileUninteract(tile);
 							}
-							/*else if (physEnt.colList.contains(tile) || tile.colList.contains(physEnt))
-							{
-								physEnt.colList.remove(tile);
-								tile.colList.remove(physEnt);
-								if (ent.colList.isEmpty())
-									physEnt.tileUninteract(tile);
-							}*/
 						}
 					}
 					
@@ -252,11 +268,6 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 					game.player.addPos(game.player.getHeldObject().getBounceVec());
 					game.player.updateHeldObjectPosition();
 				}
-				//runs new AI code for enemies
-				else if (ent instanceof Enemy)
-				{
-					//TODO: recalculate new path for enemy to go on
-				}
 			}
 			
 			/***************************
@@ -265,22 +276,34 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	
 			//inside of ent for loop
 			//checks for whatever happens when B is pressed.
-			if (game.btnB.isPressed() && ent instanceof HoldObject)
+			if (game.btnB.isPressed())
 			{
-				if (!game.player.isHoldingObject()) //not holding anything and is close enough
+				if (ent instanceof HoldObject)
+				{
+					if (!game.player.isHoldingObject()) //not holding anything and is close enough
+					{
+						if (game.player.closeEnough(ent) && game.player.isFacing(ent))
+						{
+							game.player.holdObject((HoldObject)ent);
+							vibrator(100);
+							game.btnB.unpress();
+						}
+					}
+					else //holding object, button pressed
+					{
+						game.player.dropObject();
+						vibrator(100);
+						game.btnB.unpress();
+					}
+				}
+				else if (ent instanceof PuzzleBox)
 				{
 					if (game.player.closeEnough(ent) && game.player.isFacing(ent))
 					{
-						game.player.holdObject((HoldObject)ent);
-						game.btnB.unpress();
+						((PuzzleBox)ent).run();
 						vibrator(100);
 					}
-				}
-				else //holding object, button pressed
-				{
-					game.player.dropObject();
 					game.btnB.unpress();
-					vibrator(100);
 				}
 			}
 		}
@@ -294,9 +317,8 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 				if (game.player.getEnergy() != 0)
 				{
 					final Vector2f directionVec = new Vector2f(game.player.getAngle());
-					directionVec.scale(game.player.getHalfSize());
-					final  AttackBolt attack = new AttackBolt(Vector2f.add(game.player.getPos(), directionVec), directionVec, game.player.getAngle());
-					attack.setCanHurtPlayer(false);
+					final AttackBolt attack = new AttackBolt(Vector2f.add(game.player.getPos(), directionVec), directionVec.scale(20), game.player.getAngle());
+					attack.ignore(game.player);
 					attack.genHardwareBuffers(gl);
 					EntityManager.addEntity(attack);
 					game.player.loseEnergy(5);
@@ -425,6 +447,10 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 					
 					break;
 				case MotionEvent.ACTION_UP:
+					for (final Finger f : game.fingerList)
+					{
+						f.onStackPop();
+					}
 					game.fingerList.clear();
 					break;
 				case MotionEvent.ACTION_POINTER_UP:

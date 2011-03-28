@@ -15,12 +15,12 @@ import com.lds.trigger.*;
  
 public class Parser //this is a parser
 {
-	public ArrayList<EntityData> parsedList = new ArrayList<EntityData>();
-	public ArrayList<Entity> entList = new ArrayList<Entity>();
-	public ArrayList<Trigger> triggerList = new ArrayList<Trigger>();
-	public ArrayList<Node> nodeList = new ArrayList<Node>();
-	public ArrayList<CauseData> causeDataList = new ArrayList<CauseData>();
-	public ArrayList<EffectData> effectDataList = new ArrayList<EffectData>();
+	public ArrayList<EntityData> parsedList;
+	public ArrayList<Entity> entList;
+	public ArrayList<Trigger> triggerList;
+	public ArrayList<Node> nodeList;
+	public ArrayList<CauseData> causeDataList;
+	public ArrayList<EffectData> effectDataList;
 	
 	public Tile[][] tileset;
 	public Player player;
@@ -36,6 +36,13 @@ public class Parser //this is a parser
 	public Parser(Context context, int res)
 	{
 		xrp = context.getResources().getXml(res);
+		
+		parsedList = new ArrayList<EntityData>();
+		entList = new ArrayList<Entity>();
+		triggerList = new ArrayList<Trigger>();
+		nodeList = new ArrayList<Node>();
+		causeDataList = new ArrayList<CauseData>();
+		effectDataList = new ArrayList<EffectData>();
 	}
 
 /***********************
@@ -271,9 +278,9 @@ Parse A Tileset
 		}
 	}
 	
-/************
-Parse Triggers
-************/
+	/******************
+	 * Parse Triggers *
+	 ******************/
 	
 	public void parseTriggers() throws XmlPullParserException, IOException
 	{
@@ -298,8 +305,8 @@ Parse Triggers
 			}
 			else if(xrp.getName().equalsIgnoreCase("Trigger"))
 			{			
-				Cause cause = causeFromID(xrp.getAttributeName(0));
-				Effect effect = effectFromID(xrp.getAttributeName(1)); 
+				Cause cause = causeFromID(xrp.getAttributeValue(0));
+				Effect effect = effectFromID(xrp.getAttributeValue(1)); 
 				
 				if (cause != null && effect != null)
 				{
@@ -335,7 +342,6 @@ Parse Triggers
 	public Cause causeInitializer(String type, String[] parameters)
 	{
 		Cause cause = null;
-		//TODO NOT/AND/OR/XOR causes TriggerTimer effect
 		if(type.equalsIgnoreCase("CauseNOT"))
 		{
 			cause = new CauseNOT(causeFromID(parameters[0]));
@@ -414,10 +420,11 @@ Parse Triggers
 		{
 			effect = new EffectRemoveEntity(this.<Entity>stringToSubEntity(parameters[0]));
 		}
-		/*else if (effectSTR.equalsIgnoreCase("EffectTriggerTimer"))
+		else if (type.equalsIgnoreCase("EffectTriggerTimer"))
 		{
-			effect = new EffectTriggerTimer();
-		}*/
+			//TODO pass in an actual boolean for this
+			effect = new EffectTriggerTimer((CauseTimePassed)causeFromID(parameters[0]), false);
+		}
 		
 		return effect;
 	}
@@ -445,14 +452,11 @@ Parse Triggers
 		for(String node : nodes)
 		{
 			String[] temp = node.split(",");
-			Node tempNode = new Node(Float.parseFloat(temp[0]), Float.parseFloat(temp[1]));
-			nodeList.add(tempNode);
+			nodeList.add(new Node(Float.parseFloat(temp[0]), Float.parseFloat(temp[1])));
 		}
 		
 		xrp.next();
 		xrp.next();
-		
-		//to make nodes in game, goto game constructor and nodeList = parser.nodeList
 	}
 	
 	public void parseNodeLinks() throws XmlPullParserException, IOException
@@ -464,9 +468,9 @@ Parse Triggers
 		{
 			String[] temp = nodeLink.split(",");
 			if(temp.length == 2)
-				(nodeList.get(Integer.parseInt(temp[0]))).addNodeLink(nodeList.get(Integer.parseInt(temp[1])));
+				nodeList.get(Integer.parseInt(temp[0])).addNodeLink(nodeList.get(Integer.parseInt(temp[1])));
 			else if(temp.length == 3)
-				(nodeList.get(Integer.parseInt(temp[0]))).addNodeLink(nodeList.get(Integer.parseInt(temp[1])), Boolean.parseBoolean(temp[3]));
+				nodeList.get(Integer.parseInt(temp[0])).addNodeLink(nodeList.get(Integer.parseInt(temp[1])), Boolean.parseBoolean(temp[3]));
 		}
 		
 		xrp.next();

@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    
     <string name="app_name">LDS_Game</string>
-
-
+	<string-array name="menu_items"><item>Start</item>
+		<item>Tutorial Level</item>
+		<item>About Us</item>
+		<item>Youth for Technology Foundation</item>
+		<item>Donate</item>
+		<item>Settings</item>
+	</string-array>
 </resources>
