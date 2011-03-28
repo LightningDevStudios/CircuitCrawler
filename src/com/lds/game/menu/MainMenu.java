@@ -71,7 +71,7 @@ public class MainMenu extends Activity
 		animator.addView(credits, 4);
 		
 		//Boxes n' Shit
-		final CheckBox checkbox = (CheckBox) findViewById(R.id.checkbox);
+		final CheckBox vibrationCheckbox = (CheckBox) findViewById(R.id.checkbox);
 		final CheckBox volumeCheckbox = (CheckBox) findViewById(R.id.volumeCheckbox);
 		final CheckBox enableShaders = (CheckBox) findViewById(R.id.enableShaders);
 		mSeekBar = (SeekBar)findViewById(R.id.seek);
@@ -86,7 +86,7 @@ public class MainMenu extends Activity
             public void onStopTrackingTouch(SeekBar seekBar)	{	}	
         });
        	
-		checkbox.setOnCheckedChangeListener(new OnCheckedChangeListener()
+		vibrationCheckbox.setOnCheckedChangeListener(new OnCheckedChangeListener()
 		{
 		    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
 		    {
