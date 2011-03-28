@@ -77,15 +77,39 @@ public class MainMenu extends Activity
 		final CheckBox enableMusic = (CheckBox) findViewById(R.id.EnableMusic);
 		final CheckBox enableShaders = (CheckBox) findViewById(R.id.enableShaders);
 		final SeekBar mSeekBar = (SeekBar)findViewById(R.id.seek);
+		final SeekBar volumeControl = (SeekBar)findViewById(R.id.volume);
 		final Button ldsButton = (Button)findViewById(R.id.LDS_Button);
 		final Button ytfButton = (Button)findViewById(R.id.YTF_Button);
+		final TextView seekBarValue = (TextView)findViewById(R.id.volumeText);
+		final TextView antiTextbar = (TextView)findViewById(R.id.antiText);
+		
+		//suffs
+		volumeControl.setMax(100);
+		volumeControl.setProgress(1);
+		mSeekBar.setMax(100);
+		mSeekBar.setProgress(1);
 		
 		//Action Suffs
         mSeekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener()
         {
-        	public void onProgressChanged(SeekBar seekBar, int progress, boolean fromTouch)	{	}
+        	public void onProgressChanged(SeekBar seekBar, int progress, boolean fromTouch)	
+        	{	
+        		antiTextbar.setText("Anti Aliasing: " + String.valueOf(progress) + "%");
+        	}
             public void onStartTrackingTouch(SeekBar seekBar)	{	}
             public void onStopTrackingTouch(SeekBar seekBar)	{	}	
+        });
+        
+        volumeControl.setOnSeekBarChangeListener(new OnSeekBarChangeListener()
+        {
+        	public void onProgressChanged(SeekBar volumeControl, int progress, boolean fromTouch)	
+        	{	
+        		seekBarValue.setText("Volume: " + String.valueOf(progress) + "%");
+        		SoundPlayer.effectVolume = ((float)(Integer.parseInt(String.valueOf(progress))))/100;
+        		System.out.println(SoundPlayer.effectVolume);
+        	}
+            public void onStartTrackingTouch(SeekBar volumeControl)	{	}
+            public void onStopTrackingTouch(SeekBar volumeControl)	{	}	
         });
        	
 		checkbox.setOnCheckedChangeListener(new OnCheckedChangeListener()
@@ -129,10 +153,12 @@ public class MainMenu extends Activity
 		        if ( isChecked )
 		        {
 		        	vibrator(100);
+		        	SoundPlayer.enableMusic = true;
 		        }
 		        else
 		        {
 		        	vibrator(100);
+		        	SoundPlayer.enableMusic = false;
 		        }
 		    }
 		});

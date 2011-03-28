@@ -32,6 +32,8 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	public OnGameInitializedListener gameInitializedListener;
 	public OnPuzzleActivatedListener puzzleActivatedListener;
 	public OnGameOverListener gameOverListener;
+	public float time, timer, timer2;
+	public boolean songOver;
 	
 	public GameRenderer (float screenW, float screenH, Context context, Object syncObj)
 	{
@@ -41,7 +43,9 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		this.syncObj = syncObj;
 		Game.windowOutdated = false;
 		Game.worldOutdated = false;
+		songOver = true;
 	}
+	
 	
 	@Override
 	public void onSurfaceCreated(GL10 gl, EGLConfig config)
@@ -149,8 +153,36 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		//remove entities that are queued for removal
 		//tick the stopwatch every frame, gives relatively stable intervals
 		frameCount++;
+		
 		game.frameInterval = Stopwatch.elapsedTimeMs();
+		timer2 = Stopwatch.elapsedTimeMs();
 		Stopwatch.tick();
+		
+		if(songOver)
+		{
+			SoundPlayer.getInstance().playSound(5);
+			songOver = false;
+			/*
+			//int song = ((int)(Math.random()* 2 + 5));
+			int song = 5;
+			SoundPlayer.getInstance().playMusic(song);
+			if(song == 5)
+			{
+				time = 196000;
+			}
+			else
+			{
+				time = 85000;
+			}
+			timer = 0;*/
+		}
+		/*
+		if(timer > time)
+		{
+			songOver = true;
+		}*/
+		
+		//timer += Stopwatch.elapsedTimeMs() - timer2;
 
 		game.updateTriggers();
 		game.updateRenderedEnts();

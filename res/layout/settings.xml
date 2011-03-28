@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+<ScrollView>
 <LinearLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	android:orientation="vertical"
@@ -25,14 +26,32 @@
         android:text="Enable Shaders" 
         android:checked="true"/>
     <TextView
+    	android:id="@+id/antiText"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:text="\nAnti Aliasing">
+		android:text="\nAnti Aliasing:  5%"
+		android:max="100"
+   		android:progress="5">
 	</TextView>
-    <SeekBar
+	<SeekBar
  		android:id="@+id/seek"
  		android:layout_width="fill_parent"
  		android:layout_height="wrap_content"
 		android:layout_margin="10px"
- />
+	/>
+	<TextView
+		android:id="@+id/volumeText"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="\nVolume:  5%">
+	</TextView>
+	<SeekBar
+ 		android:id="@+id/volume"
+ 		android:layout_width="fill_parent"
+ 		android:layout_height="wrap_content"
+		android:layout_margin="10px"
+		android:max="100"
+   		android:progress="5"
+	/>   
 </LinearLayout>
+</ScrollView>
