@@ -35,6 +35,7 @@ public final class R {
     public static final class id {
         public static final int About=0x7f0a0000;
         public static final int CircuitCrawlerLogo=0x7f0a0003;
+        public static final int EnableMusic=0x7f0a000a;
         public static final int LDS_Button=0x7f0a0001;
         public static final int MM_LeftParent=0x7f0a0005;
         public static final int MM_LeftViewAnimator=0x7f0a0006;
@@ -42,8 +43,8 @@ public final class R {
         public static final int MM_RightListView=0x7f0a0007;
         public static final int YTF_Button=0x7f0a0002;
         public static final int checkbox=0x7f0a0008;
-        public static final int enableShaders=0x7f0a000a;
-        public static final int seek=0x7f0a000b;
+        public static final int enableShaders=0x7f0a000b;
+        public static final int seek=0x7f0a000c;
         public static final int volumeCheckbox=0x7f0a0009;
     }
     public static final class layout {

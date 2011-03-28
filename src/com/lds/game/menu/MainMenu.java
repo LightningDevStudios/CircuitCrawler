@@ -73,8 +73,9 @@ public class MainMenu extends Activity
 		//Boxes n' Shit
 		final CheckBox checkbox = (CheckBox) findViewById(R.id.checkbox);
 		final CheckBox volumeCheckbox = (CheckBox) findViewById(R.id.volumeCheckbox);
+		final CheckBox enableMusic = (CheckBox) findViewById(R.id.EnableMusic);
 		final CheckBox enableShaders = (CheckBox) findViewById(R.id.enableShaders);
-		mSeekBar = (SeekBar)findViewById(R.id.seek);
+		final SeekBar mSeekBar = (SeekBar)findViewById(R.id.seek);
 		final Button ldsButton = (Button)findViewById(R.id.LDS_Button);
 		final Button ytfButton = (Button)findViewById(R.id.YTF_Button);
 		
@@ -106,6 +107,21 @@ public class MainMenu extends Activity
 		});
 		
 		enableShaders.setOnCheckedChangeListener(new OnCheckedChangeListener()
+		{
+		    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
+		    {
+		        if ( isChecked )
+		        {
+		        	vibrator(100);
+		        }
+		        else
+		        {
+		        	vibrator(100);
+		        }
+		    }
+		});
+		
+		enableMusic.setOnCheckedChangeListener(new OnCheckedChangeListener()
 		{
 		    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
 		    {

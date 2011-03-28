@@ -14,6 +14,11 @@
         android:layout_height="wrap_content"
         android:text="Enable Sound"  
         android:checked="true"/>
+    <CheckBox android:id="@+id/EnableMusic"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Enable Music" 
+        android:checked="true"/>
     <CheckBox android:id="@+id/enableShaders"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
