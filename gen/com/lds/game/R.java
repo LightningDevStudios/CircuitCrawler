@@ -44,10 +44,11 @@ public final class R {
         public static final int MM_RightListView=0x7f0a0007;
         public static final int YTF_Button=0x7f0a0002;
         public static final int antiText=0x7f0a000c;
+        public static final int cheatText=0x7f0a0011;
         public static final int checkbox=0x7f0a0008;
         public static final int enableShaders=0x7f0a000b;
-        public static final int god=0x7f0a0011;
-        public static final int noclip=0x7f0a0012;
+        public static final int god=0x7f0a0012;
+        public static final int noclip=0x7f0a0013;
         public static final int seek=0x7f0a000d;
         public static final int volume=0x7f0a000f;
         public static final int volumeCheckbox=0x7f0a0009;

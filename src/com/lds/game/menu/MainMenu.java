@@ -91,6 +91,7 @@ public class MainMenu extends Activity
 		final EditText input = new EditText(this);
 		final CheckBox godMode = (CheckBox) findViewById(R.id.god);
 		final CheckBox noclip = (CheckBox) findViewById(R.id.noclip);
+		final TextView cheatText = (TextView)findViewById(R.id.cheatText);
 		godMode.setVisibility(View.INVISIBLE);
 		noclip.setVisibility(View.INVISIBLE);
 		
@@ -131,7 +132,14 @@ public class MainMenu extends Activity
 								{
 									godMode.setVisibility(View.VISIBLE);
 									noclip.setVisibility(View.VISIBLE);
+									cheatText.setVisibility(View.VISIBLE);
+									cheatText.setText("Correct!");
 								}
+						else
+						{
+							cheatText.setVisibility(View.VISIBLE);
+							cheatText.setText("Wrong!");
+						}
 					}
 				});
 
