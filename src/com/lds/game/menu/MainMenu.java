@@ -9,6 +9,7 @@ import com.lds.game.SoundPlayer;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.view.*;
@@ -21,10 +22,12 @@ import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
+import android.widget.ScrollView;
 import android.widget.ViewAnimator;
 
 
@@ -58,16 +61,22 @@ public class MainMenu extends Activity
 		//add views to ViewAnimator
 		final View ccLogo = View.inflate(this, R.layout.circuit_crawler_logo, null);
 		animator.addView(ccLogo, 0);
-		final View aboutScreen = View.inflate(this, R.layout.about, null);
-		animator.addView(aboutScreen, 1);
 		final View settings = View.inflate(this, R.layout.settings, null);
-		animator.addView(settings, 2);
+		animator.addView(settings, 1);
+		final View aboutYTF = View.inflate(this, R.layout.about_ytf, null);
+		animator.addView(aboutYTF, 2);
+		//final View aboutLDS = View.inflate(this, R.layout.about_lds, null);
+		//animator.addView(aboutLDS, 3);
+		//final View credits = View.inflate(this, R.layout.credits, null);
+		//animator.addView(credits, 4);
 		
 		//Boxes n' Shit
 		final CheckBox checkbox = (CheckBox) findViewById(R.id.checkbox);
 		final CheckBox volumeCheckbox = (CheckBox) findViewById(R.id.volumeCheckbox);
 		final CheckBox enableShaders = (CheckBox) findViewById(R.id.enableShaders);
 		mSeekBar = (SeekBar)findViewById(R.id.seek);
+		//final Button ldsButton = (Button)findViewById(R.id.LDS_Button);
+		final Button ytfButton = (Button)findViewById(R.id.YTF_Button);
 		
 		//Action Suffs
         mSeekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener()
@@ -127,6 +136,26 @@ public class MainMenu extends Activity
 		        }
 		    }
 		});
+		    
+		//LDS Button
+		/*ldsButton.setOnClickListener(new View.OnClickListener()
+		{
+			public void onClick(View v) 
+			{
+				Intent browserIntent = new Intent("android.intent.action.VIEW", Uri.parse("http://lightningdevelopment.wordpress.com"));
+				startActivity(browserIntent);
+			}
+		});*/
+			
+		//YTF Button	
+		ytfButton.setOnClickListener(new View.OnClickListener()
+		{
+			public void onClick(View v) 
+			{
+				Intent browserIntent = new Intent("android.intent.action.VIEW", Uri.parse("http://www.youthfortechnology.org"));
+				startActivity(browserIntent);
+			}
+		});
 		
 		list.setOnItemClickListener(new OnItemClickListener()
 		{
@@ -145,20 +174,25 @@ public class MainMenu extends Activity
 						animator.setDisplayedChild(0);
 						break;
 					case 2:
-						//Show Settings Screen
-						animator.setDisplayedChild(2);
-						//animator.setDisplayedChild(1);
+						//Settings
+						animator.setDisplayedChild(1);
 						break;
 					case 3:
-						//show YTF screen
-						
+						//Donate Button
+						Intent browserIntent = new Intent("android.intent.action.VIEW", Uri.parse("https://www.networkforgood.org/donation/ExpressDonation.aspx?ORGID2=912125886"));
+						startActivity(browserIntent);
 						break;
 					case 4:
-						//Donate Button
+						//About YTF
+						animator.setDisplayedChild(2);
 						break;
 					case 5:
-						//About Lightning Dev Studios Menu
-						
+						//About LDS
+						animator.setDisplayedChild(3);
+						break;
+					case 6:
+						//Credits
+						animator.setDisplayedChild(4);
 				}
 			}	
 		});
