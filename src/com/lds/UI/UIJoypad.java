@@ -1,21 +1,29 @@
 package com.lds.UI;
 
+import javax.microedition.khronos.opengles.GL10;
+
 import com.lds.Enums.UIPosition;
 import com.lds.Vector2f;
+import com.lds.game.Game;
 
 public class UIJoypad extends UIEntity
 {
-	Vector2f inputVec;
-	float inputAngle;
-	boolean active;
+	private Vector2f inputVec;
+	private float inputAngle;
+	private boolean active;
+	
+	private UIImage fingerCircle;
+	
 	public static final float MAX_SCALAR = 10;
 	
 	public UIJoypad(float xSize, float ySize, UIPosition position, float inputAngle)
 	{
-		super(xSize, ySize, position);
+		super(xSize * Game.screenH, ySize * Game.screenH, position);
 		inputVec = new Vector2f();
 		this.inputAngle = inputAngle;
 		active = false;
+		fingerCircle = new UIImage(this.xSize / 2, this.ySize / 2, 0, 0);
+		fingerCircle.enableTextureMode(Game.joystickin);
 	}
 	
 	public UIJoypad(float xSize, float ySize, float xRelative, float yRelative, float inputAngle)
@@ -42,6 +50,17 @@ public class UIJoypad extends UIEntity
 		active = false;
 	}
 	
+	@Override
+	public void draw(GL10 gl)
+	{
+		super.draw(gl);
+		
+		fingerCircle.updateVertexVBO(gl);
+		fingerCircle.updateTextureVBO(gl);
+		fingerCircle.updateGradientVBO(gl);
+		fingerCircle.draw(gl);
+	}
+	
 	public void setInputVec(final float rawX, final float rawY)
 	{
 		inputVec.set(rawX - xPos, rawY - yPos);
@@ -50,6 +69,10 @@ public class UIJoypad extends UIEntity
 		//scale vector properly
 		if (inputVec.mag() > xSize / 2)
 			inputVec.scaleTo(xSize / 2);
+		
+		//TODO choose one method of moving inner circle
+		//fingerCircle.setPos(Vector2f.scaleTo(inputVec, inputVec.mag() - fingerCircle.xSize / 2));
+		fingerCircle.setPos(inputVec);
 		
 		inputVec.scaleTo(inputVec.mag() * MAX_SCALAR / xSize);
 	}
@@ -83,4 +106,30 @@ public class UIJoypad extends UIEntity
 	{
 		this.active = active;
 	}
+		
+	public void genHardwareBuffers(GL10 gl)
+	{
+		super.genHardwareBuffers(gl);
+		fingerCircle.genHardwareBuffers(gl);
+	}
+	
+	public void updateVertexVBO(GL10 gl)
+	{
+		super.updateVertexVBO(gl);
+		fingerCircle.updateVertexVBO(gl);
+	}
+	
+	public void updateGradientVBO(GL10 gl)
+	{
+		super.updateGradientVBO(gl);
+		fingerCircle.updateGradientVBO(gl);
+	}
+	
+	public void updateTextureVBO(GL10 gl)
+	{
+		super.updateTextureVBO(gl);
+		fingerCircle.updateTextureVBO(gl);
+	}
+	
+	public UIImage getFingerCircle() { return fingerCircle; }
 }

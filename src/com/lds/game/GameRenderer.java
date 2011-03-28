@@ -27,10 +27,13 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	public Context context;
 	public Object syncObj;
 	public boolean gameOver;
+	public static boolean vibrateSetting = true;
 	public int playerMoveTimeMs, frameCount = 0;	
 	public OnGameInitializedListener gameInitializedListener;
 	public OnPuzzleActivatedListener puzzleActivatedListener;
 	public OnGameOverListener gameOverListener;
+	public float time, timer, timer2;
+	public boolean songOver;
 	
 	public GameRenderer (float screenW, float screenH, Context context, Object syncObj)
 	{
@@ -40,7 +43,9 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		this.syncObj = syncObj;
 		Game.windowOutdated = false;
 		Game.worldOutdated = false;
+		songOver = true;
 	}
+	
 	
 	@Override
 	public void onSurfaceCreated(GL10 gl, EGLConfig config)
@@ -75,6 +80,13 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 			Game.text = new Texture(R.drawable.text, 256, 256, 16, 8, context, "text");
 			Game.tilesetworld = new Texture(R.drawable.tilesetworld, 512, 256, 16, 8, context, "tilesetworld");
 			Game.tilesetentities = new Texture(R.drawable.tilesetentities, 256, 256, 8, 8, context, "tilesetentities");
+			Game.joystickout = new Texture(R.raw.joystickout, 64, 64, 1, 1, context, "joystickout");
+			Game.joystickin = new Texture(R.raw.joystickin, 32, 32, 1, 1, context, "joystickin");
+			Game.buttona = new Texture(R.raw.buttona, 32, 32, 1, 1, context, "buttona");
+			Game.buttonb = new Texture(R.raw.buttonb, 32, 32, 1, 1, context, "buttonb");
+			Game.baricons = new Texture (R.raw.baricons, 32, 16, 2, 1, context, "baricons");
+			Game.energybarborder = new Texture (R.raw.energybarborder, 128, 16, 1, 1, context, "energybarborder");
+			Game.healthbarborder = new Texture(R.raw.healthbarborder, 256, 16, 1, 1, context, "healthbarborder");
 			
 			TextureLoader.getInstance().initialize(gl);
 			TextureLoader tl = TextureLoader.getInstance();
@@ -84,6 +96,13 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 			tl.loadTexture(Game.text);
 			tl.loadTexture(Game.tilesetworld);
 			tl.loadTexture(Game.tilesetentities);
+			tl.loadTexture(Game.joystickout);
+			tl.loadTexture(Game.joystickin);
+			tl.loadTexture(Game.buttona);
+			tl.loadTexture(Game.buttonb);
+			tl.loadTexture(Game.baricons);
+			tl.loadTexture(Game.energybarborder);
+			tl.loadTexture(Game.healthbarborder);
 			
 			for(Entity ent : game.entList)
 			{
@@ -134,8 +153,36 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		//remove entities that are queued for removal
 		//tick the stopwatch every frame, gives relatively stable intervals
 		frameCount++;
+		
 		game.frameInterval = Stopwatch.elapsedTimeMs();
+		timer2 = Stopwatch.elapsedTimeMs();
 		Stopwatch.tick();
+		
+		if(songOver)
+		{
+			SoundPlayer.getInstance().playSound(5);
+			songOver = false;
+			/*
+			//int song = ((int)(Math.random()* 2 + 5));
+			int song = 5;
+			SoundPlayer.getInstance().playMusic(song);
+			if(song == 5)
+			{
+				time = 196000;
+			}
+			else
+			{
+				time = 85000;
+			}
+			timer = 0;*/
+		}
+		/*
+		if(timer > time)
+		{
+			songOver = true;
+		}*/
+		
+		//timer += Stopwatch.elapsedTimeMs() - timer2;
 
 		game.updateTriggers();
 		game.updateRenderedEnts();
@@ -181,9 +228,10 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 				for (int j = i + 1; j < size; j++)
 				{
 					final Entity colEnt = game.entList.get(j);
+					final boolean colListContains = Game.arrayListContains(ent.colList, colEnt) || Game.arrayListContains(colEnt.colList, ent);
 					if (ent.isColliding(colEnt))
 					{
-						if(!ent.colList.contains(colEnt) && !colEnt.colList.contains(ent))
+						if(!colListContains)
 						{
 							ent.colList.add(colEnt);
 							colEnt.colList.add(ent);
@@ -195,7 +243,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 								((Enemy)colEnt).setColliding(true);
 						}
 					}
-					else if (ent.colList.contains(colEnt) || colEnt.colList.contains(ent))
+					else if (colListContains)
 					{
 						//System.out.println(ent.colList.size() + " " + colEnt.colList.size());
 						ent.colList.remove(colEnt);
@@ -211,22 +259,27 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 				if (ent instanceof PhysEnt)
 				{
 					final PhysEnt physEnt = (PhysEnt)ent;
-					for (final Tile[] ts : game.tileset)
+					
+					final int tilesetSize = game.tileset.length;
+					final int tileRowSize = game.tileset[0].length;
+					for (int j = 0; j < tilesetSize; j++)
 					{
-						for (final Tile tile : ts)
+						for (int k = 0; k < tileRowSize; k++)
 						{
+							Tile tile = game.tileset[j][k];
+							final boolean physColListContains = Game.arrayListContains(physEnt.colList, tile) || Game.arrayListContains(tile.colList, physEnt);
 							if (tile.isColliding(physEnt))
 							{
-								if (!physEnt.colList.contains(tile) && !tile.colList.contains(physEnt))
+								if (!physColListContains)
 								{
 									physEnt.colList.add(tile);
 									tile.colList.add(physEnt);
 									physEnt.tileInteract(tile);
 								}
 							}
-							else if (physEnt.colList.contains(tile) || tile.colList.contains(physEnt))
+							else if (physColListContains)
 							{
-								physEnt.colList.remove(tile);
+								physEnt.colList.remove(physEnt.colList.indexOf(tile));
 								tile.colList.remove(physEnt);
 								if (ent.colList.isEmpty())
 									physEnt.tileUninteract(tile);
@@ -247,11 +300,6 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 				{
 					game.player.addPos(game.player.getHeldObject().getBounceVec());
 					game.player.updateHeldObjectPosition();
-				}
-				//runs new AI code for enemies
-				else if (ent instanceof Enemy)
-				{
-					//TODO: recalculate new path for enemy to go on
 				}
 			}
 			
@@ -370,21 +418,24 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 
 	public void vibrator(int time)
 	{
-		Vibrator vibrator = null; 
-		try 
-		{ 
-			vibrator=(Vibrator)context.getSystemService(Context.VIBRATOR_SERVICE); 
-		} 
-		catch (Exception e) {}
-		
-		if (vibrator != null)
-		{ 
-		  try 
-		  { 
-			  vibrator.vibrate(((long)time)); 
-		  } 
-		  catch (Exception e) {} 
-		} 
+		if(vibrateSetting)
+		{
+			Vibrator vibrator = null; 
+			try 
+			{ 
+				vibrator=(Vibrator)context.getSystemService(Context.VIBRATOR_SERVICE); 
+			} 
+			catch (Exception e) {}
+			
+			if (vibrator != null)
+			{ 
+			  try 
+			  { 
+				  vibrator.vibrate(((long)time)); 
+			  } 
+			  catch (Exception e) {} 
+			} 
+		}
 	}
 	
 	@Override
@@ -398,6 +449,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	{
 		if(game.player.userHasControl())
 		{
+			Game.worldOutdated = true;
 			for (int i = 0; i < game.fingerList.size(); i++)
 			{
 				final Finger f = game.fingerList.get(i);
@@ -432,6 +484,10 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 					
 					break;
 				case MotionEvent.ACTION_UP:
+					for (final Finger f : game.fingerList)
+					{
+						f.onStackPop();
+					}
 					game.fingerList.clear();
 					break;
 				case MotionEvent.ACTION_POINTER_UP:

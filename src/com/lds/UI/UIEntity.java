@@ -16,6 +16,7 @@ import com.lds.Enums.RenderMode;
 import com.lds.Enums.UIPosition;
 import com.lds.Texture;
 import com.lds.TilesetHelper;
+import com.lds.Vector2f;
 
 //TODO allow relative sizing to scale for multiple monitors
 public abstract class UIEntity
@@ -259,7 +260,7 @@ public abstract class UIEntity
 		}
 		else
 		{
-			System.out.println("Warning: Current UIEntity is not using positioning with UIPosition. No padding changes made!");
+			Log.w("Circuit Crawler", "Warning: Current UIEntity is not using positioning with UIPosition. No padding changes made!");
 		}
 	}
 	
@@ -267,6 +268,22 @@ public abstract class UIEntity
 	{
 		xPos = (Game.screenW / 2 * xRelative) + leftPad - rightPad;
 		yPos = (Game.screenH / 2 * yRelative) + bottomPad - topPad;
+	}
+	
+	public void rotateTilesetCoords()
+	{
+		float negX = texture[0];
+		float negY = texture[1];
+		float posX = texture[2];
+		float posY = texture[5];
+		
+		float[] coords = { 	posX, negY,
+							posX, posY,
+							negX, negY,
+							negX, posY };
+		
+		this.texture = coords;
+		textureBuffer = setBuffer(textureBuffer, texture);
 	}
 	
 	/********************
@@ -476,7 +493,7 @@ public abstract class UIEntity
 	{
 		this.tex = tex;
 		texture = TilesetHelper.getTextureVertices(tex, tileID);
-		this.textureBuffer = setBuffer(textureBuffer, texture);
+		rotateTilesetCoords();
 		needToUpdateTexVBO = true;
 	}
 	
@@ -516,6 +533,12 @@ public abstract class UIEntity
 	public float[] getGradientCoords()	{ return color; }
 	public float[] getTextureCoords()	{ return texture; }
 	public EnumSet<RenderMode> getRenderMode()	{ return renderMode; }
+	
+	public void setPos(Vector2f posVec)
+	{
+		xPos = posVec.getX();
+		yPos = posVec.getY();
+	}
 	
 	public void setXSize(float xSize)			{ this.xSize = xSize; }
 	public void setYSize(float ySize)			{ this.ySize = ySize; }

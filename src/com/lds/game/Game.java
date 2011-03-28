@@ -27,7 +27,7 @@ import com.lds.parser.Parser;
 public class Game
 {
 	
-	//public Level[][] GameLevels;
+	public Level[] levels;
 
 	public int frameInterval;
 	public static boolean worldOutdated, windowOutdated;
@@ -56,6 +56,13 @@ public class Game
 	public static Texture text;
 	public static Texture tilesetworld;
 	public static Texture tilesetentities;
+	public static Texture joystickout;
+	public static Texture joystickin;
+	public static Texture buttona;
+	public static Texture buttonb;
+	public static Texture baricons;
+	public static Texture energybarborder;
+	public static Texture healthbarborder;
 	public Texture someText;
 	
 	
@@ -91,6 +98,13 @@ public class Game
 		text = new Texture(R.drawable.text, 256, 256, 16, 8, context, "text");
 		tilesetworld = new Texture(R.drawable.tilesetworld, 512, 256, 16, 8, context, "tilesetworld");
 		tilesetentities = new Texture(R.drawable.tilesetentities, 256, 256, 8, 8, context, "tilesetentities");
+		joystickout = new Texture(R.raw.joystickout, 64, 64, 1, 1, context, "joystickout");
+		joystickin = new Texture(R.raw.joystickin, 32, 32, 1, 1, context, "joystickin");
+		buttona = new Texture(R.raw.buttona, 32, 32, 1, 1, context, "buttona");
+		buttonb = new Texture(R.raw.buttonb, 32, 32, 1, 1, context, "buttonb");
+		baricons = new Texture (R.raw.baricons, 32, 16, 2, 1, context, "baricons");
+		energybarborder = new Texture (R.raw.energybarborder, 128, 16, 1, 1, context, "energybarborder");
+		healthbarborder = new Texture(R.raw.healthbarborder, 256, 16, 1, 1, context, "healthbarborder");
 		
 				
 		entList = new ArrayList<Entity>();
@@ -116,6 +130,13 @@ public class Game
 		tl.loadTexture(someText);
 		tl.loadTexture(tilesetworld);
 		tl.loadTexture(tilesetentities);
+		tl.loadTexture(joystickout);
+		tl.loadTexture(joystickin);
+		tl.loadTexture(buttona);
+		tl.loadTexture(buttonb);
+		tl.loadTexture(baricons);
+		tl.loadTexture(energybarborder);
+		tl.loadTexture(healthbarborder);
 						
 		///*		
  		for (int i = 0; i < tileset.length; i++)
@@ -175,6 +196,8 @@ public class Game
 		
 		//  /*CAN DEAL WITH THIS SHIT
 		door = new Door (-108.0f, -180.0f);
+		door.setAngle(90.0f);
+		door.setXScl(0.5f);
 		door.enableTilesetMode(tilesetentities, 2, 1);
 		entList.add(door);
 		
@@ -191,8 +214,7 @@ public class Game
 		//block.initGradientInterp(interpGM);
 		entList.add(block);
 		
-		/*
-		blob1 = new Blob(-250.0f, 0.0f, AIType.STALKER);
+		/*blob1 = new Blob(-250.0f, 0.0f, AIType.STALKER);
 		blob1.enableTilesetMode(tilesetwire, 2, 1);
 		entList.add(blob1);
 		
@@ -203,8 +225,8 @@ public class Game
 		np.add(new Node(-215, -400));
 		np.add(new Node(-215, -300));
 		np.add(new Node(-100, -300));
-		blob2.setPatrolPath(np);
-		*/		
+		blob2.setPatrolPath(np);*/
+
 		Button button1 = new Button(108.0f, 0.0f);
 		button1.enableTilesetMode(tilesetentities, 0, 0);
 		entList.add(button1);
@@ -222,15 +244,15 @@ public class Game
 		block2.enableTilesetMode(tilesetentities, 3, 0);
 		entList.add(block2);
 
-		SpikeBall wall = new SpikeBall(35, -200, -250, true, true, 15, 500, 0.0f, 0.0f, 0, -300, 1);
+		/*SpikeBall wall = new SpikeBall(35, -200, -250, true, true, 15, 500, 0.0f, 0.0f, 0, -300, 1);
 		wall.enableTilesetMode(tilesetwire, 1, 2);
-		entList.add(wall);
+		entList.add(wall);*/
 		
-		Cannon cannon = new Cannon(35, -100, -425, 90, 1, 1, true, false, true, 5, 5);
+		/*Cannon cannon = new Cannon(35, -100, -425, 90, 1, 1, true, false, true, 5, 5);
 		cannon.enableTilesetMode(tilesetwire, 2, 1);
-		entList.add(cannon);
+		entList.add(cannon);*/
 		
-		Teleporter tele1 = new Teleporter(40,-100,-340);
+		Teleporter tele1 = new Teleporter(40,0,-340);
 		tele1.enableTilesetMode(tilesetwire, 2, 1);
 		entList.add(tele1);
 		
@@ -249,8 +271,8 @@ public class Game
 		spr.enableTextureMode(tilesetwire);
 		entList.add(spr);*/
 
-		box = new PuzzleBox(-120.0f, -400.0f, 0.0f, false, true);
-		entList.add(box);
+		/*box = new PuzzleBox(-120.0f, -400.0f, 0.0f, false, true);
+		entList.add(box);*/
 
 		
 		player = new Player(-108.0f, -450.0f, 0.0f);
@@ -290,43 +312,60 @@ public class Game
 		triggerList.add(new Trigger(bridgeAND, new EffectRaiseBridge(tileset[5][6])));
 		triggerList.add(new Trigger(bridgeAND, new EffectRaiseBridge(tileset[5][7])));
 		
-		healthBar = new UIHealthBar(200.0f, 30.0f, UIPosition.TOPLEFT, Direction.RIGHT, player);
-		healthBar.setTopPad(5.0f);
-		healthBar.setLeftPad(5.0f);
-		healthBar.autoPadding(5, 5, 0, 0);
-				
-		//						Red	  Green	Blue  Alpha
-		float[] healthColor = {	0.0f, 1.0f, 0.0f, 0.9f,		//top right
-								0.0f, 1.0f, 0.0f, 0.9f, 	//bottom right
-								1.0f, 0.0f, 0.0f, 1.0f, 	//top left
-								1.0f, 0.0f, 0.0f, 1.0f};	//bottom left
-		healthBar.enableGradientMode(healthColor);
-		healthBar.setValue(99);
+		//TODO UIHealthBar is a UIEntity sub that contains 2 UIImages and a UIProgressBar (which will no longer be abstract)
+		healthBar = new UIHealthBar(246.0f, 8.0f, UIPosition.TOPRIGHT, Direction.LEFT, player);
+		healthBar.setTopPad(9.0f);
+		healthBar.setRightPad(10.0f);
+		healthBar.autoPadding(9, 0, 0, 10);
+		healthBar.enableColorMode(0.8f, 0.0f, 0.0f, 0.9f);
+		healthBar.setValue(100);
 		
-		energyBar = new UIEnergyBar(150.0f, 15.0f, UIPosition.TOPRIGHT, Direction.LEFT, player);
-		energyBar.setTopPad(5.0f);
-		energyBar.setRightPad(5.0f);
-		energyBar.autoPadding(5, 0, 0, 5);
+		UIImage healthBarCover = new UIImage(256, 16, UIPosition.TOPRIGHT);
+		healthBarCover.setTopPad(5.0f);
+		healthBarCover.setRightPad(5.0f);
+		healthBarCover.autoPadding(5, 0, 0, 5);
+		healthBarCover.enableTextureMode(healthbarborder);
 		
-		float[] energyColor = {	0.0f, 0.0f, 0.3f, 1.0f,
-								0.0f, 0.0f, 0.3f, 1.0f,
-								0.0f, 0.0f, 1.0f, 0.9f,
-								0.0f, 0.0f, 1.0f, 0.9f };
-		energyBar.enableGradientMode(energyColor);
-		energyBar.setValue(99);
+		UIImage healthIcon = new UIImage (16, 16, UIPosition.TOPRIGHT);
+		healthIcon.setTopPad(5.0f);
+		healthIcon.setRightPad(266.0f);
+		healthIcon.autoPadding(5, 0, 0, 266);
+		healthIcon.enableTilesetMode(baricons, 0, 0);
+		
+		energyBar = new UIEnergyBar(118.0f, 8.0f, UIPosition.TOPRIGHT, Direction.LEFT, player);
+		energyBar.setTopPad(30.0f);
+		energyBar.setRightPad(10.0f);
+		energyBar.autoPadding(30, 0, 0, 10);
+		energyBar.enableColorMode(0.0f, 0.0f, 0.8f, 0.9f);
+		energyBar.setValue(100);
+		
+		UIImage energyBarCover = new UIImage(128, 16, UIPosition.TOPRIGHT);
+		energyBarCover.setTopPad(26.0f);
+		energyBarCover.setRightPad(5.0f);
+		energyBarCover.autoPadding(26, 0, 0, 5);
+		energyBarCover.enableTextureMode(energybarborder);
+		
+		UIImage energyIcon = new UIImage (16, 16, UIPosition.TOPRIGHT);
+		energyIcon.setTopPad(26.0f);
+		energyIcon.setRightPad(138.0f);
+		energyIcon.autoPadding(26, 0, 0, 138);
+		energyIcon.enableTilesetMode(baricons, 1, 0);
 		
 		btnA = new UIButton(80.0f, 80.0f, UIPosition.BOTTOMRIGHT);
 		btnA.autoPadding(0.0f, 0.0f, 5.0f, 90.0f);
-		btnA.enableColorMode(65, 200, 65, 128);
+		//btnA.enableColorMode(65, 200, 65, 128);
+		btnA.enableTextureMode(buttona);
 		btnA.setIntervalTime(Stopwatch.elapsedTimeMs());
 		
 		btnB = new UIButton(80.0f, 80.0f, UIPosition.BOTTOMRIGHT);
 		btnB.autoPadding(0.0f, 0.0f, 90.0f, 5.0f);
-		btnB.enableColorMode(200, 65, 65, 100);
+		//btnB.enableColorMode(200, 65, 65, 100);
+		btnB.enableTextureMode(buttonb);
 		btnB.setIntervalTime(Stopwatch.elapsedTimeMs());
 		
-		joypad = new UIJoypad(100, 100, UIPosition.BOTTOMLEFT, player.getAngle());
+		joypad = new UIJoypad(.45f, .45f, UIPosition.BOTTOMLEFT, player.getAngle());
 		joypad.autoPadding(0.0f, 5.0f, 5.0f, 0.0f);
+		joypad.enableTextureMode(joystickout);
 		
 		textbox = new UITextBox(112, 32, UIPosition.TOPLEFT);
 		textbox.autoPadding(5.0f, 5.0f, 0.0f, 0.0f);
@@ -334,7 +373,11 @@ public class Game
 		textbox.setText("Testing!");
 		
 		UIList.add(healthBar);
+		UIList.add(healthBarCover);
+		UIList.add(healthIcon);
 		UIList.add(energyBar);
+		UIList.add(energyBarCover);
+		UIList.add(energyIcon);
 		UIList.add(btnA);
 		UIList.add(btnB);
 		UIList.add(joypad);
@@ -730,6 +773,7 @@ public class Game
 				startConnected = true;
 			}
 		}
+		
 		if (!goalReachable || !startConnected)
 			return null;
 
@@ -889,5 +933,16 @@ public class Game
 		gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
 		gl.glDisableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
 		gl.glDisable(GL10.GL_TEXTURE_2D);
+	}
+	
+	public static boolean arrayListContains(ArrayList<Entity> entList, Entity ent)
+	{
+		final int size = entList.size();
+		for (int i = 0; i < size; i++)
+		{
+			if (ent == entList.get(i))
+				return true;
+		}
+		return false;
 	}
 }

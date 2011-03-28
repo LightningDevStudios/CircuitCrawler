@@ -4,7 +4,7 @@ public class Door extends StaticEnt
 {
 	public Door (float xPos, float yPos)
 	{
-		 super(72.0f, xPos, yPos, 90.0f, 1.0f, .5f, true, false, true);
+		 super(72.0f, xPos, yPos, 90.0f, 1.0f, 1.0f, true, false, true);
 		 enableColorMode(1.0f, 1.0f, 1.0f, 1.0f);
 		 colorInterpSpeed = 1.0f;
 	}
@@ -24,9 +24,6 @@ public class Door extends StaticEnt
 	@Override
 	public boolean doesCollide (Entity ent)
 	{
-		if (ent instanceof Tile)
-			return false;
-		else
-			return super.doesCollide(ent);
+		return (ent instanceof Tile) ? false : true;
 	}
 }
