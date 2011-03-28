@@ -66,13 +66,12 @@ public class MainMenu extends Activity
 		final Button ytfButton = (Button)findViewById(R.id.YTF_Button);
 		ytfButton.setOnClickListener(new View.OnClickListener()
 		{
-			public void onClick(View v) 
+			public void onClick(View v)
 			{
 				Intent browserIntent = new Intent("android.intent.action.VIEW", Uri.parse("http://www.youthfortechnology.org"));
 				startActivity(browserIntent);
 			}
 		});
-		
 		list.setOnItemClickListener(new OnItemClickListener()
 		{
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id)

@@ -1,0 +1,436 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:id="@+id/About" 
+	android:layout_width="fill_parent"
+	android:layout_height ="fill_parent">
+	<LinearLayout
+		android:orientation="vertical"
+  		android:layout_width="fill_parent"
+ 		android:layout_height="wrap_content">
+		<TextView
+			android:layout_width="fill_parent" 
+			android:layout_height="wrap_content"
+			android:gravity="center_vertical|center_horizontal"
+			android:textSize="30sp"
+			android:paddingTop="30dp"
+    		android:paddingRight="10dp"
+    		android:paddingBottom="5dp"
+    		android:paddingLeft="10dp"
+			android:textStyle="bold"
+			android:text="Credits\n">
+		</TextView>
+		
+		<!-- AI -->
+		<TextView
+			android:layout_width="fill_parent" 
+			android:layout_height="wrap_content"
+			android:gravity="center_vertical|center_horizontal"
+			android:textSize="16sp"
+			android:paddingTop="20dp"
+    		android:paddingRight="10dp"
+    		android:paddingBottom="20dp"
+    		android:paddingLeft="10dp"
+			android:textStyle="bold"
+			android:text="AI">
+		</TextView>
+		<TextView
+			android:layout_width="fill_parent" 
+			android:layout_height="wrap_content"
+			android:gravity="center_vertical|center_horizontal"
+			android:textSize="16sp"
+			android:paddingTop="0dp"
+    		android:paddingRight="10dp"
+    		android:paddingBottom="5dp"
+    		android:paddingLeft="10dp"
+			android:text="Devin Reed">
+		</TextView>
+		
+		<!-- ART -->
+		<TextView
+			android:layout_width="fill_parent" 
+			android:layout_height="wrap_content"
+			android:gravity="center_vertical|center_horizontal"
+			android:textSize="16sp"
+			android:paddingTop="20dp"
+    		android:paddingRight="10dp"
+    		android:paddingBottom="20dp"
+    		android:paddingLeft="10dp"
+			android:textStyle="bold"
+			android:text="Art">
+		</TextView>
+		<TextView
+			android:layout_width="fill_parent" 
+			android:layout_height="wrap_content"
+			android:gravity="center_vertical|center_horizontal"
+			android:textSize="16sp"
+			android:paddingTop="0dp"
+    		android:paddingRight="10dp"
+    		android:paddingBottom="5dp"
+    		android:paddingLeft="10dp"
+			android:text="Lauren Burke">
+		</TextView>
+		<TextView
+			android:layout_width="fill_parent" 
+			android:layout_height="wrap_content"
+			android:gravity="center_vertical|center_horizontal"
+			android:textSize="16sp"
+			android:paddingTop="0dp"
+    		android:paddingRight="10dp"
+    		android:paddingBottom="5dp"
+    		android:paddingLeft="10dp"
+			android:text="Robert Rouhani">
+		</TextView>
+		
+		<!-- LEVEL DESIGN -->
+		<TextView
+			android:layout_width="fill_parent" 
+			android:layout_height="wrap_content"
+			android:gravity="center_vertical|center_horizontal"
+			android:textSize="16sp"
+			android:paddingTop="20dp"
+    		android:paddingRight="10dp"
+    		android:paddingBottom="20dp"
+    		android:paddingLeft="10dp"
+			android:textStyle="bold"
+			android:text="Level Design">
+		</TextView>
+		<TextView
+			android:layout_width="fill_parent" 
+			android:layout_height="wrap_content"
+			android:gravity="center_vertical|center_horizontal"
+			android:textSize="16sp"
+			android:paddingTop="0dp"
+    		android:paddingRight="10dp"
+    		android:paddingBottom="5dp"
+    		android:paddingLeft="10dp"
+			android:text="Zayd Simjee">
+		</TextView>
+		<TextView
+			android:layout_width="fill_parent" 
+			android:layout_height="wrap_content"
+			android:gravity="center_vertical|center_horizontal"
+			android:textSize="16sp"
+			android:paddingTop="0dp"
+    		android:paddingRight="10dp"
+    		android:paddingBottom="5dp"
+    		android:paddingLeft="10dp"
+			android:text="Devin Reed">
+		</TextView>
+		<TextView
+			android:layout_width="fill_parent" 
+			android:layout_height="wrap_content"
+			android:gravity="center_vertical|center_horizontal"
+			android:textSize="16sp"
+			android:paddingTop="0dp"
+    		android:paddingRight="10dp"
+    		android:paddingBottom="5dp"
+    		android:paddingLeft="10dp"
+			android:text="Matt Masarik">
+		</TextView>
+		<TextView
+			android:layout_width="fill_parent" 
+			android:layout_height="wrap_content"
+			android:gravity="center_vertical|center_horizontal"
+			android:textSize="16sp"
+			android:paddingTop="0dp"
+    		android:paddingRight="10dp"
+    		android:paddingBottom="5dp"
+    		android:paddingLeft="10dp"
+			android:text="Robert Rouhani">
+		</TextView>
+		
+		<!-- TOOLS DEVELOPMENT -->
+		<TextView
+			android:layout_width="fill_parent" 
+			android:layout_height="wrap_content"
+			android:gravity="center_vertical|center_horizontal"
+			android:textSize="16sp"
+			android:paddingTop="20dp"
+    		android:paddingRight="10dp"
+    		android:paddingBottom="20dp"
+    		android:paddingLeft="10dp"
+			android:textStyle="bold"
+			android:text="Tools Development">
+		</TextView>
+		<TextView
+			android:layout_width="fill_parent" 
+			android:layout_height="wrap_content"
+			android:gravity="center_vertical|center_horizontal"
+			android:textSize="16sp"
+			android:paddingTop="0dp"
+    		android:paddingRight="10dp"
+    		android:paddingBottom="5dp"
+    		android:paddingLeft="10dp"
+			android:text="Robert Rouhani">
+		</TextView>
+		
+		<!-- MENUS -->
+		<TextView
+			android:layout_width="fill_parent" 
+			android:layout_height="wrap_content"
+			android:gravity="center_vertical|center_horizontal"
+			android:textSize="16sp"
+			android:paddingTop="20dp"
+    		android:paddingRight="10dp"
+    		android:paddingBottom="20dp"
+    		android:paddingLeft="10dp"
+			android:textStyle="bold"
+			android:text="Menus">
+		</TextView>
+		<TextView
+			android:layout_width="fill_parent" 
+			android:layout_height="wrap_content"
+			android:gravity="center_vertical|center_horizontal"
+			android:textSize="16sp"
+			android:paddingTop="0dp"
+    		android:paddingRight="10dp"
+    		android:paddingBottom="5dp"
+    		android:paddingLeft="10dp"
+			android:text="Robert Rouhani">
+		</TextView>
+		<TextView
+			android:layout_width="fill_parent" 
+			android:layout_height="wrap_content"
+			android:gravity="center_vertical|center_horizontal"
+			android:textSize="16sp"
+			android:paddingTop="0dp"
+    		android:paddingRight="10dp"
+    		android:paddingBottom="5dp"
+    		android:paddingLeft="10dp"
+			android:text="Devin Reed">
+		</TextView>
+		<TextView
+			android:layout_width="fill_parent" 
+			android:layout_height="wrap_content"
+			android:gravity="center_vertical|center_horizontal"
+			android:textSize="16sp"
+			android:paddingTop="0dp"
+    		android:paddingRight="10dp"
+    		android:paddingBottom="5dp"
+    		android:paddingLeft="10dp"
+			android:text="Matt Masarik">
+		</TextView>
+		
+		<!-- MUSIC -->
+		<TextView
+			android:layout_width="fill_parent" 
+			android:layout_height="wrap_content"
+			android:gravity="center_vertical|center_horizontal"
+			android:textSize="16sp"
+			android:paddingTop="20dp"
+    		android:paddingRight="10dp"
+    		android:paddingBottom="20dp"
+    		android:paddingLeft="10dp"
+			android:textStyle="bold"
+			android:text="Music">
+		</TextView>
+		<TextView
+			android:layout_width="fill_parent" 
+			android:layout_height="wrap_content"
+			android:gravity="center_vertical|center_horizontal"
+			android:textSize="16sp"
+			android:paddingTop="0dp"
+    		android:paddingRight="10dp"
+    		android:paddingBottom="5dp"
+    		android:paddingLeft="10dp"
+			android:text="Jack Heffron">
+		</TextView>
+		<TextView
+			android:layout_width="fill_parent" 
+			android:layout_height="wrap_content"
+			android:gravity="center_vertical|center_horizontal"
+			android:textSize="16sp"
+			android:paddingTop="0dp"
+    		android:paddingRight="10dp"
+    		android:paddingBottom="5dp"
+    		android:paddingLeft="10dp"
+			android:text="Brandon Rayhaun">
+		</TextView>
+		
+		<!-- PARSING AND XML FORMATTING-->
+		<TextView
+			android:layout_width="fill_parent" 
+			android:layout_height="wrap_content"
+			android:gravity="center_vertical|center_horizontal"
+			android:textSize="16sp"
+			android:paddingTop="20dp"
+    		android:paddingRight="10dp"
+    		android:paddingBottom="20dp"
+    		android:paddingLeft="10dp"
+			android:textStyle="bold"
+			android:text="Parsing and XML Formatting">
+		</TextView>
+		<TextView
+			android:layout_width="fill_parent" 
+			android:layout_height="wrap_content"
+			android:gravity="center_vertical|center_horizontal"
+			android:textSize="16sp"
+			android:paddingTop="0dp"
+    		android:paddingRight="10dp"
+    		android:paddingBottom="5dp"
+    		android:paddingLeft="10dp"
+			android:text="Zayd Simjee">
+		</TextView>
+		<TextView
+			android:layout_width="fill_parent" 
+			android:layout_height="wrap_content"
+			android:gravity="center_vertical|center_horizontal"
+			android:textSize="16sp"
+			android:paddingTop="0dp"
+    		android:paddingRight="10dp"
+    		android:paddingBottom="5dp"
+    		android:paddingLeft="10dp"
+			android:text="Robert Rouhani">
+		</TextView>
+		
+		<!-- PHYSICS-->
+		<TextView
+			android:layout_width="fill_parent" 
+			android:layout_height="wrap_content"
+			android:gravity="center_vertical|center_horizontal"
+			android:textSize="16sp"
+			android:paddingTop="20dp"
+    		android:paddingRight="10dp"
+    		android:paddingBottom="20dp"
+    		android:paddingLeft="10dp"
+			android:textStyle="bold"
+			android:text="Physics Engine">
+		</TextView>
+		<TextView
+			android:layout_width="fill_parent" 
+			android:layout_height="wrap_content"
+			android:gravity="center_vertical|center_horizontal"
+			android:textSize="16sp"
+			android:paddingTop="0dp"
+    		android:paddingRight="10dp"
+    		android:paddingBottom="5dp"
+    		android:paddingLeft="10dp"
+			android:text="Devin Reed">
+		</TextView>
+		
+		<!-- PR-->
+		<TextView
+			android:layout_width="fill_parent" 
+			android:layout_height="wrap_content"
+			android:gravity="center_vertical|center_horizontal"
+			android:textSize="16sp"
+			android:paddingTop="20dp"
+    		android:paddingRight="10dp"
+    		android:paddingBottom="20dp"
+    		android:paddingLeft="10dp"
+			android:textStyle="bold"
+			android:text="PR">
+		</TextView>
+		<TextView
+			android:layout_width="fill_parent" 
+			android:layout_height="wrap_content"
+			android:gravity="center_vertical|center_horizontal"
+			android:textSize="16sp"
+			android:paddingTop="0dp"
+    		android:paddingRight="10dp"
+    		android:paddingBottom="5dp"
+    		android:paddingLeft="10dp"
+			android:text="Michael Yorita (lol)">
+		</TextView>
+		
+		<!-- Sound Effects-->
+		<TextView
+			android:layout_width="fill_parent" 
+			android:layout_height="wrap_content"
+			android:gravity="center_vertical|center_horizontal"
+			android:textSize="16sp"
+			android:paddingTop="20dp"
+    		android:paddingRight="10dp"
+    		android:paddingBottom="20dp"
+    		android:paddingLeft="10dp"
+			android:textStyle="bold"
+			android:text="Sound Effects (thanks to SFXR)">
+		</TextView>
+		<TextView
+			android:layout_width="fill_parent" 
+			android:layout_height="wrap_content"
+			android:gravity="center_vertical|center_horizontal"
+			android:textSize="16sp"
+			android:paddingTop="0dp"
+    		android:paddingRight="10dp"
+    		android:paddingBottom="5dp"
+    		android:paddingLeft="10dp"
+			android:text="Robert Rouhani">
+		</TextView>
+		<TextView
+			android:layout_width="fill_parent" 
+			android:layout_height="wrap_content"
+			android:gravity="center_vertical|center_horizontal"
+			android:textSize="16sp"
+			android:paddingTop="0dp"
+    		android:paddingRight="10dp"
+    		android:paddingBottom="5dp"
+    		android:paddingLeft="10dp"
+			android:text="Devin Reed">
+		</TextView>
+		
+		<!-- OTHER FEATURES-->
+		<TextView
+			android:layout_width="fill_parent" 
+			android:layout_height="wrap_content"
+			android:gravity="center_vertical|center_horizontal"
+			android:textSize="16sp"
+			android:paddingTop="20dp"
+    		android:paddingRight="10dp"
+    		android:paddingBottom="20dp"
+    		android:paddingLeft="10dp"
+			android:textStyle="bold"
+			android:text="Teleporters, Cannons, and other fun features">
+		</TextView>
+		<TextView
+			android:layout_width="fill_parent" 
+			android:layout_height="wrap_content"
+			android:gravity="center_vertical|center_horizontal"
+			android:textSize="16sp"
+			android:paddingTop="0dp"
+    		android:paddingRight="10dp"
+    		android:paddingBottom="5dp"
+    		android:paddingLeft="10dp"
+			android:text="Matt Masarik">
+		</TextView>
+		
+		<!-- UI-->
+		<TextView
+			android:layout_width="fill_parent" 
+			android:layout_height="wrap_content"
+			android:gravity="center_vertical|center_horizontal"
+			android:textSize="16sp"
+			android:paddingTop="20dp"
+    		android:paddingRight="10dp"
+    		android:paddingBottom="20dp"
+    		android:paddingLeft="10dp"
+			android:textStyle="bold"
+			android:text="User Interface">
+		</TextView>
+		<TextView
+			android:layout_width="fill_parent" 
+			android:layout_height="wrap_content"
+			android:gravity="center_vertical|center_horizontal"
+			android:textSize="16sp"
+			android:paddingTop="0dp"
+    		android:paddingRight="10dp"
+    		android:paddingBottom="5dp"
+    		android:paddingLeft="10dp"
+			android:text="Robert Rouhani">
+		</TextView>
+		
+		<!-- SPECIAL THANKS -->
+		<TextView
+			android:layout_width="fill_parent" 
+			android:layout_height="wrap_content"
+			android:gravity="center_vertical|center_horizontal"
+			android:textSize="16sp"
+			android:paddingTop="30dp"
+    		android:paddingRight="10dp"
+    		android:paddingBottom="20dp"
+    		android:paddingLeft="10dp"
+			android:text="And a special thanks to all of our family and friends. Without them, this would not have been possible!">
+		</TextView>
+	</LinearLayout>
+</ScrollView>
