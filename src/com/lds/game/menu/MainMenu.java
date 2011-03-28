@@ -1,22 +1,39 @@
 package com.lds.game.menu;
 
+import com.lds.game.Game;
+import com.lds.game.GameRenderer;
 import com.lds.game.R;
 import com.lds.game.Run;
+import com.lds.game.SoundPlayer;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.view.*;
+import android.view.View.OnClickListener;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ListView;
+import android.widget.SeekBar;
+import android.widget.SeekBar.OnSeekBarChangeListener;
+import android.widget.TextView;
 import android.widget.ViewAnimator;
 
+
 public class MainMenu extends Activity
-{
+{	
+	public boolean vibrateSettingMain = true;
+	public Context context;
+	SeekBar mSeekBar;
+    
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
@@ -43,6 +60,73 @@ public class MainMenu extends Activity
 		animator.addView(ccLogo, 0);
 		final View aboutScreen = View.inflate(this, R.layout.about, null);
 		animator.addView(aboutScreen, 1);
+		final View settings = View.inflate(this, R.layout.settings, null);
+		animator.addView(settings, 2);
+		
+		//Boxes n' Shit
+		final CheckBox checkbox = (CheckBox) findViewById(R.id.checkbox);
+		final CheckBox volumeCheckbox = (CheckBox) findViewById(R.id.volumeCheckbox);
+		final CheckBox enableShaders = (CheckBox) findViewById(R.id.enableShaders);
+		mSeekBar = (SeekBar)findViewById(R.id.seek);
+		
+		//Action Suffs
+        mSeekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener()
+        {
+        	public void onProgressChanged(SeekBar seekBar, int progress, boolean fromTouch)	{	}
+            public void onStartTrackingTouch(SeekBar seekBar)	{	}
+            public void onStopTrackingTouch(SeekBar seekBar)	{	}	
+        });
+       	
+		checkbox.setOnCheckedChangeListener(new OnCheckedChangeListener()
+		{
+		    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
+		    {
+		        if ( isChecked )
+		        {
+		        	vibrator(100);
+		            GameRenderer.vibrateSetting = true;
+		            System.out.println("TRUE IS VIBRATING");
+		        }
+		        else
+		        {
+		        	vibrator(100);
+		        	GameRenderer.vibrateSetting = false;
+		        	System.out.println("FALSE IS VIBRATING");
+		        }
+		    }
+		});
+		
+		enableShaders.setOnCheckedChangeListener(new OnCheckedChangeListener()
+		{
+		    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
+		    {
+		        if ( isChecked )
+		        {
+		        	vibrator(100);
+		        }
+		        else
+		        {
+		        	vibrator(100);
+		        }
+		    }
+		});
+		
+		volumeCheckbox.setOnCheckedChangeListener(new OnCheckedChangeListener()
+		{
+		    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
+		    {
+		        if ( isChecked )
+		        {
+		        	vibrator(100);
+		        	SoundPlayer.enableSound = true;
+		        }
+		        else
+		        {
+		        	vibrator(100);
+		        	SoundPlayer.enableSound = false;
+		        }
+		    }
+		});
 		
 		list.setOnItemClickListener(new OnItemClickListener()
 		{
@@ -61,17 +145,20 @@ public class MainMenu extends Activity
 						animator.setDisplayedChild(0);
 						break;
 					case 2:
-						//Show About Screen
-						animator.setDisplayedChild(1);
+						//Show Settings Screen
+						animator.setDisplayedChild(2);
+						//animator.setDisplayedChild(1);
 						break;
 					case 3:
 						//show YTF screen
+						
 						break;
 					case 4:
 						//Donate Button
 						break;
 					case 5:
-						//Settings Menu
+						//About Lightning Dev Studios Menu
+						
 				}
 			}	
 		});
@@ -93,5 +180,24 @@ public class MainMenu extends Activity
 	protected void onDestroy()
 	{
 		super.onDestroy();
+	}
+	
+	public void vibrator(int time)
+	{
+			Vibrator vibrator = null; 
+			try 
+			{ 
+				vibrator=(Vibrator)context.getSystemService(Context.VIBRATOR_SERVICE); 
+			} 
+			catch (Exception e) {}
+			
+			if (vibrator != null)
+			{ 
+			  try 
+			  { 
+				  vibrator.vibrate(((long)time)); 
+			  } 
+			  catch (Exception e) {} 
+			} 
 	}
 }

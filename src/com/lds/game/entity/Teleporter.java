@@ -24,7 +24,6 @@ public class Teleporter extends StaticEnt
 	@Override
 	public void interact (Entity ent)
 	{
-		//TODO MATT, CHECK INSTANCEOF B4 CASTING. LOL CLASSCASTEXCEPTION
 		if(!active && ent instanceof PhysEnt)
 		{
 			((PhysEnt) ent).setPosNoInterp(TeleporterLinker.getLinkedPos(this).getX(), TeleporterLinker.getLinkedPos(this).getY());

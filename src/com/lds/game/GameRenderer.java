@@ -27,6 +27,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	public Context context;
 	public Object syncObj;
 	public boolean gameOver;
+	public static boolean vibrateSetting = true;
 	public int playerMoveTimeMs, frameCount = 0;	
 	public OnGameInitializedListener gameInitializedListener;
 	public OnPuzzleActivatedListener puzzleActivatedListener;
@@ -385,21 +386,24 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 
 	public void vibrator(int time)
 	{
-		Vibrator vibrator = null; 
-		try 
-		{ 
-			vibrator=(Vibrator)context.getSystemService(Context.VIBRATOR_SERVICE); 
-		} 
-		catch (Exception e) {}
-		
-		if (vibrator != null)
-		{ 
-		  try 
-		  { 
-			  vibrator.vibrate(((long)time)); 
-		  } 
-		  catch (Exception e) {} 
-		} 
+		if(vibrateSetting)
+		{
+			Vibrator vibrator = null; 
+			try 
+			{ 
+				vibrator=(Vibrator)context.getSystemService(Context.VIBRATOR_SERVICE); 
+			} 
+			catch (Exception e) {}
+			
+			if (vibrator != null)
+			{ 
+			  try 
+			  { 
+				  vibrator.vibrate(((long)time)); 
+			  } 
+			  catch (Exception e) {} 
+			} 
+		}
 	}
 	
 	@Override
