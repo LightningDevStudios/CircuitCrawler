@@ -215,6 +215,7 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 	{
 		//Intent i = new Intent(Run.this, MainMenu.class);
 		//startActivity(i);
+		mp.stop();
 		finish();
 	}
 	
