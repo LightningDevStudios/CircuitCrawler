@@ -40,7 +40,7 @@ public class UITextBox extends UIEntity
 	
 	public void setText(String text)
 	{
-		if( this.text == null || !this.text.equalsIgnoreCase(text))
+		if ((this.text == null || !this.text.equalsIgnoreCase(text)) && text != null && !text.equals(""))
 		{
 			this.text = text;
 			tex.reloadTexture(text);

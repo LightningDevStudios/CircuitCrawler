@@ -7,9 +7,11 @@ import java.io.IOException;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Vibrator;
@@ -40,7 +42,7 @@ import com.lds.game.entity.Player;
 
 public class MainMenu extends Activity
 {	
-	public boolean vibrateSettingMain = true;
+	public boolean vibrateSettingMain = true, test = true;
 	public Context context;
 	public SeekBar mSeekBar;
 	private ViewAnimator animator;
@@ -160,6 +162,8 @@ public class MainMenu extends Activity
 		catch (IOException e) { e.printStackTrace(); }
 		catch (ArrayIndexOutOfBoundsException e) { e.printStackTrace(); }
 		
+		final ProgressDialog pd = ProgressDialog.show(this,"Loading","...Please wait.",true, false);
+		pd.hide();
 		//suffs
 		volumeControl.setMax(100);
 		final int volume = (int)(SoundPlayer.effectVolume * 100);
@@ -422,6 +426,15 @@ public class MainMenu extends Activity
 			{
 				if (position <= Run.unlockedLevel)
 				{
+					pd.show();
+					new Thread(new Runnable()
+					{
+						public void run()
+						{
+							whileLoading();
+							pd.dismiss();
+						}
+					}).start();
 					Run.levelIndex = position;
 					Intent i = new Intent(MainMenu.this, Run.class);
 					startActivity(i);
@@ -435,12 +448,30 @@ public class MainMenu extends Activity
 	{
 		if (animator.getDisplayedChild() != 6)
 			animator.setDisplayedChild(6);
+		else
+			super.onBackPressed();
 	}
 
 	@Override
 	protected void onResume()
 	{
 		super.onResume();
+	}
+	
+	public void whileLoading()
+	{
+		while(true)
+		{
+			try 
+			{
+				Thread.sleep(10000);
+			} catch (InterruptedException e) 
+			{
+				e.printStackTrace();
+			}
+			System.out.println("OMG");
+			break;
+		}
 	}
 	
 	@Override

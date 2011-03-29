@@ -169,11 +169,7 @@
 	
   <xs:complexType name="DoorInfo">
     <xs:complexContent>
-			<xs:extension base="StaticEntInfo">
-				<xs:sequence>
-					<xs:element name="startOpen" type="booleanType" />
-				</xs:sequence>
-			</xs:extension>
+			<xs:extension base="StaticEntInfo" />
     </xs:complexContent>
   </xs:complexType>
 
@@ -235,7 +231,7 @@
 		</xs:complexContent>
 	</xs:complexType>
 
-	<xs:complexType name="SpikesInfo">
+	<xs:complexType name="SpikeInfo">
 		<xs:complexContent>
 			<xs:extension base="StaticEntInfo" />
 		</xs:complexContent>
@@ -273,6 +269,10 @@
           </xs:complexType>
         </xs:element>
 
+				<xs:element name="Nodes" type="stringType" />
+				<xs:element name="NodeLinks" type="stringType" />
+				<xs:element name="NodePaths" type="stringType" />
+				
         <xs:element name="Entities">
           <xs:complexType>
             <xs:sequence>
@@ -286,7 +286,7 @@
               <xs:element name="PickupHealth" type="PickupHealthInfo" minOccurs="0" maxOccurs="unbounded" />
               <xs:element name="PuzzleBox" type="PuzzleBoxInfo" minOccurs="0" maxOccurs="unbounded" />
 							<xs:element name="SpikeBall" type="SpikeBallInfo" minOccurs="0" maxOccurs="unbounded" />
-							<xs:element name="Spikes" type="SpikesInfo" minOccurs="0" maxOccurs="unbounded" />
+							<xs:element name="Spike" type="SpikeInfo" minOccurs="0" maxOccurs="unbounded" />
               <xs:element name="Sprite" type="SpriteInfo" minOccurs="0" maxOccurs="unbounded" />
 							<xs:element name="WallButton" type="WallButtonInfo" minOccurs="0" maxOccurs="unbounded" />
 							<xs:element name="Player" type="PlayerInfo" minOccurs="0" maxOccurs="unbounded" />
@@ -326,9 +326,6 @@
             </xs:sequence>
           </xs:complexType>
         </xs:element>
-
-				<xs:element name="Nodes" type="stringType" />
-				<xs:element name="NodeLinks" type="stringType" />
 				
       </xs:sequence>
     </xs:complexType>

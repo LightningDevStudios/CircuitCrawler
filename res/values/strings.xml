@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">LDS_Game</string>
+    <string name="app_name">Circuit Crawler</string>
 	<string-array name="menu_items">
-		<item>Start</item>
+	<item>Start</item>
 		<item>Tutorial</item>
 		<item>Settings</item>
 		<item>Additional Donation</item>

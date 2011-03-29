@@ -1,5 +1,9 @@
 package com.lds.game;
 
+import java.io.FileDescriptor;
+import java.io.IOException;
+import java.io.InputStream;
+
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
@@ -9,6 +13,8 @@ import android.os.Vibrator;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.content.Context;
+import android.content.res.AssetFileDescriptor;
+import android.content.res.AssetManager;
 
 import com.lds.EntityManager;
 import com.lds.Finger;
@@ -34,8 +40,9 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	public OnPuzzleActivatedListener puzzleActivatedListener;
 	public OnGameOverListener gameOverListener;
 	public int levelId;
-	public float time, timer, timer2;
+	public static float time, timer, timer2, afterTickTimer, beforeTickTimer;
 	public boolean test;
+	MediaPlayer mp;
 	public boolean paused;
 	
 	public GameRenderer (float screenW, float screenH, Context context, Object syncObj, int levelId)
@@ -70,8 +77,12 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		
 		//start the timer and use an initial tick to prevent errors where elapsed time is a very large negative number
 		Stopwatch.restartTimer();
+		beforeTickTimer = Stopwatch.elapsedTimeMs();
 		Stopwatch.tick();
+		afterTickTimer = Stopwatch.elapsedTimeMs();
 		playerMoveTimeMs = Stopwatch.elapsedTimeMs();
+
+
 		
 		Entity.resetIndexBuffer();
 		
@@ -166,14 +177,6 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		game.frameInterval = Stopwatch.elapsedTimeMs();
 		timer2 = Stopwatch.elapsedTimeMs();
 		Stopwatch.tick();
-		
-		if(test)
-		{
-			MediaPlayer mp = MediaPlayer.create(context, R.raw.song2);
-		    mp.start();
-		    //mp.setLooping(true);
-			test = false;
-		}
 
 		game.updateTriggers();
 		game.updateRenderedEnts();
