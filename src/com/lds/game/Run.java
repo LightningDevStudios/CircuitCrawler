@@ -1,14 +1,22 @@
 package com.lds.game;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.res.AssetManager;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.media.MediaPlayer.OnCompletionListener;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.util.DisplayMetrics;
@@ -18,8 +26,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ProgressBar;
 
 import com.lds.Graphics;
+import com.lds.Stopwatch;
 import com.lds.game.event.*;
 import com.lds.game.menu.MainMenu;
 import com.lds.game.puzzle.PuzzleActivity;
@@ -35,6 +45,9 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 	public Graphics glSurface;
 	public GameRenderer gameR;
 	public static boolean songOver;
+	public static float timer = 0;
+	public Context context;
+	private MediaPlayer mp = new MediaPlayer();
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -45,7 +58,7 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 		//new PlaySong().execute(mp);
 		this.savedInstanceState = savedInstanceState;
 		
-		ProgressDialog pDialog = ProgressDialog.show(Run.this, "", "Loading...");
+		//ProgressDialog pDialog = ProgressDialog.show(Run.this, "", "Loading...");
 		
 		switch (levelIndex)
 		{
@@ -61,11 +74,149 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 		getWindowManager().getDefaultDisplay().getMetrics(screen);
 		float screenX = (float)screen.widthPixels;
 		float screenY = (float)screen.heightPixels;
+		File isSong1 = new File("/sdcard/song1.mp3");
+		File isSong2 = new File("/sdcard/song2.mp3");
 		
 		//set proper volume to adjust with +/- buttons
 		setVolumeControlStream(AudioManager.STREAM_MUSIC);
 		
-		//retrieve game if the activity restarts
+		if(!isSong1.exists())
+		{
+			try 
+			{
+				copyFileSong1();
+			} 
+			catch (IOException e) 
+			{
+				e.printStackTrace();
+			}
+		}
+		if(!isSong2.exists())
+		{
+			try 
+			{
+				copyFileSong2();
+			} 
+			catch (IOException e) 
+			{
+				e.printStackTrace();
+			}
+		}
+		if((Math.random()*2 + 1) == 2)
+    	{
+        	mp.reset();
+            try 
+            {
+				mp.setDataSource("/sdcard/song2.mp3");
+			} 
+            catch (IllegalArgumentException e) 
+            {
+				e.printStackTrace();
+			} 
+            catch (IllegalStateException e) 
+            {
+				e.printStackTrace();
+			} 
+            catch (IOException e) 
+            {
+				e.printStackTrace();
+			}
+    	}
+    	else
+    	{
+    		mp.reset();
+            try 
+            {
+				mp.setDataSource("/sdcard/song1.mp3");
+			} 
+            catch (IllegalArgumentException e) 
+            {
+				e.printStackTrace();
+			} 
+            catch (IllegalStateException e) 
+            {
+				e.printStackTrace();
+			} 
+            catch (IOException e) 
+            {
+				e.printStackTrace();
+			}
+    	}
+        try 
+        {
+			mp.prepare();
+		} 
+        catch (IllegalStateException e) 
+        {
+			e.printStackTrace();
+		} 
+        catch (IOException e)
+        {
+			e.printStackTrace();
+		}
+        mp.start();
+
+        mp.setOnCompletionListener(new OnCompletionListener() 
+        {
+                public void onCompletion(MediaPlayer mp) 
+                {
+                	if((Math.random()*2 + 1) == 2)
+                	{
+	                	mp.reset();
+	                    try 
+	                    {
+							mp.setDataSource("/sdcard/song2.mp3");
+						} 
+	                    catch (IllegalArgumentException e) 
+	                    {
+							e.printStackTrace();
+						} 
+	                    catch (IllegalStateException e) 
+	                    {
+							e.printStackTrace();
+						} 
+	                    catch (IOException e) 
+	                    {
+							e.printStackTrace();
+						}
+                	}
+                	else
+                	{
+                		mp.reset();
+	                    try 
+	                    {
+							mp.setDataSource("/sdcard/song1.mp3");
+						} 
+	                    catch (IllegalArgumentException e) 
+	                    {
+							e.printStackTrace();
+						} 
+	                    catch (IllegalStateException e) 
+	                    {
+							e.printStackTrace();
+						} 
+	                    catch (IOException e) 
+	                    {
+							e.printStackTrace();
+						}
+                	}
+                    try 
+                    {
+						mp.prepare();
+					} 
+                    catch (IllegalStateException e) 
+                    {
+						e.printStackTrace();
+					} 
+                    catch (IOException e)
+                    {
+						e.printStackTrace();
+					}
+                    mp.start();   
+                }
+        });
+		
+
 		final Object data = getLastNonConfigurationInstance();
 		
 		//set up OpenGL rendering
@@ -80,10 +231,45 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 		gameR.setGameInitializedEvent(this);
 		glSurface = new Graphics(this, gameR, syncObj);
 		
-		pDialog.dismiss();
 		setContentView(glSurface);
 	}
+		
 
+	public void copyFileSong1() throws IOException
+	{ 
+        OutputStream copyFilesStream = new FileOutputStream("/sdcard/"); 
+        InputStream copyFilesInputStream = context.getResources().openRawResource(R.raw.song1); 
+        byte[] buffer = new byte[1]; 
+        int length; 
+        while ((length = copyFilesInputStream.read(buffer)) > 0 ) 
+        { 
+        		copyFilesStream.write(buffer); 
+                Log.w("Bytes: ", ((Integer)length).toString()); 
+                Log.w("value", buffer.toString()); 
+        } 
+        copyFilesStream.flush(); 
+        copyFilesStream.close(); 
+        copyFilesInputStream.close(); 
+	} 
+	
+	public void copyFileSong2() throws IOException
+	{ 
+        OutputStream copyFilesStream = new FileOutputStream("/sdcard/"); 
+        InputStream copyFilesInputStream = context.getResources().openRawResource(R.raw.song2); 
+        byte[] buffer = new byte[1]; 
+        int length; 
+        while ((length = copyFilesInputStream.read(buffer)) > 0 ) 
+        { 
+        		copyFilesStream.write(buffer); 
+                Log.w("Bytes: ", ((Integer)length).toString()); 
+                Log.w("value", buffer.toString()); 
+        } 
+        copyFilesStream.flush(); 
+        copyFilesStream.close(); 
+        copyFilesInputStream.close(); 
+	}
+	
+	
 	@Override
 	public void onGameInitialized()
 	{
@@ -91,11 +277,14 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 		gameR.setPuzzleActivatedEvent(this);
 	}
 	
+
+	
 	@Override
 	public void onGameOver()
 	{
 		//Intent i = new Intent(Run.this, MainMenu.class);
 		//startActivity(i);
+		mp.stop();
 		finish();
 	}
 	
@@ -188,6 +377,7 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 	protected void onDestroy()
 	{
 		super.onDestroy();
+		mp.stop();
 	}
 	
 	@Override
