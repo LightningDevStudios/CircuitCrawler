@@ -135,7 +135,7 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 
         mp.setOnCompletionListener(new OnCompletionListener() 
         {
-                public void onCompletion(MediaPlayer arg0) 
+                public void onCompletion(MediaPlayer mp) 
                 {
                 	if((Math.random()*2 + 1) == 2)
                 	{
