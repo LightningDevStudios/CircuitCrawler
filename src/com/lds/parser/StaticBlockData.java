@@ -18,6 +18,7 @@ public class StaticBlockData extends StaticEntData
 	public void createInst(ArrayList<Entity> entData)
 	{
 		staticBlockRef = new StaticBlock(size, xPos, yPos);
+		staticBlockRef.setAngle(angle);
 
 		//COLOR
 		if (color != null)

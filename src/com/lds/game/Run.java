@@ -13,6 +13,9 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
 
@@ -24,6 +27,10 @@ import com.lds.game.puzzle.PuzzleActivity;
 public class Run extends Activity implements OnGameOverListener, OnGameInitializedListener, OnPuzzleActivatedListener
 {
 	public static final int PUZZLE_ACTIVITY = 2;
+	public static int unlockedLevel = 0;
+	public static int levelIndex = 0;
+	public int levelId;
+	public Bundle savedInstanceState;
 	
 	public Graphics glSurface;
 	public GameRenderer gameR;
@@ -34,10 +41,20 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 	{
 		super.onCreate(savedInstanceState);
 		
-		ProgressDialog pDialog = ProgressDialog.show(Run.this, "", "Loading...");
-
 		//RefreshHandler = new RefreshHandler();
 		//new PlaySong().execute(mp);
+		this.savedInstanceState = savedInstanceState;
+		
+		ProgressDialog pDialog = ProgressDialog.show(Run.this, "", "Loading...");
+		
+		switch (levelIndex)
+		{
+			case 0:
+				levelId = R.xml.level1;
+				break;
+			case 1:
+				levelId = R.xml.level2;
+		}
 		
 		//Grab screen information
 		DisplayMetrics screen = new DisplayMetrics();
@@ -53,7 +70,7 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 		
 		//set up OpenGL rendering
 		Object syncObj = new Object();
-		gameR = new GameRenderer(screenX, screenY, this, syncObj);
+		gameR = new GameRenderer(screenX, screenY, this, syncObj, levelId);
 		
 		if(data != null)
 		{
@@ -107,6 +124,49 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 			break;
 		default:
 		}
+	}
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu)
+	{
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.options_menu, menu);
+		gameR.paused = true;
+		return true;
+	}
+	
+	@Override
+	public void onOptionsMenuClosed(Menu menu)
+	{
+		super.onOptionsMenuClosed(menu);
+		gameR.paused = false;
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item)
+	{
+		switch(item.getItemId())
+		{
+			case R.id.restart:
+				//restart game
+				onCreate(savedInstanceState);
+				return true;
+			case R.id.main_menu:
+				//return to main menu
+				Intent i = new Intent(Run.this, MainMenu.class);
+				startActivity(i);
+				finish();
+				return true;
+			default:
+				return super.onOptionsItemSelected(item);
+		
+		}
+	}
+	
+	@Override
+	public void onBackPressed()
+	{
+		
 	}
 	
 	@Override

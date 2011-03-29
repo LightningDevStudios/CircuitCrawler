@@ -39,11 +39,13 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	public OnGameInitializedListener gameInitializedListener;
 	public OnPuzzleActivatedListener puzzleActivatedListener;
 	public OnGameOverListener gameOverListener;
+	public int levelId;
 	public float time, timer, timer2;
 	public boolean test;
 	MediaPlayer mp;
+	public boolean paused;
 	
-	public GameRenderer (float screenW, float screenH, Context context, Object syncObj)
+	public GameRenderer (float screenW, float screenH, Context context, Object syncObj, int levelId)
 	{
 		Game.screenW = screenW;
 		Game.screenH = screenH;
@@ -51,14 +53,16 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		this.syncObj = syncObj;
 		Game.windowOutdated = false;
 		Game.worldOutdated = false;
+		this.levelId = levelId;
 		test = true;
 		SoundPlayer.getInstance().initialize(context);
+		paused = false;
 	}
 	
 	
 	@Override
 	public void onSurfaceCreated(GL10 gl, EGLConfig config)
-	{
+	{	
 		//openGL settings
 		gl.glShadeModel(GL10.GL_SMOOTH);
 		gl.glEnable(GL10.GL_BLEND);
@@ -81,7 +85,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		Entity.resetIndexBuffer();
 		
 		if(game == null)
-			game = new Game(context, gl);
+			game = new Game(context, gl, levelId);
 		
 		else
 		{
@@ -159,7 +163,10 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	
 	@Override
 	public void onDrawFrame(GL10 gl) 
-	{
+	{	
+		if (paused)
+			return;
+		
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		//remove entities that are queued for removal
 		//tick the stop watch every frame, gives relatively stable intervals
@@ -244,36 +251,40 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 				if (ent instanceof PhysEnt)
 				{
 					final PhysEnt physEnt = (PhysEnt)ent;
+					final Tile nearestTile = Game.nearestTile(physEnt, game.tileset);
+					final int nearestTileX = nearestTile.xIndex;
+					final int nearestTileY = nearestTile.yIndex;
 					
-					final int tilesetSize = game.tileset.length;
-					final int tileRowSize = game.tileset[0].length;
-					for (int j = 0; j < tilesetSize; j++)
+					for (int j = nearestTileY - 1; j < nearestTileY + 1; j++)
 					{
-						for (int k = 0; k < tileRowSize; k++)
+						for (int k = nearestTileX - 1; k < nearestTileX + 1; k++)
 						{
-							Tile tile = game.tileset[j][k];
-							final boolean physColListContains = Game.arrayListContains(physEnt.colList, tile) || Game.arrayListContains(tile.colList, physEnt);
-							if (tile.isColliding(physEnt))
+							if (j < game.tileset.length && j >= 0 && k < game.tileset[0].length && k >= 0)
 							{
-								if (!physColListContains)
+								Tile tile = game.tileset[j][k];
+								final boolean physColListContains = Game.arrayListContains(physEnt.colList, tile) || Game.arrayListContains(tile.colList, physEnt);
+								if (tile.isColliding(physEnt))
 								{
-									physEnt.colList.add(tile);
-									tile.colList.add(physEnt);
-									physEnt.tileInteract(tile);
+									if (!physColListContains)
+									{
+										physEnt.colList.add(tile);
+										tile.colList.add(physEnt);
+										physEnt.tileInteract(tile);
+									}
 								}
-							}
-							else if (physColListContains)
-							{
-								physEnt.colList.remove(physEnt.colList.indexOf(tile));
-								tile.colList.remove(physEnt);
-								if (ent.colList.isEmpty())
-									physEnt.tileUninteract(tile);
+								else if (physColListContains)
+								{
+									physEnt.colList.remove(physEnt.colList.indexOf(tile));
+									tile.colList.remove(physEnt);
+									if (ent.colList.isEmpty())
+										physEnt.tileUninteract(tile);
+								}
 							}
 						}
 					}
 					
 					//interacts with nearest tile to the entity; the tile it is standing on
-					physEnt.onTileInteract(game.nearestTile(physEnt));
+					physEnt.onTileInteract(Game.nearestTile(physEnt, game.tileset));
 					
 					//bounces PhysEnts appropriately, excluding objects held by the player
 					if (!game.player.isHoldingObject() || physEnt != game.player.getHeldObject())

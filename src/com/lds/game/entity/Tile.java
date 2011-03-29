@@ -19,7 +19,7 @@ public class Tile extends StaticEnt
 	public static final float TILE_SIZE_F = 72.0f;
 	
 	private TileState state;
-	public int tileX, tileY, tileID;
+	public int tileX, tileY, tileID, xIndex, yIndex;
 	
 	private boolean tempBridge;
 	private int origTileX, origTileY;
@@ -35,7 +35,8 @@ public class Tile extends StaticEnt
 			else
 				vertices[i] += posVec.getY();
 		}
-		
+		xIndex = tilePosX;
+		yIndex = tilePosY;
 		vertexBuffer = setBuffer(vertexBuffer, vertices);
 	}
 	
@@ -255,7 +256,7 @@ public class Tile extends StaticEnt
             downTile = tileset[y + 1][x];
 
         if (leftTile != null && (leftTile.getTileState() == Enums.TileState.FLOOR || leftTile.getTileState() == Enums.TileState.WALL))
-        {
+        { 
             dirsCovered.add(Direction.LEFT);
         }
         if (rightTile != null && (rightTile.getTileState() == Enums.TileState.FLOOR || rightTile.getTileState() == Enums.TileState.WALL))

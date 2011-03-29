@@ -1,6 +1,9 @@
 package com.lds.game.menu;
 
-import java.io.FileDescriptor;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -30,19 +33,18 @@ import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 import android.widget.ViewAnimator;
 
-import com.lds.game.Game;
 import com.lds.game.GameRenderer;
 import com.lds.game.R;
 import com.lds.game.Run;
 import com.lds.game.SoundPlayer;
 import com.lds.game.entity.Player;
 
-
 public class MainMenu extends Activity
 {	
 	public boolean vibrateSettingMain = true, test = true;
 	public Context context;
 	public SeekBar mSeekBar;
+	private ViewAnimator animator;
     
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -53,13 +55,20 @@ public class MainMenu extends Activity
 		
 		//set up ListView
 		String[] items = getResources().getStringArray(R.array.menu_items);
-		ListView list = (ListView)findViewById(R.id.MM_RightListView);
+		final ListView list = (ListView)findViewById(R.id.MM_RightListView);
 		final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.list_item, items);
 		adapter.setNotifyOnChange(true);
 		list.setAdapter(adapter);
 		
+		//set up Level ListView
+		String[] levels = getResources().getStringArray(R.array.levels);
+		final ListView levelList = (ListView)View.inflate(this, R.layout.level_list, null);
+		final ArrayAdapter<String> levelAdapter = new ArrayAdapter<String>(this, R.layout.level_list_item, levels);
+		adapter.setNotifyOnChange(true);
+		levelList.setAdapter(levelAdapter);
+		
 		//set up ViewAnimator with animations
-		final ViewAnimator animator = (ViewAnimator)findViewById(R.id.MM_LeftViewAnimator);
+		animator = (ViewAnimator)findViewById(R.id.MM_LeftViewAnimator);
 		final Animation fadeIn = AnimationUtils.loadAnimation(this, R.anim.fade_in);
 		animator.setInAnimation(fadeIn);
 		final Animation fadeOut = AnimationUtils.loadAnimation(this, R.anim.fade_out);
@@ -67,29 +76,34 @@ public class MainMenu extends Activity
 		animator.setAnimateFirstView(true);
 		
 		//add views to ViewAnimator
-		final View ccLogo = View.inflate(this, R.layout.circuit_crawler_logo, null);
-		animator.addView(ccLogo, 0);
+		animator.addView(levelList, 0);
+		final View tutorial = View.inflate(this, R.layout.tutorial, null);
+		animator.addView(tutorial, 1);
 		final View settings = View.inflate(this, R.layout.settings, null);
-		animator.addView(settings, 1);
+		animator.addView(settings, 2);
 		final View aboutYTF = View.inflate(this, R.layout.about_ytf, null);
-		animator.addView(aboutYTF, 2);
+		animator.addView(aboutYTF, 3);
 		final View aboutLDS = View.inflate(this, R.layout.about_lds, null);
-		animator.addView(aboutLDS, 3);
+		animator.addView(aboutLDS, 4);
 		final View credits = View.inflate(this, R.layout.credits, null);
-		animator.addView(credits, 4);
+		animator.addView(credits, 5);
+		final View ccLogo = View.inflate(this, R.layout.circuit_crawler_logo, null);
+		animator.addView(ccLogo, 6);
+		
+		animator.setDisplayedChild(6);
 		
 		//Boxes n' Shit
-		final CheckBox checkbox = (CheckBox) findViewById(R.id.checkbox);
+		final CheckBox vibrationCheckbox = (CheckBox) findViewById(R.id.checkbox);
 		final CheckBox volumeCheckbox = (CheckBox) findViewById(R.id.volumeCheckbox);
 		final CheckBox enableMusic = (CheckBox) findViewById(R.id.EnableMusic);
-		final CheckBox enableShaders = (CheckBox) findViewById(R.id.enableShaders);
-		final SeekBar mSeekBar = (SeekBar)findViewById(R.id.seek);
+		//final CheckBox enableShaders = (CheckBox) findViewById(R.id.enableShaders);
+		//final SeekBar mSeekBar = (SeekBar)findViewById(R.id.seek);
 		final SeekBar volumeControl = (SeekBar)findViewById(R.id.volume);
 		final Button ldsButton = (Button)findViewById(R.id.LDS_Button);
 		final Button ytfButton = (Button)findViewById(R.id.YTF_Button);
 		final Button cheatButton = (Button)findViewById(R.id.Cheats);
 		final TextView seekBarValue = (TextView)findViewById(R.id.volumeText);
-		final TextView antiTextbar = (TextView)findViewById(R.id.antiText);
+		//final TextView antiTextbar = (TextView)findViewById(R.id.antiText);
 		final AlertDialog.Builder alert = new AlertDialog.Builder(this);
 		final EditText input = new EditText(this);
 		final CheckBox godMode = (CheckBox) findViewById(R.id.god);
@@ -98,14 +112,69 @@ public class MainMenu extends Activity
 		godMode.setVisibility(View.INVISIBLE);
 		noclip.setVisibility(View.INVISIBLE);
 		
+		//Internal Storage Data stuff
+		try
+		{
+			FileInputStream fis = openFileInput("effect_volume");
+			byte[] buffer = new byte[4];
+			fis.read(buffer, 0, 4);
+			SoundPlayer.effectVolume = StorageHelper.byteArrayToFloat(buffer);
+			fis.close();
+		}
+		catch (FileNotFoundException e) { e.printStackTrace(); } 
+		catch (IOException e) { e.printStackTrace(); }
+		catch (ArrayIndexOutOfBoundsException e) { e.printStackTrace(); }
+		
+		try
+		{
+			FileInputStream fis = openFileInput("vibration_enabled");
+			byte[] buffer = new byte[1];
+			fis.read(buffer, 0, 1);
+			GameRenderer.vibrateSetting = (buffer[0] != 0);
+			fis.close();
+		}
+		catch (FileNotFoundException e) { e.printStackTrace(); } 
+		catch (IOException e) { e.printStackTrace(); }
+		catch (ArrayIndexOutOfBoundsException e) { e.printStackTrace(); }
+		
+		try
+		{
+			FileInputStream fis = openFileInput("music_enabled");
+			byte[] buffer = new byte[1];
+			fis.read(buffer, 0, 1);
+			SoundPlayer.enableMusic = (buffer[0] != 0);
+			fis.close();
+		}
+		catch (FileNotFoundException e) { e.printStackTrace(); } 
+		catch (IOException e) { e.printStackTrace(); }
+		catch (ArrayIndexOutOfBoundsException e) { e.printStackTrace(); }
+		
+		try
+		{
+			FileInputStream fis = openFileInput("sound_enabled");
+			byte[] buffer = new byte[1];
+			fis.read(buffer, 0, 1);
+			SoundPlayer.enableSound = (buffer[0] != 0);
+			fis.close();
+		}
+		catch (FileNotFoundException e) { e.printStackTrace(); } 
+		catch (IOException e) { e.printStackTrace(); }
+		catch (ArrayIndexOutOfBoundsException e) { e.printStackTrace(); }
+		
 		//suffs
 		volumeControl.setMax(100);
-		volumeControl.setProgress(1);
-		mSeekBar.setMax(100);
-		mSeekBar.setProgress(1);
+		final int volume = (int)(SoundPlayer.effectVolume * 100);
+		volumeControl.setProgress(volume);
+		seekBarValue.setText("Volume: " + String.valueOf(volume) + "%");
+		vibrationCheckbox.setChecked(GameRenderer.vibrateSetting);
+		volumeCheckbox.setChecked(SoundPlayer.enableSound);
+		enableMusic.setChecked(SoundPlayer.enableMusic);
+		
+		//mSeekBar.setMax(100);
+		//mSeekBar.setProgress(1);
 		
 		//Action Suffs
-        mSeekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener()
+       /* mSeekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener()
         {
         	public void onProgressChanged(SeekBar seekBar, int progress, boolean fromTouch)	
         	{	
@@ -114,7 +183,7 @@ public class MainMenu extends Activity
         	}
             public void onStartTrackingTouch(SeekBar seekBar)	{	}
             public void onStopTrackingTouch(SeekBar seekBar)	{	}	
-        });
+        });*/
         
         cheatButton.setOnClickListener(new View.OnClickListener()
 		{
@@ -131,13 +200,13 @@ public class MainMenu extends Activity
 					public void onClick(DialogInterface dialog, int whichButton) 
 					{
 						Editable value = input.getText();
-						if(value.toString().compareTo("PASSW0rd;") == 0) // DONT LOOK AT THIS!
-								{
-									godMode.setVisibility(View.VISIBLE);
-									noclip.setVisibility(View.VISIBLE);
-									cheatText.setVisibility(View.VISIBLE);
-									cheatText.setText("Correct!");
-								}
+						if(value.toString().compareTo("PASSW0rd;") == 0) // DONT LOOK AT THIS! //lol UMADBRO? - Devin
+						{
+							godMode.setVisibility(View.VISIBLE);
+							noclip.setVisibility(View.VISIBLE);
+							cheatText.setVisibility(View.VISIBLE);
+							cheatText.setText("Correct!");
+						}
 						else
 						{
 							cheatText.setVisibility(View.VISIBLE);
@@ -160,29 +229,37 @@ public class MainMenu extends Activity
         	public void onProgressChanged(SeekBar volumeControl, int progress, boolean fromTouch)	
         	{	
         		seekBarValue.setText("Volume: " + String.valueOf(progress) + "%");
+        		final float newVol = ((float)(Integer.parseInt(String.valueOf(progress))))/100;
         		SoundPlayer.effectVolume = ((float)(Integer.parseInt(String.valueOf(progress))))/100;
-        		System.out.println(SoundPlayer.effectVolume);
+        		try 
+        		{
+        			FileOutputStream fos = openFileOutput("effect_volume", MODE_PRIVATE);
+        			fos.write(StorageHelper.floatToByteArray(newVol));
+        			fos.close();
+        		} 
+        		catch (FileNotFoundException e) { e.printStackTrace(); } 
+        		catch (IOException e) { e.printStackTrace(); }
         	}
             public void onStartTrackingTouch(SeekBar volumeControl)	{	}
             public void onStopTrackingTouch(SeekBar volumeControl)	{	}	
         });
        	
-		checkbox.setOnCheckedChangeListener(new OnCheckedChangeListener()
+		vibrationCheckbox.setOnCheckedChangeListener(new OnCheckedChangeListener()
 		{
 		    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
 		    {
-		        if ( isChecked )
-		        {
-		        	vibrator(100);
-		            GameRenderer.vibrateSetting = true;
-		            System.out.println("TRUE IS VIBRATING");
-		        }
-		        else
-		        {
-		        	vibrator(100);
-		        	GameRenderer.vibrateSetting = false;
-		        	System.out.println("FALSE IS VIBRATING");
-		        }
+		    	GameRenderer.vibrateSetting = isChecked;
+		    	byte[] value = new byte[1];
+		    	if (isChecked) value[0] = 1;
+		    	else value[0] = 0;
+		    	try 
+        		{
+        			FileOutputStream fos = openFileOutput("vibration_enabled", MODE_PRIVATE);
+        			fos.write(value);
+        			fos.close();
+        		} 
+        		catch (FileNotFoundException e) { e.printStackTrace(); } 
+        		catch (IOException e) { e.printStackTrace(); }
 		    }
 		});
 		
@@ -216,7 +293,7 @@ public class MainMenu extends Activity
 		    }
 		});
 		
-		enableShaders.setOnCheckedChangeListener(new OnCheckedChangeListener()
+		/*enableShaders.setOnCheckedChangeListener(new OnCheckedChangeListener()
 		{
 		    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
 		    {
@@ -229,22 +306,24 @@ public class MainMenu extends Activity
 		        	vibrator(100);
 		        }
 		    }
-		});
+		});*/
 		
 		enableMusic.setOnCheckedChangeListener(new OnCheckedChangeListener()
 		{
 		    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
 		    {
-		        if ( isChecked )
-		        {
-		        	vibrator(100);
-		        	SoundPlayer.enableMusic = true;
-		        }
-		        else
-		        {
-		        	vibrator(100);
-		        	SoundPlayer.enableMusic = false;
-		        }
+		    	SoundPlayer.enableMusic = isChecked;
+		    	byte[] value = new byte[1];
+		    	if (isChecked) value[0] = 1;
+		    	else value[0] = 0;
+		    	try 
+        		{
+        			FileOutputStream fos = openFileOutput("music_enabled", MODE_PRIVATE);
+        			fos.write(value);
+        			fos.close();
+        		} 
+        		catch (FileNotFoundException e) { e.printStackTrace(); } 
+        		catch (IOException e) { e.printStackTrace(); }
 		    }
 		});
 		
@@ -252,16 +331,18 @@ public class MainMenu extends Activity
 		{
 		    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
 		    {
-		        if ( isChecked )
-		        {
-		        	vibrator(100);
-		        	SoundPlayer.enableSound = true;
-		        }
-		        else
-		        {
-		        	vibrator(100);
-		        	SoundPlayer.enableSound = false;
-		        }
+		    	SoundPlayer.enableSound = isChecked;
+		    	byte[] value = new byte[1];
+		    	if (isChecked) value[0] = 1;
+		    	else value[0] = 0;
+		    	try 
+        		{
+        			FileOutputStream fos = openFileOutput("sound_enabled", MODE_PRIVATE);
+        			fos.write(value);
+        			fos.close();
+        		} 
+        		catch (FileNotFoundException e) { e.printStackTrace(); } 
+        		catch (IOException e) { e.printStackTrace(); }
 		    }
 		});
 		    
@@ -276,7 +357,6 @@ public class MainMenu extends Activity
 		});
 			
 		//YTF Button
-		
 		ytfButton.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)
@@ -285,6 +365,8 @@ public class MainMenu extends Activity
 				startActivity(browserIntent);
 			}
 		}); 
+		
+		//Side Menu
 		list.setOnItemClickListener(new OnItemClickListener()
 		{
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id)
@@ -293,17 +375,18 @@ public class MainMenu extends Activity
 				{
 					case 0:
 						//Run Game
-						Intent i = new Intent(MainMenu.this, Run.class);
-						startActivity(i);
+						if (animator.getDisplayedChild() != 0)
+							animator.setDisplayedChild(0);
 						break;
 					case 1:
 						//Run Tutorial Level
-						//for now, just takes us back to logo
-						animator.setDisplayedChild(0);
+						if (animator.getDisplayedChild() != 1)
+							animator.setDisplayedChild(1);
 						break;
 					case 2:
 						//Settings
-						animator.setDisplayedChild(1);
+						if (animator.getDisplayedChild() != 2)
+							animator.setDisplayedChild(2);
 						break;
 					case 3:
 						//Donate Button
@@ -312,18 +395,47 @@ public class MainMenu extends Activity
 						break;
 					case 4:
 						//About YTF
-						animator.setDisplayedChild(2);
+						if (animator.getDisplayedChild() != 3)
+							animator.setDisplayedChild(3);
 						break;
 					case 5:
 						//About LDS
-						animator.setDisplayedChild(3);
+						if (animator.getDisplayedChild() != 4)
+							animator.setDisplayedChild(4);
 						break;
 					case 6:
 						//Credits
-						animator.setDisplayedChild(4);
+						if (animator.getDisplayedChild() != 5)
+							animator.setDisplayedChild(5);
+						break;
+					case 7:
+						//Logo
+						if (animator.getDisplayedChild() != 6)
+							animator.setDisplayedChild(6);
 				}
 			}	
 		});
+		
+		//Level List
+		levelList.setOnItemClickListener(new OnItemClickListener()
+		{
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+			{
+				if (position <= Run.unlockedLevel)
+				{
+					Run.levelIndex = position;
+					Intent i = new Intent(MainMenu.this, Run.class);
+					startActivity(i);
+				}
+			}	
+		});
+	}
+	
+	@Override
+	public void onBackPressed()
+	{
+		if (animator.getDisplayedChild() != 6)
+			animator.setDisplayedChild(6);
 	}
 
 	@Override

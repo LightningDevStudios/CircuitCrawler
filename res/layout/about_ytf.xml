@@ -8,10 +8,20 @@
 		android:orientation="vertical"
   		android:layout_width="fill_parent"
  		android:layout_height="wrap_content">
+ 		<ImageView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:paddingTop="30dp"
+			android:paddingLeft="40dp"
+			android:paddingBottom="20dp"	
+			android:src="@raw/ytf_logo">
+		</ImageView>
 		<TextView
 			android:layout_width="wrap_content" 
 			android:layout_height="wrap_content"
-			android:padding="40dp"
+			android:paddingLeft="40dp"
+			android:paddingRight="40dp"
+			android:paddingBottom="40dp"
 			android:text=
 			"YTF is a non-profit organization dedicated to bringing technological literacy to underprivleged communities, both in developing countries and in the United States. With a special focus on youth, YTF helps bring the modern, digital world to communities around the world, and inspire innovation among the members of these communities.\n">
 		</TextView>
@@ -21,6 +31,11 @@
 			android:layout_width="wrap_content"
 			android:text="More about YTF">
 		</Button>
+		<TextView
+			android:layout_width="wrap_content" 
+			android:layout_height="wrap_content"
+			android:padding="4dp">
+		</TextView>
 	</LinearLayout>
 </ScrollView>
 			

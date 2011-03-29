@@ -15,7 +15,7 @@ public class SoundPlayer
 	public static final int SONG1 = 5;
 	public static final int SONG2 = 6;
 	public static boolean enableSound = true, enableMusic = true;
-	public static float effectVolume = 1;
+	public static float effectVolume = 0;
 	
 	private static SoundPlayer p_sp;
 	
@@ -68,7 +68,7 @@ public class SoundPlayer
 		}
 	}
 	
-	public void playMusic(int sound)
+	/*public void playMusic(int sound)
 	{
 		if(enableMusic)
 		{
@@ -79,5 +79,5 @@ public class SoundPlayer
 		
 			pool.play(poolMap.get(sound), volume, volume, 1, 0, 1.0f);
 		}
-	}
+	}*/
 }

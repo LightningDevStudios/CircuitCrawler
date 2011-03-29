@@ -1,12 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Circuit Crawler</string>
-	<string-array name="menu_items"><item>Start</item>
-		<item>Tutorial Level</item>
+	<string-array name="menu_items">
+	<item>Start</item>
+		<item>Tutorial</item>
 		<item>Settings</item>
 		<item>Additional Donation</item>
 		<item>About The Youth for Technology Foundation</item>
 		<item>About Lightning Development Studios</item>
 		<item>Credits</item>
+		<item>Back to the Logo</item>
+	</string-array>
+	<string-array name="levels">
+		<item>Level 1</item>
+		<item>Level 2</item>
 	</string-array>
 </resources>
