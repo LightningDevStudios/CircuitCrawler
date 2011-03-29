@@ -256,7 +256,7 @@ public class Tile extends StaticEnt
             downTile = tileset[y + 1][x];
 
         if (leftTile != null && (leftTile.getTileState() == Enums.TileState.FLOOR || leftTile.getTileState() == Enums.TileState.WALL))
-        {
+        { 
             dirsCovered.add(Direction.LEFT);
         }
         if (rightTile != null && (rightTile.getTileState() == Enums.TileState.FLOOR || rightTile.getTileState() == Enums.TileState.WALL))
