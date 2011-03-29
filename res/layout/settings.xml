@@ -43,7 +43,7 @@
 		android:id="@+id/volumeText"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:text="\nVolume:  100%">
+		android:text="\nVolume">
 	</TextView>
 	<SeekBar
  		android:id="@+id/volume"
@@ -53,6 +53,20 @@
 		android:max="100"
    		android:progress="0"
 	/>   
+	<TextView
+		android:id="@+id/effectVolumeText"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="\nVolume">
+	</TextView>
+	<SeekBar
+ 		android:id="@+id/effectVolume"
+ 		android:layout_width="fill_parent"
+ 		android:layout_height="wrap_content"
+		android:layout_margin="10px"
+		android:max="100"
+   		android:progress="0"
+	/> 
 	<Button
 		android:id="@+id/Cheats"
 		android:layout_height="wrap_content"

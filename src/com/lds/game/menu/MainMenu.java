@@ -110,6 +110,8 @@ public class MainMenu extends Activity
 		final CheckBox godMode = (CheckBox) findViewById(R.id.god);
 		final CheckBox noclip = (CheckBox) findViewById(R.id.noclip);
 		final TextView cheatText = (TextView)findViewById(R.id.cheatText);
+		final SeekBar volumeEffectControl = (SeekBar)findViewById(R.id.effectVolume);
+		final TextView seekVolBarValue = (TextView)findViewById(R.id.effectVolumeText);
 		godMode.setVisibility(View.INVISIBLE);
 		noclip.setVisibility(View.INVISIBLE);
 		
@@ -120,6 +122,18 @@ public class MainMenu extends Activity
 			byte[] buffer = new byte[4];
 			fis.read(buffer, 0, 4);
 			SoundPlayer.effectVolume = StorageHelper.byteArrayToFloat(buffer);
+			fis.close();
+		}
+		catch (FileNotFoundException e) { e.printStackTrace(); } 
+		catch (IOException e) { e.printStackTrace(); }
+		catch (ArrayIndexOutOfBoundsException e) { e.printStackTrace(); }
+		
+		try
+		{
+			FileInputStream fis = openFileInput("music_volume");
+			byte[] buffer = new byte[4];
+			fis.read(buffer, 0, 4);
+			SoundPlayer.musicVolume = StorageHelper.byteArrayToFloat(buffer);
 			fis.close();
 		}
 		catch (FileNotFoundException e) { e.printStackTrace(); } 
@@ -232,6 +246,26 @@ public class MainMenu extends Activity
         	public void onProgressChanged(SeekBar volumeControl, int progress, boolean fromTouch)	
         	{	
         		seekBarValue.setText("Volume: " + String.valueOf(progress) + "%");
+        		final float newVol = ((float)(Integer.parseInt(String.valueOf(progress))))/100;
+        		SoundPlayer.musicVolume = ((float)(Integer.parseInt(String.valueOf(progress))))/100;
+        		try 
+        		{
+        			FileOutputStream fos = openFileOutput("music_volume", MODE_PRIVATE);
+        			fos.write(StorageHelper.floatToByteArray(newVol));
+        			fos.close();
+        		} 
+        		catch (FileNotFoundException e) { e.printStackTrace(); } 
+        		catch (IOException e) { e.printStackTrace(); }
+        	}
+            public void onStartTrackingTouch(SeekBar volumeControl)	{	}
+            public void onStopTrackingTouch(SeekBar volumeControl)	{	}	
+        });
+        
+        volumeEffectControl.setOnSeekBarChangeListener(new OnSeekBarChangeListener()
+        {
+        	public void onProgressChanged(SeekBar volumeControl, int progress, boolean fromTouch)	
+        	{	
+        		seekVolBarValue.setText("Volume: " + String.valueOf(progress) + "%");
         		final float newVol = ((float)(Integer.parseInt(String.valueOf(progress))))/100;
         		SoundPlayer.effectVolume = ((float)(Integer.parseInt(String.valueOf(progress))))/100;
         		try 

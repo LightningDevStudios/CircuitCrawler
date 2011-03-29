@@ -102,7 +102,7 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 				e.printStackTrace();
 			}
 		}
-		if((Math.random()*2 + 1) == 2)
+		if(((int)(Math.random()*2 + 1))== 2)
     	{
         	mp.reset();
             try 
@@ -160,7 +160,7 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
         {
                 public void onCompletion(MediaPlayer mp) 
                 {
-                	if((Math.random()*2 + 1) == 2)
+                	if(((int)(Math.random()*2 + 1)) == 2)
                 	{
 	                	mp.reset();
 	                    try 
