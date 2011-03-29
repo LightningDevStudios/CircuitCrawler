@@ -74,12 +74,13 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 		getWindowManager().getDefaultDisplay().getMetrics(screen);
 		float screenX = (float)screen.widthPixels;
 		float screenY = (float)screen.heightPixels;
-		File isSong1 = new File("/sdcard/song1.mp3");
-		File isSong2 = new File("/sdcard/song2.mp3");
-		
+		/*
+		File isSong1 = new File("/assets/song1.mp3");
+		File isSong2 = new File("/assets/song2.mp3");
+		*/
 		//set proper volume to adjust with +/- buttons
 		setVolumeControlStream(AudioManager.STREAM_MUSIC);
-		
+		/*
 		if(!isSong1.exists())
 		{
 			try 
@@ -101,13 +102,13 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 			{
 				e.printStackTrace();
 			}
-		}
+		}*/
 		if(((int)(Math.random()*2 + 1))== 2)
     	{
         	mp.reset();
             try 
             {
-				mp.setDataSource("/sdcard/song2.mp3");
+				mp.setDataSource("file:///android_asset/song1.mp3");
 			} 
             catch (IllegalArgumentException e) 
             {
@@ -127,7 +128,7 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
     		mp.reset();
             try 
             {
-				mp.setDataSource("/sdcard/song1.mp3");
+				mp.setDataSource("file:///android_asset/song2.mp3");
 			} 
             catch (IllegalArgumentException e) 
             {
@@ -165,7 +166,7 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 	                	mp.reset();
 	                    try 
 	                    {
-							mp.setDataSource("/sdcard/song2.mp3");
+							mp.setDataSource("file:///android_asset/song1.mp3");
 						} 
 	                    catch (IllegalArgumentException e) 
 	                    {
@@ -185,7 +186,7 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
                 		mp.reset();
 	                    try 
 	                    {
-							mp.setDataSource("/sdcard/song1.mp3");
+							mp.setDataSource("file:///android_asset/song2.mp3");
 						} 
 	                    catch (IllegalArgumentException e) 
 	                    {
