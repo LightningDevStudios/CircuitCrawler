@@ -17,7 +17,7 @@ public class TileData
 		this.tilePosX = x;
 		this.tilePosY = y;
 		
-		tile = new Tile(Tile.TILE_SIZE_F, x, y, tilesetY - 1, tilesetX - 1);
+		tile = new Tile(Tile.TILE_SIZE_F, x, y, tilesetY, tilesetX);
 		tile.enableTilesetMode(Game.tilesetworld, 0, 0);
 		
 		if(state.equalsIgnoreCase("floor"))

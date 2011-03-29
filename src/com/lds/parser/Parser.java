@@ -29,7 +29,7 @@ public class Parser //this is a parser
 	public HashMap <String, String> dataHM;
 	
 	public static final int START_DOCUMENT = 0;
-	public static final int END_DOCUMENT = 1;
+	public static final int END_DOCUMENT = 1; 
 	public static final int START_TAG = 2;
 	public static final int END_TAG = 3;
 
