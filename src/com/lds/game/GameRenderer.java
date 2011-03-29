@@ -36,6 +36,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	public int levelId;
 	public float time, timer, timer2;
 	public boolean test;
+	public boolean paused;
 	
 	public GameRenderer (float screenW, float screenH, Context context, Object syncObj, int levelId)
 	{
@@ -48,12 +49,13 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		this.levelId = levelId;
 		test = true;
 		SoundPlayer.getInstance().initialize(context);
+		paused = false;
 	}
 	
 	
 	@Override
 	public void onSurfaceCreated(GL10 gl, EGLConfig config)
-	{
+	{	
 		//openGL settings
 		gl.glShadeModel(GL10.GL_SMOOTH);
 		gl.glEnable(GL10.GL_BLEND);
@@ -152,7 +154,10 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	
 	@Override
 	public void onDrawFrame(GL10 gl) 
-	{		
+	{	
+		if (paused)
+			return;
+		
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		//remove entities that are queued for removal
 		//tick the stop watch every frame, gives relatively stable intervals

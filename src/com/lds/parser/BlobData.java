@@ -18,7 +18,7 @@ public class BlobData extends EnemyData
 	
 	public  void createInst(ArrayList<Entity> entData)
 	{
-		blobRef = new Blob(xPos, yPos, type);
+		blobRef = new Blob(xPos, yPos, type, true); //TODO allow for active boolean
 		blobRef.setAngle(angle);
 		
 		//COLOR

@@ -5,6 +5,9 @@ import android.content.Intent;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
 
@@ -17,6 +20,7 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 {
 	public static final int PUZZLE_ACTIVITY = 2;
 	public static int levelId;
+	public Bundle savedInstanceState;
 	
 	public Graphics glSurface;
 	public GameRenderer gameR;
@@ -25,6 +29,7 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
+		this.savedInstanceState = savedInstanceState;
 		levelId = R.xml.level; //TODO: make this change
 		
 		//Grab screen information
@@ -92,6 +97,43 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 				glSurface.onPuzzleWon();
 			break;
 		default:
+		}
+	}
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu)
+	{
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.options_menu, menu);
+		gameR.paused = true;
+		return true;
+	}
+	
+	@Override
+	public void onOptionsMenuClosed(Menu menu)
+	{
+		super.onOptionsMenuClosed(menu);
+		gameR.paused = false;
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item)
+	{
+		switch(item.getItemId())
+		{
+			case R.id.restart:
+				//restart game
+				onCreate(savedInstanceState);
+				return true;
+			case R.id.main_menu:
+				//return to main menu
+				Intent i = new Intent(Run.this, MainMenu.class);
+				startActivity(i);
+				finish();
+				return true;
+			default:
+				return super.onOptionsItemSelected(item);
+		
 		}
 	}
 	

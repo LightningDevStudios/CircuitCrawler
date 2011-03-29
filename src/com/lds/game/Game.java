@@ -495,6 +495,9 @@ public class Game
 	
 	public void runAI(Enemy enemy)
 	{
+		if (!enemy.active)
+			return;
+		
 		if (Vector2f.sub(enemy.getPos(), player.getPos()).mag() <  Enemy.OUTER_RADIUS)
 		{
 			if (enemy.isAgressive())

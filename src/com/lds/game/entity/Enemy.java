@@ -11,6 +11,7 @@ public  abstract class Enemy extends Character //enemies will fall under this cl
 {
 	public static int OUTER_RADIUS = 200, INNER_RADIUS = 75;
 	private static int enemyCount = 0;
+	public boolean active;
 	protected AIType type;
 	protected boolean agressive, colliding;
 	protected int lastTime, randomTime;
@@ -22,12 +23,12 @@ public  abstract class Enemy extends Character //enemies will fall under this cl
 	protected NodePath pathToPlayer;
 	protected int playerPathLocation;
 
-	public Enemy(float size, float xPos, float yPos, boolean circular, int health, AIType type)
+	public Enemy(float size, float xPos, float yPos, boolean circular, int health, AIType type, boolean active)
 	{
-		this(size, xPos, yPos, 0.0f, 1.0f, 1.0f, circular, health, type);
+		this(size, xPos, yPos, 0.0f, 1.0f, 1.0f, circular, health, type, active);
 	}
 	
-	public Enemy(float size, float xPos, float yPos, float angle, float xScl, float yScl, boolean circular, int health, AIType type)
+	public Enemy(float size, float xPos, float yPos, float angle, float xScl, float yScl, boolean circular, int health, AIType type, boolean active)
 	{
 		super(size, xPos, yPos, angle, xScl, yScl, circular, health, 75.0f, 360.0f);
 		this.type = type;
@@ -37,6 +38,7 @@ public  abstract class Enemy extends Character //enemies will fall under this cl
 		agressive = false;
 		onPatrol = false;
 		colliding = false;
+		this.active = active;
 	}
 	
 	@Override
