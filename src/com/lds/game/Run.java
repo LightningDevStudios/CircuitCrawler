@@ -34,8 +34,17 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 	{
 		super.onCreate(savedInstanceState);
 		
-		ProgressDialog pDialog = ProgressDialog.show(Run.this, "", "Loading...");
-
+		 Thread background = new Thread (new Runnable()
+		 {
+	           public void run() 
+	           {
+	        	   //ProgressDialog pDialog = ProgressDialog.show(Run.this, "", "Loading...");
+	        	   MediaPlayer mp = MediaPlayer.create(getBaseContext(), R.raw.song2); 
+	        	   mp.start();
+	           }
+	        });
+	    background.start();
+		
 		//RefreshHandler = new RefreshHandler();
 		//new PlaySong().execute(mp);
 		
@@ -63,7 +72,7 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 		gameR.setGameInitializedEvent(this);
 		glSurface = new Graphics(this, gameR, syncObj);
 		
-		pDialog.dismiss();
+		//pDialog.dismiss();
 		setContentView(glSurface);
 	}
 
