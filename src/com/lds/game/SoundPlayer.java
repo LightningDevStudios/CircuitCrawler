@@ -51,8 +51,8 @@ public class SoundPlayer
 		poolMap.put(SHOOT_SOUND, pool.load(context, R.raw.shootsound, 1));
 		poolMap.put(ENEMY_DEATH, pool.load(context, R.raw.enemydeath, 1));
 		poolMap.put(PIT_FALL, pool.load(context, R.raw.pitfall, 1));
-		poolMap.put(SONG1, pool.load(context, R.raw.song1, 1));
-		poolMap.put(SONG2, pool.load(context, R.raw.song2, 1));
+		//poolMap.put(SONG1, pool.load(context, R.raw.song1, 1));
+		//poolMap.put(SONG2, pool.load(context, R.raw.song2, 1));
 	}
 	
 	public void playSound(int sound)
