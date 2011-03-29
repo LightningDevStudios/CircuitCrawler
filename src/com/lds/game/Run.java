@@ -19,7 +19,9 @@ import com.lds.game.puzzle.PuzzleActivity;
 public class Run extends Activity implements OnGameOverListener, OnGameInitializedListener, OnPuzzleActivatedListener
 {
 	public static final int PUZZLE_ACTIVITY = 2;
-	public static int levelId;
+	public static int unlockedLevel = 0;
+	public static int levelIndex = 0;
+	public int levelId;
 	public Bundle savedInstanceState;
 	
 	public Graphics glSurface;
@@ -30,7 +32,15 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 	{
 		super.onCreate(savedInstanceState);
 		this.savedInstanceState = savedInstanceState;
-		levelId = R.xml.level; //TODO: make this change
+		
+		switch (levelIndex)
+		{
+			case 0:
+				levelId = R.xml.level1;
+				break;
+			case 1:
+				levelId = R.xml.level2;
+		}
 		
 		//Grab screen information
 		DisplayMetrics screen = new DisplayMetrics();

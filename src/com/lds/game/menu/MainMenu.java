@@ -54,10 +54,17 @@ public class MainMenu extends Activity
 		
 		//set up ListView
 		String[] items = getResources().getStringArray(R.array.menu_items);
-		ListView list = (ListView)findViewById(R.id.MM_RightListView);
+		final ListView list = (ListView)findViewById(R.id.MM_RightListView);
 		final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.list_item, items);
 		adapter.setNotifyOnChange(true);
 		list.setAdapter(adapter);
+		
+		//set up Level ListView
+		String[] levels = getResources().getStringArray(R.array.levels);
+		final ListView levelList = (ListView)View.inflate(this, R.layout.level_list, null);
+		final ArrayAdapter<String> levelAdapter = new ArrayAdapter<String>(this, R.layout.level_list_item, levels);
+		adapter.setNotifyOnChange(true);
+		levelList.setAdapter(levelAdapter);
 		
 		//set up ViewAnimator with animations
 		animator = (ViewAnimator)findViewById(R.id.MM_LeftViewAnimator);
@@ -68,20 +75,21 @@ public class MainMenu extends Activity
 		animator.setAnimateFirstView(true);
 		
 		//add views to ViewAnimator
+		animator.addView(levelList, 0);
 		final View tutorial = View.inflate(this, R.layout.tutorial, null);
-		animator.addView(tutorial, 0);
+		animator.addView(tutorial, 1);
 		final View settings = View.inflate(this, R.layout.settings, null);
-		animator.addView(settings, 1);
+		animator.addView(settings, 2);
 		final View aboutYTF = View.inflate(this, R.layout.about_ytf, null);
-		animator.addView(aboutYTF, 2);
+		animator.addView(aboutYTF, 3);
 		final View aboutLDS = View.inflate(this, R.layout.about_lds, null);
-		animator.addView(aboutLDS, 3);
+		animator.addView(aboutLDS, 4);
 		final View credits = View.inflate(this, R.layout.credits, null);
-		animator.addView(credits, 4);
+		animator.addView(credits, 5);
 		final View ccLogo = View.inflate(this, R.layout.circuit_crawler_logo, null);
-		animator.addView(ccLogo, 5);
+		animator.addView(ccLogo, 6);
 		
-		animator.setDisplayedChild(5);
+		animator.setDisplayedChild(6);
 		
 		//Boxes n' Shit
 		final CheckBox vibrationCheckbox = (CheckBox) findViewById(R.id.checkbox);
@@ -366,18 +374,18 @@ public class MainMenu extends Activity
 				{
 					case 0:
 						//Run Game
-						Intent i = new Intent(MainMenu.this, Run.class);
-						startActivity(i);
-						break;
-					case 1:
-						//Run Tutorial Level
 						if (animator.getDisplayedChild() != 0)
 							animator.setDisplayedChild(0);
 						break;
-					case 2:
-						//Settings
+					case 1:
+						//Run Tutorial Level
 						if (animator.getDisplayedChild() != 1)
 							animator.setDisplayedChild(1);
+						break;
+					case 2:
+						//Settings
+						if (animator.getDisplayedChild() != 2)
+							animator.setDisplayedChild(2);
 						break;
 					case 3:
 						//Donate Button
@@ -386,23 +394,37 @@ public class MainMenu extends Activity
 						break;
 					case 4:
 						//About YTF
-						if (animator.getDisplayedChild() != 2)
-							animator.setDisplayedChild(2);
-						break;
-					case 5:
-						//About LDS
 						if (animator.getDisplayedChild() != 3)
 							animator.setDisplayedChild(3);
 						break;
-					case 6:
-						//Credits
+					case 5:
+						//About LDS
 						if (animator.getDisplayedChild() != 4)
 							animator.setDisplayedChild(4);
 						break;
-					case 7:
-						//Logo
+					case 6:
+						//Credits
 						if (animator.getDisplayedChild() != 5)
 							animator.setDisplayedChild(5);
+						break;
+					case 7:
+						//Logo
+						if (animator.getDisplayedChild() != 6)
+							animator.setDisplayedChild(6);
+				}
+			}	
+		});
+		
+		//Level List
+		levelList.setOnItemClickListener(new OnItemClickListener()
+		{
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+			{
+				if (position <= Run.unlockedLevel)
+				{
+					Run.levelIndex = position;
+					Intent i = new Intent(MainMenu.this, Run.class);
+					startActivity(i);
 				}
 			}	
 		});
@@ -411,8 +433,8 @@ public class MainMenu extends Activity
 	@Override
 	public void onBackPressed()
 	{
-		if (animator.getDisplayedChild() != 5)
-			animator.setDisplayedChild(5);
+		if (animator.getDisplayedChild() != 6)
+			animator.setDisplayedChild(6);
 	}
 
 	@Override

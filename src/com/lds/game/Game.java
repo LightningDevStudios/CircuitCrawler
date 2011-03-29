@@ -161,7 +161,7 @@ public class Game
 		//tileset[11][6].setAsSlipperyTile();
  		
 		//Parser
-		Parser parser = new Parser(context, R.xml.level2);
+		Parser parser = new Parser(context, levelId);
 
 		
 		entList = parser.entList;
