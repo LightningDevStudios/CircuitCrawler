@@ -1,10 +1,13 @@
 package com.lds.game.menu;
 
+import java.io.FileDescriptor;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Vibrator;
@@ -37,7 +40,7 @@ import com.lds.game.entity.Player;
 
 public class MainMenu extends Activity
 {	
-	public boolean vibrateSettingMain = true;
+	public boolean vibrateSettingMain = true, test = true;
 	public Context context;
 	public SeekBar mSeekBar;
     

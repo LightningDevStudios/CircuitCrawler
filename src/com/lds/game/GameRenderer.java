@@ -1,5 +1,9 @@
 package com.lds.game;
 
+import java.io.FileDescriptor;
+import java.io.IOException;
+import java.io.InputStream;
+
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
@@ -9,6 +13,8 @@ import android.os.Vibrator;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.content.Context;
+import android.content.res.AssetFileDescriptor;
+import android.content.res.AssetManager;
 
 import com.lds.EntityManager;
 import com.lds.Finger;
@@ -35,6 +41,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	public OnGameOverListener gameOverListener;
 	public float time, timer, timer2;
 	public boolean test;
+	MediaPlayer mp;
 	
 	public GameRenderer (float screenW, float screenH, Context context, Object syncObj)
 	{
@@ -68,6 +75,8 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		Stopwatch.restartTimer();
 		Stopwatch.tick();
 		playerMoveTimeMs = Stopwatch.elapsedTimeMs();
+
+
 		
 		Entity.resetIndexBuffer();
 		
@@ -159,15 +168,6 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		game.frameInterval = Stopwatch.elapsedTimeMs();
 		timer2 = Stopwatch.elapsedTimeMs();
 		Stopwatch.tick();
-		
-		if(test)
-		{
-			SoundPlayer.getInstance().playSound(5);
-			/*MediaPlayer mp = MediaPlayer.create(context, R.raw.song2);
-		    mp.start();
-		    //mp.setLooping(true);*/
-			test = false;
-		}
 
 		game.updateTriggers();
 		game.updateRenderedEnts();
