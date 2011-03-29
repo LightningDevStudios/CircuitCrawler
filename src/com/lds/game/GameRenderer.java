@@ -162,9 +162,10 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		
 		if(test)
 		{
-			MediaPlayer mp = MediaPlayer.create(context, R.raw.song2);
+			SoundPlayer.getInstance().playSound(5);
+			/*MediaPlayer mp = MediaPlayer.create(context, R.raw.song2);
 		    mp.start();
-		    //mp.setLooping(true);
+		    //mp.setLooping(true);*/
 			test = false;
 		}
 

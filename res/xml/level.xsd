@@ -273,6 +273,10 @@
           </xs:complexType>
         </xs:element>
 
+				<xs:element name="Nodes" type="stringType" />
+				<xs:element name="NodeLinks" type="stringType" />
+				<xs:element name="NodePaths" type="stringType" />
+				
         <xs:element name="Entities">
           <xs:complexType>
             <xs:sequence>
@@ -326,9 +330,6 @@
             </xs:sequence>
           </xs:complexType>
         </xs:element>
-
-				<xs:element name="Nodes" type="stringType" />
-				<xs:element name="NodeLinks" type="stringType" />
 				
       </xs:sequence>
     </xs:complexType>

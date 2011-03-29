@@ -1,6 +1,7 @@
 package com.lds.game;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.media.AudioManager;
 import android.os.Bundle;
@@ -25,6 +26,8 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 	{
 		super.onCreate(savedInstanceState);
 		
+		ProgressDialog pDialog = ProgressDialog.show(Run.this, "", "Loading...");
+		
 		//Grab screen information
 		DisplayMetrics screen = new DisplayMetrics();
 		getWindowManager().getDefaultDisplay().getMetrics(screen);
@@ -48,6 +51,8 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 		
 		gameR.setGameInitializedEvent(this);
 		glSurface = new Graphics(this, gameR, syncObj);
+		
+		pDialog.dismiss();
 		setContentView(glSurface);
 	}
 	
