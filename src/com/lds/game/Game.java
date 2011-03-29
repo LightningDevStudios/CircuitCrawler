@@ -406,8 +406,8 @@ public class Game
 		float minX, maxX, minY, maxY;
 		minX = camPosX - (screenW / 2);
 		maxX = camPosX + (screenW / 2);
-		minY = camPosY - (screenH / 2);
-		maxY = camPosY + (screenH / 2);
+		minY = camPosY - (screenW / 2);
+		maxY = camPosY + (screenW / 2);
 		
 		for(Entity ent : entList)
 		{
@@ -432,10 +432,10 @@ public class Game
 	public void updateRenderedTileset()
 	{
 		float minX, maxX, minY, maxY, tilesetHalfWidth, tilesetHalfHeight;
-		minX = camPosX - (screenW / 2);
-		maxX = camPosX + (screenW / 2);
-		minY = camPosY - (screenH / 2);
-		maxY = camPosY + (screenH / 2);
+		minX = camPosX - (screenW / 2) + (Tile.TILE_SIZE_F / 2.0f);
+		maxX = camPosX + (screenW / 2) + (Tile.TILE_SIZE_F / 2.0f);
+		minY = camPosY - (screenH / 2) - (Tile.TILE_SIZE_F / 2.0f);
+		maxY = camPosY + (screenH / 2) - (Tile.TILE_SIZE_F / 2.0f);
 		
 		tilesetHalfWidth = tileset[0].length * Tile.TILE_SIZE_F / 2;
 		tilesetHalfHeight = tileset.length * Tile.TILE_SIZE_F / 2;
