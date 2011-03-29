@@ -432,10 +432,10 @@ public class Game
 	public void updateRenderedTileset()
 	{
 		float minX, maxX, minY, maxY, tilesetHalfWidth, tilesetHalfHeight;
-		minX = camPosX - (screenW / 2) + (Tile.TILE_SIZE_F / 2.0f);
-		maxX = camPosX + (screenW / 2) + (Tile.TILE_SIZE_F / 2.0f);
-		minY = camPosY - (screenH / 2) - (Tile.TILE_SIZE_F / 2.0f);
-		maxY = camPosY + (screenH / 2) - (Tile.TILE_SIZE_F / 2.0f);
+		minX = camPosX - (screenW / 2);
+		maxX = camPosX + (screenW / 2);
+		minY = camPosY - (screenH / 2);
+		maxY = camPosY + (screenH / 2);
 		
 		tilesetHalfWidth = tileset[0].length * Tile.TILE_SIZE_F / 2;
 		tilesetHalfHeight = tileset.length * Tile.TILE_SIZE_F / 2;
@@ -444,6 +444,7 @@ public class Game
 		tilesetMaxX = (int)((Math.ceil(maxX + tilesetHalfWidth) - 1) / Tile.TILE_SIZE_F);
 		tilesetMinY = (int)((Math.abs(maxY - tilesetHalfHeight) - 1) / Tile.TILE_SIZE_F);
 		tilesetMaxY = (int)((Math.ceil(Math.abs(minY - tilesetHalfHeight)) - 1) / Tile.TILE_SIZE_F);
+		
 		if(tilesetMinX < 0)
 			tilesetMinX = 0;
 		if(tilesetMinY < 0)
@@ -451,7 +452,7 @@ public class Game
 		if (tilesetMaxX > tileset[0].length - 1)
 			tilesetMaxX = tileset[0].length - 1;
 		if (tilesetMaxY > tileset.length - 1)
-			tilesetMaxY = tileset.length - 1	;
+			tilesetMaxY = tileset.length - 1;
 	}
 	
 	public void updateCameraPosition()
