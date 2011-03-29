@@ -13,7 +13,7 @@
     <CheckBox android:id="@+id/volumeCheckbox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Enable Sound"  
+        android:text="Enable Sound Effects"  
         android:checked="true"/>
     <CheckBox android:id="@+id/EnableMusic"
         android:layout_width="wrap_content"
@@ -43,7 +43,7 @@
 		android:id="@+id/volumeText"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:text="\nVolume:  5%">
+		android:text="\nVolume:  100%">
 	</TextView>
 	<SeekBar
  		android:id="@+id/volume"
@@ -51,7 +51,7 @@
  		android:layout_height="wrap_content"
 		android:layout_margin="10px"
 		android:max="100"
-   		android:progress="5"
+   		android:progress="0"
 	/>   
 	<Button
 		android:id="@+id/Cheats"

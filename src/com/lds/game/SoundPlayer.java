@@ -3,10 +3,8 @@ package com.lds.game;
 import java.util.HashMap;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.media.SoundPool;
-import android.content.Context.*;
 
 public class SoundPlayer 
 {

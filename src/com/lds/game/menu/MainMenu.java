@@ -1,5 +1,10 @@
 package com.lds.game.menu;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -38,6 +43,7 @@ public class MainMenu extends Activity
 	public boolean vibrateSettingMain = true;
 	public Context context;
 	public SeekBar mSeekBar;
+	private ViewAnimator animator;
     
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -54,7 +60,7 @@ public class MainMenu extends Activity
 		list.setAdapter(adapter);
 		
 		//set up ViewAnimator with animations
-		final ViewAnimator animator = (ViewAnimator)findViewById(R.id.MM_LeftViewAnimator);
+		animator = (ViewAnimator)findViewById(R.id.MM_LeftViewAnimator);
 		final Animation fadeIn = AnimationUtils.loadAnimation(this, R.anim.fade_in);
 		animator.setInAnimation(fadeIn);
 		final Animation fadeOut = AnimationUtils.loadAnimation(this, R.anim.fade_out);
@@ -97,9 +103,64 @@ public class MainMenu extends Activity
 		godMode.setVisibility(View.INVISIBLE);
 		noclip.setVisibility(View.INVISIBLE);
 		
+		//Internal Storage Data stuff
+		try
+		{
+			FileInputStream fis = openFileInput("effect_volume");
+			byte[] buffer = new byte[4];
+			fis.read(buffer, 0, 4);
+			SoundPlayer.effectVolume = StorageHelper.byteArrayToFloat(buffer);
+			fis.close();
+		}
+		catch (FileNotFoundException e) { e.printStackTrace(); } 
+		catch (IOException e) { e.printStackTrace(); }
+		catch (ArrayIndexOutOfBoundsException e) { e.printStackTrace(); }
+		
+		try
+		{
+			FileInputStream fis = openFileInput("vibration_enabled");
+			byte[] buffer = new byte[1];
+			fis.read(buffer, 0, 1);
+			GameRenderer.vibrateSetting = (buffer[0] != 0);
+			fis.close();
+		}
+		catch (FileNotFoundException e) { e.printStackTrace(); } 
+		catch (IOException e) { e.printStackTrace(); }
+		catch (ArrayIndexOutOfBoundsException e) { e.printStackTrace(); }
+		
+		try
+		{
+			FileInputStream fis = openFileInput("music_enabled");
+			byte[] buffer = new byte[1];
+			fis.read(buffer, 0, 1);
+			SoundPlayer.enableMusic = (buffer[0] != 0);
+			fis.close();
+		}
+		catch (FileNotFoundException e) { e.printStackTrace(); } 
+		catch (IOException e) { e.printStackTrace(); }
+		catch (ArrayIndexOutOfBoundsException e) { e.printStackTrace(); }
+		
+		try
+		{
+			FileInputStream fis = openFileInput("sound_enabled");
+			byte[] buffer = new byte[1];
+			fis.read(buffer, 0, 1);
+			SoundPlayer.enableSound = (buffer[0] != 0);
+			fis.close();
+		}
+		catch (FileNotFoundException e) { e.printStackTrace(); } 
+		catch (IOException e) { e.printStackTrace(); }
+		catch (ArrayIndexOutOfBoundsException e) { e.printStackTrace(); }
+		
 		//suffs
 		volumeControl.setMax(100);
-		volumeControl.setProgress(1);
+		final int volume = (int)(SoundPlayer.effectVolume * 100);
+		volumeControl.setProgress(volume);
+		seekBarValue.setText("Volume: " + String.valueOf(volume) + "%");
+		vibrationCheckbox.setChecked(GameRenderer.vibrateSetting);
+		volumeCheckbox.setChecked(SoundPlayer.enableSound);
+		enableMusic.setChecked(SoundPlayer.enableMusic);
+		
 		//mSeekBar.setMax(100);
 		//mSeekBar.setProgress(1);
 		
@@ -159,8 +220,16 @@ public class MainMenu extends Activity
         	public void onProgressChanged(SeekBar volumeControl, int progress, boolean fromTouch)	
         	{	
         		seekBarValue.setText("Volume: " + String.valueOf(progress) + "%");
+        		final float newVol = ((float)(Integer.parseInt(String.valueOf(progress))))/100;
         		SoundPlayer.effectVolume = ((float)(Integer.parseInt(String.valueOf(progress))))/100;
-        		System.out.println(SoundPlayer.effectVolume);
+        		try 
+        		{
+        			FileOutputStream fos = openFileOutput("effect_volume", MODE_PRIVATE);
+        			fos.write(StorageHelper.floatToByteArray(newVol));
+        			fos.close();
+        		} 
+        		catch (FileNotFoundException e) { e.printStackTrace(); } 
+        		catch (IOException e) { e.printStackTrace(); }
         	}
             public void onStartTrackingTouch(SeekBar volumeControl)	{	}
             public void onStopTrackingTouch(SeekBar volumeControl)	{	}	
@@ -170,18 +239,18 @@ public class MainMenu extends Activity
 		{
 		    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
 		    {
-		        if ( isChecked )
-		        {
-		        	vibrator(100);
-		            GameRenderer.vibrateSetting = true;
-		            System.out.println("TRUE IS VIBRATING");
-		        }
-		        else
-		        {
-		        	vibrator(100);
-		        	GameRenderer.vibrateSetting = false;
-		        	System.out.println("FALSE IS VIBRATING");
-		        }
+		    	GameRenderer.vibrateSetting = isChecked;
+		    	byte[] value = new byte[1];
+		    	if (isChecked) value[0] = 1;
+		    	else value[0] = 0;
+		    	try 
+        		{
+        			FileOutputStream fos = openFileOutput("vibration_enabled", MODE_PRIVATE);
+        			fos.write(value);
+        			fos.close();
+        		} 
+        		catch (FileNotFoundException e) { e.printStackTrace(); } 
+        		catch (IOException e) { e.printStackTrace(); }
 		    }
 		});
 		
@@ -234,16 +303,18 @@ public class MainMenu extends Activity
 		{
 		    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
 		    {
-		        if ( isChecked )
-		        {
-		        	vibrator(100);
-		        	SoundPlayer.enableMusic = true;
-		        }
-		        else
-		        {
-		        	vibrator(100);
-		        	SoundPlayer.enableMusic = false;
-		        }
+		    	SoundPlayer.enableMusic = isChecked;
+		    	byte[] value = new byte[1];
+		    	if (isChecked) value[0] = 1;
+		    	else value[0] = 0;
+		    	try 
+        		{
+        			FileOutputStream fos = openFileOutput("music_enabled", MODE_PRIVATE);
+        			fos.write(value);
+        			fos.close();
+        		} 
+        		catch (FileNotFoundException e) { e.printStackTrace(); } 
+        		catch (IOException e) { e.printStackTrace(); }
 		    }
 		});
 		
@@ -251,16 +322,18 @@ public class MainMenu extends Activity
 		{
 		    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
 		    {
-		        if ( isChecked )
-		        {
-		        	vibrator(100);
-		        	SoundPlayer.enableSound = true;
-		        }
-		        else
-		        {
-		        	vibrator(100);
-		        	SoundPlayer.enableSound = false;
-		        }
+		    	SoundPlayer.enableSound = isChecked;
+		    	byte[] value = new byte[1];
+		    	if (isChecked) value[0] = 1;
+		    	else value[0] = 0;
+		    	try 
+        		{
+        			FileOutputStream fos = openFileOutput("sound_enabled", MODE_PRIVATE);
+        			fos.write(value);
+        			fos.close();
+        		} 
+        		catch (FileNotFoundException e) { e.printStackTrace(); } 
+        		catch (IOException e) { e.printStackTrace(); }
 		    }
 		});
 		    
@@ -298,11 +371,13 @@ public class MainMenu extends Activity
 						break;
 					case 1:
 						//Run Tutorial Level
-						animator.setDisplayedChild(0);
+						if (animator.getDisplayedChild() != 0)
+							animator.setDisplayedChild(0);
 						break;
 					case 2:
 						//Settings
-						animator.setDisplayedChild(1);
+						if (animator.getDisplayedChild() != 1)
+							animator.setDisplayedChild(1);
 						break;
 					case 3:
 						//Donate Button
@@ -311,22 +386,33 @@ public class MainMenu extends Activity
 						break;
 					case 4:
 						//About YTF
-						animator.setDisplayedChild(2);
+						if (animator.getDisplayedChild() != 2)
+							animator.setDisplayedChild(2);
 						break;
 					case 5:
 						//About LDS
-						animator.setDisplayedChild(3);
+						if (animator.getDisplayedChild() != 3)
+							animator.setDisplayedChild(3);
 						break;
 					case 6:
 						//Credits
-						animator.setDisplayedChild(4);
+						if (animator.getDisplayedChild() != 4)
+							animator.setDisplayedChild(4);
 						break;
 					case 7:
 						//Logo
-						animator.setDisplayedChild(5);
+						if (animator.getDisplayedChild() != 5)
+							animator.setDisplayedChild(5);
 				}
 			}	
 		});
+	}
+	
+	@Override
+	public void onBackPressed()
+	{
+		if (animator.getDisplayedChild() != 5)
+			animator.setDisplayedChild(5);
 	}
 
 	@Override

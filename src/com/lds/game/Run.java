@@ -138,6 +138,12 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 	}
 	
 	@Override
+	public void onBackPressed()
+	{
+		
+	}
+	
+	@Override
 	protected void onResume ()
 	{
 		super.onResume();
