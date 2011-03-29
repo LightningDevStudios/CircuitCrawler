@@ -80,25 +80,32 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 			}
 		}
 		mp.reset();
-        try {
+        try 
+        {
 			mp.setDataSource("/sdcard/song2.mp3");
-		} catch (IllegalArgumentException e1) {
-			// TODO Auto-generated catch block
+		} 
+        catch (IllegalArgumentException e1) 
+		{
 			e1.printStackTrace();
-		} catch (IllegalStateException e1) {
-			// TODO Auto-generated catch block
+		} 
+		catch (IllegalStateException e1) 
+		{
 			e1.printStackTrace();
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
+		} 
+		catch (IOException e1)
+		{
 			e1.printStackTrace();
 		}
-        try {
+        try 
+        {
 			mp.prepare();
-		} catch (IllegalStateException e) {
-			// TODO Auto-generated catch block
+		} 
+        catch (IllegalStateException e) 
+        {
 			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
+		} 
+        catch (IOException e)
+        {
 			e.printStackTrace();
 		}
         mp.start();
@@ -108,25 +115,32 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
                 public void onCompletion(MediaPlayer arg0) 
                 {
                 	mp.reset();
-                    try {
+                    try 
+                    {
 						mp.setDataSource("/sdcard/song2.mp3");
-					} catch (IllegalArgumentException e) {
-						// TODO Auto-generated catch block
+					} 
+                    catch (IllegalArgumentException e) 
+                    {
 						e.printStackTrace();
-					} catch (IllegalStateException e) {
-						// TODO Auto-generated catch block
+					} 
+                    catch (IllegalStateException e) 
+                    {
 						e.printStackTrace();
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
+					} 
+                    catch (IOException e) 
+                    {
 						e.printStackTrace();
 					}
-                    try {
+                    try 
+                    {
 						mp.prepare();
-					} catch (IllegalStateException e) {
-						// TODO Auto-generated catch block
+					} 
+                    catch (IllegalStateException e) 
+                    {
 						e.printStackTrace();
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
+					} 
+                    catch (IOException e)
+                    {
 						e.printStackTrace();
 					}
                     mp.start();   
@@ -164,7 +178,6 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
                 Log.w("Bytes: ", ((Integer)length).toString()); 
                 Log.w("value", buffer.toString()); 
         } 
-        //Close the streams 
         copyFilesStream.flush(); 
         copyFilesStream.close(); 
         copyFilesInputStream.close(); 
@@ -182,7 +195,6 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
                 Log.w("Bytes: ", ((Integer)length).toString()); 
                 Log.w("value", buffer.toString()); 
         } 
-        //Close the streams 
         copyFilesStream.flush(); 
         copyFilesStream.close(); 
         copyFilesInputStream.close(); 
