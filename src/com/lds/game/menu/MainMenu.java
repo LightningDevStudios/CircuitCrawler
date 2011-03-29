@@ -4,6 +4,7 @@ import java.io.FileDescriptor;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -97,7 +98,8 @@ public class MainMenu extends Activity
 		final TextView cheatText = (TextView)findViewById(R.id.cheatText);
 		godMode.setVisibility(View.INVISIBLE);
 		noclip.setVisibility(View.INVISIBLE);
-		
+		final ProgressDialog pd = ProgressDialog.show(this,"Loading","...Please wait.",true, false);
+		pd.hide();
 		//suffs
 		volumeControl.setMax(100);
 		volumeControl.setProgress(1);
@@ -293,6 +295,16 @@ public class MainMenu extends Activity
 				{
 					case 0:
 						//Run Game
+						pd.show();
+						new Thread(new Runnable()
+						{
+							public void run()
+							{
+								whileLoading();
+								pd.dismiss();
+							}
+						}).start();
+						
 						Intent i = new Intent(MainMenu.this, Run.class);
 						startActivity(i);
 						break;
@@ -330,6 +342,22 @@ public class MainMenu extends Activity
 	protected void onResume()
 	{
 		super.onResume();
+	}
+	
+	public void whileLoading()
+	{
+		while(true)
+		{
+			try 
+			{
+				Thread.sleep(10000);
+			} catch (InterruptedException e) 
+			{
+				e.printStackTrace();
+			}
+			System.out.println("OMG");
+			break;
+		}
 	}
 	
 	@Override

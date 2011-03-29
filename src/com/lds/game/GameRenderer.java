@@ -39,7 +39,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	public OnGameInitializedListener gameInitializedListener;
 	public OnPuzzleActivatedListener puzzleActivatedListener;
 	public OnGameOverListener gameOverListener;
-	public float time, timer, timer2;
+	public static float time, timer, timer2, afterTickTimer, beforeTickTimer;
 	public boolean test;
 	MediaPlayer mp;
 	
@@ -73,7 +73,9 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		
 		//start the timer and use an initial tick to prevent errors where elapsed time is a very large negative number
 		Stopwatch.restartTimer();
+		beforeTickTimer = Stopwatch.elapsedTimeMs();
 		Stopwatch.tick();
+		afterTickTimer = Stopwatch.elapsedTimeMs();
 		playerMoveTimeMs = Stopwatch.elapsedTimeMs();
 
 

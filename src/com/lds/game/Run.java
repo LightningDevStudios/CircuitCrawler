@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
@@ -15,8 +16,10 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ProgressBar;
 
 import com.lds.Graphics;
+import com.lds.Stopwatch;
 import com.lds.game.event.*;
 import com.lds.game.menu.MainMenu;
 import com.lds.game.puzzle.PuzzleActivity;
@@ -28,36 +31,24 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 	public Graphics glSurface;
 	public GameRenderer gameR;
 	public static boolean songOver;
+	public static float timer = 0;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
 		
-		 Thread background = new Thread (new Runnable()
-		 {
-	           public void run() 
-	           {
-	        	   //ProgressDialog pDialog = ProgressDialog.show(Run.this, "", "Loading...");
-	        	   MediaPlayer mp = MediaPlayer.create(getBaseContext(), R.raw.song2); 
-	        	   mp.start();
-	           }
-	        });
-	    background.start();
-		
-		//RefreshHandler = new RefreshHandler();
-		//new PlaySong().execute(mp);
-		
-		//Grab screen information
 		DisplayMetrics screen = new DisplayMetrics();
 		getWindowManager().getDefaultDisplay().getMetrics(screen);
 		float screenX = (float)screen.widthPixels;
 		float screenY = (float)screen.heightPixels;
 		
+		
 		//set proper volume to adjust with +/- buttons
 		setVolumeControlStream(AudioManager.STREAM_MUSIC);
 		
-		//retrieve game if the activity restarts
+		
+
 		final Object data = getLastNonConfigurationInstance();
 		
 		//set up OpenGL rendering
@@ -72,16 +63,21 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 		gameR.setGameInitializedEvent(this);
 		glSurface = new Graphics(this, gameR, syncObj);
 		
-		//pDialog.dismiss();
 		setContentView(glSurface);
 	}
+		
 
+
+	
+	
 	@Override
 	public void onGameInitialized()
 	{
 		gameR.setGameOverEvent(this);
 		gameR.setPuzzleActivatedEvent(this);
 	}
+	
+
 	
 	@Override
 	public void onGameOver()
