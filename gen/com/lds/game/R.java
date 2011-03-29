@@ -34,7 +34,7 @@ public final class R {
     }
     public static final class id {
         public static final int About=0x7f0a0000;
-        public static final int Cheats=0x7f0a0010;
+        public static final int Cheats=0x7f0a000d;
         public static final int CircuitCrawlerLogo=0x7f0a0003;
         public static final int EnableMusic=0x7f0a000a;
         public static final int LDS_Button=0x7f0a0001;
@@ -43,16 +43,13 @@ public final class R {
         public static final int MM_Main=0x7f0a0004;
         public static final int MM_RightListView=0x7f0a0007;
         public static final int YTF_Button=0x7f0a0002;
-        public static final int antiText=0x7f0a000c;
-        public static final int cheatText=0x7f0a0011;
+        public static final int cheatText=0x7f0a000e;
         public static final int checkbox=0x7f0a0008;
-        public static final int enableShaders=0x7f0a000b;
-        public static final int god=0x7f0a0012;
-        public static final int noclip=0x7f0a0013;
-        public static final int seek=0x7f0a000d;
-        public static final int volume=0x7f0a000f;
+        public static final int god=0x7f0a000f;
+        public static final int noclip=0x7f0a0010;
+        public static final int volume=0x7f0a000c;
         public static final int volumeCheckbox=0x7f0a0009;
-        public static final int volumeText=0x7f0a000e;
+        public static final int volumeText=0x7f0a000b;
     }
     public static final class layout {
         public static final int about_lds=0x7f030000;
@@ -62,6 +59,7 @@ public final class R {
         public static final int list_item=0x7f030004;
         public static final int main=0x7f030005;
         public static final int settings=0x7f030006;
+        public static final int tutorial=0x7f030007;
     }
     public static final class raw {
         public static final int baricons=0x7f060000;

@@ -20,7 +20,7 @@
         android:layout_height="wrap_content"
         android:text="Enable Music" 
         android:checked="true"/>
-    <CheckBox android:id="@+id/enableShaders"
+   <!-- <CheckBox android:id="@+id/enableShaders"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Enable Shaders" 
@@ -38,7 +38,7 @@
  		android:layout_width="fill_parent"
  		android:layout_height="wrap_content"
 		android:layout_margin="10px"
-	/>
+	/> -->
 	<TextView
 		android:id="@+id/volumeText"
 		android:layout_width="wrap_content"

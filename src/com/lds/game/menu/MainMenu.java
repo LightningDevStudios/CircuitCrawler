@@ -27,13 +27,11 @@ import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 import android.widget.ViewAnimator;
 
-import com.lds.game.Game;
 import com.lds.game.GameRenderer;
 import com.lds.game.R;
 import com.lds.game.Run;
 import com.lds.game.SoundPlayer;
 import com.lds.game.entity.Player;
-
 
 public class MainMenu extends Activity
 {	
@@ -64,8 +62,8 @@ public class MainMenu extends Activity
 		animator.setAnimateFirstView(true);
 		
 		//add views to ViewAnimator
-		final View ccLogo = View.inflate(this, R.layout.circuit_crawler_logo, null);
-		animator.addView(ccLogo, 0);
+		final View tutorial = View.inflate(this, R.layout.tutorial, null);
+		animator.addView(tutorial, 0);
 		final View settings = View.inflate(this, R.layout.settings, null);
 		animator.addView(settings, 1);
 		final View aboutYTF = View.inflate(this, R.layout.about_ytf, null);
@@ -74,19 +72,23 @@ public class MainMenu extends Activity
 		animator.addView(aboutLDS, 3);
 		final View credits = View.inflate(this, R.layout.credits, null);
 		animator.addView(credits, 4);
+		final View ccLogo = View.inflate(this, R.layout.circuit_crawler_logo, null);
+		animator.addView(ccLogo, 5);
+		
+		animator.setDisplayedChild(5);
 		
 		//Boxes n' Shit
 		final CheckBox vibrationCheckbox = (CheckBox) findViewById(R.id.checkbox);
 		final CheckBox volumeCheckbox = (CheckBox) findViewById(R.id.volumeCheckbox);
 		final CheckBox enableMusic = (CheckBox) findViewById(R.id.EnableMusic);
-		final CheckBox enableShaders = (CheckBox) findViewById(R.id.enableShaders);
-		final SeekBar mSeekBar = (SeekBar)findViewById(R.id.seek);
+		//final CheckBox enableShaders = (CheckBox) findViewById(R.id.enableShaders);
+		//final SeekBar mSeekBar = (SeekBar)findViewById(R.id.seek);
 		final SeekBar volumeControl = (SeekBar)findViewById(R.id.volume);
 		final Button ldsButton = (Button)findViewById(R.id.LDS_Button);
 		final Button ytfButton = (Button)findViewById(R.id.YTF_Button);
 		final Button cheatButton = (Button)findViewById(R.id.Cheats);
 		final TextView seekBarValue = (TextView)findViewById(R.id.volumeText);
-		final TextView antiTextbar = (TextView)findViewById(R.id.antiText);
+		//final TextView antiTextbar = (TextView)findViewById(R.id.antiText);
 		final AlertDialog.Builder alert = new AlertDialog.Builder(this);
 		final EditText input = new EditText(this);
 		final CheckBox godMode = (CheckBox) findViewById(R.id.god);
@@ -98,11 +100,11 @@ public class MainMenu extends Activity
 		//suffs
 		volumeControl.setMax(100);
 		volumeControl.setProgress(1);
-		mSeekBar.setMax(100);
-		mSeekBar.setProgress(1);
+		//mSeekBar.setMax(100);
+		//mSeekBar.setProgress(1);
 		
 		//Action Suffs
-        mSeekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener()
+       /* mSeekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener()
         {
         	public void onProgressChanged(SeekBar seekBar, int progress, boolean fromTouch)	
         	{	
@@ -111,7 +113,7 @@ public class MainMenu extends Activity
         	}
             public void onStartTrackingTouch(SeekBar seekBar)	{	}
             public void onStopTrackingTouch(SeekBar seekBar)	{	}	
-        });
+        });*/
         
         cheatButton.setOnClickListener(new View.OnClickListener()
 		{
@@ -128,13 +130,13 @@ public class MainMenu extends Activity
 					public void onClick(DialogInterface dialog, int whichButton) 
 					{
 						Editable value = input.getText();
-						if(value.toString().compareTo("PASSW0rd;") == 0) // DONT LOOK AT THIS!
-								{
-									godMode.setVisibility(View.VISIBLE);
-									noclip.setVisibility(View.VISIBLE);
-									cheatText.setVisibility(View.VISIBLE);
-									cheatText.setText("Correct!");
-								}
+						if(value.toString().compareTo("PASSW0rd;") == 0) // DONT LOOK AT THIS! //lol UMADBRO? - Devin
+						{
+							godMode.setVisibility(View.VISIBLE);
+							noclip.setVisibility(View.VISIBLE);
+							cheatText.setVisibility(View.VISIBLE);
+							cheatText.setText("Correct!");
+						}
 						else
 						{
 							cheatText.setVisibility(View.VISIBLE);
@@ -213,7 +215,7 @@ public class MainMenu extends Activity
 		    }
 		});
 		
-		enableShaders.setOnCheckedChangeListener(new OnCheckedChangeListener()
+		/*enableShaders.setOnCheckedChangeListener(new OnCheckedChangeListener()
 		{
 		    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
 		    {
@@ -226,7 +228,7 @@ public class MainMenu extends Activity
 		        	vibrator(100);
 		        }
 		    }
-		});
+		});*/
 		
 		enableMusic.setOnCheckedChangeListener(new OnCheckedChangeListener()
 		{
@@ -273,7 +275,6 @@ public class MainMenu extends Activity
 		});
 			
 		//YTF Button
-		
 		ytfButton.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)
@@ -282,6 +283,8 @@ public class MainMenu extends Activity
 				startActivity(browserIntent);
 			}
 		}); 
+		
+		//Side Menu
 		list.setOnItemClickListener(new OnItemClickListener()
 		{
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id)
@@ -295,7 +298,6 @@ public class MainMenu extends Activity
 						break;
 					case 1:
 						//Run Tutorial Level
-						//for now, just takes us back to logo
 						animator.setDisplayedChild(0);
 						break;
 					case 2:
@@ -318,7 +320,11 @@ public class MainMenu extends Activity
 					case 6:
 						//Credits
 						animator.setDisplayedChild(4);
-						}
+						break;
+					case 7:
+						//Logo
+						animator.setDisplayedChild(5);
+				}
 			}	
 		});
 	}

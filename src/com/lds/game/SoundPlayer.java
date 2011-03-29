@@ -3,8 +3,10 @@ package com.lds.game;
 import java.util.HashMap;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.media.SoundPool;
+import android.content.Context.*;
 
 public class SoundPlayer 
 {
@@ -15,7 +17,7 @@ public class SoundPlayer
 	public static final int SONG1 = 5;
 	public static final int SONG2 = 6;
 	public static boolean enableSound = true, enableMusic = true;
-	public static float effectVolume = 1;
+	public static float effectVolume = 0;
 	
 	private static SoundPlayer p_sp;
 	
