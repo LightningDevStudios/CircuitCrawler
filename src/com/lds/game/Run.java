@@ -160,46 +160,26 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
         {
                 public void onCompletion(MediaPlayer mp) 
                 {
-                	if((Math.random()*2 + 1) == 2)
-                	{
-	                	mp.reset();
-	                    try 
-	                    {
-							mp.setDataSource("/sdcard/song2.mp3");
-						} 
-	                    catch (IllegalArgumentException e) 
-	                    {
-							e.printStackTrace();
-						} 
-	                    catch (IllegalStateException e) 
-	                    {
-							e.printStackTrace();
-						} 
-	                    catch (IOException e) 
-	                    {
-							e.printStackTrace();
-						}
-                	}
-                	else
-                	{
-                		mp.reset();
-	                    try 
-	                    {
-							mp.setDataSource("/sdcard/song1.mp3");
-						} 
-	                    catch (IllegalArgumentException e) 
-	                    {
-							e.printStackTrace();
-						} 
-	                    catch (IllegalStateException e) 
-	                    {
-							e.printStackTrace();
-						} 
-	                    catch (IOException e) 
-	                    {
-							e.printStackTrace();
-						}
-                	}
+                	mp.reset();
+                    try 
+                    {
+                    	if((Math.random()*2 + 1) == 2)
+                    		mp.setDataSource("/sdcard/song2.mp3");
+                    	else
+                    		mp.setDataSource("/sdcard/song1.mp3");
+					} 
+                    catch (IllegalArgumentException e) 
+                    {
+						e.printStackTrace();
+					} 
+                    catch (IllegalStateException e) 
+                    {
+						e.printStackTrace();
+					} 
+                    catch (IOException e) 
+                    {
+						e.printStackTrace();
+					}
                     try 
                     {
 						mp.prepare();
