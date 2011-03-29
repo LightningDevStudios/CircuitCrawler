@@ -1,10 +1,17 @@
 package com.lds.game;
 
+import java.io.IOException;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.media.AudioManager;
+import android.media.MediaPlayer;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
 
@@ -19,12 +26,14 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 	
 	public Graphics glSurface;
 	public GameRenderer gameR;
+	public static boolean songOver;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		
+		//RefreshHandler = new RefreshHandler();
+		//new PlaySong().execute(mp);
 		//Grab screen information
 		DisplayMetrics screen = new DisplayMetrics();
 		getWindowManager().getDefaultDisplay().getMetrics(screen);
@@ -50,7 +59,7 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 		glSurface = new Graphics(this, gameR, syncObj);
 		setContentView(glSurface);
 	}
-	
+
 	@Override
 	public void onGameInitialized()
 	{
