@@ -265,6 +265,7 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 	protected void onDestroy()
 	{
 		super.onDestroy();
+		mp.stop();
 	}
 	
 	@Override
