@@ -373,7 +373,7 @@ public class Game
 		textbox = new UITextBox(112, 32, UIPosition.TOPLEFT);
 		textbox.autoPadding(5.0f, 5.0f, 0.0f, 0.0f);
 		textbox.enableTextureMode(someText);
-		textbox.setText("");
+		textbox.setText("lol penis");
 		
 		UIList.add(healthBar);
 		UIList.add(healthBarCover);
@@ -444,6 +444,14 @@ public class Game
 		tilesetMaxX = (int)((Math.ceil(maxX + tilesetHalfWidth) - 1) / Tile.TILE_SIZE_F);
 		tilesetMinY = (int)((Math.abs(maxY - tilesetHalfHeight) - 1) / Tile.TILE_SIZE_F);
 		tilesetMaxY = (int)((Math.ceil(Math.abs(minY - tilesetHalfHeight)) - 1) / Tile.TILE_SIZE_F);
+		if(tilesetMinX < 0)
+			tilesetMinX = 0;
+		if(tilesetMinY < 0)
+			tilesetMinY = 0;
+		if (tilesetMaxX > tileset[0].length - 1)
+			tilesetMaxX = tileset[0].length - 1;
+		if (tilesetMaxY > tileset.length - 1)
+			tilesetMaxY = tileset.length - 1	;
 	}
 	
 	public void updateCameraPosition()
