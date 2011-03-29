@@ -410,7 +410,7 @@ Parse A Tileset
 		}
 		else if (type.equalsIgnoreCase("EffectEndGame"))
 		{
-			effect = new EffectEndGame(null);
+			effect = new EffectEndGame(null, false);
 		}
 		else if (type.equalsIgnoreCase("EffectRaiseBridge"))
 		{

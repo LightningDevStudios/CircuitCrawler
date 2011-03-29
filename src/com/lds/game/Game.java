@@ -747,8 +747,8 @@ public class Game
 	
 	public void setGameOverEvent(OnGameOverListener listener)
 	{
-		triggerList.add(new Trigger(new CauseDoneScaling(player), new EffectEndGame(listener)));
-		triggerList.add(new Trigger(new CausePlayerHealth(0, player), new EffectEndGame(listener)));
+		triggerList.add(new Trigger(new CauseDoneScaling(player), new EffectEndGame(listener, false)));
+		triggerList.add(new Trigger(new CausePlayerHealth(0, player), new EffectEndGame(listener, false)));
 	}
 	
 	public void updateFingers()

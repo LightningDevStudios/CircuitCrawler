@@ -280,10 +280,12 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 
 	
 	@Override
-	public void onGameOver()
+	public void onGameOver(boolean winning)
 	{
 		//Intent i = new Intent(Run.this, MainMenu.class);
 		//startActivity(i);
+		if (winning && levelIndex > unlockedLevel)
+			unlockedLevel++;
 		mp.stop();
 		finish();
 	}

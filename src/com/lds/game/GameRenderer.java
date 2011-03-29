@@ -43,7 +43,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	public static float time, timer, timer2, afterTickTimer, beforeTickTimer;
 	public boolean test;
 	MediaPlayer mp;
-	public boolean paused;
+	public boolean paused, winning;
 	
 	public GameRenderer (float screenW, float screenH, Context context, Object syncObj, int levelId)
 	{
@@ -57,6 +57,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		test = true;
 		SoundPlayer.getInstance().initialize(context);
 		paused = false;
+		winning = false;
 	}
 	
 	
@@ -574,7 +575,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	
 	public void gameOver ()
 	{
-		gameOverListener.onGameOver();
+		gameOverListener.onGameOver(winning);
 	}
 	
 	public void clearTouchInput()
