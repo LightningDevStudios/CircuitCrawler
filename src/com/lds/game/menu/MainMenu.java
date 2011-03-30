@@ -478,9 +478,11 @@ public class MainMenu extends Activity
 							animator.setDisplayedChild(5);
 						break;
 					case 7:
-						//Logo
-						if (animator.getDisplayedChild() != 6)
-							animator.setDisplayedChild(6);
+						//Quit
+						moveTaskToBack(true);
+						finish();
+						System.exit(0);
+						android.os.Process.killProcess(android.os.Process.myPid());
 				}
 			}	
 		});
