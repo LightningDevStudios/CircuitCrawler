@@ -67,17 +67,4 @@ public class SoundPlayer
 			pool.play(poolMap.get(sound), volume, volume, 1, 0, 1.0f);
 		}
 	}
-	
-	public void playMusic(int sound)
-	{
-		if(enableMusic)
-		{
-			AudioManager mgr = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
-			float streamVolumeCurrent = mgr.getStreamVolume(AudioManager.STREAM_MUSIC);
-			float streamVolumeMax = mgr.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
-			float volume = streamVolumeCurrent / streamVolumeMax * musicVolume;
-		
-			pool.play(poolMap.get(sound), volume, volume, 1, 0, 1.0f);
-		}
-	}
 }

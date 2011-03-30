@@ -83,9 +83,12 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 		{
 			saveas(R.raw.song2);
 			mp.setDataSource("/sdcard/circutCrawler/media/audio/songs/song2.mp3");
-			mp.prepare();
-			mp.setVolume(SoundPlayer.musicVolume, SoundPlayer.musicVolume);
-	        mp.start();
+			if (SoundPlayer.enableMusic)
+			{
+				mp.prepare();
+				mp.setVolume(SoundPlayer.musicVolume, SoundPlayer.musicVolume);
+				mp.start();
+			}
 		} 
 		catch (Exception e) 
 		{
@@ -99,9 +102,12 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
                 	try
                 	{
 	                	mp.reset();
-	                	mp.prepare();
-	        			mp.setVolume(SoundPlayer.musicVolume, SoundPlayer.musicVolume);
-	        	        mp.start();
+	                	if (SoundPlayer.enableMusic)
+	        			{
+	        				mp.prepare();
+	        				mp.setVolume(SoundPlayer.musicVolume, SoundPlayer.musicVolume);
+	        				mp.start();
+	        			}
 	                }
 	                catch (Exception e) 
 	        		{
@@ -186,7 +192,7 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 		 this.getContentResolver().insert(MediaStore.Audio.Media.getContentUriForPath(k.getAbsolutePath()), values);  
 		  
 		 return true;  
-		}
+	}
 	
 	
 	@Override
@@ -196,17 +202,20 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 		gameR.setPuzzleActivatedEvent(this);
 	}
 	
-
-	
 	@Override
 	public void onGameOver(boolean winning)
 	{
-		//Intent i = new Intent(Run.this, MainMenu.class);
-		//startActivity(i);
 		if (winning && levelIndex > unlockedLevel)
+		{
 			unlockedLevel++;
-		mp.stop();
-		finish();
+			mp.stop();
+			finish();
+		}
+		else
+		{
+			Intent i = new Intent(Run.this, Run.class);
+			startActivity(i);
+		}
 	}
 	
 	@Override
@@ -276,7 +285,8 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 	@Override
 	public void onBackPressed()
 	{
-		
+		Intent i = new Intent(Run.this, MainMenu.class);
+		startActivity(i);
 	}
 	
 	@Override
@@ -284,6 +294,7 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 	{
 		super.onResume();
 		glSurface.onResume();
+		mp.start();
 	}
 	
 	@Override
@@ -291,6 +302,7 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 	{
 		super.onPause();
 		glSurface.onPause();
+		mp.pause();
 		//finish();
 	}
 	

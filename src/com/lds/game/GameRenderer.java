@@ -257,9 +257,9 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 					final int nearestTileX = nearestTile.xIndex;
 					final int nearestTileY = nearestTile.yIndex;
 					
-					for (int j = nearestTileY - 1; j < nearestTileY + 1; j++)
+					for (int j = nearestTileY - 1; j <= nearestTileY + 1; j++)
 					{
-						for (int k = nearestTileX - 1; k < nearestTileX + 1; k++)
+						for (int k = nearestTileX - 1; k <= nearestTileX + 1; k++)
 						{
 							if (j < game.tileset.length && j >= 0 && k < game.tileset[0].length && k >= 0)
 							{
