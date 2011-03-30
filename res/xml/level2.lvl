@@ -277,7 +277,7 @@
         </tileset>
       </renderMode>
       <health>100</health>
-      <AIType>PATROL</AIType>
+      <AIType>STALKER</AIType>
     </Blob>
     <Blob>
       <id>blob1</id>
@@ -295,7 +295,7 @@
         </tileset>
       </renderMode>
       <health>100</health>
-      <AIType>PATROL</AIType>
+      <AIType>STALKER</AIType>
     </Blob>
     <Blob>
       <id>blob2</id>
@@ -313,7 +313,7 @@
         </tileset>
       </renderMode>
       <health>100</health>
-      <AIType>PATROL</AIType>
+      <AIType>STALKER</AIType>
     </Blob>
     <Blob>
       <id>turretfordoor</id>
@@ -349,7 +349,7 @@
         </tileset>
       </renderMode>
       <health>100</health>
-      <AIType>PATROL</AIType>
+      <AIType>STALKER</AIType>
     </Blob>
     <Blob>
       <id>blob5</id>
@@ -367,7 +367,7 @@
         </tileset>
       </renderMode>
       <health>100</health>
-      <AIType>PATROL</AIType>
+      <AIType>STALKER</AIType>
     </Blob>
     <Blob>
       <id>blob6</id>
@@ -385,7 +385,7 @@
         </tileset>
       </renderMode>
       <health>100</health>
-      <AIType>PATROL</AIType>
+      <AIType>STALKER</AIType>
     </Blob>
     <Blob>
       <id>blobforpit</id>
@@ -711,7 +711,7 @@
     </Door>
     <PhysBlock>
       <id>physBlock1</id>
-      <size>50</size>
+      <size>32</size>
       <xPos>475.499939</xPos>
       <yPos>106.750259</yPos>
       <angle>90</angle>
@@ -724,10 +724,11 @@
           <y>0</y>
         </tileset>
       </renderMode>
+      <friction>0</friction>
     </PhysBlock>
     <PhysBall>
       <id>physBall0</id>
-      <size>50</size>
+      <size>32</size>
       <xPos>412.416626</xPos>
       <yPos>105.15004</yPos>
       <angle>90</angle>
@@ -740,10 +741,11 @@
           <y>0</y>
         </tileset>
       </renderMode>
+      <friction>0</friction>
     </PhysBall>
     <Player>
       <id>player</id>
-      <size>64</size>
+      <size>32</size>
       <xPos>300.625153</xPos>
       <yPos>-25.60418</yPos>
       <angle>90</angle>
@@ -760,28 +762,28 @@
     </Player>
   </Entities>
   <Triggers>
-    <Cause id="endgamecause" type="CauseLocation">player,502.899,574.966,-76.666,7.833</Cause>
-    <Cause id="deadBlob" type="CauseEnemyCount">7</Cause>
-    <Cause id="ENDBTN" type="CauseButton">finalbutton</Cause>
-    <Cause id="trueBTN" type="CauseButton">truebutton1</Cause>
     <Cause id="deadTurret" type="CauseEnemyCount">6</Cause>
+    <Cause id="trueBTN" type="CauseButton">truebutton1</Cause>
+    <Cause id="ENDBTN" type="CauseButton">finalbutton</Cause>
+    <Cause id="deadBlob" type="CauseEnemyCount">7</Cause>
+    <Cause id="endgamecause" type="CauseLocation">player,502.899,574.966,-76.666,7.833</Cause>
     <Cause id="OPENEVERYTHING" type="CauseAND">ENDBTN,trueBTN</Cause>
     <Cause id="win" type="CauseAND">endgamecause,OPENEVERYTHING</Cause>
-    <Effect id="endgame" type="EffectEndGame">True</Effect>
-    <Effect id="enemynode4" type="EffectActivateNodeLink">5</Effect>
-    <Effect id="enemynode3" type="EffectActivateNodeLink">4</Effect>
-    <Effect id="enemynode2" type="EffectActivateNodeLink">3</Effect>
-    <Effect id="enemynode1" type="EffectActivateNodeLink">0</Effect>
-    <Effect id="firstpit" type="EffectRaiseBridge">4,2</Effect>
-    <Effect id="doornode1" type="EffectActivateNodeLink">1</Effect>
-    <Effect id="secondpitnode" type="EffectActivateNodeLink">2</Effect>
-    <Effect id="tofinalBTN" type="EffectRaiseBridge">10,14</Effect>
-    <Effect id="toBTNfield" type="EffectDoor">buttonfieldDR</Effect>
-    <Effect id="enmydr1" type="EffectDoor">enemydoor1</Effect>
-    <Effect id="enmydr2" type="EffectDoor">enemydoor2</Effect>
-    <Effect id="enmydr3" type="EffectDoor">enemydoor3</Effect>
-    <Effect id="enmydr4" type="EffectDoor">enemydoor4</Effect>
     <Effect id="enmydr5" type="EffectDoor">finaldoor</Effect>
+    <Effect id="enmydr4" type="EffectDoor">enemydoor4</Effect>
+    <Effect id="enmydr3" type="EffectDoor">enemydoor3</Effect>
+    <Effect id="enmydr2" type="EffectDoor">enemydoor2</Effect>
+    <Effect id="enmydr1" type="EffectDoor">enemydoor1</Effect>
+    <Effect id="toBTNfield" type="EffectDoor">buttonfieldDR</Effect>
+    <Effect id="tofinalBTN" type="EffectRaiseBridge">10,14</Effect>
+    <Effect id="secondpitnode" type="EffectActivateNodeLink">2</Effect>
+    <Effect id="doornode1" type="EffectActivateNodeLink">1</Effect>
+    <Effect id="firstpit" type="EffectRaiseBridge">4,2</Effect>
+    <Effect id="enemynode1" type="EffectActivateNodeLink">0</Effect>
+    <Effect id="enemynode2" type="EffectActivateNodeLink">3</Effect>
+    <Effect id="enemynode3" type="EffectActivateNodeLink">4</Effect>
+    <Effect id="enemynode4" type="EffectActivateNodeLink">5</Effect>
+    <Effect id="endgame" type="EffectEndGame">True</Effect>
     <Trigger cause="OPENEVERYTHING" effect="enmydr5" />
     <Trigger cause="OPENEVERYTHING" effect="enmydr3" />
     <Trigger cause="OPENEVERYTHING" effect="enmydr4" />
