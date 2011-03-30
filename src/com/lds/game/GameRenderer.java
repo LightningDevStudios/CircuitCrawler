@@ -60,7 +60,6 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		charlieSheen = false;
 	}
 	
-	
 	@Override
 	public void onSurfaceCreated(GL10 gl, EGLConfig config)
 	{	
@@ -82,8 +81,6 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		Stopwatch.tick();
 		afterTickTimer = Stopwatch.elapsedTimeMs();
 		playerMoveTimeMs = Stopwatch.elapsedTimeMs();
-
-
 		
 		Entity.resetIndexBuffer();
 		
