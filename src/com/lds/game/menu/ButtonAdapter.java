@@ -54,6 +54,7 @@ public class ButtonAdapter extends BaseAdapter
 		if (position <= Run.unlockedLevel)
 		{
 			//button.setBackgroundColor(Color.GRAY);
+			button.setImageResource(R.raw.tile1);
 			button.setOnClickListener(new View.OnClickListener()
 			{
 				public void onClick(View v)
