@@ -40,6 +40,7 @@ import com.lds.game.R;
 import com.lds.game.Run;
 import com.lds.game.SoundPlayer;
 import com.lds.game.entity.Player;
+import com.lds.trigger.EffectEndGame;
 
 public class MainMenu extends Activity
 {	
@@ -236,6 +237,13 @@ public class MainMenu extends Activity
 							noclip.setVisibility(View.VISIBLE);
 							cheatText.setVisibility(View.VISIBLE);
 							cheatText.setText("Correct!");
+						}
+						else if(EffectEndGame.cheatsUnlocked)
+						{
+							godMode.setVisibility(View.VISIBLE);
+							noclip.setVisibility(View.VISIBLE);
+							cheatText.setVisibility(View.VISIBLE);
+							cheatText.setText("Unlocked!");
 						}
 						else
 						{
