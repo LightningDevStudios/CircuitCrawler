@@ -17,6 +17,8 @@ import android.widget.ImageButton;
 public class ButtonAdapter extends BaseAdapter
 {
 	private Context mContext;
+	private int[] ints = { 0, 1, 2, 3 };
+	public static int numberOfLevels = 4;
 	
 	public ButtonAdapter(Context mContext)
 	{
@@ -52,6 +54,7 @@ public class ButtonAdapter extends BaseAdapter
 		if (position <= Run.unlockedLevel)
 		{
 			//button.setBackgroundColor(Color.GRAY);
+			button.setImageResource(R.raw.tile1);
 			button.setOnClickListener(new View.OnClickListener()
 			{
 				public void onClick(View v)
@@ -66,6 +69,4 @@ public class ButtonAdapter extends BaseAdapter
 		}
 		return button;
 	}
-	
-	private int[] ints = { 0, 1, 2, 3 };
 }
