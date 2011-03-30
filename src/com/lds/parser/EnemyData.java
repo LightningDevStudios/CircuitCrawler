@@ -11,13 +11,13 @@ public class EnemyData extends CharacterData
 	public EnemyData(HashMap<String, String> enemyHM)
 	{
 		super(enemyHM);
-		if(enemyHM.get("type") != null)
+		if(enemyHM.get("AIType") != null)
 		{
-			if(enemyHM.get("type").equalsIgnoreCase("stalker"))
+			if(enemyHM.get("AIType").equalsIgnoreCase("stalker"))
 				type = AIType.STALKER;
-			else if (enemyHM.get("type").equalsIgnoreCase("patrol"))
+			else if (enemyHM.get("AIType").equalsIgnoreCase("patrol"))
 				type = AIType.PATROL;
-			else if (enemyHM.get("type").equalsIgnoreCase("turret"))
+			else if (enemyHM.get("AIType").equalsIgnoreCase("turret"))
 				type = AIType.TURRET;
 		}
 	}

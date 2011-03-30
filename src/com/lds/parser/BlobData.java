@@ -20,7 +20,7 @@ public class BlobData extends EnemyData
 	{
 		blobRef = new Blob(xPos, yPos, type, true); //TODO allow for active boolean
 		blobRef.setAngle(angle);
-		
+
 		//COLOR
 		if (color != null)
 			blobRef.enableColorMode(color[0],color[1],color[2],color[3]);
