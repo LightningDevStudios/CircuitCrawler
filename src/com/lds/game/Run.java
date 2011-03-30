@@ -56,10 +56,10 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 				levelId = R.xml.tutorial_level;
 				break;
 			case 1:
-				levelId = R.xml.tutorial;
+				levelId = R.xml.level2;
 				break;
 			case 2:
-				levelId = R.xml.level1;
+				levelId = R.xml.level5;
 				break;
 			case 3:
 				levelId = R.xml.level2;
