@@ -80,8 +80,8 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 		//set proper volume to adjust with +/- buttons
 		setVolumeControlStream(AudioManager.STREAM_MUSIC);
 		
-		if(!isSong1.exists())
-		{
+		//if(!isSong1.exists())
+		//{
 			try 
 			{
 				copyFileSong1();
@@ -90,9 +90,9 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 			{
 				e.printStackTrace();
 			}
-		}
-		if(!isSong2.exists())
-		{
+		//}
+		//if(!isSong2.exists())
+		//{
 			try 
 			{
 				copyFileSong2();
@@ -101,7 +101,7 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 			{
 				e.printStackTrace();
 			}
-		}
+		//}
 		if(((int)(Math.random()*2 + 1))== 2)
     	{
         	mp.reset();
@@ -239,7 +239,7 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 	{ 
         OutputStream copyFilesStream = new FileOutputStream("/sdcard/"); 
         InputStream copyFilesInputStream = context.getResources().openRawResource(R.raw.song1); 
-        byte[] buffer = new byte[1]; 
+        byte[] buffer = new byte[5000000]; 
         int length; 
         while ((length = copyFilesInputStream.read(buffer)) > 0 ) 
         { 
@@ -256,7 +256,7 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 	{ 
         OutputStream copyFilesStream = new FileOutputStream("/sdcard/"); 
         InputStream copyFilesInputStream = context.getResources().openRawResource(R.raw.song2); 
-        byte[] buffer = new byte[1]; 
+        byte[] buffer = new byte[5000000]; 
         int length; 
         while ((length = copyFilesInputStream.read(buffer)) > 0 ) 
         { 
