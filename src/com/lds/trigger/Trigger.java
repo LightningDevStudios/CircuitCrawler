@@ -40,4 +40,14 @@ public class Trigger
 	{
 		return firing;
 	}
+	
+	public Cause getCause()
+	{
+		return cause;
+	}
+	
+	public Effect getEffect()
+	{
+		return effect;
+	}
 }

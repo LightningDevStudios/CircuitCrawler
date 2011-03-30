@@ -13,9 +13,14 @@ public class EffectEndGame extends Effect
 		this.winning = winning;
 	}
 	
+	public void setListener(OnGameOverListener listener)
+	{
+		this.listener = listener;
+	}
+	
 	@Override
 	public void fireOutput()
 	{
-		listener.onGameOver(winning);
+		listener.onGameOver(true);
 	}
 }

@@ -51,7 +51,7 @@ public class ButtonAdapter extends BaseAdapter
 		}
 		if (position <= Run.unlockedLevel)
 		{
-			button.setBackgroundColor(Color.GRAY);
+			//button.setBackgroundColor(Color.GRAY);
 			button.setOnClickListener(new View.OnClickListener()
 			{
 				public void onClick(View v)
