@@ -285,6 +285,7 @@ Parse A Tileset
 	public void parseTriggers() throws XmlPullParserException, IOException
 	{
 		xrp.next();
+		Log.d("LDS_Game", xrp.getName());
 		while(!(xrp.getEventType() == END_TAG && xrp.getName().equals("Triggers")))
 		{
 			if(xrp.getName().equalsIgnoreCase("Cause"))
@@ -300,7 +301,14 @@ Parse A Tileset
 				String effectId= xrp.getAttributeValue(0);
 				String effectType = xrp.getAttributeValue(1);
 				xrp.next();
-				String[] effectParameters = xrp.getText().split(",");
+				String[] effectParameters;
+				if(xrp.getText() != null)
+					effectParameters = xrp.getText().split(",");
+				else
+				{
+					effectParameters = new String[1];
+					effectParameters[0] = "";
+				}
 				effectDataList.add(new EffectData(effectInitializer(effectType, effectParameters), effectId));
 			}
 			else if(xrp.getName().equalsIgnoreCase("Trigger"))

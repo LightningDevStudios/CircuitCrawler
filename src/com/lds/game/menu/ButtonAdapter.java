@@ -67,5 +67,5 @@ public class ButtonAdapter extends BaseAdapter
 		return button;
 	}
 	
-	private int[] ints = { 0, 1 };
+	private int[] ints = { 0, 1, 2, 3 };
 }

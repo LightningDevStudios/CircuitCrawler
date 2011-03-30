@@ -710,14 +710,19 @@ public class Game
 					}
 				}
 			}
-			lowestF = openList.get(0);
-			for (int i = 1; i < openList.size(); i++)
+			if (openList.isEmpty())
+				break;
+			else
 			{
-				if (openList.get(i).getF() < lowestF.getF())
-					lowestF = openList.get(i);
+				lowestF = openList.get(0);
+				for (int i = 1; i < openList.size(); i++)
+				{
+					if (openList.get(i).getF() < lowestF.getF())
+						lowestF = openList.get(i);
+				}
+				openList.remove(lowestF);
+				closedList.add(lowestF);
 			}
-			openList.remove(lowestF);
-			closedList.add(lowestF);
 			
 			if (givenUp)
 				break;
