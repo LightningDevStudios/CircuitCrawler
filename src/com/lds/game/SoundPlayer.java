@@ -51,8 +51,6 @@ public class SoundPlayer
 		poolMap.put(SHOOT_SOUND, pool.load(context, R.raw.shootsound, 1));
 		poolMap.put(ENEMY_DEATH, pool.load(context, R.raw.enemydeath, 1));
 		poolMap.put(PIT_FALL, pool.load(context, R.raw.pitfall, 1));
-		//poolMap.put(SONG1, pool.load(context, R.raw.song1, 1));
-		//poolMap.put(SONG2, pool.load(context, R.raw.song2, 1));
 	}
 	
 	public void playSound(int sound)
@@ -63,19 +61,6 @@ public class SoundPlayer
 			float streamVolumeCurrent = mgr.getStreamVolume(AudioManager.STREAM_MUSIC);
 			float streamVolumeMax = mgr.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
 			float volume = streamVolumeCurrent / streamVolumeMax * effectVolume;
-		
-			pool.play(poolMap.get(sound), volume, volume, 1, 0, 1.0f);
-		}
-	}
-	
-	public void playMusic(int sound)
-	{
-		if(enableMusic)
-		{
-			AudioManager mgr = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
-			float streamVolumeCurrent = mgr.getStreamVolume(AudioManager.STREAM_MUSIC);
-			float streamVolumeMax = mgr.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
-			float volume = streamVolumeCurrent / streamVolumeMax * musicVolume;
 		
 			pool.play(poolMap.get(sound), volume, volume, 1, 0, 1.0f);
 		}

@@ -85,7 +85,6 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 		setContentView(glSurface);
 	}
 	
-	//FUCK this finally works
 	public boolean saveas(int ressound)
 	{  
 		 byte[] buffer=null;  
@@ -258,6 +257,8 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 				return true;
 			case R.id.main_menu:
 				//return to main menu
+				Intent i = new Intent(Run.this, MainMenu.class);
+				startActivity(i);
 				finish();
 				return true;
 			default:

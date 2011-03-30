@@ -47,6 +47,7 @@ public class MainMenu extends Activity
 	public Context context;
 	public SeekBar mSeekBar;
 	private ViewAnimator animator;
+	private ProgressDialog pd;
     
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -88,18 +89,19 @@ public class MainMenu extends Activity
 		animator.addView(credits, 5);
 		final View ccLogo = View.inflate(this, R.layout.circuit_crawler_logo, null);
 		animator.addView(ccLogo, 6);
-		
 		animator.setDisplayedChild(6);
 		
 		//Boxes n' Shit
 		final CheckBox vibrationCheckbox = (CheckBox) findViewById(R.id.checkbox);
 		final CheckBox volumeCheckbox = (CheckBox) findViewById(R.id.volumeCheckbox);
 		final CheckBox enableMusic = (CheckBox) findViewById(R.id.EnableMusic);
+		final SeekBar volumeControl = (SeekBar)findViewById(R.id.volume);
 		final SeekBar musicVolumeControl = (SeekBar)findViewById(R.id.volume);
 		final TextView musicVolumeSeekBarText = (TextView)findViewById(R.id.volumeText);
 		final Button ldsButton = (Button)findViewById(R.id.LDS_Button);
 		final Button ytfButton = (Button)findViewById(R.id.YTF_Button);
 		final Button cheatButton = (Button)findViewById(R.id.Cheats);
+		final TextView seekBarValue = (TextView)findViewById(R.id.volumeText);
 		final AlertDialog.Builder alert = new AlertDialog.Builder(this);
 		final EditText input = new EditText(this);
 		final CheckBox godMode = (CheckBox) findViewById(R.id.god);
@@ -107,8 +109,9 @@ public class MainMenu extends Activity
 		final TextView cheatText = (TextView)findViewById(R.id.cheatText);
 		final SeekBar effectVolumeControl = (SeekBar)findViewById(R.id.effectVolume);
 		final TextView effectVolumeSeekBarText = (TextView)findViewById(R.id.effectVolumeText);
-		godMode.setVisibility(View.INVISIBLE);
-		noclip.setVisibility(View.INVISIBLE);
+		//final CheckBox enableShaders = (CheckBox) findViewById(R.id.enableShaders);
+		//final SeekBar mSeekBar = (SeekBar)findViewById(R.id.seek);
+		
 		
 		//Internal Storage Data stuff
 		try
@@ -171,7 +174,10 @@ public class MainMenu extends Activity
 		catch (IOException e) { e.printStackTrace(); }
 		catch (ArrayIndexOutOfBoundsException e) { e.printStackTrace(); }
 		
-		//suffs
+		pd = ProgressDialog.show(this,"Loading","...Please wait.",true, false);
+		pd.hide();
+		
+		//Defaults, settings, and other stuff
 		musicVolumeControl.setMax(100);
 		final int volume = (int)(SoundPlayer.musicVolume * 100);
 		musicVolumeControl.setProgress(volume);
@@ -182,8 +188,33 @@ public class MainMenu extends Activity
 		vibrationCheckbox.setChecked(GameRenderer.vibrateSetting);
 		volumeCheckbox.setChecked(SoundPlayer.enableSound);
 		enableMusic.setChecked(SoundPlayer.enableMusic);
+		godMode.setVisibility(View.INVISIBLE);
+		noclip.setVisibility(View.INVISIBLE);
+		//mSeekBar.setMax(100);
+		//mSeekBar.setProgress(1);
+
 		
-		//Action Suffs
+		/*******************
+		 *  Action Classes *
+		 *******************/
+		
+		
+		/******************************************************************************************************************************/
+		
+		//Anti Aliasing
+       /* mSeekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener()
+        {
+        	public void onProgressChanged(SeekBar seekBar, int progress, boolean fromTouch)	
+        	{	
+        		antiTextbar.setText("Anti Aliasing: " + String.valueOf(progress) + "%");
+        		System.out.println("TROLOLOLOLOLOLOLOLOLOLOL");
+        	}
+            public void onStartTrackingTouch(SeekBar seekBar)	{	}
+            public void onStopTrackingTouch(SeekBar seekBar)	{	}	
+        });*/
+		/******************************************************************************************************************************/
+		
+		//Cheat Button
         cheatButton.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v) 
@@ -222,7 +253,9 @@ public class MainMenu extends Activity
 				alert.show();
 			}
 		});      
+        /******************************************************************************************************************************/
         
+        //Music Volume Slider
         musicVolumeControl.setOnSeekBarChangeListener(new OnSeekBarChangeListener()
         {
         	public void onProgressChanged(SeekBar volumeControl, int progress, boolean fromTouch)	
@@ -242,8 +275,10 @@ public class MainMenu extends Activity
             public void onStartTrackingTouch(SeekBar volumeControl)	{	}
             public void onStopTrackingTouch(SeekBar volumeControl)	{	}	
         });
+        /******************************************************************************************************************************/
         
-       effectVolumeControl.setOnSeekBarChangeListener(new OnSeekBarChangeListener()
+        //Music Volume Slider
+        effectVolumeControl.setOnSeekBarChangeListener(new OnSeekBarChangeListener()
         {
         	public void onProgressChanged(SeekBar volumeControl, int progress, boolean fromTouch)	
         	{	
@@ -262,7 +297,9 @@ public class MainMenu extends Activity
             public void onStartTrackingTouch(SeekBar volumeControl)	{	}
             public void onStopTrackingTouch(SeekBar volumeControl)	{	}	
         });
-       	
+        /******************************************************************************************************************************/
+        
+        //Vibration CheckBox
 		vibrationCheckbox.setOnCheckedChangeListener(new OnCheckedChangeListener()
 		{
 		    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
@@ -281,7 +318,9 @@ public class MainMenu extends Activity
         		catch (IOException e) { e.printStackTrace(); }
 		    }
 		});
+		/******************************************************************************************************************************/
 		
+		//Noclip CheckBox
 		noclip.setOnCheckedChangeListener(new OnCheckedChangeListener()
 		{
 		    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
@@ -296,7 +335,9 @@ public class MainMenu extends Activity
 		        }
 		    }
 		});
+		/******************************************************************************************************************************/
 		
+		//GodMode CheckBox
 		godMode.setOnCheckedChangeListener(new OnCheckedChangeListener()
 		{
 		    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
@@ -311,7 +352,26 @@ public class MainMenu extends Activity
 		        }
 		    }
 		});
+		/******************************************************************************************************************************/
 		
+		//Enable Shaders CheckBox
+		/*enableShaders.setOnCheckedChangeListener(new OnCheckedChangeListener()
+		{
+		    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
+		    {
+		        if ( isChecked )
+		        {
+		        	vibrator(100);
+		        }
+		        else
+		        {
+		        	vibrator(100);
+		        }
+		    }
+		});*/
+		/******************************************************************************************************************************/
+		
+		//Enable Music CheckBox
 		enableMusic.setOnCheckedChangeListener(new OnCheckedChangeListener()
 		{
 		    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
@@ -330,7 +390,9 @@ public class MainMenu extends Activity
         		catch (IOException e) { e.printStackTrace(); }
 		    }
 		});
+		/******************************************************************************************************************************/
 		
+		//Enable Sound Effects CheckBox
 		volumeCheckbox.setOnCheckedChangeListener(new OnCheckedChangeListener()
 		{
 		    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
@@ -349,7 +411,8 @@ public class MainMenu extends Activity
         		catch (IOException e) { e.printStackTrace(); }
 		    }
 		});
-		    
+		/******************************************************************************************************************************/  
+		
 		//LDS Button
 		ldsButton.setOnClickListener(new View.OnClickListener()
 		{
@@ -359,7 +422,8 @@ public class MainMenu extends Activity
 				startActivity(browserIntent);
 			}
 		});
-			
+		/******************************************************************************************************************************/	
+		
 		//YTF Button
 		ytfButton.setOnClickListener(new View.OnClickListener()
 		{
@@ -369,6 +433,7 @@ public class MainMenu extends Activity
 				startActivity(browserIntent);
 			}
 		}); 
+		/******************************************************************************************************************************/
 		
 		//Side Menu
 		list.setOnItemClickListener(new OnItemClickListener()
