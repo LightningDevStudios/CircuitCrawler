@@ -88,6 +88,7 @@ public final class R {
         public static final int main_menu=0x7f0b003b;
         public static final int noclip=0x7f0b0038;
         public static final int options_menu=0x7f0b0039;
+        public static final int quit=0x7f0b003d;
         public static final int restart=0x7f0b003a;
         public static final int resume=0x7f0b003c;
         public static final int volume=0x7f0b0032;

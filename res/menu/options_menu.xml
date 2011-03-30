@@ -9,5 +9,7 @@
         android:title="Main Menu" />
     <item 
     	android:id="@+id/resume"
-    	android:title="Resume" />
+    	android:title="Resume" >
+</item>
+<item android:id="@+id/quit" android:title="Quit"></item>
 </menu>
