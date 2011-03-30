@@ -1,24 +1,31 @@
 package com.lds.game;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.AssetManager;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.provider.MediaStore;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Menu;
@@ -74,8 +81,8 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 		//Copy mp3s from raw to /sdcard/
 		try 
 		{
-			copyFileSong2();
-			mp.setDataSource("/sdcard/song2.mp3");
+			saveas(R.raw.song2);
+			mp.setDataSource("/sdcard/circutCrawler/media/audio/songs/song2.mp3");
 			mp.prepare();
 			mp.setVolume(SoundPlayer.musicVolume, SoundPlayer.musicVolume);
 	        mp.start();
@@ -121,22 +128,65 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 		setContentView(glSurface);
 	}
 	
-	public void copyFileSong2() throws IOException
-	{ 
-        OutputStream copyFilesStream = new FileOutputStream("/sdcard/"); 
-        InputStream copyFilesInputStream = context.getResources().openRawResource(R.raw.song2); 
-        byte[] buffer = new byte[5000000]; 
-        int length; 
-        while ((length = copyFilesInputStream.read(buffer)) > 0 ) 
-        { 
-        		copyFilesStream.write(buffer); 
-                Log.w("Bytes: ", ((Integer)length).toString()); 
-                Log.w("value", buffer.toString()); 
-        } 
-        copyFilesStream.flush(); 
-        copyFilesStream.close(); 
-        copyFilesInputStream.close(); 
-	}
+	public boolean saveas(int ressound)
+	{  
+		 byte[] buffer=null;  
+		 InputStream fIn = getBaseContext().getResources().openRawResource(ressound);  
+		 int size=0;  
+		  
+		 try 
+		 {  
+			  size = fIn.available();  
+			  buffer = new byte[size];  
+			  fIn.read(buffer);  
+			  fIn.close();  
+		 } catch (IOException e) 
+		 {  
+		  return false;  
+		 }  
+		  
+		 String path="/sdcard/circutCrawler/media/audio/songs/";  
+		 String filename="song2"+".mp3";  
+		  
+		 boolean exists = (new File(path)).exists();  
+		 if (!exists){new File(path).mkdirs();}  
+		  
+		 FileOutputStream save;  
+		 try 
+		 {  
+			  save = new FileOutputStream(path+filename);  
+			  save.write(buffer);  
+			  save.flush();  
+			  save.close();  
+		 } 
+		 catch (FileNotFoundException e) 
+		 {  
+		  return false;  
+		 } 
+		 catch (IOException e)
+		 {    
+		  return false;  
+		 }      
+		  
+		 sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.parse("file://"+path+filename)));  
+		  
+		 File k = new File(path, filename);  
+		  
+		 ContentValues values = new ContentValues();  
+		 values.put(MediaStore.MediaColumns.DATA, k.getAbsolutePath());  
+		 values.put(MediaStore.MediaColumns.TITLE, "exampletitle");  
+		 values.put(MediaStore.MediaColumns.MIME_TYPE, "audio/ogg");  
+		 values.put(MediaStore.Audio.Media.ARTIST, "cssounds ");  
+		 values.put(MediaStore.Audio.Media.IS_RINGTONE, true);  
+		 values.put(MediaStore.Audio.Media.IS_NOTIFICATION, true);  
+		 values.put(MediaStore.Audio.Media.IS_ALARM, true);  
+		 values.put(MediaStore.Audio.Media.IS_MUSIC, false);  
+		  
+		 //Insert it into the database  
+		 this.getContentResolver().insert(MediaStore.Audio.Media.getContentUriForPath(k.getAbsolutePath()), values);  
+		  
+		 return true;  
+		}
 	
 	
 	@Override
