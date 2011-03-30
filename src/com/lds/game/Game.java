@@ -47,9 +47,7 @@ public class Game
 	public int tilesetMinX, tilesetMinY, tilesetMaxX, tilesetMaxY;
 	
 	//Texture data
-	public static Texture tilesetcolors;
 	public static Texture tilesetwire;
-	public static Texture randomthings;
 	public static Texture text;
 	public static Texture tilesetworld;
 	public static Texture tilesetentities;
@@ -89,9 +87,7 @@ public class Game
 	{
 		fingerList = new ArrayList<Finger>();
 		
-		tilesetcolors = new Texture(R.drawable.tilesetcolors, 128, 128, 8, 8, context, "tilesetcolors");
 		tilesetwire = new Texture(R.drawable.tilesetwire, 128, 128, 8, 8, context, "tilesetwire");
-		randomthings = new Texture(R.drawable.randomthings, 256, 256, 8, 8, context, "randomthings");
 		text = new Texture(R.drawable.text, 256, 256, 16, 8, context, "text");
 		tilesetworld = new Texture(R.drawable.tilesetworld, 512, 256, 16, 8, context, "tilesetworld");
 		tilesetentities = new Texture(R.drawable.tilesetentities, 256, 256, 8, 8, context, "tilesetentities");
@@ -121,9 +117,7 @@ public class Game
 		
 		TextureLoader tl = TextureLoader.getInstance();
 		
-		tl.loadTexture(tilesetcolors);
 		tl.loadTexture(tilesetwire);
-		tl.loadTexture(randomthings);
 		tl.loadTexture(someText);
 		tl.loadTexture(tilesetworld);
 		tl.loadTexture(tilesetentities);
