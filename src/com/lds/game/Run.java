@@ -1,7 +1,10 @@
 package com.lds.game;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -123,19 +126,25 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 	
 	public void copyFileSong2() throws IOException
 	{ 
-        OutputStream copyFilesStream = new FileOutputStream("/sdcard/"); 
-        InputStream copyFilesInputStream = context.getResources().openRawResource(R.raw.song2); 
-        byte[] buffer = new byte[5000000]; 
-        int length; 
-        while ((length = copyFilesInputStream.read(buffer)) > 0 ) 
-        { 
-        		copyFilesStream.write(buffer); 
-                Log.w("Bytes: ", ((Integer)length).toString()); 
-                Log.w("value", buffer.toString()); 
-        } 
-        copyFilesStream.flush(); 
-        copyFilesStream.close(); 
-        copyFilesInputStream.close(); 
+		File f = new File(Environment.getExternalStorageDirectory(), "song2.mp3");
+		try 
+		{
+		    if (f.createNewFile())
+		    {
+		    FileWriter write = new FileWriter(f);
+		    BufferedWriter buff = new BufferedWriter(write);
+		    BufferedInputStream AudioReader = new BufferedInputStream(getResources().openRawResource(R.raw.song2));
+		    while(AudioReader.available() > 0 )
+		    {
+		    	buff.write(AudioReader.read());
+		    }
+		    buff.close();
+		    }
+		}
+		catch (IOException e) 
+		{
+	    e.printStackTrace();
+		}
 	}
 	
 	
