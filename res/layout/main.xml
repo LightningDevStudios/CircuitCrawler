@@ -6,6 +6,9 @@ android:layout_width="fill_parent"
 android:layout_height="fill_parent"
 android:orientation="horizontal"
 android:stretchColumns="0">
+<AnalogClock  android:id="@+id/clock2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 	<RelativeLayout
 		android:id="@+id/MM_LeftParent"
 		android:layout_width="fill_parent"
