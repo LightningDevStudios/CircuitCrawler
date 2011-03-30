@@ -15,7 +15,7 @@ public class SoundPlayer
 	public static final int SONG1 = 5;
 	public static final int SONG2 = 6;
 	public static boolean enableSound = true, enableMusic = true;
-	public static float effectVolume = 0;
+	public static float effectVolume = 0, musicVolume = 0;
 	
 	private static SoundPlayer p_sp;
 	
@@ -68,16 +68,16 @@ public class SoundPlayer
 		}
 	}
 	
-	/*public void playMusic(int sound)
+	public void playMusic(int sound)
 	{
 		if(enableMusic)
 		{
 			AudioManager mgr = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
 			float streamVolumeCurrent = mgr.getStreamVolume(AudioManager.STREAM_MUSIC);
 			float streamVolumeMax = mgr.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
-			float volume = streamVolumeCurrent / streamVolumeMax * effectVolume;
+			float volume = streamVolumeCurrent / streamVolumeMax * musicVolume;
 		
 			pool.play(poolMap.get(sound), volume, volume, 1, 0, 1.0f);
 		}
-	}*/
+	}
 }

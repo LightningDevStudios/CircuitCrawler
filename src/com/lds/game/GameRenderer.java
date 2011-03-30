@@ -92,9 +92,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		
 		else
 		{
-			Game.tilesetcolors = new Texture(R.drawable.tilesetcolors, 128, 128, 8, 8, context, "tilesetcolors");
 			Game.tilesetwire = new Texture(R.drawable.tilesetwire, 128, 128, 8, 8, context, "tilesetwire");
-			Game.randomthings = new Texture(R.drawable.randomthings, 256, 256, 8, 8, context, "randomthings");
 			Game.text = new Texture(R.drawable.text, 256, 256, 16, 8, context, "text");
 			Game.tilesetworld = new Texture(R.drawable.tilesetworld, 512, 256, 16, 8, context, "tilesetworld");
 			Game.tilesetentities = new Texture(R.drawable.tilesetentities, 256, 256, 8, 8, context, "tilesetentities");
@@ -108,9 +106,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 			
 			TextureLoader.getInstance().initialize(gl);
 			TextureLoader tl = TextureLoader.getInstance();
-			tl.loadTexture(Game.tilesetcolors);
 			tl.loadTexture(Game.tilesetwire);
-			tl.loadTexture(Game.randomthings);
 			tl.loadTexture(Game.text);
 			tl.loadTexture(Game.tilesetworld);
 			tl.loadTexture(Game.tilesetentities);

@@ -64,12 +64,8 @@ public abstract class EntityData
 		if (entHM.get("texture") != null)
 		{
 			String texID = entHM.get("texID");
-			if(texID.equalsIgnoreCase("tilesetcolors"))
-				tex = Game.tilesetcolors;
-			else if(texID.equalsIgnoreCase("tilesetwire"))
+			if(texID.equalsIgnoreCase("tilesetwire"))
 				tex = Game.tilesetwire;
-			else if(texID.equalsIgnoreCase("randomthings"))
-				tex = Game.randomthings;
 			else if(texID.equalsIgnoreCase("text"))
 				tex = Game.text;
 			else if(texID.equalsIgnoreCase("tilesetentities"))
@@ -88,12 +84,8 @@ public abstract class EntityData
 		{
 			//TODO move textures to a different XML file, load dynamically
 			String texID = entHM.get("texID");
-			if(texID.equalsIgnoreCase("tilesetcolors"))
-				tex = Game.tilesetcolors;
-			else if(texID.equalsIgnoreCase("tilesetwire"))
+			if(texID.equalsIgnoreCase("tilesetwire"))
 				tex = Game.tilesetwire;
-			else if(texID.equalsIgnoreCase("randomthings"))
-				tex = Game.randomthings;
 			else if(texID.equalsIgnoreCase("text"))
 				tex = Game.text;
 			else if (texID.equalsIgnoreCase("tilesetentities"))
