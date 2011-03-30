@@ -43,7 +43,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	public static float time, timer, timer2, afterTickTimer, beforeTickTimer;
 	public boolean test;
 	MediaPlayer mp;
-	public boolean paused;
+	public boolean paused, charlieSheen;
 	
 	public GameRenderer (float screenW, float screenH, Context context, Object syncObj, int levelId)
 	{
@@ -57,6 +57,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		test = true;
 		SoundPlayer.getInstance().initialize(context);
 		paused = false;
+		charlieSheen = false;
 	}
 	
 	
@@ -250,6 +251,9 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 				{
 					final PhysEnt physEnt = (PhysEnt)ent;
 					final Tile nearestTile = Game.nearestTile(physEnt, game.tileset);
+					if (nearestTile == null)
+						break;
+					
 					final int nearestTileX = nearestTile.xIndex;
 					final int nearestTileY = nearestTile.yIndex;
 					
@@ -282,7 +286,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 					}
 					
 					//interacts with nearest tile to the entity; the tile it is standing on
-					physEnt.onTileInteract(Game.nearestTile(physEnt, game.tileset));
+					physEnt.onTileInteract(nearestTile);
 					
 					//bounces PhysEnts appropriately, excluding objects held by the player
 					if (!game.player.isHoldingObject() || physEnt != game.player.getHeldObject())
@@ -567,7 +571,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	
 	public void gameOver ()
 	{
-		gameOverListener.onGameOver();
+		gameOverListener.onGameOver(charlieSheen);
 	}
 	
 	public void clearTouchInput()
