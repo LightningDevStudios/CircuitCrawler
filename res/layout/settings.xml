@@ -20,30 +20,11 @@
         android:layout_height="wrap_content"
         android:text="Enable Music" 
         android:checked="true"/>
-   <CheckBox android:id="@+id/enableShaders"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Enable Shaders" 
-        android:checked="true"/>
-    <TextView
-    	android:id="@+id/antiText"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:text="\nAnti Aliasing:  5%"
-		android:max="100"
-   		android:progress="5">
-	</TextView>
-	<SeekBar
- 		android:id="@+id/seek"
- 		android:layout_width="fill_parent"
- 		android:layout_height="wrap_content"
-		android:layout_margin="10px"
-	/>
 	<TextView
 		android:id="@+id/volumeText"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:text="\nMusic Volume">
+		android:text="\nMusic Volume: 0%">
 	</TextView>
 	<SeekBar
  		android:id="@+id/volume"
@@ -57,7 +38,7 @@
 		android:id="@+id/effectVolumeText"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:text="\nEffect Volume">
+		android:text="\nEffect Volume: 0%">
 	</TextView>
 	<SeekBar
  		android:id="@+id/effectVolume"

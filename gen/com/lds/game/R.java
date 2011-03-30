@@ -33,7 +33,7 @@ public final class R {
     }
     public static final class id {
         public static final int About=0x7f0b0000;
-        public static final int Cheats=0x7f0b0013;
+        public static final int Cheats=0x7f0b0010;
         public static final int CircuitCrawlerLogo=0x7f0b0003;
         public static final int EnableMusic=0x7f0b000b;
         public static final int LDS_Button=0x7f0b0001;
@@ -42,24 +42,21 @@ public final class R {
         public static final int MM_Main=0x7f0b0005;
         public static final int MM_RightListView=0x7f0b0008;
         public static final int YTF_Button=0x7f0b0002;
-        public static final int antiText=0x7f0b000d;
-        public static final int cheatText=0x7f0b0014;
+        public static final int cheatText=0x7f0b0011;
         public static final int checkbox=0x7f0b0009;
-        public static final int effectVolume=0x7f0b0012;
-        public static final int effectVolumeText=0x7f0b0011;
-        public static final int enableShaders=0x7f0b000c;
-        public static final int exit=0x7f0b001b;
-        public static final int god=0x7f0b0015;
+        public static final int effectVolume=0x7f0b000f;
+        public static final int effectVolumeText=0x7f0b000e;
+        public static final int exit=0x7f0b0018;
+        public static final int god=0x7f0b0012;
         public static final int level_grid=0x7f0b0004;
-        public static final int main_menu=0x7f0b0019;
-        public static final int noclip=0x7f0b0016;
-        public static final int options_menu=0x7f0b0017;
-        public static final int restart=0x7f0b0018;
-        public static final int resume=0x7f0b001a;
-        public static final int seek=0x7f0b000e;
-        public static final int volume=0x7f0b0010;
+        public static final int main_menu=0x7f0b0016;
+        public static final int noclip=0x7f0b0013;
+        public static final int options_menu=0x7f0b0014;
+        public static final int restart=0x7f0b0015;
+        public static final int resume=0x7f0b0017;
+        public static final int volume=0x7f0b000d;
         public static final int volumeCheckbox=0x7f0b000a;
-        public static final int volumeText=0x7f0b000f;
+        public static final int volumeText=0x7f0b000c;
     }
     public static final class layout {
         public static final int about_lds=0x7f030000;

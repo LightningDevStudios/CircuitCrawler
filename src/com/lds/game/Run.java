@@ -83,9 +83,12 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 		{
 			saveas(R.raw.song2);
 			mp.setDataSource("/sdcard/circutCrawler/media/audio/songs/song2.mp3");
-			mp.prepare();
-			mp.setVolume(SoundPlayer.musicVolume, SoundPlayer.musicVolume);
-	        mp.start();
+			if (SoundPlayer.enableMusic)
+			{
+				mp.prepare();
+				mp.setVolume(SoundPlayer.musicVolume, SoundPlayer.musicVolume);
+				mp.start();
+			}
 		} 
 		catch (Exception e) 
 		{
@@ -99,9 +102,12 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
                 	try
                 	{
 	                	mp.reset();
-	                	mp.prepare();
-	        			mp.setVolume(SoundPlayer.musicVolume, SoundPlayer.musicVolume);
-	        	        mp.start();
+	                	if (SoundPlayer.enableMusic)
+	        			{
+	        				mp.prepare();
+	        				mp.setVolume(SoundPlayer.musicVolume, SoundPlayer.musicVolume);
+	        				mp.start();
+	        			}
 	                }
 	                catch (Exception e) 
 	        		{
@@ -187,7 +193,7 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 		 this.getContentResolver().insert(MediaStore.Audio.Media.getContentUriForPath(k.getAbsolutePath()), values);  
 		  
 		 return true;  
-		}
+	}
 	
 	
 	@Override
