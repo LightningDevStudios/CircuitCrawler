@@ -33,15 +33,15 @@ public final class R {
     }
     public static final class id {
         public static final int About=0x7f0b0000;
-        public static final int Cheats=0x7f0b0036;
+        public static final int Cheats=0x7f0b0035;
         public static final int CircuitCrawlerLogo=0x7f0b0003;
-        public static final int EnableMusic=0x7f0b0031;
+        public static final int EnableMusic=0x7f0b0030;
         public static final int LDS_Button=0x7f0b0001;
         public static final int LinearLayout01=0x7f0b0004;
-        public static final int MM_LeftParent=0x7f0b002c;
-        public static final int MM_LeftViewAnimator=0x7f0b002d;
+        public static final int MM_LeftParent=0x7f0b002b;
+        public static final int MM_LeftViewAnimator=0x7f0b002c;
         public static final int MM_Main=0x7f0b002a;
-        public static final int MM_RightListView=0x7f0b002e;
+        public static final int MM_RightListView=0x7f0b002d;
         public static final int TextView01=0x7f0b0005;
         public static final int TextView02=0x7f0b0006;
         public static final int TextView03=0x7f0b0007;
@@ -79,21 +79,20 @@ public final class R {
         public static final int TextView35=0x7f0b0027;
         public static final int TextView36=0x7f0b0028;
         public static final int YTF_Button=0x7f0b0002;
-        public static final int cheatText=0x7f0b0037;
-        public static final int checkbox=0x7f0b002f;
-        public static final int clock2=0x7f0b002b;
-        public static final int effectVolume=0x7f0b0035;
-        public static final int effectVolumeText=0x7f0b0034;
-        public static final int god=0x7f0b0038;
+        public static final int cheatText=0x7f0b0036;
+        public static final int checkbox=0x7f0b002e;
+        public static final int effectVolume=0x7f0b0034;
+        public static final int effectVolumeText=0x7f0b0033;
+        public static final int god=0x7f0b0037;
         public static final int level_grid=0x7f0b0029;
-        public static final int main_menu=0x7f0b003c;
-        public static final int noclip=0x7f0b0039;
-        public static final int options_menu=0x7f0b003a;
-        public static final int restart=0x7f0b003b;
-        public static final int resume=0x7f0b003d;
-        public static final int volume=0x7f0b0033;
-        public static final int volumeCheckbox=0x7f0b0030;
-        public static final int volumeText=0x7f0b0032;
+        public static final int main_menu=0x7f0b003b;
+        public static final int noclip=0x7f0b0038;
+        public static final int options_menu=0x7f0b0039;
+        public static final int restart=0x7f0b003a;
+        public static final int resume=0x7f0b003c;
+        public static final int volume=0x7f0b0032;
+        public static final int volumeCheckbox=0x7f0b002f;
+        public static final int volumeText=0x7f0b0031;
     }
     public static final class layout {
         public static final int about_lds=0x7f030000;
