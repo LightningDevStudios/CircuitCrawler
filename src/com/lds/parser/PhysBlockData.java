@@ -16,7 +16,7 @@ public class PhysBlockData extends HoldObjectData
 	}
 	public void createInst(ArrayList<Entity> entData)
 	{
-		physBlockRef = new PhysBlock(size, xPos, yPos, 0.03f); //friction
+		physBlockRef = new PhysBlock(size, xPos, yPos, friction);
 		physBlockRef.setAngle(angle);
 		
 		//COLOR

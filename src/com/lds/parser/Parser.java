@@ -422,7 +422,7 @@ Parse A Tileset
 		}
 		else if (type.equalsIgnoreCase("EffectRaiseBridge"))
 		{
-			effect = new EffectRaiseBridge(tileset[Integer.parseInt(parameters[0])][Integer.parseInt(parameters[1])]);
+			effect = new EffectRaiseBridge(tileset[Integer.parseInt(parameters[1])][Integer.parseInt(parameters[0])]);  //TODO: FIND OUT IF THIS WORKS! 
 		}
 		else if(type.equalsIgnoreCase("EffectRemoveEntity"))
 		{
@@ -430,7 +430,6 @@ Parse A Tileset
 		}
 		else if (type.equalsIgnoreCase("EffectTriggerTimer"))
 		{
-			//TODO pass in an actual boolean for this
 			effect = new EffectTriggerTimer((CauseTimePassed)causeFromID(parameters[0]), false);
 		}
 		else if (type.equalsIgnoreCase("EffectAND"))

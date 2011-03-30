@@ -16,7 +16,7 @@ public class PhysBallData extends HoldObjectData
 	
 	public void createInst(ArrayList<Entity> entData)
 	{
-		physBallRef = new PhysBall(size, xPos, yPos, 0.03f); //friction
+		physBallRef = new PhysBall(size, xPos, yPos, friction);
 
 		//COLOR
 		if (color != null)
