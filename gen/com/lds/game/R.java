@@ -46,7 +46,6 @@ public final class R {
         public static final int checkbox=0x7f0b0009;
         public static final int effectVolume=0x7f0b000f;
         public static final int effectVolumeText=0x7f0b000e;
-        public static final int exit=0x7f0b0018;
         public static final int god=0x7f0b0012;
         public static final int level_grid=0x7f0b0004;
         public static final int main_menu=0x7f0b0016;

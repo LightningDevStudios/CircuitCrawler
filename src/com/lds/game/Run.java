@@ -203,17 +203,20 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 		gameR.setPuzzleActivatedEvent(this);
 	}
 	
-
-	
 	@Override
 	public void onGameOver(boolean winning)
 	{
-		//Intent i = new Intent(Run.this, MainMenu.class);
-		//startActivity(i);
 		if (winning && levelIndex > unlockedLevel)
+		{
 			unlockedLevel++;
-		mp.stop();
-		finish();
+			mp.stop();
+			finish();
+		}
+		else
+		{
+			Intent i = new Intent(Run.this, Run.class);
+			startActivity(i);
+		}
 	}
 	
 	@Override
@@ -290,6 +293,7 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 	{
 		super.onResume();
 		glSurface.onResume();
+		mp.start();
 	}
 	
 	@Override
@@ -297,6 +301,7 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 	{
 		super.onPause();
 		glSurface.onPause();
+		mp.pause();
 		//finish();
 	}
 	
