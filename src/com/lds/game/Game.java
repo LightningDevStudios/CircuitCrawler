@@ -67,7 +67,6 @@ public class Game
 	public UIButton btnA;
 	public UIButton btnB;	
 	public UIJoypad joypad;
-	public UITextBox textbox;
 	public Player player;
 	///*
 	public PhysBall block;
@@ -248,11 +247,6 @@ public class Game
 		joypad.autoPadding(0.0f, 5.0f, 5.0f, 0.0f);
 		joypad.enableTextureMode(joystickout);
 		
-		textbox = new UITextBox(112, 32, UIPosition.TOPLEFT);
-		textbox.autoPadding(5.0f, 5.0f, 0.0f, 0.0f);
-		textbox.enableTextureMode(someText);
-		textbox.setText("lol penis");
-		
 		UIList.add(healthBar);
 		UIList.add(healthBarCover);
 		UIList.add(healthIcon);
@@ -262,7 +256,6 @@ public class Game
 		UIList.add(btnA);
 		UIList.add(btnB);
 		UIList.add(joypad);
-		UIList.add(textbox);
 				
 		worldMinX = (-Tile.TILE_SIZE_F * (tileset[0].length / 2)) + (screenW / 2);
 		worldMinY = (-Tile.TILE_SIZE_F * (tileset.length / 2)) + (screenH / 2);

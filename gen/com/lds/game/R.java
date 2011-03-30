@@ -23,13 +23,19 @@ public final class R {
     }
     public static final class drawable {
         public static final int circuitpuzzle=0x7f020000;
-        public static final int icon=0x7f020001;
-        public static final int mainmenulogo=0x7f020002;
-        public static final int mmdivider=0x7f020003;
-        public static final int text=0x7f020004;
-        public static final int tilesetentities=0x7f020005;
-        public static final int tilesetwire=0x7f020006;
-        public static final int tilesetworld=0x7f020007;
+        public static final int door_open=0x7f020001;
+        public static final int enemy=0x7f020002;
+        public static final int first_level=0x7f020003;
+        public static final int holding=0x7f020004;
+        public static final int icon=0x7f020005;
+        public static final int mainmenulogo=0x7f020006;
+        public static final int mmdivider=0x7f020007;
+        public static final int opendoor=0x7f020008;
+        public static final int shooting=0x7f020009;
+        public static final int text=0x7f02000a;
+        public static final int tilesetentities=0x7f02000b;
+        public static final int tilesetwire=0x7f02000c;
+        public static final int tilesetworld=0x7f02000d;
     }
     public static final class id {
         public static final int About=0x7f0b0000;
@@ -133,7 +139,8 @@ public final class R {
         public static final int level=0x7f050000;
         public static final int level1=0x7f050001;
         public static final int level2=0x7f050002;
-        public static final int tutorial=0x7f050003;
-        public static final int tutorial_level=0x7f050004;
+        public static final int level5=0x7f050003;
+        public static final int tutorial=0x7f050004;
+        public static final int tutorial_level=0x7f050005;
     }
 }
