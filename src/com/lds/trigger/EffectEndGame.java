@@ -29,6 +29,7 @@ public class EffectEndGame extends Effect
 		{
 			cheatsUnlocked = true;
 		}
-		listener.onGameOver(winning);
+		if (listener != null)
+			listener.onGameOver(winning);
 	}
 }
