@@ -439,7 +439,7 @@
         </tileset>
       </renderMode>
       <health>100</health>
-      <AIType>STALKER</AIType>
+      <AIType>PATROL</AIType>
     </Blob>
     <Blob>
       <id>blob2</id>
@@ -457,7 +457,7 @@
         </tileset>
       </renderMode>
       <health>100</health>
-      <AIType>STALKER</AIType>
+      <AIType>PATROL</AIType>
     </Blob>
     <Blob>
       <id>blob3</id>
@@ -475,7 +475,7 @@
         </tileset>
       </renderMode>
       <health>100</health>
-      <AIType>STALKER</AIType>
+      <AIType>PATROL</AIType>
     </Blob>
     <Blob>
       <id>blob4</id>
@@ -493,7 +493,7 @@
         </tileset>
       </renderMode>
       <health>100</health>
-      <AIType>STALKER</AIType>
+      <AIType>PATROL</AIType>
     </Blob>
     <Button>
       <id>button0</id>
@@ -734,10 +734,11 @@
           <y>0</y>
         </tileset>
       </renderMode>
+      <friction>0.03</friction>
     </PhysBlock>
     <PhysBall>
       <id>physBall0</id>
-      <size>50</size>
+      <size>45</size>
       <xPos>577.5</xPos>
       <yPos>-605.5</yPos>
       <angle>90</angle>
@@ -750,6 +751,7 @@
           <y>0</y>
         </tileset>
       </renderMode>
+      <friction>0</friction>
     </PhysBall>
     <Spike>
       <id>spike0</id>
@@ -1026,20 +1028,20 @@
     </Player>
   </Entities>
   <Triggers>
-    <Cause id="idButton6" type="CauseButton">button6</Cause>
-    <Cause id="idButton5" type="CauseButton">button5</Cause>
-    <Cause id="idButton4" type="CauseButton">button4</Cause>
-    <Cause id="idButton3" type="CauseButton">button3</Cause>
-    <Cause id="idButton2" type="CauseButton">button2</Cause>
-    <Cause id="idButton1" type="CauseButton">button1</Cause>
     <Cause id="idButton0" type="CauseButton">button0</Cause>
-    <Effect id="idDoor6" type="EffectDoor">door6</Effect>
-    <Effect id="idDoor5" type="EffectDoor">door5</Effect>
-    <Effect id="idDoor4" type="EffectDoor">door4</Effect>
-    <Effect id="idDoor3" type="EffectDoor">door3</Effect>
-    <Effect id="idDoor2" type="EffectDoor">door2</Effect>
-    <Effect id="idDoor1" type="EffectDoor">door1</Effect>
+    <Cause id="idButton1" type="CauseButton">button1</Cause>
+    <Cause id="idButton2" type="CauseButton">button2</Cause>
+    <Cause id="idButton3" type="CauseButton">button3</Cause>
+    <Cause id="idButton4" type="CauseButton">button4</Cause>
+    <Cause id="idButton5" type="CauseButton">button5</Cause>
+    <Cause id="idButton6" type="CauseButton">button6</Cause>
     <Effect id="idDoor0" type="EffectDoor">door0</Effect>
+    <Effect id="idDoor1" type="EffectDoor">door1</Effect>
+    <Effect id="idDoor2" type="EffectDoor">door2</Effect>
+    <Effect id="idDoor3" type="EffectDoor">door3</Effect>
+    <Effect id="idDoor4" type="EffectDoor">door4</Effect>
+    <Effect id="idDoor5" type="EffectDoor">door5</Effect>
+    <Effect id="idDoor6" type="EffectDoor">door6</Effect>
     <Trigger cause="idButton0" effect="idDoor0" />
     <Trigger cause="idButton1" effect="idDoor1" />
     <Trigger cause="idButton2" effect="idDoor2" />
