@@ -275,7 +275,8 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 	@Override
 	public void onBackPressed()
 	{
-		
+		Intent i = new Intent(Run.this, MainMenu.class);
+		startActivity(i);
 	}
 	
 	@Override

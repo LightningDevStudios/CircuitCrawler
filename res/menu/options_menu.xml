@@ -10,4 +10,7 @@
     <item 
     	android:id="@+id/resume"
     	android:title="Resume" />
+    <item
+    	android:id="@+id/exit"
+    	android:title="Exit" />
 </menu>
