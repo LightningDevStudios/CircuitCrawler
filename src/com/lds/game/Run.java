@@ -105,6 +105,7 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 	                	if (SoundPlayer.enableMusic)
 	        			{
 	        				mp.prepare();
+	        				mp.setDataSource("/sdcard/circutCrawler/media/audio/songs/song2.mp3");
 	        				mp.setVolume(SoundPlayer.musicVolume, SoundPlayer.musicVolume);
 	        				mp.start();
 	        			}
