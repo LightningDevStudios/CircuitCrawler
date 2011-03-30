@@ -234,10 +234,14 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 	@Override
 	public void onGameOver(boolean winning)
 	{
-		if (winning /*&& levelIndex == unlockedLevel*/)
+		mp.stop();
+		if (winning)
 		{
-			unlockedLevel++;
-			mp.stop();
+			if (levelIndex == unlockedLevel)
+				setResult(2);
+			else
+				setResult(1);
+			
 			finish();
 		}
 		else

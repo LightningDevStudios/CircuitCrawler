@@ -546,8 +546,16 @@ public class MainMenu extends Activity
 	{
 		Run.levelIndex = levelIndex;
 		Intent i = new Intent(MainMenu.this, Run.class);
-		//i.putExtra("levelID", levelIndex);
-		startActivity(i);
+		i.putExtra("levelID", levelIndex);
+		startActivityForResult(i, 1);
+	}
+	
+	public void onActivityResult(int requestCode, int resultCode, Intent data)
+	{
+		if (resultCode == 2)
+		{
+			Run.unlockedLevel++;
+		}
 	}
 	
 	public void vibrator(int time)
