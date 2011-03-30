@@ -84,9 +84,7 @@ public class Game
 		
 	//Constructors
 	public Game (Context context, GL10 gl, int levelId) 
-	{
-		fingerList = new ArrayList<Finger>();
-		
+	{		
 		tilesetwire = new Texture(R.drawable.tilesetwire, 128, 128, 8, 8, context, "tilesetwire");
 		text = new Texture(R.drawable.text, 256, 256, 16, 8, context, "text");
 		tilesetworld = new Texture(R.drawable.tilesetworld, 512, 256, 16, 8, context, "tilesetworld");
@@ -103,6 +101,7 @@ public class Game
 		entList = new ArrayList<Entity>();
 		UIList = new ArrayList<UIEntity>();
 		triggerList = new ArrayList<Trigger>();
+		fingerList = new ArrayList<Finger>();
 		
 		tileset = new Tile[16][16];
 		cleaner = new EntityManager();
@@ -380,7 +379,7 @@ public class Game
 		UIList.add(joypad);
 		UIList.add(textbox);
 				
-		worldMinX = (-Tile.TILE_SIZE_F * (tileset[0].length / 2)) + (screenW / 2); //TODO fix odd-number tilesets by changing the array length to a float before dividing.
+		worldMinX = (-Tile.TILE_SIZE_F * (tileset[0].length / 2)) + (screenW / 2);
 		worldMinY = (-Tile.TILE_SIZE_F * (tileset.length / 2)) + (screenH / 2);
 		worldMaxX = (Tile.TILE_SIZE_F * (tileset[0].length / 2)) - (screenW / 2);
 		worldMaxY = (Tile.TILE_SIZE_F * (tileset.length / 2)) - (screenH / 2);

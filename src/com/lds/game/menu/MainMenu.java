@@ -47,7 +47,6 @@ public class MainMenu extends Activity
 	public Context context;
 	public SeekBar mSeekBar;
 	private ViewAnimator animator;
-	private ProgressDialog pd;
     
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -174,8 +173,7 @@ public class MainMenu extends Activity
 		catch (FileNotFoundException e) { e.printStackTrace(); } 
 		catch (IOException e) { e.printStackTrace(); }
 		catch (ArrayIndexOutOfBoundsException e) { e.printStackTrace(); }
-		pd = ProgressDialog.show(this,"Loading","...Please wait.",true, false);
-		pd.hide();
+		
 		//suffs
 		volumeControl.setMax(100);
 		final int volume = (int)(SoundPlayer.effectVolume * 100);
@@ -456,18 +454,7 @@ public class MainMenu extends Activity
 		{
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id)
 			{
-				pd.show();
-				new Thread(new Runnable()
-				{
-					public void run()
-					{
-						whileLoading();
-						pd.dismiss();
-					}
-				}).start();
-				Run.levelIndex = position;
-				Intent i = new Intent(MainMenu.this, Run.class);
-				startActivity(i);
+				runGame(position);
 			}
 		});
 	}
@@ -487,22 +474,6 @@ public class MainMenu extends Activity
 		super.onResume();
 	}
 	
-	public void whileLoading()
-	{
-		while(true)
-		{
-			try 
-			{
-				Thread.sleep(10000);
-			} catch (InterruptedException e) 
-			{
-				e.printStackTrace();
-			}
-			System.out.println("OMG");
-			break;
-		}
-	}
-	
 	@Override
 	protected void onPause()
 	{
@@ -517,17 +488,8 @@ public class MainMenu extends Activity
 	
 	public void runGame(int levelIndex)
 	{
-		pd.show();
-		new Thread(new Runnable()
-		{
-			public void run()
-			{
-				whileLoading();
-				pd.dismiss();
-			}
-		}).start();
-		Run.levelIndex = levelIndex;
 		Intent i = new Intent(MainMenu.this, Run.class);
+		i.putExtra("levelID", levelIndex);
 		startActivity(i);
 	}
 	
