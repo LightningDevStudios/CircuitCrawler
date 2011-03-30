@@ -53,12 +53,7 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		
-		//RefreshHandler = new RefreshHandler();
-		//new PlaySong().execute(mp);
 		this.savedInstanceState = savedInstanceState;
-		
-		//ProgressDialog pDialog = ProgressDialog.show(Run.this, "", "Loading...");
 		
 		switch (levelIndex)
 		{
@@ -74,150 +69,37 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 		getWindowManager().getDefaultDisplay().getMetrics(screen);
 		float screenX = (float)screen.widthPixels;
 		float screenY = (float)screen.heightPixels;
-		/*
-		File isSong1 = new File("/assets/song1.mp3");
-		File isSong2 = new File("/assets/song2.mp3");
-		*/
-		//set proper volume to adjust with +/- buttons
 		setVolumeControlStream(AudioManager.STREAM_MUSIC);
 
-		//if(!isSong1.exists())
-		//{
-		//if(!isSong1.exists())
-		//{
-			try 
-			{
-				copyFileSong1();
-			} 
-			catch (IOException e) 
-			{
-				e.printStackTrace();
-			}
-		//}
-		//if(!isSong2.exists())
-		//{
-			try 
-			{
-				copyFileSong2();
-			} 
-			catch (IOException e) 
-			{
-				e.printStackTrace();
-			}
-		//}
-		if(((int)(Math.random()*2 + 1))== 2)
-    	{
-        	mp.reset();
-            try 
-            {
-				mp.setDataSource("/sdcard/song1.mp3");
-			} 
-            catch (IllegalArgumentException e) 
-            {
-				e.printStackTrace();
-			} 
-            catch (IllegalStateException e) 
-            {
-				e.printStackTrace();
-			} 
-            catch (IOException e) 
-            {
-				e.printStackTrace();
-			}
-    	}
-    	else
-    	{
-    		mp.reset();
-            try 
-            {
-				mp.setDataSource("/sdcard/song2.mp3");
-			} 
-            catch (IllegalArgumentException e) 
-            {
-				e.printStackTrace();
-			} 
-            catch (IllegalStateException e) 
-            {
-				e.printStackTrace();
-			} 
-            catch (IOException e) 
-            {
-				e.printStackTrace();
-			}
-    	}
-        try 
-        {
+		//Copy mp3s from raw to /sdcard/
+		try 
+		{
+			copyFileSong2();
+			mp.setDataSource("/sdcard/song2.mp3");
 			mp.prepare();
+			mp.setVolume(SoundPlayer.musicVolume, SoundPlayer.musicVolume);
+	        mp.start();
 		} 
-        catch (IllegalStateException e) 
-        {
-			e.printStackTrace();
-		} 
-        catch (IOException e)
-        {
+		catch (Exception e) 
+		{
 			e.printStackTrace();
 		}
-        mp.setVolume(SoundPlayer.musicVolume, SoundPlayer.musicVolume);
-        mp.start();
 
         mp.setOnCompletionListener(new OnCompletionListener() 
         {
                 public void onCompletion(MediaPlayer mp) 
                 {
-                	if(((int)(Math.random()*2 + 1)) == 2)
+                	try
                 	{
 	                	mp.reset();
-	                    try 
-	                    {
-							mp.setDataSource("/sdcard/song1.mp3");
-						} 
-	                    catch (IllegalArgumentException e) 
-	                    {
-							e.printStackTrace();
-						} 
-	                    catch (IllegalStateException e) 
-	                    {
-							e.printStackTrace();
-						} 
-	                    catch (IOException e) 
-	                    {
-							e.printStackTrace();
-						}
-                	}
-                	else
-                	{
-                		mp.reset();
-	                    try 
-	                    {
-							mp.setDataSource("/sdcard/song2.mp3");
-						} 
-	                    catch (IllegalArgumentException e) 
-	                    {
-							e.printStackTrace();
-						} 
-	                    catch (IllegalStateException e) 
-	                    {
-							e.printStackTrace();
-						} 
-	                    catch (IOException e) 
-	                    {
-							e.printStackTrace();
-						}
-                	}
-                    try 
-                    {
-						mp.prepare();
-					} 
-                    catch (IllegalStateException e) 
-                    {
-						e.printStackTrace();
-					} 
-                    catch (IOException e)
-                    {
-						e.printStackTrace();
-					}
-                    mp.setVolume(SoundPlayer.musicVolume, SoundPlayer.musicVolume);
-                    mp.start();   
+	                	mp.prepare();
+	        			mp.setVolume(SoundPlayer.musicVolume, SoundPlayer.musicVolume);
+	        	        mp.start();
+	                }
+	                catch (Exception e) 
+	        		{
+	        			e.printStackTrace();
+	        		}
                 }
         });
 		
@@ -238,24 +120,6 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 		
 		setContentView(glSurface);
 	}
-		
-
-	public void copyFileSong1() throws IOException
-	{ 
-        OutputStream copyFilesStream = new FileOutputStream("/sdcard/"); 
-        InputStream copyFilesInputStream = context.getResources().openRawResource(R.raw.song1); 
-        byte[] buffer = new byte[5000000]; 
-        int length; 
-        while ((length = copyFilesInputStream.read(buffer)) > 0 ) 
-        { 
-        		copyFilesStream.write(buffer); 
-                Log.w("Bytes: ", ((Integer)length).toString()); 
-                Log.w("value", buffer.toString()); 
-        } 
-        copyFilesStream.flush(); 
-        copyFilesStream.close(); 
-        copyFilesInputStream.close(); 
-	} 
 	
 	public void copyFileSong2() throws IOException
 	{ 
