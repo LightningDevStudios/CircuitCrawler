@@ -187,11 +187,11 @@ public class MainMenu extends Activity
 		volumeCheckbox.setChecked(SoundPlayer.enableSound);
 		enableMusic.setChecked(SoundPlayer.enableMusic);
 		
-		//mSeekBar.setMax(100);
-		//mSeekBar.setProgress(1);
+		mSeekBar.setMax(100);
+		mSeekBar.setProgress(1);
 		
 		//Action Suffs
-       /* mSeekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener()
+        mSeekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener()
         {
         	public void onProgressChanged(SeekBar seekBar, int progress, boolean fromTouch)	
         	{	
@@ -200,7 +200,7 @@ public class MainMenu extends Activity
         	}
             public void onStartTrackingTouch(SeekBar seekBar)	{	}
             public void onStopTrackingTouch(SeekBar seekBar)	{	}	
-        });*/
+        });
         
         cheatButton.setOnClickListener(new View.OnClickListener()
 		{
@@ -330,7 +330,7 @@ public class MainMenu extends Activity
 		    }
 		});
 		
-		/*enableShaders.setOnCheckedChangeListener(new OnCheckedChangeListener()
+		enableShaders.setOnCheckedChangeListener(new OnCheckedChangeListener()
 		{
 		    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
 		    {
@@ -343,7 +343,7 @@ public class MainMenu extends Activity
 		        	vibrator(100);
 		        }
 		    }
-		});*/
+		});
 		
 		enableMusic.setOnCheckedChangeListener(new OnCheckedChangeListener()
 		{
