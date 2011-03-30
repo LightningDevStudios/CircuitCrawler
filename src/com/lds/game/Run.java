@@ -157,6 +157,7 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
         {
 			e.printStackTrace();
 		}
+        mp.setVolume(SoundPlayer.musicVolume, SoundPlayer.musicVolume);
         mp.start();
 
         mp.setOnCompletionListener(new OnCompletionListener() 
@@ -215,6 +216,7 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
                     {
 						e.printStackTrace();
 					}
+                    mp.setVolume(SoundPlayer.musicVolume, SoundPlayer.musicVolume);
                     mp.start();   
                 }
         });
