@@ -96,14 +96,14 @@ public class MainMenu extends Activity
 		final CheckBox vibrationCheckbox = (CheckBox) findViewById(R.id.checkbox);
 		final CheckBox volumeCheckbox = (CheckBox) findViewById(R.id.volumeCheckbox);
 		final CheckBox enableMusic = (CheckBox) findViewById(R.id.EnableMusic);
-		final CheckBox enableShaders = (CheckBox) findViewById(R.id.enableShaders);
-		final SeekBar mSeekBar = (SeekBar)findViewById(R.id.seek);
+		//final CheckBox enableShaders = (CheckBox) findViewById(R.id.enableShaders);
+		//final SeekBar mSeekBar = (SeekBar)findViewById(R.id.seek);
 		final SeekBar volumeControl = (SeekBar)findViewById(R.id.volume);
 		final Button ldsButton = (Button)findViewById(R.id.LDS_Button);
 		final Button ytfButton = (Button)findViewById(R.id.YTF_Button);
 		final Button cheatButton = (Button)findViewById(R.id.Cheats);
 		final TextView seekBarValue = (TextView)findViewById(R.id.volumeText);
-		final TextView antiTextbar = (TextView)findViewById(R.id.antiText);
+		//final TextView antiTextbar = (TextView)findViewById(R.id.antiText);
 		final AlertDialog.Builder alert = new AlertDialog.Builder(this);
 		final EditText input = new EditText(this);
 		final CheckBox godMode = (CheckBox) findViewById(R.id.god);
@@ -185,11 +185,11 @@ public class MainMenu extends Activity
 		volumeCheckbox.setChecked(SoundPlayer.enableSound);
 		enableMusic.setChecked(SoundPlayer.enableMusic);
 		
-		mSeekBar.setMax(100);
-		mSeekBar.setProgress(1);
+		//mSeekBar.setMax(100);
+		//mSeekBar.setProgress(1);
 		
 		//Action Suffs
-        mSeekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener()
+       /* mSeekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener()
         {
         	public void onProgressChanged(SeekBar seekBar, int progress, boolean fromTouch)	
         	{	
@@ -198,7 +198,7 @@ public class MainMenu extends Activity
         	}
             public void onStartTrackingTouch(SeekBar seekBar)	{	}
             public void onStopTrackingTouch(SeekBar seekBar)	{	}	
-        });
+        });*/
         
         cheatButton.setOnClickListener(new View.OnClickListener()
 		{
@@ -328,7 +328,7 @@ public class MainMenu extends Activity
 		    }
 		});
 		
-		enableShaders.setOnCheckedChangeListener(new OnCheckedChangeListener()
+		/*enableShaders.setOnCheckedChangeListener(new OnCheckedChangeListener()
 		{
 		    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
 		    {
@@ -341,7 +341,7 @@ public class MainMenu extends Activity
 		        	vibrator(100);
 		        }
 		    }
-		});
+		});*/
 		
 		enableMusic.setOnCheckedChangeListener(new OnCheckedChangeListener()
 		{

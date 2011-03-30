@@ -100,7 +100,6 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
                 	{
 	                	mp.reset();
 	                	mp.prepare();
-	                	mp.setDataSource("/sdcard/circutCrawler/media/audio/songs/song2.mp3");
 	        			mp.setVolume(SoundPlayer.musicVolume, SoundPlayer.musicVolume);
 	        	        mp.start();
 	                }
@@ -129,7 +128,6 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 		setContentView(glSurface);
 	}
 	
-	//FUCK this finally works
 	public boolean saveas(int ressound)
 	{  
 		 byte[] buffer=null;  
@@ -265,6 +263,8 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 				return true;
 			case R.id.main_menu:
 				//return to main menu
+				Intent i = new Intent(Run.this, MainMenu.class);
+				startActivity(i);
 				finish();
 				return true;
 			default:
