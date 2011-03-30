@@ -5,9 +5,9 @@ import com.lds.game.entity.Player;
 public class CauseLocation extends Cause
 {
 	private Player player;
-	private int minX, maxX, minY, maxY;
+	private float minX, maxX, minY, maxY;
 	
-	public CauseLocation (Player player, int minX, int maxX, int minY, int maxY)
+	public CauseLocation (Player player, float minX, float maxX, float minY, float maxY)
 	{
 		this.player = player;
 		this.minX = minX;

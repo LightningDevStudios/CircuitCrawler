@@ -389,10 +389,10 @@ Parse A Tileset
 		else if(type.equalsIgnoreCase("CauseLocation"))
 		{
 			cause = new CauseLocation(this.<Player>stringToSubEntity(parameters[0]), 
-					Integer.parseInt(parameters[1]), 
-					Integer.parseInt(parameters[2]), 
-					Integer.parseInt(parameters[3]), 
-					Integer.parseInt(parameters[4]));
+					Float.parseFloat(parameters[1]), 
+					Float.parseFloat(parameters[2]), 
+					Float.parseFloat(parameters[3]), 
+					Float.parseFloat(parameters[4]));
 		}
 		else if(type.equalsIgnoreCase("CausePlayerHealth"))
 		{
