@@ -54,12 +54,12 @@ public  abstract class Enemy extends Character //enemies will fall under this cl
 		SoundPlayer.getInstance().playSound(3);
 		if ((int)(Math.random() * 2) == 1)
 		{
-			PickupEnergy pe = new PickupEnergy((int)(Math.random() * 75) + 25, this.getXPos(), this.getYPos());
+			PickupEnergy pe = new PickupEnergy((int)(Math.random() * 25) + 20, this.getXPos(), this.getYPos());
 			EntityManager.addEntity(pe);
 		}
 		else
 		{
-			PickupHealth ph = new PickupHealth((int)(Math.random() * 50) + 25, this.getXPos(), this.getYPos());
+			PickupHealth ph = new PickupHealth((int)(Math.random() * 25) + 20, this.getXPos(), this.getYPos());
 			EntityManager.addEntity(ph);
 		}
 

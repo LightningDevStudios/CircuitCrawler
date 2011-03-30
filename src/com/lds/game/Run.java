@@ -67,6 +67,44 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 		setVolumeControlStream(AudioManager.STREAM_MUSIC);
 
 		pd = ProgressDialog.show(this, "", "Loading...");
+		//Copy mp3s from raw to /sdcard/
+		try 
+		{
+			saveas(R.raw.song2);
+			mp.setDataSource("/sdcard/circutCrawler/media/audio/songs/song2.mp3");
+			if (SoundPlayer.enableMusic)
+			{
+				mp.prepare();
+				mp.setVolume(SoundPlayer.musicVolume, SoundPlayer.musicVolume);
+				mp.start();
+			}
+		} 
+		catch (Exception e) 
+		{
+			e.printStackTrace();
+		}
+
+        mp.setOnCompletionListener(new OnCompletionListener() 
+        {
+                public void onCompletion(MediaPlayer mp) 
+                {
+                	try
+                	{
+	                	mp.reset();
+	                	if (SoundPlayer.enableMusic)
+	        			{
+	        				mp.prepare();
+	        				mp.setDataSource("/sdcard/circutCrawler/media/audio/songs/song2.mp3");
+	        				mp.setVolume(SoundPlayer.musicVolume, SoundPlayer.musicVolume);
+	        				mp.start();
+	        			}
+	                }
+	                catch (Exception e) 
+	        		{
+	        			e.printStackTrace();
+	        		}
+                }
+        });
 		
 		final Object data = getLastNonConfigurationInstance();
 		
