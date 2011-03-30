@@ -74,12 +74,15 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 		getWindowManager().getDefaultDisplay().getMetrics(screen);
 		float screenX = (float)screen.widthPixels;
 		float screenY = (float)screen.heightPixels;
-		File isSong1 = new File("/sdcard/song1.mp3");
-		File isSong2 = new File("/sdcard/song2.mp3");
-		
+		/*
+		File isSong1 = new File("/assets/song1.mp3");
+		File isSong2 = new File("/assets/song2.mp3");
+		*/
 		//set proper volume to adjust with +/- buttons
 		setVolumeControlStream(AudioManager.STREAM_MUSIC);
-		
+
+		//if(!isSong1.exists())
+		//{
 		//if(!isSong1.exists())
 		//{
 			try 
@@ -107,7 +110,7 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
         	mp.reset();
             try 
             {
-				mp.setDataSource("/sdcard/song2.mp3");
+				mp.setDataSource("/sdcard/song1.mp3");
 			} 
             catch (IllegalArgumentException e) 
             {
@@ -127,7 +130,7 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
     		mp.reset();
             try 
             {
-				mp.setDataSource("/sdcard/song1.mp3");
+				mp.setDataSource("/sdcard/song2.mp3");
 			} 
             catch (IllegalArgumentException e) 
             {
@@ -165,7 +168,7 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 	                	mp.reset();
 	                    try 
 	                    {
-							mp.setDataSource("/sdcard/song2.mp3");
+							mp.setDataSource("/sdcard/song1.mp3");
 						} 
 	                    catch (IllegalArgumentException e) 
 	                    {
@@ -185,7 +188,7 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
                 		mp.reset();
 	                    try 
 	                    {
-							mp.setDataSource("/sdcard/song1.mp3");
+							mp.setDataSource("/sdcard/song2.mp3");
 						} 
 	                    catch (IllegalArgumentException e) 
 	                    {
@@ -280,10 +283,12 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 
 	
 	@Override
-	public void onGameOver()
+	public void onGameOver(boolean winning)
 	{
 		//Intent i = new Intent(Run.this, MainMenu.class);
 		//startActivity(i);
+		if (winning && levelIndex > unlockedLevel)
+			unlockedLevel++;
 		mp.stop();
 		finish();
 	}
