@@ -24,7 +24,7 @@ public class EffectEndGame extends Effect
 	@Override
 	public void fireOutput()
 	{
-		Run.unlockedLevel++;
+		//Run.unlockedLevel++;
 		if(Run.unlockedLevel > ButtonAdapter.numberOfLevels)
 		{
 			cheatsUnlocked = true;

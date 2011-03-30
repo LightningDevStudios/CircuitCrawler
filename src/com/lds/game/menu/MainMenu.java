@@ -49,6 +49,7 @@ public class MainMenu extends Activity
 	public SeekBar mSeekBar;
 	private ViewAnimator animator;
 	private ProgressDialog pd;
+	GridView levelList;
     
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -65,7 +66,7 @@ public class MainMenu extends Activity
 		list.setAdapter(adapter);
 		
 		//set up Level ListView
-		final GridView levelList = (GridView)View.inflate(this, R.layout.level_grid, null);
+		levelList = (GridView)View.inflate(this, R.layout.level_grid, null);
 		levelList.setAdapter(new ButtonAdapter(this));
 		
 		//set up ViewAnimator with animations
@@ -443,11 +444,14 @@ public class MainMenu extends Activity
 		}); 
 		/******************************************************************************************************************************/
 		
+		
+		
 		//Side Menu
 		list.setOnItemClickListener(new OnItemClickListener()
 		{
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id)
 			{
+				
 				switch (position)
 				{
 					case 0:
@@ -505,6 +509,11 @@ public class MainMenu extends Activity
 		});
 	}
 	
+	public void restart()
+	{
+		levelList.setAdapter(new ButtonAdapter(this));
+	}
+	
 	@Override
 	public void onBackPressed()
 	{
@@ -518,6 +527,7 @@ public class MainMenu extends Activity
 	protected void onResume()
 	{
 		super.onResume();
+		restart();
 	}
 	
 	@Override
@@ -534,8 +544,9 @@ public class MainMenu extends Activity
 	
 	public void runGame(int levelIndex)
 	{
+		Run.levelIndex = levelIndex;
 		Intent i = new Intent(MainMenu.this, Run.class);
-		i.putExtra("levelID", levelIndex);
+		//i.putExtra("levelID", levelIndex);
 		startActivity(i);
 	}
 	
