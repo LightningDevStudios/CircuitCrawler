@@ -118,12 +118,12 @@ public class Parser //this is a parser
 					parsedList.add(pbd);
 					pbd.createInst(entList);
 				}
-				else if (xrp.getName().equalsIgnoreCase("PhysCircle"))
+				else if (xrp.getName().equalsIgnoreCase("PhysBall"))
 				{
-					parseObj("PhysCircle");
-					PhysBallData pcd= new PhysBallData(dataHM);
-					parsedList.add(pcd);
-					pcd.createInst(entList);
+					parseObj("PhysBall");
+					PhysBallData pbd= new PhysBallData(dataHM);
+					parsedList.add(pbd);
+					pbd.createInst(entList);
 				}
 				else if (xrp.getName().equalsIgnoreCase("Player"))
 				{
@@ -432,6 +432,10 @@ Parse A Tileset
 		{
 			//TODO pass in an actual boolean for this
 			effect = new EffectTriggerTimer((CauseTimePassed)causeFromID(parameters[0]), false);
+		}
+		else if (type.equalsIgnoreCase("EffectAND"))
+		{
+			effect = new EffectAND(effectFromID(parameters[0]), effectFromID(parameters[1]));
 		}
 		
 		return effect;

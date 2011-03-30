@@ -186,21 +186,20 @@
     </Player>
   </Entities>
   <Triggers>
-    <Cause id="locCause" type="CauseLocation">player,0,400,290,800</Cause>
-    <Cause id="leftCause" type="CauseButton">leftButton</Cause>
-    <Cause id="rightCause" type="CauseButton">rightButton</Cause>
     <Cause id="enemyCount" type="CauseEnemyCount">0</Cause>
-    <Cause id="buttonANd" type="CauseAND">leftCause,rightCause</Cause>
+    <Cause id="rightCause" type="CauseButton">rightButton</Cause>
+    <Cause id="leftCause" type="CauseButton">leftButton</Cause>
+    <Cause id="locCause" type="CauseLocation">player,0,400,290,800</Cause>
     <Cause id="endGameAND" type="CauseAND">locCause,enemyCount</Cause>
-    <Effect id="endGame" type="EffectEndGame">True</Effect>
-    <Effect id="raiseBridgeleft" type="EffectRaiseBridge">4,0</Effect>
-    <Effect id="door" type="EffectDoor">door0</Effect>
-    <Effect id="activateLink" type="EffectActivateNodeLink">0</Effect>
+    <Cause id="buttonANd" type="CauseAND">leftCause,rightCause</Cause>
     <Effect id="raiseBridgeRight" type="EffectRaiseBridge">5,0</Effect>
-    <Effect id="bridgeAnd" type="EffectAND">raiseBridgeleft,raiseBridgeRight</Effect>
-    <Effect id="buttonandeffect" type="EffectAND">activateLink,door</Effect>
-    <Trigger cause="buttonANd" effect="buttonandeffect" />
+    <Effect id="activateLink" type="EffectActivateNodeLink">0</Effect>
+    <Effect id="door" type="EffectDoor">door0</Effect>
+    <Effect id="raiseBridgeleft" type="EffectRaiseBridge">4,0</Effect>
+    <Trigger cause="buttonANd" effect="activateLink" />
     <Trigger cause="endGameAND" effect="endGame" />
-    <Trigger cause="enemyCount" effect="bridgeAnd" />
+    <Trigger cause="enemyCount" effect="raiseBridgeleft" />
+    <Trigger cause="buttonANd" effect="door" />
+    <Trigger cause="enemyCount" effect="raiseBridgeRight" />
   </Triggers>
 </Level>
