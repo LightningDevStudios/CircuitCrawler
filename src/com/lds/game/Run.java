@@ -202,7 +202,7 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 			saveas(R.raw.song2);
 			mp.setDataSource("/sdcard/circutCrawler/media/audio/songs/song2.mp3");
 			mp.prepare();
-			mp.setVolume(SoundPlayer.musicVolume, SoundPlayer.musicVolume);
+			mp.setVolume(SoundPlayer.musicVolume, SoundPlayer.musicVolume); //penis
 	        mp.start();
 		} 
 		catch (Exception e) 
