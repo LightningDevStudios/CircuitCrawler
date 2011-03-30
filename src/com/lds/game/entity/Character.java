@@ -56,7 +56,8 @@ public abstract class Character extends PhysEnt //all characters, including the 
 				isFlashing = false;
 			}
 		}
-		
+		if(this.getXScl() <= 0 && this.getYScl() <= 0)
+			health = 0;
 		if (health <= 0)
 			this.die(); 
 	}
