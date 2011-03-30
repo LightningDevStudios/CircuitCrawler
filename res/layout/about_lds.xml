@@ -8,10 +8,20 @@
 		android:orientation="vertical"
   		android:layout_width="fill_parent"
  		android:layout_height="wrap_content">
+ 		<ImageView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:paddingTop="30dp"
+			android:paddingLeft="40dp"
+			android:paddingBottom="20dp"	
+			android:src="@raw/lds_logo">
+		</ImageView>
 		<TextView
 			android:layout_width="wrap_content" 
 			android:layout_height="wrap_content"
-			android:padding="40dp"
+			android:paddingLeft="40dp"
+			android:paddingRight="40dp"
+			android:paddingBottom="40dp"
 			android:text=
 			"LDS is a group of five high school students at Sage Hill School in Newport Coast, California. We are all learning Java, and for most of us, Circuit Crawler is our first game design project. Our goal is to use this game to support the Youth For Technology Foundation, as well as increase awareness about it. 100% of the profits from Circuit Crawler will go to YTF. Expect more from us in the future!">
 		</TextView>

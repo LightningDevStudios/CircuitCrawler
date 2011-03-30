@@ -49,7 +49,7 @@ public final class R {
         public static final int effectVolumeText=0x7f0b0011;
         public static final int enableShaders=0x7f0b000c;
         public static final int god=0x7f0b0015;
-        public static final int level_list=0x7f0b0004;
+        public static final int level_grid=0x7f0b0004;
         public static final int main_menu=0x7f0b0019;
         public static final int noclip=0x7f0b0016;
         public static final int options_menu=0x7f0b0017;
@@ -65,12 +65,11 @@ public final class R {
         public static final int about_ytf=0x7f030001;
         public static final int circuit_crawler_logo=0x7f030002;
         public static final int credits=0x7f030003;
-        public static final int level_list=0x7f030004;
-        public static final int level_list_item=0x7f030005;
-        public static final int list_item=0x7f030006;
-        public static final int main=0x7f030007;
-        public static final int settings=0x7f030008;
-        public static final int tutorial=0x7f030009;
+        public static final int level_grid=0x7f030004;
+        public static final int list_item=0x7f030005;
+        public static final int main=0x7f030006;
+        public static final int settings=0x7f030007;
+        public static final int tutorial=0x7f030008;
     }
     public static final class menu {
         public static final int options_menu=0x7f0a0000;
@@ -84,11 +83,13 @@ public final class R {
         public static final int healthbarborder=0x7f060005;
         public static final int joystickin=0x7f060006;
         public static final int joystickout=0x7f060007;
-        public static final int pitfall=0x7f060008;
-        public static final int shootsound=0x7f060009;
-        public static final int song2=0x7f06000a;
-        public static final int testclick=0x7f06000b;
-        public static final int ytf_logo=0x7f06000c;
+        public static final int lds_logo=0x7f060008;
+        public static final int lock=0x7f060009;
+        public static final int pitfall=0x7f06000a;
+        public static final int shootsound=0x7f06000b;
+        public static final int song2=0x7f06000c;
+        public static final int testclick=0x7f06000d;
+        public static final int ytf_logo=0x7f06000e;
     }
     public static final class string {
         public static final int app_name=0x7f080000;
