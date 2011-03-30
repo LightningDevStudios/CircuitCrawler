@@ -23,7 +23,7 @@
 			android:paddingRight="40dp"
 			android:paddingBottom="40dp"
 			android:text=
-			"LDS is a group of five high school students at Sage Hill School in Newport Coast, California. We are all learning Java, and for most of us, Circuit Crawler is our first game design project. Our goal is to use this game to support the Youth For Technology Foundation, as well as increase awareness about it. 100% of the profits from Circuit Crawler will go to YTF. Expect more from us in the future!">
+			"Lightning Development Studios is a group of five high school students at Sage Hill School in Newport Coast, California. We are all learning Java, and for most of us, Circuit Crawler is our first game design project. Our goal is to use this game to support the Youth For Technology Foundation, as well as increase awareness about it. 100% of the profits from Circuit Crawler will go to YTF. Expect more from us in the future!">
 		</TextView>
 		<Button
 			android:id="@+id/LDS_Button"
