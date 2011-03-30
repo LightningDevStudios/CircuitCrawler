@@ -263,8 +263,6 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 				return true;
 			case R.id.main_menu:
 				//return to main menu
-				Intent i = new Intent(Run.this, MainMenu.class);
-				startActivity(i);
 				finish();
 				return true;
 			default:
