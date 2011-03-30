@@ -28,6 +28,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
+import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
@@ -46,6 +47,7 @@ public class MainMenu extends Activity
 	public Context context;
 	public SeekBar mSeekBar;
 	private ViewAnimator animator;
+	private ProgressDialog pd;
     
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -62,11 +64,8 @@ public class MainMenu extends Activity
 		list.setAdapter(adapter);
 		
 		//set up Level ListView
-		String[] levels = getResources().getStringArray(R.array.levels);
-		final ListView levelList = (ListView)View.inflate(this, R.layout.level_list, null);
-		final ArrayAdapter<String> levelAdapter = new ArrayAdapter<String>(this, R.layout.level_list_item, levels);
-		adapter.setNotifyOnChange(true);
-		levelList.setAdapter(levelAdapter);
+		final GridView levelList = (GridView)View.inflate(this, R.layout.level_grid, null);
+		levelList.setAdapter(new ButtonAdapter(this));
 		
 		//set up ViewAnimator with animations
 		animator = (ViewAnimator)findViewById(R.id.MM_LeftViewAnimator);
@@ -175,8 +174,7 @@ public class MainMenu extends Activity
 		catch (FileNotFoundException e) { e.printStackTrace(); } 
 		catch (IOException e) { e.printStackTrace(); }
 		catch (ArrayIndexOutOfBoundsException e) { e.printStackTrace(); }
-		
-		final ProgressDialog pd = ProgressDialog.show(this,"Loading","...Please wait.",true, false);
+		pd = ProgressDialog.show(this,"Loading","...Please wait.",true, false);
 		pd.hide();
 		//suffs
 		volumeControl.setMax(100);
@@ -453,27 +451,24 @@ public class MainMenu extends Activity
 			}	
 		});
 		
-		//Level List
+		//Level Grid
 		levelList.setOnItemClickListener(new OnItemClickListener()
 		{
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id)
 			{
-				if (position <= Run.unlockedLevel)
+				pd.show();
+				new Thread(new Runnable()
 				{
-					pd.show();
-					new Thread(new Runnable()
+					public void run()
 					{
-						public void run()
-						{
-							whileLoading();
-							pd.dismiss();
-						}
-					}).start();
-					Run.levelIndex = position;
-					Intent i = new Intent(MainMenu.this, Run.class);
-					startActivity(i);
-				}
-			}	
+						whileLoading();
+						pd.dismiss();
+					}
+				}).start();
+				Run.levelIndex = position;
+				Intent i = new Intent(MainMenu.this, Run.class);
+				startActivity(i);
+			}
 		});
 	}
 	
@@ -518,6 +513,22 @@ public class MainMenu extends Activity
 	protected void onDestroy()
 	{
 		super.onDestroy();
+	}
+	
+	public void runGame(int levelIndex)
+	{
+		pd.show();
+		new Thread(new Runnable()
+		{
+			public void run()
+			{
+				whileLoading();
+				pd.dismiss();
+			}
+		}).start();
+		Run.levelIndex = levelIndex;
+		Intent i = new Intent(MainMenu.this, Run.class);
+		startActivity(i);
 	}
 	
 	public void vibrator(int time)
