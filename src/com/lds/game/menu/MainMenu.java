@@ -176,6 +176,18 @@ public class MainMenu extends Activity
 		catch (IOException e) { e.printStackTrace(); }
 		catch (ArrayIndexOutOfBoundsException e) { e.printStackTrace(); }
 		
+		try
+		{
+			FileInputStream fis = openFileInput("unlocked_level");
+			byte[] buffer = new byte[4];
+			fis.read(buffer, 0, 4);
+			Run.unlockedLevel = (int)StorageHelper.byteArrayToFloat(buffer);
+			fis.close();
+		}
+		catch (FileNotFoundException e) { SoundPlayer.effectVolume = 0.5f;  } 
+		catch (IOException e) { e.printStackTrace(); }
+		catch (ArrayIndexOutOfBoundsException e) { e.printStackTrace(); }
+		
 		pd = ProgressDialog.show(this,"Loading","...Please wait.",true, false);
 		pd.hide();
 		
@@ -554,7 +566,15 @@ public class MainMenu extends Activity
 	{
 		if (resultCode == 2)
 		{
-			Run.unlockedLevel++;
+			try 
+    		{
+    			FileOutputStream fos = openFileOutput("unlocked_level", MODE_PRIVATE);
+    			fos.write(StorageHelper.floatToByteArray((float)Run.unlockedLevel + 1));
+    			fos.close();
+    		} 
+    		catch (FileNotFoundException e) { e.printStackTrace(); } 
+    		catch (IOException e) { e.printStackTrace(); }
+    		Run.unlockedLevel++;
 		}
 	}
 	
