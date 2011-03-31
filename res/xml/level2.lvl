@@ -258,73 +258,75 @@
     <Tile state="WALL" />
     <Tile state="WALL" />
   </Tileset>
+  <Nodes>466,252;294,255;-252.5,35.5;-253,-94;103,-465;256,-458;98.5,326.5;98.5,179.5;103,38.5;-33.5,44.5;-21.5,173.5;-30.5,326.5;-252.5,325;-251,469;283,463;290.5,98.5;295,-27.5</Nodes>
+  <NodeLinks>0,1,False;2,3,False;4,5,False;8,9,False;7,10,False;6,11,False;3,4,True;2,12,True;2,10,True;10,12,True;11,12,True;2,9,True;9,12,True;2,11,True;12,13,True;13,14,True;1,14,True;15,16,True;1,15,True</NodeLinks>
   <Entities>
     <Blob>
       <id>blob0</id>
-      <size>64</size>
-      <xPos>73.20002</xPos>
-      <yPos>369.9375</yPos>
+      <size>48</size>
+      <xPos>119.700012</xPos>
+      <yPos>323.4375</yPos>
       <angle>90</angle>
       <xScl>1</xScl>
       <yScl>1</yScl>
       <renderMode>
         <tileset>
-          <texID>tilesetwire</texID>
-          <x>2</x>
+          <texID>tilesetentities</texID>
+          <x>1</x>
           <y>2</y>
         </tileset>
       </renderMode>
       <health>100</health>
-      <AIType>PATROL</AIType>
+      <AIType>STALKER</AIType>
     </Blob>
     <Blob>
       <id>blob1</id>
-      <size>64</size>
-      <xPos>71.94579</xPos>
-      <yPos>215.675018</yPos>
+      <size>48</size>
+      <xPos>121.445793</xPos>
+      <yPos>181.175018</yPos>
       <angle>90</angle>
       <xScl>1</xScl>
       <yScl>1</yScl>
       <renderMode>
         <tileset>
-          <texID>tilesetwire</texID>
-          <x>2</x>
+          <texID>tilesetentities</texID>
+          <x>1</x>
           <y>2</y>
         </tileset>
       </renderMode>
       <health>100</health>
-      <AIType>PATROL</AIType>
+      <AIType>STALKER</AIType>
     </Blob>
     <Blob>
       <id>blob2</id>
-      <size>64</size>
-      <xPos>70.69172</xPos>
-      <yPos>73.95415</yPos>
+      <size>48</size>
+      <xPos>120.191719</xPos>
+      <yPos>37.9541473</yPos>
       <angle>90</angle>
       <xScl>1</xScl>
       <yScl>1</yScl>
       <renderMode>
         <tileset>
-          <texID>tilesetwire</texID>
-          <x>2</x>
+          <texID>tilesetentities</texID>
+          <x>1</x>
           <y>2</y>
         </tileset>
       </renderMode>
       <health>100</health>
-      <AIType>PATROL</AIType>
+      <AIType>STALKER</AIType>
     </Blob>
     <Blob>
       <id>turretfordoor</id>
-      <size>64</size>
-      <xPos>-284.237518</xPos>
-      <yPos>221.945816</yPos>
+      <size>48</size>
+      <xPos>-248.237518</xPos>
+      <yPos>185.945816</yPos>
       <angle>90</angle>
       <xScl>1</xScl>
       <yScl>1</yScl>
       <renderMode>
         <tileset>
-          <texID>tilesetwire</texID>
-          <x>2</x>
+          <texID>tilesetentities</texID>
+          <x>1</x>
           <y>2</y>
         </tileset>
       </renderMode>
@@ -333,70 +335,70 @@
     </Blob>
     <Blob>
       <id>blob4</id>
-      <size>64</size>
-      <xPos>213.09993</xPos>
-      <yPos>-210.899841</yPos>
+      <size>48</size>
+      <xPos>249.09993</xPos>
+      <yPos>-246.899841</yPos>
       <angle>90</angle>
       <xScl>1</xScl>
       <yScl>1</yScl>
       <renderMode>
         <tileset>
-          <texID>tilesetwire</texID>
-          <x>2</x>
+          <texID>tilesetentities</texID>
+          <x>1</x>
           <y>2</y>
         </tileset>
       </renderMode>
       <health>100</health>
-      <AIType>PATROL</AIType>
+      <AIType>STALKER</AIType>
     </Blob>
     <Blob>
       <id>blob5</id>
-      <size>64</size>
-      <xPos>436.699768</xPos>
-      <yPos>-436.6497</yPos>
+      <size>48</size>
+      <xPos>472.699768</xPos>
+      <yPos>-472.6497</yPos>
       <angle>90</angle>
       <xScl>1</xScl>
       <yScl>1</yScl>
       <renderMode>
         <tileset>
-          <texID>tilesetwire</texID>
-          <x>2</x>
+          <texID>tilesetentities</texID>
+          <x>1</x>
           <y>2</y>
         </tileset>
       </renderMode>
       <health>100</health>
-      <AIType>PATROL</AIType>
+      <AIType>STALKER</AIType>
     </Blob>
     <Blob>
       <id>blob6</id>
-      <size>64</size>
-      <xPos>428.099762</xPos>
-      <yPos>290.050323</yPos>
+      <size>48</size>
+      <xPos>464.099762</xPos>
+      <yPos>254.050323</yPos>
       <angle>90</angle>
       <xScl>1</xScl>
       <yScl>1</yScl>
       <renderMode>
         <tileset>
-          <texID>tilesetwire</texID>
-          <x>2</x>
+          <texID>tilesetentities</texID>
+          <x>1</x>
           <y>2</y>
         </tileset>
       </renderMode>
       <health>100</health>
-      <AIType>PATROL</AIType>
+      <AIType>STALKER</AIType>
     </Blob>
     <Blob>
       <id>blobforpit</id>
-      <size>64</size>
-      <xPos>-431</xPos>
-      <yPos>508</yPos>
+      <size>48</size>
+      <xPos>-395</xPos>
+      <yPos>472</yPos>
       <angle>90</angle>
       <xScl>1</xScl>
       <yScl>1</yScl>
       <renderMode>
         <tileset>
-          <texID>tilesetwire</texID>
-          <x>2</x>
+          <texID>tilesetentities</texID>
+          <x>1</x>
           <y>2</y>
         </tileset>
       </renderMode>
@@ -598,8 +600,8 @@
     <Button>
       <id>finalbutton</id>
       <size>64</size>
-      <xPos>434.5499</xPos>
-      <yPos>-210.899765</yPos>
+      <xPos>470.5499</xPos>
+      <yPos>-246.89978</yPos>
       <angle>90</angle>
       <xScl>1</xScl>
       <yScl>1</yScl>
@@ -614,8 +616,8 @@
     <Door>
       <id>finaldoor</id>
       <size>72</size>
-      <xPos>435.4999</xPos>
-      <yPos>-7.15255737E-07</yPos>
+      <xPos>471.4999</xPos>
+      <yPos>-36</yPos>
       <angle>0</angle>
       <xScl>0.5</xScl>
       <yScl>1</yScl>
@@ -626,13 +628,12 @@
           <y>1</y>
         </tileset>
       </renderMode>
-      <startOpen>false</startOpen>
     </Door>
     <Door>
       <id>enemydoor1</id>
       <size>72</size>
-      <xPos>-2.050025</xPos>
-      <yPos>359.9041</yPos>
+      <xPos>33.9499741</xPos>
+      <yPos>323.9041</yPos>
       <angle>0</angle>
       <xScl>0.5</xScl>
       <yScl>1</yScl>
@@ -643,13 +644,12 @@
           <y>1</y>
         </tileset>
       </renderMode>
-      <startOpen>false</startOpen>
     </Door>
     <Door>
       <id>enemydoor2</id>
       <size>72</size>
-      <xPos>-0.79581356</xPos>
-      <yPos>215.675018</yPos>
+      <xPos>35.2041855</xPos>
+      <yPos>179.675018</yPos>
       <angle>0</angle>
       <xScl>0.5</xScl>
       <yScl>1</yScl>
@@ -660,13 +660,12 @@
           <y>1</y>
         </tileset>
       </renderMode>
-      <startOpen>false</startOpen>
     </Door>
     <Door>
       <id>enemydoor3</id>
       <size>72</size>
-      <xPos>-0.7958212</xPos>
-      <yPos>72.70003</yPos>
+      <xPos>35.2041779</xPos>
+      <yPos>36.7000275</yPos>
       <angle>0</angle>
       <xScl>0.5</xScl>
       <yScl>1</yScl>
@@ -677,13 +676,12 @@
           <y>1</y>
         </tileset>
       </renderMode>
-      <startOpen>false</startOpen>
     </Door>
     <Door>
       <id>buttonfieldDR</id>
       <size>72</size>
-      <xPos>-287.766724</xPos>
-      <yPos>1.61668634</yPos>
+      <xPos>-251.766724</xPos>
+      <yPos>-34.383316</yPos>
       <angle>90</angle>
       <xScl>1</xScl>
       <yScl>0.5</yScl>
@@ -694,13 +692,12 @@
           <y>1</y>
         </tileset>
       </renderMode>
-      <startOpen>false</startOpen>
     </Door>
     <Door>
       <id>enemydoor4</id>
       <size>72</size>
-      <xPos>365.749664</xPos>
-      <yPos>287.9003</yPos>
+      <xPos>401.749664</xPos>
+      <yPos>251.9003</yPos>
       <angle>0</angle>
       <xScl>0.5</xScl>
       <yScl>1</yScl>
@@ -711,13 +708,12 @@
           <y>1</y>
         </tileset>
       </renderMode>
-      <startOpen>false</startOpen>
     </Door>
     <PhysBlock>
       <id>physBlock1</id>
-      <size>50</size>
-      <xPos>440.999939</xPos>
-      <yPos>135.250259</yPos>
+      <size>32</size>
+      <xPos>475.499939</xPos>
+      <yPos>106.750259</yPos>
       <angle>90</angle>
       <xScl>1</xScl>
       <yScl>1</yScl>
@@ -728,12 +724,13 @@
           <y>0</y>
         </tileset>
       </renderMode>
+      <friction>0</friction>
     </PhysBlock>
     <PhysBall>
       <id>physBall0</id>
-      <size>50</size>
-      <xPos>377.916626</xPos>
-      <yPos>133.65004</yPos>
+      <size>32</size>
+      <xPos>412.416626</xPos>
+      <yPos>105.15004</yPos>
       <angle>90</angle>
       <xScl>1</xScl>
       <yScl>1</yScl>
@@ -744,20 +741,21 @@
           <y>0</y>
         </tileset>
       </renderMode>
+      <friction>0</friction>
     </PhysBall>
     <Player>
       <id>player</id>
-      <size>64</size>
-      <xPos>293.125153</xPos>
-      <yPos>1.39581835</yPos>
+      <size>32</size>
+      <xPos>300.625153</xPos>
+      <yPos>-25.60418</yPos>
       <angle>90</angle>
       <xScl>1</xScl>
       <yScl>1</yScl>
       <renderMode>
         <tileset>
-          <texID>tilesetwire</texID>
-          <x>1</x>
-          <y>0</y>
+          <texID>tilesetentities</texID>
+          <x>0</x>
+          <y>2</y>
         </tileset>
       </renderMode>
       <health>0</health>
@@ -768,7 +766,9 @@
     <Cause id="trueBTN" type="CauseButton">truebutton1</Cause>
     <Cause id="ENDBTN" type="CauseButton">finalbutton</Cause>
     <Cause id="deadBlob" type="CauseEnemyCount">7</Cause>
+    <Cause id="endgamecause" type="CauseLocation">player,502.899,574.966,-76.666,7.833</Cause>
     <Cause id="OPENEVERYTHING" type="CauseAND">ENDBTN,trueBTN</Cause>
+    <Cause id="win" type="CauseAND">endgamecause,OPENEVERYTHING</Cause>
     <Effect id="enmydr5" type="EffectDoor">finaldoor</Effect>
     <Effect id="enmydr4" type="EffectDoor">enemydoor4</Effect>
     <Effect id="enmydr3" type="EffectDoor">enemydoor3</Effect>
@@ -779,14 +779,25 @@
     <Effect id="secondpitnode" type="EffectActivateNodeLink">2</Effect>
     <Effect id="doornode1" type="EffectActivateNodeLink">1</Effect>
     <Effect id="firstpit" type="EffectRaiseBridge">4,2</Effect>
-    <Effect id="everything" type="EffectList">highestblob,middleblob,finalblob,lowestblob,enmydr1,enmydr2,enmydr3,enmydr4,enmydr5</Effect>
-    <Effect id="lastpit" type="EffectList">tofinalBTN,secondpitnode</Effect>
-    <Effect id="buttonfield" type="EffectList">toBTNfield,doornode1</Effect>
-    <Trigger cause="trueBTN" effect="lastpit" />
-    <Trigger cause="deadTurret" effect="buttonfield" />
-    <Trigger cause="OPENEVERYTHING" effect="everything" />
+    <Effect id="enemynode1" type="EffectActivateNodeLink">0</Effect>
+    <Effect id="enemynode2" type="EffectActivateNodeLink">3</Effect>
+    <Effect id="enemynode3" type="EffectActivateNodeLink">4</Effect>
+    <Effect id="enemynode4" type="EffectActivateNodeLink">5</Effect>
+    <Effect id="endgame" type="EffectEndGame">True</Effect>
+    <Trigger cause="OPENEVERYTHING" effect="enmydr5" />
+    <Trigger cause="OPENEVERYTHING" effect="enmydr3" />
+    <Trigger cause="OPENEVERYTHING" effect="enmydr4" />
+    <Trigger cause="OPENEVERYTHING" effect="enmydr2" />
+    <Trigger cause="OPENEVERYTHING" effect="enmydr1" />
+    <Trigger cause="OPENEVERYTHING" effect="enemynode1" />
+    <Trigger cause="OPENEVERYTHING" effect="enemynode2" />
+    <Trigger cause="OPENEVERYTHING" effect="enemynode3" />
+    <Trigger cause="OPENEVERYTHING" effect="enemynode4" />
+    <Trigger cause="win" effect="endgame" />
     <Trigger cause="deadBlob" effect="firstpit" />
+    <Trigger cause="deadTurret" effect="toBTNfield" />
+    <Trigger cause="deadTurret" effect="doornode1" />
+    <Trigger cause="trueBTN" effect="secondpitnode" />
+    <Trigger cause="trueBTN" effect="tofinalBTN" />
   </Triggers>
-  <Nodes>430,288;258,291;-290,70;-289,-58;67,-429;220,-422;62.5,362.5;62.5,215.5;67,74.5;-69.5,80.5;-57.5,209.5;-66.5,362.5;-288.5,361;-287,505;247,499;254.5,134.5;259,8.5</Nodes>
-  <NodeLinks>0,1,False;2,3,False;4,5,False;8,9,False;7,10,False;6,11,False;3,4,True;2,12,True;2,10,True;10,12,True;11,12,True;2,9,True;9,12,True;2,11,True;12,13,True;13,14,True;1,14,True;15,16,True;1,15,True</NodeLinks>
 </Level>
