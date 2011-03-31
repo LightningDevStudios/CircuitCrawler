@@ -17,7 +17,7 @@ import android.widget.ImageButton;
 public class ButtonAdapter extends BaseAdapter
 {
 	private Context mContext;
-	private int[] ints = { 0, 1, 2, 3 };
+	private int[] ints = { 0, 1, 2 };
 	public static int numberOfLevels = 4;
 	
 	public ButtonAdapter(Context mContext)
