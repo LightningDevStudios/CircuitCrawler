@@ -15,10 +15,12 @@ public  abstract class Enemy extends Character //enemies will fall under this cl
 	protected AIType type;
 	protected boolean agressive, colliding;
 	protected int lastTime, randomTime;
+	
 	//Patrol stuff
 	protected NodePath patrolPath;
 	protected int patrolPathLocation;
 	protected boolean onPatrol, oneDrop = true;
+	
 	//Pathfinding stuff
 	protected NodePath pathToPlayer;
 	protected int playerPathLocation;
