@@ -14,6 +14,7 @@ import android.content.Intent;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
+import android.media.MediaPlayer.OnPreparedListener;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -28,12 +29,11 @@ import com.lds.game.event.*;
 import com.lds.game.menu.MainMenu;
 import com.lds.game.puzzle.PuzzleActivity;
 
-public class Run extends Activity implements OnGameOverListener, OnGameInitializedListener, OnPuzzleActivatedListener
+public class Run extends Activity implements OnGameOverListener, OnGameInitializedListener, OnPuzzleActivatedListener, OnPreparedListener, OnCompletionListener
 {
 	public static final int PUZZLE_ACTIVITY = 2;
 	private int unlockedLevel, levelIndex, levelId;
 	private Bundle savedInstanceState;
-	
 	private Graphics glSurface;
 	private GameRenderer gameR;
 	private Context context;
@@ -72,45 +72,9 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 		setVolumeControlStream(AudioManager.STREAM_MUSIC);
 
 		pd = ProgressDialog.show(this, "", "Loading...");
-		//Copy mp3s from raw to /sdcard/
-		try 
-		{
-			saveas(R.raw.song2);
-			mp.setDataSource("/sdcard/circutCrawler/media/audio/songs/song2.mp3");
-			if (SoundPlayer.enableMusic)
-			{
-				mp.prepare();
-				mp.setVolume(SoundPlayer.musicVolume, SoundPlayer.musicVolume);
-				mp.start();
-			}
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();
-		}
 
-        mp.setOnCompletionListener(new OnCompletionListener() 
-        {
-                public void onCompletion(MediaPlayer mp) 
-                {
-                	try
-                	{
-	                	mp.reset();
-	                	if (SoundPlayer.enableMusic)
-	        			{
-	        				mp.prepare();
-	        				mp.setDataSource("/sdcard/circutCrawler/media/audio/songs/song2.mp3");
-	        				mp.setVolume(SoundPlayer.musicVolume, SoundPlayer.musicVolume);
-	        				mp.start();
-	        			}
-	                }
-	                catch (Exception e) 
-	        		{
-	        			e.printStackTrace();
-	        		}
-                }
-        });
-				
+		playMusic();
+		
 		//set up OpenGL rendering
 		Object syncObj = new Object();
 		gameR = new GameRenderer(screenX, screenY, this, syncObj, levelId);
@@ -121,8 +85,8 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 		setContentView(glSurface);
 	}
 	
-	public boolean saveas(int ressound)
-	{
+	public boolean saveas(int ressound, String fileName)
+	{  
 		 byte[] buffer=null;  
 		 InputStream fIn = getBaseContext().getResources().openRawResource(ressound);  
 		 int size=0;  
@@ -138,8 +102,8 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 		  return false;  
 		 }  
 		  
-		 String path="/sdcard/circutCrawler/media/audio/songs/";  
-		 String filename="song2"+".mp3";  
+		 String path="/sdcard/CircutCrawler/media/audio/songs/";  
+		 String filename= fileName;
 		  
 		 boolean exists = (new File(path)).exists();  
 		 if (!exists){new File(path).mkdirs();}  
@@ -181,45 +145,25 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 		 return true;  
 	}
 	
+	@Override
+	public void onCompletion(MediaPlayer mp) 
+	{
+		mp.reset();
+		playMusic();
+	} 
 	
+	@Override 
+    public void onPrepared(MediaPlayer mp) 
+	{ 
+		mp.setVolume(SoundPlayer.musicVolume, SoundPlayer.musicVolume);
+		mp.start(); 
+    } 
+
 	@Override
 	public void onGameInitialized()
 	{
 		gameR.setGameOverEvent(this);
 		gameR.setPuzzleActivatedEvent(this);
-		
-		//Copy mp3s from raw to /sdcard/
-		try 
-		{
-			saveas(R.raw.song2);
-			mp.setDataSource("/sdcard/circutCrawler/media/audio/songs/song2.mp3");
-			mp.prepare();
-			mp.setVolume(SoundPlayer.musicVolume, SoundPlayer.musicVolume); //penis
-	        mp.start();
-		} 
-		catch (Exception e) 
-		{
-			e.printStackTrace();
-		}
-
-        mp.setOnCompletionListener(new OnCompletionListener() 
-        {
-                public void onCompletion(MediaPlayer mp) 
-                {
-                	try
-                	{
-	                	mp.reset();
-	                	mp.prepare();
-	        			mp.setVolume(SoundPlayer.musicVolume, SoundPlayer.musicVolume);
-	        	        mp.start();
-	                }
-	                catch (Exception e) 
-	        		{
-	        			e.printStackTrace();
-	        		}
-                }
-        });
-		
 		pd.dismiss();
 	}
 	
@@ -227,6 +171,7 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 	public void onGameOver(boolean winning)
 	{
 		mp.stop();
+		mp.reset();
 		if (winning)
 		{
 			if (levelIndex == unlockedLevel)
@@ -267,6 +212,45 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 				glSurface.onPuzzleWon();
 			break;
 		default:
+		}
+	}
+	
+	public void playMusic()
+	{	
+		mp.setOnPreparedListener(this);
+		mp.setOnCompletionListener(this);
+		if((Math.random()*50 + 1) >= 25)
+		{
+			try 
+			{
+				saveas(R.raw.song2, "song2.mp3");
+				mp.setDataSource("/sdcard/circutCrawler/media/audio/songs/song2.mp3");
+				if (SoundPlayer.enableMusic)
+				{
+					mp.prepare();
+				}
+			} 
+			catch (Exception e) 
+			{
+				e.printStackTrace();
+			}
+			
+		}
+		else
+		{
+			try 
+			{
+				saveas(R.raw.song1, "song1.mp3");
+				mp.setDataSource("/sdcard/circutCrawler/media/audio/songs/song1.mp3");
+				if (SoundPlayer.enableMusic)
+				{
+					mp.prepare();
+				}
+			} 
+			catch (Exception e) 
+			{
+				e.printStackTrace();
+			}
 		}
 	}
 	
@@ -321,7 +305,7 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 	{
 		super.onResume();
 		glSurface.onResume();
-		mp.start();
+		//mp.start();
 	}
 	
 	@Override

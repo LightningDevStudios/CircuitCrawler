@@ -89,11 +89,6 @@ public class Player extends Character //your character, protagonist
 				Vector2f newMoveVec = new Vector2f(Something in here);
 				this.push(newMoveVec);
 			}*/
-			else
-			{
-				this.stop();
-				this.enableUserControl();
-			}
 		}
 	}
 	
