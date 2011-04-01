@@ -35,6 +35,7 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 	public static int unlockedLevel = 0;
 	public static int levelIndex = 0;
 	public int levelId;
+	public boolean paused = false;
 	public Bundle savedInstanceState;
 	
 	public Graphics glSurface;
@@ -265,6 +266,7 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 	{
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.options_menu, menu);
+		mp.pause();
 		gameR.paused = true;
 		return true;
 	}
@@ -273,6 +275,7 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 	public void onOptionsMenuClosed(Menu menu)
 	{
 		super.onOptionsMenuClosed(menu);
+		mp.start();
 		gameR.paused = false;
 	}
 	
@@ -283,10 +286,12 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 		{
 			case R.id.restart:
 				//restart game
+				mp.start();
 				onCreate(savedInstanceState);
 				return true;
 			case R.id.main_menu:
 				//return to main menu
+				mp.stop();
 				Intent i = new Intent(Run.this, MainMenu.class);
 				startActivity(i);
 				finish();
@@ -306,6 +311,7 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 	@Override
 	public void onBackPressed()
 	{
+		mp.stop();
 		Intent i = new Intent(Run.this, MainMenu.class);
 		startActivity(i);
 	}
@@ -315,15 +321,20 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 	{
 		super.onResume();
 		glSurface.onResume();
-		//mp.start();
+		if(paused)
+		{
+			mp.start();
+			paused = false;
+		}	
 	}
 	
 	@Override
 	protected void onPause ()
 	{
 		super.onPause();
-		glSurface.onPause();
+		paused = true;
 		mp.pause();
+		glSurface.onPause();
 		//finish();
 	}
 	
