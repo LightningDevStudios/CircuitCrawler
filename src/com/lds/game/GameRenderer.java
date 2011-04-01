@@ -345,7 +345,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 				if (game.player.getEnergy() != 0)
 				{
 					final Vector2f directionVec = new Vector2f(game.player.getAngle());
-					final AttackBolt attack = new AttackBolt(Vector2f.add(game.player.getPos(), directionVec), directionVec.scale(20), game.player.getAngle());
+					final AttackBolt attack = new AttackBolt(Vector2f.add(game.player.getPos(), directionVec), directionVec.scale(25), game.player.getAngle());
 					attack.ignore(game.player);
 					attack.genHardwareBuffers(gl);
 					EntityManager.addEntity(attack);

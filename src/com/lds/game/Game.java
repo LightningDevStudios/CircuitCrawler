@@ -175,7 +175,6 @@ public class Game
 		triggerList.addAll(parser.triggerList);
 		
 		player = parser.player;
-		player.enableUserControl();
 		entList.add(player);
 		
 		for (int i = 0; i < tileset.length; i++)
@@ -800,8 +799,11 @@ public class Game
 	public void updatePlayerPos()
 	{
 		//move player
-		player.setAngle(joypad.getInputAngle());
-		player.addPos(joypad.getInputVec().scale((Stopwatch.elapsedTimeMs() - frameInterval) * (player.getMoveSpeed() / 1000)));
+		if (player.userHasControl())
+		{
+			player.setAngle(joypad.getInputAngle());
+			player.addPos(joypad.getInputVec().scale((Stopwatch.elapsedTimeMs() - frameInterval) * (player.getMoveSpeed() / 1000)));
+		}
 		joypad.clearInputVec();
 		
 		//move heldObject if neccessary
