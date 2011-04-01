@@ -32,23 +32,12 @@ import com.lds.game.puzzle.PuzzleActivity;
 public class Run extends Activity implements OnGameOverListener, OnGameInitializedListener, OnPuzzleActivatedListener, OnPreparedListener, OnCompletionListener
 {
 	public static final int PUZZLE_ACTIVITY = 2;
-<<<<<<< HEAD
-	public static int unlockedLevel = 0;
-	public static int levelIndex = 0;
-	public int levelId;
 	public boolean paused = false;
-	public Bundle savedInstanceState;
-	
-	public Graphics glSurface;
-	public GameRenderer gameR;
-	public Context context;
-=======
 	private int unlockedLevel, levelIndex, levelId;
 	private Bundle savedInstanceState;
 	private Graphics glSurface;
 	private GameRenderer gameR;
 	private Context context;
->>>>>>> refs/remotes/origin/robert_rouhani_master
 	private MediaPlayer mp = new MediaPlayer();
 	private ProgressDialog pd;
 	
@@ -297,13 +286,8 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 				return true;
 			case R.id.main_menu:
 				//return to main menu
-<<<<<<< HEAD
 				mp.stop();
-				Intent i = new Intent(Run.this, MainMenu.class);
-				startActivity(i);
-=======
 				setResult(0);
->>>>>>> refs/remotes/origin/robert_rouhani_master
 				finish();
 				return true;
 			case R.id.quit:
@@ -319,13 +303,8 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 	@Override
 	public void onBackPressed()
 	{
-<<<<<<< HEAD
 		mp.stop();
-		Intent i = new Intent(Run.this, MainMenu.class);
-		startActivity(i);
-=======
 		finish();
->>>>>>> refs/remotes/origin/robert_rouhani_master
 	}
 	
 	@Override
