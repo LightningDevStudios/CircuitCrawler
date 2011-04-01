@@ -224,7 +224,8 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 	{	
 		mp.setOnPreparedListener(this);
 		mp.setOnCompletionListener(this);
-		if((Math.random()*50 + 1) >= 25)
+		int rand = (int)(Math.random()* 50 + 1);
+		if(rand >= 25)
 		{
 			try 
 			{
