@@ -128,10 +128,11 @@ public final class R {
         public static final int lock=0x7f060009;
         public static final int pitfall=0x7f06000a;
         public static final int shootsound=0x7f06000b;
-        public static final int song2=0x7f06000c;
-        public static final int testclick=0x7f06000d;
-        public static final int unlocked=0x7f06000e;
-        public static final int ytf_logo=0x7f06000f;
+        public static final int song1=0x7f06000c;
+        public static final int song2=0x7f06000d;
+        public static final int testclick=0x7f06000e;
+        public static final int unlocked=0x7f06000f;
+        public static final int ytf_logo=0x7f060010;
     }
     public static final class string {
         public static final int app_name=0x7f080000;
