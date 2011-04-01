@@ -51,7 +51,7 @@ public class ButtonAdapter extends BaseAdapter
 		{
 			button = (ImageButton)convertView;
 		}
-		if (position <= Run.unlockedLevel)
+		if (position <= ((MainMenu)mContext).getUnlockedLevel())
 		{
 			button.setImageResource(R.raw.unlocked);
 			button.setOnClickListener(new View.OnClickListener()
