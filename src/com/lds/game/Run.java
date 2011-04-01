@@ -31,16 +31,12 @@ import com.lds.game.puzzle.PuzzleActivity;
 public class Run extends Activity implements OnGameOverListener, OnGameInitializedListener, OnPuzzleActivatedListener
 {
 	public static final int PUZZLE_ACTIVITY = 2;
-	public static int unlockedLevel = 0;
-	public static int levelIndex = 0;
-	public int levelId;
-	public Bundle savedInstanceState;
+	private int unlockedLevel, levelIndex, levelId;
+	private Bundle savedInstanceState;
 	
-	public Graphics glSurface;
-	public GameRenderer gameR;
-	public static boolean songOver;
-	public static float timer = 0;
-	public Context context;
+	private Graphics glSurface;
+	private GameRenderer gameR;
+	private Context context;
 	private MediaPlayer mp = new MediaPlayer();
 	private ProgressDialog pd;
 	
@@ -49,6 +45,12 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 	{
 		super.onCreate(savedInstanceState);
 		this.savedInstanceState = savedInstanceState;
+		
+		levelIndex = getIntent().getExtras().getInt("levelIndex", -1);
+		unlockedLevel = getIntent().getExtras().getInt("unlockedLevel", -1);
+		
+		if (levelIndex == -1 || unlockedLevel == -1)
+			finish();
 		
 		switch (levelIndex)
 		{
@@ -108,18 +110,11 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 	        		}
                 }
         });
-		
-		final Object data = getLastNonConfigurationInstance();
-		
+				
 		//set up OpenGL rendering
 		Object syncObj = new Object();
 		gameR = new GameRenderer(screenX, screenY, this, syncObj, levelId);
-		
-		if(data != null)
-		{
-			gameR.game = (Game)data;
-		}
-		
+				
 		gameR.setGameInitializedEvent(this);
 		glSurface = new Graphics(this, gameR, syncObj);
 		
@@ -127,7 +122,7 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 	}
 	
 	public boolean saveas(int ressound)
-	{  
+	{
 		 byte[] buffer=null;  
 		 InputStream fIn = getBaseContext().getResources().openRawResource(ressound);  
 		 int size=0;  
@@ -302,15 +297,12 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 				return true;
 			case R.id.main_menu:
 				//return to main menu
-				Intent i = new Intent(Run.this, MainMenu.class);
-				startActivity(i);
+				setResult(0);
 				finish();
 				return true;
 			case R.id.quit:
-				moveTaskToBack(true);
+				setResult(3);
 				finish();
-				System.exit(0);
-				android.os.Process.killProcess(android.os.Process.myPid());
 				return true;
 			default:
 				return super.onOptionsItemSelected(item);
@@ -321,8 +313,7 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 	@Override
 	public void onBackPressed()
 	{
-		Intent i = new Intent(Run.this, MainMenu.class);
-		startActivity(i);
+		finish();
 	}
 	
 	@Override
@@ -347,12 +338,5 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 	{
 		super.onDestroy();
 		mp.stop();
-	}
-	
-	@Override
-	public Object onRetainNonConfigurationInstance()
-	{
-		final Game game = gameR.game;
-		return game;
 	}
 }

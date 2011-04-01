@@ -49,6 +49,7 @@ public class MainMenu extends Activity
 	public SeekBar mSeekBar;
 	private ViewAnimator animator;
 	private ProgressDialog pd;
+	private int unlockedLevel;
 	GridView levelList;
     
 	@Override
@@ -181,7 +182,7 @@ public class MainMenu extends Activity
 			FileInputStream fis = openFileInput("unlocked_level");
 			byte[] buffer = new byte[4];
 			fis.read(buffer, 0, 4);
-			Run.unlockedLevel = (int)StorageHelper.byteArrayToFloat(buffer);
+			unlockedLevel = (int)StorageHelper.byteArrayToFloat(buffer);
 			fis.close();
 		}
 		catch (FileNotFoundException e) { SoundPlayer.effectVolume = 0.5f;  } 
@@ -532,7 +533,7 @@ public class MainMenu extends Activity
 		if (animator.getDisplayedChild() != 6)
 			animator.setDisplayedChild(6);
 		else
-			super.onBackPressed();
+			finish();
 	}
 
 	@Override
@@ -556,25 +557,31 @@ public class MainMenu extends Activity
 	
 	public void runGame(int levelIndex)
 	{
-		Run.levelIndex = levelIndex;
 		Intent i = new Intent(MainMenu.this, Run.class);
-		i.putExtra("levelID", levelIndex);
+		i.putExtra("levelIndex", levelIndex);
+		i.putExtra("unlockedLevel", unlockedLevel);
 		startActivityForResult(i, 1);
 	}
 	
+	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data)
 	{
 		if (resultCode == 2)
 		{
+			unlockedLevel++;
 			try 
     		{
     			FileOutputStream fos = openFileOutput("unlocked_level", MODE_PRIVATE);
-    			fos.write(StorageHelper.floatToByteArray((float)Run.unlockedLevel + 1));
+    			fos.write(StorageHelper.floatToByteArray((float)unlockedLevel));
     			fos.close();
     		} 
     		catch (FileNotFoundException e) { e.printStackTrace(); } 
     		catch (IOException e) { e.printStackTrace(); }
-    		Run.unlockedLevel++;
+		}
+		
+		if (resultCode == 3)
+		{
+			finish();
 		}
 	}
 	
@@ -595,5 +602,10 @@ public class MainMenu extends Activity
 			  } 
 			  catch (Exception e) {} 
 			} 
+	}
+	
+	public int getUnlockedLevel()
+	{
+		return unlockedLevel;
 	}
 }
