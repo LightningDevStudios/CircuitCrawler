@@ -28,7 +28,7 @@ public class Player extends Character //your character, protagonist
 		if(godMode)
 		{
 			health = 9999999;//LOLS
-			1
+			energy = 9999999;
 		}
 		if(noclip)
 		{
