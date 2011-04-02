@@ -36,6 +36,7 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 	private GameRenderer gameR;
 	private MediaPlayer mp = new MediaPlayer();
 	private ProgressDialog pd;
+	private boolean playingSong1;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -70,7 +71,7 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 
 		pd = ProgressDialog.show(this, "", "Loading...");
 
-		playMusic();
+		playMusic(true);
 		
 		//set up OpenGL rendering
 		Object syncObj = new Object();
@@ -146,7 +147,7 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 	public void onCompletion(MediaPlayer mp) 
 	{
 		mp.reset();
-		playMusic();
+		playMusic(false);
 	} 
 	
 	@Override 
@@ -212,17 +213,24 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 		}
 	}
 	
-	public void playMusic()
+	public void playMusic(boolean random)
 	{	
 		mp.setOnPreparedListener(this);
 		mp.setOnCompletionListener(this);
-		int rand = (int)(Math.random()* 50 + 1);
-		if(rand >= 25)
+		int whichSong;
+		if (random)
+			whichSong = (int)(Math.random() * 2 + 1);
+		else if (playingSong1)
+			whichSong = 2;
+		else
+			whichSong = 1;
+		if(whichSong == 2)
 		{
 			try 
 			{
 				saveas(R.raw.song2, "song2.mp3");
 				mp.setDataSource("/sdcard/circutCrawler/media/audio/songs/song2.mp3");
+				playingSong1 = false;
 				if (SoundPlayer.enableMusic)
 				{
 					mp.prepare();
@@ -232,7 +240,6 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 			{
 				e.printStackTrace();
 			}
-			
 		}
 		else
 		{
@@ -240,6 +247,7 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 			{
 				saveas(R.raw.song1, "song1.mp3");
 				mp.setDataSource("/sdcard/circutCrawler/media/audio/songs/song1.mp3");
+				playingSong1 = true;
 				if (SoundPlayer.enableMusic)
 				{
 					mp.prepare();
