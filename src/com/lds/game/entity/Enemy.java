@@ -11,7 +11,7 @@ public  abstract class Enemy extends Character //enemies will fall under this cl
 {
 	public static int OUTER_RADIUS = 275, INNER_RADIUS = 75;
 	private static int enemyCount = 0;
-	public boolean active, dead;
+	public boolean active;
 	protected AIType type;
 	protected boolean agressive, colliding;
 	protected int lastTime, randomTime;
@@ -41,7 +41,6 @@ public  abstract class Enemy extends Character //enemies will fall under this cl
 		onPatrol = false;
 		colliding = false;
 		this.active = active;
-		dead = false;
 	}
 	
 	@Override
@@ -53,7 +52,6 @@ public  abstract class Enemy extends Character //enemies will fall under this cl
 	@Override
 	public void die()
 	{
-		dead = true;
 		enemyCount--;
 		if(oneDrop)
 		{
@@ -84,11 +82,6 @@ public  abstract class Enemy extends Character //enemies will fall under this cl
 			agressive = true;
 		}
 	}*/
-	
-	public boolean isDead()
-	{
-		return dead;
-	}
 	
 	//Patrol stuff
 	
