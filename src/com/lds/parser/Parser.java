@@ -172,6 +172,14 @@ public class Parser //this is a parser
 					parsedList.add(wbd);
 					wbd.createInst(entList);
 				}
+				
+				else if (xrp.getName().equalsIgnoreCase("Teleporter"))
+				{
+					parseObj("Teleporter");
+					TeleporterData td = new TeleporterData(dataHM);
+					parsedList.add(td);
+					td.createInst(entList);
+				}
 			}
 		}
 	}
@@ -382,6 +390,10 @@ Parse A Tileset
 		{
 			cause = new CauseDoneScaling(this.<PhysEnt>stringToSubEntity(parameters[0]));
 		}
+		else if(type.equalsIgnoreCase("CauseEntityDestruction"))
+		{
+			cause = new CauseEntityDestruction(this.<Entity>stringToSubEntity(parameters[0]));
+		}
 		else if(type.equalsIgnoreCase("CauseEnemyCount"))
 		{
 			cause = new CauseEnemyCount(Integer.parseInt(parameters[0]));
@@ -487,6 +499,11 @@ Parse A Tileset
 		xrp.next();
 		xrp.next();
 	}
+	
+	/*********************
+	 * TeleporterLinkers *
+	 *********************/
+
 }
 
 	

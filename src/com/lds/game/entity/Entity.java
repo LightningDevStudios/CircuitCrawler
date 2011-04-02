@@ -32,6 +32,7 @@ public abstract class Entity
 	protected boolean rendered;
 	protected boolean circular;
 	protected boolean willCollide;
+	protected boolean exists;
 	
 	//graphics data
 	protected float angle, size, halfSize;
@@ -86,6 +87,7 @@ public abstract class Entity
 		this.isSolid = isSolid;
 		this.circular = circular;
 		this.willCollide = willCollide;
+		exists = true;
 		
 		//initializes graphics variables
 		this.size = size;
@@ -880,5 +882,15 @@ public abstract class Entity
 				Log.e("LDS_Game", "Index buffer generates GL_ERROR: " + error);
 			}
 		}
+	}
+
+	public boolean exists()
+	{
+		return exists;
+	}
+	
+	public void setExists(boolean exists)
+	{
+		this.exists = exists;
 	}
 }

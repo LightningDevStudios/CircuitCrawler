@@ -297,6 +297,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 					game.player.loseEnergy(5);
 					vibrator(100);
 					SoundPlayer.getInstance().playSound(2);
+					attack.enableTilesetMode(Game.tilesetentities, 1, 3);
 				}
 			}
 			else

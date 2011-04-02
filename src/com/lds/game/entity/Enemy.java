@@ -1,6 +1,9 @@
 package com.lds.game.entity;
 
 import com.lds.EntityManager;
+import com.lds.Texture;
+import com.lds.game.Game;
+import com.lds.game.R;
 import com.lds.game.SoundPlayer;
 import com.lds.Enums.AIType;
 import com.lds.Stopwatch;
@@ -56,18 +59,19 @@ public  abstract class Enemy extends Character //enemies will fall under this cl
 		if(oneDrop)
 		{
 			SoundPlayer.getInstance().playSound(3);
-			int rand = (int)(Math.random() * 3 + 1);
-			if (rand == 1)
+			int rand = (int)(Math.random() * 5);
+			if (rand == 0)
 			{
 				PickupEnergy pe = new PickupEnergy((int)(Math.random() * 15 + 15), this.getXPos(), this.getYPos());
+				pe.enableTilesetMode(Game.baricons, 1, 0);
 				EntityManager.addEntity(pe);
 			}
-			else if (rand == 2)
+			else if (rand == 1)
 			{
 				PickupHealth ph = new PickupHealth((int)(Math.random() * 15 + 15), this.getXPos(), this.getYPos());
+				ph.enableTilesetMode(Game.baricons, 0, 0);
 				EntityManager.addEntity(ph);
 			}
-			else{}
 			oneDrop = false;
 		}
 		EntityManager.removeEntity(this);
