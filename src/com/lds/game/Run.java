@@ -181,8 +181,8 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 		}
 		else
 		{
-			Intent i = new Intent(Run.this, Run.class);
-			startActivity(i);
+			setResult(100 + levelIndex);
+			finish();
 		}
 	}
 	
@@ -265,7 +265,6 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 	{
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.options_menu, menu);
-		mp.pause();
 		gameR.paused = true;
 		return true;
 	}
@@ -274,7 +273,6 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 	public void onOptionsMenuClosed(Menu menu)
 	{
 		super.onOptionsMenuClosed(menu);
-		mp.start();
 		gameR.paused = false;
 	}
 	
@@ -285,8 +283,8 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 		{
 			case R.id.restart:
 				//restart game
-				mp.start();
-				onCreate(savedInstanceState);
+				setResult(100 + levelIndex);
+				finish();
 				return true;
 			case R.id.main_menu:
 				//return to main menu

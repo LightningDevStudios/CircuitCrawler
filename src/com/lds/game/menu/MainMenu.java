@@ -544,9 +544,13 @@ public class MainMenu extends Activity
     		catch (IOException e) { e.printStackTrace(); }
 		}
 		
-		if (resultCode == 3)
+		else if (resultCode == 3)
 		{
 			finish();
+		}
+		else if (resultCode >= 100)
+		{
+			runGame(100 - resultCode);
 		}
 	}
 	
