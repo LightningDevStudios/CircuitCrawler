@@ -1,7 +1,5 @@
 package com.lds.puzzles.logic;
 
-import java.util.ArrayList;
-
 import com.lds.Enums.GateType;
 
 public class Gate 

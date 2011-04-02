@@ -3,7 +3,6 @@ package com.lds.parser;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import com.lds.game.entity.Button;
 import com.lds.game.entity.Entity;
 import com.lds.game.entity.WallButton;
 

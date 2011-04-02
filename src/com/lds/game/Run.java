@@ -9,14 +9,12 @@ import java.io.InputStream;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.ContentValues;
-import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.media.MediaPlayer.OnPreparedListener;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.DisplayMetrics;
@@ -26,7 +24,6 @@ import android.view.MenuItem;
 
 import com.lds.Graphics;
 import com.lds.game.event.*;
-import com.lds.game.menu.MainMenu;
 import com.lds.game.puzzle.PuzzleActivity;
 
 public class Run extends Activity implements OnGameOverListener, OnGameInitializedListener, OnPuzzleActivatedListener, OnPreparedListener, OnCompletionListener
@@ -37,7 +34,6 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 	private Bundle savedInstanceState;
 	private Graphics glSurface;
 	private GameRenderer gameR;
-	private Context context;
 	private MediaPlayer mp = new MediaPlayer();
 	private ProgressDialog pd;
 	

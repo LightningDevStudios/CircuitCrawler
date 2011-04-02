@@ -3,6 +3,7 @@ package com.lds.UI;
 import javax.microedition.khronos.opengles.GL10;
 
 import com.lds.Enums.UIPosition;
+import com.lds.Texture;
 import com.lds.Vector2f;
 import com.lds.game.Game;
 
@@ -16,14 +17,14 @@ public class UIJoypad extends UIEntity
 	
 	public static final float MAX_SCALAR = 10;
 	
-	public UIJoypad(float xSize, float ySize, UIPosition position, float inputAngle)
+	public UIJoypad(float xSize, float ySize, UIPosition position, float inputAngle, Texture joystickin)
 	{
 		super(xSize * Game.screenH, ySize * Game.screenH, position);
 		inputVec = new Vector2f();
 		this.inputAngle = inputAngle;
 		active = false;
 		fingerCircle = new UIImage(this.xSize / 2, this.ySize / 2, 0, 0);
-		fingerCircle.enableTextureMode(Game.joystickin);
+		fingerCircle.enableTextureMode(joystickin);
 	}
 	
 	public UIJoypad(float xSize, float ySize, float xRelative, float yRelative, float inputAngle)

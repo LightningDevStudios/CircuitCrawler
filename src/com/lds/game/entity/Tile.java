@@ -5,8 +5,6 @@ import java.util.EnumSet;
 import javax.microedition.khronos.opengles.GL10;
 import javax.microedition.khronos.opengles.GL11;
 
-import android.util.Log;
-
 import com.lds.Enums;
 import com.lds.Enums.*;
 import com.lds.Texture;
