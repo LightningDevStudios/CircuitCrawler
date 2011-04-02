@@ -50,6 +50,7 @@ public class MainMenu extends Activity
 	private ProgressDialog pd;
 	private int unlockedLevel;
 	GridView levelList;
+
     
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -102,15 +103,15 @@ public class MainMenu extends Activity
 		final TextView musicVolumeSeekBarText = (TextView)findViewById(R.id.volumeText);
 		final Button ldsButton = (Button)findViewById(R.id.LDS_Button);
 		final Button ytfButton = (Button)findViewById(R.id.YTF_Button);
-		final Button cheatButton = (Button)findViewById(R.id.Cheats);
+		//final Button cheatButton = (Button)findViewById(R.id.Cheats);
 		final TextView seekBarValue = (TextView)findViewById(R.id.volumeText);
-		final AlertDialog.Builder alert = new AlertDialog.Builder(this);
 		final EditText input = new EditText(this);
-		final CheckBox godMode = (CheckBox) findViewById(R.id.god);
-		final CheckBox noclip = (CheckBox) findViewById(R.id.noclip);
-		final TextView cheatText = (TextView)findViewById(R.id.cheatText);
+		//final CheckBox godMode = (CheckBox) findViewById(R.id.god);
+		//final CheckBox noclip = (CheckBox) findViewById(R.id.noclip);
+		//final TextView cheatText = (TextView)findViewById(R.id.cheatText);
 		final SeekBar effectVolumeControl = (SeekBar)findViewById(R.id.effectVolume);
 		final TextView effectVolumeSeekBarText = (TextView)findViewById(R.id.effectVolumeText);
+		//final AlertDialog.Builder alert = new AlertDialog.Builder(this);
 		//final CheckBox enableShaders = (CheckBox) findViewById(R.id.enableShaders);
 		//final SeekBar mSeekBar = (SeekBar)findViewById(R.id.seek);
 		
@@ -202,8 +203,8 @@ public class MainMenu extends Activity
 		vibrationCheckbox.setChecked(GameRenderer.vibrateSetting);
 		volumeCheckbox.setChecked(SoundPlayer.enableSound);
 		enableMusic.setChecked(SoundPlayer.enableMusic);
-		godMode.setVisibility(View.INVISIBLE);
-		noclip.setVisibility(View.INVISIBLE);
+		//godMode.setVisibility(View.INVISIBLE);
+		//noclip.setVisibility(View.INVISIBLE);
 		//mSeekBar.setMax(100);
 		//mSeekBar.setProgress(1);
 
@@ -229,6 +230,7 @@ public class MainMenu extends Activity
 		/******************************************************************************************************************************/
 		
 		//Cheat Button
+		/*
         cheatButton.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v) 
@@ -244,19 +246,12 @@ public class MainMenu extends Activity
 					public void onClick(DialogInterface dialog, int whichButton) 
 					{
 						Editable value = input.getText();
-						if(value.toString().compareTo("PASSW0rd;") == 0) // DONT LOOK AT THIS! //lol UMADBRO? - Devin
+						if(value.toString().compareTo("PASSW0rd;") == 0) // DONT LOOK AT THIS! //lol UMADBRO? - Devin //IMAD
 						{
 							godMode.setVisibility(View.VISIBLE);
 							noclip.setVisibility(View.VISIBLE);
 							cheatText.setVisibility(View.VISIBLE);
 							cheatText.setText("Correct!");
-						}
-						else if(EffectEndGame.cheatsUnlocked)
-						{
-							godMode.setVisibility(View.VISIBLE);
-							noclip.setVisibility(View.VISIBLE);
-							cheatText.setVisibility(View.VISIBLE);
-							cheatText.setText("Unlocked!");
 						}
 						else
 						{
@@ -266,14 +261,15 @@ public class MainMenu extends Activity
 					}
 				});
 
-				alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener()
-				{
-				  public void onClick(DialogInterface dialog, int whichButton) {	}
-				});
-
+				alert.setNegativeButton("Cancel",
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog, int whichButton) {
+								dialog.cancel();
+							}
+						});
 				alert.show();
 			}
-		});      
+		});      */
         /******************************************************************************************************************************/
         
         //Music Volume Slider
@@ -340,39 +336,9 @@ public class MainMenu extends Activity
 		    }
 		});
 		/******************************************************************************************************************************/
-		
-		//Noclip CheckBox
-		noclip.setOnCheckedChangeListener(new OnCheckedChangeListener()
-		{
-		    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
-		    {
-		        if ( isChecked )
-		        {
-		        	Player.noclip = true;
-		        }
-		        else
-		        {
-		        	Player.noclip = false;
-		        }
-		    }
-		});
+
 		/******************************************************************************************************************************/
-		
-		//GodMode CheckBox
-		godMode.setOnCheckedChangeListener(new OnCheckedChangeListener()
-		{
-		    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
-		    {
-		        if ( isChecked )
-		        {
-		        	Player.godMode = true;
-		        }
-		        else
-		        {
-		        	Player.godMode = false;
-		        }
-		    }
-		});
+
 		/******************************************************************************************************************************/
 		
 		//Enable Shaders CheckBox

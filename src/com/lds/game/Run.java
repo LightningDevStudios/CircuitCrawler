@@ -326,11 +326,10 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 	@Override
 	protected void onPause ()
 	{
+		mp.pause();
 		super.onPause();
 		paused = true;
-		mp.pause();
 		glSurface.onPause();
-		//finish();
 	}
 	
 	@Override
