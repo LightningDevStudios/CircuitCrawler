@@ -181,8 +181,8 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 		}
 		else
 		{
-			Intent i = new Intent(Run.this, Run.class);
-			startActivity(i);
+			setResult(100 + levelIndex);
+			finish();
 		}
 	}
 	
@@ -283,8 +283,8 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 		{
 			case R.id.restart:
 				//restart game
-				mp.start();
-				onCreate(savedInstanceState);
+				setResult(100 + levelIndex);
+				finish();
 				return true;
 			case R.id.main_menu:
 				//return to main menu
