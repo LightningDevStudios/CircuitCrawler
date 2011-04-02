@@ -1,22 +1,15 @@
 package com.lds.game;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Stack;
 
 import javax.microedition.khronos.opengles.GL10;
-
-import org.xmlpull.v1.XmlPullParserException;
 
 import android.content.Context;
 
 import com.lds.*;
 import com.lds.Enums.*;
 import com.lds.game.ai.Node;
-import com.lds.game.ai.NodeLink;
 import com.lds.game.ai.NodePath;
-
-
 import com.lds.UI.*;
 import com.lds.game.entity.*;
 import com.lds.game.event.*;
@@ -51,36 +44,13 @@ public class Game
 	public static Texture text;
 	public static Texture tilesetworld;
 	public static Texture tilesetentities;
-	public static Texture joystickout;
-	public static Texture joystickin;
-	public static Texture buttona;
-	public static Texture buttonb;
-	public static Texture baricons;
-	public static Texture energybarborder;
-	public static Texture healthbarborder;
-	public Texture someText;
-	
 	
 	//Testing data
-	public UIHealthBar healthBar;
-	public UIEnergyBar energyBar;
 	public UIButton btnA;
 	public UIButton btnB;	
 	public UIJoypad joypad;
 	public Player player;
-	/*
-	public PhysBall block;
-	public PhysBall circle;
-	public Button button;
-	public Door door;
-	public Blob blob1, blob2;
-	public PuzzleBox box;
-	public PickupHealth health;
-	*/
-	//public Sprite spr;
 	
-	//public Animation spriteAnim;
-		
 	//Constructors
 	public Game (Context context, GL10 gl, int levelId) 
 	{		
@@ -88,37 +58,35 @@ public class Game
 		text = new Texture(R.drawable.text, 256, 256, 16, 8, context, "text");
 		tilesetworld = new Texture(R.drawable.tilesetworld, 512, 256, 16, 8, context, "tilesetworld");
 		tilesetentities = new Texture(R.drawable.tilesetentities, 256, 256, 8, 8, context, "tilesetentities");
-		joystickout = new Texture(R.raw.joystickout, 64, 64, 1, 1, context, "joystickout");
-		joystickin = new Texture(R.raw.joystickin, 32, 32, 1, 1, context, "joystickin");
-		buttona = new Texture(R.raw.buttona, 32, 32, 1, 1, context, "buttona");
-		buttonb = new Texture(R.raw.buttonb, 32, 32, 1, 1, context, "buttonb");
-		baricons = new Texture (R.raw.baricons, 32, 16, 2, 1, context, "baricons");
-		energybarborder = new Texture (R.raw.energybarborder, 128, 16, 1, 1, context, "energybarborder");
-		healthbarborder = new Texture(R.raw.healthbarborder, 256, 16, 1, 1, context, "healthbarborder");
+		
+		final Texture joystickout = new Texture(R.raw.joystickout, 64, 64, 1, 1, context, "joystickout");
+		final Texture joystickin = new Texture(R.raw.joystickin, 32, 32, 1, 1, context, "joystickin");
+		final Texture buttona = new Texture(R.raw.buttona, 32, 32, 1, 1, context, "buttona");
+		final Texture buttonb = new Texture(R.raw.buttonb, 32, 32, 1, 1, context, "buttonb");
+		final Texture baricons = new Texture (R.raw.baricons, 32, 16, 2, 1, context, "baricons");
+		final Texture energybarborder = new Texture (R.raw.energybarborder, 128, 16, 1, 1, context, "energybarborder");
+		final Texture healthbarborder = new Texture(R.raw.healthbarborder, 256, 16, 1, 1, context, "healthbarborder");
 		
 				
 		entList = new ArrayList<Entity>();
 		UIList = new ArrayList<UIEntity>();
 		triggerList = new ArrayList<Trigger>();
 		fingerList = new ArrayList<Finger>();
-		
 		tileset = new Tile[16][16];
 		cleaner = new EntityManager();
+		
 		StringRenderer sr = StringRenderer.getInstance();
 		TextureLoader.getInstance().initialize(gl);
-		
 		sr.loadTextTileset(text);
-		
-		someText = new Texture("Testing!", sr);
-		
+				
 		SoundPlayer.getInstance().initialize(context);
 		
 		TextureLoader tl = TextureLoader.getInstance();
 		
 		tl.loadTexture(tilesetwire);
-		tl.loadTexture(someText);
 		tl.loadTexture(tilesetworld);
 		tl.loadTexture(tilesetentities);
+		
 		tl.loadTexture(joystickout);
 		tl.loadTexture(joystickin);
 		tl.loadTexture(buttona);
@@ -126,49 +94,15 @@ public class Game
 		tl.loadTexture(baricons);
 		tl.loadTexture(energybarborder);
 		tl.loadTexture(healthbarborder);
-						
-		/*		
- 		for (int i = 0; i < tileset.length; i++)
-		{
-			for (int j = 0; j < tileset[0].length; j++)
-			{
-				tileset[i][j] = new Tile(Tile.TILE_SIZE_F, j, i, tileset[0].length - 1, tileset.length - 1);
-				tileset[i][j].enableTilesetMode(tilesetworld, 0, 0);
-				if (i == 0 || j == 0 || i == tileset.length - 1 || j == tileset[0].length - 1 || (i < 4 && (j < 4 || j > 8)) || (i == 10 && j != 6) || (i > 10 && (j < 4 || j > 8)))
-				{
-					tileset[i][j].setAsWall();
-				}
-				else if (i == 4 || i == 5 || (i == 6 || i == 9 || i == 10) && (j < 4 || j > 8) || (i == 7 || i == 8) && (j < 3 || j > 9))
-				{
-					tileset[i][j].setAsPit();
-				}
-				else
-				{
-					tileset[i][j].setAsFloor();
-				}
-			}
-		}*/
-		//tileset[12][6].setAsSlipperyTile();
-		//tileset[13][6].setAsSlipperyTile();
-		//tileset[11][6].setAsSlipperyTile();
- 		
+		 		
 		//Parser
 		Parser parser = new Parser(context, levelId);
-
 		
-		entList = parser.entList;
-		try 
-		{
-			parser.parseLevel();
+		try	
+		{ 
+			parser.parseLevel(); 
 		} 
-		catch (XmlPullParserException e) 
-		{
-			e.printStackTrace();
-		} 
-		catch (IOException e) 
-		{
-			e.printStackTrace();
-		}
+		catch (Exception e) { e.printStackTrace(); } 
 	
 		tileset = parser.tileset;
 		entList.addAll(parser.entList);
@@ -193,68 +127,65 @@ public class Game
 		
 		
 		//TODO UIHealthBar is a UIEntity sub that contains 2 UIImages and a UIProgressBar (which will no longer be abstract)
-		healthBar = new UIHealthBar(246.0f, 8.0f, UIPosition.TOPRIGHT, Direction.LEFT, player);
+		UIHealthBar healthBar = new UIHealthBar(246.0f, 8.0f, UIPosition.TOPRIGHT, Direction.LEFT, player);
 		healthBar.setTopPad(9.0f);
 		healthBar.setRightPad(10.0f);
 		healthBar.autoPadding(9, 0, 0, 10);
 		healthBar.enableColorMode(0.8f, 0.0f, 0.0f, 0.9f);
 		healthBar.setValue(100);
+		UIList.add(healthBar);
 		
 		UIImage healthBarCover = new UIImage(256, 16, UIPosition.TOPRIGHT);
 		healthBarCover.setTopPad(5.0f);
 		healthBarCover.setRightPad(5.0f);
 		healthBarCover.autoPadding(5, 0, 0, 5);
 		healthBarCover.enableTextureMode(healthbarborder);
+		UIList.add(healthBarCover);
 		
 		UIImage healthIcon = new UIImage (16, 16, UIPosition.TOPRIGHT);
 		healthIcon.setTopPad(5.0f);
 		healthIcon.setRightPad(266.0f);
 		healthIcon.autoPadding(5, 0, 0, 266);
 		healthIcon.enableTilesetMode(baricons, 0, 0);
+		UIList.add(healthIcon);
 		
-		energyBar = new UIEnergyBar(118.0f, 8.0f, UIPosition.TOPRIGHT, Direction.LEFT, player);
+		UIEnergyBar energyBar = new UIEnergyBar(118.0f, 8.0f, UIPosition.TOPRIGHT, Direction.LEFT, player);
 		energyBar.setTopPad(30.0f);
 		energyBar.setRightPad(10.0f);
 		energyBar.autoPadding(30, 0, 0, 10);
 		energyBar.enableColorMode(0.0f, 0.0f, 0.8f, 0.9f);
 		energyBar.setValue(100);
+		UIList.add(energyBar);
 		
 		UIImage energyBarCover = new UIImage(128, 16, UIPosition.TOPRIGHT);
 		energyBarCover.setTopPad(26.0f);
 		energyBarCover.setRightPad(5.0f);
 		energyBarCover.autoPadding(26, 0, 0, 5);
 		energyBarCover.enableTextureMode(energybarborder);
+		UIList.add(energyBarCover);
 		
 		UIImage energyIcon = new UIImage (16, 16, UIPosition.TOPRIGHT);
 		energyIcon.setTopPad(26.0f);
 		energyIcon.setRightPad(138.0f);
 		energyIcon.autoPadding(26, 0, 0, 138);
 		energyIcon.enableTilesetMode(baricons, 1, 0);
+		UIList.add(energyIcon);
 		
 		btnA = new UIButton(80.0f, 80.0f, UIPosition.BOTTOMRIGHT);
 		btnA.autoPadding(0.0f, 0.0f, 5.0f, 90.0f);
-		//btnA.enableColorMode(65, 200, 65, 128);
 		btnA.enableTextureMode(buttona);
 		btnA.setIntervalTime(Stopwatch.elapsedTimeMs());
+		UIList.add(btnA);
 		
 		btnB = new UIButton(80.0f, 80.0f, UIPosition.BOTTOMRIGHT);
 		btnB.autoPadding(0.0f, 0.0f, 90.0f, 5.0f);
-		//btnB.enableColorMode(200, 65, 65, 100);
 		btnB.enableTextureMode(buttonb);
 		btnB.setIntervalTime(Stopwatch.elapsedTimeMs());
+		UIList.add(btnB);
 		
-		joypad = new UIJoypad(.45f, .45f, UIPosition.BOTTOMLEFT, player.getAngle());
+		joypad = new UIJoypad(.45f, .45f, UIPosition.BOTTOMLEFT, player.getAngle(), joystickin);
 		joypad.autoPadding(0.0f, 5.0f, 5.0f, 0.0f);
 		joypad.enableTextureMode(joystickout);
-		
-		UIList.add(healthBar);
-		UIList.add(healthBarCover);
-		UIList.add(healthIcon);
-		UIList.add(energyBar);
-		UIList.add(energyBarCover);
-		UIList.add(energyIcon);
-		UIList.add(btnA);
-		UIList.add(btnB);
 		UIList.add(joypad);
 				
 		worldMinX = (-Tile.TILE_SIZE_F * (tileset[0].length / 2)) + (screenW / 2);
@@ -262,19 +193,15 @@ public class Game
 		worldMaxX = (Tile.TILE_SIZE_F * (tileset[0].length / 2)) - (screenW / 2);
 		worldMaxY = (Tile.TILE_SIZE_F * (tileset.length / 2)) - (screenH / 2);
 		
-		//TODO take into account AI, perhaps render every time it chooses a new point to go to?
 		updateCameraPosition();
 		updateRenderedEnts();
-
 		updateRenderedTileset();
-		 
-		System.gc();
 	}
 	
 	public void updateRenderedEnts()
 	{
 		//define current screen bounds
-		float minX, maxX, minY, maxY;
+		final float minX, maxX, minY, maxY;
 		minX = camPosX - (screenW / 2);
 		maxX = camPosX + (screenW / 2);
 		minY = camPosY - (screenW / 2);
@@ -283,10 +210,10 @@ public class Game
 		for(Entity ent : entList)
 		{
 			//define max square bounds
-			float entMinX = ent.getXPos() - (float)ent.getDiagonal();
-			float entMaxX = ent.getXPos() + (float)ent.getDiagonal();
-			float entMinY = ent.getYPos() - (float)ent.getDiagonal();
-			float entMaxY = ent.getYPos() + (float)ent.getDiagonal();
+			final float entMinX = ent.getXPos() - (float)ent.getDiagonal();
+			final float entMaxX = ent.getXPos() + (float)ent.getDiagonal();
+			final float entMinY = ent.getYPos() - (float)ent.getDiagonal();
+			final float entMaxY = ent.getYPos() + (float)ent.getDiagonal();
 			
 			//values are opposite for entMin/Max because only the far tips have to be inside the screen (leftmost point on right border of screen)
 			if (entMinX <= maxX && entMaxX >= minX && entMinY <= maxY && entMaxY >= minY)
@@ -302,7 +229,7 @@ public class Game
 	
 	public void updateRenderedTileset()
 	{
-		float minX, maxX, minY, maxY, tilesetHalfWidth, tilesetHalfHeight;
+		final float minX, maxX, minY, maxY, tilesetHalfWidth, tilesetHalfHeight;
 		minX = camPosX - (screenW / 2);
 		maxX = camPosX + (screenW / 2);
 		minY = camPosY - (screenH / 2);
@@ -316,6 +243,7 @@ public class Game
 		tilesetMinY = (int)((Math.abs(maxY - tilesetHalfHeight) - 1) / Tile.TILE_SIZE_F);
 		tilesetMaxY = (int)((Math.ceil(Math.abs(minY - tilesetHalfHeight)) - 1) / Tile.TILE_SIZE_F);
 		
+		//make sure bounds don't exceed level edges
 		if(tilesetMinX < 0)
 			tilesetMinX = 0;
 		if(tilesetMinY < 0)

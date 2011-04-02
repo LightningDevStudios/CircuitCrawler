@@ -1,15 +1,11 @@
 package com.lds.parser;
 
-import java.util.HashMap;
-
-import com.lds.Enums.TileState;
 import com.lds.game.Game;
 import com.lds.game.entity.Tile;
 
 public class TileData
 {
 	private int tilePosX, tilePosY;
-	private TileState state;
 	private Tile tile;
 	
 	public TileData(String state, int x, int y, int tilesetX, int tilesetY)

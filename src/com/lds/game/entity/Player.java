@@ -3,7 +3,6 @@ package com.lds.game.entity;
 import android.content.Context;
 import android.os.Vibrator;
 
-import com.lds.Stopwatch;
 import com.lds.Vector2f;
 import com.lds.game.SoundPlayer;
 

@@ -6,14 +6,10 @@ import javax.microedition.khronos.opengles.GL10;
 import android.content.Context;
 import android.view.MotionEvent;
 
-import com.lds.Texture;
-import com.lds.TextureLoader;
-import com.lds.game.R;
 import com.lds.game.puzzle.IPuzzle;
 import com.lds.game.puzzle.event.OnPuzzleFailListener;
 import com.lds.game.puzzle.event.OnPuzzleInitializedListener;
 import com.lds.game.puzzle.event.OnPuzzleSuccessListener;
-import com.lds.Enums;
 
 public class LogicPuzzle implements IPuzzle
 {
@@ -51,8 +47,8 @@ public class LogicPuzzle implements IPuzzle
 	@Override
 	public void onTouchEvent(MotionEvent event)
 	{
-		float xPos = event.getX();
-		float yPos = event.getY();
+		//float xPos = event.getX();
+		//float yPos = event.getY();
 	}
 
 	@Override
