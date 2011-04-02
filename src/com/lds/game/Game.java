@@ -57,8 +57,8 @@ public class Game
 	{		
 		tilesetwire = new Texture(R.drawable.tilesetwire, 128, 128, 8, 8, context, "tilesetwire");
 		text = new Texture(R.drawable.text, 256, 256, 16, 8, context, "text");
-		tilesetworld = new Texture(R.drawable.tilesetworld, 512, 256, 16, 8, context, "tilesetworld");
-		tilesetentities = new Texture(R.drawable.tilesetentities, 256, 256, 8, 8, context, "tilesetentities");
+		tilesetworld = new Texture(R.raw.tilesetworld, 512, 256, 16, 8, context, "tilesetworld");
+		tilesetentities = new Texture(R.raw.tilesetentities, 256, 256, 8, 8, context, "tilesetentities");
 		baricons = new Texture (R.raw.baricons, 32, 16, 2, 1, context, "baricons");
 		
 		final Texture joystickout = new Texture(R.raw.joystickout, 64, 64, 1, 1, context, "joystickout");
@@ -358,6 +358,7 @@ public class Game
 						EntityManager.addEntity(attack);
 						enemy.setRandomTime((int)(Math.random() * 500) + 500);
 						enemy.setLastTime(Stopwatch.elapsedTimeMs());
+						attack.enableTilesetMode(Game.tilesetentities, 0, 3);
 					}
 					//move to player
 					if (Vector2f.sub(enemy.getPos(), player.getPos()).mag() <  Enemy.INNER_RADIUS)
@@ -412,6 +413,7 @@ public class Game
 				EntityManager.addEntity(attack);
 				enemy.setRandomTime((int)(Math.random() * 500) + 500);
 				enemy.setLastTime(Stopwatch.elapsedTimeMs());
+				attack.enableTilesetMode(Game.tilesetentities, 0, 3);
 			}
 		}
 	}
