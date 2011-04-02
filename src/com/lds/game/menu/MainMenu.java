@@ -469,10 +469,7 @@ public class MainMenu extends Activity
 						break;
 					case 7:
 						//Quit
-						moveTaskToBack(true);
 						finish();
-						System.exit(0);
-						android.os.Process.killProcess(android.os.Process.myPid());
 				}
 			}	
 		});
