@@ -452,6 +452,11 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 		Game.worldOutdated = true;
 	}
 	
+	public void setPosNoInterp(final Vector2f v)
+	{
+		posVec = v;
+		Game.worldOutdated = true;
+	}
 	
 	//mutators for position
 	public void setPos (final Vector2f v)
