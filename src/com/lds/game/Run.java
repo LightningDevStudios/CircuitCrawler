@@ -32,7 +32,6 @@ import com.lds.game.puzzle.PuzzleActivity;
 public class Run extends Activity implements OnGameOverListener, OnGameInitializedListener, OnPuzzleActivatedListener, OnPreparedListener, OnCompletionListener
 {
 	public static final int PUZZLE_ACTIVITY = 2;
-	public boolean paused = false;
 	private int unlockedLevel, levelIndex, levelId;
 	private Bundle savedInstanceState;
 	private Graphics glSurface;
@@ -40,6 +39,8 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 	private Context context;
 	private MediaPlayer mp = new MediaPlayer();
 	private ProgressDialog pd;
+	public static boolean onLastLevel = false;
+	public static int numberOfLevels, unlockedLevelnumber;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -48,22 +49,36 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 		this.savedInstanceState = savedInstanceState;
 		
 		levelIndex = getIntent().getExtras().getInt("levelIndex", -1);
+		System.out.println(levelIndex);
 		unlockedLevel = getIntent().getExtras().getInt("unlockedLevel", -1);
+		System.out.println(unlockedLevel);
 		
 		if (levelIndex == -1 || unlockedLevel == -1)
 			finish();
 		
+		
+		/*******************************/
+		//MAKE SURE TO SET THIS WHEN ADDING A LEVEL
+		numberOfLevels = 3;
+		//MAKE SURE TO SET THIS WHEN ADDING A LEVEL
+		/*******************************/
 		switch (levelIndex)
 		{
 			case 0:
 				levelId = R.xml.tutorial_level;
 				break;
 			case 1:
-				levelId = R.xml.level2;
+				levelId = R.xml.tutorial_level;
 				break;
 			case 2:
-				levelId = R.xml.level5;
+				levelId = R.xml.tutorial_level;
 		}
+		
+		if(levelIndex == numberOfLevels)
+		{
+			onLastLevel = true;
+		}
+		
 		
 		//Grab screen information
 		DisplayMetrics screen = new DisplayMetrics();
@@ -71,7 +86,7 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 		float screenX = (float)screen.widthPixels;
 		float screenY = (float)screen.heightPixels;
 		setVolumeControlStream(AudioManager.STREAM_MUSIC);
-
+		unlockedLevelnumber = unlockedLevel;
 		pd = ProgressDialog.show(this, "", "Loading...");
 
 		playMusic();
@@ -291,10 +306,12 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 				finish();
 				return true;
 			case R.id.quit:
+				mp.stop();
 				setResult(3);
 				finish();
 				return true;
 			default:
+				mp.start();
 				return super.onOptionsItemSelected(item);
 		
 		}
@@ -311,22 +328,16 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 	protected void onResume ()
 	{
 		super.onResume();
-		glSurface.onResume();
-		if(paused)
-		{
-			mp.start();
-			paused = false;
-		}	
+		//mp.start();
+		glSurface.onResume();	
 	}
 	
 	@Override
 	protected void onPause ()
 	{
 		super.onPause();
-		paused = true;
-		mp.pause();
+		//mp.pause();
 		glSurface.onPause();
-		//finish();
 	}
 	
 	@Override

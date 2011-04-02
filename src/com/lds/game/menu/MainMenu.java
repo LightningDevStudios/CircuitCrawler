@@ -1,5 +1,6 @@
 package com.lds.game.menu;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -104,6 +105,7 @@ public class MainMenu extends Activity
 		final Button ldsButton = (Button)findViewById(R.id.LDS_Button);
 		final Button ytfButton = (Button)findViewById(R.id.YTF_Button);
 		final Button cheatButton = (Button)findViewById(R.id.Cheats);
+		final Button reset = (Button)findViewById(R.id.reset);
 		final TextView seekBarValue = (TextView)findViewById(R.id.volumeText);
 		final AlertDialog.Builder alert = new AlertDialog.Builder(this);
 		final EditText input = new EditText(this);
@@ -112,6 +114,7 @@ public class MainMenu extends Activity
 		final TextView cheatText = (TextView)findViewById(R.id.cheatText);
 		final SeekBar effectVolumeControl = (SeekBar)findViewById(R.id.effectVolume);
 		final TextView effectVolumeSeekBarText = (TextView)findViewById(R.id.effectVolumeText);
+		final TextView ResetText = (TextView)findViewById(R.id.ResetText);
 		//final CheckBox enableShaders = (CheckBox) findViewById(R.id.enableShaders);
 		//final SeekBar mSeekBar = (SeekBar)findViewById(R.id.seek);
 		
@@ -252,7 +255,7 @@ public class MainMenu extends Activity
 							cheatText.setVisibility(View.VISIBLE);
 							cheatText.setText("Correct!");
 						}
-						else if(EffectEndGame.cheatsUnlocked)
+						else if(Run.onLastLevel)
 						{
 							godMode.setVisibility(View.VISIBLE);
 							noclip.setVisibility(View.VISIBLE);
@@ -442,6 +445,28 @@ public class MainMenu extends Activity
 			{
 				Intent browserIntent = new Intent("android.intent.action.VIEW", Uri.parse("http://lightningdevelopment.wordpress.com"));
 				startActivity(browserIntent);
+			}
+		});
+		
+		/******************************************************************************************************************************/  
+		
+		//Reset Button
+		reset.setOnClickListener(new View.OnClickListener()
+		{
+			public void onClick(View v) 
+			{
+				ResetText.setText("Settings Reset");
+				File dir = getFilesDir();
+				if(dir.isDirectory())
+				{
+					String[] files = dir.list();
+					for(int i = 0; i < files.length; i++)
+					{
+						String str = files[i];
+						File file = new File(dir, str);
+						boolean deleted = file.delete();
+					}
+				}
 			}
 		});
 		/******************************************************************************************************************************/	
