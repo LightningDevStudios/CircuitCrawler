@@ -5,6 +5,7 @@ import com.lds.Vector2f;
 public class Teleporter extends StaticEnt
 {
 	protected boolean active;
+	protected TeleporterLinker teleLinker;
 	
 	public Teleporter(float size, float xPos, float yPos, float angle, float xScl, float yScl, boolean isSolid, boolean circular, boolean willCollide) 
 	{
@@ -26,8 +27,13 @@ public class Teleporter extends StaticEnt
 	{
 		if(!active && ent instanceof PhysEnt)
 		{
-			((PhysEnt) ent).setPosNoInterp(TeleporterLinker.getLinkedPos(this).getX(), TeleporterLinker.getLinkedPos(this).getY());
+			((PhysEnt) ent).setPosNoInterp(teleLinker.getLinkedPos(this).getX(), teleLinker.getLinkedPos(this).getY());
 		}
+	}
+	
+	public void setLinker (TeleporterLinker ent)
+	{
+		teleLinker = ent;
 	}
 	
 	@Override
