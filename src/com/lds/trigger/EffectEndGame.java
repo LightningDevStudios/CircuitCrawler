@@ -25,10 +25,10 @@ public class EffectEndGame extends Effect
 	public void fireOutput()
 	{
 		//Run.unlockedLevel++;
-		if(Run.unlockedLevel > ButtonAdapter.numberOfLevels)
+		/*if(Run.unlockedLevel > ButtonAdapter.numberOfLevels)
 		{
 			cheatsUnlocked = true;
-		}
+		}*/
 		if (listener != null)
 			listener.onGameOver(winning);
 	}

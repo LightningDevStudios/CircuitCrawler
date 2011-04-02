@@ -68,7 +68,7 @@ public class Game
 	public UIButton btnB;	
 	public UIJoypad joypad;
 	public Player player;
-	///*
+	/*
 	public PhysBall block;
 	public PhysBall circle;
 	public Button button;
@@ -76,7 +76,7 @@ public class Game
 	public Blob blob1, blob2;
 	public PuzzleBox box;
 	public PickupHealth health;
-	//*/
+	*/
 	//public Sprite spr;
 	
 	//public Animation spriteAnim;

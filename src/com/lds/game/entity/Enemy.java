@@ -15,10 +15,12 @@ public  abstract class Enemy extends Character //enemies will fall under this cl
 	protected AIType type;
 	protected boolean agressive, colliding;
 	protected int lastTime, randomTime;
+	
 	//Patrol stuff
 	protected NodePath patrolPath;
 	protected int patrolPathLocation;
-	protected boolean onPatrol;
+	protected boolean onPatrol, oneDrop = true;
+	
 	//Pathfinding stuff
 	protected NodePath pathToPlayer;
 	protected int playerPathLocation;
@@ -51,18 +53,23 @@ public  abstract class Enemy extends Character //enemies will fall under this cl
 	public void die()
 	{
 		enemyCount--;
-		SoundPlayer.getInstance().playSound(3);
-		if ((int)(Math.random() * 2) == 1)
+		if(oneDrop)
 		{
-			PickupEnergy pe = new PickupEnergy((int)(Math.random() * 15 + 15), this.getXPos(), this.getYPos());
-			EntityManager.addEntity(pe);
+			SoundPlayer.getInstance().playSound(3);
+			int rand = (int)(Math.random() * 3 + 1);
+			if (rand == 1)
+			{
+				PickupEnergy pe = new PickupEnergy((int)(Math.random() * 15 + 15), this.getXPos(), this.getYPos());
+				EntityManager.addEntity(pe);
+			}
+			else if (rand == 2)
+			{
+				PickupHealth ph = new PickupHealth((int)(Math.random() * 15 + 15), this.getXPos(), this.getYPos());
+				EntityManager.addEntity(ph);
+			}
+			else{}
+			oneDrop = false;
 		}
-		else
-		{
-			PickupHealth ph = new PickupHealth((int)(Math.random() * 15 + 15), this.getXPos(), this.getYPos());
-			EntityManager.addEntity(ph);
-		}
-
 		EntityManager.removeEntity(this);
 	}
 	

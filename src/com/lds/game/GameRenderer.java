@@ -19,8 +19,6 @@ import android.content.res.AssetManager;
 import com.lds.EntityManager;
 import com.lds.Finger;
 import com.lds.Stopwatch;
-import com.lds.Texture;
-import com.lds.TextureLoader;
 import com.lds.Vector2f;
 import com.lds.game.ai.Node;
 import com.lds.game.entity.*;
@@ -30,19 +28,17 @@ import com.lds.UI.*;
 
 public class GameRenderer implements com.lds.Graphics.Renderer
 {
-	public Game game;
-	public Context context;
-	public Object syncObj;
-	public boolean gameOver;
 	public static boolean vibrateSetting = true;
-	public int playerMoveTimeMs, frameCount = 0;	
-	public OnGameInitializedListener gameInitializedListener;
-	public OnPuzzleActivatedListener puzzleActivatedListener;
-	public OnGameOverListener gameOverListener;
-	public int levelId;
-	public static float time, timer, timer2, afterTickTimer, beforeTickTimer;
-	public boolean test;
-	MediaPlayer mp;
+	
+	private Game game;
+	private Context context;
+	private Object syncObj;
+	private int playerMoveTimeMs/*, frameCount = 0*/;	
+	private OnGameInitializedListener gameInitializedListener;
+	private OnPuzzleActivatedListener puzzleActivatedListener;
+	private OnGameOverListener gameOverListener;
+	private int levelId;
+	private MediaPlayer mp;
 	public boolean paused, charlieSheen;
 	
 	public GameRenderer (float screenW, float screenH, Context context, Object syncObj, int levelId)
@@ -54,7 +50,6 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		Game.windowOutdated = false;
 		Game.worldOutdated = false;
 		this.levelId = levelId;
-		test = true;
 		SoundPlayer.getInstance().initialize(context);
 		paused = false;
 		charlieSheen = false;
@@ -77,50 +72,12 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		
 		//start the timer and use an initial tick to prevent errors where elapsed time is a very large negative number
 		Stopwatch.restartTimer();
-		beforeTickTimer = Stopwatch.elapsedTimeMs();
 		Stopwatch.tick();
-		afterTickTimer = Stopwatch.elapsedTimeMs();
 		playerMoveTimeMs = Stopwatch.elapsedTimeMs();
 		
 		Entity.resetIndexBuffer();
-		
-		if(game == null)
-			game = new Game(context, gl, levelId);
-		
-		else
-		{
-			Game.tilesetwire = new Texture(R.drawable.tilesetwire, 128, 128, 8, 8, context, "tilesetwire");
-			Game.text = new Texture(R.drawable.text, 256, 256, 16, 8, context, "text");
-			Game.tilesetworld = new Texture(R.drawable.tilesetworld, 512, 256, 16, 8, context, "tilesetworld");
-			Game.tilesetentities = new Texture(R.drawable.tilesetentities, 256, 256, 8, 8, context, "tilesetentities");
-			Game.joystickout = new Texture(R.raw.joystickout, 64, 64, 1, 1, context, "joystickout");
-			Game.joystickin = new Texture(R.raw.joystickin, 32, 32, 1, 1, context, "joystickin");
-			Game.buttona = new Texture(R.raw.buttona, 32, 32, 1, 1, context, "buttona");
-			Game.buttonb = new Texture(R.raw.buttonb, 32, 32, 1, 1, context, "buttonb");
-			Game.baricons = new Texture (R.raw.baricons, 32, 16, 2, 1, context, "baricons");
-			Game.energybarborder = new Texture (R.raw.energybarborder, 128, 16, 1, 1, context, "energybarborder");
-			Game.healthbarborder = new Texture(R.raw.healthbarborder, 256, 16, 1, 1, context, "healthbarborder");
-			
-			TextureLoader.getInstance().initialize(gl);
-			TextureLoader tl = TextureLoader.getInstance();
-			tl.loadTexture(Game.tilesetwire);
-			tl.loadTexture(Game.text);
-			tl.loadTexture(Game.tilesetworld);
-			tl.loadTexture(Game.tilesetentities);
-			tl.loadTexture(Game.joystickout);
-			tl.loadTexture(Game.joystickin);
-			tl.loadTexture(Game.buttona);
-			tl.loadTexture(Game.buttonb);
-			tl.loadTexture(Game.baricons);
-			tl.loadTexture(Game.energybarborder);
-			tl.loadTexture(Game.healthbarborder);
-			
-			for(Entity ent : game.entList)
-			{
-				ent.resetAllBuffers();
-			}
-		}
-		
+		game = new Game(context, gl, levelId);
+				
 		//Use VBOs if available
 		Entity.genIndexBuffer(gl);
 		
@@ -166,10 +123,9 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		//remove entities that are queued for removal
 		//tick the stop watch every frame, gives relatively stable intervals
-		frameCount++;
+		//frameCount++;
 		
 		game.frameInterval = Stopwatch.elapsedTimeMs();
-		timer2 = Stopwatch.elapsedTimeMs();
 		Stopwatch.tick();
 
 		game.updateTriggers();
@@ -404,11 +360,11 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		}
 				
 		//framerate count
-		if (frameCount >= 10)
+		/*if (frameCount >= 10)
 		{
 			Log.d("LDS_Game", "FPS: " + (1000.0f / (Stopwatch.elapsedTimeMs() - game.frameInterval)));
 			frameCount = 0;
-		}
+		}*/
 	}
 
 	public void vibrator(int time)
