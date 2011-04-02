@@ -265,7 +265,6 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 	{
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.options_menu, menu);
-		mp.pause();
 		gameR.paused = true;
 		return true;
 	}
@@ -274,7 +273,6 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 	public void onOptionsMenuClosed(Menu menu)
 	{
 		super.onOptionsMenuClosed(menu);
-		mp.start();
 		gameR.paused = false;
 	}
 	

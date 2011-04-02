@@ -44,6 +44,7 @@ public class Game
 	public static Texture text;
 	public static Texture tilesetworld;
 	public static Texture tilesetentities;
+	public static Texture baricons;
 	
 	//Testing data
 	public UIButton btnA;
@@ -58,12 +59,12 @@ public class Game
 		text = new Texture(R.drawable.text, 256, 256, 16, 8, context, "text");
 		tilesetworld = new Texture(R.drawable.tilesetworld, 512, 256, 16, 8, context, "tilesetworld");
 		tilesetentities = new Texture(R.drawable.tilesetentities, 256, 256, 8, 8, context, "tilesetentities");
+		baricons = new Texture (R.raw.baricons, 32, 16, 2, 1, context, "baricons");
 		
 		final Texture joystickout = new Texture(R.raw.joystickout, 64, 64, 1, 1, context, "joystickout");
 		final Texture joystickin = new Texture(R.raw.joystickin, 32, 32, 1, 1, context, "joystickin");
 		final Texture buttona = new Texture(R.raw.buttona, 32, 32, 1, 1, context, "buttona");
 		final Texture buttonb = new Texture(R.raw.buttonb, 32, 32, 1, 1, context, "buttonb");
-		final Texture baricons = new Texture (R.raw.baricons, 32, 16, 2, 1, context, "baricons");
 		final Texture energybarborder = new Texture (R.raw.energybarborder, 128, 16, 1, 1, context, "energybarborder");
 		final Texture healthbarborder = new Texture(R.raw.healthbarborder, 256, 16, 1, 1, context, "healthbarborder");
 		
