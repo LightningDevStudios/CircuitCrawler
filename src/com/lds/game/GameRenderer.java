@@ -186,6 +186,8 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 							ent.uninteract(colEnt);
 							colEnt.uninteract(ent);
 						}
+						//else if (colEnt.colList.isEmpty())
+							//colEnt.uninteract(ent);
 					}
 				}
 				

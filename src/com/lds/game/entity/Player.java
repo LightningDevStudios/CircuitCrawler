@@ -28,6 +28,7 @@ public class Player extends Character //your character, protagonist
 		if(godMode)
 		{
 			health = 9999999;//LOLS
+			energy = 9999999;//LOLS Again
 		}
 		if(noclip)
 		{
@@ -46,12 +47,14 @@ public class Player extends Character //your character, protagonist
 		super.interact(ent);
 		if (ent instanceof PickupEnergy)
 		{
+			colList.remove(ent);
 			energy += ((PickupEnergy)ent).getEnergyValue();
 			if (energy > ENERGY_LIMIT)
 				energy = ENERGY_LIMIT;
 		}
 		else if (ent instanceof PickupHealth)
 		{
+			colList.remove(ent);
 			health += ((PickupHealth)ent).getHealthValue();
 			if (health > HEALTH_LIMIT)
 				health = HEALTH_LIMIT;

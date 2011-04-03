@@ -91,7 +91,7 @@ public  abstract class Enemy extends Character //enemies will fall under this cl
 	
 	public void setPatrolPath(NodePath patrolPath)
 	{
-		type = AIType.PATROL;
+		//type = AIType.PATROL;
 		this.patrolPath = patrolPath;
 		patrolPathLocation = 0;
 	}
@@ -137,7 +137,6 @@ public  abstract class Enemy extends Character //enemies will fall under this cl
 	}
 	
 	//General Stuff
-	
 	public boolean isColliding()
 	{
 		return colliding;

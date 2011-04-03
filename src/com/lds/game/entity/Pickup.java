@@ -21,6 +21,7 @@ public abstract class Pickup extends PhysEnt //pickup objects are picked up, suc
 	{
 		if (ent instanceof Player)
 		{
+			ent.colList.remove(this);
 			EntityManager.removeEntity(this);
 		}
 	}

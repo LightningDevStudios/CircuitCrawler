@@ -11,4 +11,13 @@ public abstract class StaticEnt extends Entity //static obejcts are immovable, s
 	{
 		super(size, xPos, yPos, angle, xScl, yScl, isSolid, circular, willCollide);
 	}
+	
+	@Override
+	public boolean isColliding(Entity ent)
+	{
+		if (ent instanceof Tile || ent instanceof StaticEnt)
+			return false;
+		
+		return  super.isColliding(ent);
+	}
 }
