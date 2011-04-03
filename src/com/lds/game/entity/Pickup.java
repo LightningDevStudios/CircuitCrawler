@@ -6,20 +6,14 @@ public abstract class Pickup extends PhysEnt //pickup objects are picked up, suc
 {	
 	public Pickup (float xPos, float yPos)
 	{
-		super(10.0f, xPos, yPos, false, false, 50.0f, 90.0f, 0.1f, 0.0f);
+		super(20.0f, xPos, yPos, false, false, 50.0f, 90.0f, 1.0f, 0.0f);
+		setAngle(90.0f);
 	}
 	
 	@Override
 	public void update()
 	{
-		if (getXScl() == 1.0f)
-		{
-			scaleTo(2.0f, 2.0f);
-		}
-		else if (getXScl() == 2.0)
-		{
-			scaleTo(1.0f, 1.0f);
-		}
+		scaleTo(2, 2);
 	}
 	
 	@Override

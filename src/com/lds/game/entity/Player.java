@@ -3,7 +3,6 @@ package com.lds.game.entity;
 import android.content.Context;
 import android.os.Vibrator;
 
-import com.lds.Stopwatch;
 import com.lds.Vector2f;
 import com.lds.game.SoundPlayer;
 
@@ -25,10 +24,11 @@ public class Player extends Character //your character, protagonist
 		//initialize Player data
 		energy = ENERGY_LIMIT;
 		nextAngle = angle;
+		controlled = true;
 		if(godMode)
 		{
 			health = 9999999;//LOLS
-			energy = 9999999;
+			energy = 9999999;//LOLS Again
 		}
 		if(noclip)
 		{
@@ -76,20 +76,18 @@ public class Player extends Character //your character, protagonist
 	{
 		if (tile != null)
 		{
-			if (tile.isPit() && controlled)
+			if (tile.isPit())
 			{
 				this.disableUserControl();
-				this.moveTo(tile.getXPos(), tile.getYPos());
-				this.scaleTo(0, 0);
 				if (!falling)
+				{
+					this.stop();
+					this.scaleTo(0, 0);
+					this.moveTo(tile.getXPos(), tile.getYPos());
 					SoundPlayer.getInstance().playSound(SoundPlayer.PIT_FALL);
+				}
 				falling = true;
 			}
-			/*else if (tile.isSlipperyTile())
-			{
-				Vector2f newMoveVec = new Vector2f(Something in here);
-				this.push(newMoveVec);
-			}*/
 		}
 	}
 	
@@ -168,11 +166,6 @@ public class Player extends Character //your character, protagonist
 		if (holdingObject)
 			this.dropObject();
 		controlled = false;
-	}
-	
-	public void enableUserControl()
-	{
-		controlled = true;
 	}
 	
 	public boolean userHasControl()

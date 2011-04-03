@@ -1,17 +1,11 @@
 package com.lds.game.menu;
 
 import com.lds.game.R;
-import com.lds.game.Run;
 
 import android.content.Context;
-import android.content.Intent;
-import android.content.res.Resources;
-import android.graphics.Color;
-import android.net.Uri;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.ImageButton;
 
 public class ButtonAdapter extends BaseAdapter

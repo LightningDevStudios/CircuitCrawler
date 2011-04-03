@@ -14,12 +14,11 @@ public class AttackBolt extends PhysEnt
 	{
 		super(20.0f, posVec.getX(), posVec.getY(), false, false, 250.0f, 100.0f, 0.0f, 0.0f);
 		this.directionVec = directionVec;
-		this.angle = angle;
+		this.angle = angle + 90.0f;
 		//this.move(directionVec.getX() * 5.0f, directionVec.getY() * 5.0f);
 		this.push(directionVec.scale(0.5f));
-		this.enableColorMode(1.0f, 0.0f, 0.0f, 1.0f);
 		this.setColorInterpSpeed(1.4f);
-		this.initColorInterp(0.0f, 0.0f, 0.0f, 0.0f);
+		this.initColorInterp(1.0f, 1.0f, 1.0f, 0.0f);
 		ignoreList = new ArrayList<Entity>();
 	}
 	

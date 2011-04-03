@@ -1,29 +1,20 @@
 package com.lds.game;
 
-import java.io.FileDescriptor;
-import java.io.IOException;
-import java.io.InputStream;
-
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 import android.media.MediaPlayer;
 import android.opengl.GLU;
 import android.os.Vibrator;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.content.Context;
-import android.content.res.AssetFileDescriptor;
-import android.content.res.AssetManager;
 
 import com.lds.EntityManager;
 import com.lds.Finger;
 import com.lds.Stopwatch;
 import com.lds.Vector2f;
-import com.lds.game.ai.Node;
 import com.lds.game.entity.*;
 import com.lds.game.event.*;
-import com.lds.trigger.*;
 import com.lds.UI.*;
 
 public class GameRenderer implements com.lds.Graphics.Renderer
@@ -33,7 +24,6 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	private Game game;
 	private Context context;
 	private Object syncObj;
-	private int playerMoveTimeMs/*, frameCount = 0*/;	
 	private OnGameInitializedListener gameInitializedListener;
 	private OnPuzzleActivatedListener puzzleActivatedListener;
 	private OnGameOverListener gameOverListener;
@@ -73,7 +63,6 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		//start the timer and use an initial tick to prevent errors where elapsed time is a very large negative number
 		Stopwatch.restartTimer();
 		Stopwatch.tick();
-		playerMoveTimeMs = Stopwatch.elapsedTimeMs();
 		
 		Entity.resetIndexBuffer();
 		game = new Game(context, gl, levelId);
@@ -301,13 +290,14 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 				if (game.player.getEnergy() != 0)
 				{
 					final Vector2f directionVec = new Vector2f(game.player.getAngle());
-					final AttackBolt attack = new AttackBolt(Vector2f.add(game.player.getPos(), directionVec), directionVec.scale(20), game.player.getAngle());
+					final AttackBolt attack = new AttackBolt(Vector2f.add(game.player.getPos(), directionVec), directionVec.scale(25), game.player.getAngle());
 					attack.ignore(game.player);
 					attack.genHardwareBuffers(gl);
 					EntityManager.addEntity(attack);
 					game.player.loseEnergy(5);
 					vibrator(100);
 					SoundPlayer.getInstance().playSound(2);
+					attack.enableTilesetMode(Game.tilesetentities, 1, 3);
 				}
 			}
 			else

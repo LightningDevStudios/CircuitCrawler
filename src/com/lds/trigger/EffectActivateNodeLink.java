@@ -1,7 +1,6 @@
 package com.lds.trigger;
 
 import com.lds.game.ai.Node;
-import com.lds.game.ai.NodeLink;
 
 public class EffectActivateNodeLink extends Effect
 {

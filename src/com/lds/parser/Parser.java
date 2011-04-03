@@ -66,6 +66,8 @@ public class Parser //this is a parser
 					parseNodes();
 				else if(xrp.getName().equalsIgnoreCase("NodeLinks"))
 					parseNodeLinks();
+				else if(xrp.getName().equalsIgnoreCase("TeleporterLinker"))
+					parseTeleporterLinker();
 					
 			}
 			
@@ -171,6 +173,14 @@ public class Parser //this is a parser
 					WallButtonData wbd = new WallButtonData(dataHM);
 					parsedList.add(wbd);
 					wbd.createInst(entList);
+				}
+				
+				else if (xrp.getName().equalsIgnoreCase("Teleporter"))
+				{
+					parseObj("Teleporter");
+					TeleporterData td = new TeleporterData(dataHM);
+					parsedList.add(td);
+					td.createInst(entList);
 				}
 			}
 		}
@@ -382,6 +392,10 @@ Parse A Tileset
 		{
 			cause = new CauseDoneScaling(this.<PhysEnt>stringToSubEntity(parameters[0]));
 		}
+		else if(type.equalsIgnoreCase("CauseEntityDestruction"))
+		{
+			cause = new CauseEntityDestruction(this.<Entity>stringToSubEntity(parameters[0]));
+		}
 		else if(type.equalsIgnoreCase("CauseEnemyCount"))
 		{
 			cause = new CauseEnemyCount(Integer.parseInt(parameters[0]));
@@ -486,6 +500,23 @@ Parse A Tileset
 		
 		xrp.next();
 		xrp.next();
+	}
+	
+	/*********************
+	 * TeleporterLinkers *
+	 *********************/
+
+	private void parseTeleporterLinker() throws XmlPullParserException, IOException 
+	{
+		xrp.next();
+		Teleporter tp1 = this.<Teleporter>stringToSubEntity(xrp.getAttributeValue(0));
+		Teleporter tp2 = this.<Teleporter>stringToSubEntity(xrp.getAttributeValue(1));
+		boolean oneWay = Boolean.parseBoolean(xrp.getAttributeValue(2));
+		TeleporterLinker tpLink = new TeleporterLinker(tp1, tp2, oneWay);
+		tp1.setTeleporterLinker(tpLink);
+		tp2.setTeleporterLinker(tpLink);
+		entList.add(tp1);
+		entList.add(tp2);
 	}
 }
 

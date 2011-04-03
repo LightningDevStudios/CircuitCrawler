@@ -9,14 +9,12 @@ import java.io.InputStream;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.ContentValues;
-import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.media.MediaPlayer.OnPreparedListener;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.DisplayMetrics;
@@ -26,7 +24,6 @@ import android.view.MenuItem;
 
 import com.lds.Graphics;
 import com.lds.game.event.*;
-import com.lds.game.menu.MainMenu;
 import com.lds.game.puzzle.PuzzleActivity;
 
 public class Run extends Activity implements OnGameOverListener, OnGameInitializedListener, OnPuzzleActivatedListener, OnPreparedListener, OnCompletionListener
@@ -36,11 +33,9 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 	private Bundle savedInstanceState;
 	private Graphics glSurface;
 	private GameRenderer gameR;
-	private Context context;
 	private MediaPlayer mp = new MediaPlayer();
 	private ProgressDialog pd;
-	public static boolean onLastLevel = false;
-	public static int numberOfLevels, unlockedLevelnumber;
+	private boolean playingSong1;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -55,13 +50,7 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 		
 		if (levelIndex == -1 || unlockedLevel == -1)
 			finish();
-		
-		
-		/*******************************/
-		//MAKE SURE TO SET THIS WHEN ADDING A LEVEL
-		numberOfLevels = 3;
-		//MAKE SURE TO SET THIS WHEN ADDING A LEVEL
-		/*******************************/
+	
 		switch (levelIndex)
 		{
 			case 0:
@@ -72,13 +61,7 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 				break;
 			case 2:
 				levelId = R.xml.tutorial_level;
-		}
-		
-		if(levelIndex == numberOfLevels)
-		{
-			onLastLevel = true;
-		}
-		
+		}		
 		
 		//Grab screen information
 		DisplayMetrics screen = new DisplayMetrics();
@@ -86,10 +69,9 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 		float screenX = (float)screen.widthPixels;
 		float screenY = (float)screen.heightPixels;
 		setVolumeControlStream(AudioManager.STREAM_MUSIC);
-		unlockedLevelnumber = unlockedLevel;
 		pd = ProgressDialog.show(this, "", "Loading...");
 
-		playMusic();
+		playMusic(true);
 		
 		//set up OpenGL rendering
 		Object syncObj = new Object();
@@ -165,7 +147,7 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 	public void onCompletion(MediaPlayer mp) 
 	{
 		mp.reset();
-		playMusic();
+		playMusic(false);
 	} 
 	
 	@Override 
@@ -199,8 +181,8 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 		}
 		else
 		{
-			Intent i = new Intent(Run.this, Run.class);
-			startActivity(i);
+			setResult(100 + levelIndex);
+			finish();
 		}
 	}
 	
@@ -231,17 +213,24 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 		}
 	}
 	
-	public void playMusic()
+	public void playMusic(boolean random)
 	{	
 		mp.setOnPreparedListener(this);
 		mp.setOnCompletionListener(this);
-		int rand = (int)(Math.random()* 50 + 1);
-		if(rand >= 25)
+		int whichSong;
+		if (random)
+			whichSong = (int)(Math.random() * 2 + 1);
+		else if (playingSong1)
+			whichSong = 2;
+		else
+			whichSong = 1;
+		if(whichSong == 2)
 		{
 			try 
 			{
 				saveas(R.raw.song2, "song2.mp3");
 				mp.setDataSource("/sdcard/circutCrawler/media/audio/songs/song2.mp3");
+				playingSong1 = false;
 				if (SoundPlayer.enableMusic)
 				{
 					mp.prepare();
@@ -251,7 +240,6 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 			{
 				e.printStackTrace();
 			}
-			
 		}
 		else
 		{
@@ -259,6 +247,7 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 			{
 				saveas(R.raw.song1, "song1.mp3");
 				mp.setDataSource("/sdcard/circutCrawler/media/audio/songs/song1.mp3");
+				playingSong1 = true;
 				if (SoundPlayer.enableMusic)
 				{
 					mp.prepare();
@@ -276,7 +265,6 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 	{
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.options_menu, menu);
-		mp.pause();
 		gameR.paused = true;
 		return true;
 	}
@@ -285,7 +273,6 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 	public void onOptionsMenuClosed(Menu menu)
 	{
 		super.onOptionsMenuClosed(menu);
-		mp.start();
 		gameR.paused = false;
 	}
 	
@@ -296,8 +283,8 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 		{
 			case R.id.restart:
 				//restart game
-				mp.start();
-				onCreate(savedInstanceState);
+				setResult(100 + levelIndex);
+				finish();
 				return true;
 			case R.id.main_menu:
 				//return to main menu
@@ -335,8 +322,8 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 	@Override
 	protected void onPause ()
 	{
+		mp.pause();
 		super.onPause();
-		//mp.pause();
 		glSurface.onPause();
 	}
 	

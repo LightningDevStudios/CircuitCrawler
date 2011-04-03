@@ -12,7 +12,6 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Vibrator;
@@ -52,6 +51,7 @@ public class MainMenu extends Activity
 	private ProgressDialog pd;
 	private int unlockedLevel;
 	GridView levelList;
+
     
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -104,17 +104,17 @@ public class MainMenu extends Activity
 		final TextView musicVolumeSeekBarText = (TextView)findViewById(R.id.volumeText);
 		final Button ldsButton = (Button)findViewById(R.id.LDS_Button);
 		final Button ytfButton = (Button)findViewById(R.id.YTF_Button);
-		final Button cheatButton = (Button)findViewById(R.id.Cheats);
-		final Button reset = (Button)findViewById(R.id.reset);
+		//final Button cheatButton = (Button)findViewById(R.id.Cheats);
+		//final Button reset = (Button)findViewById(R.id.reset);
 		final TextView seekBarValue = (TextView)findViewById(R.id.volumeText);
-		final AlertDialog.Builder alert = new AlertDialog.Builder(this);
-		final EditText input = new EditText(this);
-		final CheckBox godMode = (CheckBox) findViewById(R.id.god);
-		final CheckBox noclip = (CheckBox) findViewById(R.id.noclip);
-		final TextView cheatText = (TextView)findViewById(R.id.cheatText);
+		//final EditText input = new EditText(this);
+		//final CheckBox godMode = (CheckBox) findViewById(R.id.god);
+		//final CheckBox noclip = (CheckBox) findViewById(R.id.noclip);
+		//final TextView cheatText = (TextView)findViewById(R.id.cheatText);
 		final SeekBar effectVolumeControl = (SeekBar)findViewById(R.id.effectVolume);
 		final TextView effectVolumeSeekBarText = (TextView)findViewById(R.id.effectVolumeText);
-		final TextView ResetText = (TextView)findViewById(R.id.ResetText);
+		//final TextView ResetText = (TextView)findViewById(R.id.ResetText);
+		//final AlertDialog.Builder alert = new AlertDialog.Builder(this);
 		//final CheckBox enableShaders = (CheckBox) findViewById(R.id.enableShaders);
 		//final SeekBar mSeekBar = (SeekBar)findViewById(R.id.seek);
 		
@@ -206,8 +206,8 @@ public class MainMenu extends Activity
 		vibrationCheckbox.setChecked(GameRenderer.vibrateSetting);
 		volumeCheckbox.setChecked(SoundPlayer.enableSound);
 		enableMusic.setChecked(SoundPlayer.enableMusic);
-		godMode.setVisibility(View.INVISIBLE);
-		noclip.setVisibility(View.INVISIBLE);
+		//godMode.setVisibility(View.INVISIBLE);
+		//noclip.setVisibility(View.INVISIBLE);
 		//mSeekBar.setMax(100);
 		//mSeekBar.setProgress(1);
 
@@ -233,6 +233,7 @@ public class MainMenu extends Activity
 		/******************************************************************************************************************************/
 		
 		//Cheat Button
+		/*
         cheatButton.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v) 
@@ -248,12 +249,13 @@ public class MainMenu extends Activity
 					public void onClick(DialogInterface dialog, int whichButton) 
 					{
 						Editable value = input.getText();
-						if(value.toString().compareTo("PASSW0rd;") == 0) // DONT LOOK AT THIS! //lol UMADBRO? - Devin
+						if(value.toString().compareTo("PASSW0rd;") == 0) // DONT LOOK AT THIS! //lol UMADBRO? - Devin //IMAD
 						{
 							godMode.setVisibility(View.VISIBLE);
 							noclip.setVisibility(View.VISIBLE);
 							cheatText.setVisibility(View.VISIBLE);
 							cheatText.setText("Correct!");
+<<<<<<< HEAD
 						}
 						else if(Run.onLastLevel)
 						{
@@ -261,6 +263,8 @@ public class MainMenu extends Activity
 							noclip.setVisibility(View.VISIBLE);
 							cheatText.setVisibility(View.VISIBLE);
 							cheatText.setText("Unlocked!");
+=======
+>>>>>>> refs/remotes/origin/matthew_masarik_master
 						}
 						else
 						{
@@ -270,14 +274,15 @@ public class MainMenu extends Activity
 					}
 				});
 
-				alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener()
-				{
-				  public void onClick(DialogInterface dialog, int whichButton) {	}
-				});
-
+				alert.setNegativeButton("Cancel",
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog, int whichButton) {
+								dialog.cancel();
+							}
+						});
 				alert.show();
 			}
-		});      
+		});      */
         /******************************************************************************************************************************/
         
         //Music Volume Slider
@@ -345,38 +350,8 @@ public class MainMenu extends Activity
 		});
 		/******************************************************************************************************************************/
 		
-		//Noclip CheckBox
-		noclip.setOnCheckedChangeListener(new OnCheckedChangeListener()
-		{
-		    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
-		    {
-		        if ( isChecked )
-		        {
-		        	Player.noclip = true;
-		        }
-		        else
-		        {
-		        	Player.noclip = false;
-		        }
-		    }
-		});
 		/******************************************************************************************************************************/
-		
-		//GodMode CheckBox
-		godMode.setOnCheckedChangeListener(new OnCheckedChangeListener()
-		{
-		    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
-		    {
-		        if ( isChecked )
-		        {
-		        	Player.godMode = true;
-		        }
-		        else
-		        {
-		        	Player.godMode = false;
-		        }
-		    }
-		});
+
 		/******************************************************************************************************************************/
 		
 		//Enable Shaders CheckBox
@@ -449,7 +424,7 @@ public class MainMenu extends Activity
 		});
 		
 		/******************************************************************************************************************************/  
-		
+		/*
 		//Reset Button
 		reset.setOnClickListener(new View.OnClickListener()
 		{
@@ -468,7 +443,7 @@ public class MainMenu extends Activity
 					}
 				}
 			}
-		});
+		});*/
 		/******************************************************************************************************************************/	
 		
 		//YTF Button
@@ -529,10 +504,7 @@ public class MainMenu extends Activity
 						break;
 					case 7:
 						//Quit
-						moveTaskToBack(true);
 						finish();
-						System.exit(0);
-						android.os.Process.killProcess(android.os.Process.myPid());
 				}
 			}	
 		});
@@ -604,9 +576,13 @@ public class MainMenu extends Activity
     		catch (IOException e) { e.printStackTrace(); }
 		}
 		
-		if (resultCode == 3)
+		else if (resultCode == 3)
 		{
 			finish();
+		}
+		else if (resultCode >= 100)
+		{
+			runGame(100 - resultCode);
 		}
 	}
 	

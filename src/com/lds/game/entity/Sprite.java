@@ -2,8 +2,6 @@
 
 import com.lds.Animation;
 
-import com.lds.game.ai.*;
-
 public class Sprite extends PhysEnt
 {
 	public Animation anim;

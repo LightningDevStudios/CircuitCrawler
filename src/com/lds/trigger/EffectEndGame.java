@@ -1,8 +1,6 @@
 package com.lds.trigger;
 
-import com.lds.game.Run;
 import com.lds.game.event.OnGameOverListener;
-import com.lds.game.menu.ButtonAdapter;
 
 public class EffectEndGame extends Effect
 {
