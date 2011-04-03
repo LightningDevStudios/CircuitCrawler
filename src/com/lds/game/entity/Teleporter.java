@@ -1,6 +1,7 @@
 package com.lds.game.entity;
 
 import com.lds.Vector2f;
+import com.lds.game.SoundPlayer;
 
 public class Teleporter extends PhysEnt
 {
@@ -35,6 +36,7 @@ public class Teleporter extends PhysEnt
 	{		
 		if(active && ent instanceof PhysEnt && tpLink != null)
 		{
+			SoundPlayer.getInstance().playSound(SoundPlayer.TELEPORT);
 			((PhysEnt)ent).setPosNoInterp(tpLink.getLinkedPos(this));
 		}
 	}

@@ -12,10 +12,9 @@ public class SoundPlayer
 	public static final int SHOOT_SOUND = 2;
 	public static final int ENEMY_DEATH = 3;
 	public static final int PIT_FALL = 4;
-	public static final int SONG1 = 5;
-	public static final int SONG2 = 6;
-	public static boolean enableSound = true, enableMusic = true;
-	public static float effectVolume = 0, musicVolume = 0;
+	public static final int TELEPORT = 5;
+	private boolean enableSound = true, enableMusic = true;
+	private float effectVolume, musicVolume;
 	
 	private static SoundPlayer p_sp;
 	
@@ -51,6 +50,7 @@ public class SoundPlayer
 		poolMap.put(SHOOT_SOUND, pool.load(context, R.raw.shootsound, 1));
 		poolMap.put(ENEMY_DEATH, pool.load(context, R.raw.enemydeath, 1));
 		poolMap.put(PIT_FALL, pool.load(context, R.raw.pitfall, 1));
+		poolMap.put(TELEPORT, pool.load(context, R.raw.teleport, 1));
 	}
 	
 	public void playSound(int sound)
@@ -65,4 +65,14 @@ public class SoundPlayer
 			pool.play(poolMap.get(sound), volume, volume, 1, 0, 1.0f);
 		}
 	}
+	
+	public boolean getSoundEnabled()	{ return enableSound; }
+	public boolean getMusicEnabled()	{ return enableMusic; }
+	public float getEffectVolume()		{ return effectVolume; }
+	public float getMusicVolume()		{ return musicVolume; }
+	
+	public void setSoundEnabled(boolean state)	{ enableSound = state; }
+	public void setMusicEnabled(boolean state)	{ enableMusic = state; }
+	public void setEffectVolume(float volume)	{ effectVolume = volume; }
+	public void setMusicVolume(float volume)	{ musicVolume = volume; }
 }

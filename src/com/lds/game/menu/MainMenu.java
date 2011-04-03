@@ -121,10 +121,10 @@ public class MainMenu extends Activity
 			FileInputStream fis = openFileInput("effect_volume");
 			byte[] buffer = new byte[4];
 			fis.read(buffer, 0, 4);
-			SoundPlayer.effectVolume = StorageHelper.byteArrayToFloat(buffer);
+			SoundPlayer.getInstance().setEffectVolume(StorageHelper.byteArrayToFloat(buffer));
 			fis.close();
 		}
-		catch (FileNotFoundException e) { SoundPlayer.effectVolume = 0.5f;  } 
+		catch (FileNotFoundException e) { SoundPlayer.getInstance().setEffectVolume(0.5f);  } 
 		catch (IOException e) { e.printStackTrace(); }
 		catch (ArrayIndexOutOfBoundsException e) { e.printStackTrace(); }
 		
@@ -133,10 +133,10 @@ public class MainMenu extends Activity
 			FileInputStream fis = openFileInput("music_volume");
 			byte[] buffer = new byte[4];
 			fis.read(buffer, 0, 4);
-			SoundPlayer.musicVolume = StorageHelper.byteArrayToFloat(buffer);
+			SoundPlayer.getInstance().setMusicVolume(StorageHelper.byteArrayToFloat(buffer));
 			fis.close();
 		}
-		catch (FileNotFoundException e) { SoundPlayer.musicVolume = 0.5f; } 
+		catch (FileNotFoundException e) { SoundPlayer.getInstance().setMusicVolume(0.5f); } 
 		catch (IOException e) { e.printStackTrace(); }
 		catch (ArrayIndexOutOfBoundsException e) { e.printStackTrace(); }
 		
@@ -157,7 +157,7 @@ public class MainMenu extends Activity
 			FileInputStream fis = openFileInput("music_enabled");
 			byte[] buffer = new byte[1];
 			fis.read(buffer, 0, 1);
-			SoundPlayer.enableMusic = (buffer[0] != 0);
+			SoundPlayer.getInstance().setMusicEnabled(buffer[0] != 0);
 			fis.close();
 		}
 		catch (FileNotFoundException e) { e.printStackTrace(); } 
@@ -169,7 +169,7 @@ public class MainMenu extends Activity
 			FileInputStream fis = openFileInput("sound_enabled");
 			byte[] buffer = new byte[1];
 			fis.read(buffer, 0, 1);
-			SoundPlayer.enableSound = (buffer[0] != 0);
+			SoundPlayer.getInstance().setSoundEnabled(buffer[0] != 0);
 			fis.close();
 		}
 		catch (FileNotFoundException e) { e.printStackTrace(); } 
@@ -184,7 +184,7 @@ public class MainMenu extends Activity
 			unlockedLevel = (int)StorageHelper.byteArrayToFloat(buffer);
 			fis.close();
 		}
-		catch (FileNotFoundException e) { SoundPlayer.effectVolume = 0.5f;  } 
+		catch (FileNotFoundException e) { SoundPlayer.getInstance().setEffectVolume(0.5f);  } 
 		catch (IOException e) { e.printStackTrace(); }
 		catch (ArrayIndexOutOfBoundsException e) { e.printStackTrace(); }
 		
@@ -193,15 +193,15 @@ public class MainMenu extends Activity
 		
 		//Defaults, settings, and other stuff
 		musicVolumeControl.setMax(100);
-		final int volume = (int)(SoundPlayer.musicVolume * 100);
+		final int volume = (int)(SoundPlayer.getInstance().getMusicVolume() * 100);
 		musicVolumeControl.setProgress(volume);
 		musicVolumeSeekBarText.setText("Music Volume: " + String.valueOf(volume) + "%");
-		final int effectVolume = (int)(SoundPlayer.effectVolume * 100);
+		final int effectVolume = (int)(SoundPlayer.getInstance().getEffectVolume() * 100);
 		effectVolumeControl.setProgress(effectVolume);
 		effectVolumeSeekBarText.setText("Sound Effect Volume: " + String.valueOf(effectVolume) + "%");
 		vibrationCheckbox.setChecked(GameRenderer.vibrateSetting);
-		volumeCheckbox.setChecked(SoundPlayer.enableSound);
-		enableMusic.setChecked(SoundPlayer.enableMusic);
+		volumeCheckbox.setChecked(SoundPlayer.getInstance().getSoundEnabled());
+		enableMusic.setChecked(SoundPlayer.getInstance().getMusicEnabled());
 		godMode.setVisibility(View.INVISIBLE);
 		noclip.setVisibility(View.INVISIBLE);
 		//mSeekBar.setMax(100);
@@ -281,9 +281,9 @@ public class MainMenu extends Activity
         {
         	public void onProgressChanged(SeekBar volumeControl, int progress, boolean fromTouch)	
         	{	
-        		musicVolumeSeekBarText.setText("Music Volume: " + String.valueOf(progress) + "%");
-        		final float newVol = ((float)(Integer.parseInt(String.valueOf(progress))))/100;
-        		SoundPlayer.musicVolume = ((float)(Integer.parseInt(String.valueOf(progress))))/100;
+        		musicVolumeSeekBarText.setText("Music Volume: " + progress + "%");
+        		final float newVol = ((float)progress) / 100;
+        		SoundPlayer.getInstance().setMusicVolume(((float)progress) / 100);
         		try 
         		{
         			FileOutputStream fos = openFileOutput("music_volume", MODE_PRIVATE);
@@ -303,9 +303,9 @@ public class MainMenu extends Activity
         {
         	public void onProgressChanged(SeekBar volumeControl, int progress, boolean fromTouch)	
         	{	
-        		effectVolumeSeekBarText.setText("Sound Effect Volume: " + String.valueOf(progress) + "%");
-        		final float newVol = ((float)(Integer.parseInt(String.valueOf(progress))))/100;
-        		SoundPlayer.effectVolume = ((float)(Integer.parseInt(String.valueOf(progress))))/100;
+        		effectVolumeSeekBarText.setText("Sound Effect Volume: " + progress + "%");
+        		final float newVol = ((float)progress) / 100;
+        		SoundPlayer.getInstance().setEffectVolume(((float)progress) / 100);
         		try 
         		{
         			FileOutputStream fos = openFileOutput("effect_volume", MODE_PRIVATE);
@@ -397,7 +397,7 @@ public class MainMenu extends Activity
 		{
 		    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
 		    {
-		    	SoundPlayer.enableMusic = isChecked;
+		    	SoundPlayer.getInstance().setSoundEnabled(isChecked);
 		    	byte[] value = new byte[1];
 		    	if (isChecked) value[0] = 1;
 		    	else value[0] = 0;
@@ -418,7 +418,7 @@ public class MainMenu extends Activity
 		{
 		    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
 		    {
-		    	SoundPlayer.enableSound = isChecked;
+		    	SoundPlayer.getInstance().setSoundEnabled(isChecked);
 		    	byte[] value = new byte[1];
 		    	if (isChecked) value[0] = 1;
 		    	else value[0] = 0;
