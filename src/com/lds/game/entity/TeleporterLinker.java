@@ -4,9 +4,9 @@ import com.lds.Vector2f;
 
 public class TeleporterLinker 
 {
-	protected static Vector2f link1Pos, link2Pos, link3Pos;
-	protected static Teleporter entTele1, entTele2, entTele3;
-	protected static boolean oneWay, threeWay;
+	protected Vector2f link1Pos, link2Pos;
+	protected Teleporter entTele1, entTele2;
+	protected boolean oneWay;
 	
 	public TeleporterLinker(Teleporter ent, Teleporter ent2, boolean isOneWay)
 	{
@@ -17,36 +17,19 @@ public class TeleporterLinker
 		oneWay = isOneWay;
 	}
 	
-	public static  Vector2f getLinkedPos(Teleporter ent3)
+	public Vector2f getLinkedPos(Teleporter t)
 	{
-		if(ent3.equals(entTele1))
+		if (t == entTele1)
 		{
-			entTele1.setActive(false);
-			entTele2.setActive(true);
-			return link2Pos;
+			return entTele2.getPos();
 		}
-		else if(ent3.equals(entTele2))
+		else if (t == entTele2)
 		{
-			{
-				if(oneWay)
-				{
-					entTele1.setActive(false);
-					entTele2.setActive(true);
-					return link2Pos;
-				}
-				else
-				{
-					entTele1.setActive(true);
-					entTele2.setActive(false);
-					return link1Pos;
-				}
-			}
+			return entTele1.getPos();
 		}
-		else {return null;}
-	}
-	
-	public void setOneWay(boolean bool)
-	{
-		oneWay = bool;
+		else
+		{
+			return null;
+		}
 	}
 }

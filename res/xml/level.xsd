@@ -49,20 +49,24 @@
       <xs:enumeration value="CauseEnemyCount" />
       <xs:enumeration value="CauseLocation" />
       <xs:enumeration value="CausePlayerHealth" />
+			<xs:enumeration value="CauseOffScreen" />
       <xs:enumeration value="CauseTimePassed" />
     </xs:restriction>
   </xs:simpleType>
 
   <xs:simpleType name="effectType">
     <xs:restriction base="xs:token">
+			<xs:enumeration value="EffectActivateEnemy" />
 			<xs:enumeration value="EffectActivateNodeLink" />
 			<xs:enumeration value="EffectAND" />
+			<xs:enumeration value="EffectDeactivateEnemy" />
 			<xs:enumeration value="EffectDeactivateNodeLink" />
       <xs:enumeration value="EffectDoor" />
       <xs:enumeration value="EffectEndGame" />
 			<xs:enumeration value="EffectList" />
       <xs:enumeration value="EffectRaiseBridge" />
       <xs:enumeration value="EffectRemoveEntity" />
+			<xs:enumeration value="EffectSetEnemyOuterRadius" />
       <xs:enumeration value="EffectTriggerTimer" />
     </xs:restriction>
   </xs:simpleType>
@@ -175,13 +179,21 @@
 
   <xs:complexType name="PhysBlockInfo">
     <xs:complexContent>
-      <xs:extension base="PhysEntInfo" />
+      <xs:extension base="PhysEntInfo">
+        <xs:sequence>
+          <xs:element name="friction" type="floatType" />
+        </xs:sequence>
+      </xs:extension>
     </xs:complexContent>
   </xs:complexType>
 
   <xs:complexType name="PhysBallInfo">
     <xs:complexContent>
-      <xs:extension base="PhysEntInfo" />
+      <xs:extension base="PhysEntInfo">
+        <xs:sequence>
+          <xs:element name="friction" type="floatType" />
+        </xs:sequence>
+      </xs:extension>
     </xs:complexContent>
   </xs:complexType>
 
@@ -252,7 +264,13 @@
 			<xs:extension base="StaticEntInfo" />
 		</xs:complexContent>
 	</xs:complexType>
-  
+
+	<xs:complexType name="TeleporterInfo">
+		<xs:complexContent>
+			<xs:extension base="StaticEntInfo" />
+		</xs:complexContent>
+	</xs:complexType>
+	
   <!-- LEVEL XSD -->
 
    <xs:element name="Level">
@@ -276,6 +294,7 @@
         <xs:element name="Entities">
           <xs:complexType>
             <xs:sequence>
+							<xs:element name="Teleporter" type="TeleporterInfo" minOccurs="0" maxOccurs="unbounded" />
               <xs:element name="Blob" type="BlobInfo" minOccurs="0" maxOccurs="unbounded" />
               <xs:element name="Button" type="ButtonInfo" minOccurs="0" maxOccurs="unbounded" />
 							<xs:element name="Cannon" type="CannonInfo" minOccurs="0" maxOccurs="unbounded" />
@@ -326,6 +345,14 @@
             </xs:sequence>
           </xs:complexType>
         </xs:element>
+
+				<xs:element name="TeleportLinker" minOccurs="0" maxOccurs="unbounded">
+					<xs:complexType>
+						<xs:attribute name="t1" type="stringType" use="required" />
+						<xs:attribute name="t2" type="stringType" use="required" />
+						<xs:attribute name="oneWay" type="booleanType" use="required" />
+					</xs:complexType>
+				</xs:element>
 				
       </xs:sequence>
     </xs:complexType>
