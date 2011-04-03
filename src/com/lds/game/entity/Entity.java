@@ -54,7 +54,7 @@ public abstract class Entity
 	public static ByteBuffer indexBuffer;
 	
 	protected int VBOVertPtr, VBOGradientPtr, VBOTexturePtr;
-	protected boolean needToUpdateTexVBO, needToUpdateGradientVBO;
+	protected boolean needToUpdateTexVBO, needToUpdateGradientVBO, needToUpdateVertexVBO;
 	public static int VBOIndexPtr;
 	public static boolean useVBOs;
 	
@@ -760,7 +760,19 @@ public abstract class Entity
 	public EnumSet<RenderMode> getRenderMode()	{ return renderMode; }
 	public boolean isSolid()			{ return isSolid; }
 	
-	public void setSize(float size)		{ this.size = size; this.halfSize = size / 2; }
+	public void setSize(float size)
+	{ 
+		this.size = size; 
+		this.halfSize = size / 2; 
+		float[] initVerts = {	halfSize, halfSize, 	//top left
+								halfSize, -halfSize, 	//bottom left
+								-halfSize, halfSize, 	//top right
+								-halfSize, -halfSize }; //bottom right
+		
+		vertices = initVerts;
+		this.vertexBuffer = setBuffer(vertexBuffer, vertices);
+		needToUpdateVertexVBO = true;
+	}
 	public void setAngle(float angle)	{ this.angle = angle; }
 	public void setXPos(float xPos)		{ posVec.setX(xPos); }
 	public void setYPos(float yPos)		{ posVec.setY(yPos); }
@@ -833,6 +845,18 @@ public abstract class Entity
 				Log.e("LDS_Game", "Buffers generate GL_ERROR: " + error);
 			}
 		}
+	}
+	
+	public void updateVertexVBO(GL10 gl)
+	{
+		if (useVBOs && needToUpdateVertexVBO)
+		{
+			GL11 gl11 = (GL11)gl;
+			gl11.glBindBuffer(GL11.GL_ARRAY_BUFFER, VBOVertPtr);
+			final int vertexSize = vertexBuffer.capacity() * 4;
+			gl11.glBufferData(GL11.GL_ARRAY_BUFFER, vertexSize, vertexBuffer, GL11.GL_STATIC_DRAW);
+		}
+		needToUpdateVertexVBO = false;
 	}
 	
 	public void updateTextureVBO(GL10 gl)
