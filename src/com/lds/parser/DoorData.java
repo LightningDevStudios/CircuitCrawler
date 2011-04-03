@@ -21,7 +21,6 @@ public class DoorData extends StaticEntData
 		doorRef.setXScl(xScl);
 		doorRef.setYScl(yScl);
 		
-		
 		//COLOR
 		if (color != null)
 			doorRef.enableColorMode(color[0],color[1],color[2],color[3]);
