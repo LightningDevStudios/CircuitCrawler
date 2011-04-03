@@ -17,6 +17,7 @@ public class DoorData extends StaticEntData
 	public void createInst(ArrayList<Entity> entData)
 	{
 		doorRef = new Door(xPos, yPos);
+		doorRef.setSize(size);
 		doorRef.setAngle(angle);
 		doorRef.setXScl(xScl);
 		doorRef.setYScl(yScl);

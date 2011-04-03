@@ -30,7 +30,6 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 {
 	public static final int PUZZLE_ACTIVITY = 2;
 	private int unlockedLevel, levelIndex, levelId;
-	private Bundle savedInstanceState;
 	private Graphics glSurface;
 	private GameRenderer gameR;
 	private MediaPlayer mp = new MediaPlayer();
@@ -41,7 +40,6 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		this.savedInstanceState = savedInstanceState;
 		
 		levelIndex = getIntent().getExtras().getInt("levelIndex", -1);
 		System.out.println(levelIndex);
@@ -57,11 +55,11 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 				levelId = R.xml.tutorial_level;
 				break;
 			case 1:
-				levelId = R.xml.tutorial_level;
+				levelId = R.xml.level1;
 				break;
 			case 2:
-				levelId = R.xml.tutorial_level;
-		}		
+				levelId = R.xml.level5;
+		}
 		
 		//Grab screen information
 		DisplayMetrics screen = new DisplayMetrics();
