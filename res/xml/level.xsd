@@ -47,6 +47,7 @@
       <xs:enumeration value="CauseDoneRotating" />
       <xs:enumeration value="CauseDoneScaling" />
       <xs:enumeration value="CauseEnemyCount" />
+			<xs:enumeration value="CauseEntityDestruction" />
       <xs:enumeration value="CauseLocation" />
       <xs:enumeration value="CausePlayerHealth" />
 			<xs:enumeration value="CauseOffScreen" />
@@ -142,7 +143,8 @@
     <xs:complexContent>
       <xs:extension base="CharacterInfo">
         <xs:sequence>
-          <xs:element name="AIType" type="AIEnumType"/>
+          <xs:element name="AIType" type="AIEnumType" />
+					<xs:element name="PatrolPath" type="stringType" minOccurs ="0" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
@@ -346,7 +348,7 @@
           </xs:complexType>
         </xs:element>
 
-				<xs:element name="TeleportLinker" minOccurs="0" maxOccurs="unbounded">
+				<xs:element name="TeleporterLinker" minOccurs="0" maxOccurs="unbounded">
 					<xs:complexType>
 						<xs:attribute name="t1" type="stringType" use="required" />
 						<xs:attribute name="t2" type="stringType" use="required" />

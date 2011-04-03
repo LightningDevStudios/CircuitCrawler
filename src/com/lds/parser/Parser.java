@@ -9,7 +9,9 @@ import android.content.Context;
 import android.content.res.XmlResourceParser;
 import android.util.Log;
 
+import com.lds.Enums.AIType;
 import com.lds.game.ai.Node;
+import com.lds.game.ai.NodePath;
 import com.lds.game.entity.*;
 import com.lds.trigger.*;
  
@@ -21,6 +23,7 @@ public class Parser //this is a parser
 	public ArrayList<Node> nodeList;
 	public ArrayList<CauseData> causeDataList;
 	public ArrayList<EffectData> effectDataList;
+	public ArrayList<NodePath> nodePathList;
 	
 	public Tile[][] tileset;
 	public Player player;
@@ -43,6 +46,7 @@ public class Parser //this is a parser
 		nodeList = new ArrayList<Node>();
 		causeDataList = new ArrayList<CauseData>();
 		effectDataList = new ArrayList<EffectData>();
+		nodePathList = new ArrayList<NodePath>();
 	}
 
 /***********************
@@ -110,6 +114,14 @@ public class Parser //this is a parser
 				{
 					parseObj("Blob");
 					BlobData bd = new BlobData(dataHM);
+					if (bd.type == AIType.PATROL)
+					{
+						for (NodePath np : nodePathList)
+						{
+							if (np.getID().equals(bd.getPathID()))
+								bd.setPath(np);
+						}
+					}
 					parsedList.add(bd);
 					bd.createInst(entList);
 				}
@@ -502,21 +514,42 @@ Parse A Tileset
 		xrp.next();
 	}
 	
+	public void parseNodePaths() throws XmlPullParserException, IOException
+	{
+		xrp.next();
+		String[] nodePaths = (xrp.getText()).split(";");
+		
+		for(String nodePath : nodePaths)
+		{
+			NodePath np = new NodePath();
+			String[] values = nodePath.split(",");
+			np.setID(values[0]);
+			for (int i = 1; i < values.length; i++)
+			{
+				np.add(nodeList.get(Integer.parseInt(values[i])));
+			}
+			nodePathList.add(np);
+		}
+		
+		xrp.next();
+		xrp.next();
+	}
+	
 	/*********************
 	 * TeleporterLinkers *
 	 *********************/
 
 	private void parseTeleporterLinker() throws XmlPullParserException, IOException 
-	{
-		xrp.next();
+	{		
 		Teleporter tp1 = this.<Teleporter>stringToSubEntity(xrp.getAttributeValue(0));
 		Teleporter tp2 = this.<Teleporter>stringToSubEntity(xrp.getAttributeValue(1));
 		boolean oneWay = Boolean.parseBoolean(xrp.getAttributeValue(2));
 		TeleporterLinker tpLink = new TeleporterLinker(tp1, tp2, oneWay);
-		tp1.setTeleporterLinker(tpLink);
-		tp2.setTeleporterLinker(tpLink);
 		entList.add(tp1);
 		entList.add(tp2);
+		
+		xrp.next();
+		xrp.next();
 	}
 }
 

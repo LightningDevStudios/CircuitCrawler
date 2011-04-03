@@ -69,6 +69,38 @@
   <Nodes>-41,105;-41,-21;89,-138;-121,-165</Nodes>
   <NodeLinks>0,1,False;1,2,True;1,3,True;2,3,True</NodeLinks>
   <Entities>
+    <Teleporter>
+      <id>teleporter0</id>
+      <size>64</size>
+      <xPos>-180.25</xPos>
+      <yPos>153</yPos>
+      <angle>0</angle>
+      <xScl>1</xScl>
+      <yScl>1</yScl>
+      <renderMode>
+        <tileset>
+          <texID>tilesetentities</texID>
+          <x>2</x>
+          <y>2</y>
+        </tileset>
+      </renderMode>
+    </Teleporter>
+    <Teleporter>
+      <id>teleporter1</id>
+      <size>64</size>
+      <xPos>169.75</xPos>
+      <yPos>151</yPos>
+      <angle>0</angle>
+      <xScl>1</xScl>
+      <yScl>1</yScl>
+      <renderMode>
+        <tileset>
+          <texID>tilesetentities</texID>
+          <x>2</x>
+          <y>2</y>
+        </tileset>
+      </renderMode>
+    </Teleporter>
     <Blob>
       <id>blob0</id>
       <size>48</size>
@@ -166,6 +198,7 @@
           <y>0</y>
         </tileset>
       </renderMode>
+      <friction>0</friction>
     </PhysBlock>
     <PhysBall>
       <id>physBall0</id>
@@ -182,6 +215,7 @@
           <y>0</y>
         </tileset>
       </renderMode>
+      <friction>0</friction>
     </PhysBall>
     <Player>
       <id>player</id>
@@ -202,19 +236,20 @@
     </Player>
   </Entities>
   <Triggers>
-    <Cause id="locCause" type="CauseLocation">player,0,400,250,800</Cause>
-    <Cause id="leftCause" type="CauseButton">leftButton</Cause>
     <Cause id="rightCause" type="CauseButton">rightButton</Cause>
-    <Cause id="enemyCount" type="CauseEnemyCount">0</Cause>
+    <Cause id="leftCause" type="CauseButton">leftButton</Cause>
+    <Cause id="locCause" type="CauseLocation">player,0,400,250,800</Cause>
+    <Cause id="enemyKilled" type="CauseEntityDestruction">blob0</Cause>
+    <Cause id="endGameAND" type="CauseAND">locCause,enemyKilled</Cause>
     <Cause id="buttonANd" type="CauseAND">leftCause,rightCause</Cause>
-    <Cause id="endGameAND" type="CauseAND">locCause,enemyCount</Cause>
-    <Effect id="endGame" type="EffectEndGame">True</Effect>
-    <Effect id="doorsecond" type="EffectDoor">door1</Effect>
-    <Effect id="doorfirst" type="EffectDoor">door0</Effect>
     <Effect id="activateLink" type="EffectActivateNodeLink">0</Effect>
+    <Effect id="doorfirst" type="EffectDoor">door0</Effect>
+    <Effect id="doorsecond" type="EffectDoor">door1</Effect>
+    <Effect id="endGame" type="EffectEndGame">True</Effect>
     <Trigger cause="buttonANd" effect="activateLink" />
     <Trigger cause="endGameAND" effect="endGame" />
-    <Trigger cause="enemyCount" effect="doorsecond" />
+    <Trigger cause="enemyKilled" effect="doorsecond" />
     <Trigger cause="buttonANd" effect="doorfirst" />
   </Triggers>
+  <TeleporterLinker t1="teleporter0" t2="teleporter1" oneWay="false" />
 </Level>

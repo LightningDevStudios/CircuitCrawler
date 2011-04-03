@@ -15,10 +15,11 @@ public class BlobData extends EnemyData
 		super(blobHM);
 	}
 	
-	public  void createInst(ArrayList<Entity> entData)
+	public void createInst(ArrayList<Entity> entData)
 	{
 		blobRef = new Blob(xPos, yPos, type, true); //TODO allow for active boolean
 		blobRef.setAngle(angle);
+		blobRef.setPatrolPath(nodePath);
 
 		//COLOR
 		if (color != null)

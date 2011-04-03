@@ -8,6 +8,7 @@ import com.lds.game.entity.Entity;
 public class NodePath 
 {
 	private ArrayList<Node> nodeList;
+	private String ID;
 	
 	public NodePath()
 	{
@@ -80,4 +81,7 @@ public class NodePath
 	{
 		return nodeList.get(index);
 	}
+	
+	public void setID (String id)	{ ID = id; }
+	public String getID ()	{ return ID; }
 }
