@@ -37,7 +37,9 @@ public class Teleporter extends PhysEnt
 		if(active && ent instanceof PhysEnt && tpLink != null)
 		{
 			SoundPlayer.getInstance().playSound(SoundPlayer.TELEPORT);
-			((PhysEnt)ent).setPosNoInterp(tpLink.getLinkedPos(this));
+			Vector2f newPos = tpLink.getLinkedPos(this);
+			if (newPos != null)
+				((PhysEnt)ent).setPosNoInterp(newPos);
 		}
 	}
 	
@@ -45,6 +47,15 @@ public class Teleporter extends PhysEnt
 	public void uninteract (Entity ent)		
 	{
 		active = true;
+	}
+	
+	@Override
+	public boolean isColliding(Entity ent)
+	{
+		if (ent instanceof Tile || ent instanceof StaticEnt)
+			return false;
+		
+		return  super.isColliding(ent);
 	}
 	
 	public void setActive(boolean bool)

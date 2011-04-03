@@ -29,9 +29,7 @@ import com.lds.game.puzzle.PuzzleActivity;
 public class Run extends Activity implements OnGameOverListener, OnGameInitializedListener, OnPuzzleActivatedListener, OnPreparedListener, OnCompletionListener
 {
 	public static final int PUZZLE_ACTIVITY = 2;
-	public boolean paused = false;
 	private int unlockedLevel, levelIndex, levelId;
-	private Bundle savedInstanceState;
 	private Graphics glSurface;
 	private GameRenderer gameR;
 	private MediaPlayer mp = new MediaPlayer();
@@ -42,21 +40,22 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		this.savedInstanceState = savedInstanceState;
 		
 		levelIndex = getIntent().getExtras().getInt("levelIndex", -1);
+		System.out.println(levelIndex);
 		unlockedLevel = getIntent().getExtras().getInt("unlockedLevel", -1);
+		System.out.println(unlockedLevel);
 		
 		if (levelIndex == -1 || unlockedLevel == -1)
 			finish();
-		
+	
 		switch (levelIndex)
 		{
 			case 0:
 				levelId = R.xml.tutorial_level;
 				break;
 			case 1:
-				levelId = R.xml.level2;
+				levelId = R.xml.level1;
 				break;
 			case 2:
 				levelId = R.xml.level5;
@@ -68,7 +67,6 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 		float screenX = (float)screen.widthPixels;
 		float screenY = (float)screen.heightPixels;
 		setVolumeControlStream(AudioManager.STREAM_MUSIC);
-
 		pd = ProgressDialog.show(this, "", "Loading...");
 
 		playMusic(true);
@@ -293,10 +291,12 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 				finish();
 				return true;
 			case R.id.quit:
+				mp.stop();
 				setResult(3);
 				finish();
 				return true;
 			default:
+				mp.start();
 				return super.onOptionsItemSelected(item);
 		
 		}
@@ -313,22 +313,16 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 	protected void onResume ()
 	{
 		super.onResume();
-		glSurface.onResume();
-		if(paused)
-		{
-			mp.start();
-			paused = false;
-		}	
+		//mp.start();
+		glSurface.onResume();	
 	}
 	
 	@Override
 	protected void onPause ()
 	{
-		super.onPause();
-		paused = true;
 		mp.pause();
+		super.onPause();
 		glSurface.onPause();
-		//finish();
 	}
 	
 	@Override

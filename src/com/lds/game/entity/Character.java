@@ -29,6 +29,7 @@ public abstract class Character extends PhysEnt //all characters, including the 
 	{
 		if (ent instanceof AttackBolt && !((AttackBolt)ent).doesIgnore(this))
 		{
+			colList.remove(ent);
 			takeDamage(5);
 		}
 		else if (ent instanceof SpikeBall)
