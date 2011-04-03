@@ -66,6 +66,8 @@ public class Parser //this is a parser
 					parseNodes();
 				else if(xrp.getName().equalsIgnoreCase("NodeLinks"))
 					parseNodeLinks();
+				else if(xrp.getName().equalsIgnoreCase("TeleporterLinker"))
+					parseTeleporterLinker();
 					
 			}
 			
@@ -504,6 +506,18 @@ Parse A Tileset
 	 * TeleporterLinkers *
 	 *********************/
 
+	private void parseTeleporterLinker() throws XmlPullParserException, IOException 
+	{
+		xrp.next();
+		Teleporter tp1 = this.<Teleporter>stringToSubEntity(xrp.getAttributeValue(0));
+		Teleporter tp2 = this.<Teleporter>stringToSubEntity(xrp.getAttributeValue(1));
+		boolean oneWay = Boolean.parseBoolean(xrp.getAttributeValue(2));
+		TeleporterLinker tpLink = new TeleporterLinker(tp1, tp2, oneWay);
+		tp1.setTeleporterLinker(tpLink);
+		tp2.setTeleporterLinker(tpLink);
+		entList.add(tp1);
+		entList.add(tp2);
+	}
 }
 
 	
