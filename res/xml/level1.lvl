@@ -24,9 +24,9 @@
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
+    <Tile state="WALL" />
+    <Tile state="WALL" />
+    <Tile state="WALL" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
@@ -44,10 +44,10 @@
     <Tile state="PIT" />
     <Tile state="PIT" />
     <Tile state="FLOOR" />
+    <Tile state="PIT" />
+    <Tile state="PIT" />
+    <Tile state="PIT" />
     <Tile state="FLOOR" />
-    <Tile state="PIT" />
-    <Tile state="PIT" />
-    <Tile state="PIT" />
     <Tile state="WALL" />
     <Tile state="WALL" />
     <Tile state="FLOOR" />
@@ -60,10 +60,10 @@
     <Tile state="FLOOR" />
     <Tile state="PIT" />
     <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
     <Tile state="PIT" />
     <Tile state="FLOOR" />
     <Tile state="PIT" />
+    <Tile state="FLOOR" />
     <Tile state="WALL" />
     <Tile state="WALL" />
     <Tile state="FLOOR" />
@@ -76,20 +76,16 @@
     <Tile state="PIT" />
     <Tile state="PIT" />
     <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
     <Tile state="PIT" />
     <Tile state="PIT" />
     <Tile state="PIT" />
+    <Tile state="FLOOR" />
     <Tile state="WALL" />
     <Tile state="WALL" />
     <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
+    <Tile state="WALL" />
+    <Tile state="WALL" />
+    <Tile state="WALL" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
@@ -97,9 +93,13 @@
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="WALL" />
+    <Tile state="FLOOR" />
+    <Tile state="FLOOR" />
+    <Tile state="FLOOR" />
+    <Tile state="WALL" />
     <Tile state="WALL" />
     <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
+    <Tile state="WALL" />
     <Tile state="WALL" />
     <Tile state="WALL" />
     <Tile state="WALL" />
@@ -263,7 +263,7 @@
   <Entities>
     <Blob>
       <id>blob0</id>
-      <size>45</size>
+      <size>48</size>
       <xPos>-246.75</xPos>
       <yPos>28.5</yPos>
       <angle>90</angle>
@@ -318,8 +318,8 @@
     <Blob>
       <id>blob3</id>
       <size>48</size>
-      <xPos>392.75</xPos>
-      <yPos>329</yPos>
+      <xPos>325.75</xPos>
+      <yPos>325</yPos>
       <angle>90</angle>
       <xScl>1</xScl>
       <yScl>1</yScl>
@@ -335,7 +335,7 @@
     </Blob>
     <Blob>
       <id>blob4</id>
-      <size>45</size>
+      <size>48</size>
       <xPos>41</xPos>
       <yPos>-252.5</yPos>
       <angle>90</angle>
@@ -401,7 +401,7 @@
     </Button>
     <Door>
       <id>lowerDoor</id>
-      <size>78</size>
+      <size>72</size>
       <xPos>-397</xPos>
       <yPos>-326.5</yPos>
       <angle>90</angle>
@@ -418,8 +418,8 @@
     <Door>
       <id>upperDoor</id>
       <size>84</size>
-      <xPos>-324.5</xPos>
-      <yPos>38.25</yPos>
+      <xPos>-327.5</xPos>
+      <yPos>36.25</yPos>
       <angle>0</angle>
       <xScl>0.5</xScl>
       <yScl>1</yScl>
@@ -434,8 +434,8 @@
     <PhysBlock>
       <id>physBlock0</id>
       <size>50</size>
-      <xPos>468.75</xPos>
-      <yPos>464</yPos>
+      <xPos>339.75</xPos>
+      <yPos>178</yPos>
       <angle>90</angle>
       <xScl>1</xScl>
       <yScl>1</yScl>
