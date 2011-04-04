@@ -42,7 +42,7 @@ public class EntityManager
 		for (Entity ent : addList)
 		{
 			ent.genHardwareBuffers(gl);
-			entList.add(ent);
+			entList.add(0, ent);
 		}
 		
 		trashList.clear();
