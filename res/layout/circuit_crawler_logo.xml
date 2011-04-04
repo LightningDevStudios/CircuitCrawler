@@ -4,5 +4,5 @@
 	android:id="@+id/CircuitCrawlerLogo"
 	android:layout_width="fill_parent"
 	android:layout_height="fill_parent"		
-	android:src="@drawable/mainmenulogo">
+	android:src="@drawable/mainmenulogoxml">
 </ImageView>
