@@ -8,4 +8,9 @@ public class Blob extends Enemy
 	{
 		super(Entity.DEFAULT_SIZE, xPos, yPos, false, 25, type, active);
 	}
+
+	public void setHealth(int health) 
+	{
+		this.health = health;
+	}
 }

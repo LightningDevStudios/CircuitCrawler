@@ -55,8 +55,8 @@ public final class R {
         public static final int TextView08=0x7f0b000c;
         public static final int TextView09=0x7f0b000d;
         public static final int TextView10=0x7f0b000e;
-        public static final int TextView12=0x7f0b0022;
-        public static final int TextView13=0x7f0b0023;
+        public static final int TextView12=0x7f0b0023;
+        public static final int TextView13=0x7f0b0024;
         public static final int TextView14=0x7f0b000f;
         public static final int TextView15=0x7f0b0010;
         public static final int TextView16=0x7f0b0011;
@@ -74,7 +74,7 @@ public final class R {
         public static final int TextView28=0x7f0b001d;
         public static final int TextView29=0x7f0b001e;
         public static final int TextView30=0x7f0b0021;
-        public static final int TextView31=0x7f0b0024;
+        public static final int TextView31=0x7f0b0022;
         public static final int TextView32=0x7f0b0025;
         public static final int TextView33=0x7f0b0026;
         public static final int TextView34=0x7f0b001f;

@@ -44,7 +44,6 @@ public class Player extends Character //your character, protagonist
 	@Override
 	public void interact (Entity ent)
 	{
-		super.interact(ent);
 		if (ent instanceof PickupEnergy)
 		{
 			colList.remove(ent);
@@ -69,6 +68,11 @@ public class Player extends Character //your character, protagonist
 		}
 		else if (ent instanceof CannonShell)
 		{
+			takeDamage(5);
+		}
+		else if (ent instanceof AttackBolt && !((AttackBolt)ent).doesIgnore(this))
+		{
+			colList.remove(ent);
 			takeDamage(5);
 		}
 	}

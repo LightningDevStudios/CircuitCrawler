@@ -118,7 +118,7 @@ public class Tile extends StaticEnt
 	@Override
 	public boolean isColliding(Entity ent)
 	{
-		if (state != TileState.WALL)
+		if (state != TileState.WALL || ent instanceof Tile || ent instanceof StaticEnt || ent instanceof Teleporter)
 			return false;
 		else
 			return super.isColliding(ent);

@@ -20,6 +20,7 @@ public class BlobData extends EnemyData
 		blobRef = new Blob(xPos, yPos, type, true); //TODO allow for active boolean
 		blobRef.setAngle(angle);
 		blobRef.setPatrolPath(nodePath);
+		blobRef.setHealth(health);
 
 		//COLOR
 		if (color != null)

@@ -4,7 +4,7 @@ import java.util.HashMap;
 
 public class CharacterData extends PhysEntData
 {
-	private int health;
+	protected int health;
 	public CharacterData(HashMap<String, String> characterHM)
 	{
 		super(characterHM);
