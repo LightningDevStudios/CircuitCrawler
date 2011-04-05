@@ -548,7 +548,7 @@ Parse A Tileset
 		entList.add(tp1);
 		entList.add(tp2);
 		
-		xrp.next();
+		//xrp.next();
 		xrp.next();
 	}
 }

@@ -20,6 +20,6 @@ public class EffectDoor extends Effect
 	@Override
 	public void unfireOutput()
 	{
-		door.tryToClose();
+		door.close();
 	}
 }

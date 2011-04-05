@@ -27,8 +27,8 @@ public class Teleporter extends PhysEnt
 	public void update()
 	{
 		super.update();
-		if (!isRotating)
-			rotate(180);
+		//if (!isRotating)
+			//rotate(180);
 	}
 	
 	@Override
@@ -36,10 +36,12 @@ public class Teleporter extends PhysEnt
 	{		
 		if(active && ent instanceof PhysEnt && tpLink != null)
 		{
-			SoundPlayer.getInstance().playSound(SoundPlayer.TELEPORT);
 			Vector2f newPos = tpLink.getLinkedPos(this);
 			if (newPos != null)
+			{
 				((PhysEnt)ent).setPosNoInterp(newPos);
+				SoundPlayer.getInstance().playSound(SoundPlayer.TELEPORT);
+			}
 		}
 	}
 	
