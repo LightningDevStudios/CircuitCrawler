@@ -13,7 +13,7 @@ public abstract class Pickup extends PhysEnt //pickup objects are picked up, suc
 	@Override
 	public void update()
 	{
-		scaleTo(2, 2);
+		//scaleTo(2, 2);
 	}
 	
 	@Override

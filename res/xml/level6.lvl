@@ -1172,7 +1172,7 @@
       </renderMode>
     </Teleporter>
     <Teleporter>
-      <id>teleporter0</id>
+      <id>trick3In</id>
       <size>64</size>
       <xPos>-538.600037</xPos>
       <yPos>26.0502777</yPos>
@@ -1220,7 +1220,7 @@
       </renderMode>
     </Teleporter>
     <Teleporter>
-      <id>teleporter3</id>
+      <id>firstCloverOut</id>
       <size>64</size>
       <xPos>-399.850037</xPos>
       <yPos>-251.449722</yPos>
@@ -1236,7 +1236,7 @@
       </renderMode>
     </Teleporter>
     <Teleporter>
-      <id>teleporter4</id>
+      <id>trick2In</id>
       <size>64</size>
       <xPos>-538.5999</xPos>
       <yPos>-393.899658</yPos>
@@ -1252,7 +1252,7 @@
       </renderMode>
     </Teleporter>
     <Teleporter>
-      <id>teleporter5</id>
+      <id>trick1In</id>
       <size>64</size>
       <xPos>-686.6</xPos>
       <yPos>-397.599731</yPos>
@@ -1268,7 +1268,7 @@
       </renderMode>
     </Teleporter>
     <Teleporter>
-      <id>teleporter6</id>
+      <id>teleB1</id>
       <size>64</size>
       <xPos>-829.050049</xPos>
       <yPos>-107.149734</yPos>
@@ -1284,7 +1284,7 @@
       </renderMode>
     </Teleporter>
     <Teleporter>
-      <id>teleporter7</id>
+      <id>teleA1</id>
       <size>64</size>
       <xPos>-827.2001</xPos>
       <yPos>-249.599747</yPos>
@@ -1332,7 +1332,7 @@
       </renderMode>
     </Teleporter>
     <Teleporter>
-      <id>teleporter10</id>
+      <id>escapeTele</id>
       <size>64</size>
       <xPos>177.44986</xPos>
       <yPos>-893.0496</yPos>
@@ -1430,8 +1430,8 @@
     <Teleporter>
       <id>teleporter16</id>
       <size>64</size>
-      <xPos>823.099731</xPos>
-      <yPos>607.300049</yPos>
+      <xPos>825.599731</xPos>
+      <yPos>609.800049</yPos>
       <angle>0</angle>
       <xScl>1</xScl>
       <yScl>1</yScl>
@@ -1462,8 +1462,8 @@
     <Teleporter>
       <id>teleporter18</id>
       <size>64</size>
-      <xPos>680.649658</xPos>
-      <yPos>899.6001</yPos>
+      <xPos>685.649658</xPos>
+      <yPos>472.1001</yPos>
       <angle>0</angle>
       <xScl>1</xScl>
       <yScl>1</yScl>
@@ -1478,7 +1478,7 @@
     <Teleporter>
       <id>teleporter19</id>
       <size>64</size>
-      <xPos>540.0497</xPos>
+      <xPos>542.5497</xPos>
       <yPos>895.9001</yPos>
       <angle>0</angle>
       <xScl>1</xScl>
@@ -1492,7 +1492,7 @@
       </renderMode>
     </Teleporter>
     <Teleporter>
-      <id>teleporter20</id>
+      <id>secondCloverFirstIn</id>
       <size>64</size>
       <xPos>390.1997</xPos>
       <yPos>755.3001</yPos>
@@ -1510,8 +1510,8 @@
     <Teleporter>
       <id>teleporter21</id>
       <size>64</size>
-      <xPos>680.649658</xPos>
-      <yPos>466.700134</yPos>
+      <xPos>690.649658</xPos>
+      <yPos>899.200134</yPos>
       <angle>0</angle>
       <xScl>1</xScl>
       <yScl>1</yScl>
@@ -1542,7 +1542,7 @@
     <Teleporter>
       <id>teleporter23</id>
       <size>64</size>
-      <xPos>393.89975</xPos>
+      <xPos>396.39975</xPos>
       <yPos>612.8501</yPos>
       <angle>0</angle>
       <xScl>1</xScl>
@@ -1556,7 +1556,7 @@
       </renderMode>
     </Teleporter>
     <Teleporter>
-      <id>teleporter24</id>
+      <id>trickTele1</id>
       <size>64</size>
       <xPos>-755.000244</xPos>
       <yPos>-898.699951</yPos>
@@ -1572,7 +1572,7 @@
       </renderMode>
     </Teleporter>
     <Teleporter>
-      <id>teleporter25</id>
+      <id>trickTele2</id>
       <size>64</size>
       <xPos>-900.2003</xPos>
       <yPos>-903.0999</yPos>
@@ -1588,7 +1588,7 @@
       </renderMode>
     </Teleporter>
     <Teleporter>
-      <id>teleporter26</id>
+      <id>trickTele3</id>
       <size>64</size>
       <xPos>-902.4003</xPos>
       <yPos>-1041.70007</yPos>
@@ -1604,7 +1604,7 @@
       </renderMode>
     </Teleporter>
     <Teleporter>
-      <id>teleporter27</id>
+      <id>secretTele</id>
       <size>64</size>
       <xPos>-757.200256</xPos>
       <yPos>-1043.8999</yPos>
@@ -1620,7 +1620,7 @@
       </renderMode>
     </Teleporter>
     <Teleporter>
-      <id>cruelTele</id>
+      <id>cruelPitTele</id>
       <size>64</size>
       <xPos>-181.9003</xPos>
       <yPos>-394.899872</yPos>
@@ -1636,7 +1636,7 @@
       </renderMode>
     </Teleporter>
     <Teleporter>
-      <id>teleporter28</id>
+      <id>cruelSpikeTele</id>
       <size>64</size>
       <xPos>-504.9003</xPos>
       <yPos>286.400024</yPos>
@@ -1652,7 +1652,7 @@
       </renderMode>
     </Teleporter>
     <Teleporter>
-      <id>teleporter29</id>
+      <id>2ndToButtonTele</id>
       <size>64</size>
       <xPos>57.5</xPos>
       <yPos>722.5</yPos>
@@ -1716,7 +1716,7 @@
       </renderMode>
     </Teleporter>
     <Teleporter>
-      <id>teleporter33</id>
+      <id>finnallyOutTele</id>
       <size>64</size>
       <xPos>1035</xPos>
       <yPos>-324.5</yPos>
@@ -1828,7 +1828,7 @@
       </renderMode>
     </Teleporter>
     <Teleporter>
-      <id>teleporter30</id>
+      <id>3rdToButtonTele</id>
       <size>64</size>
       <xPos>-828.8001</xPos>
       <yPos>141.5501</yPos>
@@ -1844,7 +1844,7 @@
       </renderMode>
     </Teleporter>
     <Teleporter>
-      <id>teleporter31</id>
+      <id>backInTele</id>
       <size>64</size>
       <xPos>-1041.50024</xPos>
       <yPos>1044.1</yPos>
@@ -2082,8 +2082,8 @@
     <Blob>
       <id>blob5</id>
       <size>48</size>
-      <xPos>440.000031</xPos>
-      <yPos>34.14998</yPos>
+      <xPos>447.500031</xPos>
+      <yPos>39.14998</yPos>
       <angle>90</angle>
       <xScl>1</xScl>
       <yScl>1</yScl>
@@ -2154,7 +2154,7 @@
     <Blob>
       <id>blob9</id>
       <size>48</size>
-      <xPos>524.15</xPos>
+      <xPos>519.15</xPos>
       <yPos>35.84999</yPos>
       <angle>90</angle>
       <xScl>1</xScl>
@@ -2172,8 +2172,8 @@
     <Blob>
       <id>blob10</id>
       <size>48</size>
-      <xPos>526.7</xPos>
-      <yPos>-37.2500153</yPos>
+      <xPos>524.2</xPos>
+      <yPos>-32.2500153</yPos>
       <angle>90</angle>
       <xScl>1</xScl>
       <yScl>1</yScl>
@@ -2299,7 +2299,7 @@
       <id>blob17</id>
       <size>48</size>
       <xPos>812.3</xPos>
-      <yPos>48.6</yPos>
+      <yPos>43.6</yPos>
       <angle>90</angle>
       <xScl>1</xScl>
       <yScl>1</yScl>
@@ -2389,7 +2389,7 @@
       <id>blob22</id>
       <size>48</size>
       <xPos>877.749939</xPos>
-      <yPos>-16.8500042</yPos>
+      <yPos>-24.3500061</yPos>
       <angle>90</angle>
       <xScl>1</xScl>
       <yScl>1</yScl>
@@ -2440,11 +2440,18 @@
     </Player>
   </Entities>
   <Triggers>
-    <Cause id="topButtonCause" type="CauseButton">topButton</Cause>
+    <Cause id="endGameLoc" type="CauseLocation">player,1100,1200,-155,155</Cause>
     <Cause id="bottomButtonCause" type="CauseButton">bottomButton</Cause>
-    <Effect id="leftBrige" type="EffectRaiseBridge">6,26</Effect>
-    <Effect id="middleBridge" type="EffectRaiseBridge">8,26</Effect>
+    <Cause id="topButtonCause" type="CauseButton">topButton</Cause>
+    <Cause id="endGameAND" type="CauseAND">topButtonCause,endGameLoc</Cause>
+    <Effect id="endGameEffect" type="EffectEndGame">True</Effect>
     <Effect id="rightBridge" type="EffectRaiseBridge">17,30</Effect>
+    <Effect id="middleBridge" type="EffectRaiseBridge">8,26</Effect>
+    <Effect id="leftBrige" type="EffectRaiseBridge">6,26</Effect>
+    <Trigger cause="topButtonCause" effect="rightBridge" />
+    <Trigger cause="bottomButtonCause" effect="leftBrige" />
+    <Trigger cause="bottomButtonCause" effect="middleBridge" />
+    <Trigger cause="endGameAND" effect="endGameEffect" />
   </Triggers>
   <TeleporterLinker t1="firstTele" t2="secondTele" oneWay="true" />
   <TeleporterLinker t1="thirdTele" t2="fourthTele" oneWay="true" />
@@ -2454,4 +2461,23 @@
   <TeleporterLinker t1="toBlockTele" t2="blockTele" oneWay="false" />
   <TeleporterLinker t1="pitChoice" t2="pitDestination" oneWay="false" />
   <TeleporterLinker t1="blockNballChoice" t2="blockNballDestination" oneWay="true" />
+  <TeleporterLinker t1="3rdToButtonTele" t2="2ndToButtonTele" oneWay="false" />
+  <TeleporterLinker t1="escapeTele" t2="secretTele" oneWay="true" />
+  <TeleporterLinker t1="secretTele" t2="finnallyOutTele" oneWay="true" />
+  <TeleporterLinker t1="trickTele1" t2="trick1In" oneWay="true" />
+  <TeleporterLinker t1="trickTele2" t2="trick2In" oneWay="true" />
+  <TeleporterLinker t1="trickTele3" t2="trick3In" oneWay="true" />
+  <TeleporterLinker t1="teleA0" t2="teleA1" oneWay="true" />
+  <TeleporterLinker t1="teleB0" t2="teleB1" oneWay="true" />
+  <TeleporterLinker t1="teleporter2" t2="cruelPitTele" oneWay="true" />
+  <TeleporterLinker t1="teleporter1" t2="cruelSpikeTele" oneWay="true" />
+  <TeleporterLinker t1="firstCloverOut" t2="secondCloverFirstIn" oneWay="false" />
+  <TeleporterLinker t1="backInTele" t2="trick2In" oneWay="true" />
+  <TeleporterLinker t1="teleporter17" t2="teleporter23" oneWay="false" />
+  <TeleporterLinker t1="teleporter16" t2="teleporter12" oneWay="false" />
+  <TeleporterLinker t1="teleporter8" t2="teleporter11" oneWay="false" />
+  <TeleporterLinker t1="teleporter9" t2="teleporter13" oneWay="false" />
+  <TeleporterLinker t1="teleporter15" t2="teleporter18" oneWay="false" />
+  <TeleporterLinker t1="teleporter14" t2="teleporter22" oneWay="false" />
+  <TeleporterLinker t1="teleporter21" t2="teleporter19" oneWay="false" />
 </Level>

@@ -668,7 +668,7 @@
           <y>2</y>
         </tileset>
       </renderMode>
-      <health>500</health>
+      <health>210</health>
       <AIType>TURRET</AIType>
     </Blob>
     <Blob>
@@ -740,7 +740,7 @@
           <y>2</y>
         </tileset>
       </renderMode>
-      <health>500</health>
+      <health>210</health>
       <AIType>STALKER</AIType>
     </Blob>
     <Player>

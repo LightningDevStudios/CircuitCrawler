@@ -10,12 +10,12 @@ public class Teleporter extends PhysEnt
 	
 	public Teleporter(float size, float xPos, float yPos, float angle, float xScl, float yScl, boolean isSolid, boolean circular, boolean willCollide) 
 	{
-		super(size, xPos, yPos, angle, xScl, yScl, isSolid, circular, willCollide, 0, 360, 0, 0);
+		super(size, xPos, yPos, angle, xScl, yScl, isSolid, circular, willCollide, 0, 0, 0, 0);
 		active = true;
 	}
 	public Teleporter(float size, float xPos, float yPos) 
 	{
-		super(size, xPos, yPos, 0.0f, 1.0f, 1.0f, true, false, false, 0, 360, 0, 0);
+		super(size, xPos, yPos, 0.0f, 1.0f, 1.0f, true, false, false, 0, 0, 0, 0);
 		active = true;
 	}
 	public  Vector2f getPos()
@@ -24,18 +24,12 @@ public class Teleporter extends PhysEnt
 	}
 	
 	@Override
-	public void update()
-	{
-		super.update();
-		//if (!isRotating)
-			//rotate(180);
-	}
-	
-	@Override
 	public void interact (Entity ent)
 	{		
 		if(active && ent instanceof PhysEnt && tpLink != null)
 		{
+			if (ent instanceof HoldObject && ((HoldObject)ent).isHeld())
+				return;
 			Vector2f newPos = tpLink.getLinkedPos(this);
 			if (newPos != null)
 			{

@@ -517,19 +517,19 @@
     </Player>
   </Entities>
   <Triggers>
-    <Cause id="rightButtonCause" type="CauseButton">rightButton</Cause>
-    <Cause id="middleButtonCause" type="CauseButton">middleButton</Cause>
-    <Cause id="leftButtonCause" type="CauseButton">leftButton</Cause>
     <Cause id="endGameLoc" type="CauseLocation">player,350,520,550,700</Cause>
-    <Cause id="allThreeButtonCause" type="CauseAND">mANDrButtonCause,leftButtonCause</Cause>
+    <Cause id="leftButtonCause" type="CauseButton">leftButton</Cause>
+    <Cause id="middleButtonCause" type="CauseButton">middleButton</Cause>
+    <Cause id="rightButtonCause" type="CauseButton">rightButton</Cause>
     <Cause id="mANDrButtonCause" type="CauseAND">middleButtonCause,rightButtonCause</Cause>
+    <Cause id="allThreeButtonCause" type="CauseAND">mANDrButtonCause,leftButtonCause</Cause>
     <Cause id="endGameCause" type="CauseAND">allThreeButtonCause,endGameLoc</Cause>
-    <Effect id="rightBridgeEffect" type="EffectRaiseBridge">14,0</Effect>
-    <Effect id="leftBridgeEffect" type="EffectRaiseBridge">13,0</Effect>
-    <Effect id="upperDoorEffect" type="EffectDoor">upperDoor</Effect>
-    <Effect id="lowerDoorEffect" type="EffectDoor">lowerDoor</Effect>
-    <Effect id="endGame" type="EffectEndGame">True</Effect>
     <Effect id="helperDoor" type="EffectDoor">door0</Effect>
+    <Effect id="endGame" type="EffectEndGame">True</Effect>
+    <Effect id="lowerDoorEffect" type="EffectDoor">lowerDoor</Effect>
+    <Effect id="upperDoorEffect" type="EffectDoor">upperDoor</Effect>
+    <Effect id="leftBridgeEffect" type="EffectRaiseBridge">13,0</Effect>
+    <Effect id="rightBridgeEffect" type="EffectRaiseBridge">14,0</Effect>
     <Trigger cause="middleButtonCause" effect="lowerDoorEffect" />
     <Trigger cause="mANDrButtonCause" effect="upperDoorEffect" />
     <Trigger cause="allThreeButtonCause" effect="leftBridgeEffect" />
