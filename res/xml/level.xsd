@@ -297,8 +297,7 @@
           <xs:complexType>
             <xs:sequence>
 							<xs:element name="Teleporter" type="TeleporterInfo" minOccurs="0" maxOccurs="unbounded" />
-              <xs:element name="Blob" type="BlobInfo" minOccurs="0" maxOccurs="unbounded" />
-              <xs:element name="Button" type="ButtonInfo" minOccurs="0" maxOccurs="unbounded" />
+							<xs:element name="Button" type="ButtonInfo" minOccurs="0" maxOccurs="unbounded" />
 							<xs:element name="Cannon" type="CannonInfo" minOccurs="0" maxOccurs="unbounded" />
               <xs:element name="Door" type="DoorInfo" minOccurs="0" maxOccurs="unbounded" />
               <xs:element name="PhysBlock" type="PhysBlockInfo" minOccurs="0" maxOccurs="unbounded" />
@@ -310,6 +309,7 @@
 							<xs:element name="Spike" type="SpikeInfo" minOccurs="0" maxOccurs="unbounded" />
               <xs:element name="Sprite" type="SpriteInfo" minOccurs="0" maxOccurs="unbounded" />
 							<xs:element name="WallButton" type="WallButtonInfo" minOccurs="0" maxOccurs="unbounded" />
+							<xs:element name="Blob" type="BlobInfo" minOccurs="0" maxOccurs="unbounded" />
 							<xs:element name="Player" type="PlayerInfo" minOccurs="0" maxOccurs="unbounded" />
             </xs:sequence>
           </xs:complexType>

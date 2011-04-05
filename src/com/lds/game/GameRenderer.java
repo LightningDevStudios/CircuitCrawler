@@ -117,12 +117,6 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		game.frameInterval = Stopwatch.elapsedTimeMs();
 		Stopwatch.tick();
 
-		game.updateTriggers();
-		game.updateRenderedEnts();
-		game.cleaner.update(game.entList, gl);
-		game.updateFingers();
-		game.renderTileset(gl);
-
 		//Triggered when the perspective needs to be redrawn
 		if (Game.windowOutdated)
 		{
@@ -130,6 +124,12 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 			updateCamPosition(gl);
 			Game.windowOutdated = false;
 		}
+		
+		game.updateTriggers();
+		game.updateRenderedEnts();
+		game.cleaner.update(game.entList, gl);
+		game.updateFingers();
+		game.renderTileset(gl);
 		
 		//update all entites
 		for (Entity ent : game.entList)
