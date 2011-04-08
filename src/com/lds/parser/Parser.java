@@ -556,10 +556,7 @@ Parse A Tileset
 		Teleporter tp2 = this.<Teleporter>stringToSubEntity(xrp.getAttributeValue(1));
 		boolean oneWay = Boolean.parseBoolean(xrp.getAttributeValue(2));
 		TeleporterLinker tpLink = new TeleporterLinker(tp1, tp2, oneWay);
-		entList.add(tp1);
-		entList.add(tp2);
 		
-		//xrp.next();
 		xrp.next();
 	}
 }

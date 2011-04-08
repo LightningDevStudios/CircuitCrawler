@@ -287,48 +287,7 @@
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="WALL" />
-    <Tile state="WALL" />
-    <Tile state="WALL" />
-    <Tile state="WALL" />
-    <Tile state="WALL" />
-    <Tile state="WALL" />
-    <Tile state="WALL" />
-    <Tile state="WALL" />
-    <Tile state="WALL" />
-    <Tile state="WALL" />
-    <Tile state="WALL" />
-    <Tile state="WALL" />
-    <Tile state="WALL" />
-    <Tile state="WALL" />
-    <Tile state="WALL" />
-    <Tile state="WALL" />
-    <Tile state="WALL" />
-    <Tile state="WALL" />
-    <Tile state="WALL" />
-    <Tile state="FLOOR" />
-    <Tile state="WALL" />
-    <Tile state="WALL" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
+    <Tile state="PIT" />
     <Tile state="FLOOR" />
     <Tile state="PIT" />
     <Tile state="FLOOR" />
@@ -340,43 +299,84 @@
     <Tile state="FLOOR" />
     <Tile state="PIT" />
     <Tile state="FLOOR" />
-    <Tile state="WALL" />
-    <Tile state="WALL" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="WALL" />
     <Tile state="WALL" />
+    <Tile state="WALL" />
+    <Tile state="WALL" />
+    <Tile state="WALL" />
+    <Tile state="WALL" />
+    <Tile state="WALL" />
+    <Tile state="WALL" />
+    <Tile state="WALL" />
+    <Tile state="WALL" />
+    <Tile state="WALL" />
+    <Tile state="WALL" />
+    <Tile state="WALL" />
+    <Tile state="WALL" />
+    <Tile state="WALL" />
+    <Tile state="WALL" />
+    <Tile state="WALL" />
+    <Tile state="WALL" />
+    <Tile state="WALL" />
     <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
+    <Tile state="WALL" />
+    <Tile state="WALL" />
+    <Tile state="PIT" />
+    <Tile state="PIT" />
+    <Tile state="PIT" />
+    <Tile state="PIT" />
+    <Tile state="PIT" />
+    <Tile state="PIT" />
+    <Tile state="PIT" />
+    <Tile state="PIT" />
+    <Tile state="PIT" />
+    <Tile state="PIT" />
+    <Tile state="PIT" />
+    <Tile state="PIT" />
+    <Tile state="PIT" />
+    <Tile state="PIT" />
+    <Tile state="PIT" />
     <Tile state="PIT" />
     <Tile state="FLOOR" />
-    <Tile state="PIT" />
     <Tile state="FLOOR" />
-    <Tile state="PIT" />
+    <Tile state="WALL" />
+    <Tile state="WALL" />
     <Tile state="FLOOR" />
+    <Tile state="FLOOR" />
+    <Tile state="FLOOR" />
+    <Tile state="FLOOR" />
+    <Tile state="FLOOR" />
+    <Tile state="FLOOR" />
+    <Tile state="FLOOR" />
+    <Tile state="FLOOR" />
+    <Tile state="FLOOR" />
+    <Tile state="FLOOR" />
+    <Tile state="FLOOR" />
+    <Tile state="FLOOR" />
+    <Tile state="FLOOR" />
+    <Tile state="FLOOR" />
+    <Tile state="FLOOR" />
+    <Tile state="FLOOR" />
+    <Tile state="FLOOR" />
+    <Tile state="FLOOR" />
+    <Tile state="WALL" />
+    <Tile state="WALL" />
+    <Tile state="PIT" />
+    <Tile state="PIT" />
+    <Tile state="PIT" />
+    <Tile state="PIT" />
+    <Tile state="PIT" />
+    <Tile state="PIT" />
+    <Tile state="PIT" />
+    <Tile state="PIT" />
+    <Tile state="PIT" />
+    <Tile state="PIT" />
+    <Tile state="PIT" />
+    <Tile state="PIT" />
+    <Tile state="PIT" />
+    <Tile state="PIT" />
+    <Tile state="PIT" />
     <Tile state="PIT" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
@@ -402,7 +402,7 @@
     <Tile state="WALL" />
     <Tile state="WALL" />
   </Tileset>
-  <Nodes>-339.5,-322;-617.75,-313.25;-614.25,-40.25;-189,-315;110.25,-320.25;225.75,-318.5;376.25,-320.25;602,-320.25;-43.75,-327.25;-225.75,29.75;465.5,477.75;470.75,-31.5;605.5,252;-565.25,595;458.5,248.5;456.75,323.75;180.25,537.25;316.75,56;462,56;175,243.25;320.25,241.5;323.75,614.25;462,609;171.5,623;33.25,617.75;178.5,31.5;-108.5,610.75;-105,35;-250.25,-36.75;-400.75,614.25;596.75,600.25;603.75,29.75;-122.5,318.5;-260.75,320.25;-119,189;-248.5,189;29.75,255.5;-119,246.75;-392,329;-563.5,330.75;-395.5,175;33.25,43.75;31.5,-45.5;-106.75,-47.25;-108.5,533.75;31.5,526.75;-255.5,537.25;-259,623;-399,546;-253.75,395.5;-393.75,399;-542.5,176.75;-402.5,-43.75;-542.5,-28;-404.25,40.25;-549.5,35;323.75,-49;185.5,-45.5;323.75,486.5;318.5,542.5</Nodes>
+  <Nodes>-339.5,-322;-617.75,-313.25;-614.25,-40.25;-189,-315;110.25,-320.25;248.25,-323;400.25,-320.25;602,-320.25;-43.75,-327.25;-225.75,29.75;465.5,477.75;470.75,-31.5;605.5,252;-536.75,604;458.5,248.5;456.75,323.75;180.25,537.25;316.75,56;462,56;175,243.25;320.25,241.5;323.75,614.25;462,609;171.5,623;33.25,617.75;178.5,31.5;-108.5,610.75;-105,35;-250.25,-36.75;-400.75,614.25;596.75,600.25;603.75,29.75;-122.5,318.5;-260.75,320.25;-119,189;-248.5,189;29.75,255.5;-119,246.75;-392,329;-535,333.75;-395.5,175;33.25,43.75;31.5,-45.5;-106.75,-47.25;-108.5,533.75;31.5,526.75;-255.5,537.25;-259,623;-399,546;-253.75,395.5;-393.75,399;-542.5,176.75;-402.5,-43.75;-542.5,-28;-404.25,40.25;-549.5,35;323.75,-49;185.5,-45.5;323.75,470;318.5,542.5</Nodes>
   <NodeLinks>11,18,True;14,15,True;14,18,True;12,14,True;10,15,True;10,22,True;21,22,True;17,20,True;19,20,True;16,19,True;23,24,True;16,23,True;19,25,True;17,18,True;9,27,True;1,2,True;0,1,True;0,3,True;3,8,True;4,8,True;4,5,True;5,6,True;6,7,True;13,29,True;9,28,True;12,31,True;12,30,True;36,41,True;41,42,True;42,43,True;27,43,True;25,41,True;36,37,True;27,34,True;34,37,True;32,37,True;36,45,True;24,45,True;44,45,True;32,44,True;26,44,True;32,33,True;33,35,True;9,35,True;38,40,True;33,49,True;46,49,True;46,47,True;46,48,True;48,50,True;38,50,True;49,50,True;29,48,True;13,39,True;38,39,True;39,51,True;40,51,True;40,54,True;28,52,True;52,54,True;54,55,True;53,55,True;2,53,True;34,35,True;17,56,True;56,57,True;25,57,True;20,58,True;58,59,True;16,59,True;21,59,True;51,55,True;26,47,True</NodeLinks>
   <Entities>
     <Button>
@@ -518,102 +518,6 @@
       </renderMode>
     </Button>
     <Door>
-      <id>door0</id>
-      <size>80</size>
-      <xPos>455</xPos>
-      <yPos>-320</yPos>
-      <angle>0</angle>
-      <xScl>0.5</xScl>
-      <yScl>1</yScl>
-      <renderMode>
-        <tileset>
-          <texID>tilesetentities</texID>
-          <x>2</x>
-          <y>1</y>
-        </tileset>
-      </renderMode>
-    </Door>
-    <Door>
-      <id>door1</id>
-      <size>80</size>
-      <xPos>299.25</xPos>
-      <yPos>-320</yPos>
-      <angle>0</angle>
-      <xScl>0.5</xScl>
-      <yScl>1</yScl>
-      <renderMode>
-        <tileset>
-          <texID>tilesetentities</texID>
-          <x>2</x>
-          <y>1</y>
-        </tileset>
-      </renderMode>
-    </Door>
-    <Door>
-      <id>door2</id>
-      <size>80</size>
-      <xPos>169.75</xPos>
-      <yPos>-320</yPos>
-      <angle>0</angle>
-      <xScl>0.5</xScl>
-      <yScl>1</yScl>
-      <renderMode>
-        <tileset>
-          <texID>tilesetentities</texID>
-          <x>2</x>
-          <y>1</y>
-        </tileset>
-      </renderMode>
-    </Door>
-    <Door>
-      <id>door3</id>
-      <size>80</size>
-      <xPos>36.75</xPos>
-      <yPos>-320</yPos>
-      <angle>0</angle>
-      <xScl>0.5</xScl>
-      <yScl>1</yScl>
-      <renderMode>
-        <tileset>
-          <texID>tilesetentities</texID>
-          <x>2</x>
-          <y>1</y>
-        </tileset>
-      </renderMode>
-    </Door>
-    <Door>
-      <id>door4</id>
-      <size>80</size>
-      <xPos>-122.5</xPos>
-      <yPos>-320</yPos>
-      <angle>0</angle>
-      <xScl>0.5</xScl>
-      <yScl>1</yScl>
-      <renderMode>
-        <tileset>
-          <texID>tilesetentities</texID>
-          <x>2</x>
-          <y>1</y>
-        </tileset>
-      </renderMode>
-    </Door>
-    <Door>
-      <id>door5</id>
-      <size>80</size>
-      <xPos>-255.5</xPos>
-      <yPos>-320</yPos>
-      <angle>0</angle>
-      <xScl>0.5</xScl>
-      <yScl>1</yScl>
-      <renderMode>
-        <tileset>
-          <texID>tilesetentities</texID>
-          <x>2</x>
-          <y>1</y>
-        </tileset>
-      </renderMode>
-    </Door>
-    <Door>
       <id>door6</id>
       <size>80</size>
       <xPos>689</xPos>
@@ -663,262 +567,6 @@
       </renderMode>
       <friction>0</friction>
     </PhysBall>
-    <Spike>
-      <id>spike0</id>
-      <size>64</size>
-      <xPos>-617.75</xPos>
-      <yPos>-624.75</yPos>
-      <angle>-90</angle>
-      <xScl>1</xScl>
-      <yScl>1</yScl>
-      <renderMode>
-        <tileset>
-          <texID>tilesetentities</texID>
-          <x>3</x>
-          <y>1</y>
-        </tileset>
-      </renderMode>
-    </Spike>
-    <Spike>
-      <id>spike1</id>
-      <size>64</size>
-      <xPos>-540.75</xPos>
-      <yPos>-624.75</yPos>
-      <angle>-90</angle>
-      <xScl>1</xScl>
-      <yScl>1</yScl>
-      <renderMode>
-        <tileset>
-          <texID>tilesetentities</texID>
-          <x>3</x>
-          <y>1</y>
-        </tileset>
-      </renderMode>
-    </Spike>
-    <Spike>
-      <id>spike2</id>
-      <size>64</size>
-      <xPos>-458.25</xPos>
-      <yPos>-624.75</yPos>
-      <angle>-90</angle>
-      <xScl>1</xScl>
-      <yScl>1</yScl>
-      <renderMode>
-        <tileset>
-          <texID>tilesetentities</texID>
-          <x>3</x>
-          <y>1</y>
-        </tileset>
-      </renderMode>
-    </Spike>
-    <Spike>
-      <id>spike3</id>
-      <size>64</size>
-      <xPos>-383.25</xPos>
-      <yPos>-625.75</yPos>
-      <angle>-90</angle>
-      <xScl>1</xScl>
-      <yScl>1</yScl>
-      <renderMode>
-        <tileset>
-          <texID>tilesetentities</texID>
-          <x>3</x>
-          <y>1</y>
-        </tileset>
-      </renderMode>
-    </Spike>
-    <Spike>
-      <id>spike4</id>
-      <size>64</size>
-      <xPos>-311.5</xPos>
-      <yPos>-624.75</yPos>
-      <angle>-90</angle>
-      <xScl>1</xScl>
-      <yScl>1</yScl>
-      <renderMode>
-        <tileset>
-          <texID>tilesetentities</texID>
-          <x>3</x>
-          <y>1</y>
-        </tileset>
-      </renderMode>
-    </Spike>
-    <Spike>
-      <id>spike5</id>
-      <size>64</size>
-      <xPos>-243.25</xPos>
-      <yPos>-624.75</yPos>
-      <angle>-90</angle>
-      <xScl>1</xScl>
-      <yScl>1</yScl>
-      <renderMode>
-        <tileset>
-          <texID>tilesetentities</texID>
-          <x>3</x>
-          <y>1</y>
-        </tileset>
-      </renderMode>
-    </Spike>
-    <Spike>
-      <id>spike6</id>
-      <size>64</size>
-      <xPos>-175</xPos>
-      <yPos>-624.75</yPos>
-      <angle>-90</angle>
-      <xScl>1</xScl>
-      <yScl>1</yScl>
-      <renderMode>
-        <tileset>
-          <texID>tilesetentities</texID>
-          <x>3</x>
-          <y>1</y>
-        </tileset>
-      </renderMode>
-    </Spike>
-    <Spike>
-      <id>spike7</id>
-      <size>64</size>
-      <xPos>-92.75</xPos>
-      <yPos>-624.75</yPos>
-      <angle>-90</angle>
-      <xScl>1</xScl>
-      <yScl>1</yScl>
-      <renderMode>
-        <tileset>
-          <texID>tilesetentities</texID>
-          <x>3</x>
-          <y>1</y>
-        </tileset>
-      </renderMode>
-    </Spike>
-    <Spike>
-      <id>spike8</id>
-      <size>64</size>
-      <xPos>-98</xPos>
-      <yPos>-462</yPos>
-      <angle>90</angle>
-      <xScl>1</xScl>
-      <yScl>1</yScl>
-      <renderMode>
-        <tileset>
-          <texID>tilesetentities</texID>
-          <x>3</x>
-          <y>1</y>
-        </tileset>
-      </renderMode>
-    </Spike>
-    <Spike>
-      <id>spike9</id>
-      <size>64</size>
-      <xPos>-171.5</xPos>
-      <yPos>-462</yPos>
-      <angle>90</angle>
-      <xScl>1</xScl>
-      <yScl>1</yScl>
-      <renderMode>
-        <tileset>
-          <texID>tilesetentities</texID>
-          <x>3</x>
-          <y>1</y>
-        </tileset>
-      </renderMode>
-    </Spike>
-    <Spike>
-      <id>spike10</id>
-      <size>64</size>
-      <xPos>-241.5</xPos>
-      <yPos>-462</yPos>
-      <angle>90</angle>
-      <xScl>1</xScl>
-      <yScl>1</yScl>
-      <renderMode>
-        <tileset>
-          <texID>tilesetentities</texID>
-          <x>3</x>
-          <y>1</y>
-        </tileset>
-      </renderMode>
-    </Spike>
-    <Spike>
-      <id>spike11</id>
-      <size>64</size>
-      <xPos>-325.5</xPos>
-      <yPos>-462</yPos>
-      <angle>90</angle>
-      <xScl>1</xScl>
-      <yScl>1</yScl>
-      <renderMode>
-        <tileset>
-          <texID>tilesetentities</texID>
-          <x>3</x>
-          <y>1</y>
-        </tileset>
-      </renderMode>
-    </Spike>
-    <Spike>
-      <id>spike12</id>
-      <size>64</size>
-      <xPos>-408.25</xPos>
-      <yPos>-462</yPos>
-      <angle>90</angle>
-      <xScl>1</xScl>
-      <yScl>1</yScl>
-      <renderMode>
-        <tileset>
-          <texID>tilesetentities</texID>
-          <x>3</x>
-          <y>1</y>
-        </tileset>
-      </renderMode>
-    </Spike>
-    <Spike>
-      <id>spike13</id>
-      <size>64</size>
-      <xPos>-481.25</xPos>
-      <yPos>-462</yPos>
-      <angle>90</angle>
-      <xScl>1</xScl>
-      <yScl>1</yScl>
-      <renderMode>
-        <tileset>
-          <texID>tilesetentities</texID>
-          <x>3</x>
-          <y>1</y>
-        </tileset>
-      </renderMode>
-    </Spike>
-    <Spike>
-      <id>spike14</id>
-      <size>64</size>
-      <xPos>-560</xPos>
-      <yPos>-463.75</yPos>
-      <angle>90</angle>
-      <xScl>1</xScl>
-      <yScl>1</yScl>
-      <renderMode>
-        <tileset>
-          <texID>tilesetentities</texID>
-          <x>3</x>
-          <y>1</y>
-        </tileset>
-      </renderMode>
-    </Spike>
-    <Spike>
-      <id>spike15</id>
-      <size>64</size>
-      <xPos>-630</xPos>
-      <yPos>-462</yPos>
-      <angle>90</angle>
-      <xScl>1</xScl>
-      <yScl>1</yScl>
-      <renderMode>
-        <tileset>
-          <texID>tilesetentities</texID>
-          <x>3</x>
-          <y>1</y>
-        </tileset>
-      </renderMode>
-    </Spike>
     <Blob>
       <id>blob0</id>
       <size>48</size>
@@ -1009,11 +657,227 @@
       <health>100</health>
       <AIType>STALKER</AIType>
     </Blob>
+    <Blob>
+      <id>blob5</id>
+      <size>48</size>
+      <xPos>-398</xPos>
+      <yPos>114.5</yPos>
+      <angle>90</angle>
+      <xScl>1</xScl>
+      <yScl>1</yScl>
+      <renderMode>
+        <tileset>
+          <texID>tilesetentities</texID>
+          <x>1</x>
+          <y>2</y>
+        </tileset>
+      </renderMode>
+      <health>100</health>
+      <AIType>STALKER</AIType>
+    </Blob>
+    <Blob>
+      <id>blob6</id>
+      <size>48</size>
+      <xPos>-542</xPos>
+      <yPos>330.5</yPos>
+      <angle>90</angle>
+      <xScl>1</xScl>
+      <yScl>1</yScl>
+      <renderMode>
+        <tileset>
+          <texID>tilesetentities</texID>
+          <x>1</x>
+          <y>2</y>
+        </tileset>
+      </renderMode>
+      <health>100</health>
+      <AIType>STALKER</AIType>
+    </Blob>
+    <Blob>
+      <id>blob7</id>
+      <size>48</size>
+      <xPos>377.5</xPos>
+      <yPos>323</yPos>
+      <angle>90</angle>
+      <xScl>1</xScl>
+      <yScl>1</yScl>
+      <renderMode>
+        <tileset>
+          <texID>tilesetentities</texID>
+          <x>1</x>
+          <y>2</y>
+        </tileset>
+      </renderMode>
+      <health>100</health>
+      <AIType>STALKER</AIType>
+    </Blob>
+    <Blob>
+      <id>blob8</id>
+      <size>48</size>
+      <xPos>245.5</xPos>
+      <yPos>113</yPos>
+      <angle>90</angle>
+      <xScl>1</xScl>
+      <yScl>1</yScl>
+      <renderMode>
+        <tileset>
+          <texID>tilesetentities</texID>
+          <x>1</x>
+          <y>2</y>
+        </tileset>
+      </renderMode>
+      <health>100</health>
+      <AIType>STALKER</AIType>
+    </Blob>
+    <Blob>
+      <id>blob9</id>
+      <size>48</size>
+      <xPos>-41</xPos>
+      <yPos>395</yPos>
+      <angle>90</angle>
+      <xScl>1</xScl>
+      <yScl>1</yScl>
+      <renderMode>
+        <tileset>
+          <texID>tilesetentities</texID>
+          <x>1</x>
+          <y>2</y>
+        </tileset>
+      </renderMode>
+      <health>100</health>
+      <AIType>STALKER</AIType>
+    </Blob>
+    <Blob>
+      <id>blob10</id>
+      <size>48</size>
+      <xPos>500.5</xPos>
+      <yPos>-34</yPos>
+      <angle>90</angle>
+      <xScl>1</xScl>
+      <yScl>1</yScl>
+      <renderMode>
+        <tileset>
+          <texID>tilesetentities</texID>
+          <x>1</x>
+          <y>2</y>
+        </tileset>
+      </renderMode>
+      <health>100</health>
+      <AIType>STALKER</AIType>
+    </Blob>
+    <Blob>
+      <id>blob11</id>
+      <size>48</size>
+      <xPos>-561.5</xPos>
+      <yPos>554</yPos>
+      <angle>90</angle>
+      <xScl>1</xScl>
+      <yScl>1</yScl>
+      <renderMode>
+        <tileset>
+          <texID>tilesetentities</texID>
+          <x>1</x>
+          <y>2</y>
+        </tileset>
+      </renderMode>
+      <health>100</health>
+      <AIType>STALKER</AIType>
+    </Blob>
+    <Blob>
+      <id>blob12</id>
+      <size>48</size>
+      <xPos>538</xPos>
+      <yPos>540.5</yPos>
+      <angle>90</angle>
+      <xScl>1</xScl>
+      <yScl>1</yScl>
+      <renderMode>
+        <tileset>
+          <texID>tilesetentities</texID>
+          <x>1</x>
+          <y>2</y>
+        </tileset>
+      </renderMode>
+      <health>100</health>
+      <AIType>STALKER</AIType>
+    </Blob>
+    <Blob>
+      <id>blob13</id>
+      <size>48</size>
+      <xPos>-503.75</xPos>
+      <yPos>-542</yPos>
+      <angle>90</angle>
+      <xScl>1</xScl>
+      <yScl>1</yScl>
+      <renderMode>
+        <tileset>
+          <texID>tilesetentities</texID>
+          <x>1</x>
+          <y>2</y>
+        </tileset>
+      </renderMode>
+      <health>100</health>
+      <AIType>STALKER</AIType>
+    </Blob>
+    <Blob>
+      <id>blob14</id>
+      <size>48</size>
+      <xPos>-275.75</xPos>
+      <yPos>-542</yPos>
+      <angle>90</angle>
+      <xScl>1</xScl>
+      <yScl>1</yScl>
+      <renderMode>
+        <tileset>
+          <texID>tilesetentities</texID>
+          <x>1</x>
+          <y>2</y>
+        </tileset>
+      </renderMode>
+      <health>100</health>
+      <AIType>STALKER</AIType>
+    </Blob>
+    <Blob>
+      <id>blob15</id>
+      <size>48</size>
+      <xPos>-21.75</xPos>
+      <yPos>-543</yPos>
+      <angle>90</angle>
+      <xScl>1</xScl>
+      <yScl>1</yScl>
+      <renderMode>
+        <tileset>
+          <texID>tilesetentities</texID>
+          <x>1</x>
+          <y>2</y>
+        </tileset>
+      </renderMode>
+      <health>100</health>
+      <AIType>STALKER</AIType>
+    </Blob>
+    <Blob>
+      <id>blob16</id>
+      <size>48</size>
+      <xPos>217.25</xPos>
+      <yPos>-543</yPos>
+      <angle>90</angle>
+      <xScl>1</xScl>
+      <yScl>1</yScl>
+      <renderMode>
+        <tileset>
+          <texID>tilesetentities</texID>
+          <x>1</x>
+          <y>2</y>
+        </tileset>
+      </renderMode>
+      <health>100</health>
+      <AIType>STALKER</AIType>
+    </Blob>
     <Player>
       <id>player</id>
       <size>32</size>
-      <xPos>-621.25</xPos>
-      <yPos>-539</yPos>
+      <xPos>-407.25</xPos>
+      <yPos>-541</yPos>
       <angle>0</angle>
       <xScl>1</xScl>
       <yScl>1</yScl>
@@ -1038,18 +902,20 @@
     <Cause id="idButton0" type="CauseButton">button0</Cause>
     <Cause id="endGameAND" type="CauseAND">idButton6,endGameLoc</Cause>
     <Effect id="idDoor6" type="EffectDoor">door6</Effect>
-    <Effect id="idDoor5" type="EffectDoor">door5</Effect>
-    <Effect id="idDoor4" type="EffectDoor">door4</Effect>
-    <Effect id="idDoor3" type="EffectDoor">door3</Effect>
-    <Effect id="idDoor2" type="EffectDoor">door2</Effect>
-    <Effect id="idDoor1" type="EffectDoor">door1</Effect>
-    <Effect id="idDoor0" type="EffectDoor">door0</Effect>
-    <Trigger cause="idButton0" effect="idDoor0" />
-    <Trigger cause="idButton1" effect="idDoor1" />
-    <Trigger cause="idButton2" effect="idDoor2" />
-    <Trigger cause="idButton3" effect="idDoor3" />
-    <Trigger cause="idButton4" effect="idDoor4" />
-    <Trigger cause="idButton5" effect="idDoor5" />
+    <Effect id="floor5" type="EffectRaiseBridge">6,14</Effect>
+    <Effect id="floor4" type="EffectRaiseBridge">8,14</Effect>
+    <Effect id="floor3" type="EffectRaiseBridge">10,14</Effect>
+    <Effect id="floor2" type="EffectRaiseBridge">12,14</Effect>
+    <Effect id="floor1" type="EffectRaiseBridge">14,14</Effect>
+    <Effect id="floor0" type="EffectRaiseBridge">16,14</Effect>
+    <Effect id="enemyRAGE" type="EffectSetEnemyOuterRadius">3000</Effect>
+    <Trigger cause="idButton0" effect="floor0" />
+    <Trigger cause="idButton1" effect="floor1" />
+    <Trigger cause="idButton2" effect="floor2" />
+    <Trigger cause="idButton3" effect="floor3" />
+    <Trigger cause="idButton4" effect="floor4" />
+    <Trigger cause="idButton5" effect="floor5" />
     <Trigger cause="idButton6" effect="idDoor6" />
+    <Trigger cause="idButton6" effect="enemyRAGE" />
   </Triggers>
 </Level>

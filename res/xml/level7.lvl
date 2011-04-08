@@ -855,8 +855,8 @@
     <Teleporter>
       <id>teleporter14</id>
       <size>64</size>
-      <xPos>492</xPos>
-      <yPos>786.75</yPos>
+      <xPos>498.75</xPos>
+      <yPos>800.25</yPos>
       <angle>0</angle>
       <xScl>1</xScl>
       <yScl>1</yScl>
@@ -1630,11 +1630,11 @@
     </Player>
   </Entities>
   <Triggers>
-    <Cause id="idButton2" type="CauseButton">button1</Cause>
     <Cause id="idButton" type="CauseButton">button0</Cause>
+    <Cause id="idButton2" type="CauseButton">button1</Cause>
     <Cause type="CauseAND">idButton,idButton2</Cause>
-    <Effect id="idEnd" type="EffectEndGame">True</Effect>
     <Effect id="idDoor" type="EffectDoor">door0</Effect>
+    <Effect id="idEnd" type="EffectEndGame">True</Effect>
     <Trigger cause="idButton" effect="idDoor" />
     <Trigger effect="idEnd" />
   </Triggers>

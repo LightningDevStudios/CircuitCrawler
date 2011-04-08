@@ -17,6 +17,7 @@ public class SpikeData extends StaticEntData
 	public void createInst(ArrayList<Entity> entData)
 	{
 		spikeRef = new Spike(xPos, yPos, angle);
+		spikeRef.setSize(size);
 		
 		//COLOR
 		if (color != null)

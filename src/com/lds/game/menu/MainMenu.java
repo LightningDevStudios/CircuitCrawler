@@ -582,7 +582,7 @@ public class MainMenu extends Activity
 		}
 		else if (resultCode >= 100)
 		{
-			runGame(100 - resultCode);
+			runGame(resultCode - 100);
 		}
 	}
 	
