@@ -142,5 +142,6 @@ public final class R {
         public static final int level4=0x7f050004;
         public static final int level5=0x7f050005;
         public static final int level6=0x7f050006;
+        public static final int level7=0x7f050007;
     }
 }

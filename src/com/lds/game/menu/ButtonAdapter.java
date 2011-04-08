@@ -12,7 +12,7 @@ public class ButtonAdapter extends BaseAdapter
 {
 	private Context mContext;
 	private int[] ints = { 0, 1, 2, 3, 4, 5 };
-	public static int numberOfLevels = 6;
+	public static int numberOfLevels = 7;
 	
 	public ButtonAdapter(Context mContext)
 	{

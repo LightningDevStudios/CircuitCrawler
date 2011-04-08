@@ -52,7 +52,7 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 		switch (levelIndex)
 		{
 			case 0:
-				levelId = R.xml.level1;
+				levelId = R.xml.level7;
 				break;
 			case 1:
 				levelId = R.xml.level2;
@@ -64,10 +64,10 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 				levelId = R.xml.level4;
 				break;
 			case 4:
-				levelId = R.xml.level5;
+				levelId = R.xml.level6;
 				break;
 			case 5:
-				levelId = R.xml.level6;
+				levelId = R.xml.level5;
 		}
 		
 		//Grab screen information
