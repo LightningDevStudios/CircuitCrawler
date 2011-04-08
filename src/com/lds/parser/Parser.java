@@ -155,6 +155,13 @@ public class Parser //this is a parser
 					parsedList.add(phD);
 					phD.createInst(entList);
 				}
+				else if (xrp.getName().equalsIgnoreCase("PickupEnergy"))
+				{
+					parseObj("PickupEnergy");
+					PickupEnergyData pbD = new PickupEnergyData(dataHM);
+					parsedList.add(pbD);
+					pbD.createInst(entList);
+				}
 				else if (xrp.getName().equalsIgnoreCase("Cannon"))
 				{
 					parseObj("Cannon");
@@ -430,6 +437,10 @@ Parse A Tileset
 				cause = new CauseTimePassed(Integer.parseInt(parameters[0]), Boolean.parseBoolean(parameters[1]));
 			else
 				cause = new CauseTimePassed(Integer.parseInt(parameters[0]));
+		}
+		else if(type.equalsIgnoreCase("CauseOffScreen"))
+		{
+			cause = new CauseOffScreen(this.<Player>stringToSubEntity(parameters[0]), tileset);
 		}
 		
 		return cause;

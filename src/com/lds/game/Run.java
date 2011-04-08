@@ -52,7 +52,7 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 		switch (levelIndex)
 		{
 			case 0:
-				levelId = R.xml.level7;
+				levelId = R.xml.level1;
 				break;
 			case 1:
 				levelId = R.xml.level2;
@@ -64,10 +64,16 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 				levelId = R.xml.level4;
 				break;
 			case 4:
-				levelId = R.xml.level6;
+				levelId = R.xml.level5;
 				break;
 			case 5:
-				levelId = R.xml.level5;
+				levelId = R.xml.level6;
+				break;
+			case 6:
+				levelId = R.xml.level7;
+				break;
+			case 7:
+				levelId = R.xml.level8;
 		}
 		
 		//Grab screen information
@@ -169,7 +175,8 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 	{
 		gameR.setGameOverEvent(this);
 		gameR.setPuzzleActivatedEvent(this);
-		pd.dismiss();
+		try	{ pd.dismiss(); }
+		catch (Exception e) { }
 	}
 	
 	@Override
@@ -329,9 +336,11 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 	@Override
 	protected void onPause ()
 	{
-		mp.pause();
 		super.onPause();
 		glSurface.onPause();
+		try	{ pd.dismiss(); }
+		catch (Exception e) { }
+		mp.pause();
 	}
 	
 	@Override

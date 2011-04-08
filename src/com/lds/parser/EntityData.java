@@ -90,6 +90,8 @@ public abstract class EntityData
 				tex = Game.text;
 			else if (texID.equalsIgnoreCase("tilesetentities"))
 				tex = Game.tilesetentities;
+			else if (texID.equalsIgnoreCase("baricons"))
+				tex = Game.baricons;
 			
 			tileX = Integer.parseInt(entHM.get("x"));
 			tileY = Integer.parseInt(entHM.get("y"));

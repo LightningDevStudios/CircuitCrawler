@@ -759,6 +759,9 @@ public abstract class Entity
 	public boolean isRendered()			{ return rendered; }
 	public EnumSet<RenderMode> getRenderMode()	{ return renderMode; }
 	public boolean isSolid()			{ return isSolid; }
+	public int getVertexVBO()			{ return VBOVertPtr; }
+	public int getTextureVBO()			{ return VBOTexturePtr; }
+	public int getGradientVBO()			{ return VBOGradientPtr; }
 	
 	public void setSize(float size)
 	{ 
@@ -905,6 +908,21 @@ public abstract class Entity
 			{
 				Log.e("LDS_Game", "Index buffer generates GL_ERROR: " + error);
 			}
+		}
+	}
+	
+	public void freeHardwareBuffers(GL10 gl)
+	{
+		if (useVBOs)
+		{
+			GL11 gl11 = (GL11)gl;
+			int[] buffer = new int[3];
+			buffer[0] = VBOVertPtr;
+			buffer[1] = VBOTexturePtr;
+			buffer[2] = VBOGradientPtr;
+			
+			gl11.glDeleteBuffers(3, buffer, 0);
+			
 		}
 	}
 
