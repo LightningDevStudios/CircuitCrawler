@@ -3,6 +3,7 @@ package com.lds;
 import java.util.ArrayList;
 
 import javax.microedition.khronos.opengles.GL10;
+import javax.microedition.khronos.opengles.GL11;
 
 import com.lds.game.entity.Entity;
 
@@ -34,7 +35,12 @@ public class EntityManager
 	{
 		for (Entity ent : trashList)
 		{
-			//TODO free hardware buffers
+			ent.freeHardwareBuffers(gl);
+			for (Entity cEnt : entList)
+			{
+				if (cEnt.colList.contains(ent))
+					cEnt.colList.remove(ent);
+			}
 			entList.remove(ent);
 			ent = null;
 		}
