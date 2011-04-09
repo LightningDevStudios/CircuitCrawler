@@ -1,94 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Level xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <Tileset x="25" y="25">
-    <Tile state="WALL" />
-    <Tile state="WALL" />
-    <Tile state="WALL" />
-    <Tile state="WALL" />
-    <Tile state="WALL" />
-    <Tile state="WALL" />
-    <Tile state="WALL" />
-    <Tile state="WALL" />
-    <Tile state="WALL" />
-    <Tile state="WALL" />
-    <Tile state="WALL" />
-    <Tile state="WALL" />
-    <Tile state="WALL" />
-    <Tile state="WALL" />
-    <Tile state="WALL" />
-    <Tile state="WALL" />
-    <Tile state="WALL" />
-    <Tile state="WALL" />
-    <Tile state="WALL" />
-    <Tile state="WALL" />
-    <Tile state="WALL" />
-    <Tile state="WALL" />
-    <Tile state="WALL" />
-    <Tile state="WALL" />
-    <Tile state="WALL" />
-    <Tile state="WALL" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="WALL" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="WALL" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="WALL" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="WALL" />
-    <Tile state="WALL" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="WALL" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="WALL" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="WALL" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="WALL" />
-    <Tile state="WALL" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="WALL" />
-    <Tile state="WALL" />
-    <Tile state="WALL" />
-    <Tile state="WALL" />
-    <Tile state="WALL" />
-    <Tile state="WALL" />
-    <Tile state="WALL" />
-    <Tile state="WALL" />
-    <Tile state="WALL" />
+  <Tileset x="16" y="32">
     <Tile state="WALL" />
     <Tile state="WALL" />
     <Tile state="FLOOR" />
@@ -96,26 +8,8 @@
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
-    <Tile state="WALL" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="WALL" />
-    <Tile state="WALL" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="WALL" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="WALL" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="WALL" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
@@ -130,202 +24,301 @@
     <Tile state="WALL" />
     <Tile state="WALL" />
     <Tile state="WALL" />
+    <Tile state="FLOOR" />
+    <Tile state="WALL" />
+    <Tile state="WALL" />
+    <Tile state="WALL" />
+    <Tile state="WALL" />
+    <Tile state="WALL" />
+    <Tile state="WALL" />
+    <Tile state="WALL" />
+    <Tile state="WALL" />
+    <Tile state="WALL" />
+    <Tile state="WALL" />
+    <Tile state="WALL" />
+    <Tile state="WALL" />
+    <Tile state="WALL" />
+    <Tile state="WALL" />
+    <Tile state="FLOOR" />
+    <Tile state="FLOOR" />
+    <Tile state="FLOOR" />
+    <Tile state="FLOOR" />
+    <Tile state="WALL" />
+    <Tile state="WALL" />
+    <Tile state="WALL" />
+    <Tile state="WALL" />
+    <Tile state="WALL" />
+    <Tile state="WALL" />
+    <Tile state="WALL" />
+    <Tile state="WALL" />
+    <Tile state="WALL" />
+    <Tile state="WALL" />
+    <Tile state="WALL" />
+    <Tile state="WALL" />
+    <Tile state="FLOOR" />
+    <Tile state="FLOOR" />
+    <Tile state="FLOOR" />
+    <Tile state="FLOOR" />
+    <Tile state="WALL" />
+    <Tile state="WALL" />
+    <Tile state="WALL" />
+    <Tile state="WALL" />
+    <Tile state="WALL" />
+    <Tile state="WALL" />
+    <Tile state="WALL" />
+    <Tile state="WALL" />
+    <Tile state="WALL" />
+    <Tile state="WALL" />
+    <Tile state="WALL" />
+    <Tile state="WALL" />
+    <Tile state="WALL" />
+    <Tile state="FLOOR" />
+    <Tile state="FLOOR" />
+    <Tile state="WALL" />
+    <Tile state="WALL" />
+    <Tile state="WALL" />
+    <Tile state="WALL" />
+    <Tile state="WALL" />
+    <Tile state="WALL" />
+    <Tile state="WALL" />
+    <Tile state="WALL" />
     <Tile state="WALL" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
+    <Tile state="FLOOR" />
+    <Tile state="FLOOR" />
+    <Tile state="FLOOR" />
+    <Tile state="FLOOR" />
+    <Tile state="FLOOR" />
+    <Tile state="FLOOR" />
+    <Tile state="FLOOR" />
+    <Tile state="WALL" />
+    <Tile state="WALL" />
+    <Tile state="WALL" />
+    <Tile state="WALL" />
+    <Tile state="FLOOR" />
+    <Tile state="FLOOR" />
+    <Tile state="FLOOR" />
+    <Tile state="FLOOR" />
+    <Tile state="FLOOR" />
+    <Tile state="FLOOR" />
+    <Tile state="FLOOR" />
+    <Tile state="FLOOR" />
+    <Tile state="FLOOR" />
+    <Tile state="FLOOR" />
+    <Tile state="FLOOR" />
+    <Tile state="FLOOR" />
+    <Tile state="WALL" />
+    <Tile state="WALL" />
+    <Tile state="WALL" />
     <Tile state="WALL" />
     <Tile state="PIT" />
-    <Tile state="FLOOR" />
+    <Tile state="PIT" />
+    <Tile state="PIT" />
+    <Tile state="PIT" />
+    <Tile state="PIT" />
+    <Tile state="PIT" />
+    <Tile state="PIT" />
+    <Tile state="PIT" />
+    <Tile state="PIT" />
+    <Tile state="PIT" />
+    <Tile state="PIT" />
     <Tile state="PIT" />
     <Tile state="WALL" />
     <Tile state="WALL" />
     <Tile state="WALL" />
     <Tile state="WALL" />
+    <Tile state="PIT" />
+    <Tile state="PIT" />
+    <Tile state="PIT" />
+    <Tile state="PIT" />
+    <Tile state="PIT" />
+    <Tile state="PIT" />
+    <Tile state="PIT" />
+    <Tile state="PIT" />
+    <Tile state="PIT" />
+    <Tile state="PIT" />
+    <Tile state="PIT" />
+    <Tile state="PIT" />
     <Tile state="WALL" />
     <Tile state="WALL" />
     <Tile state="WALL" />
+    <Tile state="WALL" />
+    <Tile state="PIT" />
+    <Tile state="PIT" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
+    <Tile state="PIT" />
+    <Tile state="PIT" />
+    <Tile state="PIT" />
+    <Tile state="PIT" />
+    <Tile state="PIT" />
+    <Tile state="PIT" />
+    <Tile state="PIT" />
     <Tile state="WALL" />
     <Tile state="WALL" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
     <Tile state="WALL" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
     <Tile state="WALL" />
-    <Tile state="FLOOR" />
+    <Tile state="PIT" />
+    <Tile state="PIT" />
+    <Tile state="PIT" />
+    <Tile state="PIT" />
+    <Tile state="PIT" />
+    <Tile state="PIT" />
+    <Tile state="PIT" />
+    <Tile state="PIT" />
+    <Tile state="PIT" />
+    <Tile state="PIT" />
+    <Tile state="PIT" />
+    <Tile state="PIT" />
+    <Tile state="WALL" />
+    <Tile state="WALL" />
+    <Tile state="WALL" />
+    <Tile state="WALL" />
+    <Tile state="PIT" />
+    <Tile state="PIT" />
+    <Tile state="PIT" />
+    <Tile state="PIT" />
+    <Tile state="PIT" />
+    <Tile state="PIT" />
+    <Tile state="PIT" />
+    <Tile state="PIT" />
+    <Tile state="PIT" />
+    <Tile state="PIT" />
+    <Tile state="PIT" />
+    <Tile state="PIT" />
+    <Tile state="WALL" />
+    <Tile state="WALL" />
+    <Tile state="WALL" />
+    <Tile state="WALL" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
-    <Tile state="WALL" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
-    <Tile state="WALL" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
-    <Tile state="WALL" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
-    <Tile state="WALL" />
-    <Tile state="WALL" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
-    <Tile state="WALL" />
     <Tile state="WALL" />
     <Tile state="WALL" />
     <Tile state="WALL" />
     <Tile state="WALL" />
-    <Tile state="WALL" />
-    <Tile state="WALL" />
-    <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
-    <Tile state="WALL" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
-    <Tile state="WALL" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
-    <Tile state="WALL" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
-    <Tile state="WALL" />
-    <Tile state="WALL" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
+    <Tile state="WALL" />
     <Tile state="WALL" />
+    <Tile state="WALL" />
+    <Tile state="WALL" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
-    <Tile state="WALL" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
-    <Tile state="WALL" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
-    <Tile state="WALL" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
-    <Tile state="WALL" />
     <Tile state="WALL" />
     <Tile state="WALL" />
     <Tile state="WALL" />
     <Tile state="WALL" />
     <Tile state="WALL" />
     <Tile state="WALL" />
+    <Tile state="FLOOR" />
     <Tile state="WALL" />
     <Tile state="WALL" />
     <Tile state="WALL" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
     <Tile state="WALL" />
     <Tile state="WALL" />
     <Tile state="WALL" />
     <Tile state="FLOOR" />
-    <Tile state="WALL" />
     <Tile state="WALL" />
     <Tile state="WALL" />
     <Tile state="WALL" />
     <Tile state="WALL" />
     <Tile state="WALL" />
     <Tile state="WALL" />
-    <Tile state="WALL" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
-    <Tile state="WALL" />
-    <Tile state="WALL" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
-    <Tile state="WALL" />
+    <Tile state="FLOOR" />
+    <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
+    <Tile state="WALL" />
+    <Tile state="WALL" />
+    <Tile state="WALL" />
     <Tile state="WALL" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
-    <Tile state="WALL" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
-    <Tile state="WALL" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="WALL" />
     <Tile state="WALL" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
     <Tile state="WALL" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
     <Tile state="WALL" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
-    <Tile state="WALL" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
-    <Tile state="WALL" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="WALL" />
     <Tile state="WALL" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
     <Tile state="WALL" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
     <Tile state="WALL" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
-    <Tile state="WALL" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
-    <Tile state="WALL" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
-    <Tile state="WALL" />
     <Tile state="WALL" />
     <Tile state="WALL" />
     <Tile state="WALL" />
@@ -336,13 +329,7 @@
     <Tile state="WALL" />
     <Tile state="WALL" />
     <Tile state="WALL" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
     <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="WALL" />
-    <Tile state="WALL" />
     <Tile state="WALL" />
     <Tile state="WALL" />
     <Tile state="WALL" />
@@ -351,134 +338,73 @@
     <Tile state="WALL" />
     <Tile state="WALL" />
     <Tile state="WALL" />
-    <Tile state="WALL" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
     <Tile state="WALL" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="WALL" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
-    <Tile state="WALL" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="WALL" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
     <Tile state="WALL" />
     <Tile state="WALL" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
     <Tile state="WALL" />
-    <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="WALL" />
-    <Tile state="WALL" />
-    <Tile state="WALL" />
-    <Tile state="WALL" />
-    <Tile state="WALL" />
-    <Tile state="WALL" />
-    <Tile state="WALL" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
-    <Tile state="WALL" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
-    <Tile state="WALL" />
-    <Tile state="WALL" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="WALL" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
     <Tile state="WALL" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
     <Tile state="WALL" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
     <Tile state="WALL" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
-    <Tile state="WALL" />
-    <Tile state="WALL" />
-    <Tile state="WALL" />
-    <Tile state="WALL" />
-    <Tile state="WALL" />
-    <Tile state="WALL" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
-    <Tile state="WALL" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="WALL" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
     <Tile state="WALL" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
     <Tile state="WALL" />
     <Tile state="WALL" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
-    <Tile state="WALL" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
-    <Tile state="WALL" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
-    <Tile state="WALL" />
-    <Tile state="WALL" />
-    <Tile state="WALL" />
-    <Tile state="WALL" />
     <Tile state="WALL" />
     <Tile state="WALL" />
     <Tile state="WALL" />
     <Tile state="WALL" />
     <Tile state="WALL" />
     <Tile state="WALL" />
-    <Tile state="WALL" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="WALL" />
     <Tile state="WALL" />
@@ -486,120 +412,81 @@
     <Tile state="WALL" />
     <Tile state="WALL" />
     <Tile state="WALL" />
+    <Tile state="FLOOR" />
     <Tile state="WALL" />
     <Tile state="WALL" />
     <Tile state="WALL" />
     <Tile state="WALL" />
     <Tile state="WALL" />
     <Tile state="WALL" />
-    <Tile state="FLOOR" />
     <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="WALL" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
-    <Tile state="WALL" />
-    <Tile state="WALL" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
-    <Tile state="WALL" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
+    <Tile state="WALL" />
+    <Tile state="WALL" />
+    <Tile state="WALL" />
     <Tile state="WALL" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
-    <Tile state="WALL" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
-    <Tile state="WALL" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
-    <Tile state="WALL" />
     <Tile state="WALL" />
     <Tile state="WALL" />
     <Tile state="WALL" />
     <Tile state="WALL" />
-    <Tile state="WALL" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
-    <Tile state="WALL" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
-    <Tile state="WALL" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="WALL" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
     <Tile state="WALL" />
     <Tile state="WALL" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
     <Tile state="WALL" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
-    <Tile state="WALL" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
-    <Tile state="WALL" />
-    <Tile state="WALL" />
-    <Tile state="WALL" />
-    <Tile state="WALL" />
-    <Tile state="WALL" />
-    <Tile state="WALL" />
-    <Tile state="WALL" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
     <Tile state="FLOOR" />
+    <Tile state="FLOOR" />
     <Tile state="WALL" />
     <Tile state="WALL" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
     <Tile state="WALL" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
     <Tile state="WALL" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
     <Tile state="WALL" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
     <Tile state="WALL" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
-    <Tile state="FLOOR" />
+    <Tile state="WALL" />
+    <Tile state="WALL" />
     <Tile state="WALL" />
     <Tile state="WALL" />
     <Tile state="WALL" />
@@ -627,876 +514,14 @@
     <Tile state="WALL" />
     <Tile state="WALL" />
   </Tileset>
+  <Nodes>-5.5,-854.5497;-249.7,-845.7497;244.2,-817.1497;-254.1,-580.6497;-85.79999,-504.7497;88,-500.3497;246.4,-570.7497;-2.200012,-391.4497;-3.299988,-205.5497;-160.6,-211.0497;146.3,-206.6497;-112.2,-125.2494;80.30005,-119.7494;-248.6,-52.64941;-12.09998,-47.14941;242,-51.54941;-255.2,157.4506;248.6,175.0506;-2.5,132.0002</Nodes>
+  <NodeLinks>13,16,True;13,14,True;11,14,True;11,13,True;9,11,True;8,11,True;8,9,True;8,14,True;11,12,True;12,14,True;14,15,True;12,15,True;10,12,True;8,12,True;8,10,True;9,13,True;10,15,True;7,8,True;4,7,True;5,7,True;4,5,True;3,4,True;5,6,True;1,3,True;0,1,True;0,2,True;2,6,True;15,17,True;17,18,True;16,18,True</NodeLinks>
   <Entities>
-    <Teleporter>
-      <id>teleporter0</id>
-      <size>64</size>
-      <xPos>135</xPos>
-      <yPos>132.25</yPos>
-      <angle>0</angle>
-      <xScl>1</xScl>
-      <yScl>1</yScl>
-      <renderMode>
-        <tileset>
-          <texID>tilesetentities</texID>
-          <x>2</x>
-          <y>2</y>
-        </tileset>
-      </renderMode>
-    </Teleporter>
-    <Teleporter>
-      <id>teleporter1</id>
-      <size>64</size>
-      <xPos>63.25</xPos>
-      <yPos>785</yPos>
-      <angle>0</angle>
-      <xScl>1</xScl>
-      <yScl>1</yScl>
-      <renderMode>
-        <tileset>
-          <texID>tilesetentities</texID>
-          <x>2</x>
-          <y>2</y>
-        </tileset>
-      </renderMode>
-    </Teleporter>
-    <Teleporter>
-      <id>teleporter2</id>
-      <size>64</size>
-      <xPos>-146.75</xPos>
-      <yPos>-137.25</yPos>
-      <angle>0</angle>
-      <xScl>1</xScl>
-      <yScl>1</yScl>
-      <renderMode>
-        <tileset>
-          <texID>tilesetentities</texID>
-          <x>2</x>
-          <y>2</y>
-        </tileset>
-      </renderMode>
-    </Teleporter>
-    <Teleporter>
-      <id>teleporter3</id>
-      <size>64</size>
-      <xPos>-295.5</xPos>
-      <yPos>-149.5</yPos>
-      <angle>0</angle>
-      <xScl>1</xScl>
-      <yScl>1</yScl>
-      <renderMode>
-        <tileset>
-          <texID>tilesetentities</texID>
-          <x>2</x>
-          <y>2</y>
-        </tileset>
-      </renderMode>
-    </Teleporter>
-    <Teleporter>
-      <id>teleporter4</id>
-      <size>64</size>
-      <xPos>-500.25</xPos>
-      <yPos>-426</yPos>
-      <angle>0</angle>
-      <xScl>1</xScl>
-      <yScl>1</yScl>
-      <renderMode>
-        <tileset>
-          <texID>tilesetentities</texID>
-          <x>2</x>
-          <y>2</y>
-        </tileset>
-      </renderMode>
-    </Teleporter>
-    <Teleporter>
-      <id>teleporter5</id>
-      <size>64</size>
-      <xPos>294.25</xPos>
-      <yPos>-146</yPos>
-      <angle>0</angle>
-      <xScl>1</xScl>
-      <yScl>1</yScl>
-      <renderMode>
-        <tileset>
-          <texID>tilesetentities</texID>
-          <x>2</x>
-          <y>2</y>
-        </tileset>
-      </renderMode>
-    </Teleporter>
-    <Teleporter>
-      <id>teleporter6</id>
-      <size>64</size>
-      <xPos>493.75</xPos>
-      <yPos>-352.5</yPos>
-      <angle>0</angle>
-      <xScl>1</xScl>
-      <yScl>1</yScl>
-      <renderMode>
-        <tileset>
-          <texID>tilesetentities</texID>
-          <x>2</x>
-          <y>2</y>
-        </tileset>
-      </renderMode>
-    </Teleporter>
-    <Teleporter>
-      <id>teleporter7</id>
-      <size>64</size>
-      <xPos>-773.25</xPos>
-      <yPos>422.75</yPos>
-      <angle>0</angle>
-      <xScl>1</xScl>
-      <yScl>1</yScl>
-      <renderMode>
-        <tileset>
-          <texID>tilesetentities</texID>
-          <x>2</x>
-          <y>2</y>
-        </tileset>
-      </renderMode>
-    </Teleporter>
-    <Teleporter>
-      <id>teleporter8</id>
-      <size>64</size>
-      <xPos>-649</xPos>
-      <yPos>291.5</yPos>
-      <angle>0</angle>
-      <xScl>1</xScl>
-      <yScl>1</yScl>
-      <renderMode>
-        <tileset>
-          <texID>tilesetentities</texID>
-          <x>2</x>
-          <y>2</y>
-        </tileset>
-      </renderMode>
-    </Teleporter>
-    <Teleporter>
-      <id>teleporter9</id>
-      <size>64</size>
-      <xPos>-482.75</xPos>
-      <yPos>786.75</yPos>
-      <angle>0</angle>
-      <xScl>1</xScl>
-      <yScl>1</yScl>
-      <renderMode>
-        <tileset>
-          <texID>tilesetentities</texID>
-          <x>2</x>
-          <y>2</y>
-        </tileset>
-      </renderMode>
-    </Teleporter>
-    <Teleporter>
-      <id>teleporter10</id>
-      <size>64</size>
-      <xPos>-797.75</xPos>
-      <yPos>288</yPos>
-      <angle>0</angle>
-      <xScl>1</xScl>
-      <yScl>1</yScl>
-      <renderMode>
-        <tileset>
-          <texID>tilesetentities</texID>
-          <x>2</x>
-          <y>2</y>
-        </tileset>
-      </renderMode>
-    </Teleporter>
-    <Teleporter>
-      <id>teleporter11</id>
-      <size>64</size>
-      <xPos>653</xPos>
-      <yPos>494.5</yPos>
-      <angle>0</angle>
-      <xScl>1</xScl>
-      <yScl>1</yScl>
-      <renderMode>
-        <tileset>
-          <texID>tilesetentities</texID>
-          <x>2</x>
-          <y>2</y>
-        </tileset>
-      </renderMode>
-    </Teleporter>
-    <Teleporter>
-      <id>teleporter12</id>
-      <size>64</size>
-      <xPos>787.75</xPos>
-      <yPos>361.5</yPos>
-      <angle>0</angle>
-      <xScl>1</xScl>
-      <yScl>1</yScl>
-      <renderMode>
-        <tileset>
-          <texID>tilesetentities</texID>
-          <x>2</x>
-          <y>2</y>
-        </tileset>
-      </renderMode>
-    </Teleporter>
-    <Teleporter>
-      <id>teleporter13</id>
-      <size>64</size>
-      <xPos>224.25</xPos>
-      <yPos>790.25</yPos>
-      <angle>0</angle>
-      <xScl>1</xScl>
-      <yScl>1</yScl>
-      <renderMode>
-        <tileset>
-          <texID>tilesetentities</texID>
-          <x>2</x>
-          <y>2</y>
-        </tileset>
-      </renderMode>
-    </Teleporter>
-    <Teleporter>
-      <id>teleporter14</id>
-      <size>64</size>
-      <xPos>496.75</xPos>
-      <yPos>792.25</yPos>
-      <angle>0</angle>
-      <xScl>1</xScl>
-      <yScl>1</yScl>
-      <renderMode>
-        <tileset>
-          <texID>tilesetentities</texID>
-          <x>2</x>
-          <y>2</y>
-        </tileset>
-      </renderMode>
-    </Teleporter>
-    <Teleporter>
-      <id>teleporter15</id>
-      <size>64</size>
-      <xPos>213.75</xPos>
-      <yPos>435</yPos>
-      <angle>0</angle>
-      <xScl>1</xScl>
-      <yScl>1</yScl>
-      <renderMode>
-        <tileset>
-          <texID>tilesetentities</texID>
-          <x>2</x>
-          <y>2</y>
-        </tileset>
-      </renderMode>
-    </Teleporter>
-    <Teleporter>
-      <id>teleporter16</id>
-      <size>64</size>
-      <xPos>282</xPos>
-      <yPos>296.75</yPos>
-      <angle>0</angle>
-      <xScl>1</xScl>
-      <yScl>1</yScl>
-      <renderMode>
-        <tileset>
-          <texID>tilesetentities</texID>
-          <x>2</x>
-          <y>2</y>
-        </tileset>
-      </renderMode>
-    </Teleporter>
-    <Teleporter>
-      <id>teleporter17</id>
-      <size>64</size>
-      <xPos>490.25</xPos>
-      <yPos>585.5</yPos>
-      <angle>0</angle>
-      <xScl>1</xScl>
-      <yScl>1</yScl>
-      <renderMode>
-        <tileset>
-          <texID>tilesetentities</texID>
-          <x>2</x>
-          <y>2</y>
-        </tileset>
-      </renderMode>
-    </Teleporter>
-    <Teleporter>
-      <id>teleporter18</id>
-      <size>64</size>
-      <xPos>233</xPos>
-      <yPos>585.5</yPos>
-      <angle>0</angle>
-      <xScl>1</xScl>
-      <yScl>1</yScl>
-      <renderMode>
-        <tileset>
-          <texID>tilesetentities</texID>
-          <x>2</x>
-          <y>2</y>
-        </tileset>
-      </renderMode>
-    </Teleporter>
-    <Teleporter>
-      <id>teleporter19</id>
-      <size>64</size>
-      <xPos>-792.5</xPos>
-      <yPos>-564.25</yPos>
-      <angle>0</angle>
-      <xScl>1</xScl>
-      <yScl>1</yScl>
-      <renderMode>
-        <tileset>
-          <texID>tilesetentities</texID>
-          <x>2</x>
-          <y>2</y>
-        </tileset>
-      </renderMode>
-    </Teleporter>
-    <Teleporter>
-      <id>teleporter20</id>
-      <size>64</size>
-      <xPos>-663</xPos>
-      <yPos>-445.25</yPos>
-      <angle>0</angle>
-      <xScl>1</xScl>
-      <yScl>1</yScl>
-      <renderMode>
-        <tileset>
-          <texID>tilesetentities</texID>
-          <x>2</x>
-          <y>2</y>
-        </tileset>
-      </renderMode>
-    </Teleporter>
-    <Teleporter>
-      <id>teleporter21</id>
-      <size>64</size>
-      <xPos>-652.5</xPos>
-      <yPos>6.25</yPos>
-      <angle>0</angle>
-      <xScl>1</xScl>
-      <yScl>1</yScl>
-      <renderMode>
-        <tileset>
-          <texID>tilesetentities</texID>
-          <x>2</x>
-          <y>2</y>
-        </tileset>
-      </renderMode>
-    </Teleporter>
-    <Teleporter>
-      <id>teleporter22</id>
-      <size>64</size>
-      <xPos>-785.5</xPos>
-      <yPos>135.75</yPos>
-      <angle>0</angle>
-      <xScl>1</xScl>
-      <yScl>1</yScl>
-      <renderMode>
-        <tileset>
-          <texID>tilesetentities</texID>
-          <x>2</x>
-          <y>2</y>
-        </tileset>
-      </renderMode>
-    </Teleporter>
-    <Teleporter>
-      <id>teleporter23</id>
-      <size>64</size>
-      <xPos>-134.5</xPos>
-      <yPos>141</yPos>
-      <angle>0</angle>
-      <xScl>1</xScl>
-      <yScl>1</yScl>
-      <renderMode>
-        <tileset>
-          <texID>tilesetentities</texID>
-          <x>2</x>
-          <y>2</y>
-        </tileset>
-      </renderMode>
-    </Teleporter>
-    <Teleporter>
-      <id>teleporter24</id>
-      <size>64</size>
-      <xPos>121</xPos>
-      <yPos>-144.25</yPos>
-      <angle>0</angle>
-      <xScl>1</xScl>
-      <yScl>1</yScl>
-      <renderMode>
-        <tileset>
-          <texID>tilesetentities</texID>
-          <x>2</x>
-          <y>2</y>
-        </tileset>
-      </renderMode>
-    </Teleporter>
-    <Teleporter>
-      <id>teleporter25</id>
-      <size>64</size>
-      <xPos>-313</xPos>
-      <yPos>6.25</yPos>
-      <angle>0</angle>
-      <xScl>1</xScl>
-      <yScl>1</yScl>
-      <renderMode>
-        <tileset>
-          <texID>tilesetentities</texID>
-          <x>2</x>
-          <y>2</y>
-        </tileset>
-      </renderMode>
-    </Teleporter>
-    <Teleporter>
-      <id>teleporter26</id>
-      <size>64</size>
-      <xPos>-222</xPos>
-      <yPos>289.75</yPos>
-      <angle>0</angle>
-      <xScl>1</xScl>
-      <yScl>1</yScl>
-      <renderMode>
-        <tileset>
-          <texID>tilesetentities</texID>
-          <x>2</x>
-          <y>2</y>
-        </tileset>
-      </renderMode>
-    </Teleporter>
-    <Teleporter>
-      <id>teleporter27</id>
-      <size>64</size>
-      <xPos>133.25</xPos>
-      <yPos>-424.25</yPos>
-      <angle>0</angle>
-      <xScl>1</xScl>
-      <yScl>1</yScl>
-      <renderMode>
-        <tileset>
-          <texID>tilesetentities</texID>
-          <x>2</x>
-          <y>2</y>
-        </tileset>
-      </renderMode>
-    </Teleporter>
-    <Teleporter>
-      <id>teleporter28</id>
-      <size>64</size>
-      <xPos>-517.75</xPos>
-      <yPos>286.25</yPos>
-      <angle>0</angle>
-      <xScl>1</xScl>
-      <yScl>1</yScl>
-      <renderMode>
-        <tileset>
-          <texID>tilesetentities</texID>
-          <x>2</x>
-          <y>2</y>
-        </tileset>
-      </renderMode>
-    </Teleporter>
-    <Teleporter>
-      <id>teleporter29</id>
-      <size>64</size>
-      <xPos>-297.25</xPos>
-      <yPos>-429.5</yPos>
-      <angle>0</angle>
-      <xScl>1</xScl>
-      <yScl>1</yScl>
-      <renderMode>
-        <tileset>
-          <texID>tilesetentities</texID>
-          <x>2</x>
-          <y>2</y>
-        </tileset>
-      </renderMode>
-    </Teleporter>
-    <Teleporter>
-      <id>teleporter30</id>
-      <size>64</size>
-      <xPos>-134.5</xPos>
-      <yPos>-298.25</yPos>
-      <angle>0</angle>
-      <xScl>1</xScl>
-      <yScl>1</yScl>
-      <renderMode>
-        <tileset>
-          <texID>tilesetentities</texID>
-          <x>2</x>
-          <y>2</y>
-        </tileset>
-      </renderMode>
-    </Teleporter>
-    <Teleporter>
-      <id>teleporter31</id>
-      <size>64</size>
-      <xPos>653</xPos>
-      <yPos>9.75</yPos>
-      <angle>0</angle>
-      <xScl>1</xScl>
-      <yScl>1</yScl>
-      <renderMode>
-        <tileset>
-          <texID>tilesetentities</texID>
-          <x>2</x>
-          <y>2</y>
-        </tileset>
-      </renderMode>
-    </Teleporter>
-    <Teleporter>
-      <id>teleporter32</id>
-      <size>64</size>
-      <xPos>651.25</xPos>
-      <yPos>216.25</yPos>
-      <angle>0</angle>
-      <xScl>1</xScl>
-      <yScl>1</yScl>
-      <renderMode>
-        <tileset>
-          <texID>tilesetentities</texID>
-          <x>2</x>
-          <y>2</y>
-        </tileset>
-      </renderMode>
-    </Teleporter>
-    <Teleporter>
-      <id>teleporter33</id>
-      <size>64</size>
-      <xPos>280.25</xPos>
-      <yPos>142.75</yPos>
-      <angle>0</angle>
-      <xScl>1</xScl>
-      <yScl>1</yScl>
-      <renderMode>
-        <tileset>
-          <texID>tilesetentities</texID>
-          <x>2</x>
-          <y>2</y>
-        </tileset>
-      </renderMode>
-    </Teleporter>
-    <Teleporter>
-      <id>teleporter34</id>
-      <size>64</size>
-      <xPos>490.25</xPos>
-      <yPos>2.75</yPos>
-      <angle>0</angle>
-      <xScl>1</xScl>
-      <yScl>1</yScl>
-      <renderMode>
-        <tileset>
-          <texID>tilesetentities</texID>
-          <x>2</x>
-          <y>2</y>
-        </tileset>
-      </renderMode>
-    </Teleporter>
-    <Teleporter>
-      <id>teleporter35</id>
-      <size>64</size>
-      <xPos>789.5</xPos>
-      <yPos>214.5</yPos>
-      <angle>0</angle>
-      <xScl>1</xScl>
-      <yScl>1</yScl>
-      <renderMode>
-        <tileset>
-          <texID>tilesetentities</texID>
-          <x>2</x>
-          <y>2</y>
-        </tileset>
-      </renderMode>
-    </Teleporter>
-    <Teleporter>
-      <id>teleporter36</id>
-      <size>64</size>
-      <xPos>796.5</xPos>
-      <yPos>-2.5</yPos>
-      <angle>0</angle>
-      <xScl>1</xScl>
-      <yScl>1</yScl>
-      <renderMode>
-        <tileset>
-          <texID>tilesetentities</texID>
-          <x>2</x>
-          <y>2</y>
-        </tileset>
-      </renderMode>
-    </Teleporter>
-    <Teleporter>
-      <id>teleporter37</id>
-      <size>64</size>
-      <xPos>640.75</xPos>
-      <yPos>-357.75</yPos>
-      <angle>0</angle>
-      <xScl>1</xScl>
-      <yScl>1</yScl>
-      <renderMode>
-        <tileset>
-          <texID>tilesetentities</texID>
-          <x>2</x>
-          <y>2</y>
-        </tileset>
-      </renderMode>
-    </Teleporter>
-    <Teleporter>
-      <id>teleporter38</id>
-      <size>64</size>
-      <xPos>782.5</xPos>
-      <yPos>-142.5</yPos>
-      <angle>0</angle>
-      <xScl>1</xScl>
-      <yScl>1</yScl>
-      <renderMode>
-        <tileset>
-          <texID>tilesetentities</texID>
-          <x>2</x>
-          <y>2</y>
-        </tileset>
-      </renderMode>
-    </Teleporter>
-    <Teleporter>
-      <id>teleporter39</id>
-      <size>64</size>
-      <xPos>128</xPos>
-      <yPos>-2.5</yPos>
-      <angle>0</angle>
-      <xScl>1</xScl>
-      <yScl>1</yScl>
-      <renderMode>
-        <tileset>
-          <texID>tilesetentities</texID>
-          <x>2</x>
-          <y>2</y>
-        </tileset>
-      </renderMode>
-    </Teleporter>
-    <Teleporter>
-      <id>teleporter40</id>
-      <size>64</size>
-      <xPos>794.75</xPos>
-      <yPos>-363</yPos>
-      <angle>0</angle>
-      <xScl>1</xScl>
-      <yScl>1</yScl>
-      <renderMode>
-        <tileset>
-          <texID>tilesetentities</texID>
-          <x>2</x>
-          <y>2</y>
-        </tileset>
-      </renderMode>
-    </Teleporter>
-    <Teleporter>
-      <id>teleporter41</id>
-      <size>64</size>
-      <xPos>-143.25</xPos>
-      <yPos>-433</yPos>
-      <angle>0</angle>
-      <xScl>1</xScl>
-      <yScl>1</yScl>
-      <renderMode>
-        <tileset>
-          <texID>tilesetentities</texID>
-          <x>2</x>
-          <y>2</y>
-        </tileset>
-      </renderMode>
-    </Teleporter>
-    <Teleporter>
-      <id>teleporter42</id>
-      <size>64</size>
-      <xPos>114</xPos>
-      <yPos>-303.5</yPos>
-      <angle>0</angle>
-      <xScl>1</xScl>
-      <yScl>1</yScl>
-      <renderMode>
-        <tileset>
-          <texID>tilesetentities</texID>
-          <x>2</x>
-          <y>2</y>
-        </tileset>
-      </renderMode>
-    </Teleporter>
-    <Teleporter>
-      <id>teleporter43</id>
-      <size>64</size>
-      <xPos>-223.75</xPos>
-      <yPos>571.5</yPos>
-      <angle>0</angle>
-      <xScl>1</xScl>
-      <yScl>1</yScl>
-      <renderMode>
-        <tileset>
-          <texID>tilesetentities</texID>
-          <x>2</x>
-          <y>2</y>
-        </tileset>
-      </renderMode>
-    </Teleporter>
-    <Teleporter>
-      <id>teleporter44</id>
-      <size>64</size>
-      <xPos>-502</xPos>
-      <yPos>433.25</yPos>
-      <angle>0</angle>
-      <xScl>1</xScl>
-      <yScl>1</yScl>
-      <renderMode>
-        <tileset>
-          <texID>tilesetentities</texID>
-          <x>2</x>
-          <y>2</y>
-        </tileset>
-      </renderMode>
-    </Teleporter>
-    <Teleporter>
-      <id>teleporter45</id>
-      <size>64</size>
-      <xPos>579.5</xPos>
-      <yPos>-506.5</yPos>
-      <angle>0</angle>
-      <xScl>1</xScl>
-      <yScl>1</yScl>
-      <renderMode>
-        <tileset>
-          <texID>tilesetentities</texID>
-          <x>2</x>
-          <y>2</y>
-        </tileset>
-      </renderMode>
-    </Teleporter>
-    <Teleporter>
-      <id>teleporter46</id>
-      <size>64</size>
-      <xPos>140.25</xPos>
-      <yPos>-573</yPos>
-      <angle>0</angle>
-      <xScl>1</xScl>
-      <yScl>1</yScl>
-      <renderMode>
-        <tileset>
-          <texID>tilesetentities</texID>
-          <x>2</x>
-          <y>2</y>
-        </tileset>
-      </renderMode>
-    </Teleporter>
-    <Teleporter>
-      <id>teleporter47</id>
-      <size>64</size>
-      <xPos>775.5</xPos>
-      <yPos>-510</yPos>
-      <angle>0</angle>
-      <xScl>1</xScl>
-      <yScl>1</yScl>
-      <renderMode>
-        <tileset>
-          <texID>tilesetentities</texID>
-          <x>2</x>
-          <y>2</y>
-        </tileset>
-      </renderMode>
-    </Teleporter>
-    <Teleporter>
-      <id>teleporter48</id>
-      <size>64</size>
-      <xPos>152.5</xPos>
-      <yPos>-788.25</yPos>
-      <angle>0</angle>
-      <xScl>1</xScl>
-      <yScl>1</yScl>
-      <renderMode>
-        <tileset>
-          <texID>tilesetentities</texID>
-          <x>2</x>
-          <y>2</y>
-        </tileset>
-      </renderMode>
-    </Teleporter>
-    <Teleporter>
-      <id>teleporter49</id>
-      <size>64</size>
-      <xPos>576</xPos>
-      <yPos>-784.75</yPos>
-      <angle>0</angle>
-      <xScl>1</xScl>
-      <yScl>1</yScl>
-      <renderMode>
-        <tileset>
-          <texID>tilesetentities</texID>
-          <x>2</x>
-          <y>2</y>
-        </tileset>
-      </renderMode>
-    </Teleporter>
-    <Teleporter>
-      <id>teleporter50</id>
-      <size>64</size>
-      <xPos>430.75</xPos>
-      <yPos>-786.5</yPos>
-      <angle>0</angle>
-      <xScl>1</xScl>
-      <yScl>1</yScl>
-      <renderMode>
-        <tileset>
-          <texID>tilesetentities</texID>
-          <x>2</x>
-          <y>2</y>
-        </tileset>
-      </renderMode>
-    </Teleporter>
-    <Teleporter>
-      <id>teleporter51</id>
-      <size>64</size>
-      <xPos>-15.5</xPos>
-      <yPos>-139</yPos>
-      <angle>0</angle>
-      <xScl>1</xScl>
-      <yScl>1</yScl>
-      <renderMode>
-        <tileset>
-          <texID>tilesetentities</texID>
-          <x>2</x>
-          <y>2</y>
-        </tileset>
-      </renderMode>
-    </Teleporter>
-    <Teleporter>
-      <id>teleporter52</id>
-      <size>64</size>
-      <xPos>-790.75</xPos>
-      <yPos>-786.5</yPos>
-      <angle>0</angle>
-      <xScl>1</xScl>
-      <yScl>1</yScl>
-      <renderMode>
-        <tileset>
-          <texID>tilesetentities</texID>
-          <x>2</x>
-          <y>2</y>
-        </tileset>
-      </renderMode>
-    </Teleporter>
-    <Teleporter>
-      <id>teleporter53</id>
-      <size>64</size>
-      <xPos>-148.5</xPos>
-      <yPos>6.25</yPos>
-      <angle>0</angle>
-      <xScl>1</xScl>
-      <yScl>1</yScl>
-      <renderMode>
-        <tileset>
-          <texID>tilesetentities</texID>
-          <x>2</x>
-          <y>2</y>
-        </tileset>
-      </renderMode>
-    </Teleporter>
     <Button>
       <id>button0</id>
       <size>64</size>
-      <xPos>294.25</xPos>
-      <yPos>-790</yPos>
+      <xPos>-359</xPos>
+      <yPos>-865</yPos>
       <angle>90</angle>
       <xScl>1</xScl>
       <yScl>1</yScl>
@@ -1511,8 +536,184 @@
     <Button>
       <id>button1</id>
       <size>64</size>
-      <xPos>-8.5</xPos>
-      <yPos>573.25</yPos>
+      <xPos>359</xPos>
+      <yPos>-865</yPos>
+      <angle>90</angle>
+      <xScl>1</xScl>
+      <yScl>1</yScl>
+      <renderMode>
+        <tileset>
+          <texID>tilesetentities</texID>
+          <x>0</x>
+          <y>0</y>
+        </tileset>
+      </renderMode>
+    </Button>
+    <Button>
+      <id>button2</id>
+      <size>64</size>
+      <xPos>0</xPos>
+      <yPos>-504</yPos>
+      <angle>90</angle>
+      <xScl>1</xScl>
+      <yScl>1</yScl>
+      <renderMode>
+        <tileset>
+          <texID>tilesetentities</texID>
+          <x>0</x>
+          <y>0</y>
+        </tileset>
+      </renderMode>
+    </Button>
+    <Button>
+      <id>button3</id>
+      <size>64</size>
+      <xPos>-359</xPos>
+      <yPos>-504</yPos>
+      <angle>90</angle>
+      <xScl>1</xScl>
+      <yScl>1</yScl>
+      <renderMode>
+        <tileset>
+          <texID>tilesetentities</texID>
+          <x>0</x>
+          <y>0</y>
+        </tileset>
+      </renderMode>
+    </Button>
+    <Button>
+      <id>button4</id>
+      <size>64</size>
+      <xPos>359</xPos>
+      <yPos>-504</yPos>
+      <angle>90</angle>
+      <xScl>1</xScl>
+      <yScl>1</yScl>
+      <renderMode>
+        <tileset>
+          <texID>tilesetentities</texID>
+          <x>0</x>
+          <y>0</y>
+        </tileset>
+      </renderMode>
+    </Button>
+    <Button>
+      <id>button5</id>
+      <size>64</size>
+      <xPos>-359</xPos>
+      <yPos>-144</yPos>
+      <angle>90</angle>
+      <xScl>1</xScl>
+      <yScl>1</yScl>
+      <renderMode>
+        <tileset>
+          <texID>tilesetentities</texID>
+          <x>0</x>
+          <y>0</y>
+        </tileset>
+      </renderMode>
+    </Button>
+    <Button>
+      <id>button6</id>
+      <size>64</size>
+      <xPos>359</xPos>
+      <yPos>-144</yPos>
+      <angle>90</angle>
+      <xScl>1</xScl>
+      <yScl>1</yScl>
+      <renderMode>
+        <tileset>
+          <texID>tilesetentities</texID>
+          <x>0</x>
+          <y>0</y>
+        </tileset>
+      </renderMode>
+    </Button>
+    <Button>
+      <id>button7</id>
+      <size>64</size>
+      <xPos>-359</xPos>
+      <yPos>179</yPos>
+      <angle>90</angle>
+      <xScl>1</xScl>
+      <yScl>1</yScl>
+      <renderMode>
+        <tileset>
+          <texID>tilesetentities</texID>
+          <x>0</x>
+          <y>0</y>
+        </tileset>
+      </renderMode>
+    </Button>
+    <Button>
+      <id>button8</id>
+      <size>64</size>
+      <xPos>0</xPos>
+      <yPos>179</yPos>
+      <angle>90</angle>
+      <xScl>1</xScl>
+      <yScl>1</yScl>
+      <renderMode>
+        <tileset>
+          <texID>tilesetentities</texID>
+          <x>0</x>
+          <y>0</y>
+        </tileset>
+      </renderMode>
+    </Button>
+    <Button>
+      <id>button9</id>
+      <size>64</size>
+      <xPos>359</xPos>
+      <yPos>179</yPos>
+      <angle>90</angle>
+      <xScl>1</xScl>
+      <yScl>1</yScl>
+      <renderMode>
+        <tileset>
+          <texID>tilesetentities</texID>
+          <x>0</x>
+          <y>0</y>
+        </tileset>
+      </renderMode>
+    </Button>
+    <Button>
+      <id>button10</id>
+      <size>64</size>
+      <xPos>-252</xPos>
+      <yPos>467</yPos>
+      <angle>90</angle>
+      <xScl>1</xScl>
+      <yScl>1</yScl>
+      <renderMode>
+        <tileset>
+          <texID>tilesetentities</texID>
+          <x>0</x>
+          <y>0</y>
+        </tileset>
+      </renderMode>
+    </Button>
+    <Button>
+      <id>button11</id>
+      <size>64</size>
+      <xPos>-107</xPos>
+      <yPos>936</yPos>
+      <angle>90</angle>
+      <xScl>1</xScl>
+      <yScl>1</yScl>
+      <renderMode>
+        <tileset>
+          <texID>tilesetentities</texID>
+          <x>0</x>
+          <y>0</y>
+        </tileset>
+      </renderMode>
+    </Button>
+    <Button>
+      <id>button12</id>
+      <size>64</size>
+      <xPos>107</xPos>
+      <yPos>936</yPos>
       <angle>90</angle>
       <xScl>1</xScl>
       <yScl>1</yScl>
@@ -1527,8 +728,8 @@
     <Door>
       <id>door0</id>
       <size>80</size>
-      <xPos>-1.5</xPos>
-      <yPos>212.75</yPos>
+      <xPos>-252</xPos>
+      <yPos>-684</yPos>
       <angle>90</angle>
       <xScl>0.5</xScl>
       <yScl>1</yScl>
@@ -1540,29 +741,143 @@
         </tileset>
       </renderMode>
     </Door>
-    <PhysBall>
-      <id>physBall0</id>
-      <size>50</size>
-      <xPos>-650.75</xPos>
-      <yPos>-723.5</yPos>
+    <Door>
+      <id>door1</id>
+      <size>80</size>
+      <xPos>252</xPos>
+      <yPos>-684</yPos>
       <angle>90</angle>
-      <xScl>1</xScl>
+      <xScl>0.5</xScl>
       <yScl>1</yScl>
       <renderMode>
         <tileset>
           <texID>tilesetentities</texID>
           <x>2</x>
+          <y>1</y>
+        </tileset>
+      </renderMode>
+    </Door>
+    <Door>
+      <id>door3</id>
+      <size>80</size>
+      <xPos>35</xPos>
+      <yPos>-325</yPos>
+      <angle>90</angle>
+      <xScl>0.5</xScl>
+      <yScl>1</yScl>
+      <renderMode>
+        <tileset>
+          <texID>tilesetentities</texID>
+          <x>2</x>
+          <y>1</y>
+        </tileset>
+      </renderMode>
+    </Door>
+    <Door>
+      <id>door4</id>
+      <size>80</size>
+      <xPos>252</xPos>
+      <yPos>35</yPos>
+      <angle>90</angle>
+      <xScl>0.5</xScl>
+      <yScl>1</yScl>
+      <renderMode>
+        <tileset>
+          <texID>tilesetentities</texID>
+          <x>2</x>
+          <y>1</y>
+        </tileset>
+      </renderMode>
+    </Door>
+    <Door>
+      <id>door5</id>
+      <size>80</size>
+      <xPos>-252</xPos>
+      <yPos>35</yPos>
+      <angle>90</angle>
+      <xScl>0.5</xScl>
+      <yScl>1</yScl>
+      <renderMode>
+        <tileset>
+          <texID>tilesetentities</texID>
+          <x>2</x>
+          <y>1</y>
+        </tileset>
+      </renderMode>
+    </Door>
+    <Door>
+      <id>door6</id>
+      <size>80</size>
+      <xPos>-35</xPos>
+      <yPos>1045</yPos>
+      <angle>90</angle>
+      <xScl>0.5</xScl>
+      <yScl>1</yScl>
+      <renderMode>
+        <tileset>
+          <texID>tilesetentities</texID>
+          <x>2</x>
+          <y>1</y>
+        </tileset>
+      </renderMode>
+    </Door>
+    <PhysBlock>
+      <id>physBlock0</id>
+      <size>50</size>
+      <xPos>-107</xPos>
+      <yPos>-756</yPos>
+      <angle>90</angle>
+      <xScl>1</xScl>
+      <yScl>1</yScl>
+      <renderMode>
+        <tileset>
+          <texID>tilesetentities</texID>
+          <x>3</x>
           <y>0</y>
         </tileset>
       </renderMode>
       <friction>0</friction>
-    </PhysBall>
+    </PhysBlock>
+    <PhysBlock>
+      <id>physBlock1</id>
+      <size>50</size>
+      <xPos>107</xPos>
+      <yPos>-756</yPos>
+      <angle>90</angle>
+      <xScl>1</xScl>
+      <yScl>1</yScl>
+      <renderMode>
+        <tileset>
+          <texID>tilesetentities</texID>
+          <x>3</x>
+          <y>0</y>
+        </tileset>
+      </renderMode>
+      <friction>0</friction>
+    </PhysBlock>
+    <PhysBlock>
+      <id>physBlock2</id>
+      <size>50</size>
+      <xPos>0</xPos>
+      <yPos>-612</yPos>
+      <angle>90</angle>
+      <xScl>1</xScl>
+      <yScl>1</yScl>
+      <renderMode>
+        <tileset>
+          <texID>tilesetentities</texID>
+          <x>3</x>
+          <y>0</y>
+        </tileset>
+      </renderMode>
+      <friction>0</friction>
+    </PhysBlock>
     <Blob>
       <id>blob0</id>
       <size>48</size>
-      <xPos>-685.75</xPos>
-      <yPos>-784.75</yPos>
-      <angle>90</angle>
+      <xPos>-169.599976</xPos>
+      <yPos>-497.4989</yPos>
+      <angle>270</angle>
       <xScl>1</xScl>
       <yScl>1</yScl>
       <renderMode>
@@ -1572,15 +887,15 @@
           <y>2</y>
         </tileset>
       </renderMode>
-      <health>100</health>
+      <health>75</health>
       <AIType>STALKER</AIType>
     </Blob>
     <Blob>
       <id>blob1</id>
       <size>48</size>
-      <xPos>355.5</xPos>
-      <yPos>-788.25</yPos>
-      <angle>90</angle>
+      <xPos>198.550049</xPos>
+      <yPos>-499.348877</yPos>
+      <angle>270</angle>
       <xScl>1</xScl>
       <yScl>1</yScl>
       <renderMode>
@@ -1590,15 +905,15 @@
           <y>2</y>
         </tileset>
       </renderMode>
-      <health>100</health>
+      <health>75</health>
       <AIType>STALKER</AIType>
     </Blob>
     <Blob>
       <id>blob2</id>
       <size>48</size>
-      <xPos>0.5</xPos>
-      <yPos>439</yPos>
-      <angle>90</angle>
+      <xPos>-4.949951</xPos>
+      <yPos>-125.648926</yPos>
+      <angle>270</angle>
       <xScl>1</xScl>
       <yScl>1</yScl>
       <renderMode>
@@ -1608,14 +923,14 @@
           <y>2</y>
         </tileset>
       </renderMode>
-      <health>100</health>
+      <health>50</health>
       <AIType>STALKER</AIType>
     </Blob>
     <Player>
       <id>player</id>
       <size>32</size>
       <xPos>0</xPos>
-      <yPos>0</yPos>
+      <yPos>-950</yPos>
       <angle>90</angle>
       <xScl>1</xScl>
       <yScl>1</yScl>
@@ -1630,39 +945,51 @@
     </Player>
   </Entities>
   <Triggers>
-    <Cause id="idButton2" type="CauseButton">button1</Cause>
-    <Cause id="idButton" type="CauseButton">button0</Cause>
-    <Cause id="buttonAND" type="CauseAND">idButton,idButton2</Cause>
-    <Effect id="idEnd" type="EffectEndGame">True</Effect>
-    <Effect id="idDoor" type="EffectDoor">door0</Effect>
-    <Trigger cause="idButton" effect="idDoor" />
-    <Trigger cause="buttonAND" effect="idEnd" />
+    <Cause id="cEndGame" type="CauseLocation">player,-107,107,1080,1152</Cause>
+    <Cause id="cBtn12" type="CauseButton">button12</Cause>
+    <Cause id="cBtn11" type="CauseButton">button11</Cause>
+    <Cause id="cBtn10" type="CauseButton">button10</Cause>
+    <Cause id="cBtn9" type="CauseButton">button9</Cause>
+    <Cause id="cBtn8" type="CauseButton">button8</Cause>
+    <Cause id="cBtn7" type="CauseButton">button7</Cause>
+    <Cause id="cBtn6" type="CauseButton">button6</Cause>
+    <Cause id="cBtn5" type="CauseButton">button5</Cause>
+    <Cause id="cBtn4" type="CauseButton">button4</Cause>
+    <Cause id="cBtn3" type="CauseButton">button3</Cause>
+    <Cause id="cBtn2" type="CauseButton">button2</Cause>
+    <Cause id="cBtn1" type="CauseButton">button1</Cause>
+    <Cause id="cBtn0" type="CauseButton">button0</Cause>
+    <Cause id="c3or4" type="CauseOR">cBtn3,cBtn4</Cause>
+    <Cause id="c11and12" type="CauseAND">cBtn11,cBtn12</Cause>
+    <Cause id="c7and9" type="CauseAND">cBtn7,cBtn9</Cause>
+    <Cause id="cLevelDone" type="CauseAND">c11and12,cEndGame</Cause>
+    <Cause id="c6or9" type="CauseOR">cBtn6,cBtn9</Cause>
+    <Cause id="c5or7" type="CauseOR">cBtn5,cBtn7</Cause>
+    <Cause id="cBtns34or8" type="CauseOR">c3or4,cBtn8</Cause>
+    <Cause id="c1or2" type="CauseOR">cBtn1,cBtn2</Cause>
+    <Cause id="c0or2" type="CauseOR">cBtn0,cBtn2</Cause>
+    <Cause id="cBtns79or10" type="CauseOR">c7and9,cBtn10</Cause>
+    <Effect id="eEndGame" type="EffectEndGame">True</Effect>
+    <Effect id="eDoor6" type="EffectDoor">door6</Effect>
+    <Effect id="eBridge3" type="EffectRaiseBridge">6,11</Effect>
+    <Effect id="eBridge2" type="EffectRaiseBridge">6,10</Effect>
+    <Effect id="eBridge1" type="EffectRaiseBridge">6,8</Effect>
+    <Effect id="eBridge0" type="EffectRaiseBridge">6,7</Effect>
+    <Effect id="eDoor5" type="EffectDoor">door5</Effect>
+    <Effect id="eDoor4" type="EffectDoor">door4</Effect>
+    <Effect id="eDoor3" type="EffectDoor">door3</Effect>
+    <Effect id="eDoor1" type="EffectDoor">door1</Effect>
+    <Effect id="eDoor0" type="EffectDoor">door0</Effect>
+    <Trigger cause="c0or2" effect="eDoor0" />
+    <Trigger cause="c1or2" effect="eDoor1" />
+    <Trigger cause="cBtns34or8" effect="eDoor3" />
+    <Trigger cause="cBtns79or10" effect="eBridge0" />
+    <Trigger cause="cBtns79or10" effect="eBridge1" />
+    <Trigger cause="cBtns79or10" effect="eBridge2" />
+    <Trigger cause="cBtns79or10" effect="eBridge3" />
+    <Trigger cause="c11and12" effect="eDoor6" />
+    <Trigger cause="c5or7" effect="eDoor5" />
+    <Trigger cause="c6or9" effect="eDoor4" />
+    <Trigger cause="cLevelDone" effect="eEndGame" />
   </Triggers>
-  <TeleporterLinker t1="teleporter0" t2="teleporter1" oneWay="true" />
-  <TeleporterLinker t1="teleporter2" t2="teleporter3" oneWay="true" />
-  <TeleporterLinker t1="teleporter4" t2="teleporter5" oneWay="false" />
-  <TeleporterLinker t1="teleporter6" t2="teleporter7" oneWay="false" />
-  <TeleporterLinker t1="teleporter9" t2="teleporter8" oneWay="true" />
-  <TeleporterLinker t1="teleporter10" t2="teleporter11" oneWay="true" />
-  <TeleporterLinker t1="teleporter12" t2="teleporter13" oneWay="false" />
-  <TeleporterLinker t1="teleporter14" t2="teleporter15" oneWay="true" />
-  <TeleporterLinker t1="teleporter16" t2="teleporter17" oneWay="false" />
-  <TeleporterLinker t1="teleporter18" t2="teleporter19" oneWay="false" />
-  <TeleporterLinker t1="teleporter20" t2="teleporter21" oneWay="true" />
-  <TeleporterLinker t1="teleporter22" t2="teleporter23" oneWay="true" />
-  <TeleporterLinker t1="teleporter24" t2="teleporter25" oneWay="false" />
-  <TeleporterLinker t1="teleporter26" t2="teleporter27" oneWay="true" />
-  <TeleporterLinker t1="teleporter28" t2="teleporter29" oneWay="true" />
-  <TeleporterLinker t1="teleporter30" t2="teleporter31" oneWay="false" />
-  <TeleporterLinker t1="teleporter32" t2="teleporter33" oneWay="true" />
-  <TeleporterLinker t1="teleporter34" t2="teleporter35" oneWay="false" />
-  <TeleporterLinker t1="teleporter36" t2="teleporter37" oneWay="true" />
-  <TeleporterLinker t1="teleporter38" t2="teleporter39" oneWay="true" />
-  <TeleporterLinker t1="teleporter41" t2="teleporter40" oneWay="false" />
-  <TeleporterLinker t1="teleporter43" t2="teleporter42" oneWay="false" />
-  <TeleporterLinker t1="teleporter45" t2="teleporter44" oneWay="false" />
-  <TeleporterLinker t1="teleporter47" t2="teleporter46" oneWay="false" />
-  <TeleporterLinker t1="teleporter48" t2="teleporter49" oneWay="false" />
-  <TeleporterLinker t1="teleporter50" t2="teleporter51" oneWay="true" />
-  <TeleporterLinker t1="teleporter52" t2="teleporter53" oneWay="false" />
 </Level>
