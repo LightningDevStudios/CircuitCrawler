@@ -550,7 +550,7 @@ Parse A Tileset
 	 * TeleporterLinkers *
 	 *********************/
 
-	private void parseTeleporterLinker() throws XmlPullParserException, IOException 
+	private void parseTeleporterLinker() throws XmlPullParserException, IOException //lol
 	{		
 		Teleporter tp1 = this.<Teleporter>stringToSubEntity(xrp.getAttributeValue(0));
 		Teleporter tp2 = this.<Teleporter>stringToSubEntity(xrp.getAttributeValue(1));

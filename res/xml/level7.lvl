@@ -855,8 +855,8 @@
     <Teleporter>
       <id>teleporter14</id>
       <size>64</size>
-      <xPos>498.75</xPos>
-      <yPos>800.25</yPos>
+      <xPos>496.75</xPos>
+      <yPos>792.25</yPos>
       <angle>0</angle>
       <xScl>1</xScl>
       <yScl>1</yScl>
@@ -1596,8 +1596,8 @@
     <Blob>
       <id>blob2</id>
       <size>48</size>
-      <xPos>-1.5</xPos>
-      <yPos>463</yPos>
+      <xPos>0.5</xPos>
+      <yPos>439</yPos>
       <angle>90</angle>
       <xScl>1</xScl>
       <yScl>1</yScl>
@@ -1630,19 +1630,19 @@
     </Player>
   </Entities>
   <Triggers>
-    <Cause id="idButton" type="CauseButton">button0</Cause>
     <Cause id="idButton2" type="CauseButton">button1</Cause>
-    <Cause type="CauseAND">idButton,idButton2</Cause>
-    <Effect id="idDoor" type="EffectDoor">door0</Effect>
+    <Cause id="idButton" type="CauseButton">button0</Cause>
+    <Cause id="buttonAND" type="CauseAND">idButton,idButton2</Cause>
     <Effect id="idEnd" type="EffectEndGame">True</Effect>
+    <Effect id="idDoor" type="EffectDoor">door0</Effect>
     <Trigger cause="idButton" effect="idDoor" />
-    <Trigger effect="idEnd" />
+    <Trigger cause="buttonAND" effect="idEnd" />
   </Triggers>
-  <TeleporterLinker t1="teleporter0" t2="teleporter1" oneWay="false" />
+  <TeleporterLinker t1="teleporter0" t2="teleporter1" oneWay="true" />
   <TeleporterLinker t1="teleporter2" t2="teleporter3" oneWay="true" />
   <TeleporterLinker t1="teleporter4" t2="teleporter5" oneWay="false" />
   <TeleporterLinker t1="teleporter6" t2="teleporter7" oneWay="false" />
-  <TeleporterLinker t1="teleporter8" t2="teleporter9" oneWay="true" />
+  <TeleporterLinker t1="teleporter9" t2="teleporter8" oneWay="true" />
   <TeleporterLinker t1="teleporter10" t2="teleporter11" oneWay="true" />
   <TeleporterLinker t1="teleporter12" t2="teleporter13" oneWay="false" />
   <TeleporterLinker t1="teleporter14" t2="teleporter15" oneWay="true" />
