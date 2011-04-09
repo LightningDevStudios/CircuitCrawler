@@ -404,7 +404,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 			{
 				case MotionEvent.ACTION_POINTER_DOWN:
 				case MotionEvent.ACTION_DOWN:
-					final int fingerIndex = e.getPointerId(e.getActionIndex());
+					final int fingerIndex = e.getPointerId(e.getAction() >> MotionEvent.ACTION_POINTER_ID_SHIFT);
 					final Vector2f touchVec = new Vector2f(e.getX(e.getPointerCount() - 1) - Game.screenW / 2, Game.screenH / 2 - e.getY(e.getPointerCount() - 1));
 					boolean onEnt = false;
 					for (int i = 0; i < game.UIList.size(); i++)
@@ -436,7 +436,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 				case MotionEvent.ACTION_POINTER_UP:
 					if(!game.fingerList.isEmpty())
 					{
-						final int fIndex = e.getPointerId(e.getActionIndex());
+						final int fIndex = e.getPointerId(e.getAction() >> MotionEvent.ACTION_POINTER_ID_SHIFT);
 						for(int i = 0; i < game.fingerList.size(); i++)
 						{
 							final Finger f = game.fingerList.get(i);
