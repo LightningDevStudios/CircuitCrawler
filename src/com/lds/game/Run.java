@@ -74,6 +74,9 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 				break;
 			case 7:
 				levelId = R.xml.level8;
+				break;
+			case 8:
+				levelId = R.xml.level9;
 		}
 		
 		//Grab screen information
