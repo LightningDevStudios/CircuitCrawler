@@ -1,5 +1,7 @@
 package com.lds;
 
+import java.io.InputStream;
+
 import javax.microedition.khronos.opengles.GL10;
 
 import android.content.Context;
@@ -17,7 +19,7 @@ public class Texture
 	
 	public Texture(int texID, int xSize, int ySize, int xTiles, int yTiles, Context context, String id)
 	{
-		this(BitmapFactory.decodeResource(context.getResources(), texID), xSize, ySize, xTiles, yTiles, id);
+		this(genBitmapFromRawStream(context, texID), xSize, ySize, xTiles, yTiles, id);
 	}
 	
 	public Texture(Bitmap bmp, int xSize, int ySize, int xTiles, int yTiles, String id)
@@ -105,4 +107,24 @@ public class Texture
 	public void setWrapS(int glCap)			{ this.wrapS = glCap; }
 	public void setWrapT(int glCap)			{ this.wrapT = glCap; }
 	public void setID(String id)			{ this.id = id; }
+	
+	private static Bitmap genBitmapFromRawStream(Context context, int texID)
+	{
+		Bitmap tempBmp;
+		InputStream is = context.getResources().openRawResource(texID);
+		try
+		{
+			tempBmp = BitmapFactory.decodeStream(is);
+		}
+		finally
+		{
+			try
+			{
+				is.close();
+				is = null;
+			}
+			catch (Exception e) { e.printStackTrace(); }
+		}
+		return tempBmp;
+	}
 }
