@@ -567,6 +567,23 @@
       </renderMode>
       <friction>0</friction>
     </PhysBall>
+    <PickupEnergy>
+      <id>pickupenergy0</id>
+      <size>20</size>
+      <xPos>-543</xPos>
+      <yPos>-323</yPos>
+      <angle>90</angle>
+      <xScl>1</xScl>
+      <yScl>1</yScl>
+      <renderMode>
+        <tileset>
+          <texID>baricons</texID>
+          <x>1</x>
+          <y>0</y>
+        </tileset>
+      </renderMode>
+      <value>70</value>
+    </PickupEnergy>
     <Blob>
       <id>blob0</id>
       <size>48</size>
@@ -840,8 +857,8 @@
     <Blob>
       <id>blob15</id>
       <size>48</size>
-      <xPos>-21.75</xPos>
-      <yPos>-543</yPos>
+      <xPos>231.75</xPos>
+      <yPos>-541.5</yPos>
       <angle>90</angle>
       <xScl>1</xScl>
       <yScl>1</yScl>
@@ -858,8 +875,8 @@
     <Blob>
       <id>blob16</id>
       <size>48</size>
-      <xPos>217.25</xPos>
-      <yPos>-543</yPos>
+      <xPos>-24</xPos>
+      <yPos>-540.5</yPos>
       <angle>90</angle>
       <xScl>1</xScl>
       <yScl>1</yScl>
@@ -892,23 +909,24 @@
     </Player>
   </Entities>
   <Triggers>
-    <Cause id="endGameLoc" type="CauseLocation">player,700,750,560,660</Cause>
-    <Cause id="idButton6" type="CauseButton">button6</Cause>
-    <Cause id="idButton5" type="CauseButton">button5</Cause>
-    <Cause id="idButton4" type="CauseButton">button4</Cause>
-    <Cause id="idButton3" type="CauseButton">button3</Cause>
-    <Cause id="idButton2" type="CauseButton">button2</Cause>
-    <Cause id="idButton1" type="CauseButton">button1</Cause>
     <Cause id="idButton0" type="CauseButton">button0</Cause>
+    <Cause id="idButton1" type="CauseButton">button1</Cause>
+    <Cause id="idButton2" type="CauseButton">button2</Cause>
+    <Cause id="idButton3" type="CauseButton">button3</Cause>
+    <Cause id="idButton4" type="CauseButton">button4</Cause>
+    <Cause id="idButton5" type="CauseButton">button5</Cause>
+    <Cause id="idButton6" type="CauseButton">button6</Cause>
+    <Cause id="endGameLoc" type="CauseLocation">player,700,750,560,660</Cause>
     <Cause id="endGameAND" type="CauseAND">idButton6,endGameLoc</Cause>
-    <Effect id="idDoor6" type="EffectDoor">door6</Effect>
-    <Effect id="floor5" type="EffectRaiseBridge">6,14</Effect>
-    <Effect id="floor4" type="EffectRaiseBridge">8,14</Effect>
-    <Effect id="floor3" type="EffectRaiseBridge">10,14</Effect>
-    <Effect id="floor2" type="EffectRaiseBridge">12,14</Effect>
-    <Effect id="floor1" type="EffectRaiseBridge">14,14</Effect>
-    <Effect id="floor0" type="EffectRaiseBridge">16,14</Effect>
+    <Effect id="endGameEffect" type="EffectEndGame">True</Effect>
     <Effect id="enemyRAGE" type="EffectSetEnemyOuterRadius">3000</Effect>
+    <Effect id="floor0" type="EffectRaiseBridge">16,14</Effect>
+    <Effect id="floor1" type="EffectRaiseBridge">14,14</Effect>
+    <Effect id="floor2" type="EffectRaiseBridge">12,14</Effect>
+    <Effect id="floor3" type="EffectRaiseBridge">10,14</Effect>
+    <Effect id="floor4" type="EffectRaiseBridge">8,14</Effect>
+    <Effect id="floor5" type="EffectRaiseBridge">6,14</Effect>
+    <Effect id="idDoor6" type="EffectDoor">door6</Effect>
     <Trigger cause="idButton0" effect="floor0" />
     <Trigger cause="idButton1" effect="floor1" />
     <Trigger cause="idButton2" effect="floor2" />
@@ -917,5 +935,6 @@
     <Trigger cause="idButton5" effect="floor5" />
     <Trigger cause="idButton6" effect="idDoor6" />
     <Trigger cause="idButton6" effect="enemyRAGE" />
+    <Trigger cause="endGameAND" effect="endGameEffect" />
   </Triggers>
 </Level>

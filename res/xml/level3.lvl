@@ -281,46 +281,10 @@
       <friction>0.006</friction>
     </PhysBall>
     <Blob>
-      <id>blob0</id>
-      <size>48</size>
-      <xPos>165</xPos>
-      <yPos>190</yPos>
-      <angle>90</angle>
-      <xScl>1</xScl>
-      <yScl>1</yScl>
-      <renderMode>
-        <tileset>
-          <texID>tilesetentities</texID>
-          <x>1</x>
-          <y>2</y>
-        </tileset>
-      </renderMode>
-      <health>100</health>
-      <AIType>STALKER</AIType>
-    </Blob>
-    <Blob>
       <id>blob1</id>
       <size>48</size>
       <xPos>27</xPos>
       <yPos>281</yPos>
-      <angle>90</angle>
-      <xScl>1</xScl>
-      <yScl>1</yScl>
-      <renderMode>
-        <tileset>
-          <texID>tilesetentities</texID>
-          <x>1</x>
-          <y>2</y>
-        </tileset>
-      </renderMode>
-      <health>100</health>
-      <AIType>STALKER</AIType>
-    </Blob>
-    <Blob>
-      <id>blob2</id>
-      <size>48</size>
-      <xPos>332</xPos>
-      <yPos>276</yPos>
       <angle>90</angle>
       <xScl>1</xScl>
       <yScl>1</yScl>
@@ -424,24 +388,6 @@
       <health>100</health>
       <AIType>STALKER</AIType>
     </Blob>
-    <Blob>
-      <id>blob8</id>
-      <size>48</size>
-      <xPos>-257</xPos>
-      <yPos>109</yPos>
-      <angle>90</angle>
-      <xScl>1</xScl>
-      <yScl>1</yScl>
-      <renderMode>
-        <tileset>
-          <texID>tilesetentities</texID>
-          <x>1</x>
-          <y>2</y>
-        </tileset>
-      </renderMode>
-      <health>100</health>
-      <AIType>STALKER</AIType>
-    </Blob>
     <Player>
       <id>player</id>
       <size>32</size>
@@ -461,15 +407,15 @@
     </Player>
   </Entities>
   <Triggers>
-    <Cause id="bottomLeft" type="CauseButton">bottomLeftButton</Cause>
-    <Cause id="bottomRight" type="CauseButton">bottomRightButton</Cause>
-    <Cause id="topLeft" type="CauseButton">topLeftButton</Cause>
     <Cause id="endGameLoc" type="CauseLocation">player,200,300,420,460</Cause>
+    <Cause id="topLeft" type="CauseButton">topLeftButton</Cause>
+    <Cause id="bottomRight" type="CauseButton">bottomRightButton</Cause>
+    <Cause id="bottomLeft" type="CauseButton">bottomLeftButton</Cause>
     <Cause id="buttonAND" type="CauseAND">bottomRight,topLeft</Cause>
     <Cause id="endGameAND" type="CauseAND">buttonAND,endGameLoc</Cause>
-    <Effect id="firstDoorEffect" type="EffectDoor">firstDoor</Effect>
-    <Effect id="endDoorEffect" type="EffectDoor">endDoor</Effect>
     <Effect id="endGameEffect" type="EffectEndGame">True</Effect>
+    <Effect id="endDoorEffect" type="EffectDoor">endDoor</Effect>
+    <Effect id="firstDoorEffect" type="EffectDoor">firstDoor</Effect>
     <Trigger cause="bottomLeft" effect="firstDoorEffect" />
     <Trigger cause="buttonAND" effect="endDoorEffect" />
     <Trigger cause="endGameAND" effect="endGameEffect" />

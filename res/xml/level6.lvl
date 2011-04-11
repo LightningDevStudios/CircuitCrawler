@@ -762,28 +762,29 @@
     </Player>
   </Entities>
   <Triggers>
-    <Cause id="trueBTN" type="CauseButton">truebutton1</Cause>
-    <Cause id="ENDBTN" type="CauseButton">finalbutton</Cause>
-    <Cause id="endgamecause" type="CauseLocation">player,502.899,574.966,-76.666,7.833</Cause>
-    <Cause id="deadTurret" type="CauseEntityDestruction">turretfordoor</Cause>
     <Cause id="deadBlob" type="CauseEntityDestruction">blobforpit</Cause>
+    <Cause id="deadTurret" type="CauseEntityDestruction">turretfordoor</Cause>
+    <Cause id="endgamecause" type="CauseLocation">player,502.899,574.966,-76.666,7.833</Cause>
+    <Cause id="ENDBTN" type="CauseButton">finalbutton</Cause>
+    <Cause id="trueBTN" type="CauseButton">truebutton1</Cause>
     <Cause id="OPENEVERYTHING" type="CauseAND">ENDBTN,trueBTN</Cause>
     <Cause id="win" type="CauseAND">endgamecause,OPENEVERYTHING</Cause>
-    <Effect id="enmydr5" type="EffectDoor">finaldoor</Effect>
-    <Effect id="enmydr4" type="EffectDoor">enemydoor4</Effect>
-    <Effect id="enmydr3" type="EffectDoor">enemydoor3</Effect>
-    <Effect id="enmydr2" type="EffectDoor">enemydoor2</Effect>
-    <Effect id="enmydr1" type="EffectDoor">enemydoor1</Effect>
-    <Effect id="toBTNfield" type="EffectDoor">buttonfieldDR</Effect>
-    <Effect id="tofinalBTN" type="EffectRaiseBridge">10,14</Effect>
-    <Effect id="secondpitnode" type="EffectActivateNodeLink">2</Effect>
-    <Effect id="doornode1" type="EffectActivateNodeLink">1</Effect>
-    <Effect id="firstpit" type="EffectRaiseBridge">4,2</Effect>
-    <Effect id="enemynode1" type="EffectActivateNodeLink">0</Effect>
-    <Effect id="enemynode2" type="EffectActivateNodeLink">3</Effect>
-    <Effect id="enemynode3" type="EffectActivateNodeLink">4</Effect>
-    <Effect id="enemynode4" type="EffectActivateNodeLink">5</Effect>
+    <Effect id="enemyRage" type="EffectSetEnemyOuterRadius">3000</Effect>
     <Effect id="endgame" type="EffectEndGame">True</Effect>
+    <Effect id="enemynode4" type="EffectActivateNodeLink">5</Effect>
+    <Effect id="enemynode3" type="EffectActivateNodeLink">4</Effect>
+    <Effect id="enemynode2" type="EffectActivateNodeLink">3</Effect>
+    <Effect id="enemynode1" type="EffectActivateNodeLink">0</Effect>
+    <Effect id="firstpit" type="EffectRaiseBridge">4,2</Effect>
+    <Effect id="doornode1" type="EffectActivateNodeLink">1</Effect>
+    <Effect id="secondpitnode" type="EffectActivateNodeLink">2</Effect>
+    <Effect id="tofinalBTN" type="EffectRaiseBridge">10,14</Effect>
+    <Effect id="toBTNfield" type="EffectDoor">buttonfieldDR</Effect>
+    <Effect id="enmydr1" type="EffectDoor">enemydoor1</Effect>
+    <Effect id="enmydr2" type="EffectDoor">enemydoor2</Effect>
+    <Effect id="enmydr3" type="EffectDoor">enemydoor3</Effect>
+    <Effect id="enmydr4" type="EffectDoor">enemydoor4</Effect>
+    <Effect id="enmydr5" type="EffectDoor">finaldoor</Effect>
     <Trigger cause="OPENEVERYTHING" effect="enmydr5" />
     <Trigger cause="OPENEVERYTHING" effect="enmydr3" />
     <Trigger cause="OPENEVERYTHING" effect="enmydr4" />
@@ -799,5 +800,6 @@
     <Trigger cause="deadTurret" effect="doornode1" />
     <Trigger cause="trueBTN" effect="secondpitnode" />
     <Trigger cause="trueBTN" effect="tofinalBTN" />
+    <Trigger cause="OPENEVERYTHING" effect="enemyRage" />
   </Triggers>
 </Level>
