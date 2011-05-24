@@ -121,15 +121,16 @@ public final class R {
         public static final int lock=0x7f060009;
         public static final int mainmenulogo=0x7f06000a;
         public static final int pitfall=0x7f06000b;
-        public static final int shootsound=0x7f06000c;
-        public static final int song1=0x7f06000d;
-        public static final int song2=0x7f06000e;
-        public static final int teleport=0x7f06000f;
-        public static final int testclick=0x7f060010;
-        public static final int tilesetentities=0x7f060011;
-        public static final int tilesetworld=0x7f060012;
-        public static final int unlocked=0x7f060013;
-        public static final int ytf_logo=0x7f060014;
+        public static final int readme=0x7f06000c;
+        public static final int shootsound=0x7f06000d;
+        public static final int song1=0x7f06000e;
+        public static final int song2=0x7f06000f;
+        public static final int teleport=0x7f060010;
+        public static final int testclick=0x7f060011;
+        public static final int tilesetentities=0x7f060012;
+        public static final int tilesetworld=0x7f060013;
+        public static final int unlocked=0x7f060014;
+        public static final int ytf_logo=0x7f060015;
     }
     public static final class string {
         public static final int app_name=0x7f080000;
@@ -142,5 +143,6 @@ public final class R {
         public static final int level4=0x7f050004;
         public static final int level5=0x7f050005;
         public static final int level6=0x7f050006;
+        public static final int level7=0x7f050007;
     }
 }
