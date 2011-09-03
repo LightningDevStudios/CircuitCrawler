@@ -52,7 +52,7 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 		switch (levelIndex)
 		{
 			case 0:
-				levelId = R.xml.level1;
+				levelId = R.xml.level7;
 				break;
 			case 1:
 				levelId = R.xml.level2;
@@ -162,6 +162,8 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 		 return true;  
 	}
 	
+	
+	
 	@Override
 	public void onCompletion(MediaPlayer mp) 
 	{
@@ -237,6 +239,7 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 	{	
 		mp.setOnPreparedListener(this);
 		mp.setOnCompletionListener(this);
+		saveas(R.raw.readme, "readme.txt");
 		int whichSong;
 		if (random)
 			whichSong = (int)(Math.random() * 2 + 1);
