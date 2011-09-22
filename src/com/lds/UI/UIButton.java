@@ -6,7 +6,6 @@ import com.lds.Stopwatch;
 public class UIButton extends UIEntity
 {
 	private boolean pressed;
-	private int intervalTime;
 	
 	public UIButton (float xSize, float ySize, UIPosition position)
 	{
@@ -42,15 +41,6 @@ public class UIButton extends UIEntity
 		return pressed;
 	}
 	
-	public boolean canPress(int interval)
-	{
-		if (Stopwatch.elapsedTimeMs() - intervalTime >= interval)
-			return true;
-		
-		else
-			return false;
-	}
-	
 	public void press ()
 	{
 		pressed = true;
@@ -59,10 +49,5 @@ public class UIButton extends UIEntity
 	public void unpress()
 	{
 		pressed = false;
-	}
-	
-	public void setIntervalTime(int time)
-	{
-		this.intervalTime = time;
 	}
 }

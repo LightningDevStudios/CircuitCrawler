@@ -18,7 +18,7 @@ import com.lds.Texture;
 import com.lds.TilesetHelper;
 import com.lds.Vector2f;
 
-//TODO allow relative sizing to scale for multiple monitors
+//\TODO allow relative sizing to scale for multiple monitors
 public abstract class UIEntity
 {
 	//constants
@@ -305,7 +305,7 @@ public abstract class UIEntity
 			
 			gl11.glBindBuffer(GL11.GL_ARRAY_BUFFER, VBOVertPtr);
 			final int vertSize = vertexBuffer.capacity() * 4;
-			gl11.glBufferData(GL11.GL_ARRAY_BUFFER, vertSize, vertexBuffer, GL11.GL_STATIC_DRAW); //TODO choose static/draw settings..?
+			gl11.glBufferData(GL11.GL_ARRAY_BUFFER, vertSize, vertexBuffer, GL11.GL_STATIC_DRAW); //\TODO choose static/draw settings..?
 			
 			if(renderMode.contains(RenderMode.GRADIENT))
 			{

@@ -7,7 +7,7 @@ public abstract class Character extends PhysEnt //all characters, including the 
 {
 	protected int health;
 	protected boolean isFlashing, doneRotating;
-	protected int msPassed;
+	protected int damageTime;
 	
 	public Character(float size, float xPos, float yPos, boolean circular, int health, float moveSpeed, float rotSpeed)
 	{
@@ -19,7 +19,7 @@ public abstract class Character extends PhysEnt //all characters, including the 
 		super(size, xPos, yPos, angle, xScl, yScl, true, circular, true, moveSpeed, rotSpeed, 1.0f, 0.0f);
 		this.enableColorMode(1.0f, 1.0f, 1.0f, 1.0f);
 		isFlashing = false;
-		msPassed = Stopwatch.elapsedTimeMs();
+		damageTime = 0;
 		this.health = health;
 		doneRotating = false;
 	}
@@ -47,9 +47,11 @@ public abstract class Character extends PhysEnt //all characters, including the 
 	{
 		super.update();
 		
+		damageTime += Stopwatch.getFrameTime();
+		
 		if (isFlashing)
 		{
-			if (Stopwatch.elapsedTimeMs() - msPassed <= 250)
+			if (damageTime <= 250)
 				this.enableColorMode(1.0f, 0.0f, 0.0f, 1.0f);
 			else
 			{
@@ -72,7 +74,7 @@ public abstract class Character extends PhysEnt //all characters, including the 
 	{
 		health -= damage;
 		isFlashing = true;
-		msPassed = Stopwatch.elapsedTimeMs();
+		damageTime = 0;
 	}
 	
 	public void die ()

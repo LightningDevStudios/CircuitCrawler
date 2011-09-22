@@ -37,7 +37,7 @@ public  abstract class Enemy extends Character //enemies will fall under this cl
 	{
 		super(size, xPos, yPos, angle, xScl, yScl, circular, health, 75.0f, 360.0f);
 		this.type = type;
-		lastTime = Stopwatch.elapsedTimeMs();
+		lastTime = 0;
 		randomTime = 500;
 		enemyCount++;
 		agressive = false;
@@ -180,6 +180,11 @@ public  abstract class Enemy extends Character //enemies will fall under this cl
 	public void setRandomTime(int randomTime)
 	{
 		this.randomTime = randomTime;
+	}
+	
+	public void incrementLastTime(int step)
+	{
+		this.lastTime += step;
 	}
 	
 	public void setLastTime(int lastTime)

@@ -31,7 +31,7 @@ public class StringRenderer
 	public Bitmap stringToBitmap(String input)
 	{
 		//Create a new, blank bitmap. Also allocate an int array which the Bitmap class uses to store in getPixels() and read in setPixels()
-		//TODO check for ySize with the number of \n chars
+		//\TODO check for ySize with the number of \n chars
 		Bitmap textTileset = text.getBitmap();
 		int xTileSize = text.getXPixPerTile();
 		int yTileSize = text.getYPixPerTile();

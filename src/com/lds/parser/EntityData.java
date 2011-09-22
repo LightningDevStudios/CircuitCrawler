@@ -82,7 +82,7 @@ public abstract class EntityData
 		//TILESET
 		if (entHM.get("tileset") != null)
 		{
-			//TODO move textures to a different XML file, load dynamically
+			//\TODO move textures to a different XML file, load dynamically
 			String texID = entHM.get("texID");
 			if(texID.equalsIgnoreCase("tilesetwire"))
 				tex = Game.tilesetwire;

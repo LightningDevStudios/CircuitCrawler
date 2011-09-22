@@ -61,7 +61,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		gl.glHint(GL10.GL_PERSPECTIVE_CORRECTION_HINT, GL10.GL_FASTEST);	
 		
 		//start the timer and use an initial tick to prevent errors where elapsed time is a very large negative number
-		Stopwatch.restartTimer();
+		Stopwatch.start();
 		Stopwatch.tick();
 		
 		Entity.resetIndexBuffer();
@@ -114,7 +114,6 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		//tick the stop watch every frame, gives relatively stable intervals
 		//frameCount++;
 		
-		game.frameInterval = Stopwatch.elapsedTimeMs();
 		Stopwatch.tick();
 
 		//Triggered when the perspective needs to be redrawn
@@ -505,13 +504,13 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	@Override
 	public void onPuzzleWon() 
 	{
-		// TODO Auto-generated method stub
+		// \TODO Auto-generated method stub
 	}
 
 	@Override
 	public void onPuzzleFailed() 
 	{
-		// TODO Auto-generated method stub
+		// \TODO Auto-generated method stub
 	}
 	
 	public void gameOver ()

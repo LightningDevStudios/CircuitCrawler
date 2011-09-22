@@ -31,7 +31,7 @@ public class CircuitPuzzle implements IPuzzle
 	private OnPuzzleFailListener failListener;
 	
 	private boolean selected;
-	private int selectTimeMs;
+	private int touchEventTime;
 	private int selectedX, selectedY;
 						
 	@Override
@@ -55,7 +55,7 @@ public class CircuitPuzzle implements IPuzzle
 		
 		initializePuzzle();
 		
-		//Stopwatch.restartTimer();
+		Stopwatch.start();
 		Stopwatch.tick();
 		
 		if (initializedListener != null)
@@ -101,9 +101,10 @@ public class CircuitPuzzle implements IPuzzle
 	@Override
 	public void onTouchEvent(MotionEvent event) 
 	{
-		if(Stopwatch.elapsedTimeMs() - selectTimeMs > 500)
+		touchEventTime += Stopwatch.getFrameTime();
+		if(touchEventTime > 500)
 		{
-			selectTimeMs = Stopwatch.elapsedTimeMs();
+			touchEventTime = 0;
 			float xInput = event.getX();
 			float yInput = event.getY();
 						

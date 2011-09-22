@@ -40,6 +40,7 @@ public class Game
 	public int tilesetMinX, tilesetMinY, tilesetMaxX, tilesetMaxY;
 	
 	//Texture data
+	//\TODO TextureManager class
 	public static Texture tilesetwire;
 	public static Texture text;
 	public static Texture tilesetworld;
@@ -126,7 +127,7 @@ public class Game
 		nodeList = parser.nodeList;
 		
 		
-		//TODO UIHealthBar is a UIEntity sub that contains 2 UIImages and a UIProgressBar (which will no longer be abstract)
+		//\TODO UIHealthBar is a UIEntity sub that contains 2 UIImages and a UIProgressBar (which will no longer be abstract)
 		UIHealthBar healthBar = new UIHealthBar(246.0f, 8.0f, UIPosition.TOPRIGHT, Direction.LEFT, player);
 		healthBar.setTopPad(9.0f);
 		healthBar.setRightPad(10.0f);
@@ -174,13 +175,13 @@ public class Game
 		btnA = new UIButton(80.0f, 80.0f, UIPosition.BOTTOMRIGHT);
 		btnA.autoPadding(0.0f, 0.0f, 5.0f, 90.0f);
 		btnA.enableTextureMode(buttona);
-		btnA.setIntervalTime(Stopwatch.elapsedTimeMs());
+		//btnA.setIntervalTime(Stopwatch.elapsedTimeMs());
 		UIList.add(btnA);
 		
 		btnB = new UIButton(80.0f, 80.0f, UIPosition.BOTTOMRIGHT);
 		btnB.autoPadding(0.0f, 0.0f, 90.0f, 5.0f);
 		btnB.enableTextureMode(buttonb);
-		btnB.setIntervalTime(Stopwatch.elapsedTimeMs());
+		//btnB.setIntervalTime(Stopwatch.elapsedTimeMs());
 		UIList.add(btnB);
 		
 		joypad = new UIJoypad(.45f, .45f, UIPosition.BOTTOMLEFT, player.getAngle(), joystickin);
@@ -277,7 +278,7 @@ public class Game
 	
 	public static Tile nearestTile(Entity ent, Tile[][] tileset)
 	{	
-		//TODO Fix return null when offscreen
+		//\TODO Fix return null when offscreen
 		final float tilesetHalfWidth = tileset[0].length * Tile.TILE_SIZE_F / 2;
 		final float tilesetHalfHeight = tileset.length * Tile.TILE_SIZE_F / 2;
 		
@@ -316,6 +317,7 @@ public class Game
 	
 	public void runAgressiveAI(Enemy enemy)
 	{
+		enemy.incrementLastTime((int)Stopwatch.getFrameTime());
 		if (enemy.getType() == AIType.STALKER || enemy.getType() == AIType.PATROL)
 		{
 			if (enemy.getPathToPlayer() != null)
@@ -350,14 +352,14 @@ public class Game
 				if (enemy.getPathToPlayer().getSize() == 2 || pathIsClear(new Node(enemy.getPos()), new Node(player.getPos())))
 				{
 					//shoot, on timer
-					if (Stopwatch.elapsedTimeMs() - enemy.getLastTime() > enemy.getRandomTime())
+					if (enemy.getLastTime() > enemy.getRandomTime())
 					{
 						Vector2f directionVec = new Vector2f(enemy.getAngle());
 						AttackBolt attack = new AttackBolt(Vector2f.add(enemy.getPos(), directionVec), directionVec.scale(15), enemy.getAngle());
 						attack.ignore(enemy);
 						EntityManager.addEntity(attack);
 						enemy.setRandomTime((int)(Math.random() * 500) + 500);
-						enemy.setLastTime(Stopwatch.elapsedTimeMs());
+						enemy.setLastTime(0);
 						attack.enableTilesetMode(Game.tilesetentities, 0, 3);
 					}
 					//move to player
@@ -405,14 +407,14 @@ public class Game
 			else
 				enemy.setAngle(towardsPlayerAngle);
 			
-			if (Stopwatch.elapsedTimeMs() - enemy.getLastTime() > enemy.getRandomTime())
+			if (enemy.getLastTime() > enemy.getRandomTime())
 			{
 				Vector2f directionVec = new Vector2f(enemy.getAngle());
 				final AttackBolt attack = new AttackBolt(Vector2f.add(enemy.getPos(), directionVec), directionVec.scale(15), enemy.getAngle());
 				attack.ignore(enemy);
 				EntityManager.addEntity(attack);
 				enemy.setRandomTime((int)(Math.random() * 500) + 500);
-				enemy.setLastTime(Stopwatch.elapsedTimeMs());
+				enemy.setLastTime(0);
 				attack.enableTilesetMode(Game.tilesetentities, 0, 3);
 			}
 		}
@@ -733,7 +735,7 @@ public class Game
 		if (player.userHasControl())
 		{
 			player.setAngle(joypad.getInputAngle());
-			player.addPos(joypad.getInputVec().scale((Stopwatch.elapsedTimeMs() - frameInterval) * (player.getMoveSpeed() / 1000)));
+			player.addPos(joypad.getInputVec().scale(Stopwatch.getFrameTime() * (player.getMoveSpeed() / 1000)));
 		}
 		joypad.clearInputVec();
 		
@@ -750,7 +752,7 @@ public class Game
 		gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
 		gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
 		
-		//TODO don't iterate through all and check if visible, have bounds available
+		//\TODO don't iterate through all and check if visible, have bounds available
 		for (int i = tilesetMinY; i <= tilesetMaxY; i++)
 		{
 			for (int j = tilesetMinX; j <= tilesetMaxX; j++)

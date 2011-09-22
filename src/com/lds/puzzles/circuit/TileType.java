@@ -2,7 +2,7 @@ package com.lds.puzzles.circuit;
 
 import com.lds.Enums.Direction;
 
-//TODO HAX, get a proper UP/DOWN on the angled types...
+//\TODO HAX, get a proper UP/DOWN on the angled types...
 public enum TileType 
 { 
 	VERTICAL(Direction.UP, Direction.DOWN, 0), 

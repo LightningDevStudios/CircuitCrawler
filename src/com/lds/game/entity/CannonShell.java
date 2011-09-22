@@ -9,7 +9,7 @@ public class CannonShell extends PhysEnt //A Large Ball of Doom
 	public CannonShell(float size, float xPos, float yPos, float angle, float xScl, float yScl, boolean isSolid, boolean circular, boolean willCollide, float moveSpeed, float rotSpeed, float sclSpeed, float friction, int secondsUntilRemove)
 	{
 		super(size, xPos, yPos, angle, 1.0f, 1.0f, true, circular, willCollide, moveSpeed, rotSpeed, sclSpeed, friction);
-		time = Stopwatch.elapsedTimeMs();
+		time = 0;
 		remove = secondsUntilRemove;
 	}
 	
@@ -22,9 +22,12 @@ public class CannonShell extends PhysEnt //A Large Ball of Doom
 	public void update()
 	{
 		super.update();
-		if(Stopwatch.elapsedTimeMs() - time > remove * 1000) // Time loop are cools
+		
+		time += Stopwatch.getFrameTime();
+		
+		if(time > remove * 1000) // Time loop are cools
 		{
-			time = Stopwatch.elapsedTimeMs();
+			time = 0;
 			this.remove();
 		}
 	}

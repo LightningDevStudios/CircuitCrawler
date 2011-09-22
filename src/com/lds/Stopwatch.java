@@ -2,55 +2,45 @@ package com.lds;
 
 import android.os.SystemClock;
 
+/**
+ * A static class that manages time between frames.
+ * @author Lightning Development Studios
+ *
+ */
 public class Stopwatch 
 {
-	private static int elapsedTimeMs;
-	private static int elapsedTimeS;
-	private static int elapsedTimeM;
+	private static long previousFrame;
+	private static long currentFrame;
+	private static long frameTime;
 	
-	private static long startTimeMs;
-		
 	private Stopwatch() {}
 	
-	public static void restartTimer()
+	/**
+	 * Initializes the Stopwatch with the current system time.
+	 */
+	public static void start()
 	{
-		startTimeMs = SystemClock.elapsedRealtime();
+		//first frame will have a frametime of 0
+		previousFrame = SystemClock.elapsedRealtime();
+		currentFrame = SystemClock.elapsedRealtime();
 	}
-		
+	
+	/**
+	 * Declares the beginning of a new frame and updates the time.
+	 */
 	public static void tick()
 	{
-		elapsedTimeMs = (int)(SystemClock.elapsedRealtime() - startTimeMs);
-		elapsedTimeS = (int)(SystemClock.elapsedRealtime() - startTimeMs) / 1000;
-		elapsedTimeM = (int)(SystemClock.elapsedRealtime() - startTimeMs) / 60000;
+		previousFrame = currentFrame;
+		currentFrame = SystemClock.elapsedRealtime();
+		frameTime = currentFrame - previousFrame;
 	}
 	
-	public static int elapsedTimeMs()
+	/**
+	 * Retrieves the amount of time the previous frame took to render.
+	 * @return The amount of time the previous frame took to render, in milliseconds.
+	 */
+	public static long getFrameTime()
 	{
-		return elapsedTimeMs;
-	}
-	
-	public static int elapsedTimeS()
-	{
-		return elapsedTimeS;
-	}
-	
-	public static int elapsedTimeM()
-	{
-		return elapsedTimeM;
-	}
-	
-	public static int elapsedTimeMsRemainder()
-	{
-		return elapsedTimeMs % 1000;
-	}
-	
-	public static int elapsedTimeSRemainder()
-	{
-		return elapsedTimeS % 60;
-	}
-	
-	public static int now()
-	{
-		return (int)SystemClock.elapsedRealtime();
+		return frameTime;
 	}
 }

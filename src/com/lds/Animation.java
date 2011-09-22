@@ -4,7 +4,6 @@ public class Animation
 {
 	private Texture tex;
 	private int framerate, xTiles, yTiles, startX, startY, curX, curY;
-	private int animTimeMs;
 	private boolean framerateDependent;
 	
 	public Animation(Texture tex, int xTiles, int yTiles, int startX, int startY, int framerate)
@@ -24,14 +23,12 @@ public class Animation
 		
 		if (framerate < 0)
 			framerateDependent = true;
-		else
-			animTimeMs = Stopwatch.elapsedTimeMs();
 	}
 	
 	public void update()
 	{
 		//grab a time difference
-		int timeElapsed = Stopwatch.elapsedTimeMs() - animTimeMs;
+		int timeElapsed = (int)Stopwatch.getFrameTime();
 		
 		//one set for time-based animation, another for framerate dependent animation
 		if (!framerateDependent)
@@ -44,9 +41,6 @@ public class Animation
 				
 				for(int i = 0; i < framesPassed; i++)
 					incrementCount();
-				
-				animTimeMs = Stopwatch.elapsedTimeMs();
-				
 			}
 		}
 		

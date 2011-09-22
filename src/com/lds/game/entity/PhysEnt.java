@@ -11,7 +11,6 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 {
 	//interpolation data
 	public float interpAngle, endAngle;
-	public int moveTimeMs, rotTimeMs, sclTimeMs;
 	protected float moveSpeed, rotSpeed, sclSpeed;
 	public boolean isMoving, isRotating, isScaling, isRotatingCCW, falling, gettingPushed;
 	protected Vector2f moveVec, moveInterpVec, endPosVec, movedVec;
@@ -106,7 +105,6 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 			moveInterpCount = 0;
 			moveVec.set(x - getXPos(), y - getYPos());
 			isMoving = true;
-			moveTimeMs = Stopwatch.elapsedTimeMs();
 			endPosVec = new Vector2f(x, y);
 		}
 		movedVec.set(0, 0);
@@ -122,7 +120,6 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 		gettingPushed = true;
 		moveInterpVec.set(x, y);
 		isMoving = true;
-		moveTimeMs = Stopwatch.elapsedTimeMs();
 		Game.worldOutdated = true;
 	}
 	
@@ -193,7 +190,6 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 			}
 			
 			isRotating = true;
-			rotTimeMs = Stopwatch.elapsedTimeMs();
 		}
 	}
 	
@@ -204,7 +200,6 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 		sclInterpCount = 0;
 		sclVec.set(x - getXScl(), y - getYScl());
 		isScaling = true;
-		sclTimeMs = Stopwatch.elapsedTimeMs();
 		endScaleVec = new Vector2f(x, y);
 	}
 	
@@ -219,7 +214,6 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 			moveInterpCount = 0;
 			moveVec.set(x, y);
 			isMoving = true;
-			moveTimeMs = Stopwatch.elapsedTimeMs();
 			endPosVec = Vector2f.add(moveVec, posVec);
 			Game.worldOutdated = true;
 		}
@@ -245,7 +239,6 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 		sclInterpCount = 0;
 		sclVec.set((x - 1) * getXScl(), (y - 1) * getYScl());
 		isScaling = true;
-		sclTimeMs = Stopwatch.elapsedTimeMs();
 		endScaleVec = Vector2f.add(sclVec, scaleVec);
 		Game.worldOutdated = true;
 	}
@@ -527,7 +520,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 				else
 				{
 					moveInterpCount++;
-					moveInterpVec = Vector2f.normalize(moveVec).scale(moveSpeed / 1000 * (Stopwatch.elapsedTimeMs() - moveTimeMs));
+					moveInterpVec = Vector2f.normalize(moveVec).scale(moveSpeed / 1000 * Stopwatch.getFrameTime());
 				}
 				
 				if (!gettingPushed && movedVec.mag() > moveVec.mag())
@@ -551,17 +544,13 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 				
 				Game.worldOutdated = true;
 			}
-				
-			moveTimeMs = Stopwatch.elapsedTimeMs();
 		}
 	}
 	
 	public void rotateInterpolate ()
 	{
 		if (isRotating)
-		{
-			final float increment = (float)(Stopwatch.elapsedTimeMs() - rotTimeMs);
-			
+		{			
 			final float dist = Math.abs(endAngle - angle);
 			
 			if (isRotatingCCW)
@@ -572,7 +561,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 					isRotating = false;
 				}
 				else
-					this.setAngle(angle + rotSpeed / 1000 * increment);
+					this.setAngle(angle + rotSpeed / 1000 * Stopwatch.getFrameTime());
 			}
 			else
 			{
@@ -582,9 +571,8 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 					isRotating = false;
 				}
 				else
-					this.setAngle(angle - rotSpeed / 1000 * increment);
-			}	
-			rotTimeMs = Stopwatch.elapsedTimeMs();
+					this.setAngle(angle - rotSpeed / 1000 * Stopwatch.getFrameTime());
+			}
 			
 			Game.worldOutdated = true;
 		}
@@ -603,7 +591,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 			else 
 			{
 				sclInterpCount++;
-				sclInterpVec = Vector2f.normalize(sclVec).scale(sclSpeed / 1000 * (Stopwatch.elapsedTimeMs() - sclTimeMs));
+				sclInterpVec = Vector2f.normalize(sclVec).scale(sclSpeed / 1000 * Stopwatch.getFrameTime());
 				
 				if (sclVec.mag() - sclInterpVec.mag() * sclInterpCount <= sclInterpVec.mag())
 				{
@@ -619,8 +607,6 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 				
 				Game.worldOutdated = true;
 			}
-							
-			sclTimeMs = Stopwatch.elapsedTimeMs();
 		}
 	}
 	

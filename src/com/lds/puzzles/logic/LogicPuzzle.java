@@ -16,14 +16,14 @@ public class LogicPuzzle implements IPuzzle
 	@Override
 	public void onDrawFrame(GL10 arg0)
 	{
-		// TODO Auto-generated method stub
+		// \TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void onSurfaceChanged(GL10 arg0, int arg1, int arg2) 
 	{
-		// TODO Auto-generated method stub
+		// \TODO Auto-generated method stub
 		
 	}
 
@@ -54,31 +54,31 @@ public class LogicPuzzle implements IPuzzle
 	@Override
 	public void setContext(Context context) 
 	{
-		// TODO Auto-generated method stub
+		// \TODO Auto-generated method stub
 	}
 
 	@Override
 	public void setSyncObj(Object o) 
 	{
-		// TODO Auto-generated method stub
+		// \TODO Auto-generated method stub
 	}
 
 	@Override
 	public void setPuzzleInitializedEvent(OnPuzzleInitializedListener listener)
 	{
-		// TODO Auto-generated method stub	
+		// \TODO Auto-generated method stub	
 	}
 
 	@Override
 	public void setPuzzleSuccessEvent(OnPuzzleSuccessListener listener) 
 	{
-		// TODO Auto-generated method stub		
+		// \TODO Auto-generated method stub		
 	}
 
 	@Override
 	public void setPuzzleFailEvent(OnPuzzleFailListener listener)
 	{
-		// TODO Auto-generated method stub		
+		// \TODO Auto-generated method stub		
 	}
 	
 	public void createPuzzle()

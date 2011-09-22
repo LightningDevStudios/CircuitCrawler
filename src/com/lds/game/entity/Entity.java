@@ -69,9 +69,6 @@ public abstract class Entity
 	public ArrayList<Entity> colList = new ArrayList<Entity>();
 	public ArrayList<Entity> colIgnoreList = new ArrayList<Entity>();
 	
-	//color/graident interp data
-	public int colorTimeMs, gradientTimeMs;
-	
 	public Entity (float size, float xPos, float yPos, boolean circular, boolean willCollide)
 	{
 		this(size, xPos, yPos, 0.0f, 1.0f, 1.0f, true, circular, willCollide);
@@ -623,14 +620,13 @@ public abstract class Entity
 		endColorB = b;
 		endColorA = a;
 		isColorInterp = true;
-		colorTimeMs = Stopwatch.elapsedTimeMs();
 	}
 	 
 	public void colorInterp()
 	{
 		if (isColorInterp)
 		{
-			final float colorInterp = colorInterpSpeed / 1000 * (Stopwatch.elapsedTimeMs() - colorTimeMs);
+			final float colorInterp = colorInterpSpeed / 1000 * Stopwatch.getFrameTime();
 			final double rNear = Math.abs(endColorR - colorR);
 			final double gNear = Math.abs(endColorG - colorG);
 			final double bNear = Math.abs(endColorB - colorB);
@@ -657,8 +653,6 @@ public abstract class Entity
 				if (endColorA > colorA)	colorA += colorInterp;
 				else					colorA -= colorInterp;
 			}
-			
-			colorTimeMs = Stopwatch.elapsedTimeMs();
 		}
 	}
 	
@@ -666,14 +660,13 @@ public abstract class Entity
 	{
 		endColor = c;
 		isGradientInterp = true;
-		gradientTimeMs = Stopwatch.elapsedTimeMs();
 	}
 	
 	public void gradientInterp()
 	{
 		if (isGradientInterp)
 		{
-			final float gradientInterp = colorInterpSpeed / 1000 * (Stopwatch.elapsedTimeMs() - gradientTimeMs);
+			final float gradientInterp = colorInterpSpeed / 1000 * Stopwatch.getFrameTime();
 			int nearCount = 0;
 			for (int i =0; i < color.length; i++)
 			{
@@ -692,7 +685,6 @@ public abstract class Entity
 				isGradientInterp = false;
 			
 			colorBuffer = setBuffer(colorBuffer, color);
-			gradientTimeMs = Stopwatch.elapsedTimeMs();
 			needToUpdateGradientVBO = true;
 		}
 	}
@@ -823,7 +815,7 @@ public abstract class Entity
 			
 			gl11.glBindBuffer(GL11.GL_ARRAY_BUFFER, VBOVertPtr);
 			final int vertSize = vertexBuffer.capacity() * 4;
-			gl11.glBufferData(GL11.GL_ARRAY_BUFFER, vertSize, vertexBuffer, GL11.GL_STATIC_DRAW); //TODO choose static/draw settings..?
+			gl11.glBufferData(GL11.GL_ARRAY_BUFFER, vertSize, vertexBuffer, GL11.GL_STATIC_DRAW); //\TODO choose static/draw settings..?
 			
 			if(renderMode.contains(RenderMode.GRADIENT))
 			{
