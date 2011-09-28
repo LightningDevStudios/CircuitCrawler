@@ -45,7 +45,6 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		charlieSheen = false;
 	}
 	
-	@Override
 	public void onSurfaceCreated(GL10 gl, EGLConfig config)
 	{	
 		//openGL settings
@@ -103,7 +102,6 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		}
 	}
 	
-	@Override
 	public void onDrawFrame(GL10 gl) 
 	{	
 		if (paused)
@@ -380,13 +378,11 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		}
 	}
 	
-	@Override
 	public void onSurfaceChanged(GL10 gl, int width, int height)
 	{		
 		updateCamPosition(gl);
 	}
 
-	@Override
 	public void onTouchInput(MotionEvent e) 
 	{
 		if(game.player.userHasControl())
@@ -482,32 +478,27 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		gl.glPopMatrix();
 	}
 	
-	@Override
 	public void setGameOverEvent(OnGameOverListener listener) 
 	{
 		this.gameOverListener = listener;
 		game.setGameOverEvent(listener);
 	}
 	
-	@Override
 	public void setGameInitializedEvent(OnGameInitializedListener listener)
 	{
 		this.gameInitializedListener = listener;
 	}
 
-	@Override
 	public void setPuzzleActivatedEvent(OnPuzzleActivatedListener listener)
 	{
 		this.puzzleActivatedListener = listener;
 	}
 	
-	@Override
 	public void onPuzzleWon() 
 	{
 		// \TODO Auto-generated method stub
 	}
 
-	@Override
 	public void onPuzzleFailed() 
 	{
 		// \TODO Auto-generated method stub

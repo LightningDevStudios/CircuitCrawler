@@ -86,19 +86,16 @@ public class PuzzleActivity extends Activity implements OnPuzzleInitializedListe
 		finish();
 	}
 
-	@Override
 	public void onPuzzleFail() 
 	{
 		finishPuzzleFailed();
 	}
 
-	@Override
 	public void onPuzzleSuccess() 
 	{
 		finishPuzzleSuccess();
 	}
 
-	@Override
 	public void onInitialized() 
 	{
 		puzzle.setPuzzleFailEvent(this);
