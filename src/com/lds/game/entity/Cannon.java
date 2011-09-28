@@ -1,9 +1,9 @@
 package com.lds.game.entity;
 
 import com.lds.EntityManager;
-import com.lds.Vector2f;
 import com.lds.Stopwatch;
 import com.lds.game.Game;
+import com.lds.math.Vector2;
 
 public class Cannon extends StaticEnt
 {
@@ -30,7 +30,7 @@ public class Cannon extends StaticEnt
 			time = 0;
 			CannonShell cannonShot = new CannonShell(getXPos(), getYPos(), angle, speed, 2);
 			cannonShot.enableTilesetMode(Game.tilesetwire, 1, 3);
-			cannonShot.push(new Vector2f(angle).scale(speed));
+			cannonShot.push(new Vector2(angle).scale(speed));
 			EntityManager.addEntity(cannonShot);
 		}
 	}

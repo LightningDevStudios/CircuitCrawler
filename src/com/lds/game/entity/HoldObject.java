@@ -1,7 +1,7 @@
 package com.lds.game.entity;
 
-import com.lds.Vector2f;
 import com.lds.game.SoundPlayer;
+import com.lds.math.Vector2;
 
 public abstract class HoldObject extends PhysEnt //and object that is held (blocks, balls, etc.)
 {
@@ -18,7 +18,7 @@ public abstract class HoldObject extends PhysEnt //and object that is held (bloc
 	{
 		if (!held)
 		{
-			if (moveInterpVec.mag() < 1.0f && moveInterpVec.mag() > 0.0f)
+			if (moveInterpVec.magnitude() < 1.0f && moveInterpVec.magnitude() > 0.0f)
 			{
 				if (tile.isPit())
 				{
@@ -52,6 +52,6 @@ public abstract class HoldObject extends PhysEnt //and object that is held (bloc
 	public void push ()
 	{
 		held = false;
-		push(new Vector2f (angle).scale(3));
+		push(new Vector2 (angle).scale(3));
 	}
 }

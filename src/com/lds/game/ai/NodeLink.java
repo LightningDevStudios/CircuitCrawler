@@ -1,18 +1,18 @@
  package com.lds.game.ai;
 
-import com.lds.Vector2f;
+import com.lds.math.Vector2;
 
 public class NodeLink 
 {
 	private Node thisNode, linkedNode;
-	private Vector2f nodeVec;
+	private Vector2 nodeVec;
 	private boolean active;
 
 	public NodeLink(Node thisNode, Node linkedNode, boolean active)
 	{
 		this.thisNode = thisNode;
 		this.linkedNode = linkedNode;
-		nodeVec = Vector2f.sub(linkedNode.getPos(), thisNode.getPos());
+		nodeVec = Vector2.subtract(linkedNode.getPos(), thisNode.getPos());
 		this.active = active;
 	}
 	
@@ -31,7 +31,7 @@ public class NodeLink
 		return linkedNode;
 	}
 	
-	public Vector2f getNodeVec()
+	public Vector2 getNodeVec()
 	{
 		return nodeVec;
 	}

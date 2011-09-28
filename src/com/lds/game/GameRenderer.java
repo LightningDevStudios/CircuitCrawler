@@ -12,9 +12,9 @@ import android.content.Context;
 import com.lds.EntityManager;
 import com.lds.Finger;
 import com.lds.Stopwatch;
-import com.lds.Vector2f;
 import com.lds.game.entity.*;
 import com.lds.game.event.*;
+import com.lds.math.Vector2;
 import com.lds.UI.*;
 
 public class GameRenderer implements com.lds.Graphics.Renderer
@@ -290,8 +290,8 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 			{
 				if (game.player.getEnergy() != 0)
 				{
-					final Vector2f directionVec = new Vector2f(game.player.getAngle());
-					final AttackBolt attack = new AttackBolt(Vector2f.add(game.player.getPos(), directionVec), directionVec.scale(25), game.player.getAngle());
+					final Vector2 directionVec = new Vector2(game.player.getAngle());
+					final AttackBolt attack = new AttackBolt(Vector2.add(game.player.getPos(), directionVec), directionVec.scale(25), game.player.getAngle());
 					attack.ignore(game.player);
 					attack.genHardwareBuffers(gl);
 					EntityManager.addEntity(attack);
@@ -395,7 +395,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 			for (int i = 0; i < game.fingerList.size(); i++)
 			{
 				final Finger f = game.fingerList.get(i);
-				final Vector2f touchInput = new Vector2f(e.getX(f.getPointerId()) - Game.screenW / 2, Game.screenH / 2 - e.getY(f.getPointerId()));
+				final Vector2 touchInput = new Vector2(e.getX(f.getPointerId()) - Game.screenW / 2, Game.screenH / 2 - e.getY(f.getPointerId()));
 				f.setPosition(touchInput);
 			}
 			
@@ -404,7 +404,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 				case MotionEvent.ACTION_POINTER_DOWN:
 				case MotionEvent.ACTION_DOWN:
 					final int fingerIndex = e.getPointerId(e.getAction() >> MotionEvent.ACTION_POINTER_ID_SHIFT);
-					final Vector2f touchVec = new Vector2f(e.getX(e.getPointerCount() - 1) - Game.screenW / 2, Game.screenH / 2 - e.getY(e.getPointerCount() - 1));
+					final Vector2 touchVec = new Vector2(e.getX(e.getPointerCount() - 1) - Game.screenW / 2, Game.screenH / 2 - e.getY(e.getPointerCount() - 1));
 					boolean onEnt = false;
 					for (int i = 0; i < game.UIList.size(); i++)
 					{

@@ -2,14 +2,15 @@ package com.lds;
 
 import com.lds.UI.*;
 import com.lds.game.Game;
+import com.lds.math.Vector2;
 
 public class Finger 
 {
-	private Vector2f position;
+	private Vector2 position;
 	private UIEntity ent;
 	private int ptrId;
 	
-	public Finger(final Vector2f position, final UIEntity ent, final int ptrId)
+	public Finger(final Vector2 position, final UIEntity ent, final int ptrId)
 	{
 		this.position = position;
 		this.ent = ent;
@@ -57,7 +58,7 @@ public class Finger
 		return ptrId;
 	}
 	
-	public void setPosition(final Vector2f input)
+	public void setPosition(final Vector2 input)
 	{
 		position = input;
 	}

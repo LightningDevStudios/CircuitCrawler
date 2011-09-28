@@ -10,8 +10,8 @@ import com.lds.Stopwatch;
 import com.lds.Texture;
 import com.lds.TilesetHelper;
 import com.lds.Enums.RenderMode;
-import com.lds.Vector2f;
 import com.lds.game.Game;
+import com.lds.math.Vector2;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -41,7 +41,7 @@ public abstract class Entity
 	protected float colorInterpSpeed;
 	protected EnumSet<RenderMode> renderMode;
 	protected Texture tex;
-	protected Vector2f posVec, scaleVec;
+	protected Vector2 posVec, scaleVec;
 	
 	protected float[] vertices;
 	protected float[] texture;
@@ -63,7 +63,7 @@ public abstract class Entity
 	private static int entCount = 0;
 	
 	//collision data
-	protected Vector2f[] vertVecs;
+	protected Vector2[] vertVecs;
 	protected double diagonal, rad;
 	
 	public ArrayList<Entity> colList = new ArrayList<Entity>();
@@ -90,17 +90,17 @@ public abstract class Entity
 		this.size = size;
 		halfSize = size / 2;
 		this.angle = angle;
-		posVec = new Vector2f(xPos, yPos);
-		scaleVec = new Vector2f(xScl, yScl);
+		posVec = new Vector2(xPos, yPos);
+		scaleVec = new Vector2(xScl, yScl);
 		
 		//initializes collision variables
 		rad = Math.toRadians((double)(angle));
 		diagonal = Math.sqrt(Math.pow(halfSize * xScl, 2) + Math.pow(halfSize * yScl, 2)); //distance from center to corner
 		 
-		vertVecs = new Vector2f[4];
+		vertVecs = new Vector2[4];
 		for (int i = 0; i < vertVecs.length; i++)
 		{
-			vertVecs[i] = new Vector2f();
+			vertVecs[i] = new Vector2();
 		}
 		
 		float[] initVerts = {	halfSize, halfSize, 	//top left
@@ -207,7 +207,7 @@ public abstract class Entity
 	
 	public void update()
 	{
-		if (scaleVec.mag() <= 0.0f)
+		if (scaleVec.magnitude() <= 0.0f)
 			this.remove(); //remove the entity
 		colorInterp();
 		gradientInterp();
@@ -248,20 +248,20 @@ public abstract class Entity
 	//used to get the absolute, not relative, positions of the entity's 4 points in the XY Plane
 	public void updateAbsolutePointLocations ()
 	{	
-		final Vector2f unscaledVec = new Vector2f((float)Math.cos(Math.toRadians(angle)), (float)Math.sin(Math.toRadians(angle))).scale(halfSize);
-		final Vector2f xVec = Vector2f.scale(unscaledVec, getXScl());
-		final Vector2f yVec = Vector2f.scale(Vector2f.getNormal(unscaledVec), getYScl());
+		final Vector2 unscaledVec = new Vector2((float)Math.cos(Math.toRadians(angle)), (float)Math.sin(Math.toRadians(angle))).scale(halfSize);
+		final Vector2 xVec = Vector2.scale(unscaledVec, getXScl());
+		final Vector2 yVec = Vector2.scale(Vector2.getNormal(unscaledVec), getYScl());
 		 																 //these are assuming the entity is facing right: angle = 0.0f
-		vertVecs[0].set(Vector2f.add(xVec, yVec).add(posVec)); //top  right
-		vertVecs[1].set(Vector2f.sub(yVec, xVec).add(posVec)); //top left
-		vertVecs[2].set(Vector2f.add(Vector2f.neg(xVec), Vector2f.neg(yVec)).add(posVec)); //bottom left
-		vertVecs[3].set(Vector2f.sub(xVec, yVec).add(posVec)); //bottom right
+		vertVecs[0].copy(Vector2.add(xVec, yVec).add(posVec)); //top  right
+		vertVecs[1].copy(Vector2.subtract(yVec, xVec).add(posVec)); //top left
+		vertVecs[2].copy(Vector2.add(Vector2.negate(xVec), Vector2.negate(yVec)).add(posVec)); //bottom left
+		vertVecs[3].copy(Vector2.subtract(xVec, yVec).add(posVec)); //bottom right
 	}
 	
 	public boolean closeEnough (Entity ent)
 	{
 		initializeCollisionVariables();
-		if (Vector2f.sub(this.posVec, ent.posVec).mag() < (float)((diagonal) + ent.diagonal))
+		if (Vector2.subtract(this.posVec, ent.posVec).magnitude() < (float)((diagonal) + ent.diagonal))
 			return true;
 		else
 			return false;
@@ -322,7 +322,7 @@ public abstract class Entity
 	protected boolean isCircleCollidingWithCircle (Entity ent) //if both entities are circles
 	{
 		boolean output;
-		if (Vector2f.sub(this.posVec, ent.posVec).mag() < halfSize + ent.halfSize)
+		if (Vector2.subtract(this.posVec, ent.posVec).magnitude() < halfSize + ent.halfSize)
 			output = true;
 		else
 			output = false;
@@ -341,22 +341,22 @@ public abstract class Entity
 		this.updateAbsolutePointLocations();
 		ent.updateAbsolutePointLocations();
 		
-		Vector2f[] axes = new Vector2f[3];
+		Vector2[] axes = new Vector2[3];
 		//set rectangle-based axes
-		axes[0] = Vector2f.abs(Vector2f.sub(vertVecs[0], this.vertVecs[1]));
-		axes[1] = Vector2f.getNormal(axes[0]);
+		axes[0] = Vector2.abs(Vector2.subtract(vertVecs[0], this.vertVecs[1]));
+		axes[1] = Vector2.getNormal(axes[0]);
 		//set circle axis
-		axes[2] = Vector2f.sub(vertVecs[0], ent.posVec);
+		axes[2] = Vector2.subtract(vertVecs[0], ent.posVec);
 		for (int i = 1; i < vertVecs.length; i++)
 		{
-			Vector2f tempVec = Vector2f.sub(vertVecs[i], ent.posVec);
-			if (axes[2].mag() > tempVec.mag())
+			Vector2 tempVec = Vector2.subtract(vertVecs[i], ent.posVec);
+			if (axes[2].magnitude() > tempVec.magnitude())
 			{
-				axes[2].set(tempVec);
+				axes[2].copy(tempVec);
 			}
 		}
 		
-		for (Vector2f axis : axes)
+		for (Vector2 axis : axes)
 		{
 			axis.normalize();
 						
@@ -373,8 +373,8 @@ public abstract class Entity
 			}
 			
 			//get mins and maxes for circle 
-			float min2 = axis.dot(Vector2f.add(ent.posVec, Vector2f.scale(axis, ent.halfSize)));
-			float max2 = axis.dot(Vector2f.sub(ent.posVec, Vector2f.scale(axis, ent.halfSize)));
+			float min2 = axis.dot(Vector2.add(ent.posVec, Vector2.scale(axis, ent.halfSize)));
+			float max2 = axis.dot(Vector2.subtract(ent.posVec, Vector2.scale(axis, ent.halfSize)));
 			if (min2 > max2)
 			{
 				float temp = min2;
@@ -401,13 +401,13 @@ public abstract class Entity
 		this.updateAbsolutePointLocations();
 		ent.updateAbsolutePointLocations();
 		
-		Vector2f[] axes = new Vector2f[4];
-		axes[0] = Vector2f.abs(Vector2f.sub(this.vertVecs[0], this.vertVecs[1]));
-		axes[1] = Vector2f.getNormal(axes[0]);
-		axes[2] = Vector2f.abs(Vector2f.sub(ent.vertVecs[0], ent.vertVecs[1]));
-		axes[3] = Vector2f.getNormal(axes[2]);
+		Vector2[] axes = new Vector2[4];
+		axes[0] = Vector2.abs(Vector2.subtract(this.vertVecs[0], this.vertVecs[1]));
+		axes[1] = Vector2.getNormal(axes[0]);
+		axes[2] = Vector2.abs(Vector2.subtract(ent.vertVecs[0], ent.vertVecs[1]));
+		axes[3] = Vector2.getNormal(axes[2]);
 		
-		for (Vector2f axis : axes)
+		for (Vector2 axis : axes)
 		{
 			axis.normalize();
 						
@@ -689,11 +689,11 @@ public abstract class Entity
 		}
 	}
 	
-	public boolean containsPoint(Vector2f v)
+	public boolean containsPoint(Vector2 v)
 	{
 		boolean output = true;
 		this.updateAbsolutePointLocations();
-		Vector2f axis = Vector2f.sub(this.vertVecs[0], this.vertVecs[1]).abs();
+		Vector2 axis = Vector2.subtract(this.vertVecs[0], this.vertVecs[1]).abs();
 		
 		for (int i = 0; i < 2; i ++)
 		{
@@ -726,8 +726,8 @@ public abstract class Entity
 	
 	public float getSize()				{ return size; }
 	public float getHalfSize()			{ return halfSize; }
-	public Vector2f getPos()			{ return posVec; }
-	public Vector2f getScl()			{ return scaleVec; }
+	public Vector2 getPos()			{ return posVec; }
+	public Vector2 getScl()			{ return scaleVec; }
 	public float getXPos()				{ return posVec.getX(); }
 	public float getYPos()				{ return posVec.getY(); }
 	public float getAngle()				{ return angle; }
@@ -741,7 +741,7 @@ public abstract class Entity
 	public float[] getColorCoords()		{ return color; }
 	public float[] getTextureCoords()	{ return texture; }
 	public Texture getTexture()			{ return tex; }
-	public Vector2f[] getVertVecs()		{ return vertVecs; }
+	public Vector2[] getVertVecs()		{ return vertVecs; }
 	public double getDiagonal()			{ return diagonal; }
 	public double getRad()				{ return rad; }
 	public int getEntID()				{ return entID; }
@@ -777,7 +777,7 @@ public abstract class Entity
 	public void setRendered(boolean state)	{ rendered = state; }
 	public void setSolidity(boolean solid)	{ isSolid = solid; }
 	public void setWillCollide(boolean willCollide) { this.willCollide = willCollide; }
-	public void setVertexVecs(Vector2f[] vertVecs)
+	public void setVertexVecs(Vector2[] vertVecs)
 	{
 		if (vertVecs.length == 4)
 			this.vertVecs = vertVecs;

@@ -12,11 +12,11 @@ import android.util.Log;
 
 import com.lds.game.Game;
 import com.lds.game.entity.Entity;
+import com.lds.math.Vector2;
 import com.lds.Enums.RenderMode;
 import com.lds.Enums.UIPosition;
 import com.lds.Texture;
 import com.lds.TilesetHelper;
-import com.lds.Vector2f;
 
 //\TODO allow relative sizing to scale for multiple monitors
 public abstract class UIEntity
@@ -534,7 +534,7 @@ public abstract class UIEntity
 	public float[] getTextureCoords()	{ return texture; }
 	public EnumSet<RenderMode> getRenderMode()	{ return renderMode; }
 	
-	public void setPos(Vector2f posVec)
+	public void setPos(Vector2 posVec)
 	{
 		xPos = posVec.getX();
 		yPos = posVec.getY();
