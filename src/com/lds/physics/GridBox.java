@@ -8,13 +8,17 @@ import com.lds.math.*;
 public class GridBox 
 {
 	public Vector4 pos;
+	public Vector2 center;
+	public float gridSize;
 	
 	public int entityCount = 0;
 	public ArrayList<Entity> detectedEnts = new ArrayList<Entity>();
 	
-	public GridBox(Vector4 pos)
+	public GridBox(Vector4 pos, Vector2 center, float gridSize)
 	{
 		this.pos = pos;
+		this.center = center;
+		this.gridSize = gridSize;
 	}
 	
 	public boolean IsInBox(Vector2 point, Entity ent)
