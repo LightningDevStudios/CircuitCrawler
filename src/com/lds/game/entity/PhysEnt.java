@@ -18,8 +18,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	protected int moveInterpCount, sclInterpCount;
 	protected ArrayList<Vector2> bounceList;
 	protected float friction;
-	
-	
+		
 	public PhysEnt(float size, float xPos, float yPos, boolean circular, boolean willCollide, float moveSpeed, float rotSpeed, float sclSpeed, float friction)
 	{
 		this(size, xPos, yPos, 0.0f, 1.0f, 1.0f, true, circular, willCollide, moveSpeed, rotSpeed, sclSpeed, friction);
@@ -630,7 +629,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	{
 	 	if (bounceList.isEmpty())
 		{
-			return Vector2.ZERO;
+			return Vector2.Zero;
 		}
 		else
 		{

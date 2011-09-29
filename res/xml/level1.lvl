@@ -117,22 +117,6 @@
         </tileset>
       </renderMode>
     </Door>
-    <Door>
-      <id>door1</id>
-      <size>76</size>
-      <xPos>33</xPos>
-      <yPos>266</yPos>
-      <angle>90</angle>
-      <xScl>0.5</xScl>
-      <yScl>1</yScl>
-      <renderMode>
-        <tileset>
-          <texID>tilesetentities</texID>
-          <x>2</x>
-          <y>1</y>
-        </tileset>
-      </renderMode>
-    </Door>
     <PhysBlock>
       <id>physBlock0</id>
       <size>50</size>
@@ -167,24 +151,6 @@
       </renderMode>
       <friction>0</friction>
     </PhysBall>
-    <Blob>
-      <id>blob0</id>
-      <size>48</size>
-      <xPos>-31</xPos>
-      <yPos>149</yPos>
-      <angle>90</angle>
-      <xScl>1</xScl>
-      <yScl>1</yScl>
-      <renderMode>
-        <tileset>
-          <texID>tilesetentities</texID>
-          <x>1</x>
-          <y>2</y>
-        </tileset>
-      </renderMode>
-      <health>100</health>
-      <AIType>STALKER</AIType>
-    </Blob>
     <Player>
       <id>player</id>
       <size>32</size>
@@ -207,16 +173,12 @@
     <Cause id="rightCause" type="CauseButton">rightButton</Cause>
     <Cause id="leftCause" type="CauseButton">leftButton</Cause>
     <Cause id="locCause" type="CauseLocation">player,0,400,250,800</Cause>
-    <Cause id="enemyKilled" type="CauseEntityDestruction">blob0</Cause>
-    <Cause id="endGameAND" type="CauseAND">locCause,enemyKilled</Cause>
     <Cause id="buttonANd" type="CauseAND">leftCause,rightCause</Cause>
     <Effect id="activateLink" type="EffectActivateNodeLink">0</Effect>
     <Effect id="doorfirst" type="EffectDoor">door0</Effect>
-    <Effect id="doorsecond" type="EffectDoor">door1</Effect>
     <Effect id="endGame" type="EffectEndGame">True</Effect>
     <Trigger cause="buttonANd" effect="activateLink" />
-    <Trigger cause="endGameAND" effect="endGame" />
-    <Trigger cause="enemyKilled" effect="doorsecond" />
+    <Trigger cause="locCause" effect="endGame" />
     <Trigger cause="buttonANd" effect="doorfirst" />
   </Triggers>
 </Level>
