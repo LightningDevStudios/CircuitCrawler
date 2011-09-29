@@ -1,42 +1,77 @@
 package com.lds.math;
 
+/**
+ * A 2-component vector.
+ * @author Lightning Development Studios
+ *
+ */
 public class Vector2
 {
-	/**
-	 * Constant Vectors
-	 */
-	public static final Vector2 ZERO = new Vector2();
-	public static final Vector2 UNIT_X = new Vector2(1, 0);
-	public static final Vector2 UNIT_Y = new Vector2(0, 1);
+	/*************
+	 * Constants *
+	 *************/
 	
 	/**
-	 * Private Variables
+	 * A unit vector in the X direction.
+	 */
+	public static final Vector2 UnitX = new Vector2(1, 0);
+	
+	/**
+	 * A unit vector in the Y direction.
+	 */
+	public static final Vector2 UnitY = new Vector2(0, 1);
+	
+	public static final Vector2 Zero = new Vector2();
+	
+	/***********
+	 * Members *
+	 ***********/
+	
+	/**
+	 * The vector's X component.
 	 */
 	private float x;
+	
+	/**
+	 * The vector's Y component.
+	 */
 	private float y;
 	
 	/****************
 	 * Constructors *
 	 ****************/
 	
+	/**
+	 * Creates a new instance of the Vector2 class with all components equal to 0.
+	 */
 	public Vector2()
 	{
 		x = 0;
 		y = 0;
 	}
 	
+	/**
+	 * Creates a new instance of the Vector2 class.
+	 * @param x The X component of the vector.
+	 * @param y The Y component of the vector.
+	 */
 	public Vector2(float x, float y)
 	{
 		this.x = x;
 		this.y = y;
 	}
 	
+	//TODO same as copy?
 	public Vector2(Vector2 v)
 	{
 		x = v.getX();
 		y = v.getY();
 	}
 	
+	/**
+	 * Creates a new instance of the Vector2 class from an angle.
+	 * @param angle The angle (in degrees) which will be the vector's direction.
+	 */
 	public Vector2(float angle)
 	{
 		double angleRad = Math.toRadians(angle);

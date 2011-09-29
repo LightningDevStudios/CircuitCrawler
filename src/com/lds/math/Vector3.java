@@ -1,26 +1,67 @@
 package com.lds.math;
 
+/**
+ * A 3-component vector.
+ * @author Lightning Development Studios
+ *
+ */
 public class Vector3
 {
-	/**
-	 * Constant Vectors
-	 */
-	public static final Vector3 ZERO = new Vector3();
-	public static final Vector3 UNIT_X = new Vector3(1, 0, 0);
-	public static final Vector3 UNIT_Y = new Vector3(0, 1, 0);
-	public static final Vector3 UNIT_Z = new Vector3(0, 0, 1);
+	/*************
+	 * Constants *
+	 *************/
 	
 	/**
-	 * Private Variables
+	 * A unit vector in the X direction.
+	 */
+	public static final Vector3 UnitX = new Vector3(1, 0, 0);
+	
+	/**
+	 * A unit vector in the Y direction.
+	 */
+	public static final Vector3 UnitY = new Vector3(0, 1, 0);
+	
+	/**
+	 * A unit vector in the Z direction.
+	 */
+	public static final Vector3 UnitZ = new Vector3(0, 0, 1);
+	
+	/**
+	 * A vector of all components equal to 1.
+	 */
+	public static final Vector3 One = new Vector3(1, 1, 1);
+	
+	/**
+	 * A vector of all values components to 0.
+	 */
+	public static final Vector3 Zero = new Vector3(0, 0, 0);
+	
+	/***********
+	 * Members *
+	 ***********/
+	
+	/**
+	 * The vector's X component.
 	 */
 	private float x;
+	
+	/**
+	 * The vector's Y component.
+	 */
 	private float y;
+	
+	/**
+	 * The vector's Z component.
+	 */
 	private float z;
 	
 	/****************
 	 * Constructors *
 	 ****************/
-	
+
+	/**
+	 * Creates a new instance of the Vector3 class with all components equal to 0.
+	 */
 	public Vector3()
 	{
 		x = 0;
@@ -28,10 +69,28 @@ public class Vector3
 		z = 0;
 	}
 	
+	/**
+	 * Creates a new instance of the Vector3 class.
+	 * @param x The X component of the vector.
+	 * @param y The Y component of the vector.
+	 * @param z The Z component of the vector.
+	 */
 	public Vector3(float x, float y, float z)
 	{
 		this.x = x;
 		this.y = y;
+		this.z = z;
+	}
+	
+	/**
+	 * Creates a new instance of the Vector3 class.
+	 * @param xy A vector containing the X and Y components of the vector.
+	 * @param z The Z component of the vector.
+	 */
+	public Vector3(Vector2 xy, float z)
+	{
+		this.x = xy.getX();
+		this.y = xy.getY();
 		this.z = z;
 	}
 	
@@ -197,11 +256,57 @@ public class Vector3
 		return this;
 	}
 	
-	/***********************
-	 * Getters and Setters *
-	 ***********************/
+	/***********
+	 * Swizzle *
+	 ***********/
 	
-	public float getX() { return x; } public void setX(float x) { this.x = x; }
-	public float getY() { return y; } public void setY(float y) { this.y = y; }
-	public float getZ() { return z; } public void setZ(float z) { this.z = z; }
+	/**
+	 * Gets the vector <x, y>
+	 * @return A Vector2 containing the x and y components of this vector.
+	 * @see Vector2
+	 */
+	public Vector2 xy()
+	{
+		return new Vector2(x, y);
+	}
+	
+	/**************************
+	 * Accessors and Mutators *
+	 **************************/
+	
+	/**
+	 * Gets the X component of the vector.
+	 * @return The vector's X component.
+	 */
+	public float getX() { return x; }
+	
+	/**
+	 * Gets the Y component of the vector.
+	 * @return The vector's Y component.
+	 */
+	public float getY() { return y; }
+	
+	/**
+	 * Gets the Z component of the vector.
+	 * @return The vector's Z component.
+	 */
+	public float getZ() { return z; }
+	
+	/**
+	 * Manually sets the X component of the vector.
+	 * @param x A new X component.
+	 */
+	public void setX(float x) { this.x = x; }
+	
+	/**
+	 * Manually sets the Y component of the vector.
+	 * @param y A new Y component.
+	 */
+	public void setY(float y) { this.y = y; }
+	
+	/**
+	 * Manually sets the Z component of the vector.
+	 * @param z A new Z component.
+	 */
+	public void setZ(float z) { this.z = z; }
 }
