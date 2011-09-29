@@ -110,21 +110,6 @@ public class Parser //this is a parser
 					parsedList.add(pbd);
 					pbd.createInst(entList);
 				}
-				else if (xrp.getName().equalsIgnoreCase("Blob"))
-				{
-					parseObj("Blob");
-					BlobData bd = new BlobData(dataHM);
-					if (bd.type == AIType.PATROL)
-					{
-						for (NodePath np : nodePathList)
-						{
-							if (np.getID().equals(bd.getPathID()))
-								bd.setPath(np);
-						}
-					}
-					parsedList.add(bd);
-					bd.createInst(entList);
-				}
 				else if (xrp.getName().equalsIgnoreCase("PuzzleBox"))
 				{
 					parseObj("PuzzleBox");
@@ -414,10 +399,6 @@ Parse A Tileset
 		else if(type.equalsIgnoreCase("CauseEntityDestruction"))
 		{
 			cause = new CauseEntityDestruction(this.<Entity>stringToSubEntity(parameters[0]));
-		}
-		else if(type.equalsIgnoreCase("CauseEnemyCount"))
-		{
-			cause = new CauseEnemyCount(Integer.parseInt(parameters[0]));
 		}
 		else if(type.equalsIgnoreCase("CauseLocation"))
 		{

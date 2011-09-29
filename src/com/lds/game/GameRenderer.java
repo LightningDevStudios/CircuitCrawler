@@ -134,10 +134,6 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 			ent.update();
 			ent.updateGradientVBO(gl);
 			ent.updateTextureVBO(gl);
-			
-			//run AI code for enemies
-			if (ent instanceof Enemy)
-				game.runAI((Enemy)ent);
 		}
 		
 		/**********************************************
@@ -167,10 +163,6 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 							colEnt.colList.add(ent);
 							ent.interact(colEnt);
 							colEnt.interact(ent);
-							if (ent instanceof Enemy)
-								((Enemy)ent).setColliding(true);
-							if (colEnt instanceof Enemy)
-								((Enemy)colEnt).setColliding(true);
 						}
 					}
 					else if (colListContains)
