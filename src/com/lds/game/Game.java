@@ -15,6 +15,7 @@ import com.lds.game.entity.*;
 import com.lds.game.event.*;
 import com.lds.trigger.*;
 
+import com.lds.math.Vector2;
 import com.lds.parser.Parser;
 
 public class Game
@@ -299,7 +300,7 @@ public class Game
 		if (!enemy.active)
 			return;
 		
-		if (Vector2f.sub(enemy.getPos(), player.getPos()).mag() <  Enemy.OUTER_RADIUS)
+		if (Vector2.subtract(enemy.getPos(), player.getPos()).magnitude() <  Enemy.OUTER_RADIUS)
 		{
 			if (enemy.isAgressive())
 				runAgressiveAI(enemy);
@@ -354,8 +355,8 @@ public class Game
 					//shoot, on timer
 					if (enemy.getLastTime() > enemy.getRandomTime())
 					{
-						Vector2f directionVec = new Vector2f(enemy.getAngle());
-						AttackBolt attack = new AttackBolt(Vector2f.add(enemy.getPos(), directionVec), directionVec.scale(15), enemy.getAngle());
+						Vector2 directionVec = new Vector2(enemy.getAngle());
+						AttackBolt attack = new AttackBolt(Vector2.add(enemy.getPos(), directionVec), directionVec.scale(15), enemy.getAngle());
 						attack.ignore(enemy);
 						EntityManager.addEntity(attack);
 						enemy.setRandomTime((int)(Math.random() * 500) + 500);
@@ -363,14 +364,14 @@ public class Game
 						attack.enableTilesetMode(Game.tilesetentities, 0, 3);
 					}
 					//move to player
-					if (Vector2f.sub(enemy.getPos(), player.getPos()).mag() <  Enemy.INNER_RADIUS)
+					if (Vector2.subtract(enemy.getPos(), player.getPos()).magnitude() <  Enemy.INNER_RADIUS)
 					{
 						enemy.stop();
 					}
 					else
 					{
 						enemy.stop();
-						enemy.rotateTo(Vector2f.sub(player.getPos(), enemy.getPos()).angleDeg());
+						enemy.rotateTo(Vector2.subtract(player.getPos(), enemy.getPos()).angleDeg());
 						enemy.moveTo(player.getPos());
 						runBecomeAgressiveAI(enemy);
 					}
@@ -389,9 +390,9 @@ public class Game
 						else
 							enemy.setPlayerPathLocation(enemy.getPlayerPathLocation() + 1);
 					}
-					Vector2f nextNodePos = enemy.getPathToPlayer().getNode(enemy.getPlayerPathLocation() + 1).getPos();
+					Vector2 nextNodePos = enemy.getPathToPlayer().getNode(enemy.getPlayerPathLocation() + 1).getPos();
 					enemy.moveTo(nextNodePos);
-					enemy.rotateTo(Vector2f.sub(nextNodePos, enemy.getPos()).angleDeg());
+					enemy.rotateTo(Vector2.subtract(nextNodePos, enemy.getPos()).angleDeg());
 				}
 			}
 			else
@@ -401,7 +402,7 @@ public class Game
 		}
 		else if (enemy.getType() == AIType.TURRET)
 		{
-			float towardsPlayerAngle = (float)Vector2f.sub(player.getPos(), enemy.getPos()).angleDeg();
+			float towardsPlayerAngle = (float)Vector2.subtract(player.getPos(), enemy.getPos()).angleDeg();
 			if (enemy.getAngle() > towardsPlayerAngle + 5.0f || enemy.getAngle() < towardsPlayerAngle - 5.0f)
 				enemy.rotateTo(towardsPlayerAngle);
 			else
@@ -409,8 +410,8 @@ public class Game
 			
 			if (enemy.getLastTime() > enemy.getRandomTime())
 			{
-				Vector2f directionVec = new Vector2f(enemy.getAngle());
-				final AttackBolt attack = new AttackBolt(Vector2f.add(enemy.getPos(), directionVec), directionVec.scale(15), enemy.getAngle());
+				Vector2 directionVec = new Vector2(enemy.getAngle());
+				final AttackBolt attack = new AttackBolt(Vector2.add(enemy.getPos(), directionVec), directionVec.scale(15), enemy.getAngle());
 				attack.ignore(enemy);
 				EntityManager.addEntity(attack);
 				enemy.setRandomTime((int)(Math.random() * 500) + 500);
@@ -432,7 +433,7 @@ public class Game
 		else if (enemy.getType() == AIType.PATROL)
 		{
 			enemy.stop();
-			float angleToPlayer = (float)Vector2f.sub(player.getPos(), enemy.getPos()).angleDeg();
+			float angleToPlayer = (float)Vector2.subtract(player.getPos(), enemy.getPos()).angleDeg();
 			if (enemy.getAngle() == angleToPlayer)
 			{
 				enemy.setAngle(angleToPlayer);
@@ -481,7 +482,7 @@ public class Game
 						enemy.setPatrolPathLocation(enemy.getPatrolPathLocation() + 1);
 				}
 				
-				float angleToNode = (float)Vector2f.sub(nextNode.getPos(), enemy.getPos()).angleDeg();
+				float angleToNode = (float)Vector2.subtract(nextNode.getPos(), enemy.getPos()).angleDeg();
 				
 				if (enemy.getAngle() == angleToNode)
 					enemy.setDoneRotating(true);
@@ -529,7 +530,7 @@ public class Game
 			}
 			else
 			{
-				float angleToNode = (float)Vector2f.sub(closestNode.getPos(), enemy.getPos()).angleDeg();
+				float angleToNode = (float)Vector2.subtract(closestNode.getPos(), enemy.getPos()).angleDeg();
 				if (enemy.getAngle() == angleToNode)
 				{
 					enemy.setDoneRotating(true);
@@ -606,8 +607,8 @@ public class Game
 		ArrayList<Node> closedList = new ArrayList<Node>();
 		Node lowestF = startNode;
 		closedList.add(startNode);
-		final Vector2f startHVec = Vector2f.sub(startNode.getPos(), goalNode.getPos());
-		startNode.setH(startHVec.mag());
+		final Vector2 startHVec = Vector2.subtract(startNode.getPos(), goalNode.getPos());
+		startNode.setH(startHVec.magnitude());
 		startNode.setF(startNode.getH());
 		
 		boolean givenUp = true;
@@ -621,7 +622,7 @@ public class Game
 				{
 					if (openList.contains(node))
 					{
-						float newG = lowestF.getG() + lowestF.getNodeLink(i).getNodeVec().mag();
+						float newG = lowestF.getG() + lowestF.getNodeLink(i).getNodeVec().magnitude();
 						if (node.getG() > newG)
 						{
 							node.setG(newG);
@@ -631,9 +632,9 @@ public class Game
 					}
 					else
 					{
-						final Vector2f hVec = Vector2f.sub(node.getPos(), goalNode.getPos());
-						node.setG(lowestF.getG() + lowestF.getNodeLink(i).getNodeVec().mag());
-						node.setH(hVec.mag());
+						final Vector2 hVec = Vector2.subtract(node.getPos(), goalNode.getPos());
+						node.setG(lowestF.getG() + lowestF.getNodeLink(i).getNodeVec().magnitude());
+						node.setH(hVec.magnitude());
 						node.setF(node.getG() + node.getH());
 						node.setParentNode(lowestF);
 						openList.add(node);
@@ -691,10 +692,10 @@ public class Game
 		}
 	}
 	
-	public boolean pathIsClear(final Vector2f startVec, final Vector2f endVec)
+	public boolean pathIsClear(final Vector2 startVec, final Vector2 endVec)
 	{
-		final Vector2f pathVec = Vector2f.sub(endVec, startVec).normalize();
-		final Vector2f pathNormal = Vector2f.getNormal(pathVec);
+		final Vector2 pathVec = Vector2.subtract(endVec, startVec).normalize();
+		final Vector2 pathNormal = Vector2.getNormal(pathVec);
 		final float normProj = startVec.dot(pathNormal);
 		final float startProj = startVec.dot(pathVec);
 		final float endProj = endVec.dot(pathVec);

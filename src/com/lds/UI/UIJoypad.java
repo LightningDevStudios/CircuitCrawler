@@ -4,12 +4,12 @@ import javax.microedition.khronos.opengles.GL10;
 
 import com.lds.Enums.UIPosition;
 import com.lds.Texture;
-import com.lds.Vector2f;
 import com.lds.game.Game;
+import com.lds.math.Vector2;
 
 public class UIJoypad extends UIEntity
 {
-	private Vector2f inputVec;
+	private Vector2 inputVec;
 	private float inputAngle;
 	private boolean active;
 	
@@ -20,7 +20,7 @@ public class UIJoypad extends UIEntity
 	public UIJoypad(float xSize, float ySize, UIPosition position, float inputAngle, Texture joystickin)
 	{
 		super(xSize * Game.screenH, ySize * Game.screenH, position);
-		inputVec = new Vector2f();
+		inputVec = new Vector2();
 		this.inputAngle = inputAngle;
 		active = false;
 		fingerCircle = new UIImage(this.xSize / 2, this.ySize / 2, 0, 0);
@@ -30,7 +30,7 @@ public class UIJoypad extends UIEntity
 	public UIJoypad(float xSize, float ySize, float xRelative, float yRelative, float inputAngle)
 	{
 		super (xSize, ySize, xRelative, yRelative);
-		inputVec = new Vector2f();
+		inputVec = new Vector2();
 		this.inputAngle = inputAngle;
 		active = false;
 	}
@@ -38,7 +38,7 @@ public class UIJoypad extends UIEntity
 	public UIJoypad(float xSize, float ySize, UIPosition position, float topPad, float leftPad, float bottomPad, float rightPad, float inputAngle) 
 	{
 		super(xSize, ySize, position, topPad, leftPad, bottomPad, rightPad);
-		inputVec = new Vector2f();
+		inputVec = new Vector2();
 		this.inputAngle = inputAngle;
 		active = false;
 	}
@@ -46,7 +46,7 @@ public class UIJoypad extends UIEntity
 	public UIJoypad(float xSize, float ySize, float xRelative, float yRelative, float topPad, float leftPad, float bottomPad, float rightPad, float inputAngle)
 	{
 		super(xSize, ySize, xRelative, yRelative, topPad, leftPad, bottomPad, rightPad);
-		inputVec = new Vector2f();
+		inputVec = new Vector2();
 		this.inputAngle = inputAngle;
 		active = false;
 	}
@@ -68,17 +68,17 @@ public class UIJoypad extends UIEntity
 		inputAngle = inputVec.angleDeg();
 		
 		//scale vector properly
-		if (inputVec.mag() > xSize / 2)
+		if (inputVec.magnitude() > xSize / 2)
 			inputVec.scaleTo(xSize / 2);
 		
 		//\TODO choose one method of moving inner circle
 		//fingerCircle.setPos(Vector2f.scaleTo(inputVec, inputVec.mag() - fingerCircle.xSize / 2));
 		fingerCircle.setPos(inputVec);
 		
-		inputVec.scaleTo(inputVec.mag() * MAX_SCALAR / xSize);
+		inputVec.scaleTo(inputVec.magnitude() * MAX_SCALAR / xSize);
 	}
 	
-	public void setInputVec(final Vector2f rawVec)
+	public void setInputVec(final Vector2 rawVec)
 	{
 		this.setInputVec(rawVec.getX(), rawVec.getY());
 	}
@@ -88,7 +88,7 @@ public class UIJoypad extends UIEntity
 		inputVec.set(0.0f, 0.0f);
 	}
 
-	public Vector2f getInputVec()
+	public Vector2 getInputVec()
 	{
 		return inputVec;
 	}

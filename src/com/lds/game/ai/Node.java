@@ -1,25 +1,26 @@
 package com.lds.game.ai;
 
 import java.util.ArrayList;
-import com.lds.Vector2f;
+
+import com.lds.math.Vector2;
 
 public class Node 
 {
-	private Vector2f posVec;
+	private Vector2 posVec;
 	private ArrayList<NodeLink> linkList;
 	private NodeLink parentNodeLink;
 	private float f, g, h;
 
 	public Node(float xPos, float yPos)
 	{
-		posVec = new Vector2f(xPos, yPos);
+		posVec = new Vector2(xPos, yPos);
 		linkList = new ArrayList<NodeLink>();
 		f = 0;
 		g = 0;
 		h = 0;
 	}
 	
-	public Node(Vector2f posVec)
+	public Node(Vector2 posVec)
 	{
 		this(posVec.getX(), posVec.getY());
 	}
@@ -64,12 +65,12 @@ public class Node
 		return linkList.get(index).getLinkedNode();
 	}
 	
-	public Vector2f getLinkVector(int index)
+	public Vector2 getLinkVector(int index)
 	{
 		return linkList.get(index).getNodeVec();
 	}
 	
-	public Vector2f getLinkVector(Node node)
+	public Vector2 getLinkVector(Node node)
 	{
 		return getNodeLink(node).getNodeVec();
 	}
@@ -108,9 +109,9 @@ public class Node
 		return nodeList;
 	}
 	
-	public ArrayList<Vector2f> getLinkedVecs()
+	public ArrayList<Vector2> getLinkedVecs()
 	{
-		ArrayList<Vector2f> vecList = new ArrayList<Vector2f>();
+		ArrayList<Vector2> vecList = new ArrayList<Vector2>();
 		for (NodeLink link : linkList)
 		{
 			vecList.add(link.getNodeVec());
@@ -162,7 +163,7 @@ public class Node
 		return linkList;
 	}
 	
-	public Vector2f getPos()
+	public Vector2 getPos()
 	{
 		return posVec;
 	}

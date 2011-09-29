@@ -2,15 +2,15 @@ package com.lds.game.entity;
 
 import java.util.ArrayList;
 
-import com.lds.Vector2f;
 import com.lds.EntityManager;
+import com.lds.math.Vector2;
 
 public class AttackBolt extends PhysEnt
 {
-	Vector2f directionVec;
+	Vector2 directionVec;
 	ArrayList<Entity> ignoreList;
 	
-	public AttackBolt(Vector2f posVec, Vector2f directionVec, float angle)
+	public AttackBolt(Vector2 posVec, Vector2 directionVec, float angle)
 	{
 		super(20.0f, posVec.getX(), posVec.getY(), false, false, 250.0f, 100.0f, 0.0f, 0.0f);
 		this.directionVec = directionVec;

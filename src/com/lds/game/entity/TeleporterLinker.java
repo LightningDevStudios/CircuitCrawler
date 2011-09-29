@@ -1,6 +1,6 @@
 package com.lds.game.entity;
 
-import com.lds.Vector2f;
+import com.lds.math.Vector2;
 
 public class TeleporterLinker 
 {
@@ -16,7 +16,7 @@ public class TeleporterLinker
 		entTele2.setTeleporterLinker(this);
 	}
 	
-	public Vector2f getLinkedPos(Teleporter t)
+	public Vector2 getLinkedPos(Teleporter t)
 	{
 		if (t == entTele1)
 		{

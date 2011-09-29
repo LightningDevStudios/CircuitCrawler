@@ -1,7 +1,7 @@
 package com.lds.game.entity;
 
-import com.lds.Vector2f;
 import com.lds.game.SoundPlayer;
+import com.lds.math.Vector2;
 
 public class Teleporter extends PhysEnt
 {
@@ -18,9 +18,9 @@ public class Teleporter extends PhysEnt
 		super(size, xPos, yPos, 0.0f, 1.0f, 1.0f, true, false, false, 0, 0, 0, 0);
 		active = true;
 	}
-	public  Vector2f getPos()
+	public  Vector2 getPos()
 	{
-		return new Vector2f(getXPos(),getYPos());
+		return new Vector2(getXPos(),getYPos());
 	}
 	
 	@Override
@@ -30,7 +30,7 @@ public class Teleporter extends PhysEnt
 		{
 			if (ent instanceof HoldObject && ((HoldObject)ent).isHeld())
 				return;
-			Vector2f newPos = tpLink.getLinkedPos(this);
+			Vector2 newPos = tpLink.getLinkedPos(this);
 			if (newPos != null)
 			{
 				((PhysEnt)ent).setPosNoInterp(newPos);

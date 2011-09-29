@@ -3,8 +3,8 @@ package com.lds.game.entity;
 import android.content.Context;
 import android.os.Vibrator;
 
-import com.lds.Vector2f;
 import com.lds.game.SoundPlayer;
+import com.lds.math.Vector2;
 
 public class Player extends Character //your character, protagonist
 {
@@ -112,7 +112,7 @@ public class Player extends Character //your character, protagonist
 		holdingObject = false;
 		colIgnoreList.remove(hObj);
 		hObj.colIgnoreList.remove(this);
-		final Vector2f addVec = new Vector2f(angle).scale(10);
+		final Vector2 addVec = new Vector2(angle).scale(10);
 		hObj.addPos(addVec);
 		hObj.drop();
 		hObj = new PhysBlock(0.0f, 0.0f, 0.0f, 0.03f);
@@ -124,7 +124,7 @@ public class Player extends Character //your character, protagonist
 		holdingObject = false;
 		colIgnoreList.remove(hObj);
 		hObj.colIgnoreList.remove(this);
-		final Vector2f addVec = new Vector2f(angle).scale(10);
+		final Vector2 addVec = new Vector2(angle).scale(10);
 		hObj.addPos(addVec);
 		hObj.push();
 		hObj = new PhysBlock(0.0f, 0.0f, 0.0f, 0.03f);
@@ -153,7 +153,7 @@ public class Player extends Character //your character, protagonist
 	public void updateHeldObjectPosition()
 	{
 			float heldDistance = hObj.halfSize * hObj.getXScl() + this.halfSize + 10.0f;
-			Vector2f directionVec = new Vector2f(angle);
+			Vector2 directionVec = new Vector2(angle);
 			directionVec.scale(heldDistance).add(posVec);
 			hObj.setPos(directionVec);
 			hObj.setAngle(angle);
