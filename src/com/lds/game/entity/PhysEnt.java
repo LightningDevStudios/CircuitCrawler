@@ -651,7 +651,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	{
 	 	if (bounceList.isEmpty())
 		{
-			return Vector2.Zero;
+			return Vector2.zero();
 		}
 		else
 		{

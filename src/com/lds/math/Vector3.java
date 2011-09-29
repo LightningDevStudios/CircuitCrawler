@@ -13,28 +13,33 @@ public class Vector3
 	
 	/**
 	 * A unit vector in the X direction.
+	 * @return A vector.
 	 */
-	public static final Vector3 UnitX = new Vector3(1, 0, 0);
+	public static Vector3 unitX() { return new Vector3(1, 0, 0); }
 	
 	/**
 	 * A unit vector in the Y direction.
+	 * @return A vector.
 	 */
-	public static final Vector3 UnitY = new Vector3(0, 1, 0);
+	public static Vector3 unitY() { return new Vector3(0, 1, 0); }
 	
 	/**
 	 * A unit vector in the Z direction.
+	 * @return A vector.
 	 */
-	public static final Vector3 UnitZ = new Vector3(0, 0, 1);
+	public static Vector3 unitZ() { return new Vector3(0, 0, 1); }
 	
 	/**
 	 * A vector of all components equal to 1.
+	 * @return A vector.
 	 */
-	public static final Vector3 One = new Vector3(1, 1, 1);
+	public static Vector3 one() { return new Vector3(1, 1, 1); }
 	
 	/**
 	 * A vector of all values components to 0.
+	 * @return A vector.
 	 */
-	public static final Vector3 Zero = new Vector3(0, 0, 0);
+	public static Vector3 zero() { return new Vector3(0, 0, 0); }
 	
 	/***********
 	 * Members *
