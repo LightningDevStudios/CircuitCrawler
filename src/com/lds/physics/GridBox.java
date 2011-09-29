@@ -21,9 +21,9 @@ public class GridBox
 		this.gridSize = gridSize;
 	}
 	
-	public boolean IsInBox(Vector2 point, Entity ent)
+	public boolean IsInBox(Entity ent)
 	{
-		if(point.getX() >= pos.getX() && point.getX() <= pos.getZ() && point.getY() >= pos.getW() && point.getY() <= pos.getY())
+		if(ent.getPos().getX() >= pos.getX() && ent.getPos().getX() <= pos.getZ() && ent.getPos().getY() >= pos.getW() && ent.getPos().getY() <= pos.getY())
 		{
 			detectedEnts.add(ent);
 			return true;
