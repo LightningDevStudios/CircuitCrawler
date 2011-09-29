@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import com.lds.game.Game;
 import com.lds.game.SoundPlayer;
+import com.lds.math.Matrix4;
 import com.lds.math.Vector2;
 import com.lds.Stopwatch;
 
@@ -441,12 +442,16 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	public void setPosNoInterp(final float x, final float y)
 	{
 		posVec.set(x, y);
+		posMat = Matrix4.translate(x, y);
+		rebuildModelMatrix();
 		Game.worldOutdated = true;
 	}
 	
 	public void setPosNoInterp(final Vector2 v)
 	{
 		posVec = v;
+		posMat = Matrix4.translate(v);
+		rebuildModelMatrix();
 		Game.worldOutdated = true;
 	}
 	
@@ -455,6 +460,8 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	{
 		moveInterpVec = Vector2.subtract(v, posVec);
 		posVec.copy(v);
+		posMat = Matrix4.translate(v);
+		rebuildModelMatrix();
 		Game.worldOutdated = true;
 	}
 	
@@ -463,6 +470,8 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 		if (!gettingPushed && (v.getX() != 0.0f || v.getY() != 0.0f))
 			moveInterpVec.copy(v);
 		posVec.add(v);
+		posMat = Matrix4.translate(posVec);
+		rebuildModelMatrix();
 		Game.worldOutdated = true;
 	}
 	
@@ -484,6 +493,8 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 		
 		angle = degrees;
 		endAngle = degrees;
+		rotMat = Matrix4.rotateZ((float)Math.toRadians(angle));
+		rebuildModelMatrix();
 		Game.worldOutdated = true;
 	}
 	
@@ -491,6 +502,8 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	public void setScale (final float x, final float y)
 	{
 		sclVec.set(x, y);
+		sclMat = Matrix4.scale(scaleVec.getX(), scaleVec.getY(), 1);
+		rebuildModelMatrix();
 		Game.worldOutdated = true;
 	}
 	
@@ -543,6 +556,9 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 				
 				Game.worldOutdated = true;
 			}
+			
+			posMat = Matrix4.translate(posVec);
+			rebuildModelMatrix();
 		}
 	}
 	
@@ -574,6 +590,9 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 			}
 			
 			Game.worldOutdated = true;
+			
+			rotMat = Matrix4.rotateZ((float)Math.toRadians(angle));
+			rebuildModelMatrix();
 		}
 	}
 	
@@ -606,6 +625,9 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 				
 				Game.worldOutdated = true;
 			}
+			
+			sclMat = Matrix4.scale(scaleVec.getX(), scaleVec.getY(), 1);
+			rebuildModelMatrix();
 		}
 	}
 	
