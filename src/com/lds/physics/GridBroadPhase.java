@@ -11,9 +11,9 @@ public class GridBroadPhase
 	
 	private ArrayList<GridBox> masterGrid = new ArrayList<GridBox>();
 	
-	public GridBroadPhase(World world) throws Exception
+	public GridBroadPhase(World world) 
 	{
-		if(world.Area < 9) { throw new Exception("World to small."); }
+		if(world.Area < 9) { return; }
 		
 		//checks to see if world is 9^n
 		while((Math.log(world.Area)/Math.log(9) % 1) != 0)
@@ -48,15 +48,15 @@ public class GridBroadPhase
 		//Calculate box centers
 		Vector2[] boxPosList = 
 		{
-			new Vector2(-size/6,  		size/6),	
-			new Vector2( center.getX(), size/6),
-			new Vector2( size/6,  		size/6),
-			new Vector2(-size/6,        center.getY()),
+			new Vector2(-size/3,  		size/3),	
+			new Vector2( center.getX(), size/3),
+			new Vector2( size/3,  		size/3),
+			new Vector2(-size/3,        center.getY()),
 			new Vector2( center.getX(), center.getY()),
-			new Vector2( size/6,        center.getY()),
-			new Vector2(-size/6,        -size/6),
-			new Vector2( center.getX(), -size/6),
-			new Vector2( size/6,        -size/6),
+			new Vector2( size/3,        center.getY()),
+			new Vector2(-size/3,        -size/3),
+			new Vector2( center.getX(), -size/3),
+			new Vector2( size/3,        -size/3),
 		};
 		
 		//Calculate box sides
