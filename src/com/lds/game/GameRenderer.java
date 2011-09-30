@@ -15,6 +15,7 @@ import com.lds.Stopwatch;
 import com.lds.game.entity.*;
 import com.lds.game.event.*;
 import com.lds.math.Vector2;
+import com.lds.physics.PhysicsManager;
 import com.lds.UI.*;
 
 public class GameRenderer implements com.lds.Graphics.Renderer
@@ -31,6 +32,8 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	private MediaPlayer mp;
 	public boolean paused, charlieSheen;
 	
+	private PhysicsManager physMan;
+	
 	public GameRenderer (float screenW, float screenH, Context context, Object syncObj, int levelId)
 	{
 		Game.screenW = screenW;
@@ -43,9 +46,9 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		SoundPlayer.getInstance().initialize(context);
 		paused = false;
 		charlieSheen = false;
+		physMan = new PhysicsManager(game.world, game.bf);
 	}
 	
-	@Override
 	public void onSurfaceCreated(GL10 gl, EGLConfig config)
 	{	
 		//openGL settings
@@ -103,7 +106,6 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		}
 	}
 	
-	@Override
 	public void onDrawFrame(GL10 gl) 
 	{	
 		if (paused)
@@ -142,12 +144,15 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		 * Perform a Collision Check for all Entities *
 		 **********************************************/
 		
+		physMan.PerformCollisionCheck();
+		
 		//Iterates through all entities
 		final int size = game.entList.size();
 		for (int i = 0; i < size; i++)
 		{
+			
 			final Entity ent = game.entList.get(i);
-						
+			/*			
 			//checks for collision with all other entities in entList if needed
 			if (Game.worldOutdated)
 			{
@@ -235,7 +240,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 					game.player.updateHeldObjectPosition();
 				}
 			}
-			
+			*/
 			/***************************
 			 * Performs Button Actions *
 			 ***************************/
@@ -273,7 +278,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 				}
 			}
 		}
-			
+		
 		//outside of ent for loop
 		//causes button A to shoot when pressed
 		if (game.btnA.isPressed())
@@ -372,13 +377,11 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		}
 	}
 	
-	@Override
 	public void onSurfaceChanged(GL10 gl, int width, int height)
 	{		
 		updateCamPosition(gl);
 	}
 
-	@Override
 	public void onTouchInput(MotionEvent e) 
 	{
 		if(game.player.userHasControl())
@@ -474,32 +477,27 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		gl.glPopMatrix();
 	}
 	
-	@Override
 	public void setGameOverEvent(OnGameOverListener listener) 
 	{
 		this.gameOverListener = listener;
 		game.setGameOverEvent(listener);
 	}
 	
-	@Override
 	public void setGameInitializedEvent(OnGameInitializedListener listener)
 	{
 		this.gameInitializedListener = listener;
 	}
 
-	@Override
 	public void setPuzzleActivatedEvent(OnPuzzleActivatedListener listener)
 	{
 		this.puzzleActivatedListener = listener;
 	}
 	
-	@Override
 	public void onPuzzleWon() 
 	{
 		// \TODO Auto-generated method stub
 	}
 
-	@Override
 	public void onPuzzleFailed() 
 	{
 		// \TODO Auto-generated method stub

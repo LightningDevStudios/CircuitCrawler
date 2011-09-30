@@ -162,23 +162,18 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 		 return true;  
 	}
 	
-	
-	
-	@Override
 	public void onCompletion(MediaPlayer mp) 
 	{
 		mp.reset();
 		playMusic(false);
 	} 
 	
-	@Override 
     public void onPrepared(MediaPlayer mp) 
 	{ 
 		mp.setVolume(SoundPlayer.getInstance().getMusicVolume(), SoundPlayer.getInstance().getMusicVolume());
 		mp.start(); 
     } 
 
-	@Override
 	public void onGameInitialized()
 	{
 		gameR.setGameOverEvent(this);
@@ -187,7 +182,6 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 		catch (Exception e) { }
 	}
 	
-	@Override
 	public void onGameOver(boolean winning)
 	{
 		mp.stop();
@@ -208,7 +202,6 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 		}
 	}
 	
-	@Override
 	public void onPuzzleActivated()
 	{
 		gameR.clearTouchInput();

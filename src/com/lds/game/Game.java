@@ -17,6 +17,9 @@ import com.lds.trigger.*;
 
 import com.lds.math.Vector2;
 import com.lds.parser.Parser;
+import com.lds.physics.GridBroadPhase;
+import com.lds.physics.PhysicsManager;
+import com.lds.physics.World;
 
 public class Game
 {
@@ -29,6 +32,8 @@ public class Game
 	public ArrayList<Trigger> triggerList;
 	public ArrayList<Node> nodeList;
 	public EntityManager cleaner;
+	public World world;
+	public GridBroadPhase bf;
 	
 	public ArrayList<Finger> fingerList;
 	
@@ -55,7 +60,7 @@ public class Game
 	public Player player;
 	
 	//Constructors
-	public Game (Context context, GL10 gl, int levelId) 
+	public Game (Context context, GL10 gl, int levelId)
 	{		
 		tilesetwire = new Texture(R.drawable.tilesetwire, 128, 128, 8, 8, context, "tilesetwire");
 		text = new Texture(R.drawable.text, 256, 256, 16, 8, context, "text");
@@ -69,8 +74,7 @@ public class Game
 		final Texture buttonb = new Texture(R.raw.buttonb, 32, 32, 1, 1, context, "buttonb");
 		final Texture energybarborder = new Texture (R.raw.energybarborder, 128, 16, 1, 1, context, "energybarborder");
 		final Texture healthbarborder = new Texture(R.raw.healthbarborder, 256, 16, 1, 1, context, "healthbarborder");
-		
-				
+			
 		entList = new ArrayList<Entity>();
 		UIList = new ArrayList<UIEntity>();
 		triggerList = new ArrayList<Trigger>();
@@ -198,6 +202,10 @@ public class Game
 		updateCameraPosition();
 		updateRenderedEnts();
 		updateRenderedTileset();
+		
+		//Physics
+		world = new World(729, entList);
+		bf = new GridBroadPhase(world);
 	}
 	
 	public void updateRenderedEnts()

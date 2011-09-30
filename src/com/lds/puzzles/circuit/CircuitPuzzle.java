@@ -34,7 +34,6 @@ public class CircuitPuzzle implements IPuzzle
 	private int touchEventTime;
 	private int selectedX, selectedY;
 						
-	@Override
 	public void onSurfaceCreated(GL10 gl, EGLConfig config) 
 	{
 		gl.glShadeModel(GL10.GL_SMOOTH);
@@ -63,7 +62,6 @@ public class CircuitPuzzle implements IPuzzle
 		
 	}
 
-	@Override
 	public void onDrawFrame(GL10 gl) 
 	{
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
@@ -87,7 +85,6 @@ public class CircuitPuzzle implements IPuzzle
 		
 	}
 
-	@Override
 	public void onSurfaceChanged(GL10 gl, int width, int height) 
 	{
 		gl.glViewport(0, 0, (int)Game.screenW, (int)Game.screenH);
@@ -98,7 +95,6 @@ public class CircuitPuzzle implements IPuzzle
 		gl.glLoadIdentity();
 	}
 	
-	@Override
 	public void onTouchEvent(MotionEvent event) 
 	{
 		touchEventTime += Stopwatch.getFrameTime();
@@ -169,20 +165,17 @@ public class CircuitPuzzle implements IPuzzle
 		}
 	}
 
-	@Override
 	public void setPuzzleInitializedEvent(OnPuzzleInitializedListener listener) 
 	{
 		this.initializedListener = listener;
 	}
 
-	@Override
 	public void setPuzzleSuccessEvent(OnPuzzleSuccessListener listener) 
 	{
 		this.successListener = listener;
 		
 	}
 
-	@Override
 	public void setPuzzleFailEvent(OnPuzzleFailListener listener) 
 	{
 		this.failListener = listener;
@@ -361,14 +354,12 @@ public class CircuitPuzzle implements IPuzzle
 		}
 	}
 	
-	@Override
 	public void setContext(Context context)
 	{
 		this.context = context;
 		
 	}
 	
-	@Override
 	public void setSyncObj(Object o)
 	{
 		syncObj = o;
