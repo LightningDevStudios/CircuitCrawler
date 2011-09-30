@@ -13,15 +13,21 @@ public class Vector2
 	
 	/**
 	 * A unit vector in the X direction.
+	 * @return A vector.
 	 */
-	public static final Vector2 UnitX = new Vector2(1, 0);
+	public static Vector2 unitX() { return new Vector2(1, 0); }
 	
 	/**
 	 * A unit vector in the Y direction.
+	 * @return A vector.
 	 */
-	public static final Vector2 UnitY = new Vector2(0, 1);
+	public static Vector2 unitY() { return new Vector2(0, 1); }
 	
-	public static final Vector2 Zero = new Vector2();
+	/**
+	 * A unit vector with all components equal to 0.
+	 * @return A vector.
+	 */
+	public static Vector2 zero() { return new Vector2(); }
 	
 	/***********
 	 * Members *

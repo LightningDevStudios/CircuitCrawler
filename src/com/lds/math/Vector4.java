@@ -13,33 +13,39 @@ public class Vector4
 	
 	/**
 	 * A unit vector in the X direction.
+	 * @return A vector.
 	 */
-	public static final Vector4 UnitX = new Vector4(1, 0, 0, 0);
+	public static Vector4 unitX() { return new Vector4(1, 0, 0, 0); }
 	
 	/**
 	 * A unit vector in the Y direction.
+	 * @return A vector.
 	 */
-	public static final Vector4 UnitY = new Vector4(0, 1, 0, 0);
+	public static Vector4 unitY() { return new Vector4(0, 1, 0, 0); }
 	
 	/**
 	 * A unit vector in the Z direction.
+	 * @return A vector.
 	 */
-	public static final Vector4 UnitZ = new Vector4(0, 0, 1, 0);
+	public static Vector4 unitZ() { return new Vector4(0, 0, 1, 0); }
 	
 	/**
 	 * A unit vector in the W direction.
+	 * @return A vector.
 	 */
-	public static final Vector4 UnitW = new Vector4(0, 0, 0, 1);
+	public static Vector4 unitW() { return new Vector4(0, 0, 0, 1); }
 	
 	/**
 	 * A vector of all components equal to 1.
+	 * @return A vector.
 	 */
-	public static final Vector4 One = new Vector4(1, 1, 1, 1);
+	public static Vector4 one() { return new Vector4(1, 1, 1, 1); }
 	
 	/**
 	 * A vector of all components equal to 0.
+	 * @return A vector.
 	 */
-	public static final Vector4 Zero = new Vector4(0, 0, 0, 0);
+	public static Vector4 zero() { return new Vector4(0, 0, 0, 0); }
 
 	/***********
 	 * Members *
