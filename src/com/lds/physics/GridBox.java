@@ -11,12 +11,14 @@ public class GridBox
 	public Vector4 pos;
 	public Vector2 center;
 	public Vector2 gridSize;
+	public String quad;
 	
 	public int entityCount = 0;
 	public ArrayList<Entity> detectedEnts = new ArrayList<Entity>();
 	
-	public GridBox(Vector4 pos, Vector2 center, Vector2 gridSize)
+	public GridBox(Vector4 pos, Vector2 center, Vector2 gridSize, String quad)
 	{
+		this.quad = quad;
 		this.pos = pos;
 		this.center = center;
 		this.gridSize = gridSize;
@@ -24,13 +26,6 @@ public class GridBox
 	
 	public boolean IsInBox(Entity ent)
 	{
-		//TODO Create bounding box then compare to this gridbox
-		/*
-		if(ent.getPos().getX() >= pos.getX() && ent.getPos().getX() <= pos.getZ() && ent.getPos().getY() >= pos.getW() && ent.getPos().getY() <= pos.getY())
-		{
-			detectedEnts.add(ent);
-			return true;
-		}*/
 		return false;
 	}
 }
