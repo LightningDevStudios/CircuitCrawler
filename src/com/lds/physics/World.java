@@ -7,12 +7,12 @@ import com.lds.math.*;
 
 public class World 
 {
-	public float Area;
+	public Vector2 size;
 	public ArrayList<Entity> entList = new ArrayList<Entity>();
 	
-	public World(float Area, ArrayList<Entity> entList)
+	public World(Vector2 size, ArrayList<Entity> entList)
 	{
-		this.Area = Area;	
+		this.size = size;	
 		this.entList = entList;
 	}
 }

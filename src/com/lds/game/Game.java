@@ -204,7 +204,7 @@ public class Game
 		updateRenderedTileset();
 		
 		//Physics
-		world = new World(729, entList);
+		world = new World(new Vector2(250,250), entList);
 		bf = new GridBroadPhase(world);
 	}
 	
