@@ -3,9 +3,9 @@ package com.lds.physics;
 public class PhysicsManager 
 {
 	private World world;
-	private GridBroadPhase grid;
+	private CollisionDetector grid;
 	
-	public PhysicsManager(World world, GridBroadPhase grid)
+	public PhysicsManager(World world, CollisionDetector grid)
 	{
 		this.world = world;
 		this.grid = grid;
@@ -13,6 +13,6 @@ public class PhysicsManager
 	
 	public void PerformCollisionCheck()
 	{
-		
+		grid.Run();
 	}
 }

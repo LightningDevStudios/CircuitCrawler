@@ -17,7 +17,8 @@ import com.lds.trigger.*;
 
 import com.lds.math.Vector2;
 import com.lds.parser.Parser;
-import com.lds.physics.GridBroadPhase;
+import com.lds.physics.CollisionDetector;
+import com.lds.physics.CollisionDetector;
 import com.lds.physics.PhysicsManager;
 import com.lds.physics.World;
 
@@ -33,7 +34,7 @@ public class Game
 	public ArrayList<Node> nodeList;
 	public EntityManager cleaner;
 	public World world;
-	public GridBroadPhase bf;
+	public CollisionDetector CD;
 	
 	public ArrayList<Finger> fingerList;
 	
@@ -205,7 +206,7 @@ public class Game
 		
 		//Physics
 		world = new World(new Vector2(250,250), entList);
-		bf = new GridBroadPhase(world);
+		CD = new CollisionDetector(world);
 	}
 	
 	public void updateRenderedEnts()

@@ -46,7 +46,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		SoundPlayer.getInstance().initialize(context);
 		paused = false;
 		charlieSheen = false;
-		physMan = new PhysicsManager(game.world, game.bf);
+		physMan = new PhysicsManager(game.world, game.CD);
 	}
 	
 	public void onSurfaceCreated(GL10 gl, EGLConfig config)
@@ -152,7 +152,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		{
 			
 			final Entity ent = game.entList.get(i);
-			/*			
+						
 			//checks for collision with all other entities in entList if needed
 			if (Game.worldOutdated)
 			{
@@ -240,7 +240,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 					game.player.updateHeldObjectPosition();
 				}
 			}
-			*/
+			
 			/***************************
 			 * Performs Button Actions *
 			 ***************************/

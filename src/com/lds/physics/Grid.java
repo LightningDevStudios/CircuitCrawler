@@ -50,7 +50,7 @@ public class Grid
 			float X2 = boxPosList[i].getX() + gridSizeX/2;
 			float Y2 = boxPosList[i].getY() - gridSizeY/2;
 			
-			grid.add(new GridBox(new Vector4(X1, X2, Y1, Y2), boxPosList[i], new Vector2(gridSizeX, gridSizeY), "Q" + i));
+			grid.add(new GridBox(new Vector4(X1, X2, Y1, Y2), boxPosList[i], new Vector2(gridSizeX, gridSizeY), i));
 		}
 		return grid;
 		
@@ -66,23 +66,23 @@ public class Grid
 		this.grids = grids;
 	}
 
-	public void SplitGrid(String str) 
+	public void SplitGrid(int quadrant) 
 	{
-		switch(str)
+		switch(quadrant)
 		{
-			case "Q1":
+			case 1:
 				subGrids[0] = new Grid(grids.get(0).gridSize, grids.get(0).center, level + 1, grids.get(0).detectedEnts);
 				FindAndUpdateEntitiesInAQuadrant(subGrids[0]);
 			break;
-			case "Q2":
+			case 2:
 				subGrids[1] = new Grid(grids.get(1).gridSize, grids.get(1).center, level + 1, grids.get(1).detectedEnts);
 				FindAndUpdateEntitiesInAQuadrant(subGrids[1]);
 			break;
-			case "Q3":
+			case 3:
 				subGrids[2] = new Grid(grids.get(2).gridSize, grids.get(2).center, level + 1, grids.get(2).detectedEnts);
 				FindAndUpdateEntitiesInAQuadrant(subGrids[2]);
 			break;
-			case "Q4":
+			case 4:
 				subGrids[3] = new Grid(grids.get(3).gridSize, grids.get(3).center, level + 1, grids.get(3).detectedEnts);
 				FindAndUpdateEntitiesInAQuadrant(subGrids[3]);
 			break;
@@ -115,7 +115,7 @@ public class Grid
 			if(bx.entityCount > 1)
 			{
 				if(grid.level <= MAX_LEVEL)
-					grid.SplitGrid(bx.quad);
+					grid.SplitGrid(bx.quadrant);
 				else
 				{
 					//TODO DO SAT on each entity in the bx.

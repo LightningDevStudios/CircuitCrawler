@@ -11,14 +11,14 @@ public class GridBox
 	public Vector4 pos;
 	public Vector2 center;
 	public Vector2 gridSize;
-	public String quad;
 	
+	public int quadrant;
 	public int entityCount = 0;
 	public ArrayList<Entity> detectedEnts = new ArrayList<Entity>();
 	
-	public GridBox(Vector4 pos, Vector2 center, Vector2 gridSize, String quad)
+	public GridBox(Vector4 pos, Vector2 center, Vector2 gridSize, int quadrant)
 	{
-		this.quad = quad;
+		this.quadrant = quadrant;
 		this.pos = pos;
 		this.center = center;
 		this.gridSize = gridSize;
