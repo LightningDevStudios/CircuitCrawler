@@ -1,6 +1,6 @@
 package com.lds.math;
 
-//TODO Gauss-Jordan elimination for an inverse method. Only if we need that method.
+//TODO Gauss-Jordan elimination for an inverse method?
 
 /**
  * A 4x4 matrix class.
@@ -15,11 +15,19 @@ public class Matrix4
 	
 	/**
 	 * The identity matrix, where each row is it's respective unit vector.
+	 * @return The identity matrix.
 	 */
-	public static final Matrix4 Identity = new Matrix4( 1, 0, 0, 0,
+	public static Matrix4 identity()
+	{
+		return new Matrix4( 1, 0, 0, 0,
+							0, 1, 0, 0,
+							0, 0, 1, 0,
+							0, 0, 0, 1);
+	}
+	/*public static final Matrix4 Identity = new Matrix4( 1, 0, 0, 0,
 														0, 1, 0, 0,
 														0, 0, 1, 0,
-														0, 0, 0, 1);
+														0, 0, 0, 1);*/
 	
 	/***********
 	 * Members *
@@ -283,11 +291,12 @@ public class Matrix4
 	 */
 	public static Matrix4 scale(float x, float y, float z)
 	{
-		Matrix4 scaleMat = Matrix4.Identity;
+		Matrix4 scaleMat = new Matrix4();
 		
 		scaleMat.setM11(x);
 		scaleMat.setM22(y);
 		scaleMat.setM33(z);
+		scaleMat.setM44(1);
 		
 		return scaleMat;
 	}
@@ -332,10 +341,10 @@ public class Matrix4
 	 */
 	public static Matrix4 translate(float x, float y, float z)
 	{
-		Matrix4 transMat = Matrix4.Identity;
-		transMat.setM14(x);
-		transMat.setM24(y);
-		transMat.setM34(z);
+		Matrix4 transMat = Matrix4.identity();
+		transMat.setM41(x);
+		transMat.setM42(y);
+		transMat.setM43(z);
 		
 		return transMat;
 	}
@@ -347,7 +356,7 @@ public class Matrix4
 	 */
 	public static Matrix4 rotateX(float radians)
 	{
-		Matrix4 rotMat = Matrix4.Identity;
+		Matrix4 rotMat = Matrix4.identity();
 		
 		float sin = (float)Math.sin(radians);
 		float cos = (float)Math.cos(radians);
@@ -367,7 +376,7 @@ public class Matrix4
 	 */
 	public static Matrix4 rotateY(float radians)
 	{
-		Matrix4 rotMat = Matrix4.Identity;
+		Matrix4 rotMat = Matrix4.identity();
 		
 		float sin = (float)Math.sin(radians);
 		float cos = (float)Math.cos(radians);
@@ -387,7 +396,7 @@ public class Matrix4
 	 */
 	public static Matrix4 rotateZ(float radians)
 	{
-		Matrix4 rotMat = Matrix4.Identity;
+		Matrix4 rotMat = Matrix4.identity();
 		
 		float sin = (float)Math.sin(radians);
 		float cos = (float)Math.cos(radians);
@@ -398,6 +407,35 @@ public class Matrix4
 		rotMat.setM22(cos);
 		
 		return rotMat;
+	}
+	
+	/**
+	 * Creates an orthographic projection matrix.
+	 * @param left The left bound of the projection.
+	 * @param right The right bound of the projection.
+	 * @param top The upper bound of the projection.
+	 * @param bottom The lower bound of the projection.
+	 * @param near The location of the near clipping plane.
+	 * @param far The location of the far clipping plane.
+	 * @return An orthographic projection matrix.
+	 */
+	public static Matrix4 ortho(float left, float right, float top, float bottom, float near, float far)
+	{
+		float[] result = new float[16];
+		
+		float rl = 1.0f / (right - left);
+		float tb = 1.0f / (top - bottom);
+		float fn = 1.0f / (far - near);
+		
+		result[0] = 2 * rl;
+		result[5] = 2 * tb;
+		result[10] = -2 * fn;
+		
+		result[3] = rl * -(right + left);
+		result[7] = tb * -(top + bottom);
+		result[11] = fn * -(far + near);
+		
+		return new Matrix4(result);
 	}
 	
 	/**************************

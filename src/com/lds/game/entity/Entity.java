@@ -5,6 +5,7 @@ import javax.microedition.khronos.opengles.GL11;
 
 import android.util.Log;
 
+import com.lds.math.*;
 import com.lds.EntityManager;
 import com.lds.Stopwatch;
 import com.lds.Texture;
@@ -42,6 +43,7 @@ public abstract class Entity
 	protected EnumSet<RenderMode> renderMode;
 	protected Texture tex;
 	protected Vector2 posVec, scaleVec;
+	protected Matrix4 posMat, rotMat, sclMat, model;
 	
 	protected float[] vertices;
 	protected float[] texture;
@@ -93,6 +95,11 @@ public abstract class Entity
 		posVec = new Vector2(xPos, yPos);
 		scaleVec = new Vector2(xScl, yScl);
 		
+		posMat = Matrix4.translate(posVec);
+		rotMat = Matrix4.rotateZ((float)Math.toRadians(angle));
+		sclMat = Matrix4.scale(xScl, yScl, 1);
+		rebuildModelMatrix();
+		
 		//initializes collision variables
 		rad = Math.toRadians((double)(angle));
 		diagonal = Math.sqrt(Math.pow(halfSize * xScl, 2) + Math.pow(halfSize * yScl, 2)); //distance from center to corner
@@ -116,9 +123,7 @@ public abstract class Entity
 	
 	public void draw(GL10 gl)
 	{
-		gl.glTranslatef(posVec.getX(), posVec.getY(), 0.0f);
-		gl.glRotatef(angle, 0.0f, 0.0f, 1.0f);
-		gl.glScalef(scaleVec.getX(), scaleVec.getY(), 1.0f);
+		gl.glLoadMatrixf(model.array(), 0);
 		
 		final boolean containsColor = renderMode.contains(RenderMode.COLOR);
 		final boolean containsGradient = renderMode.contains(RenderMode.GRADIENT);
@@ -768,11 +773,42 @@ public abstract class Entity
 		this.vertexBuffer = setBuffer(vertexBuffer, vertices);
 		needToUpdateVertexVBO = true;
 	}
-	public void setAngle(float angle)	{ this.angle = angle; }
-	public void setXPos(float xPos)		{ posVec.setX(xPos); }
-	public void setYPos(float yPos)		{ posVec.setY(yPos); }
-	public void setXScl(float xScl)		{ scaleVec.setX(xScl); }
-	public void setYScl(float yScl)		{ scaleVec.setY(yScl); }
+	
+	public void setAngle(float angle)
+	{
+		this.angle = angle;
+		rotMat = Matrix4.rotateZ((float)Math.toRadians(angle));
+		rebuildModelMatrix();
+	}
+	
+	public void setXPos(float xPos)
+	{
+		posVec.setX(xPos);
+		posMat.setM41(xPos);
+		rebuildModelMatrix();
+	}
+	
+	public void setYPos(float yPos)
+	{
+		posVec.setY(yPos);
+		posMat.setM42(yPos);
+		rebuildModelMatrix();
+	}
+	
+	public void setXScl(float xScl)
+	{
+		scaleVec.setX(xScl);
+		sclMat.setM11(xScl);
+		rebuildModelMatrix();
+	}
+	
+	public void setYScl(float yScl)
+	{
+		scaleVec.setY(yScl);
+		sclMat.setM22(yScl);
+		rebuildModelMatrix();
+	}
+	
 	public void setColorInterpSpeed(float s) { this.colorInterpSpeed = s; }
 	public void setRendered(boolean state)	{ rendered = state; }
 	public void setSolidity(boolean solid)	{ isSolid = solid; }
@@ -926,5 +962,10 @@ public abstract class Entity
 	public void setExists(boolean exists)
 	{
 		this.exists = exists;
+	}
+	
+	protected void rebuildModelMatrix()
+	{
+		model = Matrix4.multiply(Matrix4.multiply(sclMat, rotMat), posMat);
 	}
 }
