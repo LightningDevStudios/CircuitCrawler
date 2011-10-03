@@ -46,7 +46,6 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		SoundPlayer.getInstance().initialize(context);
 		paused = false;
 		charlieSheen = false;
-		physMan = new PhysicsManager(new Vector2(250,250));
 	}
 	
 	public void onSurfaceCreated(GL10 gl, EGLConfig config)

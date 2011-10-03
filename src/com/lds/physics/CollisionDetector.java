@@ -24,8 +24,5 @@ public class CollisionDetector
 		masterGrid.FindAndUpdateEntitiesInAQuadrant(masterGrid);
 	}
 	
-	public Grid getMaster()
-	{
-		return masterGrid;
-	}
+	public Grid getMaster() { return masterGrid; }
 }

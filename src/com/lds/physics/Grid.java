@@ -91,7 +91,7 @@ public class Grid
 		
 	}
 	
-	public void FindAndUpdateEntitiesInAQuadrant(Grid grid)
+	public void FindAndUpdateEntitiesInAQuadrant(Grid grid) //TODO: SHORTER NAME PL0X
 	{
 		for(Entity ent : grid.entList)
 		{
@@ -106,7 +106,7 @@ public class Grid
 			}
 			if(isOnALine)
 			{
-				//TODO Each entity that runs this if needs to be SATd to all entities in the sub grids of this grid.
+				//TODO Pass up colliding entities list
 			}
 		}
 		
@@ -118,7 +118,7 @@ public class Grid
 					grid.SplitGrid(bx.quadrant);
 				else
 				{
-					//TODO DO SAT on each entity in the bx.
+					//TODO Pass up colliding entities list
 				}
 			}
 		}
