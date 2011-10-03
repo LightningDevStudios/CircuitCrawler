@@ -20,7 +20,7 @@ public class CollisionDetector
 	
 	public void Run()
 	{
-		masterGrid = new Grid(size, new Vector2(0,0), 0, entList);	
+		masterGrid = new Grid(size, new Vector2(0,0), 0, entList, null);	
 		masterGrid.FindAndUpdateEntitiesInAQuadrant(masterGrid);
 	}
 	
