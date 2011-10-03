@@ -134,4 +134,7 @@ public class Grid
 		for(int i = 0; i < 4; i++)
 			subGrids[i] = null;
 	}
+	
+	public ArrayList<Entity> getEntList() { return entList; }
+	public void setEntList(ArrayList<Entity> entList) { this.entList = entList; }
 }

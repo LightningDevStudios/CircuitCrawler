@@ -46,7 +46,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		SoundPlayer.getInstance().initialize(context);
 		paused = false;
 		charlieSheen = false;
-		physMan = new PhysicsManager(game.world, game.CD);
+		physMan = new PhysicsManager(new Vector2(250,250));
 	}
 	
 	public void onSurfaceCreated(GL10 gl, EGLConfig config)
@@ -144,7 +144,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		 * Perform a Collision Check for all Entities *
 		 **********************************************/
 		
-		physMan.PerformCollisionCheck();
+		//physMan.PerformCollisionCheck();
 		
 		//Iterates through all entities
 		final int size = game.entList.size();

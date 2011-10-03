@@ -1,21 +1,31 @@
 package com.lds.physics;
 
+import java.util.ArrayList;
+
 import com.lds.math.*;
 import com.lds.game.entity.Entity;
 
 public class CollisionDetector 
-{
-	private World world;	
+{	
 	private Grid masterGrid;
 	
-	public CollisionDetector(World world) 
+	private Vector2 size;
+	private ArrayList<Entity> entList;
+	
+	public CollisionDetector(Vector2 size, ArrayList<Entity> entList) 
 	{
-		masterGrid = new Grid(world.size, new Vector2(0,0), 0, world.entList);
+		this.size = size;
+		this.entList = entList;
 	}
 	
 	public void Run()
 	{
-		masterGrid = new Grid(world.size, new Vector2(0,0), 0, world.entList);	
+		masterGrid = new Grid(size, new Vector2(0,0), 0, entList);	
 		masterGrid.FindAndUpdateEntitiesInAQuadrant(masterGrid);
+	}
+	
+	public Grid getMaster()
+	{
+		return masterGrid;
 	}
 }

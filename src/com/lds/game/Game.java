@@ -203,10 +203,6 @@ public class Game
 		updateCameraPosition();
 		updateRenderedEnts();
 		updateRenderedTileset();
-		
-		//Physics
-		world = new World(new Vector2(250,250), entList);
-		CD = new CollisionDetector(world);
 	}
 	
 	public void updateRenderedEnts()
