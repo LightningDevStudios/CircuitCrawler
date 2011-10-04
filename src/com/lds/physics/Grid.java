@@ -12,13 +12,18 @@ public class Grid
 	private ArrayList<Entity> entList;
 	private Grid[] subGrids = new Grid[4];
 	
+	private ArrayList<ArrayList<Entity>> colEnts = new ArrayList<ArrayList<Entity>>();
+	private ArrayList<ArrayList<Entity>> colEntsOnLines = new ArrayList<ArrayList<Entity>>();
+	
 	private int level;
 	private Vector2 size;
 	private Vector2 center;
 	private final int MAX_LEVEL = 5;
+	private Grid parentGrid;
 	
-	public Grid(Vector2 size, Vector2 center, int level, ArrayList<Entity> entList)
+	public Grid(Vector2 size, Vector2 center, int level, ArrayList<Entity> entList, Grid parentGrid)
 	{
+		this.parentGrid = parentGrid;
 		this.level = level;
 		this.size = size;
 		this.center = center;
@@ -71,19 +76,19 @@ public class Grid
 		switch(quadrant)
 		{
 			case 1:
-				subGrids[0] = new Grid(grids.get(0).gridSize, grids.get(0).center, level + 1, grids.get(0).detectedEnts);
+				subGrids[0] = new Grid(grids.get(0).gridSize, grids.get(0).center, level + 1, grids.get(0).detectedEnts, this);
 				FindAndUpdateEntitiesInAQuadrant(subGrids[0]);
 			break;
 			case 2:
-				subGrids[1] = new Grid(grids.get(1).gridSize, grids.get(1).center, level + 1, grids.get(1).detectedEnts);
+				subGrids[1] = new Grid(grids.get(1).gridSize, grids.get(1).center, level + 1, grids.get(1).detectedEnts, this);
 				FindAndUpdateEntitiesInAQuadrant(subGrids[1]);
 			break;
 			case 3:
-				subGrids[2] = new Grid(grids.get(2).gridSize, grids.get(2).center, level + 1, grids.get(2).detectedEnts);
+				subGrids[2] = new Grid(grids.get(2).gridSize, grids.get(2).center, level + 1, grids.get(2).detectedEnts, this);
 				FindAndUpdateEntitiesInAQuadrant(subGrids[2]);
 			break;
 			case 4:
-				subGrids[3] = new Grid(grids.get(3).gridSize, grids.get(3).center, level + 1, grids.get(3).detectedEnts);
+				subGrids[3] = new Grid(grids.get(3).gridSize, grids.get(3).center, level + 1, grids.get(3).detectedEnts, this);
 				FindAndUpdateEntitiesInAQuadrant(subGrids[3]);
 			break;
 		}
@@ -106,9 +111,17 @@ public class Grid
 			}
 			if(isOnALine)
 			{
-				//TODO Pass up colliding entities list
+				ArrayList<Entity> onLineEnts = new ArrayList<Entity>();
+				onLineEnts.add(ent);
+				for(Entity ent2 : grid.entList)
+				{
+					onLineEnts.add(ent2);
+				}
+				colEntsOnLines.add(onLineEnts);
 			}
 		}
+		
+		ChainUpOnLineEnts(colEntsOnLines);
 		
 		for(GridBox bx : grid.getGrids())
 		{
@@ -118,10 +131,27 @@ public class Grid
 					grid.SplitGrid(bx.quadrant);
 				else
 				{
-					//TODO Pass up colliding entities list
+					colEnts.add(bx.detectedEnts);
 				}
 			}
 		}
+		
+		if(colEnts.size() > 0)
+			ChainUpNormalEnts(colEnts);
+	}
+	
+	public void ChainUpNormalEnts(ArrayList<ArrayList<Entity>> colEnts)
+	{
+		if(parentGrid == null)
+			this.colEnts = colEnts;
+		parentGrid.ChainUpNormalEnts(colEnts);
+	}
+	
+	public void ChainUpOnLineEnts(ArrayList<ArrayList<Entity>> colEntsOnLines)
+	{
+		if(parentGrid == null)
+			this.colEntsOnLines = colEntsOnLines;
+		parentGrid.ChainUpOnLineEnts(colEntsOnLines);
 	}
 	
 	public void Clear()
