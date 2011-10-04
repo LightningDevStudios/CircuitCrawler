@@ -11,37 +11,32 @@ public class PhysicsManager
 	 * Members *
 	 ***********/
 
-	//TODO: Remove entlist
-	private ArrayList<Entity> entList;
+	private CollisionDetector collisionDetector;
 	
 	/****************
-	 * Constructors *
+	 * Constructors 
+	 * @param collisionDetector *
 	 ****************/
 	
-	public PhysicsManager()
+	public PhysicsManager(CollisionDetector collisionDetector)
 	{
-		
-	}
-	public PhysicsManager(ArrayList<Entity> entList)
-	{
-		this.entList = entList;
+		this.collisionDetector = collisionDetector;
 	}
 	
-	public void AddEntity (Entity ent) { entList.add(ent); }
-	public void AddEntities (ArrayList<Entity> ents) { entList.addAll(ents); }
-	public void AddEntities (Entity[] ents) 
-	{ 
-		for(Entity ent : ents) 
-			entList.add(ent);
-	}
+	//Get entities from a Collision Detector
+		//Step 1: Run QuadTreeDetection();
+		//Step 2: Use the QuadTreeList from QuadTreeDetection() and pass the entities to RadiusCheck.
+		//Step 3: If the RadiusCheck returns true pass them to the SeperatingAxisTheorem
+		//Step 4: Solve the Collisions from the CollisionPair
 	
-	public void RemoveEntity(Entity ent) { entList.remove(ent); }
-	public void RemoveEntities(ArrayList<Entity> ents) { entList.removeAll(ents); }
-	public void RemoveEntities(Entity[] ents)
+	//Note the QuadTreeDetection() returns 2 list of lists.
+		//List1 called normalEntity contains all entities that could be colliding with each other so if 
+		//there is 1 list in normalEntity and it contains 3 entities; entity 1 compares to entity 2 and 3, and entity 2 compares to 3
+	
+		//List 2 called onLineEntity contains all entities that do not fall in a specific quadrant so if onLineEntity contains 1 list 
+		//which has 6 entities in it; entity 1 is compared to entity 2, 3, 4, 5, and 6.
+	public void SolveCollision()
 	{
-		for(Entity ent : ents) 
-			entList.remove(ent);
+		//TODO Put all physics calculations in here 
 	}
-	
-	public void ClearEntities() { entList.clear(); }
 }

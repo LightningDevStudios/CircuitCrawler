@@ -7,8 +7,6 @@ import com.lds.game.entity.Entity;
 
 public class CollisionDetector 
 {	
-	private Grid masterGrid;
-	
 	private Vector2 size;
 	private ArrayList<Entity> entList;
 	
@@ -18,10 +16,11 @@ public class CollisionDetector
 		this.entList = entList;
 	}
 	
-	public void Run()
+	public QuadTreeList QuadTreeDetection()
 	{
-		masterGrid = new Grid(size, new Vector2(0,0), 0, entList, null);	
-		masterGrid.FindAndUpdateEntitiesInAQuadrant(masterGrid);
+		Grid masterGrid = new Grid(size, new Vector2(0,0), 0, entList, null);	
+		masterGrid.SearchGrid(masterGrid);
+		return new QuadTreeList(masterGrid.getColEnts(), masterGrid.getColEntsOnLines());
 	}
 	
 	public boolean RadiusCheck(Entity a, Entity b)
@@ -78,6 +77,4 @@ public class CollisionDetector
 		
 		return new CollisionPair(a, b);
 	}
-	
-	public Grid getMaster() { return masterGrid; }
 }

@@ -26,6 +26,6 @@ public class GridBox
 	
 	public boolean IsInBox(Entity ent)
 	{
-		return false;
+		return false; //TODO Bounding Box Check
 	}
 }

@@ -17,12 +17,16 @@ public class World
 		this.size = size;	
 		this.entList = entList;
 		collisionDetector = new CollisionDetector(size, entList);
-		physManager = new PhysicsManager(entList);
+		physManager = new PhysicsManager(collisionDetector);
 	}
+
+	public void AddEntity (Entity ent) { entList.add(ent); }
+	public void AddEntities (ArrayList<Entity> ents) { entList.addAll(ents); }
+	public void AddEntities (Entity[] ents) { for(Entity ent : ents) entList.add(ent); }
 	
-	public void PerformCollisionCheck()
-	{
-		collisionDetector.getMaster().setEntList(entList);
-		collisionDetector.Run();
-	}
+	public void RemoveEntity(Entity ent) { entList.remove(ent); }
+	public void RemoveEntities(ArrayList<Entity> ents) { entList.removeAll(ents); }
+	public void RemoveEntities(Entity[] ents) { for(Entity ent : ents) entList.remove(ent); }
+	
+	public void ClearEntities() { entList.clear(); }
 }

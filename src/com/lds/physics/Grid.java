@@ -26,7 +26,7 @@ public class Grid
 		this.parentGrid = parentGrid;
 		this.level = level;
 		this.size = size;
-		this.center = center;
+		this.setCenter(center);
 		this.entList = entList;
 		setGrids(CreateGrid(size, center));
 	}
@@ -77,26 +77,26 @@ public class Grid
 		{
 			case 1:
 				subGrids[0] = new Grid(grids.get(0).gridSize, grids.get(0).center, level + 1, grids.get(0).detectedEnts, this);
-				FindAndUpdateEntitiesInAQuadrant(subGrids[0]);
+				SearchGrid(subGrids[0]);
 			break;
 			case 2:
 				subGrids[1] = new Grid(grids.get(1).gridSize, grids.get(1).center, level + 1, grids.get(1).detectedEnts, this);
-				FindAndUpdateEntitiesInAQuadrant(subGrids[1]);
+				SearchGrid(subGrids[1]);
 			break;
 			case 3:
 				subGrids[2] = new Grid(grids.get(2).gridSize, grids.get(2).center, level + 1, grids.get(2).detectedEnts, this);
-				FindAndUpdateEntitiesInAQuadrant(subGrids[2]);
+				SearchGrid(subGrids[2]);
 			break;
 			case 4:
 				subGrids[3] = new Grid(grids.get(3).gridSize, grids.get(3).center, level + 1, grids.get(3).detectedEnts, this);
-				FindAndUpdateEntitiesInAQuadrant(subGrids[3]);
+				SearchGrid(subGrids[3]);
 			break;
 		}
 		
 		
 	}
 	
-	public void FindAndUpdateEntitiesInAQuadrant(Grid grid) //TODO: SHORTER NAME PL0X
+	public void SearchGrid(Grid grid)
 	{
 		for(Entity ent : grid.entList)
 		{
@@ -117,11 +117,11 @@ public class Grid
 				{
 					onLineEnts.add(ent2);
 				}
-				colEntsOnLines.add(onLineEnts);
+				getColEntsOnLines().add(onLineEnts);
 			}
 		}
 		
-		ChainUpOnLineEnts(colEntsOnLines);
+		ChainUpOnLineEnts(getColEntsOnLines());
 		
 		for(GridBox bx : grid.getGrids())
 		{
@@ -131,26 +131,26 @@ public class Grid
 					grid.SplitGrid(bx.quadrant);
 				else
 				{
-					colEnts.add(bx.detectedEnts);
+					getColEnts().add(bx.detectedEnts);
 				}
 			}
 		}
 		
-		if(colEnts.size() > 0)
-			ChainUpNormalEnts(colEnts);
+		if(getColEnts().size() > 0)
+			ChainUpNormalEnts(getColEnts());
 	}
 	
 	public void ChainUpNormalEnts(ArrayList<ArrayList<Entity>> colEnts)
 	{
 		if(parentGrid == null)
-			this.colEnts = colEnts;
+			this.setColEnts(colEnts);
 		parentGrid.ChainUpNormalEnts(colEnts);
 	}
 	
 	public void ChainUpOnLineEnts(ArrayList<ArrayList<Entity>> colEntsOnLines)
 	{
 		if(parentGrid == null)
-			this.colEntsOnLines = colEntsOnLines;
+			this.setColEntsOnLines(colEntsOnLines);
 		parentGrid.ChainUpOnLineEnts(colEntsOnLines);
 	}
 	
@@ -167,4 +167,10 @@ public class Grid
 	
 	public ArrayList<Entity> getEntList() { return entList; }
 	public void setEntList(ArrayList<Entity> entList) { this.entList = entList; }
+	public Vector2 getCenter() { return center; }
+	public void setCenter(Vector2 center) { this.center = center; }
+	public ArrayList<ArrayList<Entity>> getColEnts() { return colEnts; }
+	public void setColEnts(ArrayList<ArrayList<Entity>> colEnts) { this.colEnts = colEnts; }
+	public ArrayList<ArrayList<Entity>> getColEntsOnLines() { return colEntsOnLines; }
+	public void setColEntsOnLines(ArrayList<ArrayList<Entity>> colEntsOnLines)  { this.colEntsOnLines = colEntsOnLines; }
 }
