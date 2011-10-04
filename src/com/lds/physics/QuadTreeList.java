@@ -11,7 +11,13 @@ public class QuadTreeList
 	
 	public QuadTreeList(ArrayList<ArrayList<Entity>> normalEntity, ArrayList<ArrayList<Entity>> onLineEntity)
 	{
-		this.normalEntity = normalEntity;
-		this.onLineEntity = onLineEntity;
+		this.setNormalEntity(normalEntity);
+		this.setOnLineEntity(onLineEntity);
 	}
+
+	public ArrayList<ArrayList<Entity>> getOnLineEntity() { return onLineEntity; }
+	public void setOnLineEntity(ArrayList<ArrayList<Entity>> onLineEntity) { this.onLineEntity = onLineEntity; }
+	
+	public ArrayList<ArrayList<Entity>> getNormalEntity() { return normalEntity; }
+	public void setNormalEntity(ArrayList<ArrayList<Entity>> normalEntity) { this.normalEntity = normalEntity; }
 }
