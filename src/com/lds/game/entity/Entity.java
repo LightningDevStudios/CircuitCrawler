@@ -700,7 +700,7 @@ public abstract class Entity
 		this.updateAbsolutePointLocations();
 		Vector2 axis = Vector2.subtract(this.vertVecs[0], this.vertVecs[1]).abs();
 		
-		for (int i = 0; i < 2; i ++)
+		for (int i = 0; i < 2; i++)
 		{
 			//get mins and maxes for entity
 			float min = axis.dot(this.vertVecs[0]);
