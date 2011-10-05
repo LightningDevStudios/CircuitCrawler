@@ -141,6 +141,40 @@ public class Vector4
 		return new Vector4(v.getX(), v.getY(), v.getZ(), v.getW());
 	}
 	
+	/******************
+	 * Static Methods *
+	 ******************/
+	
+	/**
+	 * Transforms a vector by a matrix.
+	 * @param v The vector to be transformed.
+	 * @param mat The matrix to transform the vector by.
+	 * @return A transformed vector.
+	 */
+	public static Vector4 transform(Vector4 v, Matrix4 mat)
+	{
+		Vector4 result = new Vector4();
+		
+		float[] elements = mat.array();
+		
+		float m11 = elements[0],	m12 = elements[1],	m13 = elements[2],	m14 = elements[3],
+			  m21 = elements[4],	m22 = elements[5],	m23 = elements[6],	m24 = elements[7],
+			  m31 = elements[8],	m32 = elements[9],	m33 = elements[10],	m34 = elements[11],
+			  m41 = elements[12],	m42 = elements[13],	m43 = elements[14],	m44 = elements[15];
+		
+		float vX = v.getX();
+		float vY = v.getY();
+		float vZ = v.getZ();
+		float vW = v.getW();
+		
+		result.setX(vX * m11 + vY * m21 + vZ * m31 + vW * m41);
+		result.setY(vX * m12 + vY * m22 + vZ * m32 + vW * m42);
+		result.setZ(vX * m13 + vY * m23 + vZ * m33 + vW * m43);
+		result.setW(vX * m14 + vY * m24 + vZ * m34 + vW * m44);
+		
+		return result;
+	}
+	
 	/***********
 	 * Swizzle *
 	 ***********/
