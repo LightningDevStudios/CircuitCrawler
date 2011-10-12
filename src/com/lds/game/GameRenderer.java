@@ -74,7 +74,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		
 		if (Entity.useVBOs)
 		{
-			for (Entity ent: game.entList)
+			for (Entity ent : game.entList)
 			{
 				ent.genHardwareBuffers(gl);
 			}

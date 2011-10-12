@@ -119,18 +119,35 @@ public abstract class UIEntity
 		
 		//Enable settings for this polygon
 		gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
-		if (containsTexture || containsTileset) {gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);}
-		if (containsGradient) {gl.glEnableClientState(GL10.GL_COLOR_ARRAY);}
+		if (containsTexture || containsTileset)
+		{
+		    gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
+		}
+		
+		if (containsGradient)
+		{
+		    gl.glEnableClientState(GL10.GL_COLOR_ARRAY);
+		}
 		
 		//Sets color
-		if (containsColor) {gl.glColor4f(colorR, colorG, colorB, colorA);}
+		if (containsColor)
+		{
+		    gl.glColor4f(colorR, colorG, colorB, colorA);
+		}
 		
 		//Bind vertices, texture coordinates, and/or color coordinates to the OpenGL system
-		if(!Entity.useVBOs)
+		if (!Entity.useVBOs)
 		{
 			gl.glVertexPointer(2, GL10.GL_FLOAT, 0, vertexBuffer);
-			if (containsTexture || containsTileset) {gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, textureBuffer);}
-			if (containsGradient) {gl.glColorPointer(4, GL10.GL_FLOAT, 0, colorBuffer);}
+			if (containsTexture || containsTileset)
+			{
+			    gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, textureBuffer);
+			}
+			
+			if (containsGradient)
+			{
+			    gl.glColorPointer(4, GL10.GL_FLOAT, 0, colorBuffer);
+			}
 			
 			//Draw the vertices
 			gl.glDrawElements(GL10.GL_TRIANGLE_STRIP, 4, GL10.GL_UNSIGNED_BYTE, Entity.indexBuffer);	
@@ -166,7 +183,11 @@ public abstract class UIEntity
 				
 		//Disable things for next polygon
 		gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
-		if(containsGradient) {gl.glDisableClientState(GL10.GL_COLOR_ARRAY);}
+		if (containsGradient)
+		{
+		    gl.glDisableClientState(GL10.GL_COLOR_ARRAY);
+		}
+		
 		gl.glDisable(GL10.GL_CULL_FACE);
 		
 		//Disable texturing for next polygon
@@ -177,7 +198,10 @@ public abstract class UIEntity
 		}
 		
 		//Reset color for next polygon.
-		if (containsColor) {gl.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);}
+		if (containsColor)
+		{
+		    gl.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+		}
 	}
 	
 	public void update()
@@ -228,6 +252,8 @@ public abstract class UIEntity
 				case TOPRIGHT:
 					this.topPad = halfYSize + topPad;
 					break;
+            default:
+                break;
 			}
 			
 			switch (position)
@@ -237,6 +263,8 @@ public abstract class UIEntity
 				case BOTTOMLEFT:
 					this.leftPad = halfXSize + leftPad;
 					break;
+				default:
+				    break;
 			}
 			
 			switch (position)
@@ -246,6 +274,7 @@ public abstract class UIEntity
 				case BOTTOMRIGHT:
 					this.bottomPad = halfYSize + bottomPad;
 					break;
+				default:
 			}
 			
 			switch (position)
@@ -255,6 +284,7 @@ public abstract class UIEntity
 				case BOTTOMRIGHT:
 					this.rightPad = halfXSize + rightPad;
 					break;
+				default:
 			}
 			updatePosition();
 		}
@@ -277,10 +307,13 @@ public abstract class UIEntity
 		float posX = texture[2];
 		float posY = texture[5];
 		
-		float[] coords = { 	posX, negY,
-							posX, posY,
-							negX, negY,
-							negX, posY };
+		float[] coords = 
+		{
+		    posX, negY,
+			posX, posY,
+			negX, negY,
+			negX, posY 
+		};
 		
 		this.texture = coords;
 		textureBuffer = setBuffer(textureBuffer, texture);
@@ -307,7 +340,7 @@ public abstract class UIEntity
 			final int vertSize = vertexBuffer.capacity() * 4;
 			gl11.glBufferData(GL11.GL_ARRAY_BUFFER, vertSize, vertexBuffer, GL11.GL_STATIC_DRAW); //\TODO choose static/draw settings..?
 			
-			if(renderMode.contains(RenderMode.GRADIENT))
+			if (renderMode.contains(RenderMode.GRADIENT))
 			{
 				gl11.glGenBuffers(1, tempPtr, 0);
 				VBOGradientPtr = tempPtr[0];
@@ -334,7 +367,7 @@ public abstract class UIEntity
 	
 	public void updateTextureVBO(GL10 gl)
 	{
-		if(Entity.useVBOs && needToUpdateTexVBO)
+		if (Entity.useVBOs && needToUpdateTexVBO)
 		{
 			GL11 gl11 = (GL11)gl;
 			gl11.glBindBuffer(GL11.GL_ARRAY_BUFFER, VBOTexturePtr);
@@ -346,7 +379,7 @@ public abstract class UIEntity
 	
 	public void updateGradientVBO(GL10 gl)
 	{
-		if(Entity.useVBOs && needToUpdateGradientVBO)
+		if (Entity.useVBOs && needToUpdateGradientVBO)
 		{
 			GL11 gl11 = (GL11)gl;
 			gl11.glBindBuffer(GL11.GL_ARRAY_BUFFER, VBOGradientPtr);
@@ -358,7 +391,7 @@ public abstract class UIEntity
 
 	public void updateVertexVBO(GL10 gl) 
 	{
-		if(Entity.useVBOs && needToUpdateVertexVBO)
+		if (Entity.useVBOs && needToUpdateVertexVBO)
 		{
 			GL11 gl11 = (GL11)gl;
 			gl11.glBindBuffer(GL11.GL_ARRAY_BUFFER, VBOVertPtr);
@@ -448,11 +481,15 @@ public abstract class UIEntity
 		
 	public void updateTexture(Texture tex)
 	{
-			float[] initTexture = { 1.0f, 0.0f,
-									1.0f, 1.0f,
-									0.0f, 0.0f,
-									0.0f, 1.0f};
-			updateTexture(tex, initTexture);
+		float[] initTexture = 
+		{
+		    1.0f, 0.0f,
+			1.0f, 1.0f,
+			0.0f, 0.0f,
+			0.0f, 1.0f
+		};
+		
+		updateTexture(tex, initTexture);
 	}
 	
 	public void updateTexture(Texture tex, float[] texture)
@@ -465,7 +502,7 @@ public abstract class UIEntity
 	
 	public void disableTextureMode()
 	{
-		if(renderMode.contains(RenderMode.TEXTURE))
+		if (renderMode.contains(RenderMode.TEXTURE))
 			renderMode.remove(RenderMode.TEXTURE);
 	}
 	
@@ -511,7 +548,7 @@ public abstract class UIEntity
 	
 	public void disableTilesetMode()
 	{
-		if(renderMode.contains(RenderMode.TILESET))
+		if (renderMode.contains(RenderMode.TILESET))
 			renderMode.remove(RenderMode.TILESET);
 	}
 	

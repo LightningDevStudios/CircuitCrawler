@@ -36,7 +36,7 @@ public class PhysEntData extends EntityData
 	public void setRotSpeed(float newRotSpeed)		{ rotSpeed = newRotSpeed; }
 	public void setSclSpeed(float newSclSpeed)		{ sclSpeed = newSclSpeed; }
 	
-	public float getMoveSpeed()		{return moveSpeed;}
-	public float getRotSpeed()		{return	rotSpeed;}
-	public float getSclSpeed()		{return sclSpeed;}
+	public float getMoveSpeed()		{ return moveSpeed; }
+	public float getRotSpeed()		{ return	rotSpeed; }
+	public float getSclSpeed()		{ return sclSpeed; }
 }

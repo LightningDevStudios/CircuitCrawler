@@ -184,7 +184,7 @@ public class CircuitPuzzle implements IPuzzle
 		
 	}
 	
-	public void highlightAdjacent (int x, int y)
+	public void highlightAdjacent(int x, int y)
 	{
 		if (y < grid.length - 1)
 			grid[y + 1][x].highlight();
@@ -327,7 +327,7 @@ public class CircuitPuzzle implements IPuzzle
 	}
 	
 	//randomly initialize a 6x3 grid of Tile objects
-	public void initializeGrid ()
+	public void initializeGrid()
 	{
 		grid = new Tile[3][6];
 		

@@ -45,17 +45,23 @@ public class Tile
 		
 		float halfSize = tileSize / 2;
 		
-		float[] initVerts = {	halfSize, halfSize,
-								halfSize, -halfSize,
-								-halfSize, halfSize,
-								-halfSize, -halfSize };
+		float[] initVerts =
+		{
+		    halfSize, halfSize,
+			halfSize, -halfSize,
+			-halfSize, halfSize,
+			-halfSize, -halfSize
+		};
 		
 		this.vertices = initVerts;
 		this.vertexBuffer = setBuffer(vertexBuffer, vertices);
 		
 		updateTexture();
 				
-		byte[] indices = { 0, 1, 2, 3 };
+		byte[] indices = 
+		{
+		    0, 1, 2, 3
+		};
 		
 		indexBuffer = ByteBuffer.allocateDirect(indices.length);
 		indexBuffer.put(indices);
@@ -97,7 +103,7 @@ public class Tile
 		return buffer;
 	}
 		
-	public static Direction flipDirection (Direction dir)
+	public static Direction flipDirection(Direction dir)
 	{
 		switch (dir)
 		{
@@ -114,7 +120,7 @@ public class Tile
 		}
 	}
 	
-	public static int moveXPos (int x, Direction dir)
+	public static int moveXPos(int x, Direction dir)
 	{
 		if (dir == Direction.LEFT)
 			return x - 1;
@@ -124,7 +130,7 @@ public class Tile
 			return x;
 	}
 	
-	public static int moveYPos (int y, Direction dir)
+	public static int moveYPos(int y, Direction dir)
 	{
 		if (dir == Direction.UP)
 			return y - 1;
@@ -151,10 +157,13 @@ public class Tile
 		float posX = texture[2];
 		float posY = texture[5];
 		
-		float[] coords = { 	posX, negY,
-							posX, posY,
-							negX, negY,
-							negX, posY };
+		float[] coords =
+		{
+		    posX, negY,
+			posX, posY,
+			negX, negY,
+			negX, posY
+		};
 		
 		this.texture = coords;
 		this.textureBuffer = setBuffer(textureBuffer, texture);
@@ -167,21 +176,21 @@ public class Tile
 		updateTexture();
 	}
 	
-	public void deselect ()		
+	public void deselect()		
 	{
 		selected = false;
 		tileState -= 1;
 		updateTexture();
 	}
 	
-	public void highlight ()	
+	public void highlight()	
 	{
 		highlighted = true;
 		tileState += 2;
 		updateTexture();
 	}
 	
-	public void dehighlight ()	
+	public void dehighlight()	
 	{ 
 		highlighted = false; 
 		tileState -= 2;
@@ -208,7 +217,7 @@ public class Tile
 		updateTexture();
 	}
 	
-	public boolean isPowered ()		{ return powered; }
+	public boolean isPowered()		{ return powered; }
 	public boolean isSelected()		{ return selected; }
 	public boolean isHightlighted() { return highlighted; }
 	public float getXPos()			{ return xPos; }

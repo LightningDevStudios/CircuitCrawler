@@ -102,25 +102,25 @@ public abstract class EntityData
 	
 	
 	//float setters/getters
-	public void setSize(float newSize) 			{size = newSize;}
-	public void setXPos (float newXPos)			{xPos = newXPos;}
-	public void setYPos (float newYPos)			{yPos = newYPos;}
-	public void setXScl(float newXScl)			{xScl = newXScl;}
-	public void setYScl(float newYScl)			{yScl = newYScl;}
-	public void setAngle(float newAngle)		{angle = newAngle;}
-	public void setIsSolid(boolean newIsSolid) 	{isSolid = newIsSolid;}
-	public void setCircular(boolean newCircular){circular = newCircular;}
+	public void setSize(float newSize) 			{ size = newSize; }
+	public void setXPos (float newXPos)			{ xPos = newXPos; }
+	public void setYPos (float newYPos)			{ yPos = newYPos; }
+	public void setXScl(float newXScl)			{ xScl = newXScl; }
+	public void setYScl(float newYScl)			{ yScl = newYScl; }
+	public void setAngle(float newAngle)		{ angle = newAngle; }
+	public void setIsSolid(boolean newIsSolid) 	{ isSolid = newIsSolid; }
+	public void setCircular(boolean newCircular){ circular = newCircular; }
 	
-	public float getSize()		{return size;}
-	public float getXPos() 		{return xPos;}
-	public float getYPos()		{return yPos;}
-	public float getXScl()		{return xScl;}
-	public float getYScl()		{return yScl;}
-	public float getAngle()		{return angle;}
-	public boolean getIsSolid()	{return isSolid;}
-	public boolean getCircular(){return circular;}
-	public String getID()		{return id;}
-	public Entity getEnt()		{return ent;}
+	public float getSize()		{ return size; }
+	public float getXPos() 		{ return xPos; }
+	public float getYPos()		{ return yPos; }
+	public float getXScl()		{ return xScl; }
+	public float getYScl()		{ return yScl; }
+	public float getAngle()		{ return angle; }
+	public boolean getIsSolid()	{ return isSolid; }
+	public boolean getCircular(){ return circular; }
+	public String getID()		{ return id; }
+	public Entity getEnt()		{ return ent; }
 		
 	public void createInst(ArrayList<Entity> entData)
 	{

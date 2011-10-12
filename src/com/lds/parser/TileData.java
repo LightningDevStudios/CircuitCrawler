@@ -39,6 +39,6 @@ public class TileData
 	
 	public Tile getTile()		{ return tile; }
 
-	public void setTilePosX(int newTilePosX)	{tilePosX = newTilePosX;}
-	public void setTilePosY(int newTilePosY)	{tilePosY = newTilePosY;}
+	public void setTilePosX(int newTilePosX)	{ tilePosX = newTilePosX; }
+	public void setTilePosY(int newTilePosY)	{ tilePosY = newTilePosY; }
 }

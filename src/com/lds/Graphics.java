@@ -32,7 +32,7 @@ public class Graphics extends GLSurfaceView
 		});
 		
 		//sync with OpenGL thread
-		synchronized(syncObj)
+		synchronized (syncObj)
 		{
 			try
 			{
