@@ -12,21 +12,21 @@ public class CauseTimePassed extends Cause
 	private int triggerTime, time;
 	private boolean countdownHasStarted, paused;
 	
-	public CauseTimePassed (int triggerTime)
+	public CauseTimePassed(int triggerTime)
 	{
 		this.triggerTime = triggerTime;
 		countdownHasStarted = true;
 		time = 0;
 	}
 	
-	public CauseTimePassed (int triggerTime, boolean countdownHasStarted)
+	public CauseTimePassed(int triggerTime, boolean countdownHasStarted)
 	{
 		this.countdownHasStarted = countdownHasStarted;
 		this.triggerTime = triggerTime;
 	}
 	
 	@Override
-	public void update ()
+	public void update()
 	{
 		if (countdownHasStarted && !paused)
 		{

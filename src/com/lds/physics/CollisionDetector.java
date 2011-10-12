@@ -18,16 +18,16 @@ public class CollisionDetector
 	
 	public QuadTreeList QuadTreeDetection()
 	{
-		Grid masterGrid = new Grid(size, new Vector2(0,0), 0, entList, null);	
+		Grid masterGrid = new Grid(size, new Vector2(0, 0), 0, entList, null);	
 		masterGrid.SearchGrid(masterGrid);
 		return new QuadTreeList(masterGrid.getColEnts(), masterGrid.getColEntsOnLines());
 	}
 	
 	public boolean RadiusCheck(Entity a, Entity b)
 	{
-		double diagonalA = Math.sqrt((Math.pow(a.getHalfSize() * a.getXScl(), 2) + Math.pow(a.getHalfSize() * a.getYScl(), 2)));
-		double diagonalB = Math.sqrt((Math.pow(b.getHalfSize() * b.getXScl(), 2) + Math.pow(b.getHalfSize() * b.getYScl(), 2)));
-		return (Vector2.subtract(a.getPos(), b.getPos()).magnitude() < (float)(diagonalA + diagonalB));
+		double diagonalA = Math.sqrt(Math.pow(a.getHalfSize() * a.getXScl(), 2) + Math.pow(a.getHalfSize() * a.getYScl(), 2));
+		double diagonalB = Math.sqrt(Math.pow(b.getHalfSize() * b.getXScl(), 2) + Math.pow(b.getHalfSize() * b.getYScl(), 2));
+		return Vector2.subtract(a.getPos(), b.getPos()).magnitude() < (float)(diagonalA + diagonalB);
 	}
 	
 	public CollisionPair SeperatingAxisTheorem(Entity a, Entity b)

@@ -21,7 +21,7 @@ public class PhysBlockData extends HoldObjectData
 		
 		//COLOR
 		if (color != null)
-			physBlockRef.enableColorMode(color[0],color[1],color[2],color[3]);
+			physBlockRef.enableColorMode(color[0], color[1], color[2], color[3]);
 		
 		//GRADIENT
 		if (gradient != null)

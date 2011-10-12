@@ -22,7 +22,7 @@ public class StaticBlockData extends StaticEntData
 
 		//COLOR
 		if (color != null)
-			staticBlockRef.enableColorMode(color[0],color[1],color[2],color[3]);
+			staticBlockRef.enableColorMode(color[0], color[1], color[2], color[3]);
 		
 		//GRADIENT
 		if (gradient != null)

@@ -7,46 +7,6 @@ package com.lds.math;
  */
 public class Vector4 
 {
-	/*************
-	 * Constants *
-	 *************/
-	
-	/**
-	 * A unit vector in the X direction.
-	 * @return A vector.
-	 */
-	public static Vector4 unitX() { return new Vector4(1, 0, 0, 0); }
-	
-	/**
-	 * A unit vector in the Y direction.
-	 * @return A vector.
-	 */
-	public static Vector4 unitY() { return new Vector4(0, 1, 0, 0); }
-	
-	/**
-	 * A unit vector in the Z direction.
-	 * @return A vector.
-	 */
-	public static Vector4 unitZ() { return new Vector4(0, 0, 1, 0); }
-	
-	/**
-	 * A unit vector in the W direction.
-	 * @return A vector.
-	 */
-	public static Vector4 unitW() { return new Vector4(0, 0, 0, 1); }
-	
-	/**
-	 * A vector of all components equal to 1.
-	 * @return A vector.
-	 */
-	public static Vector4 one() { return new Vector4(1, 1, 1, 1); }
-	
-	/**
-	 * A vector of all components equal to 0.
-	 * @return A vector.
-	 */
-	public static Vector4 zero() { return new Vector4(0, 0, 0, 0); }
-
 	/***********
 	 * Members *
 	 ***********/
@@ -181,7 +141,7 @@ public class Vector4
 	 ***********/
 	
 	/**
-	 * Gets the vector <x, y, z>
+	 * Gets the vector <x, y, z>.
 	 * @return A Vector3 containing the x, y, and z components of this vector.
 	 * @see Vector3
 	 */
@@ -191,7 +151,7 @@ public class Vector4
 	}
 	
 	/**
-	 * Gets the vector <x, y>
+	 * Gets the vector <x, y>.
 	 * @return A Vector2 containing the x and y components of this vector.
 	 * @see Vector2
 	 */
@@ -208,56 +168,141 @@ public class Vector4
 	 * Gets the X component of the vector.
 	 * @return The vector's X component.
 	 */
-	public float getX() { return x; }
+	public float getX()
+	{
+	    return x;
+	}
 	
 	/**
 	 * Gets the Y component of the vector.
 	 * @return The vector's Y component.
 	 */
-	public float getY() { return y; }
+	public float getY()
+	{
+	    return y;
+	}
 	
 	/**
 	 * Gets the Z component of the vector.
 	 * @return The vector's Z component.
 	 */
-	public float getZ() { return z; }
+	public float getZ()
+	{
+	    return z;
+	}
 	
 	/**
 	 * Gets the W component of the vector.
 	 * @return The vector's W component.
 	 */
-	public float getW() { return w; }
+	public float getW()
+	{
+	    return w;
+	}
 	
 	/**
-	 * Converts the vector to a float array
+	 * Converts the vector to a float array.
 	 * @return A float array containing the vector components.
 	 */
-	public float[] getArray()
+	public float[] array()
 	{
-		return new float[] { x, y, z, w };
+		return new float[]
+		{
+		    x, y, z, w 
+		};
 	}
 	
 	/**
 	 * Manually sets the X component of the vector.
 	 * @param x A new X component.
 	 */
-	public void setX(float x) { this.x = x; }
+	public void setX(float x)
+	{
+	    this.x = x;
+	}
 	
 	/**
 	 * Manually sets the Y component of the vector.
 	 * @param y A new Y component.
 	 */
-	public void setY(float y) { this.y = y; }
+	public void setY(float y)
+	{
+	    this.y = y;
+	}
 	
 	/**
 	 * Manually sets the Z component of the vector.
 	 * @param z A new Z component.
 	 */
-	public void setZ(float z) { this.z = z; }
+	public void setZ(float z)
+	{
+	    this.z = z;
+	}
 	
 	/**
 	 * Manually sets the W component of the vector.
 	 * @param w A new W component.
 	 */
-	public void setW(float w) { this.w = w; }
+	public void setW(float w)
+	{
+	    this.w = w;
+	}
+	
+	/*************
+     * Constants *
+     *************/
+    
+    /**
+     * A unit vector in the X direction.
+     * @return A vector.
+     */
+    public static Vector4 unitX()
+    {
+        return new Vector4(1, 0, 0, 0);
+    }
+    
+    /**
+     * A unit vector in the Y direction.
+     * @return A vector.
+     */
+    public static Vector4 unitY()
+    {
+        return new Vector4(0, 1, 0, 0);
+    }
+    
+    /**
+     * A unit vector in the Z direction.
+     * @return A vector.
+     */
+    public static Vector4 unitZ()
+    {
+        return new Vector4(0, 0, 1, 0);
+    }
+    
+    /**
+     * A unit vector in the W direction.
+     * @return A vector.
+     */
+    public static Vector4 unitW()
+    {
+        return new Vector4(0, 0, 0, 1);
+    }
+    
+    /**
+     * A vector of all components equal to 1.
+     * @return A vector.
+     */
+    public static Vector4 one()
+    {
+        return new Vector4(1, 1, 1, 1);
+    }
+    
+    /**
+     * A vector of all components equal to 0.
+     * @return A vector.
+     */
+    public static Vector4 zero()
+    {
+        return new Vector4(0, 0, 0, 0);
+    }
 }

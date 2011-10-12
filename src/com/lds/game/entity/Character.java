@@ -59,25 +59,25 @@ public abstract class Character extends PhysEnt //all characters, including the 
 				isFlashing = false;
 			}
 		}
-		if(this.getXScl() <= 0 && this.getYScl() <= 0)
+		if (this.getXScl() <= 0 && this.getYScl() <= 0)
 			health = 0;
 		if (health <= 0)
 			this.die(); 
 	}
 	
-	public int getHealth ()
+	public int getHealth()
 	{
 		return health;
 	}
 	
-	public void takeDamage (int damage)
+	public void takeDamage(int damage)
 	{
 		health -= damage;
 		isFlashing = true;
 		damageTime = 0;
 	}
 	
-	public void die ()
+	public void die()
 	{
 		 EntityManager.removeEntity(this);
 	}

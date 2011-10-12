@@ -9,35 +9,15 @@ package com.lds.math;
  */
 public class Matrix4 
 {
-	/*************
-	 * Constants *
-	 *************/
-	
-	/**
-	 * The identity matrix, where each row is it's respective unit vector.
-	 * @return The identity matrix.
-	 */
-	public static Matrix4 identity()
-	{
-		return new Matrix4( 1, 0, 0, 0,
-							0, 1, 0, 0,
-							0, 0, 1, 0,
-							0, 0, 0, 1);
-	}
-	/*public static final Matrix4 Identity = new Matrix4( 1, 0, 0, 0,
-														0, 1, 0, 0,
-														0, 0, 1, 0,
-														0, 0, 0, 1);*/
-	
-	/***********
-	 * Members *
-	 ***********/
-	
-	/**
-	 * Column-major order.
-	 */
-	private float[] elements;
-	
+    /***********
+     * Members *
+     ***********/
+    
+    /**
+     * Column-major order.
+     */
+    private float[] elements;
+    
 	/****************
 	 * Constructors *
 	 ****************/
@@ -61,10 +41,10 @@ public class Matrix4
 	{
 		this();
 		
-		float[] col0 = column0.getArray();
-		float[] col1 = column1.getArray();
-		float[] col2 = column2.getArray();
-		float[] col3 = column3.getArray();
+		float[] col0 = column0.array();
+		float[] col1 = column1.array();
+		float[] col2 = column2.array();
+		float[] col3 = column3.array();
 		
 		elements[0]  = col0[0];
 		elements[1]  = col0[1];
@@ -103,10 +83,10 @@ public class Matrix4
 	 * @param m43 Row 4, Column 3 of the matrix.
 	 * @param m44 Row 4, Column 4 of the matrix.
 	 */
-	public Matrix4(	float m11, float m12, float m13, float m14, 
-					float m21, float m22, float m23, float m24, 
-					float m31, float m32, float m33, float m34, 
-					float m41, float m42, float m43, float m44)
+	public Matrix4(float m11, float m12, float m13, float m14, 
+				   float m21, float m22, float m23, float m24, 
+				   float m31, float m32, float m33, float m34, 
+				   float m41, float m42, float m43, float m44)
 	{
 		this();
 		
@@ -130,12 +110,12 @@ public class Matrix4
 	
 	/**
 	 * Creates a new instance of the Matrix4 class.
-	 * @param elements An array of 16 floats in column-major order.
+	 * @param data An array of 16 floats in column-major order.
 	 */
-	public Matrix4(float[] elements)
+	public Matrix4(float[] data)
 	{
-		if (elements.length == 16)
-			this.elements = elements;
+		if (data.length == 16)
+			this.elements = data;
 		
 		else
 			throw new IllegalArgumentException("elements is not of proper size (16).");
@@ -168,10 +148,10 @@ public class Matrix4
 	 */
 	public float determinant()
 	{
-		float m11 = elements[0], m12 = elements[1], m13 = elements[2], m14 = elements[3],
-			  m21 = elements[4], m22 = elements[5], m23 = elements[6], m24 = elements[7],
-			  m31 = elements[8], m32 = elements[9], m33 = elements[10], m34 = elements[11],
-			  m41 = elements[12], m42 = elements[13], m43 = elements[14], m44 = elements[15];
+		final float m11 = elements[0], m12 = elements[1], m13 = elements[2], m14 = elements[3],
+		            m21 = elements[4], m22 = elements[5], m23 = elements[6], m24 = elements[7],
+		            m31 = elements[8], m32 = elements[9], m33 = elements[10], m34 = elements[11],
+		            m41 = elements[12], m42 = elements[13], m43 = elements[14], m44 = elements[15];
 		
 		return m11 * m22 * m33 * m44 - m11 * m22 * m34 * m43 + m11 * m23 * m34 * m42 - m11 * m23 * m32 * m44
 			 + m11 * m24 * m32 * m43 - m11 * m24 * m33 * m42 - m12 * m23 * m34 * m41 + m12 * m23 * m31 * m44
@@ -446,293 +426,481 @@ public class Matrix4
 	 * Gets the matrix element at row 1, column 1.
 	 * @return The X component of the first column.
 	 */
-	public float m11() { return elements[0]; }
+	public float m11() 
+	{
+	    return elements[0];
+	}
 	
 	/**
 	 * Gets the matrix element at row 1, column 2.
 	 * @return The Y component of the first column.
 	 */
-	public float m12() { return elements[1]; }
+	public float m12() 
+	{
+	    return elements[1];
+	}
 	
 	/**
 	 * Gets the matrix element at row 1, column 3.
 	 * @return The X component of the first column.
 	 */
-	public float m13() { return elements[2]; }
+	public float m13() 
+	{
+	    return elements[2];
+	}
 	
 	/**
 	 * Gets the matrix element at row 1, column 4.
 	 * @return The X component of the first column.
 	 */
-	public float m14() { return elements[3]; }
+	public float m14() 
+	{
+	    return elements[3];
+	}
 	
 	/**
 	 * Gets the matrix element at row 2, column 1.
 	 * @return The X component of the second column.
 	 */
-	public float m21() { return elements[4]; }
+	public float m21() 
+	{
+	    return elements[4];
+	}
 	
 	/**
 	 * Gets the matrix element at row 2, column 2.
 	 * @return The X component of the second column.
 	 */
-	public float m22() { return elements[5]; }
+	public float m22() 
+	{
+	    return elements[5];
+	}
 	
 	/**
 	 * Gets the matrix element at row 2, column 3.
 	 * @return The X component of the second column.
 	 */
-	public float m23() { return elements[6]; }
+	public float m23()
+	{
+	    return elements[6];
+	}
 	
 	/**
 	 * Gets the matrix element at row 2, column 4.
 	 * @return The X component of the second column.
 	 */
-	public float m24() { return elements[7]; }
+	public float m24()
+	{
+	    return elements[7];
+	}
 	
 	/**
 	 * Gets the matrix element at row 3, column 1.
 	 * @return The X component of the third column.
 	 */
-	public float m31() { return elements[8]; }
+	public float m31() 
+	{
+	    return elements[8];
+	}
 	
 	/**
 	 * Gets the matrix element at row 3, column 2.
 	 * @return The X component of the third column.
 	 */
-	public float m32() { return elements[9]; }
+	public float m32() 
+	{
+	    return elements[9];
+	}
 	
 	/**
 	 * Gets the matrix element at row 3, column 3.
 	 * @return The X component of the third column.
 	 */
-	public float m33() { return elements[10]; }
+	public float m33() 
+	{
+	    return elements[10];
+	}
 	
 	/**
 	 * Gets the matrix element at row 3, column 4.
 	 * @return The X component of the third column.
 	 */
-	public float m34() { return elements[11]; }
+	public float m34() 
+	{
+	    return elements[11];
+	}
 	
 	/**
 	 * Gets the matrix element at row 4, column 1.
 	 * @return The X component of the fourth column.
 	 */
-	public float m41() { return elements[12]; }
+	public float m41() 
+	{
+	    return elements[12];
+	}
 	
 	/**
 	 * Gets the matrix element at row 4, column 2.
 	 * @return The X component of the fourth column.
 	 */
-	public float m42() { return elements[13]; }
+	public float m42() 
+	{
+	    return elements[13];
+	}
 	
 	/**
 	 * Gets the matrix element at row 4, column 3.
 	 * @return The X component of the fourth column.
 	 */
-	public float m43() { return elements[14]; }
+	public float m43() 
+	{
+	    return elements[14];
+	}
 	
 	/**
 	 * Gets the matrix element at row 4, column 4.
 	 * @return The X component of the fourth column.
 	 */
-	public float m44() { return elements[15]; }
+	public float m44() 
+	{
+	    return elements[15];
+	}
 	
 	/**
 	 * Gets the first row of the matrix.
 	 * @return A Vector4 containing the X components of all the columns.
 	 */
-	public Vector4 row0() { return new Vector4(elements[0], elements[4], elements[8], elements[12]); }
+	public Vector4 row0() 
+	{
+	    return new Vector4(elements[0], elements[4], elements[8], elements[12]);
+	}
 	
 	/**
 	 * Gets the second row of the matrix.
 	 * @return A Vector4 containing the X components of all the columns.
 	 */
-	public Vector4 row1() { return new Vector4(elements[1], elements[5], elements[9], elements[13]); }
+	public Vector4 row1() 
+	{
+	    return new Vector4(elements[1], elements[5], elements[9], elements[13]);
+	}
 	
 	/**
 	 * Gets the third row of the matrix.
 	 * @return A Vector4 containing the X components of all the columns.
 	 */
-	public Vector4 row2() { return new Vector4(elements[2], elements[6], elements[10], elements[14]); }
+	public Vector4 row2()
+	{
+	    return new Vector4(elements[2], elements[6], elements[10], elements[14]);
+	}
 	
 	/**
 	 * Gets the fourth row of the matrix.
 	 * @return A Vector4 containing the X components of all the columns.
 	 */
-	public Vector4 row3() { return new Vector4(elements[3], elements[7], elements[11], elements[15]); }
+	public Vector4 row3() 
+	{
+	    return new Vector4(elements[3], elements[7], elements[11], elements[15]);
+	}
 	
 	/**
 	 * Gets the first column of the matrix.
 	 * @return A Vector4 containing all the components of the first column.
 	 */
-	public Vector4 column0() { return new Vector4(elements[0], elements[1], elements[2], elements[3]); }
+	public Vector4 column0() 
+	{
+	    return new Vector4(elements[0], elements[1], elements[2], elements[3]);
+	}
 	
 	/**
 	 * Gets the second column of the matrix.
 	 * @return A Vector4 containing all the components of the second column.
 	 */
-	public Vector4 column1() { return new Vector4(elements[4], elements[5], elements[6], elements[7]); }
+	public Vector4 column1() 
+	{
+	    return new Vector4(elements[4], elements[5], elements[6], elements[7]);
+	}
 	
 	/**
 	 * Gets the third column of the matrix.
 	 * @return A Vector4 containing all the components of the third column.
 	 */
-	public Vector4 column2() { return new Vector4(elements[8], elements[9], elements[10], elements[11]); }
+	public Vector4 column2()
+	{
+	    return new Vector4(elements[8], elements[9], elements[10], elements[11]);
+	}
 	
 	/**
 	 * Gets the fourth column of the matrix.
 	 * @return A Vector4 containing all the components of the fourth column.
 	 */
-	public Vector4 column3() { return new Vector4(elements[12], elements[13], elements[14], elements[15]); }
+	public Vector4 column3()
+	{
+	    return new Vector4(elements[12], elements[13], elements[14], elements[15]);
+	}
 	
 	/**
 	 * Gets an array containing all the elements of the matrix.
 	 * @return A float[16] containing all the elements of the matrix in column-major order.
 	 */
-	public float[] array() { return elements; }
+	public float[] array()
+	{
+	    return elements;
+	}
 	
 	/**
 	 * Sets the matrix element at row 1, column 1.
 	 * @param value The new element value.
 	 */
-	public void setM11(float value) { elements[0] = value; }
+	public void setM11(float value) 
+	{
+	    elements[0] = value;
+	}
 	
 	/**
 	 * Sets the matrix element at row 1, column 2.
 	 * @param value The new element value.
 	 */
-	public void setM12(float value) { elements[1] = value; }
+	public void setM12(float value) 
+	{
+	    elements[1] = value;
+	}
 	
 	/**
 	 * Sets the matrix element at row 1, column 3.
 	 * @param value The new element value.
 	 */
-	public void setM13(float value) { elements[2] = value; }
+	public void setM13(float value)
+	{
+	    elements[2] = value;
+	}
 	
 	/**
 	 * Sets the matrix element at row 1, column 4.
 	 * @param value The new element value.
 	 */
-	public void setM14(float value) { elements[3] = value; }
+	public void setM14(float value) 
+	{
+	    elements[3] = value;
+	}
 	
 	/**
 	 * Sets the matrix element at row 2, column 1.
 	 * @param value The new element value.
 	 */
-	public void setM21(float value) { elements[4] = value; }
+	public void setM21(float value) 
+	{
+	    elements[4] = value;
+	}
 	
 	/**
 	 * Sets the matrix element at row 2, column 2.
 	 * @param value The new element value.
 	 */
-	public void setM22(float value) { elements[5] = value; }
+	public void setM22(float value) 
+	{
+	    elements[5] = value;
+	}
 	
 	/**
 	 * Sets the matrix element at row 2, column 3.
 	 * @param value The new element value.
 	 */
-	public void setM23(float value) { elements[6] = value; }
+	public void setM23(float value) 
+	{
+	    elements[6] = value;
+	}
 	
 	/**
 	 * Sets the matrix element at row 2, column 4.
 	 * @param value The new element value.
 	 */
-	public void setM24(float value) { elements[7] = value; }
+	public void setM24(float value) 
+	{
+	    elements[7] = value;
+	}
 	
 	/**
 	 * Sets the matrix element at row 3, column 1.
 	 * @param value The new element value.
 	 */
-	public void setM31(float value) { elements[8] = value; }
+	public void setM31(float value) 
+	{
+	    elements[8] = value;
+	}
 	
 	/**
 	 * Sets the matrix element at row 3, column 2.
 	 * @param value The new element value.
 	 */
-	public void setM32(float value) { elements[9] = value; }
+	public void setM32(float value) 
+	{
+	    elements[9] = value;
+	}
 	
 	/**
 	 * Sets the matrix element at row 3, column 3.
 	 * @param value The new element value.
 	 */
-	public void setM33(float value) { elements[10] = value; }
+	public void setM33(float value) 
+	{
+	    elements[10] = value;
+	}
 	
 	/**
 	 * Sets the matrix element at row 3, column 4.
 	 * @param value The new element value.
 	 */
-	public void setM34(float value) { elements[11] = value; }
+	public void setM34(float value) 
+	{
+	    elements[11] = value;
+	}
 	
 	/**
 	 * Sets the matrix element at row 4, column 1.
 	 * @param value The new element value.
 	 */
-	public void setM41(float value) { elements[12] = value; }
+	public void setM41(float value)
+	{
+	    elements[12] = value;
+	}
 	
 	/**
 	 * Sets the matrix element at row 4, column 2.
 	 * @param value The new element value.
 	 */
-	public void setM42(float value) { elements[13] = value; }
+	public void setM42(float value) 
+	{
+	    elements[13] = value;
+	}
 	
 	/**
 	 * Sets the matrix element at row 4, column 3.
 	 * @param value The new element value.
 	 */
-	public void setM43(float value) { elements[14] = value; }
+	public void setM43(float value) 
+	{
+	    elements[14] = value;
+	}
 	
 	/**
 	 * Sets the matrix element at row 4, column 4.
 	 * @param value The new element value.
 	 */
-	public void setM44(float value) { elements[15] = value; }
+	public void setM44(float value) 
+	{
+	    elements[15] = value;
+	}
 	
 	/**
 	 * Sets the X components of all the columns.
 	 * @param value The Vector4 containing the elements.
 	 */
-	public void setRow0(Vector4 value) { elements[0] = value.getX(); elements[4] = value.getY(); elements[8] = value.getZ(); elements[12] = value.getW(); }
+	public void setRow0(Vector4 value)
+	{
+	    elements[0] = value.getX();
+	    elements[4] = value.getY();
+	    elements[8] = value.getZ();
+	    elements[12] = value.getW();
+	}
 	
 	/**
 	 * Sets the Y components of all the columns.
 	 * @param value The Vector4 containing the elements.
 	 */
-	public void setRow1(Vector4 value) { elements[1] = value.getX(); elements[5] = value.getY(); elements[9] = value.getZ(); elements[13] = value.getW(); }
+	public void setRow1(Vector4 value) 
+	{
+	    elements[1] = value.getX();
+	    elements[5] = value.getY();
+	    elements[9] = value.getZ();
+	    elements[13] = value.getW();
+	}
 	
 	/**
 	 * Sets the Z components of all the columns.
 	 * @param value The Vector4 containing the elements.
 	 */
-	public void setRow2(Vector4 value) { elements[2] = value.getX(); elements[6] = value.getY(); elements[10] = value.getZ(); elements[14] = value.getW(); }
+	public void setRow2(Vector4 value)
+	{
+	    elements[2] = value.getX();
+	    elements[6] = value.getY();
+	    elements[10] = value.getZ();
+	    elements[14] = value.getW();
+	}
 	
 	/**
 	 * Sets the W components of all the columns.
 	 * @param value The Vector4 containing the elements.
 	 */
-	public void setRow3(Vector4 value) { elements[3] = value.getX(); elements[7] = value.getY(); elements[11] = value.getZ(); elements[15] = value.getW(); }
+	public void setRow3(Vector4 value) 
+	{
+	    elements[3] = value.getX();
+	    elements[7] = value.getY();
+	    elements[11] = value.getZ();
+	    elements[15] = value.getW();
+	}
 	
 	/**
 	 * Sets the elements contained in the first column of the matrix.
 	 * @param value The new column as a Vector4.
 	 */
-	public void setColumn0(Vector4 value) { elements[0] = value.getX(); elements[1] = value.getY(); elements[2] = value.getZ(); elements[3] = value.getW(); }
+	public void setColumn0(Vector4 value)
+	{
+	    elements[0] = value.getX();
+	    elements[1] = value.getY();
+	    elements[2] = value.getZ();
+	    elements[3] = value.getW();
+	}
 	
 	/**
 	 * Sets the elements contained in the second column of the matrix.
 	 * @param value The new column as a Vector4.
 	 */
-	public void setColumn1(Vector4 value) { elements[4] = value.getX(); elements[5] = value.getY(); elements[6] = value.getZ(); elements[7] = value.getW(); }
+	public void setColumn1(Vector4 value)
+	{
+	    elements[4] = value.getX();
+	    elements[5] = value.getY();
+	    elements[6] = value.getZ();
+	    elements[7] = value.getW();
+	}
 	
 	/**
 	 * Sets the elements contained in the third column of the matrix.
 	 * @param value The new column as a Vector4.
 	 */
-	public void setColumn2(Vector4 value) { elements[8] = value.getX(); elements[9] = value.getY(); elements[10] = value.getZ(); elements[11] = value.getW(); }
+	public void setColumn2(Vector4 value)
+	{
+	    elements[8] = value.getX();
+	    elements[9] = value.getY();
+	    elements[10] = value.getZ();
+	    elements[11] = value.getW();
+	}
 	
 	/**
 	 * Sets the elements contained in the fourth column of the matrix.
 	 * @param value The new column as a Vector4.
 	 */
-	public void setColumn3(Vector4 value) { elements[12] = value.getX(); elements[13] = value.getY(); elements[14] = value.getZ(); elements[15] = value.getW(); }
+	public void setColumn3(Vector4 value)
+	{
+	    elements[12] = value.getX();
+	    elements[13] = value.getY();
+	    elements[14] = value.getZ();
+	    elements[15] = value.getW();
+	}
+	
+	/*************
+     * Constants *
+     *************/
+    
+    /**
+     * The identity matrix, where each row is it's respective unit vector.
+     * @return The identity matrix.
+     */
+    public static Matrix4 identity()
+    {
+        return new Matrix4(1, 0, 0, 0,
+                           0, 1, 0, 0,
+                           0, 0, 1, 0,
+                           0, 0, 0, 1);
+    }
+    
 }

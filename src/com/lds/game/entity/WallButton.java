@@ -13,7 +13,7 @@ public class WallButton extends StaticEnt
 	}
 	
 	@Override
-	public void interact (Entity ent)
+	public void interact(Entity ent)
 	{
 		if (ent instanceof PhysEnt)
 		{

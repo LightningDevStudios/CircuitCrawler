@@ -151,7 +151,7 @@ public class Tile extends StaticEnt
 	public void setAsSlipperyTile()
 	{
 		state = TileState.SlipperyTile;
-		updateTileset(15,0);
+		updateTileset(15, 0);
 		isSolid = false;
 		rotateTilesetCoords();
 	}

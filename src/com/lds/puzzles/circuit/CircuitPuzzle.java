@@ -98,14 +98,14 @@ public class CircuitPuzzle implements IPuzzle
 	public void onTouchEvent(MotionEvent event) 
 	{
 		touchEventTime += Stopwatch.getFrameTime();
-		if(touchEventTime > 500)
+		if (touchEventTime > 500)
 		{
 			touchEventTime = 0;
 			float xInput = event.getX();
 			float yInput = event.getY();
 						
 			//initial touch
-			if(!selected)
+			if (!selected)
 			{
 				for (int i = 0; i < grid.length; i++)
 				{
@@ -121,7 +121,7 @@ public class CircuitPuzzle implements IPuzzle
 							selectedX = j;
 							selectedY = i;
 							t.select();
-							highlightAdjacent(j,i);
+							highlightAdjacent(j, i);
 						}
 					}
 				}
@@ -147,14 +147,14 @@ public class CircuitPuzzle implements IPuzzle
 						}
 					}
 				}
-				if(!correctTouch)
+				if (!correctTouch)
 				{
 					grid[selectedY][selectedX].deselect();
 					for (Tile[] ta : grid)
 					{
 						for (Tile t : ta)
 						{
-							if(t.isHightlighted())
+							if (t.isHightlighted())
 								t.dehighlight();
 						}
 					}
@@ -208,7 +208,7 @@ public class CircuitPuzzle implements IPuzzle
 				t.unpower();	
 			}
 		}
-		checkPower(0,0, Direction.DOWN);
+		checkPower(0, 0, Direction.DOWN);
 		
 		//if last tile is powered and pointing down, complete puzzle
 		Tile lastTile = grid[grid.length - 1][grid[0].length - 1];
@@ -228,7 +228,7 @@ public class CircuitPuzzle implements IPuzzle
 		
 		if (current.getType().getDir1() == Tile.flipDirection(incomingDir))
 			outgoingDir = current.getType().getDir2();
-		else if(current.getType().getDir2() == Tile.flipDirection(incomingDir))
+		else if (current.getType().getDir2() == Tile.flipDirection(incomingDir))
 			outgoingDir = current.getType().getDir1();
 		else
 			return;
@@ -273,7 +273,7 @@ public class CircuitPuzzle implements IPuzzle
 			{
 				for (Tile t : ta)
 				{
-					switch(t.getType())
+					switch (t.getType())
 					{
 						case VERTICAL: 		countVert++; break;
 						case HORIZONTAL: 	countHoriz++; break;
@@ -281,6 +281,7 @@ public class CircuitPuzzle implements IPuzzle
 						case TOPLEFT:		countTL++; break;
 						case TOPRIGHT:		countTR++; break;
 						case BOTTOMRIGHT:	countBR++; break;
+						default:
 					}
 				}
 			}

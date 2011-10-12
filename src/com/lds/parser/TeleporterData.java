@@ -20,7 +20,7 @@ public class TeleporterData extends StaticEntData
 
 		//COLOR
 		if (color != null)
-			teleporterRef.enableColorMode(color[0],color[1],color[2],color[3]);
+			teleporterRef.enableColorMode(color[0], color[1], color[2], color[3]);
 		
 		//GRADIENT
 		if (gradient != null)

@@ -23,19 +23,19 @@ public abstract class EntityData
 	
 	public EntityData(HashMap<String, String> entHM)
 	{
-		if(entHM.get("size") != null)
+		if (entHM.get("size") != null)
 			size = Float.parseFloat(entHM.get("size"));
-		if(entHM.get("xPos") != null)
+		if (entHM.get("xPos") != null)
 			xPos = Float.parseFloat(entHM.get("xPos"));
-		if(entHM.get("yPos") != null)
+		if (entHM.get("yPos") != null)
 			yPos = Float.parseFloat(entHM.get("yPos"));
-		if(entHM.get("xScl") != null)
+		if (entHM.get("xScl") != null)
 			xScl = Float.parseFloat(entHM.get("xScl"));
-		if(entHM.get("yScl") != null)
+		if (entHM.get("yScl") != null)
 			yScl = Float.parseFloat(entHM.get("yScl"));
-		if(entHM.get("angle") != null)
+		if (entHM.get("angle") != null)
 			angle = Float.parseFloat(entHM.get("angle"));
-		if(entHM.get("id") != null)
+		if (entHM.get("id") != null)
 			id = entHM.get("id");
 		
 		isSolid = Boolean.parseBoolean(entHM.get("isSolid"));
@@ -43,11 +43,11 @@ public abstract class EntityData
 		willCollide = Boolean.parseBoolean(entHM.get("willCollide"));
 		
 		//COLOR
-		if(entHM.get("color") != null)
+		if (entHM.get("color") != null)
 		{
 			String[] colorsStr = entHM.get("color").split(",");
 			color = new float[colorsStr.length];
-			for(int i = 0; i < colorsStr.length; i++)
+			for (int i = 0; i < colorsStr.length; i++)
 				color[i] = Float.parseFloat(colorsStr[i]);
 		}
 		
@@ -64,11 +64,11 @@ public abstract class EntityData
 		if (entHM.get("texture") != null)
 		{
 			String texID = entHM.get("texID");
-			if(texID.equalsIgnoreCase("tilesetwire"))
+			if (texID.equalsIgnoreCase("tilesetwire"))
 				tex = Game.tilesetwire;
-			else if(texID.equalsIgnoreCase("text"))
+			else if (texID.equalsIgnoreCase("text"))
 				tex = Game.text;
-			else if(texID.equalsIgnoreCase("tilesetentities"))
+			else if (texID.equalsIgnoreCase("tilesetentities"))
 				tex = Game.tilesetentities;
 			
 			String[] textureStr = entHM.get("coords").split(",");
@@ -84,9 +84,9 @@ public abstract class EntityData
 		{
 			//\TODO move textures to a different XML file, load dynamically
 			String texID = entHM.get("texID");
-			if(texID.equalsIgnoreCase("tilesetwire"))
+			if (texID.equalsIgnoreCase("tilesetwire"))
 				tex = Game.tilesetwire;
-			else if(texID.equalsIgnoreCase("text"))
+			else if (texID.equalsIgnoreCase("text"))
 				tex = Game.text;
 			else if (texID.equalsIgnoreCase("tilesetentities"))
 				tex = Game.tilesetentities;

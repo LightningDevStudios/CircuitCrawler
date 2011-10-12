@@ -21,7 +21,7 @@ public class PlayerData extends CharacterData
 
 		//COLOR
 		if (color != null)
-			playerRef.enableColorMode(color[0],color[1],color[2],color[3]);
+			playerRef.enableColorMode(color[0], color[1], color[2], color[3]);
 		
 		//GRADIENT
 		if (gradient != null)

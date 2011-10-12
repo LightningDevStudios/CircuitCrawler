@@ -68,28 +68,28 @@ public abstract class UIProgressBar extends UIEntity
 		switch(dir)
 		{
 			case UP:
-				for(int i = 0; i < 4; i++)
+				for (int i = 0; i < 4; i++)
 				{
 					curGradient[i + 4] = (((float)(maximum - value) * originalColor[i]) + ((float)(value - minimum) * originalColor[i + 4])) / (float)(maximum - minimum); //weighted average of colors by current percentage
 					curGradient[i + 12] = (((float)(maximum - value) * originalColor[i + 8]) + ((float)(value - minimum) * originalColor[i + 12])) / (float)(maximum - minimum);
 				}
 				break;
 			case RIGHT:
-				for(int i = 0; i < 4; i++)
+				for (int i = 0; i < 4; i++)
 				{
 					curGradient[i] = (((float)(maximum - value) * originalColor[i + 8]) + ((float)(value - minimum) * originalColor[i])) / (float)(maximum - minimum);
 					curGradient[i + 4] = (((float)(maximum - value) * originalColor[i + 12]) + ((float)(value - minimum) * originalColor[i + 4])) / (float)(maximum - minimum);
 				}
 				break;
 			case DOWN:
-				for(int i = 0; i < 4; i++)
+				for (int i = 0; i < 4; i++)
 				{
 					curGradient[i + 4] = (((float)(maximum - value) * originalColor[i]) + ((float)(value - minimum) * originalColor[i + 4])) / (float)(maximum - minimum);
 					curGradient[i + 12] = (((float)(maximum - value) * originalColor[i + 8]) + ((float)(value - minimum) * originalColor[i + 12])) / (float)(maximum - minimum);
 				}
 				break;
 			case LEFT:
-				for(int i = 0; i < 4; i++)
+				for (int i = 0; i < 4; i++)
 				{
 					curGradient[i + 8] = (((float)(maximum - value) * originalColor[i]) + ((float)(value - minimum) * originalColor[i + 8])) / (float)(maximum - minimum);
 					curGradient[i + 12] = (((float)(maximum - value) * originalColor[i + 4]) + ((float)(value - minimum) * originalColor[i + 12])) / (float)(maximum - minimum);
@@ -123,10 +123,13 @@ public abstract class UIProgressBar extends UIEntity
 		halfXSize = xSize / 2;
 		halfYSize = ySize / 2;
 		
-		float[] initVerts = { 	halfXSize, halfYSize,
-								halfXSize, -halfYSize,
-								-halfXSize, halfYSize,
-								-halfXSize, -halfYSize };
+		float[] initVerts = 
+		{
+		    halfXSize, halfYSize,
+			halfXSize, -halfYSize,
+			-halfXSize, halfYSize,
+			-halfXSize, -halfYSize
+		};
 		
 		this.vertices = initVerts;
 		this.vertexBuffer = setBuffer(vertexBuffer, initVerts);

@@ -7,7 +7,7 @@ public class CausePlayerHealth extends Cause
 	private int healthLimit;
 	private Player player;
 	
-	public CausePlayerHealth (int healthLimit, Player player)
+	public CausePlayerHealth(int healthLimit, Player player)
 	{
 		super();
 		this.healthLimit = healthLimit;

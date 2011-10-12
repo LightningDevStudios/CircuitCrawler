@@ -192,7 +192,7 @@ public class MainMenu extends Activity
 		catch (IOException e) { e.printStackTrace(); }
 		catch (ArrayIndexOutOfBoundsException e) { e.printStackTrace(); }
 		
-		pd = ProgressDialog.show(this,"Loading","...Please wait.",true, false);
+		pd = ProgressDialog.show(this, "Loading", "...Please wait.", true, false);
 		pd.hide();
 		
 		//Defaults, settings, and other stuff

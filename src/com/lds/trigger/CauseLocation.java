@@ -7,7 +7,7 @@ public class CauseLocation extends Cause
 	private Player player;
 	private float minX, maxX, minY, maxY;
 	
-	public CauseLocation (Player player, float minX, float maxX, float minY, float maxY)
+	public CauseLocation(Player player, float minX, float maxX, float minY, float maxY)
 	{
 		this.player = player;
 		this.minX = minX;

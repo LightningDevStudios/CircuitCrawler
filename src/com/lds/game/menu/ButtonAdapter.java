@@ -10,9 +10,10 @@ import android.widget.ImageButton;
 
 public class ButtonAdapter extends BaseAdapter
 {
+    public static final int NUMBER_OF_LEVELS = 7;
+    
 	private Context mContext;
-	private int[] ints = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
-	public static int numberOfLevels = 7;
+	private int[] ints = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
 	
 	public ButtonAdapter(Context mContext)
 	{

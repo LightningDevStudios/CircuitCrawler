@@ -4,7 +4,7 @@ public class CauseNOT extends Cause
 {
 	private Cause cause;
 	
-	public CauseNOT (Cause cause)
+	public CauseNOT(Cause cause)
 	{
 		this.cause = cause;
 	}

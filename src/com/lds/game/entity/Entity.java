@@ -101,7 +101,7 @@ public abstract class Entity
 		rebuildModelMatrix();
 		
 		//initializes collision variables
-		rad = Math.toRadians((double)(angle));
+		rad = Math.toRadians((double)angle);
 		diagonal = Math.sqrt(Math.pow(halfSize * xScl, 2) + Math.pow(halfSize * yScl, 2)); //distance from center to corner
 		 
 		vertVecs = new Vector2[4];
@@ -110,10 +110,13 @@ public abstract class Entity
 			vertVecs[i] = new Vector2();
 		}
 		
-		float[] initVerts = {	halfSize, halfSize, 	//top left
-								halfSize, -halfSize, 	//bottom left
-								-halfSize, halfSize, 	//top right
-								-halfSize, -halfSize }; //bottom right
+		float[] initVerts = 
+		{
+		    halfSize, halfSize, 	//top left
+			halfSize, -halfSize, 	//bottom left
+			-halfSize, halfSize, 	//top right
+			-halfSize, -halfSize    //bottom right
+		}; 
 
 		vertices = initVerts;
 		this.vertexBuffer = setBuffer(vertexBuffer, vertices);
@@ -144,18 +147,35 @@ public abstract class Entity
 		
 		//Enable settings for this polygon
 		gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
-		if (containsTexture || containsTileset) {gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);}
-		if (containsGradient) {gl.glEnableClientState(GL10.GL_COLOR_ARRAY);}
+		if (containsTexture || containsTileset) 
+		{
+		    gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
+		}
+		
+		if (containsGradient) 
+		{
+		    gl.glEnableClientState(GL10.GL_COLOR_ARRAY);
+		}
 		
 		//Sets color
-		if (containsColor) {gl.glColor4f(colorR, colorG, colorB, colorA);}
+		if (containsColor) 
+		{
+		    gl.glColor4f(colorR, colorG, colorB, colorA);
+		}
 		
 		//Bind vertices, texture coordinates, and/or color coordinates to the OpenGL system
-		if(!useVBOs)
+		if (!useVBOs)
 		{
 			gl.glVertexPointer(2, GL10.GL_FLOAT, 0, vertexBuffer);
-			if (containsTexture || containsTileset) {gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, textureBuffer);}
-			if (containsGradient) {gl.glColorPointer(4, GL10.GL_FLOAT, 0, colorBuffer);}
+			if (containsTexture || containsTileset) 
+			{
+			    gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, textureBuffer);
+			}
+			
+			if (containsGradient) 
+			{
+			    gl.glColorPointer(4, GL10.GL_FLOAT, 0, colorBuffer);
+			}
 			
 			//Draw the vertices
 			gl.glDrawElements(GL10.GL_TRIANGLE_STRIP, 4, GL10.GL_UNSIGNED_BYTE, indexBuffer);	
@@ -191,7 +211,10 @@ public abstract class Entity
 				
 		//Disable things for next polygon
 		gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
-		if(containsGradient) {gl.glDisableClientState(GL10.GL_COLOR_ARRAY);}
+		if (containsGradient)
+		{
+		    gl.glDisableClientState(GL10.GL_COLOR_ARRAY);
+		}
 		gl.glDisable(GL10.GL_CULL_FACE);
 		
 		//Disable texturing for next polygon
@@ -202,7 +225,10 @@ public abstract class Entity
 		}
 		
 		//Reset color for next polygon.
-		if (containsColor) {gl.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);}
+		if (containsColor) 
+		{
+		    gl.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+		}
 	}
 			
 	public void remove()
@@ -266,15 +292,12 @@ public abstract class Entity
 	public boolean closeEnough (Entity ent)
 	{
 		initializeCollisionVariables();
-		if (Vector2.subtract(this.posVec, ent.posVec).magnitude() < (float)((diagonal) + ent.diagonal))
-			return true;
-		else
-			return false;
+		return Vector2.subtract(this.posVec, ent.posVec).magnitude() < (float)(diagonal + ent.diagonal);
 	}
 
 	public boolean isFacing(Entity ent)
 	{
-		float angleBetween = (float)Math.toDegrees(Math.atan2((ent.getYPos() - this.getYPos()) , (ent.getXPos() - this.getXPos())));
+		float angleBetween = (float)Math.toDegrees(Math.atan2(ent.getYPos() - this.getYPos() , ent.getXPos() - this.getXPos()));
 		//clamp angle between 0 and 360
 		if (angleBetween == 360.0f)
 			angleBetween = 0.0f;
@@ -288,11 +311,7 @@ public abstract class Entity
 		if (angleDiff > 315.0f)
 			angleDiff -= 360.0f;
 		
-		if (angleDiff > -45 && angleDiff < 45)
-			return true;
-		
-		else
-			return false;
+		return angleDiff > -45 && angleDiff < 45;
 	}
 	
 	public boolean isColliding (Entity ent) //if both entities are polygons
@@ -551,24 +570,28 @@ public abstract class Entity
 		
 	public void updateTexture(Texture tex)
 	{
-			final float[] initTexture = { 1.0f, 0.0f,
-									1.0f, 1.0f,
-									0.0f, 0.0f,
-									0.0f, 1.0f};
-			updateTexture(tex, initTexture);
+		final float[] initTexture = 
+	    {
+	        1.0f, 0.0f,
+			1.0f, 1.0f,
+			0.0f, 0.0f,
+			0.0f, 1.0f
+		};
+		
+		updateTexture(tex, initTexture);
 	}
 	
 	public void updateTexture(Texture tex, float[] texture)
 	{
-			this.tex = tex;
-			this.texture = texture;
-			this.textureBuffer = setBuffer(textureBuffer, texture);
-			needToUpdateTexVBO = true;
+		this.tex = tex;
+		this.texture = texture;
+		this.textureBuffer = setBuffer(textureBuffer, texture);
+		needToUpdateTexVBO = true;
 	}
 	
 	public void disableTextureMode()
 	{
-		if(renderMode.contains(RenderMode.TEXTURE))
+		if (renderMode.contains(RenderMode.TEXTURE))
 			renderMode.remove(RenderMode.TEXTURE);
 	}
 	
@@ -614,7 +637,7 @@ public abstract class Entity
 	
 	public void disableTilesetMode()
 	{
-		if(renderMode.contains(RenderMode.TILESET))
+		if (renderMode.contains(RenderMode.TILESET))
 			renderMode.remove(RenderMode.TILESET);
 	}
 		
@@ -673,7 +696,7 @@ public abstract class Entity
 		{
 			final float gradientInterp = colorInterpSpeed / 1000 * Stopwatch.getFrameTime();
 			int nearCount = 0;
-			for (int i =0; i < color.length; i++)
+			for (int i = 0; i < color.length; i++)
 			{
 				if (Math.abs(endColor[i] - color[i]) < gradientInterp)
 				{
@@ -700,7 +723,7 @@ public abstract class Entity
 		this.updateAbsolutePointLocations();
 		Vector2 axis = Vector2.subtract(this.vertVecs[0], this.vertVecs[1]).abs();
 		
-		for (int i = 0; i < 2; i ++)
+		for (int i = 0; i < 2; i++)
 		{
 			//get mins and maxes for entity
 			float min = axis.dot(this.vertVecs[0]);
@@ -821,11 +844,11 @@ public abstract class Entity
 	
 	public void resetAllBuffers()
 	{
-		if(vertices != null)
+		if (vertices != null)
 			vertexBuffer = setBuffer(vertexBuffer, vertices);
-		if(color != null)
+		if (color != null)
 			colorBuffer = setBuffer(colorBuffer, color);
-		if(texture!= null)
+		if (texture != null)
 			textureBuffer = setBuffer(textureBuffer, texture);
 	}
 	
@@ -892,7 +915,7 @@ public abstract class Entity
 	
 	public void updateTextureVBO(GL10 gl)
 	{
-		if(useVBOs && needToUpdateTexVBO)
+		if (useVBOs && needToUpdateTexVBO)
 		{
 			GL11 gl11 = (GL11)gl;
 			gl11.glBindBuffer(GL11.GL_ARRAY_BUFFER, VBOTexturePtr);
@@ -904,7 +927,7 @@ public abstract class Entity
 	
 	public void updateGradientVBO(GL10 gl)
 	{
-		if(useVBOs && needToUpdateGradientVBO)
+		if (useVBOs && needToUpdateGradientVBO)
 		{
 			GL11 gl11 = (GL11)gl;
 			gl11.glBindBuffer(GL11.GL_ARRAY_BUFFER, VBOGradientPtr);

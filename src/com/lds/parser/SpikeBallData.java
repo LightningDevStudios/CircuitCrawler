@@ -6,9 +6,9 @@ import java.util.HashMap;
 import com.lds.game.entity.Entity;
 import com.lds.game.entity.SpikeBall;
 
-public class SpikeBallData extends PhysEntData	
+public class SpikeBallData extends PhysEntData
 {
-	protected float moveX, moveY,rotateDir;
+	protected float moveX, moveY, rotateDir;
 	private SpikeBall spikeBallRef;
 	
 	public SpikeBallData(HashMap<String, String> sbdHM)
@@ -29,7 +29,7 @@ public class SpikeBallData extends PhysEntData
 		
 		//COLOR
 		if (color != null)
-			spikeBallRef.enableColorMode(color[0],color[1],color[2],color[3]);
+			spikeBallRef.enableColorMode(color[0], color[1], color[2], color[3]);
 		
 		//GRADIENT
 		if (gradient != null)

@@ -224,7 +224,7 @@ public class Vector2
 	
 	public float magnitude()
 	{
-		return (float)Math.sqrt(x*x + y*y);
+		return (float)Math.sqrt((x * x) + (y * y));
 	}
 	
 	public float dot(Vector2 v)
@@ -241,7 +241,7 @@ public class Vector2
 	
 	public float angle(Vector2 v)
 	{
-	    float rad = ((float)Math.acos(Vector2.normalize(this).dot(Vector2.normalize(v))));
+	    float rad = (float)Math.acos(Vector2.normalize(this).dot(Vector2.normalize(v)));
 	    //clamp angle between 0 and 360
 		if (rad == Math.PI * 2)
 			rad = 0.0f;

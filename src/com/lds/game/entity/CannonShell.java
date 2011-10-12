@@ -25,7 +25,7 @@ public class CannonShell extends PhysEnt //A Large Ball of Doom
 		
 		time += Stopwatch.getFrameTime();
 		
-		if(time > remove * 1000) // Time loop are cools
+		if (time > remove * 1000) // Time loop are cools
 		{
 			time = 0;
 			this.remove();
