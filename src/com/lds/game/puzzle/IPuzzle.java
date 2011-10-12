@@ -1,6 +1,8 @@
 package com.lds.game.puzzle;
 
-import com.lds.game.puzzle.event.*;
+import com.lds.game.event.OnPuzzleFailListener;
+import com.lds.game.event.OnPuzzleInitializedListener;
+import com.lds.game.event.OnPuzzleSuccessListener;
 
 import android.content.Context;
 import android.opengl.GLSurfaceView;

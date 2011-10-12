@@ -185,7 +185,7 @@ public final class Vector3
 	
 	/**
 	 * Creates a vector pointing to the midpoint of the directed line segment between two vectors.
-	 * \todo //TODO turn into a lerp method, add float 0-1 for distance.
+	 * \todo turn into a lerp method, add float 0-1 for distance.
 	 * @param v1 The first vector.
 	 * @param v2 The second vector.
 	 * @return A vector with components averaged from the two vectors.

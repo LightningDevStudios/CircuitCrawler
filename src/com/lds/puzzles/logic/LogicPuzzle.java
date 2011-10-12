@@ -6,10 +6,10 @@ import javax.microedition.khronos.opengles.GL10;
 import android.content.Context;
 import android.view.MotionEvent;
 
+import com.lds.game.event.OnPuzzleFailListener;
+import com.lds.game.event.OnPuzzleInitializedListener;
+import com.lds.game.event.OnPuzzleSuccessListener;
 import com.lds.game.puzzle.IPuzzle;
-import com.lds.game.puzzle.event.OnPuzzleFailListener;
-import com.lds.game.puzzle.event.OnPuzzleInitializedListener;
-import com.lds.game.puzzle.event.OnPuzzleSuccessListener;
 
 public class LogicPuzzle implements IPuzzle
 {

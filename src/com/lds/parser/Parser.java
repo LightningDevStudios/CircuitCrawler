@@ -439,7 +439,7 @@ Parse A Tileset
 		}
 		else if (type.equalsIgnoreCase("EffectRaiseBridge"))
 		{
-			effect = new EffectRaiseBridge(tileset[Integer.parseInt(parameters[1])][Integer.parseInt(parameters[0])]);  //\TODO FIND OUT IF THIS WORKS! 
+			effect = new EffectRaiseBridge(tileset[Integer.parseInt(parameters[1])][Integer.parseInt(parameters[0])]);  //\todo FIND OUT IF THIS WORKS! 
 		}
 		else if (type.equalsIgnoreCase("EffectRemoveEntity"))
 		{

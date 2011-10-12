@@ -1,7 +1,9 @@
 package com.lds.game.puzzle;
 
+import com.lds.game.event.OnPuzzleFailListener;
+import com.lds.game.event.OnPuzzleInitializedListener;
+import com.lds.game.event.OnPuzzleSuccessListener;
 import com.lds.game.puzzle.IPuzzle;
-import com.lds.game.puzzle.event.*;
 
 import android.app.Activity;
 import android.os.Bundle;

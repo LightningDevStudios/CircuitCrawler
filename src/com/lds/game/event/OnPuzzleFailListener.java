@@ -1,4 +1,4 @@
-package com.lds.game.puzzle.event;
+package com.lds.game.event;
 
 public interface OnPuzzleFailListener 
 {

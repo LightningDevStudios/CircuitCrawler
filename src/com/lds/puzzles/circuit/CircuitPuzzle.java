@@ -9,8 +9,10 @@ import android.view.MotionEvent;
 
 import com.lds.game.Game;
 import com.lds.game.R;
+import com.lds.game.event.OnPuzzleFailListener;
+import com.lds.game.event.OnPuzzleInitializedListener;
+import com.lds.game.event.OnPuzzleSuccessListener;
 import com.lds.game.puzzle.IPuzzle;
-import com.lds.game.puzzle.event.*;
 
 import com.lds.puzzles.circuit.Tile;
 

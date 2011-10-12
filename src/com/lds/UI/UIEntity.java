@@ -57,7 +57,7 @@ public abstract class UIEntity
 		this(xSize, ySize, UIPositionF[position.getValue() * 2], UIPositionF[(position.getValue() * 2) + 1], 0, 0, 0, 0);
 		this.position = position;
 	}
-	
+
 	public UIEntity(float xSize, float ySize, float xRelative, float yRelative) 
 	{
 		this(xSize, ySize, xRelative, yRelative, 0, 0, 0, 0);
