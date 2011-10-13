@@ -1,19 +1,22 @@
 package com.lds.game.menu;
 
-import com.lds.game.R;
-
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageButton;
 
+import com.lds.game.R;
+
 public class ButtonAdapter extends BaseAdapter
 {
     public static final int NUMBER_OF_LEVELS = 7;
     
 	private Context mContext;
-	private int[] ints = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+	private int[] ints = 
+	{ 
+	    0, 1, 2, 3, 4, 5, 6, 7, 8, 9
+	};
 	
 	public ButtonAdapter(Context mContext)
 	{

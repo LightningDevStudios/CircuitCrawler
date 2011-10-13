@@ -1,14 +1,14 @@
 package com.lds.parser;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
 import com.lds.game.entity.Entity;
 import com.lds.game.entity.Player;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 public class PlayerData extends CharacterData
 {
-	Player playerRef;
+	private Player playerRef;
 	
 	public PlayerData(HashMap<String, String> playerHM)
 	{

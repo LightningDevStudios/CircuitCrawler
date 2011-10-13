@@ -1,22 +1,22 @@
 package com.lds.game;
 
-import javax.microedition.khronos.egl.EGLConfig;
-import javax.microedition.khronos.opengles.GL10;
-
+import android.content.Context;
 import android.media.MediaPlayer;
 import android.opengl.GLU;
 import android.os.Vibrator;
 import android.view.MotionEvent;
-import android.content.Context;
 
 import com.lds.EntityManager;
 import com.lds.Finger;
 import com.lds.Stopwatch;
+import com.lds.UI.*;
 import com.lds.game.entity.*;
 import com.lds.game.event.*;
 import com.lds.math.Vector2;
 import com.lds.physics.PhysicsManager;
-import com.lds.UI.*;
+
+import javax.microedition.khronos.egl.EGLConfig;
+import javax.microedition.khronos.opengles.GL10;
 
 public class GameRenderer implements com.lds.Graphics.Renderer
 {
@@ -34,7 +34,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	
 	private PhysicsManager physMan;
 	
-	public GameRenderer (float screenW, float screenH, Context context, Object syncObj, int levelId)
+	public GameRenderer(float screenW, float screenH, Context context, Object syncObj, int levelId)
 	{
 		Game.screenW = screenW;
 		Game.screenH = screenH;
@@ -93,7 +93,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 			}
 		}
 		
-		if(gameInitializedListener != null)
+		if (gameInitializedListener != null)
 			gameInitializedListener.onGameInitialized();
 		
 		for (Entity ent : game.entList)
@@ -163,7 +163,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 					final boolean colListContains = Game.arrayListContains(ent.colList, colEnt) || Game.arrayListContains(colEnt.colList, ent);
 					if (ent.isColliding(colEnt))
 					{
-						if(!colListContains)
+						if (!colListContains)
 						{
 							ent.colList.add(colEnt);
 							colEnt.colList.add(ent);
@@ -356,22 +356,22 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 
 	public void vibrator(int time)
 	{
-		if(vibrateSetting)
+		if (vibrateSetting)
 		{
 			Vibrator vibrator = null; 
 			try 
 			{ 
-				vibrator=(Vibrator)context.getSystemService(Context.VIBRATOR_SERVICE); 
+				vibrator = (Vibrator)context.getSystemService(Context.VIBRATOR_SERVICE); 
 			} 
-			catch (Exception e) {}
+			catch (Exception e) { }
 			
 			if (vibrator != null)
 			{ 
 			  try 
 			  { 
-				  vibrator.vibrate(((long)time)); 
+				  vibrator.vibrate((long)time); 
 			  } 
-			  catch (Exception e) {} 
+			  catch (Exception e) { } 
 			} 
 		}
 	}
@@ -383,7 +383,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 
 	public void onTouchInput(MotionEvent e) 
 	{
-		if(game.player.userHasControl())
+		if (game.player.userHasControl())
 		{
 			Game.worldOutdated = true;
 			for (int i = 0; i < game.fingerList.size(); i++)
@@ -393,7 +393,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 				f.setPosition(touchInput);
 			}
 			
-			switch(e.getAction() & MotionEvent.ACTION_MASK)
+			switch (e.getAction() & MotionEvent.ACTION_MASK)
 			{
 				case MotionEvent.ACTION_POINTER_DOWN:
 				case MotionEvent.ACTION_DOWN:
@@ -427,10 +427,10 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 					game.fingerList.clear();
 					break;
 				case MotionEvent.ACTION_POINTER_UP:
-					if(!game.fingerList.isEmpty())
+					if (!game.fingerList.isEmpty())
 					{
 						final int fIndex = e.getPointerId(e.getAction() >> MotionEvent.ACTION_POINTER_ID_SHIFT);
-						for(int i = 0; i < game.fingerList.size(); i++)
+						for (int i = 0; i < game.fingerList.size(); i++)
 						{
 							final Finger f = game.fingerList.get(i);
 							if (fIndex == f.getPointerId())
@@ -438,6 +438,8 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 						}
 					}
 					break;
+            default:
+                break;
 			}
 		}
 		
@@ -448,7 +450,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		gl.glViewport(0, 0, (int)Game.screenW, (int)Game.screenH);
 		gl.glMatrixMode(GL10.GL_PROJECTION);
 		gl.glLoadIdentity();
-		GLU.gluOrtho2D(gl, game.camPosX - (Game.screenW/2), game.camPosX + (Game.screenW/2), game.camPosY - (Game.screenH/2), game.camPosY + (Game.screenH/2));
+		GLU.gluOrtho2D(gl, game.camPosX - (Game.screenW / 2), game.camPosX + (Game.screenW / 2), game.camPosY - (Game.screenH / 2), game.camPosY + (Game.screenH / 2));
 		gl.glMatrixMode(GL10.GL_MODELVIEW);
 		gl.glLoadIdentity();
 		
@@ -461,7 +463,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		gl.glMatrixMode(GL10.GL_PROJECTION);
 		gl.glPushMatrix();
 		gl.glLoadIdentity();
-		GLU.gluOrtho2D(gl, -Game.screenW /2 , Game.screenW / 2, -Game.screenH / 2, Game.screenH / 2);
+		GLU.gluOrtho2D(gl, -Game.screenW / 2 , Game.screenW / 2, -Game.screenH / 2, Game.screenH / 2);
 		gl.glMatrixMode(GL10.GL_MODELVIEW);
 		gl.glPushMatrix();
 		gl.glLoadIdentity();
@@ -502,7 +504,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		// \TODO Auto-generated method stub
 	}
 	
-	public void gameOver ()
+	public void gameOver()
 	{
 		gameOverListener.onGameOver(charlieSheen);
 	}

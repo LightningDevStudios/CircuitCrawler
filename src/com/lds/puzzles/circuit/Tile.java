@@ -1,14 +1,14 @@
 package com.lds.puzzles.circuit;
 
+import com.lds.Enums.Direction;
+import com.lds.Texture;
+import com.lds.TilesetHelper;
+
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 
 import javax.microedition.khronos.opengles.GL10;
-
-import com.lds.Enums.Direction;
-import com.lds.Texture;
-import com.lds.TilesetHelper;
 
 public class Tile 
 {
@@ -142,10 +142,7 @@ public class Tile
 	
 	public boolean containsDirection(Direction dir)
 	{
-		if (type.getDir1() == dir || type.getDir2() == dir)
-			return true;
-		else
-			return false;
+		return type.getDir1() == dir || type.getDir2() == dir;
 	}
 	
 	public void updateTexture()
@@ -217,11 +214,38 @@ public class Tile
 		updateTexture();
 	}
 	
-	public boolean isPowered()		{ return powered; }
-	public boolean isSelected()		{ return selected; }
-	public boolean isHightlighted() { return highlighted; }
-	public float getXPos()			{ return xPos; }
-	public float getYPos()			{ return yPos; }
-	public int getTileState()		{ return tileState; }
-	public TileType getType()		{ return type; }
+	public boolean isPowered()
+	{
+	    return powered;
+	}
+	
+	public boolean isSelected()
+	{
+	    return selected;
+	}
+	
+	public boolean isHightlighted()
+	{
+	    return highlighted;
+	}
+	
+	public float getXPos()
+	{
+	    return xPos;
+	}
+	
+	public float getYPos()
+	{
+	    return yPos;
+	}
+	
+	public int getTileState()
+	{
+	    return tileState;
+	}
+	
+	public TileType getType()
+	{
+	    return type;
+	}
 }

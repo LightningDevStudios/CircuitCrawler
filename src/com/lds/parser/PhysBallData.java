@@ -1,10 +1,10 @@
 package com.lds.parser;
 
+import com.lds.game.entity.Entity;
+import com.lds.game.entity.PhysBall;
+
 import java.util.ArrayList;
 import java.util.HashMap;
-
-import com.lds.game.entity.PhysBall;
-import com.lds.game.entity.Entity;
 
 public class PhysBallData extends HoldObjectData
 {

@@ -1,10 +1,10 @@
 package com.lds;
 
-import com.lds.game.event.*;
-
 import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.view.MotionEvent;
+
+import com.lds.game.event.*;
 
 public class Graphics extends GLSurfaceView
 {

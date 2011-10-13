@@ -1,11 +1,10 @@
 package com.lds;
 
+import com.lds.game.entity.Entity;
+
 import java.util.ArrayList;
 
 import javax.microedition.khronos.opengles.GL10;
-import javax.microedition.khronos.opengles.GL11;
-
-import com.lds.game.entity.Entity;
 
 public class EntityManager 
 {

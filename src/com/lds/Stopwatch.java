@@ -5,15 +5,20 @@ import android.os.SystemClock;
 /**
  * A static class that manages time between frames.
  * @author Lightning Development Studios
- *
  */
-public class Stopwatch 
+public final class Stopwatch 
 {
 	private static long previousFrame;
 	private static long currentFrame;
 	private static long frameTime;
 	
-	private Stopwatch() {}
+	/**
+	 * Prevents initialization of the static Stopwatch class.
+	 */
+	private Stopwatch() 
+	{
+	    
+	}
 	
 	/**
 	 * Initializes the Stopwatch with the current system time.

@@ -1,12 +1,12 @@
 package com.lds.game.entity;
 
-import java.util.ArrayList;
-
+import com.lds.Stopwatch;
 import com.lds.game.Game;
 import com.lds.game.SoundPlayer;
 import com.lds.math.Matrix4;
 import com.lds.math.Vector2;
-import com.lds.Stopwatch;
+
+import java.util.ArrayList;
 
 public abstract class PhysEnt extends Entity //physics objects are movable, such as doors, blocks, etc.
 {
@@ -596,7 +596,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 		}
 	}
 	
-	public void scaleInterpolate ()
+	public void scaleInterpolate()
 	{
 		if (isScaling)
 		{

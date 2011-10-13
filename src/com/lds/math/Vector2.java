@@ -6,29 +6,7 @@ package com.lds.math;
  *
  */
 public class Vector2
-{
-	/*************
-	 * Constants *
-	 *************/
-	
-	/**
-	 * A unit vector in the X direction.
-	 * @return A vector.
-	 */
-	public static Vector2 unitX() { return new Vector2(1, 0); }
-	
-	/**
-	 * A unit vector in the Y direction.
-	 * @return A vector.
-	 */
-	public static Vector2 unitY() { return new Vector2(0, 1); }
-	
-	/**
-	 * A unit vector with all components equal to 0.
-	 * @return A vector.
-	 */
-	public static Vector2 zero() { return new Vector2(); }
-	
+{	
 	/***********
 	 * Members *
 	 ***********/
@@ -296,6 +274,54 @@ public class Vector2
 	 * Getters and Setters *
 	 ***********************/
 	
-	public float getX() { return x; } public void setX(float x) { this.x = x; }
-	public float getY() { return y; } public void setY(float y) { this.y = y; }
+	public float getX()
+	{
+	    return x;
+	}
+	
+	public void setX(float x)
+	{
+	    this.x = x;
+	}
+	
+	public float getY()
+	{
+	    return y;
+	}
+	
+	public void setY(float y)
+	{
+	    this.y = y;
+	}
+	
+	/*************
+     * Constants *
+     *************/
+    
+    /**
+     * A unit vector in the X direction.
+     * @return A vector.
+     */
+    public static Vector2 unitX()
+    {
+        return new Vector2(1, 0);
+    }
+    
+    /**
+     * A unit vector in the Y direction.
+     * @return A vector.
+     */
+    public static Vector2 unitY()
+    {
+        return new Vector2(0, 1);
+    }
+    
+    /**
+     * A unit vector with all components equal to 0.
+     * @return A vector.
+     */
+    public static Vector2 zero()
+    {
+        return new Vector2();
+    }
 }

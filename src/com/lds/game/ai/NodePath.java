@@ -1,9 +1,9 @@
 package com.lds.game.ai;
 
-import java.util.ArrayList;
-
 import com.lds.game.entity.Entity;
 import com.lds.math.Vector2;
+
+import java.util.ArrayList;
 
 public class NodePath 
 {
@@ -82,6 +82,13 @@ public class NodePath
 		return nodeList.get(index);
 	}
 	
-	public void setID (String id)	{ ID = id; }
-	public String getID ()	{ return ID; }
+	public void setID(String id)
+	{
+	    ID = id;
+	}
+	
+	public String getID()
+	{
+	    return ID;
+	}
 }

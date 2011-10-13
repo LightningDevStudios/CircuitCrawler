@@ -1,13 +1,15 @@
 package com.lds.physics;
 
-import java.util.ArrayList;
-
 import com.lds.game.entity.Entity;
 import com.lds.math.Vector2;
 import com.lds.math.Vector4;
 
+import java.util.ArrayList;
+
 public class Grid 
 {
+    private static final int MAX_LEVEL = 5;
+    
 	private ArrayList<GridBox> grids = new ArrayList<GridBox>();
 	private ArrayList<Entity> entList;
 	private Grid[] subGrids = new Grid[4];
@@ -18,7 +20,6 @@ public class Grid
 	private int level;
 	private Vector2 size;
 	private Vector2 center;
-	private final int MAX_LEVEL = 5;
 	private Grid parentGrid;
 	
 	public Grid(Vector2 size, Vector2 center, int level, ArrayList<Entity> entList, Grid parentGrid)
@@ -166,12 +167,43 @@ public class Grid
 			subGrids[i] = null;
 	}
 	
-	public ArrayList<Entity> getEntList() { return entList; }
-	public void setEntList(ArrayList<Entity> entList) { this.entList = entList; }
-	public Vector2 getCenter() { return center; }
-	public void setCenter(Vector2 center) { this.center = center; }
-	public ArrayList<ArrayList<Entity>> getColEnts() { return colEnts; }
-	public void setColEnts(ArrayList<ArrayList<Entity>> colEnts) { this.colEnts = colEnts; }
-	public ArrayList<ArrayList<Entity>> getColEntsOnLines() { return colEntsOnLines; }
-	public void setColEntsOnLines(ArrayList<ArrayList<Entity>> colEntsOnLines)  { this.colEntsOnLines = colEntsOnLines; }
+	public ArrayList<Entity> getEntList()
+	{
+	    return entList;
+	}
+	
+	public void setEntList(ArrayList<Entity> entList)
+	{
+	    this.entList = entList;
+	}
+	
+	public Vector2 getCenter()
+	{
+	    return center;
+	}
+	
+	public void setCenter(Vector2 center)
+	{
+	    this.center = center;
+	}
+	
+	public ArrayList<ArrayList<Entity>> getColEnts()
+	{
+	    return colEnts;
+	}
+	
+	public void setColEnts(ArrayList<ArrayList<Entity>> colEnts)
+	{
+	    this.colEnts = colEnts;
+	}
+	
+	public ArrayList<ArrayList<Entity>> getColEntsOnLines()
+	{
+	    return colEntsOnLines;
+	}
+	
+	public void setColEntsOnLines(ArrayList<ArrayList<Entity>> colEntsOnLines)
+	{
+	    this.colEntsOnLines = colEntsOnLines;
+	}
 }

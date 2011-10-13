@@ -1,10 +1,5 @@
 package com.lds.parser;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-
-import org.xmlpull.v1.XmlPullParserException;
 import android.content.Context;
 import android.content.res.XmlResourceParser;
 import android.util.Log;
@@ -13,6 +8,12 @@ import com.lds.game.ai.Node;
 import com.lds.game.ai.NodePath;
 import com.lds.game.entity.*;
 import com.lds.trigger.*;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+
+import org.xmlpull.v1.XmlPullParserException;
  
 public class Parser
 {
@@ -540,5 +541,3 @@ Parse A Tileset
 		xrp.next();
 	}
 }
-
-	

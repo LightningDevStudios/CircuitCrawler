@@ -2,11 +2,11 @@ package com.lds;
 
 import android.graphics.Bitmap;
 
-public class StringRenderer 
+public final class StringRenderer 
 {
-	private static StringRenderer p_sr;
+	private static StringRenderer instance;
 	
-	Texture text;
+	private Texture text;
 	
 	private StringRenderer()
 	{
@@ -14,24 +14,24 @@ public class StringRenderer
 	
 	public static StringRenderer getInstance()
 	{
-		if (p_sr == null)
+		if (instance == null)
 		{
-			synchronized(StringRenderer.class)
+			synchronized (StringRenderer.class)
 			{
-				if (p_sr == null)
+				if (instance == null)
 				{
-					p_sr = new StringRenderer();
+					instance = new StringRenderer();
 				}
 			}
 		}
 		
-		return p_sr;
+		return instance;
 	}
 	
 	public Bitmap stringToBitmap(String input)
 	{
 		//Create a new, blank bitmap. Also allocate an int array which the Bitmap class uses to store in getPixels() and read in setPixels()
-		//\TODO check for ySize with the number of \n chars
+		//\todo check for ySize with the number of \n chars
 		Bitmap textTileset = text.getBitmap();
 		int xTileSize = text.getXPixPerTile();
 		int yTileSize = text.getYPixPerTile();

@@ -1,10 +1,10 @@
 package com.lds.parser;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
 import com.lds.game.entity.Entity;
 import com.lds.game.entity.WallButton;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class WallButtonData extends StaticEntData
 {

@@ -3,7 +3,6 @@ package com.lds.math;
 /**
  * A 3-component vector.
  * @author Lightning Development Studios
- *
  */
 public final class Vector3
 {	

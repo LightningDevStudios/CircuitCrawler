@@ -1,11 +1,5 @@
 package com.lds.game;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.ContentValues;
@@ -25,6 +19,12 @@ import android.view.MenuItem;
 import com.lds.Graphics;
 import com.lds.game.event.*;
 import com.lds.game.puzzle.PuzzleActivity;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 
 public class Run extends Activity implements OnGameOverListener, OnGameInitializedListener, OnPuzzleActivatedListener, OnPreparedListener, OnCompletionListener
 {
@@ -80,6 +80,8 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 				break;
 			case 9:
 				levelId = R.xml.level10;
+			default:
+			    break;
 		}
 		
 		//Grab screen information
@@ -186,7 +188,10 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 		{
 		    pd.dismiss();
 		}
-		catch (Exception e) {}
+		catch (Exception e) 
+		{
+		    e.printStackTrace();
+		}
 	}
 	
 	public void onGameOver(boolean winning)

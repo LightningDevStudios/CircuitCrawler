@@ -30,13 +30,34 @@ public class PhysEntData extends EntityData
 		else
 			friction = 0.02f;
 	}
+
+	public void setMoveSpeed(float newMoveSpeed)
+	{
+	    moveSpeed = newMoveSpeed;
+	}
 	
-	    //int setters/getters
-	public void setMoveSpeed(float newMoveSpeed)	{ moveSpeed = newMoveSpeed; }
-	public void setRotSpeed(float newRotSpeed)		{ rotSpeed = newRotSpeed; }
-	public void setSclSpeed(float newSclSpeed)		{ sclSpeed = newSclSpeed; }
+	public void setRotSpeed(float newRotSpeed)
+	{
+	    rotSpeed = newRotSpeed;
+	}
 	
-	public float getMoveSpeed()		{ return moveSpeed; }
-	public float getRotSpeed()		{ return	rotSpeed; }
-	public float getSclSpeed()		{ return sclSpeed; }
+	public void setSclSpeed(float newSclSpeed)
+	{
+	    sclSpeed = newSclSpeed;
+	}
+	
+	public float getMoveSpeed()
+	{
+	    return moveSpeed;
+	}
+	
+	public float getRotSpeed()
+	{
+	    return	rotSpeed;
+	}
+	
+	public float getSclSpeed()
+	{
+	    return sclSpeed;
+	}
 }

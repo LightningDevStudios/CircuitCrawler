@@ -1,8 +1,8 @@
 package com.lds.UI;
 
+import com.lds.Enums.Direction;
 import com.lds.Enums.RenderMode;
 import com.lds.Enums.UIPosition;
-import com.lds.Enums.Direction;
 
 public abstract class UIProgressBar extends UIEntity
 {
@@ -139,12 +139,30 @@ public abstract class UIProgressBar extends UIEntity
 	
 	
 	
-	public int getValue()				{ return value;	}
-	public int getMaximum() 			{ return maximum; }
-	public int getMinimum() 			{ return minimum; }
+	public int getValue()
+	{
+	    return value;
+	}
 	
-	public void setMaximum(int maximum) { this.maximum = maximum; }
-	public void setMinimum(int minimum) { this.minimum = minimum; }
+	public int getMaximum()
+	{
+	    return maximum;
+	}
+	
+	public int getMinimum()
+	{
+	    return minimum;
+	}
+	
+	public void setMaximum(int maximum)
+	{
+	    this.maximum = maximum;
+	}
+	
+	public void setMinimum(int minimum)
+	{
+	    this.minimum = minimum;
+	}
 	
 	public void setValue(int value)
 	{

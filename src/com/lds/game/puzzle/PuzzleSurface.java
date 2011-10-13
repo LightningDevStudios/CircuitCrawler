@@ -28,7 +28,7 @@ public class PuzzleSurface extends GLSurfaceView
 			}
 		});
 		
-		synchronized(syncObj)
+		synchronized (syncObj)
 		{
 			try
 			{

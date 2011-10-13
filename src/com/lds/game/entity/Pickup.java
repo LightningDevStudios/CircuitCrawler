@@ -4,7 +4,7 @@ import com.lds.EntityManager;
 
 public abstract class Pickup extends PhysEnt //pickup objects are picked up, such as keys, powerups, or batteries
 {	
-	public Pickup (float xPos, float yPos)
+	public Pickup(float xPos, float yPos)
 	{
 		super(20.0f, xPos, yPos, false, false, 50.0f, 90.0f, 1.0f, 0.0f);
 		setAngle(90.0f);

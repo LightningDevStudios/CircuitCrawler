@@ -1,5 +1,16 @@
 package com.lds.UI;
 
+import android.util.Log;
+
+import com.lds.Enums.RenderMode;
+import com.lds.Enums.UIPosition;
+
+import com.lds.Texture;
+import com.lds.TilesetHelper;
+import com.lds.game.Game;
+import com.lds.game.entity.Entity;
+import com.lds.math.Vector2;
+
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
@@ -8,29 +19,25 @@ import java.util.EnumSet;
 import javax.microedition.khronos.opengles.GL10;
 import javax.microedition.khronos.opengles.GL11;
 
-import android.util.Log;
-
-import com.lds.game.Game;
-import com.lds.game.entity.Entity;
-import com.lds.math.Vector2;
-import com.lds.Enums.RenderMode;
-import com.lds.Enums.UIPosition;
-import com.lds.Texture;
-import com.lds.TilesetHelper;
-
 //\TODO allow relative sizing to scale for multiple monitors
 public abstract class UIEntity
 {
 	//constants
-	protected static final float[] UIPositionF = { 	0.0f, 1.0f,
-													-1.0f, 0.0f,
-													0.0f, -1.0f,
-													1.0f, 0.0f,
-													0.0f, 0.0f,
-													-1.0f, 1.0f,
-													1.0f, 1.0f,
-													-1.0f, -1.0f,
-													1.0f, -1.0f }; //clamped between -1 and 1, turns UIPosition enum to relative coords
+    
+    /**
+     * clamped between -1 and 1, turns UIPosition enum to relative coords.
+     */
+	protected static final float[] UIPositionF =
+	{
+	    0.0f, 1.0f,
+		-1.0f, 0.0f,
+		0.0f, -1.0f,
+		1.0f, 0.0f,
+		0.0f, 0.0f,
+		-1.0f, 1.0f,
+		1.0f, 1.0f,
+		-1.0f, -1.0f,
+		1.0f, -1.0f };
 	
 	//graphics data
 	protected float xSize, ySize, xPos, yPos, xRelative, yRelative, halfXSize, halfYSize;
@@ -83,10 +90,13 @@ public abstract class UIEntity
 		this.halfXSize = xSize / 2;
 		this.halfYSize = ySize / 2;
 		
-		float[] initVerts = { 	halfXSize, halfYSize,
-								halfXSize, -halfYSize,
-								-halfXSize, halfYSize,
-								-halfXSize, -halfYSize };
+		float[] initVerts =
+		{
+		    halfXSize, halfYSize,
+			halfXSize, -halfYSize,
+			-halfXSize, halfYSize,
+			-halfXSize, -halfYSize
+		};
 		
 		this.vertices = initVerts;
 		this.vertexBuffer = setBuffer(vertexBuffer, vertices);
@@ -556,20 +566,75 @@ public abstract class UIEntity
 	 * Accessors and Mutators *
 	 **************************/
 	
-	public float getXSize() 			{ return xSize; }
-	public float getYSize() 			{ return ySize; }
-	public float getXPos()				{ return xPos; }
-	public float getYPos()				{ return yPos; }
-	public float getColorR() 			{ return colorR; }
-	public float getColorG()			{ return colorG; }
-	public float getColorB()			{ return colorB; }
-	public float getColorA()			{ return colorA; }
-	public Texture getTexture()			{ return tex; }
-	public UIPosition getPosEnum()		{ return position; }
-	public float[] getVertices()		{ return vertices; }
-	public float[] getGradientCoords()	{ return color; }
-	public float[] getTextureCoords()	{ return texture; }
-	public EnumSet<RenderMode> getRenderMode()	{ return renderMode; }
+	public float getXSize()
+	{
+	    return xSize;
+	}
+	
+	public float getYSize()
+	{
+	    return ySize;
+	}
+	
+	public float getXPos()
+	{
+	    return xPos;
+	}
+	
+	public float getYPos()
+	{
+	    return yPos;
+	}
+	
+	public float getColorR()
+	{
+	    return colorR;
+	}
+	
+	public float getColorG()
+	{
+	    return colorG;
+	}
+	
+	public float getColorB()
+	{
+	    return colorB;
+	}
+	
+	public float getColorA()
+	{
+	    return colorA;
+	}
+	
+	public Texture getTexture()
+	{
+	    return tex;
+	}
+	
+	public UIPosition getPosEnum()
+	{
+	    return position;
+	}
+	
+	public float[] getVertices()
+	{
+	    return vertices;
+	}
+	
+	public float[] getGradientCoords()
+	{
+	    return color;
+	}
+	
+	public float[] getTextureCoords()
+	{
+	    return texture;
+	}
+	
+	public EnumSet<RenderMode> getRenderMode()
+	{
+	    return renderMode;
+	}
 	
 	public void setPos(Vector2 posVec)
 	{
@@ -577,12 +642,43 @@ public abstract class UIEntity
 		yPos = posVec.getY();
 	}
 	
-	public void setXSize(float xSize)			{ this.xSize = xSize; }
-	public void setYSize(float ySize)			{ this.ySize = ySize; }
-	public void setXPos(float xPos)				{ this.xPos = xPos; }
-	public void setYPos(float yPos)				{ this.yPos = yPos; }
-	public void setTopPad(float topPad)			{ this.topPad = topPad; }
-	public void setLeftPad(float leftPad)		{ this.leftPad = leftPad; }
-	public void setBottomPad(float bottomPad)	{ this.bottomPad = bottomPad; }
-	public void setRightPad(float rightPad)		{ this.rightPad = rightPad; }
+	public void setXSize(float xSize)
+	{
+	    this.xSize = xSize;
+	}
+	
+	public void setYSize(float ySize)
+	{
+	    this.ySize = ySize;
+	}
+	
+	public void setXPos(float xPos)
+	{
+	    this.xPos = xPos;
+	}
+	
+	public void setYPos(float yPos)
+	{
+	    this.yPos = yPos;
+	}
+	
+	public void setTopPad(float topPad)
+	{
+	    this.topPad = topPad;
+	}
+	
+	public void setLeftPad(float leftPad)
+	{
+	    this.leftPad = leftPad;
+	}
+	
+	public void setBottomPad(float bottomPad)
+	{
+	    this.bottomPad = bottomPad;
+	}
+	
+	public void setRightPad(float rightPad)
+	{
+	    this.rightPad = rightPad;
+	}
 }

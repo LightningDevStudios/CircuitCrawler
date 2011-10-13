@@ -1,15 +1,14 @@
 package com.lds.game.entity;
 
-import java.util.EnumSet;
-
-import javax.microedition.khronos.opengles.GL10;
-import javax.microedition.khronos.opengles.GL11;
-
 import com.lds.Enums;
 import com.lds.Enums.*;
 import com.lds.Texture;
 import com.lds.TilesetHelper;
 
+import java.util.EnumSet;
+
+import javax.microedition.khronos.opengles.GL10;
+import javax.microedition.khronos.opengles.GL11;
 
 public class Tile extends StaticEnt
 {
@@ -26,7 +25,7 @@ public class Tile extends StaticEnt
 	{
 		super(size, 0, 0, false, true);
 		TilesetHelper.setInitialTileOffset(this, tilePosY, tilePosX, tilesetX, tilesetY);
-		for(int i = 0; i < vertices.length; i++)
+		for (int i = 0; i < vertices.length; i++)
 		{
 			if (i % 2 == 0)
 				vertices[i] += posVec.getX();
@@ -41,7 +40,7 @@ public class Tile extends StaticEnt
 	@Override
 	public void draw(GL10 gl)
 	{
-		if(!useVBOs)
+		if (!useVBOs)
 		{
 			gl.glVertexPointer(2, GL10.GL_FLOAT, 0, vertexBuffer);
 			gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, textureBuffer);
@@ -106,10 +105,13 @@ public class Tile extends StaticEnt
 		float posX = texture[2];
 		float posY = texture[5];
 		
-		float[] coords = { 	posX, negY,
-							posX, posY,
-							negX, negY,
-							negX, posY };
+		float[] coords =
+		{ 
+		    posX, negY,
+			posX, posY,
+			negX, negY,
+			negX, posY
+		};
 		
 		this.texture = coords;
 		textureBuffer = setBuffer(textureBuffer, texture);
@@ -517,30 +519,30 @@ public class Tile extends StaticEnt
     {
         EnumSet<DiagDir> dirsCovered = EnumSet.noneOf(DiagDir.class);
 
-        Tile TLTile = null, TRTile = null, BLTile = null, BRTile = null;
+        Tile tlTile = null, trTile = null, blTile = null, brTile = null;
 
         if (x > 0 && y > 0)
-            TLTile = tileset[y - 1][x - 1];
+            tlTile = tileset[y - 1][x - 1];
         if (x < tileset[0].length - 1 && y > 0)
-            TRTile = tileset[y - 1][x + 1];
+            trTile = tileset[y - 1][x + 1];
         if (x > 0 && y < tileset.length - 1)
-            BLTile = tileset[y + 1][x - 1];
+            blTile = tileset[y + 1][x - 1];
         if (x < tileset[0].length - 1 && y < tileset.length - 1)
-            BRTile = tileset[y + 1][x + 1];
+            brTile = tileset[y + 1][x + 1];
 
-        if (TLTile != null && (TLTile.getTileState() == Enums.TileState.FLOOR || TLTile.getTileState() == Enums.TileState.PIT))
+        if (tlTile != null && (tlTile.getTileState() == Enums.TileState.FLOOR || tlTile.getTileState() == Enums.TileState.PIT))
         {
             dirsCovered.add(DiagDir.TOPLEFT);
         }
-        if (TRTile != null && (TRTile.getTileState() == Enums.TileState.FLOOR || TRTile.getTileState() == Enums.TileState.PIT))
+        if (trTile != null && (trTile.getTileState() == Enums.TileState.FLOOR || trTile.getTileState() == Enums.TileState.PIT))
         {
             dirsCovered.add(DiagDir.TOPRIGHT);
         }
-        if (BLTile != null && (BLTile.getTileState() == Enums.TileState.FLOOR || BLTile.getTileState() == Enums.TileState.PIT))
+        if (blTile != null && (blTile.getTileState() == Enums.TileState.FLOOR || blTile.getTileState() == Enums.TileState.PIT))
         {
             dirsCovered.add(DiagDir.BOTTOMLEFT);
         }
-        if (BRTile != null && (BRTile.getTileState() == Enums.TileState.FLOOR || BRTile.getTileState() == Enums.TileState.PIT))
+        if (brTile != null && (brTile.getTileState() == Enums.TileState.FLOOR || brTile.getTileState() == Enums.TileState.PIT))
         {
             dirsCovered.add(DiagDir.BOTTOMRIGHT);
         }
@@ -638,18 +640,18 @@ public class Tile extends StaticEnt
     {
         EnumSet<DiagDir> dirsCovered = EnumSet.noneOf(DiagDir.class);
 
-        Tile TRTile = null, BRTile = null;
+        Tile trTile = null, brTile = null;
 
         if (x < tileset[0].length - 1 && y > 0)
-            TRTile = tileset[y - 1][x + 1];
+            trTile = tileset[y - 1][x + 1];
         if (x < tileset[0].length - 1 && y < tileset.length - 1)
-            BRTile = tileset[y + 1][x + 1];
+            brTile = tileset[y + 1][x + 1];
 
-        if (TRTile != null && (TRTile.getTileState() == Enums.TileState.FLOOR || TRTile.getTileState() == Enums.TileState.PIT))
+        if (trTile != null && (trTile.getTileState() == Enums.TileState.FLOOR || trTile.getTileState() == Enums.TileState.PIT))
         {
             dirsCovered.add(DiagDir.TOPRIGHT);
         }
-        if (BRTile != null && (BRTile.getTileState() == Enums.TileState.FLOOR || BRTile.getTileState() == Enums.TileState.PIT))
+        if (brTile != null && (brTile.getTileState() == Enums.TileState.FLOOR || brTile.getTileState() == Enums.TileState.PIT))
         {
             dirsCovered.add(DiagDir.BOTTOMRIGHT);
         }
@@ -679,18 +681,18 @@ public class Tile extends StaticEnt
     {
         EnumSet<DiagDir> dirsCovered = EnumSet.noneOf(DiagDir.class);
 
-        Tile TLTile = null, BLTile = null;
+        Tile tlTile = null, blTile = null;
 
         if (x > 0 && y > 0)
-            TLTile = tileset[y - 1][x - 1];
+            tlTile = tileset[y - 1][x - 1];
         if (x > 0 && y < tileset.length - 1)
-            BLTile = tileset[y + 1][x - 1];
+            blTile = tileset[y + 1][x - 1];
 
-        if (TLTile != null && (TLTile.getTileState() == Enums.TileState.FLOOR || TLTile.getTileState() == Enums.TileState.PIT))
+        if (tlTile != null && (tlTile.getTileState() == Enums.TileState.FLOOR || tlTile.getTileState() == Enums.TileState.PIT))
         {
             dirsCovered.add(DiagDir.TOPLEFT);
         }
-        if (BLTile != null && (BLTile.getTileState() == Enums.TileState.FLOOR || BLTile.getTileState() == Enums.TileState.PIT))
+        if (blTile != null && (blTile.getTileState() == Enums.TileState.FLOOR || blTile.getTileState() == Enums.TileState.PIT))
         {
             dirsCovered.add(DiagDir.BOTTOMLEFT);
         }
@@ -720,18 +722,18 @@ public class Tile extends StaticEnt
     {
         EnumSet<DiagDir> dirsCovered = EnumSet.noneOf(DiagDir.class);
 
-        Tile TLTile = null, TRTile = null;
+        Tile tlTile = null, trTile = null;
 
         if (x > 0 && y > 0)
-            TLTile = tileset[y - 1][x - 1];
+            tlTile = tileset[y - 1][x - 1];
         if (x < tileset[0].length - 1 && y > 0)
-            TRTile = tileset[y - 1][x + 1];
+            trTile = tileset[y - 1][x + 1];
 
-        if (TLTile != null && (TLTile.getTileState() == Enums.TileState.FLOOR || TLTile.getTileState() == Enums.TileState.PIT))
+        if (tlTile != null && (tlTile.getTileState() == Enums.TileState.FLOOR || tlTile.getTileState() == Enums.TileState.PIT))
         {
             dirsCovered.add(DiagDir.TOPLEFT);
         }
-        if (TRTile != null && (TRTile.getTileState() == Enums.TileState.FLOOR || TRTile.getTileState() == Enums.TileState.PIT))
+        if (trTile != null && (trTile.getTileState() == Enums.TileState.FLOOR || trTile.getTileState() == Enums.TileState.PIT))
         {
             dirsCovered.add(DiagDir.TOPRIGHT);
         }
@@ -761,18 +763,18 @@ public class Tile extends StaticEnt
     {
         EnumSet<DiagDir> dirsCovered = EnumSet.noneOf(DiagDir.class);
 
-        Tile BLTile = null, BRTile = null;
+        Tile blTile = null, brTile = null;
 
         if (x > 0 && y < tileset.length - 1)
-            BLTile = tileset[y + 1][x - 1];
+            blTile = tileset[y + 1][x - 1];
         if (x < tileset[0].length - 1 && y < tileset.length - 1)
-            BRTile = tileset[y + 1][x + 1];
+            brTile = tileset[y + 1][x + 1];
 
-        if (BLTile != null && (BLTile.getTileState() == Enums.TileState.FLOOR || BLTile.getTileState() == Enums.TileState.PIT))
+        if (blTile != null && (blTile.getTileState() == Enums.TileState.FLOOR || blTile.getTileState() == Enums.TileState.PIT))
         {
             dirsCovered.add(DiagDir.BOTTOMLEFT);
         }
-        if (BRTile != null && (BRTile.getTileState() == Enums.TileState.FLOOR || BRTile.getTileState() == Enums.TileState.PIT))
+        if (brTile != null && (brTile.getTileState() == Enums.TileState.FLOOR || brTile.getTileState() == Enums.TileState.PIT))
         {
             dirsCovered.add(DiagDir.BOTTOMRIGHT);
         }

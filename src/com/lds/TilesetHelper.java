@@ -2,7 +2,7 @@ package com.lds;
 
 import com.lds.game.entity.Tile;
 
-public class TilesetHelper 
+public final class TilesetHelper 
 {
 	private TilesetHelper()
 	{

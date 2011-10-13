@@ -4,7 +4,7 @@ package com.lds.math;
  * A 4-component vector.
  * @author Lightning Development Studios
  */
-public class Vector4 
+public final class Vector4 
 {
 	/***********
 	 * Members *
@@ -112,9 +112,7 @@ public class Vector4
 	 * @return A transformed vector.
 	 */
 	public static Vector4 transform(Vector4 v, Matrix4 mat)
-	{
-		Vector4 result = new Vector4();
-		
+	{		
 		float[] elements = mat.array();
 		
 		float m11 = elements[0],	m12 = elements[1],	m13 = elements[2],	m14 = elements[3],
@@ -127,12 +125,10 @@ public class Vector4
 		float vZ = v.getZ();
 		float vW = v.getW();
 		
-		result.setX(vX * m11 + vY * m21 + vZ * m31 + vW * m41);
-		result.setY(vX * m12 + vY * m22 + vZ * m32 + vW * m42);
-		result.setZ(vX * m13 + vY * m23 + vZ * m33 + vW * m43);
-		result.setW(vX * m14 + vY * m24 + vZ * m34 + vW * m44);
-		
-		return result;
+		return new Vector4(vX * m11 + vY * m21 + vZ * m31 + vW * m41,
+		                   vX * m12 + vY * m22 + vZ * m32 + vW * m42,
+		                   vX * m13 + vY * m23 + vZ * m33 + vW * m43,
+		                   vX * m14 + vY * m24 + vZ * m34 + vW * m44);
 	}
 	
 	/***********
@@ -209,42 +205,6 @@ public class Vector4
 		{
 		    x, y, z, w 
 		};
-	}
-	
-	/**
-	 * Manually sets the X component of the vector.
-	 * @param x A new X component.
-	 */
-	public void setX(float x)
-	{
-	    this.x = x;
-	}
-	
-	/**
-	 * Manually sets the Y component of the vector.
-	 * @param y A new Y component.
-	 */
-	public void setY(float y)
-	{
-	    this.y = y;
-	}
-	
-	/**
-	 * Manually sets the Z component of the vector.
-	 * @param z A new Z component.
-	 */
-	public void setZ(float z)
-	{
-	    this.z = z;
-	}
-	
-	/**
-	 * Manually sets the W component of the vector.
-	 * @param w A new W component.
-	 */
-	public void setW(float w)
-	{
-	    this.w = w;
 	}
 	
 	/*************

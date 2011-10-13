@@ -1,12 +1,14 @@
 package com.lds.puzzles.circuit;
 
-import javax.microedition.khronos.egl.EGLConfig;
-import javax.microedition.khronos.opengles.GL10;
-
 import android.content.Context;
 import android.opengl.GLU;
 import android.view.MotionEvent;
 
+import com.lds.Enums.Direction;
+
+import com.lds.Stopwatch;
+import com.lds.Texture;
+import com.lds.TextureLoader;
 import com.lds.game.Game;
 import com.lds.game.R;
 import com.lds.game.event.OnPuzzleFailListener;
@@ -14,12 +16,8 @@ import com.lds.game.event.OnPuzzleInitializedListener;
 import com.lds.game.event.OnPuzzleSuccessListener;
 import com.lds.game.puzzle.IPuzzle;
 
-import com.lds.puzzles.circuit.Tile;
-
-import com.lds.Enums.Direction;
-import com.lds.Stopwatch;
-import com.lds.Texture;
-import com.lds.TextureLoader;
+import javax.microedition.khronos.egl.EGLConfig;
+import javax.microedition.khronos.opengles.GL10;
 
 public class CircuitPuzzle implements IPuzzle
 {
@@ -114,10 +112,10 @@ public class CircuitPuzzle implements IPuzzle
 					for (int j = 0; j < grid[0].length; j++)
 					{
 						Tile t = grid[i][j];
-						if (xInput >= t.getXPos() - (Tile.tileSize / 2) &&
-							xInput < t.getXPos() + (Tile.tileSize / 2) &&
-							yInput >= t.getYPos() - (Tile.tileSize / 2) &&
-							yInput < t.getYPos() + (Tile.tileSize / 2))
+						if (xInput >= t.getXPos() - (Tile.tileSize / 2)
+						 && xInput < t.getXPos() + (Tile.tileSize / 2)
+						 && yInput >= t.getYPos() - (Tile.tileSize / 2)
+						 && yInput < t.getYPos() + (Tile.tileSize / 2))
 						{
 							selected = true;
 							selectedX = j;
@@ -138,11 +136,11 @@ public class CircuitPuzzle implements IPuzzle
 					for (int j = 0; j < grid[0].length; j++)
 					{
 						Tile t = grid[i][j];
-						if (xInput >= t.getXPos() - (Tile.tileSize / 2) &&
-							xInput < t.getXPos() + (Tile.tileSize / 2) &&
-							yInput >= t.getYPos() - (Tile.tileSize / 2) &&
-							yInput < t.getYPos() + (Tile.tileSize / 2) &&
-							t.isHightlighted())
+						if (xInput >= t.getXPos() - (Tile.tileSize / 2)
+						 && xInput < t.getXPos() + (Tile.tileSize / 2)
+						 && yInput >= t.getYPos() - (Tile.tileSize / 2)
+						 && yInput < t.getYPos() + (Tile.tileSize / 2)
+						 && t.isHightlighted())
 						{
 							swapTiles(t, grid[selectedY][selectedX]);
 							correctTouch = true;

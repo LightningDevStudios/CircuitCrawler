@@ -19,7 +19,7 @@ public class Trigger
 		
 		if (!firing)
 		{
-			if(cause.isTriggered())
+			if (cause.isTriggered())
 			{
 				effect.fireOutput();
 				firing = true;
@@ -28,7 +28,7 @@ public class Trigger
 				
 		else
 		{
-			if(!cause.isTriggered())
+			if (!cause.isTriggered())
 			{
 				effect.unfireOutput();
 				firing = false;

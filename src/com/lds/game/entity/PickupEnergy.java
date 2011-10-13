@@ -4,7 +4,7 @@ public class PickupEnergy extends Pickup
 {
 	private int energyValue;
 	
-	public PickupEnergy (int energyValue, float xPos, float yPos)
+	public PickupEnergy(int energyValue, float xPos, float yPos)
 	{
 		super(xPos, yPos);
 		this.energyValue = energyValue;

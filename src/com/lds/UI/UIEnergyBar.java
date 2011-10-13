@@ -16,7 +16,7 @@ public class UIEnergyBar extends UIProgressBar
 	
 	public UIEnergyBar(float xSize, float ySize, float xRelative, float yRelative, Direction dir, Player player)
 	{
-		super (xSize, ySize, xRelative, yRelative, dir, 100, 0, 100);
+		super(xSize, ySize, xRelative, yRelative, dir, 100, 0, 100);
 		this.player = player;
 	}
 	

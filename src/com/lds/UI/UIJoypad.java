@@ -1,21 +1,21 @@
 package com.lds.UI;
 
-import javax.microedition.khronos.opengles.GL10;
-
 import com.lds.Enums.UIPosition;
 import com.lds.Texture;
 import com.lds.game.Game;
 import com.lds.math.Vector2;
 
+import javax.microedition.khronos.opengles.GL10;
+
 public class UIJoypad extends UIEntity
 {
+    public static final float MAX_SCALAR = 10;
+    
 	private Vector2 inputVec;
 	private float inputAngle;
 	private boolean active;
 	
 	private UIImage fingerCircle;
-	
-	public static final float MAX_SCALAR = 10;
 	
 	public UIJoypad(float xSize, float ySize, UIPosition position, float inputAngle, Texture joystickin)
 	{
@@ -29,7 +29,7 @@ public class UIJoypad extends UIEntity
 	
 	public UIJoypad(float xSize, float ySize, float xRelative, float yRelative, float inputAngle)
 	{
-		super (xSize, ySize, xRelative, yRelative);
+		super(xSize, ySize, xRelative, yRelative);
 		inputVec = new Vector2();
 		this.inputAngle = inputAngle;
 		active = false;
@@ -132,5 +132,8 @@ public class UIJoypad extends UIEntity
 		fingerCircle.updateTextureVBO(gl);
 	}
 	
-	public UIImage getFingerCircle() { return fingerCircle; }
+	public UIImage getFingerCircle()
+	{
+	    return fingerCircle;
+	}
 }

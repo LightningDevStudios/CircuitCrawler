@@ -1,9 +1,10 @@
 package com.lds.parser;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import com.lds.game.entity.Door;
 import com.lds.game.entity.Entity;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class DoorData extends StaticEntData
 {

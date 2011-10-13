@@ -135,7 +135,7 @@ public class Player extends Character //your character, protagonist
 		{ 
 			vibrator = (Vibrator)context.getSystemService(Context.VIBRATOR_SERVICE); 
 		} 
-		catch (Exception e) {}
+		catch (Exception e) { }
 		
 		if (vibrator != null)
 		{ 
@@ -143,7 +143,7 @@ public class Player extends Character //your character, protagonist
 		  { 
 			  vibrator.vibrate((long)time); 
 		  } 
-		  catch (Exception e) {} 
+		  catch (Exception e) { }
 		} 
 	}
 

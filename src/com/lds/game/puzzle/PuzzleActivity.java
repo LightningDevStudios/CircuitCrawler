@@ -1,14 +1,13 @@
 package com.lds.game.puzzle;
 
-import com.lds.game.event.OnPuzzleFailListener;
-import com.lds.game.event.OnPuzzleInitializedListener;
-import com.lds.game.event.OnPuzzleSuccessListener;
-import com.lds.game.puzzle.IPuzzle;
-
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.Window;
 import android.view.WindowManager;
+
+import com.lds.game.event.OnPuzzleFailListener;
+import com.lds.game.event.OnPuzzleInitializedListener;
+import com.lds.game.event.OnPuzzleSuccessListener;
 
 public class PuzzleActivity extends Activity implements OnPuzzleInitializedListener, OnPuzzleSuccessListener, OnPuzzleFailListener
 {
@@ -36,13 +35,25 @@ public class PuzzleActivity extends Activity implements OnPuzzleInitializedListe
 		{
 			puzzle = (IPuzzle)(Class.forName(className, true, Thread.currentThread().getContextClassLoader()).newInstance());
 		} 
-		catch (InstantiationException e) { finishPuzzleFailed(); }
-		catch (IllegalAccessException e) { finishPuzzleFailed(); }
-		catch (ClassNotFoundException e) { finishPuzzleFailed(); }
-		if(puzzle != null)
+		
+		catch (InstantiationException e)
+		{
+		    finishPuzzleFailed();
+		}
+		
+		catch (IllegalAccessException e)
+		{
+		    finishPuzzleFailed();
+		}
+		
+		catch (ClassNotFoundException e)
+		{
+		    finishPuzzleFailed();
+		}
+		
+		if (puzzle != null)
 		{
 		Object syncObj = new Object();
-		
 		puzzle.setContext(this);
 		puzzle.setSyncObj(syncObj);
 		puzzle.setPuzzleFailEvent(this);

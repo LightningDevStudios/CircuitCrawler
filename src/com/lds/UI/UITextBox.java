@@ -14,7 +14,7 @@ public class UITextBox extends UIEntity
 	
 	public UITextBox(float xSize, float ySize, float xRelative, float yRelative)
 	{
-		super (xSize, ySize, xRelative, yRelative);
+		super(xSize, ySize, xRelative, yRelative);
 	}
 	
 	public UITextBox(float xSize, float ySize, UIPosition position, float topPad, float leftPad, float bottomPad, float rightPad) 
@@ -49,10 +49,14 @@ public class UITextBox extends UIEntity
 			halfXSize = xSize / 2;
 			halfYSize = ySize / 2;
 			
-			float[] initVerts = { 	halfXSize, halfYSize,
-									halfXSize, -halfYSize,
-									-halfXSize, halfYSize,
-									-halfXSize, -halfYSize };
+			float[] initVerts =
+			{
+			    halfXSize, halfYSize,
+				halfXSize, -halfYSize,
+				-halfXSize, halfYSize,
+				-halfXSize, -halfYSize
+			};
+			
 			this.vertices = initVerts;
 			setBuffer(vertexBuffer, vertices);
 			needToUpdateVertexVBO = true;

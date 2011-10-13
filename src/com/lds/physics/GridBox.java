@@ -1,10 +1,9 @@
 package com.lds.physics;
 
-import java.util.ArrayList;
-
 import com.lds.game.entity.Entity;
-import com.lds.game.entity.PhysBall;
 import com.lds.math.*;
+
+import java.util.ArrayList;
 
 public class GridBox 
 {

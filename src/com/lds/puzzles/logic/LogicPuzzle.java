@@ -1,8 +1,5 @@
 package com.lds.puzzles.logic;
 
-import javax.microedition.khronos.egl.EGLConfig;
-import javax.microedition.khronos.opengles.GL10;
-
 import android.content.Context;
 import android.view.MotionEvent;
 
@@ -10,6 +7,9 @@ import com.lds.game.event.OnPuzzleFailListener;
 import com.lds.game.event.OnPuzzleInitializedListener;
 import com.lds.game.event.OnPuzzleSuccessListener;
 import com.lds.game.puzzle.IPuzzle;
+
+import javax.microedition.khronos.egl.EGLConfig;
+import javax.microedition.khronos.opengles.GL10;
 
 public class LogicPuzzle implements IPuzzle
 {

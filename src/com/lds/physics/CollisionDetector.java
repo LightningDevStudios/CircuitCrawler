@@ -1,9 +1,9 @@
 package com.lds.physics;
 
-import java.util.ArrayList;
-
-import com.lds.math.*;
 import com.lds.game.entity.Entity;
+import com.lds.math.*;
+
+import java.util.ArrayList;
 
 public class CollisionDetector 
 {	

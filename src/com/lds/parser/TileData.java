@@ -16,7 +16,7 @@ public class TileData
 		tile = new Tile(Tile.TILE_SIZE_F, x, y, tilesetY, tilesetX);
 		tile.enableTilesetMode(Game.tilesetworld, 0, 0);
 		
-		if(state.equalsIgnoreCase("floor"))
+		if (state.equalsIgnoreCase("floor"))
 			tile.setAsFloor();
 		else if (state.equalsIgnoreCase("wall"))
 			tile.setAsWall();
@@ -37,8 +37,18 @@ public class TileData
 	    return tilePosY;
 	}
 	
-	public Tile getTile()		{ return tile; }
+	public Tile getTile()
+	{
+	    return tile;
+	}
 
-	public void setTilePosX(int newTilePosX)	{ tilePosX = newTilePosX; }
-	public void setTilePosY(int newTilePosY)	{ tilePosY = newTilePosY; }
+	public void setTilePosX(int newTilePosX)
+	{
+	    tilePosX = newTilePosX;
+	}
+	
+	public void setTilePosY(int newTilePosY)
+	{
+	    tilePosY = newTilePosY;
+	}
 }
