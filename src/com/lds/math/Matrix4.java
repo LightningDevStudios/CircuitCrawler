@@ -8,6 +8,18 @@ package com.lds.math;
  */
 public final class Matrix4 
 {
+    /*************
+     * Constants *
+     *************/
+    
+    /**
+     * The identity matrix, where each row is it's respective unit vector.
+     */
+    public static final Matrix4 IDENTITY = new Matrix4(1, 0, 0, 0,
+                                                       0, 1, 0, 0,
+                                                       0, 0, 1, 0,
+                                                       0, 0, 0, 1);
+    
     /***********
      * Members *
      ***********/
@@ -49,10 +61,10 @@ public final class Matrix4
 	
 	/**
 	 * Creates a new instance of the Matrix4 class.
-	 * @param column0 The first column of the matrix.
-	 * @param column1 The second column of the matrix.
-	 * @param column2 The third column of the matrix.
-	 * @param column3 The fourth column of the matrix.
+	 * @param row0 The first row of the matrix.
+	 * @param row1 The second row of the matrix.
+	 * @param row2 The third row of the matrix.
+	 * @param row3 The fourth row of the matrix.
 	 */
 	public Matrix4(Vector4 row0, Vector4 row1, Vector4 row2, Vector4 row3)
 	{
@@ -201,8 +213,8 @@ public final class Matrix4
 	}
 	
 	/**
-	 * Creates a non-uniform scale matrix.
-	 * @param scale The vector to scale by.
+	 * Creates a uniform scale matrix.
+	 * @param scale Scaling in the X, Y, and Z directions.
 	 * @return A scale matrix.
 	 */
 	public static Matrix4 scale(Vector3 scale)
@@ -211,7 +223,7 @@ public final class Matrix4
 	}
 	
 	/**
-	 * Creates a non-uniform scale matrix.
+	 * Creates a uniform scale matrix.
 	 * @param x Scaling in the X direction.
 	 * @param y Scaling in the Y direction.
 	 * @param z Scaling in the Z direction.
@@ -225,6 +237,11 @@ public final class Matrix4
             		       0, 0, 0, 1);
 	}
 	
+	/**
+	 * Creates a uniform scale matrix.
+	 * @param scale Scaling in the X and Y directions.
+	 * @return A scale matrix.
+	 */
 	public static Matrix4 scale(Vector2 scale)
 	{
 	    return Matrix4.scale(scale.getX(), scale.getY(), 1);
@@ -247,7 +264,7 @@ public final class Matrix4
 	 */
 	public static Matrix4 translate(Vector3 position)
 	{
-	    return new Matrix4(Vector4.unitX, Vector4.unitY, Vector4.unitZ, new Vector4(position, 1));
+	    return new Matrix4(Vector4.UNIT_X, Vector4.UNIT_Y, Vector4.UNIT_Z, new Vector4(position, 1));
 	}
 	
 	/**
@@ -587,17 +604,4 @@ public final class Matrix4
 	        row3.getX(), row3.getY(), row3.getZ(), row3.getW()
         };
 	}
-	
-	/*************
-     * Constants *
-     *************/
-    
-    /**
-     * The identity matrix, where each row is it's respective unit vector.
-     */
-    public static final Matrix4 identity = new Matrix4(1, 0, 0, 0,
-                                                       0, 1, 0, 0,
-                                                       0, 0, 1, 0,
-                                                       0, 0, 0, 1);
-    
 }

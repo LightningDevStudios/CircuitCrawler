@@ -5,7 +5,36 @@ package com.lds.math;
  * @author Lightning Development Studios
  */
 public final class Vector3
-{	
+{
+    /*************
+     * Constants *
+     *************/
+    
+    /**
+     * A unit vector in the X direction.
+     */
+    public static final Vector3 UNIT_X = new Vector3(1, 0, 0);
+    
+    /**
+     * A unit vector in the Y direction.
+     */
+    public static final Vector3 UNIT_Y = new Vector3(0, 1, 0);
+
+    /**
+     * A unit vector in the Z direction.
+     */
+    public static final Vector3 UNIT_Z = new Vector3(0, 0, 1);
+
+    /**
+     * A vector of all components equal to 1.
+     */
+    public static final Vector3 ONE = new Vector3(1, 1, 1);
+    
+    /**
+     * A vector of all values components to 0.
+     */
+    public static final Vector3 ZERO = new Vector3(0, 0, 0);
+    
 	/***********
 	 * Members *
 	 ***********/
@@ -360,33 +389,4 @@ public final class Vector3
 	{
 	    return z;
 	}
-	
-	/*************
-     * Constants *
-     *************/
-    
-    /**
-     * A unit vector in the X direction.
-     */
-    public static final Vector3 unitX = new Vector3(1, 0, 0);
-    
-    /**
-     * A unit vector in the Y direction.
-     */
-    public static final Vector3 unitY = new Vector3(0, 1, 0);
-
-    /**
-     * A unit vector in the Z direction.
-     */
-    public static final Vector3 unitZ = new Vector3(0, 0, 1);
-
-    /**
-     * A vector of all components equal to 1.
-     */
-    public static final Vector3 one = new Vector3(1, 1, 1);
-    
-    /**
-     * A vector of all values components to 0.
-     */
-    public static final Vector3 zero = new Vector3(0, 0, 0);
 }

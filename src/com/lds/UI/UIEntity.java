@@ -19,7 +19,7 @@ import java.util.EnumSet;
 import javax.microedition.khronos.opengles.GL10;
 import javax.microedition.khronos.opengles.GL11;
 
-//\TODO allow relative sizing to scale for multiple monitors
+//\todo allow relative sizing to scale for multiple monitors
 public abstract class UIEntity
 {
 	//constants

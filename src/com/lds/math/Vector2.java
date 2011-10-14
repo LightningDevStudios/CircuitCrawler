@@ -5,7 +5,31 @@ package com.lds.math;
  * @author Lightning Development Studios
  */
 public final class Vector2
-{	
+{
+    /*************
+     * Constants *
+     *************/
+    
+    /**
+     * A unit vector in the X direction.
+     */
+    public static final Vector2 UNIT_X = new Vector2(1, 0);
+
+    /**
+     * A unit vector in the Y direction.
+     */
+    public static final Vector2 UINT_Y = new Vector2(0, 1);
+
+    /**
+     * A vector with all components equal to 0.
+     */
+    public static final Vector2 ZERO = new Vector2(0, 0);
+    
+    /**
+     * A vector with all components equal to 1.
+     */
+    public static final Vector2 ONE = new Vector2(1, 1);
+    
 	/***********
 	 * Members *
 	 ***********/
@@ -26,6 +50,7 @@ public final class Vector2
 	
 	/**
 	 * Creates a new instance of the Vector2 class with all components equal to 0.
+	 * @deprecated Using "new Vector2(0, 0)" is better for readability.
 	 */
 	public Vector2()
 	{
@@ -490,35 +515,4 @@ public final class Vector2
 	{
 	    this.y = y;
 	}
-	
-	/*************
-     * Constants *
-     *************/
-    
-    /**
-     * A unit vector in the X direction.
-     * @return A vector.
-     */
-    public static Vector2 unitX()
-    {
-        return new Vector2(1, 0);
-    }
-    
-    /**
-     * A unit vector in the Y direction.
-     * @return A vector.
-     */
-    public static Vector2 unitY()
-    {
-        return new Vector2(0, 1);
-    }
-    
-    /**
-     * A unit vector with all components equal to 0.
-     * @return A vector.
-     */
-    public static Vector2 zero()
-    {
-        return new Vector2();
-    }
 }

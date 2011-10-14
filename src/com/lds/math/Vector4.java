@@ -6,6 +6,40 @@ package com.lds.math;
  */
 public final class Vector4 
 {
+    /*************
+     * Constants *
+     *************/
+    
+    /**
+     * A unit vector in the X direction.
+     */
+    public static final Vector4 UNIT_X = new Vector4(1, 0, 0, 0);
+    
+    /**
+     * A unit vector in the Y direction.
+     */
+    public static final Vector4 UNIT_Y = new Vector4(0, 1, 0, 0);
+    
+    /**
+     * A unit vector in the Z direction.
+     */
+    public static final Vector4 UNIT_Z = new Vector4(0, 0, 1, 0);
+    
+    /**
+     * A unit vector in the W direction.
+     */
+    public static final Vector4 UNIT_W = new Vector4(0, 0, 0, 1);
+
+    /**
+     * A vector of all components equal to 1.
+     */
+    public static final Vector4 ONE = new Vector4(1, 1, 1, 1);
+
+    /**
+     * A vector of all components equal to 0.
+     */
+    public static final Vector4 ZERO = new Vector4(0, 0, 0, 0);
+    
 	/***********
 	 * Members *
 	 ***********/
@@ -206,38 +240,4 @@ public final class Vector4
 		    x, y, z, w 
 		};
 	}
-	
-	/*************
-     * Constants *
-     *************/
-    
-    /**
-     * A unit vector in the X direction.
-     */
-    public static final Vector4 unitX = new Vector4(1, 0, 0, 0);
-    
-    /**
-     * A unit vector in the Y direction.
-     */
-    public static final Vector4 unitY = new Vector4(0, 1, 0, 0);
-    
-    /**
-     * A unit vector in the Z direction.
-     */
-    public static final Vector4 unitZ = new Vector4(0, 0, 1, 0);
-    
-    /**
-     * A unit vector in the W direction.
-     */
-    public static final Vector4 unitW = new Vector4(0, 0, 0, 1);
-
-    /**
-     * A vector of all components equal to 1.
-     */
-    public static final Vector4 one = new Vector4(1, 1, 1, 1);
-
-    /**
-     * A vector of all components equal to 0.
-     */
-    public static final Vector4 zero = new Vector4(0, 0, 0, 0);
 }
