@@ -13,17 +13,17 @@ public final class Vector3
 	/**
 	 * The vector's X component.
 	 */
-	private float x;
+	private final float x;
 	
 	/**
 	 * The vector's Y component.
 	 */
-	private float y;
+	private final float y;
 	
 	/**
 	 * The vector's Z component.
 	 */
-	private float z;
+	private final float z;
 	
 	/****************
 	 * Constructors *
@@ -367,46 +367,26 @@ public final class Vector3
     
     /**
      * A unit vector in the X direction.
-     * @return A vector.
      */
-    public static Vector3 unitX() 
-    {
-        return new Vector3(1, 0, 0);
-    }
+    public static final Vector3 unitX = new Vector3(1, 0, 0);
     
     /**
      * A unit vector in the Y direction.
-     * @return A vector.
      */
-    public static Vector3 unitY() 
-    {
-        return new Vector3(0, 1, 0);
-    }
-    
+    public static final Vector3 unitY = new Vector3(0, 1, 0);
+
     /**
      * A unit vector in the Z direction.
-     * @return A vector.
      */
-    public static Vector3 unitZ() 
-    {
-        return new Vector3(0, 0, 1);
-    }
-    
+    public static final Vector3 unitZ = new Vector3(0, 0, 1);
+
     /**
      * A vector of all components equal to 1.
-     * @return A vector.
      */
-    public static Vector3 one() 
-    {
-        return new Vector3(1, 1, 1);
-    }
+    public static final Vector3 one = new Vector3(1, 1, 1);
     
     /**
      * A vector of all values components to 0.
-     * @return A vector.
      */
-    public static Vector3 zero() 
-    {
-        return new Vector3(0, 0, 0);
-    }
+    public static final Vector3 zero = new Vector3(0, 0, 0);
 }

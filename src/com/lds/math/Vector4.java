@@ -13,22 +13,22 @@ public final class Vector4
 	/**
 	 * The vector's X component.
 	 */
-	private float x;
+	private final float x;
 	
 	/**
 	 * The vector's Y component.
 	 */
-	private float y;
+	private final float y;
 	
 	/**
 	 * The vector's Z component.
 	 */
-	private float z;
+	private final float z;
 	
 	/**
 	 * The vector's W component.
 	 */
-	private float w;
+	private final float w;
 	
 	/****************
 	 * Constructors *
@@ -213,55 +213,31 @@ public final class Vector4
     
     /**
      * A unit vector in the X direction.
-     * @return A vector.
      */
-    public static Vector4 unitX()
-    {
-        return new Vector4(1, 0, 0, 0);
-    }
+    public static final Vector4 unitX = new Vector4(1, 0, 0, 0);
     
     /**
      * A unit vector in the Y direction.
-     * @return A vector.
      */
-    public static Vector4 unitY()
-    {
-        return new Vector4(0, 1, 0, 0);
-    }
+    public static final Vector4 unitY = new Vector4(0, 1, 0, 0);
     
     /**
      * A unit vector in the Z direction.
-     * @return A vector.
      */
-    public static Vector4 unitZ()
-    {
-        return new Vector4(0, 0, 1, 0);
-    }
+    public static final Vector4 unitZ = new Vector4(0, 0, 1, 0);
     
     /**
      * A unit vector in the W direction.
-     * @return A vector.
      */
-    public static Vector4 unitW()
-    {
-        return new Vector4(0, 0, 0, 1);
-    }
-    
+    public static final Vector4 unitW = new Vector4(0, 0, 0, 1);
+
     /**
      * A vector of all components equal to 1.
-     * @return A vector.
      */
-    public static Vector4 one()
-    {
-        return new Vector4(1, 1, 1, 1);
-    }
-    
+    public static final Vector4 one = new Vector4(1, 1, 1, 1);
+
     /**
      * A vector of all components equal to 0.
-     * @return A vector.
      */
-    public static Vector4 zero()
-    {
-        return new Vector4(0, 0, 0, 0);
-    }
+    public static final Vector4 zero = new Vector4(0, 0, 0, 0);
 }

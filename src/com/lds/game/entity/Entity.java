@@ -943,32 +943,17 @@ public abstract class Entity
 		rebuildModelMatrix();
 	}
 	
-	public void setXPos(float xPos)
+	public void setPos(Vector2 position)
 	{
-		posVec.setX(xPos);
-		posMat.setM41(xPos);
-		rebuildModelMatrix();
+	    posVec = position;
+	    posMat = Matrix4.translate(position);
 	}
 	
-	public void setYPos(float yPos)
+	public void setScale(Vector2 scale)
 	{
-		posVec.setY(yPos);
-		posMat.setM42(yPos);
-		rebuildModelMatrix();
-	}
-	
-	public void setXScl(float xScl)
-	{
-		scaleVec.setX(xScl);
-		sclMat.setM11(xScl);
-		rebuildModelMatrix();
-	}
-	
-	public void setYScl(float yScl)
-	{
-		scaleVec.setY(yScl);
-		sclMat.setM22(yScl);
-		rebuildModelMatrix();
+	    scaleVec = scale;
+	    sclMat = Matrix4.scale(scale.getX(), scale.getY(), 1);
+	    rebuildModelMatrix();
 	}
 	
 	public void setColorInterpSpeed(float s)

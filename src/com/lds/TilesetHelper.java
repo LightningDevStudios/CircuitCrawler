@@ -1,6 +1,7 @@
 package com.lds;
 
 import com.lds.game.entity.Tile;
+import com.lds.math.Vector2;
 
 public final class TilesetHelper 
 {
@@ -82,16 +83,15 @@ public final class TilesetHelper
 		{
 			for (int j = 0; j < width; j++)
 			{
-				tileset[i][j].setXPos((-(float)width / 2 * Tile.TILE_SIZE_F) + (j * Tile.TILE_SIZE_F));
-				tileset[i][j].setYPos(((float)length / 2 * Tile.TILE_SIZE_F) - (i * Tile.TILE_SIZE_F));
+			    tileset[i][j].setPos(new Vector2((-(float)width / 2 * Tile.TILE_SIZE_F) + (j * Tile.TILE_SIZE_F), ((float)length / 2 * Tile.TILE_SIZE_F) - (i * Tile.TILE_SIZE_F)));
 			}
 		}
 	}
 	
 	public static void setInitialTileOffset(Tile tile, int y, int x, int length, int width)
 	{
-		tile.setXPos((-(float)width / 2.0f * Tile.TILE_SIZE_F) + (x * Tile.TILE_SIZE_F) + (Tile.TILE_SIZE_F / 2));
-		tile.setYPos(((float)length / 2.0f * Tile.TILE_SIZE_F) - (y * Tile.TILE_SIZE_F) - (Tile.TILE_SIZE_F / 2));
+	    tile.setPos(new Vector2((-(float)width / 2.0f * Tile.TILE_SIZE_F) + (x * Tile.TILE_SIZE_F) + (Tile.TILE_SIZE_F / 2), 
+	            ((float)length / 2.0f * Tile.TILE_SIZE_F) - (y * Tile.TILE_SIZE_F) - (Tile.TILE_SIZE_F / 2)));
 		
 	}
 }

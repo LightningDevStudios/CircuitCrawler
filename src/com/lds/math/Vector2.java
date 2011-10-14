@@ -101,7 +101,7 @@ public final class Vector2
      */
 	public static Vector2 add(Vector2 v1, Vector2 v2)
 	{
-		return Vector2.add(v1, v2.getX(), v2.getY());
+		return new Vector2(v1.getX() + v2.getX(), v1.getY() + v2.getY());
 	}
 	
 	/**
@@ -125,7 +125,7 @@ public final class Vector2
      */
 	public static Vector2 subtract(Vector2 v1, Vector2 v2)
 	{
-		return Vector2.subtract(v1, v2.getX(), v2.getY());
+		return new Vector2(v1.getX() - v2.getX(), v1.getY() - v2.getY());
 	}
 	
 	/**
