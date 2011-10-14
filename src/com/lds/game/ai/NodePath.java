@@ -46,7 +46,7 @@ public class NodePath
 		for (Node node : nodeList)
 		{
 			newDistanceVec = Vector2.subtract(node.getPos(), ent.getPos());
-			if (distanceVec.magnitude() > newDistanceVec.magnitude())
+			if (distanceVec.length() > newDistanceVec.length())
 				closestNode = node;
 		}
 		return closestNode;

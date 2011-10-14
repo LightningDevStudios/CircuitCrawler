@@ -18,7 +18,7 @@ public abstract class HoldObject extends PhysEnt //and object that is held (bloc
 	{
 		if (!held)
 		{
-			if (moveInterpVec.magnitude() < 1.0f && moveInterpVec.magnitude() > 0.0f)
+			if (moveInterpVec.length() < 1.0f && moveInterpVec.length() > 0.0f)
 			{
 				if (tile.isPit())
 				{

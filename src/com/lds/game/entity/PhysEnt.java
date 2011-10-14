@@ -289,7 +289,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	    	maxPos = 0; 
 	        for (int i = 1; i < k; i++)
 	        {
-	             if (vertDistVecs[i].magnitude() > vertDistVecs[maxPos].magnitude()) 
+	             if (vertDistVecs[i].length() > vertDistVecs[maxPos].length()) 
 	                  maxPos = i; 
 	        }
 	        temp.copy(vertDistVecs[maxPos]); 
@@ -300,7 +300,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	    Vector2 bounceSide = Vector2.subtract(vertDistVecs[0], vertDistVecs[1]).normalize();
 	    Vector2 bounceNormal = Vector2.getNormal(bounceSide);
 	    Vector2 mpDist = Vector2.getMidpoint(vertDistVecs[0].add(this.posVec), vertDistVecs[1].add(this.posVec)).subtract(ent.posVec);
-		if (mpDist.magnitude() > mpDist.add(bounceNormal).magnitude())
+		if (mpDist.length() > mpDist.add(bounceNormal).length())
 			bounceNormal.negate();
 		
 		//get max of projection of ent
@@ -342,7 +342,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	    	maxPos = 0; 
 	        for (int i = 1; i < k; i++)
 	        {
-	             if (vertDistVecs[i].magnitude() > vertDistVecs[maxPos].magnitude()) 
+	             if (vertDistVecs[i].length() > vertDistVecs[maxPos].length()) 
 	                  maxPos = i; 
 	        }
 	        temp.copy(vertDistVecs[maxPos]); 
@@ -353,7 +353,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	    Vector2 bounceSide = Vector2.subtract(vertDistVecs[0], vertDistVecs[1]).normalize();
 	    Vector2 bounceNormal = Vector2.getNormal(bounceSide);
 	    Vector2 mpDist = Vector2.getMidpoint(vertDistVecs[0].add(this.posVec), vertDistVecs[1].add(this.posVec)).subtract(ent.posVec);
-		if (mpDist.magnitude() > mpDist.add(bounceNormal).magnitude())
+		if (mpDist.length() > mpDist.add(bounceNormal).length())
 			bounceNormal.negate();
 		
 		//get max of projection of ent
@@ -396,7 +396,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	    	maxPos = 0; 
 	        for (int i = 1; i < k; i++) 
 	        {
-	             if (vertDistVecs[i].magnitude() > vertDistVecs[maxPos].magnitude()) 
+	             if (vertDistVecs[i].length() > vertDistVecs[maxPos].length()) 
 	                  maxPos = i; 
 	        }
 	        temp.copy(vertDistVecs[maxPos]); 
@@ -407,7 +407,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	    Vector2 bounceSide = Vector2.subtract(vertDistVecs[0], vertDistVecs[1]).normalize();
 	    Vector2 bounceNormal = Vector2.getNormal(bounceSide);
 	    Vector2 mpDist = Vector2.getMidpoint(vertDistVecs[0].add(this.posVec), vertDistVecs[1].add(this.posVec)).subtract(ent.posVec);
-		if (mpDist.magnitude() > mpDist.add(bounceNormal).magnitude())
+		if (mpDist.length() > mpDist.add(bounceNormal).length())
 			bounceNormal.negate();
 		
 		//get min of projection of this entity
@@ -527,7 +527,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 			{
 				if (gettingPushed)
 				{
-					moveInterpVec.scaleTo(moveInterpVec.magnitude() - friction);
+					moveInterpVec.scaleTo(moveInterpVec.length() - friction);
 				}
 				else
 				{
@@ -535,7 +535,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 					moveInterpVec = Vector2.normalize(moveVec).scale(moveSpeed / 1000 * Stopwatch.getFrameTime());
 				}
 				
-				if (!gettingPushed && movedVec.magnitude() > moveVec.magnitude())
+				if (!gettingPushed && movedVec.length() > moveVec.length())
 				{
 					moveInterpVec.set(0, 0);
 					posVec = endPosVec;
@@ -545,7 +545,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 				}
 				else
 				{
-					if (moveInterpVec.magnitude() > 0.1)
+					if (moveInterpVec.length() > 0.1)
 					{
 						posVec.add(moveInterpVec);
 						movedVec.add(moveInterpVec);
@@ -611,7 +611,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 				sclInterpCount++;
 				sclInterpVec = Vector2.normalize(sclVec).scale(sclSpeed / 1000 * Stopwatch.getFrameTime());
 				
-				if (sclVec.magnitude() - sclInterpVec.magnitude() * sclInterpCount <= sclInterpVec.magnitude())
+				if (sclVec.length() - sclInterpVec.length() * sclInterpCount <= sclInterpVec.length())
 				{
 					sclInterpVec.set(0, 0);
 					scaleVec = endScaleVec;

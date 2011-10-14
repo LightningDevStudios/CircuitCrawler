@@ -237,7 +237,7 @@ public abstract class Entity
 	
 	public void update()
 	{
-		if (scaleVec.magnitude() <= 0.0f)
+		if (scaleVec.length() <= 0.0f)
 			this.remove(); //remove the entity
 		colorInterp();
 		gradientInterp();
@@ -291,7 +291,7 @@ public abstract class Entity
 	public boolean closeEnough(Entity ent)
 	{
 		initializeCollisionVariables();
-		return Vector2.subtract(this.posVec, ent.posVec).magnitude() < (float)(diagonal + ent.diagonal);
+		return Vector2.subtract(this.posVec, ent.posVec).length() < (float)(diagonal + ent.diagonal);
 	}
 
 	public boolean isFacing(Entity ent)
@@ -345,7 +345,7 @@ public abstract class Entity
 	protected boolean isCircleCollidingWithCircle(Entity ent) //if both entities are circles
 	{
 		boolean output;
-		if (Vector2.subtract(this.posVec, ent.posVec).magnitude() < halfSize + ent.halfSize)
+		if (Vector2.subtract(this.posVec, ent.posVec).length() < halfSize + ent.halfSize)
 			output = true;
 		else
 			output = false;
@@ -373,7 +373,7 @@ public abstract class Entity
 		for (int i = 1; i < vertVecs.length; i++)
 		{
 			Vector2 tempVec = Vector2.subtract(vertVecs[i], ent.posVec);
-			if (axes[2].magnitude() > tempVec.magnitude())
+			if (axes[2].length() > tempVec.length())
 			{
 				axes[2].copy(tempVec);
 			}

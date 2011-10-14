@@ -68,14 +68,14 @@ public class UIJoypad extends UIEntity
 		inputAngle = inputVec.angleDeg();
 		
 		//scale vector properly
-		if (inputVec.magnitude() > xSize / 2)
+		if (inputVec.length() > xSize / 2)
 			inputVec.scaleTo(xSize / 2);
 		
 		//\TODO choose one method of moving inner circle
 		//fingerCircle.setPos(Vector2f.scaleTo(inputVec, inputVec.mag() - fingerCircle.xSize / 2));
 		fingerCircle.setPos(inputVec);
 		
-		inputVec.scaleTo(inputVec.magnitude() * MAX_SCALAR / xSize);
+		inputVec.scaleTo(inputVec.length() * MAX_SCALAR / xSize);
 	}
 	
 	public void setInputVec(final Vector2 rawVec)

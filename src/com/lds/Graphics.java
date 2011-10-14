@@ -6,11 +6,21 @@ import android.view.MotionEvent;
 
 import com.lds.game.event.*;
 
+/**
+ * A subclass of GLSurfaceView that contains Circuit Crawler-specific code.
+ * @author Lightning Development Studios
+ */
 public class Graphics extends GLSurfaceView
 {
 	private Renderer renderer;
 	private Object syncObj;
 	
+	/**
+	 * Initializes a new instance of the Graphics class.
+	 * @param context An Android context.
+	 * @param r A 
+	 * @param syncObj An object to sync between the main thread and the rendering thread.
+	 */
 	public Graphics(Context context, Renderer r, Object syncObj) 
 	{
 		super(context);
@@ -46,6 +56,9 @@ public class Graphics extends GLSurfaceView
 		return true;
 	}
 	
+	/**
+     * Called when a puzzle event returns successfully.
+     */
 	public void onPuzzleWon()
 	{
 		queueEvent(new Runnable()
@@ -57,6 +70,9 @@ public class Graphics extends GLSurfaceView
 		});
 	}
 	
+	/**
+     * Called when a puzzle event returns unsuccessfully.
+     */
 	public void onPuzzleFailed()
 	{
 		queueEvent(new Runnable()
@@ -67,14 +83,46 @@ public class Graphics extends GLSurfaceView
 			}
 		});
 	}
-			
+	
+	/**
+	 * A sub-interface of GLSurfaceView.Renderer for Circuit Crawler.
+	 * Handles touch input and puzzle activity hooks.
+	 * @author Lightning Development Studios
+	 */
 	public interface Renderer extends GLSurfaceView.Renderer
 	{
-		public abstract void onTouchInput(MotionEvent event);
-		public abstract void setGameOverEvent(OnGameOverListener listener);
-		public abstract void setGameInitializedEvent(OnGameInitializedListener listener);
-		public abstract void setPuzzleActivatedEvent(OnPuzzleActivatedListener listener);
-		public abstract void onPuzzleWon();
-		public abstract void onPuzzleFailed();
+	    /**
+	     * Called when the user touches the touchscreen.
+	     * @param event The Android MotionEvent describing the input.
+	     */
+		void onTouchInput(MotionEvent event);
+		
+		/**
+		 * Sets a delegate to be called when the game is over.
+		 * @param listener The delegate container interface with an anonymous inner method.
+		 */
+		void setGameOverEvent(OnGameOverListener listener);
+		
+		/**
+		 * Sets the delegate to be called when the game is initialized.
+		 * @param listener The delegate container interface with an anonymous inner method.
+		 */
+		void setGameInitializedEvent(OnGameInitializedListener listener);
+		
+		/**
+		 * Sets the delegate to be called when the game is initialized.
+		 * @param listener The delegate container interface with an anonymous inner method.
+		 */
+		void setPuzzleActivatedEvent(OnPuzzleActivatedListener listener);
+		
+		/**
+		 * Called when a puzzle event returns successfully.
+		 */
+		void onPuzzleWon();
+		
+		/**
+		 * Called when a puzzle event returns unsuccessfully.
+		 */
+		void onPuzzleFailed();
 	}
 }

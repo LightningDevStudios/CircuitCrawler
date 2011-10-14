@@ -137,7 +137,7 @@ public final class Vector3
 	/**
 	 * Flips the sign of all the components of a vector.
 	 * @param v The vector to negate.
-	 * @return A vector equal in magniutde but opposite in direction.
+	 * @return A vector equal in magnitude but opposite in direction.
 	 */
 	public static Vector3 negate(Vector3 v)
 	{
