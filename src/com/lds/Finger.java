@@ -48,8 +48,7 @@ public class Finger
 		else if (ent instanceof UIJoypad)
 		{
 			final UIJoypad joypad = (UIJoypad)ent;
-			joypad.getFingerCircle().setXPos(0);
-			joypad.getFingerCircle().setYPos(0);
+			joypad.getFingerCircle().setPos(joypad.getPos());
 		}
 	}
 	

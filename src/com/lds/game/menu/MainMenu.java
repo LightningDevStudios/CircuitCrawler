@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Vibrator;
 import android.view.View;
 import android.view.Window;
 import android.view.animation.Animation;
@@ -25,10 +24,12 @@ import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 import android.widget.ViewAnimator;
 
+import com.lds.Vibrator;
 import com.lds.game.GameRenderer;
 import com.lds.game.R;
 import com.lds.game.Run;
 import com.lds.game.SoundPlayer;
+
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -160,7 +161,7 @@ public class MainMenu extends Activity
 			FileInputStream fis = openFileInput("vibration_enabled");
 			byte[] buffer = new byte[1];
 			fis.read(buffer, 0, 1);
-			GameRenderer.vibrateSetting = buffer[0] != 0;
+			Vibrator.setEnableState(buffer[0] != 0);
 			fis.close();
 		}
 		catch (FileNotFoundException e)
@@ -253,7 +254,7 @@ public class MainMenu extends Activity
 		final int effectVolume = (int)(SoundPlayer.getInstance().getEffectVolume() * 100);
 		effectVolumeControl.setProgress(effectVolume);
 		effectVolumeSeekBarText.setText("Sound Effect Volume: " + String.valueOf(effectVolume) + "%");
-		vibrationCheckbox.setChecked(GameRenderer.vibrateSetting);
+		vibrationCheckbox.setChecked(Vibrator.getEnableState());
 		volumeCheckbox.setChecked(SoundPlayer.getInstance().getSoundEnabled());
 		enableMusic.setChecked(SoundPlayer.getInstance().getMusicEnabled());
 		//godMode.setVisibility(View.INVISIBLE);
@@ -396,7 +397,7 @@ public class MainMenu extends Activity
 		{
 		    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
 		    {
-		    	GameRenderer.vibrateSetting = isChecked;
+		    	Vibrator.setEnableState(isChecked);
 		    	byte[] value = new byte[1];
 		    	if (isChecked) value[0] = 1;
 		    	else value[0] = 0;
@@ -672,25 +673,6 @@ public class MainMenu extends Activity
 		{
 			runGame(resultCode - 100);
 		}
-	}
-	
-	public void vibrator(int time)
-	{
-			Vibrator vibrator = null; 
-			try 
-			{ 
-				vibrator = (Vibrator)context.getSystemService(Context.VIBRATOR_SERVICE); 
-			} 
-			catch (Exception e) { }
-			
-			if (vibrator != null)
-			{ 
-			  try 
-			  { 
-				  vibrator.vibrate((long)time); 
-			  } 
-			  catch (Exception e) { } 
-			} 
 	}
 	
 	public int getUnlockedLevel()

@@ -3,6 +3,7 @@ package com.lds.UI;
 import com.lds.Enums.Direction;
 import com.lds.Enums.RenderMode;
 import com.lds.Enums.UIPosition;
+import com.lds.math.Vector2;
 
 public abstract class UIProgressBar extends UIEntity
 {
@@ -14,7 +15,7 @@ public abstract class UIProgressBar extends UIEntity
 		
 	public UIProgressBar(float xSize, float ySize, UIPosition position, Direction dir, int value, int minimum, int maximum)
 	{
-		this(xSize, ySize, UIPositionF[position.getValue() * 2], UIPositionF[(position.getValue() * 2) + 1], dir, 0, 0, 0, 0, value, minimum, maximum);
+		this(xSize, ySize, UI_POSITION_F[position.getValue() * 2], UI_POSITION_F[(position.getValue() * 2) + 1], dir, 0, 0, 0, 0, value, minimum, maximum);
 		this.position = position;
 	}
 	
@@ -25,7 +26,7 @@ public abstract class UIProgressBar extends UIEntity
 	
 	public UIProgressBar(float xSize, float ySize, UIPosition position, Direction dir, float topPad, float leftPad, float bottomPad, float rightPad, int value, int minimum, int maximum) 
 	{
-		this(xSize, ySize, UIPositionF[position.getValue() * 2], UIPositionF[(position.getValue() * 2) + 1], dir, topPad, leftPad, bottomPad, rightPad, value, minimum, maximum);
+		this(xSize, ySize, UI_POSITION_F[position.getValue() * 2], UI_POSITION_F[(position.getValue() * 2) + 1], dir, topPad, leftPad, bottomPad, rightPad, value, minimum, maximum);
 		this.position = position;
 	}
 	
@@ -108,27 +109,26 @@ public abstract class UIProgressBar extends UIEntity
 		{
 		case UP:
 		case DOWN:
-			xSize = originalXSize;
-			ySize = originalYSize * ((float)(value - minimum) / (float)(maximum - minimum));
+		    size = new Vector2(originalXSize, originalYSize * ((float)value - minimum) / (float)(maximum - minimum));
 			break;
 		case LEFT:
 		case RIGHT:
-			xSize = originalXSize * ((float)(value - minimum) / (float)(maximum - minimum));
-			ySize = originalYSize;
+			size = new Vector2(originalXSize * ((float)(value - minimum) / (float)(maximum - minimum)), originalYSize);
 			break;
 		default:	
 		}
 		
-				
-		halfXSize = xSize / 2;
-		halfYSize = ySize / 2;
+		halfSize = Vector2.scale(size, 0.5f);
+		
+		float x = halfSize.getX();
+		float y = halfSize.getY();
 		
 		float[] initVerts = 
 		{
-		    halfXSize, halfYSize,
-			halfXSize, -halfYSize,
-			-halfXSize, halfYSize,
-			-halfXSize, -halfYSize
+		    x, y,
+		    x, -y,
+			-x, y,
+			-x, -y
 		};
 		
 		this.vertices = initVerts;
@@ -178,18 +178,12 @@ public abstract class UIProgressBar extends UIEntity
 		updateGradientProgress();
 	}
 	
-	@Override
-	public void setXSize(float xSize)
+	@Override 
+	public void setSize(Vector2 size)
 	{
-		this.originalXSize = xSize;
-		updateVertices();
-	}
-	
-	@Override
-	public void setYSize(float ySize)
-	{
-		this.originalYSize = ySize;
-		updateVertices();
+	    this.originalXSize = size.getX();
+	    this.originalYSize = size.getY();
+	    updateVertices();
 	}
 	
 	@Override

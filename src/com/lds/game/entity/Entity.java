@@ -36,8 +36,7 @@ public abstract class Entity
 	
 	//graphics data
 	protected float angle, size, halfSize;
-	protected float colorR, colorG, colorB, colorA;
-	protected float endColorR, endColorG, endColorB, endColorA;
+	protected Vector4 colorVec, endColorVec;
 	protected float colorInterpSpeed;
 	protected EnumSet<RenderMode> renderMode;
 	protected Texture tex;
@@ -86,6 +85,9 @@ public abstract class Entity
 		this.circular = circular;
 		this.willCollide = willCollide;
 		exists = true;
+		
+		this.colorVec = new Vector4(0, 0, 0, 1);
+		this.endColorVec = new Vector4(0, 0, 0, 1);
 		
 		//initializes graphics variables
 		this.size = size;
@@ -159,7 +161,7 @@ public abstract class Entity
 		//Sets color
 		if (containsColor) 
 		{
-		    gl.glColor4f(colorR, colorG, colorB, colorA);
+		    gl.glColor4f(colorVec.getX(), colorVec.getY(), colorVec.getZ(), colorVec.getW());
 		}
 		
 		//Bind vertices, texture coordinates, and/or color coordinates to the OpenGL system
@@ -532,10 +534,7 @@ public abstract class Entity
 	
 	public void updateColor(float r, float g, float b, float a)
 	{
-			colorR = r;
-			colorG = g;
-			colorB = b;
-			colorA = a;
+			colorVec = new Vector4(r, g, b, a);
 	}
 	
 	public void updateColor(int r, int g, int b, int a)
@@ -660,10 +659,7 @@ public abstract class Entity
 		
 	public void initColorInterp(float r, float g, float b, float a)
 	{
-		endColorR = r;
-		endColorG = g;
-		endColorB = b;
-		endColorA = a;
+		endColorVec = new Vector4(r, g, b, a);
 		isColorInterp = true;
 	}
 	 
@@ -672,31 +668,25 @@ public abstract class Entity
 		if (isColorInterp)
 		{
 			final float colorInterp = colorInterpSpeed / 1000 * Stopwatch.getFrameTime();
-			final double rNear = Math.abs(endColorR - colorR);
-			final double gNear = Math.abs(endColorG - colorG);
-			final double bNear = Math.abs(endColorB - colorB);
-			final double aNear = Math.abs(endColorA - colorA);
-			if (rNear < colorInterp && gNear < colorInterp && bNear < colorInterp && aNear < colorInterp)
+			final Vector4 colorDiffVec = Vector4.abs(Vector4.subtract(endColorVec, colorVec));
+			if (colorDiffVec.getX() < colorInterp && colorDiffVec.getY() < colorInterp && colorDiffVec.getZ() < colorInterp && colorDiffVec.getW() < colorInterp)
 			{
-				colorR = endColorR;
-				colorG = endColorG;
-				colorB = endColorB;
-				colorA = endColorA;
+				color = endColor;
 				isColorInterp = false;
 			}
 			else
 			{
-				if (endColorR > colorR)	colorR += colorInterp;
-				else					colorR -= colorInterp;
+				if (endColorVec.getX() > colorVec.getX())   colorVec = Vector4.add(colorVec, new Vector4(colorInterp, 0, 0, 0));
+				else					                    colorVec = Vector4.subtract(colorVec, new Vector4(colorInterp, 0, 0, 0));
 				
-				if (endColorG > colorG)	colorG += colorInterp;
-				else					colorG -= colorInterp;
+				if (endColorVec.getY() > colorVec.getY())	colorVec = Vector4.add(colorVec, new Vector4(0, colorInterp, 0, 0));
+				else					                    colorVec = Vector4.subtract(colorVec, new Vector4(0, colorInterp, 0, 0));
 				
-				if (endColorB > colorB)	colorB += colorInterp;
-				else					colorB -= colorInterp;
+				if (endColorVec.getZ() > colorVec.getZ())	colorVec = Vector4.add(colorVec, new Vector4(0, 0, colorInterp, 0));
+				else					                    colorVec = Vector4.subtract(colorVec, new Vector4(0, 0, colorInterp, 0));
 				
-				if (endColorA > colorA)	colorA += colorInterp;
-				else					colorA -= colorInterp;
+				if (endColorVec.getW() > colorVec.getW())	colorVec = Vector4.add(colorVec, new Vector4(0, 0, 0, colorInterp));
+				else					                    colorVec = Vector4.subtract(colorVec, new Vector4(0, 0, 0, colorInterp));
 			}
 		}
 	}
@@ -814,24 +804,9 @@ public abstract class Entity
         return scaleVec.getY();
     }
 
-    public float getColorR()
+    public Vector4 getColor()
     {
-        return colorR;
-    }
-
-    public float getColorG()
-    {
-        return colorG;
-    }
-
-    public float getColorB()
-    {
-        return colorB;
-    }
-
-    public float getColorA()
-    {
-        return colorA;
+        return colorVec;
     }
 
     public float[] getVertices()
@@ -947,6 +922,7 @@ public abstract class Entity
 	{
 	    posVec = position;
 	    posMat = Matrix4.translate(position);
+	    rebuildModelMatrix();
 	}
 	
 	public void setScale(Vector2 scale)

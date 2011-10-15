@@ -106,59 +106,31 @@ public final class Vector3
 	{
 		return new Vector3(Math.abs(v.getX()), Math.abs(v.getY()), Math.abs(v.getZ()));
 	}
-	
+		
 	/**
 	 * Adds two vectors together.
-	 * @param v The vector to be added to.
-	 * @param x The X component of the vector to add by.
-	 * @param y The Y component of the vector to add by.
-	 * @param z The Z component of the vector to add by.
-	 * @return The resultant vector of the addition.
-	 * @deprecated Use Vector3.add(v, new Vector3(x, y, z)) instead.
-	 */
-	public static Vector3 add(Vector3 v, float x, float y, float z)
-	{
-		return new Vector3(v.getX() + x, v.getY() + y, v.getZ() + z);
-	}
-	
-	/**
-	 * Adds two vectors together.
-	 * @param v1 The vector to be added to.
-	 * @param v2 The vector to be added by.
+	 * @param left The vector to be added to.
+	 * @param right The vector to be added by.
 	 * @return The resultant vector of the addition.
 	 */
-	public static Vector3 add(Vector3 v1, Vector3 v2)
+	public static Vector3 add(Vector3 left, Vector3 right)
 	{
-		float x1 = v1.getX(), y1 = v1.getY(), z1 = v1.getZ(),
-			  x2 = v2.getX(), y2 = v2.getY(), z2 = v2.getZ();
+		float x1 = left.getX(), y1 = left.getY(), z1 = left.getZ(),
+			  x2 = right.getX(), y2 = right.getY(), z2 = right.getZ();
 		
 		return new Vector3(x1 + x2, y1 + y2, z1 + z2);
 	}
-	
+		
 	/**
 	 * Subtracts one vector from another.
-	 * @param v The vector to subtract from.
-	 * @param x X component of vector to subtract by.
-	 * @param y Y component of vector to subtract by.
-	 * @param z Z component of vector to subtract by.
-	 * @return The resultant vector of the subtraction.
-	 * @deprecated Use Vector3.subtract(v, new Vector3(x, y, z)) instead.
-	 */
-	public static Vector3 subtract(Vector3 v, float x, float y, float z)
-	{
-		return Vector3.subtract(v, new Vector3(x, y, z));
-	}
-	
-	/**
-	 * Subtracts one vector from another.
-	 * @param v1 The vector to subtract from.
-	 * @param v2 The vector to subtract by.
+	 * @param left The vector to subtract from.
+	 * @param right The vector to subtract by.
 	 * @return The resultant vector of the subtraction.
 	 */
-	public static Vector3 subtract(Vector3 v1, Vector3 v2)
+	public static Vector3 subtract(Vector3 left, Vector3 right)
 	{
-		float x1 = v1.getX(), y1 = v1.getY(), z1 = v1.getZ(),
-			  x2 = v2.getX(), y2 = v2.getY(), z2 = v2.getZ();
+		float x1 = left.getX(), y1 = left.getY(), z1 = left.getZ(),
+			  x2 = right.getX(), y2 = right.getY(), z2 = right.getZ();
 		
 		return new Vector3(x1 - x2, y1 - y2, z1 - z2);
 	}
@@ -214,14 +186,14 @@ public final class Vector3
 	/**
 	 * Creates a vector pointing to the midpoint of the directed line segment between two vectors.
 	 * \todo turn into a lerp method, add float 0-1 for distance.
-	 * @param v1 The first vector.
-	 * @param v2 The second vector.
+	 * @param left The left vector.
+	 * @param right The right vector.
 	 * @return A vector with components averaged from the two vectors.
 	 */
-	public static Vector3 getMidpoint(Vector3 v1, Vector3 v2)
+	public static Vector3 getMidpoint(Vector3 left, Vector3 right)
 	{
-		float x1 = v1.getX(), y1 = v1.getY(), z1 = v1.getZ(),
-			  x2 = v2.getX(), y2 = v2.getY(), z2 = v2.getZ();
+		float x1 = left.getX(), y1 = left.getY(), z1 = left.getZ(),
+			  x2 = right.getX(), y2 = right.getY(), z2 = right.getZ();
 		
 		return new Vector3((x1 + x2) / 2, 
 						   (y1 + y2) / 2, 
@@ -229,71 +201,37 @@ public final class Vector3
 	}
 	
 	/**
+	 * Calculates the dot product of two vectors.
+	 * @param left The left vector.
+	 * @param right The right vector.
+	 * @return The dot product.
+	 */
+	public static float dot(Vector3 left, Vector3 right)
+	{
+	    return (left.getX() * right.getX()) + (left.getY() * right.getY()) + (left.getZ() * right.getZ());
+	}
+	
+	/**
 	 * Calculates the cross product of two vectors.
-	 * @param v1 The first vector.
-	 * @param v2 The second vector.
+	 * @param left The left vector.
+	 * @param right The right vector.
 	 * @return The resultant vector of the cross product.
 	 */
-	public static Vector3 cross(Vector3 v1, Vector3 v2)
+	public static Vector3 cross(Vector3 left, Vector3 right)
 	{
-		float x1 = v1.getX(), y1 = v1.getY(), z1 = v1.getZ(),
-			  x2 = v2.getX(), y2 = v2.getY(), z2 = v2.getZ();
+		float x1 = left.getX(), y1 = left.getY(), z1 = left.getZ(),
+			  x2 = right.getX(), y2 = right.getY(), z2 = right.getZ();
 
 		return new Vector3(y1 * z2 - z1 * y2, 
 						   z1 * x2 - x1 * z2, 
 						   x1 * y2 - y1 * x2);
 	}
 	
-	/************************************************************************************************************
-	 * Non-Static Methods - return and change vectors, calculate vector quantites (i.e. dot product, magnitude) *
-	 ************************************************************************************************************/
+	/********************
+	 * Instance methods *
+	 ********************/
 	
-	/*public void set(float x, float y, float z)
-	{
-		this.x = x;
-		this.y = y;
-		this.z = z;
-	}
-	
-	public void copy(Vector3 v)
-	{
-		set(v.getX(), v.getY(), v.getZ());
-	}*/
-	
-	/*public Vector3 abs()
-	{
-		x = Math.abs(x);
-		y = Math.abs(y);
-		z = Math.abs(z);
-		return this;
-	}
-	
-	public Vector3 add(float x, float y, float z)
-	{
-		this.x += x;
-		this.y += y;
-		this.z += z;
-		return this;
-	}
-	
-	public Vector3 add(Vector3 v)
-	{
-		return add(v.getX(), v.getY(), v.getZ());
-	}
-	
-	public Vector3 subtract(float x, float y, float z)
-	{
-		this.x -= x;
-		this.y -= y;
-		this.z -= z;
-		return this;
-	}
-	
-	public Vector3 subtract(Vector3 v)
-	{
-		return subtract(v.getX(), v.getY(), v.getZ());
-	}
-	
+	/*
 	public boolean equals(Vector3 v)
 	{
 		return x == v.getX() && y == v.getY() && z == v.getZ();
@@ -303,26 +241,7 @@ public final class Vector3
 	{
 		return Math.abs(x - v.x) < epsilon && Math.abs(y - v.y) < epsilon && Math.abs(z - v.z) < epsilon;
 	}
-	
-	public Vector3 negate()
-	{
-		return scale(-1);
-	}
-	
-	public Vector3 scale(float scalar)
-	{
-		x *= scalar;
-		y *= scalar;
-		z *= scalar;
-		return this;
-	}
-	
-	public Vector3 scaleTo(float scalar)
-	{
-		normalize();
-		scale(scalar);
-		return this;
-	}*/
+	*/
 	
 	/**
 	 * Calculates the length (magnitude) of the vector.
@@ -332,19 +251,7 @@ public final class Vector3
 	{
 		return (float)Math.sqrt((x * x) + (y * y) + (z * z));
 	}
-	
-	/*public float dot(Vector3 v)
-	{
-		return x * v.getX() + y * v.getY() + z * v.getZ();
-	}
-	
-	public Vector3 normalize()
-	{
-		if (x != 0 || y != 0 || z != 0)
-			scale(1 / mag());
-		return this;
-	}*/
-	
+
 	/***********
 	 * Swizzle *
 	 ***********/

@@ -23,7 +23,7 @@ public class UIJoypad extends UIEntity
 		inputVec = new Vector2();
 		this.inputAngle = inputAngle;
 		active = false;
-		fingerCircle = new UIImage(this.xSize / 2, this.ySize / 2, 0, 0);
+		fingerCircle = new UIImage(halfSize.getX(), halfSize.getY(), 0, 0);
 		fingerCircle.enableTextureMode(joystickin);
 	}
 	
@@ -64,18 +64,18 @@ public class UIJoypad extends UIEntity
 	
 	public void setInputVec(final float rawX, final float rawY)
 	{
-		inputVec.set(rawX - xPos, rawY - yPos);
+		inputVec.set(rawX - pos.getX(), rawY - pos.getY());
 		inputAngle = inputVec.angleDeg();
 		
 		//scale vector properly
-		if (inputVec.length() > xSize / 2)
-			inputVec.scaleTo(xSize / 2);
+		if (inputVec.length() > size.getX() / 2)
+			inputVec.scaleTo(size.getX() / 2);
 		
 		//\TODO choose one method of moving inner circle
 		//fingerCircle.setPos(Vector2f.scaleTo(inputVec, inputVec.mag() - fingerCircle.xSize / 2));
-		fingerCircle.setPos(inputVec);
+		fingerCircle.setPos(Vector2.add(inputVec, pos));
 		
-		inputVec.scaleTo(inputVec.length() * MAX_SCALAR / xSize);
+		inputVec.scaleTo(inputVec.length() * MAX_SCALAR / size.getX());
 	}
 	
 	public void setInputVec(final Vector2 rawVec)
@@ -130,6 +130,13 @@ public class UIJoypad extends UIEntity
 	{
 		super.updateTextureVBO(gl);
 		fingerCircle.updateTextureVBO(gl);
+	}
+	
+	@Override
+	public void setPos(Vector2 pos)
+	{
+	    super.setPos(pos);
+	    fingerCircle.setPos(pos);
 	}
 	
 	public UIImage getFingerCircle()

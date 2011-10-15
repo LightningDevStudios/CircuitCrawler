@@ -165,6 +165,38 @@ public final class Vector4
 		                   vX * m14 + vY * m24 + vZ * m34 + vW * m44);
 	}
 	
+	/**
+	 * Turns all components of the vector into their absolute value equivalent.
+	 * @param v The vector to process.
+	 * @return A vector with all positive components.
+	 */
+	public static Vector4 abs(Vector4 v)
+	{
+	    return new Vector4(Math.abs(v.getX()), Math.abs(v.getY()), Math.abs(v.getZ()), Math.abs(v.getW()));
+	}
+	
+	/**
+	 * Subtacts one vector from another.
+	 * @param left The vector to subtract from.
+     * @param right The vector to subtract by.
+     * @return The resultant vector of the subtraction.
+	 */
+	public static Vector4 subtract(Vector4 left, Vector4 right)
+	{
+	    return new Vector4(left.getX() - right.getX(), left.getY() - right.getY(), left.getZ() - right.getZ(), left.getW() - right.getW());
+	}
+	
+	/**
+     * Adds two vectors together.
+     * @param left The vector to be added to.
+     * @param right The vector to be added by.
+     * @return The resultant vector of the addition.
+     */
+	public static Vector4 add(Vector4 left, Vector4 right)
+	{
+	    return new Vector4(left.getX() + right.getX(), left.getY() + right.getY(), left.getZ() + right.getZ(), left.getW() + right.getW());
+	}
+	
 	/***********
 	 * Swizzle *
 	 ***********/

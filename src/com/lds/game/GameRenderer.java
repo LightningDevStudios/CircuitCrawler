@@ -3,13 +3,13 @@ package com.lds.game;
 import android.content.Context;
 import android.media.MediaPlayer;
 import android.opengl.GLU;
-import android.os.Vibrator;
 import android.view.MotionEvent;
 
 import com.lds.EntityManager;
 import com.lds.Finger;
 import com.lds.Stopwatch;
 import com.lds.UI.*;
+import com.lds.Vibrator;
 import com.lds.game.entity.*;
 import com.lds.game.event.*;
 import com.lds.math.Vector2;
@@ -20,7 +20,7 @@ import javax.microedition.khronos.opengles.GL10;
 
 public class GameRenderer implements com.lds.Graphics.Renderer
 {
-	public static boolean vibrateSetting = true;
+	//public static boolean vibrateSetting = true;
 	
 	private Game game;
 	private Context context;
@@ -255,14 +255,14 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 						if (game.player.closeEnough(ent) && game.player.isFacing(ent))
 						{
 							game.player.holdObject((HoldObject)ent);
-							vibrator(100);
+							Vibrator.vibrate(context, 100);
 							game.btnB.unpress();
 						}
 					}
 					else //holding object, button pressed
 					{
 						game.player.dropObject();
-						vibrator(100);
+						Vibrator.vibrate(context, 100);
 						game.btnB.unpress();
 					}
 				}
@@ -271,7 +271,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 					if (game.player.closeEnough(ent) && game.player.isFacing(ent))
 					{
 						((PuzzleBox)ent).run();
-						vibrator(100);
+						Vibrator.vibrate(context, 100);
 					}
 					game.btnB.unpress();
 				}
@@ -292,7 +292,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 					attack.genHardwareBuffers(gl);
 					EntityManager.addEntity(attack);
 					game.player.loseEnergy(5);
-					vibrator(100);
+					Vibrator.vibrate(context, 100);
 					SoundPlayer.getInstance().playSound(2);
 					attack.enableTilesetMode(Game.tilesetentities, 1, 3);
 				}
@@ -300,7 +300,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 			else
 			{
 				game.player.throwObject();
-				vibrator(100);
+				Vibrator.vibrate(context, 100);
 			}
 			
 			game.btnA.unpress();
@@ -352,28 +352,6 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 			Log.d("LDS_Game", "FPS: " + (1000.0f / (Stopwatch.elapsedTimeMs() - game.frameInterval)));
 			frameCount = 0;
 		}*/
-	}
-
-	public void vibrator(int time)
-	{
-		if (vibrateSetting)
-		{
-			Vibrator vibrator = null; 
-			try 
-			{ 
-				vibrator = (Vibrator)context.getSystemService(Context.VIBRATOR_SERVICE); 
-			} 
-			catch (Exception e) { }
-			
-			if (vibrator != null)
-			{ 
-			  try 
-			  { 
-				  vibrator.vibrate((long)time); 
-			  } 
-			  catch (Exception e) { } 
-			} 
-		}
 	}
 	
 	public void onSurfaceChanged(GL10 gl, int width, int height)

@@ -1,10 +1,9 @@
 package com.lds.math;
 
-//TODO Gauss-Jordan elimination for an inverse method?
-
 /**
  * A 4x4 matrix class.
  * @author Lightning Development Studios
+ * \todo Gauss-Jordan elimination for an inverse method?
  */
 public final class Matrix4 
 {
