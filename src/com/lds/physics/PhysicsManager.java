@@ -12,6 +12,7 @@ public class PhysicsManager
 	 ***********/
 
 	private CollisionDetector collisionDetector;
+	private ArrayList<CollisionPair> pairList = new ArrayList<CollisionPair>();
 	
 	/****************
 	 * Constructors 
@@ -37,6 +38,41 @@ public class PhysicsManager
 		//which has 6 entities in it; entity 1 is compared to entity 2, 3, 4, 5, and 6.
 	public void SolveCollision()
 	{
-		//TODO Put all physics calculations in here 
+		if(pairList.size() > 0)
+			pairList.clear();
+		
+		QuadTreeList quadList = collisionDetector.QuadTreeDetection();
+		
+		for(ArrayList<Entity> ents : quadList.getOnLineEntity())
+		{
+			for(int i = 1; i < ents.size() - 1; i++)
+			{
+				if(collisionDetector.RadiusCheck(ents.get(0), ents.get(i)))
+				{
+					CollisionPair pair = collisionDetector.SeperatingAxisTheorem(ents.get(0), ents.get(i));
+					if(pair != null)
+					{
+						pairList.add(pair);
+					}
+				}
+			}
+		}
+		for(ArrayList<Entity> ents : quadList.getNormalEntity())
+		{
+			for(Entity ent : ents)
+			{
+				for(Entity en : ents)
+				{
+					if((!(ent.equals(en))) && collisionDetector.RadiusCheck(ent, en))
+					{
+						CollisionPair pair = collisionDetector.SeperatingAxisTheorem(ent, en);
+						if(pair != null)
+						{
+							pairList.add(pair);
+						}
+					}
+				}
+			}
+		}
 	}
 }
