@@ -3,7 +3,7 @@ package com.lds.game.entity;
 public class Door extends StaticEnt
 {
 	
-	public Door (float xPos, float yPos)
+	public Door(float xPos, float yPos)
 	{
 		 super(72.0f, xPos, yPos, 90.0f, 1.0f, 1.0f, true, false, true);
 		 enableColorMode(1.0f, 1.0f, 1.0f, 1.0f);
@@ -23,7 +23,7 @@ public class Door extends StaticEnt
 	}
 	
 	@Override
-	public boolean doesCollide (Entity ent)
+	public boolean doesCollide(Entity ent)
 	{
 		return (ent instanceof Tile) ? false : true;
 	}

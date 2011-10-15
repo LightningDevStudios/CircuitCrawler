@@ -1,10 +1,10 @@
 package com.lds.parser;
 
+import com.lds.game.entity.Entity;
+import com.lds.game.entity.Spike;
+
 import java.util.ArrayList;
 import java.util.HashMap;
-
-import com.lds.game.entity.Spike;
-import com.lds.game.entity.Entity;
 
 public class SpikeData extends StaticEntData
 {
@@ -21,7 +21,7 @@ public class SpikeData extends StaticEntData
 		
 		//COLOR
 		if (color != null)
-			spikeRef.enableColorMode(color[0],color[1],color[2],color[3]);
+			spikeRef.enableColorMode(color[0], color[1], color[2], color[3]);
 		
 		//GRADIENT
 		if (gradient != null)

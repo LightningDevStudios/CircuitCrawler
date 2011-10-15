@@ -1,10 +1,10 @@
 package com.lds.parser;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
 import com.lds.game.entity.Cannon;
 import com.lds.game.entity.Entity;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class CannonData extends StaticEntData
 {
@@ -23,13 +23,13 @@ public class CannonData extends StaticEntData
 			time = Integer.parseInt(cannonHM.get("time"));
 	}
 	
-	public  void createInst(ArrayList<Entity> entData)
+	public void createInst(ArrayList<Entity> entData)
 	{
 		cannonRef = new Cannon(size, xPos, yPos, angle, xScl, yScl, isSolid, circular, willCollide, speed, 5);
 		
 		//COLOR
 		if (color != null)
-			cannonRef.enableColorMode(color[0],color[1],color[2],color[3]);
+			cannonRef.enableColorMode(color[0], color[1], color[2], color[3]);
 		
 		//GRADIENT
 		if (gradient != null)

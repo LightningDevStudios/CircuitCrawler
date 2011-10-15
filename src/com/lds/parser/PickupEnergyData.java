@@ -1,10 +1,10 @@
 package com.lds.parser;
 
-import java.util.HashMap;
-import java.util.ArrayList;
 import com.lds.game.entity.Entity;
-
 import com.lds.game.entity.PickupEnergy;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class PickupEnergyData extends PickupData
 {
@@ -22,7 +22,7 @@ public class PickupEnergyData extends PickupData
 
 		//COLOR
 		if (color != null)
-			pickupEnergyRef.enableColorMode(color[0],color[1],color[2],color[3]);
+			pickupEnergyRef.enableColorMode(color[0], color[1], color[2], color[3]);
 		
 		//GRADIENT
 		if (gradient != null)

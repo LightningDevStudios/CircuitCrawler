@@ -1,5 +1,16 @@
 package com.lds.UI;
 
+import android.util.Log;
+
+import com.lds.Enums.RenderMode;
+import com.lds.Enums.UIPosition;
+
+import com.lds.Texture;
+import com.lds.TilesetHelper;
+import com.lds.game.Game;
+import com.lds.game.entity.Entity;
+import com.lds.math.Vector2;
+
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
@@ -8,29 +19,25 @@ import java.util.EnumSet;
 import javax.microedition.khronos.opengles.GL10;
 import javax.microedition.khronos.opengles.GL11;
 
-import android.util.Log;
-
-import com.lds.game.Game;
-import com.lds.game.entity.Entity;
-import com.lds.math.Vector2;
-import com.lds.Enums.RenderMode;
-import com.lds.Enums.UIPosition;
-import com.lds.Texture;
-import com.lds.TilesetHelper;
-
-//\TODO allow relative sizing to scale for multiple monitors
+//\todo allow relative sizing to scale for multiple monitors
 public abstract class UIEntity
 {
 	//constants
-	protected static final float[] UIPositionF = { 	0.0f, 1.0f,
-													-1.0f, 0.0f,
-													0.0f, -1.0f,
-													1.0f, 0.0f,
-													0.0f, 0.0f,
-													-1.0f, 1.0f,
-													1.0f, 1.0f,
-													-1.0f, -1.0f,
-													1.0f, -1.0f }; //clamped between -1 and 1, turns UIPosition enum to relative coords
+    
+    /**
+     * clamped between -1 and 1, turns UIPosition enum to relative coords.
+     */
+	protected static final float[] UIPositionF =
+	{
+	    0.0f, 1.0f,
+		-1.0f, 0.0f,
+		0.0f, -1.0f,
+		1.0f, 0.0f,
+		0.0f, 0.0f,
+		-1.0f, 1.0f,
+		1.0f, 1.0f,
+		-1.0f, -1.0f,
+		1.0f, -1.0f };
 	
 	//graphics data
 	protected float xSize, ySize, xPos, yPos, xRelative, yRelative, halfXSize, halfYSize;
@@ -57,7 +64,7 @@ public abstract class UIEntity
 		this(xSize, ySize, UIPositionF[position.getValue() * 2], UIPositionF[(position.getValue() * 2) + 1], 0, 0, 0, 0);
 		this.position = position;
 	}
-	
+
 	public UIEntity(float xSize, float ySize, float xRelative, float yRelative) 
 	{
 		this(xSize, ySize, xRelative, yRelative, 0, 0, 0, 0);
@@ -83,10 +90,13 @@ public abstract class UIEntity
 		this.halfXSize = xSize / 2;
 		this.halfYSize = ySize / 2;
 		
-		float[] initVerts = { 	halfXSize, halfYSize,
-								halfXSize, -halfYSize,
-								-halfXSize, halfYSize,
-								-halfXSize, -halfYSize };
+		float[] initVerts =
+		{
+		    halfXSize, halfYSize,
+			halfXSize, -halfYSize,
+			-halfXSize, halfYSize,
+			-halfXSize, -halfYSize
+		};
 		
 		this.vertices = initVerts;
 		this.vertexBuffer = setBuffer(vertexBuffer, vertices);
@@ -119,18 +129,35 @@ public abstract class UIEntity
 		
 		//Enable settings for this polygon
 		gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
-		if (containsTexture || containsTileset) {gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);}
-		if (containsGradient) {gl.glEnableClientState(GL10.GL_COLOR_ARRAY);}
+		if (containsTexture || containsTileset)
+		{
+		    gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
+		}
+		
+		if (containsGradient)
+		{
+		    gl.glEnableClientState(GL10.GL_COLOR_ARRAY);
+		}
 		
 		//Sets color
-		if (containsColor) {gl.glColor4f(colorR, colorG, colorB, colorA);}
+		if (containsColor)
+		{
+		    gl.glColor4f(colorR, colorG, colorB, colorA);
+		}
 		
 		//Bind vertices, texture coordinates, and/or color coordinates to the OpenGL system
-		if(!Entity.useVBOs)
+		if (!Entity.useVBOs)
 		{
 			gl.glVertexPointer(2, GL10.GL_FLOAT, 0, vertexBuffer);
-			if (containsTexture || containsTileset) {gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, textureBuffer);}
-			if (containsGradient) {gl.glColorPointer(4, GL10.GL_FLOAT, 0, colorBuffer);}
+			if (containsTexture || containsTileset)
+			{
+			    gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, textureBuffer);
+			}
+			
+			if (containsGradient)
+			{
+			    gl.glColorPointer(4, GL10.GL_FLOAT, 0, colorBuffer);
+			}
 			
 			//Draw the vertices
 			gl.glDrawElements(GL10.GL_TRIANGLE_STRIP, 4, GL10.GL_UNSIGNED_BYTE, Entity.indexBuffer);	
@@ -166,7 +193,11 @@ public abstract class UIEntity
 				
 		//Disable things for next polygon
 		gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
-		if(containsGradient) {gl.glDisableClientState(GL10.GL_COLOR_ARRAY);}
+		if (containsGradient)
+		{
+		    gl.glDisableClientState(GL10.GL_COLOR_ARRAY);
+		}
+		
 		gl.glDisable(GL10.GL_CULL_FACE);
 		
 		//Disable texturing for next polygon
@@ -177,7 +208,10 @@ public abstract class UIEntity
 		}
 		
 		//Reset color for next polygon.
-		if (containsColor) {gl.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);}
+		if (containsColor)
+		{
+		    gl.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+		}
 	}
 	
 	public void update()
@@ -228,6 +262,8 @@ public abstract class UIEntity
 				case TOPRIGHT:
 					this.topPad = halfYSize + topPad;
 					break;
+            default:
+                break;
 			}
 			
 			switch (position)
@@ -237,6 +273,8 @@ public abstract class UIEntity
 				case BOTTOMLEFT:
 					this.leftPad = halfXSize + leftPad;
 					break;
+				default:
+				    break;
 			}
 			
 			switch (position)
@@ -246,6 +284,7 @@ public abstract class UIEntity
 				case BOTTOMRIGHT:
 					this.bottomPad = halfYSize + bottomPad;
 					break;
+				default:
 			}
 			
 			switch (position)
@@ -255,6 +294,7 @@ public abstract class UIEntity
 				case BOTTOMRIGHT:
 					this.rightPad = halfXSize + rightPad;
 					break;
+				default:
 			}
 			updatePosition();
 		}
@@ -277,10 +317,13 @@ public abstract class UIEntity
 		float posX = texture[2];
 		float posY = texture[5];
 		
-		float[] coords = { 	posX, negY,
-							posX, posY,
-							negX, negY,
-							negX, posY };
+		float[] coords = 
+		{
+		    posX, negY,
+			posX, posY,
+			negX, negY,
+			negX, posY 
+		};
 		
 		this.texture = coords;
 		textureBuffer = setBuffer(textureBuffer, texture);
@@ -307,7 +350,7 @@ public abstract class UIEntity
 			final int vertSize = vertexBuffer.capacity() * 4;
 			gl11.glBufferData(GL11.GL_ARRAY_BUFFER, vertSize, vertexBuffer, GL11.GL_STATIC_DRAW); //\TODO choose static/draw settings..?
 			
-			if(renderMode.contains(RenderMode.GRADIENT))
+			if (renderMode.contains(RenderMode.GRADIENT))
 			{
 				gl11.glGenBuffers(1, tempPtr, 0);
 				VBOGradientPtr = tempPtr[0];
@@ -334,7 +377,7 @@ public abstract class UIEntity
 	
 	public void updateTextureVBO(GL10 gl)
 	{
-		if(Entity.useVBOs && needToUpdateTexVBO)
+		if (Entity.useVBOs && needToUpdateTexVBO)
 		{
 			GL11 gl11 = (GL11)gl;
 			gl11.glBindBuffer(GL11.GL_ARRAY_BUFFER, VBOTexturePtr);
@@ -346,7 +389,7 @@ public abstract class UIEntity
 	
 	public void updateGradientVBO(GL10 gl)
 	{
-		if(Entity.useVBOs && needToUpdateGradientVBO)
+		if (Entity.useVBOs && needToUpdateGradientVBO)
 		{
 			GL11 gl11 = (GL11)gl;
 			gl11.glBindBuffer(GL11.GL_ARRAY_BUFFER, VBOGradientPtr);
@@ -358,7 +401,7 @@ public abstract class UIEntity
 
 	public void updateVertexVBO(GL10 gl) 
 	{
-		if(Entity.useVBOs && needToUpdateVertexVBO)
+		if (Entity.useVBOs && needToUpdateVertexVBO)
 		{
 			GL11 gl11 = (GL11)gl;
 			gl11.glBindBuffer(GL11.GL_ARRAY_BUFFER, VBOVertPtr);
@@ -448,11 +491,15 @@ public abstract class UIEntity
 		
 	public void updateTexture(Texture tex)
 	{
-			float[] initTexture = { 1.0f, 0.0f,
-									1.0f, 1.0f,
-									0.0f, 0.0f,
-									0.0f, 1.0f};
-			updateTexture(tex, initTexture);
+		float[] initTexture = 
+		{
+		    1.0f, 0.0f,
+			1.0f, 1.0f,
+			0.0f, 0.0f,
+			0.0f, 1.0f
+		};
+		
+		updateTexture(tex, initTexture);
 	}
 	
 	public void updateTexture(Texture tex, float[] texture)
@@ -465,7 +512,7 @@ public abstract class UIEntity
 	
 	public void disableTextureMode()
 	{
-		if(renderMode.contains(RenderMode.TEXTURE))
+		if (renderMode.contains(RenderMode.TEXTURE))
 			renderMode.remove(RenderMode.TEXTURE);
 	}
 	
@@ -511,7 +558,7 @@ public abstract class UIEntity
 	
 	public void disableTilesetMode()
 	{
-		if(renderMode.contains(RenderMode.TILESET))
+		if (renderMode.contains(RenderMode.TILESET))
 			renderMode.remove(RenderMode.TILESET);
 	}
 	
@@ -519,20 +566,75 @@ public abstract class UIEntity
 	 * Accessors and Mutators *
 	 **************************/
 	
-	public float getXSize() 			{ return xSize; }
-	public float getYSize() 			{ return ySize; }
-	public float getXPos()				{ return xPos; }
-	public float getYPos()				{ return yPos; }
-	public float getColorR() 			{ return colorR; }
-	public float getColorG()			{ return colorG; }
-	public float getColorB()			{ return colorB; }
-	public float getColorA()			{ return colorA; }
-	public Texture getTexture()			{ return tex; }
-	public UIPosition getPosEnum()		{ return position; }
-	public float[] getVertices()		{ return vertices; }
-	public float[] getGradientCoords()	{ return color; }
-	public float[] getTextureCoords()	{ return texture; }
-	public EnumSet<RenderMode> getRenderMode()	{ return renderMode; }
+	public float getXSize()
+	{
+	    return xSize;
+	}
+	
+	public float getYSize()
+	{
+	    return ySize;
+	}
+	
+	public float getXPos()
+	{
+	    return xPos;
+	}
+	
+	public float getYPos()
+	{
+	    return yPos;
+	}
+	
+	public float getColorR()
+	{
+	    return colorR;
+	}
+	
+	public float getColorG()
+	{
+	    return colorG;
+	}
+	
+	public float getColorB()
+	{
+	    return colorB;
+	}
+	
+	public float getColorA()
+	{
+	    return colorA;
+	}
+	
+	public Texture getTexture()
+	{
+	    return tex;
+	}
+	
+	public UIPosition getPosEnum()
+	{
+	    return position;
+	}
+	
+	public float[] getVertices()
+	{
+	    return vertices;
+	}
+	
+	public float[] getGradientCoords()
+	{
+	    return color;
+	}
+	
+	public float[] getTextureCoords()
+	{
+	    return texture;
+	}
+	
+	public EnumSet<RenderMode> getRenderMode()
+	{
+	    return renderMode;
+	}
 	
 	public void setPos(Vector2 posVec)
 	{
@@ -540,12 +642,43 @@ public abstract class UIEntity
 		yPos = posVec.getY();
 	}
 	
-	public void setXSize(float xSize)			{ this.xSize = xSize; }
-	public void setYSize(float ySize)			{ this.ySize = ySize; }
-	public void setXPos(float xPos)				{ this.xPos = xPos; }
-	public void setYPos(float yPos)				{ this.yPos = yPos; }
-	public void setTopPad(float topPad)			{ this.topPad = topPad; }
-	public void setLeftPad(float leftPad)		{ this.leftPad = leftPad; }
-	public void setBottomPad(float bottomPad)	{ this.bottomPad = bottomPad; }
-	public void setRightPad(float rightPad)		{ this.rightPad = rightPad; }
+	public void setXSize(float xSize)
+	{
+	    this.xSize = xSize;
+	}
+	
+	public void setYSize(float ySize)
+	{
+	    this.ySize = ySize;
+	}
+	
+	public void setXPos(float xPos)
+	{
+	    this.xPos = xPos;
+	}
+	
+	public void setYPos(float yPos)
+	{
+	    this.yPos = yPos;
+	}
+	
+	public void setTopPad(float topPad)
+	{
+	    this.topPad = topPad;
+	}
+	
+	public void setLeftPad(float leftPad)
+	{
+	    this.leftPad = leftPad;
+	}
+	
+	public void setBottomPad(float bottomPad)
+	{
+	    this.bottomPad = bottomPad;
+	}
+	
+	public void setRightPad(float rightPad)
+	{
+	    this.rightPad = rightPad;
+	}
 }

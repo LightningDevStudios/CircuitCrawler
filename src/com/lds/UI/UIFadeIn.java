@@ -11,7 +11,7 @@ public class UIFadeIn extends UIEntity
 	
 	public UIFadeIn(float xSize, float ySize, float xRelative, float yRelative)
 	{
-		super (xSize, ySize, xRelative, yRelative);
+		super(xSize, ySize, xRelative, yRelative);
 	}
 	
 	public UIFadeIn(float xSize, float ySize, UIPosition position, float topPad, float leftPad, float bottomPad, float rightPad) 

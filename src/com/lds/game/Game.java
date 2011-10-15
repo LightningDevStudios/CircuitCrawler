@@ -1,26 +1,22 @@
 package com.lds.game;
 
-import java.util.ArrayList;
-
-import javax.microedition.khronos.opengles.GL10;
-
 import android.content.Context;
 
 import com.lds.*;
 import com.lds.Enums.*;
-import com.lds.game.ai.Node;
-import com.lds.game.ai.NodePath;
 import com.lds.UI.*;
+import com.lds.game.ai.Node;
 import com.lds.game.entity.*;
 import com.lds.game.event.*;
-import com.lds.trigger.*;
-
 import com.lds.math.Vector2;
 import com.lds.parser.Parser;
 import com.lds.physics.CollisionDetector;
-import com.lds.physics.CollisionDetector;
-import com.lds.physics.PhysicsManager;
 import com.lds.physics.World;
+import com.lds.trigger.*;
+
+import java.util.ArrayList;
+
+import javax.microedition.khronos.opengles.GL10;
 
 public class Game
 {
@@ -61,19 +57,19 @@ public class Game
 	public Player player;
 	
 	//Constructors
-	public Game (Context context, GL10 gl, int levelId)
+	public Game(Context context, GL10 gl, int levelId)
 	{		
 		tilesetwire = new Texture(R.drawable.tilesetwire, 128, 128, 8, 8, context, "tilesetwire");
 		text = new Texture(R.drawable.text, 256, 256, 16, 8, context, "text");
 		tilesetworld = new Texture(R.raw.tilesetworld, 512, 256, 16, 8, context, "tilesetworld");
 		tilesetentities = new Texture(R.raw.tilesetentities, 256, 256, 8, 8, context, "tilesetentities");
-		baricons = new Texture (R.raw.baricons, 32, 16, 2, 1, context, "baricons");
+		baricons = new Texture(R.raw.baricons, 32, 16, 2, 1, context, "baricons");
 		
 		final Texture joystickout = new Texture(R.raw.joystickout, 64, 64, 1, 1, context, "joystickout");
 		final Texture joystickin = new Texture(R.raw.joystickin, 32, 32, 1, 1, context, "joystickin");
 		final Texture buttona = new Texture(R.raw.buttona, 32, 32, 1, 1, context, "buttona");
 		final Texture buttonb = new Texture(R.raw.buttonb, 32, 32, 1, 1, context, "buttonb");
-		final Texture energybarborder = new Texture (R.raw.energybarborder, 128, 16, 1, 1, context, "energybarborder");
+		final Texture energybarborder = new Texture(R.raw.energybarborder, 128, 16, 1, 1, context, "energybarborder");
 		final Texture healthbarborder = new Texture(R.raw.healthbarborder, 256, 16, 1, 1, context, "healthbarborder");
 			
 		entList = new ArrayList<Entity>();
@@ -109,8 +105,12 @@ public class Game
 		try	
 		{ 
 			parser.parseLevel(); 
-		} 
-		catch (Exception e) { e.printStackTrace(); } 
+		}
+		
+		catch (Exception e) 
+		{
+		    e.printStackTrace();
+		}
 	
 		tileset = parser.tileset;
 		entList.addAll(parser.entList);
@@ -149,7 +149,7 @@ public class Game
 		healthBarCover.enableTextureMode(healthbarborder);
 		UIList.add(healthBarCover);
 		
-		UIImage healthIcon = new UIImage (16, 16, UIPosition.TOPRIGHT);
+		UIImage healthIcon = new UIImage(16, 16, UIPosition.TOPRIGHT);
 		healthIcon.setTopPad(5.0f);
 		healthIcon.setRightPad(266.0f);
 		healthIcon.autoPadding(5, 0, 0, 266);
@@ -171,7 +171,7 @@ public class Game
 		energyBarCover.enableTextureMode(energybarborder);
 		UIList.add(energyBarCover);
 		
-		UIImage energyIcon = new UIImage (16, 16, UIPosition.TOPRIGHT);
+		UIImage energyIcon = new UIImage(16, 16, UIPosition.TOPRIGHT);
 		energyIcon.setTopPad(26.0f);
 		energyIcon.setRightPad(138.0f);
 		energyIcon.autoPadding(26, 0, 0, 138);
@@ -214,7 +214,7 @@ public class Game
 		minY = camPosY - (screenW / 2);
 		maxY = camPosY + (screenW / 2);
 		
-		for(Entity ent : entList)
+		for (Entity ent : entList)
 		{
 			//define max square bounds
 			final float entMinX = ent.getXPos() - (float)ent.getDiagonal();
@@ -251,9 +251,9 @@ public class Game
 		tilesetMaxY = (int)((Math.ceil(Math.abs(minY - tilesetHalfHeight)) - 1) / Tile.TILE_SIZE_F);
 		
 		//make sure bounds don't exceed level edges
-		if(tilesetMinX < 0)
+		if (tilesetMinX < 0)
 			tilesetMinX = 0;
-		if(tilesetMinY < 0)
+		if (tilesetMinY < 0)
 			tilesetMinY = 0;
 		if (tilesetMaxX > tileset[0].length - 1)
 			tilesetMaxX = tileset[0].length - 1;
@@ -314,9 +314,9 @@ public class Game
 	
 	public void updateFingers()
 	{
-		if(player.userHasControl())
+		if (player.userHasControl())
 		{
-			for(Finger f : fingerList)
+			for (Finger f : fingerList)
 			{
 				f.update();
 			}

@@ -1,14 +1,14 @@
 package com.lds.game.entity;
 
-import java.util.ArrayList;
-
 import com.lds.EntityManager;
 import com.lds.math.Vector2;
 
+import java.util.ArrayList;
+
 public class AttackBolt extends PhysEnt
 {
-	Vector2 directionVec;
-	ArrayList<Entity> ignoreList;
+	private Vector2 directionVec;
+	private ArrayList<Entity> ignoreList;
 	
 	public AttackBolt(Vector2 posVec, Vector2 directionVec, float angle)
 	{
@@ -59,12 +59,12 @@ public class AttackBolt extends PhysEnt
 		}
 	}
 	
-	public void ignore (Entity ent)
+	public void ignore(Entity ent)
 	{
 		ignoreList.add(ent);
 	}
 	
-	public boolean doesIgnore (Entity ent)
+	public boolean doesIgnore(Entity ent)
 	{
 		return ignoreList.contains(ent);
 	}

@@ -1,9 +1,10 @@
 package com.lds.parser;
 
-import java.util.HashMap;
-import java.util.ArrayList;
 import com.lds.game.entity.Entity;
 import com.lds.game.entity.Teleporter;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class TeleporterData extends StaticEntData
 {
@@ -20,7 +21,7 @@ public class TeleporterData extends StaticEntData
 
 		//COLOR
 		if (color != null)
-			teleporterRef.enableColorMode(color[0],color[1],color[2],color[3]);
+			teleporterRef.enableColorMode(color[0], color[1], color[2], color[3]);
 		
 		//GRADIENT
 		if (gradient != null)

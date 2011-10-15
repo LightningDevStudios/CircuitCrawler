@@ -4,9 +4,9 @@ import com.lds.game.entity.WallButton;
 
 public class CauseWallButton extends Cause//cause based on the state of a button
 {
-	WallButton button;
+	private WallButton button;
 	
-	public CauseWallButton (WallButton button)
+	public CauseWallButton(WallButton button)
 	{
 		this.button = button;
 	}

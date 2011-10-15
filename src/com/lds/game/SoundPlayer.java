@@ -1,19 +1,20 @@
 package com.lds.game;
 
-import java.util.HashMap;
-
 import android.content.Context;
 import android.media.AudioManager;
 import android.media.SoundPool;
 
-public class SoundPlayer 
+import java.util.HashMap;
+
+public final class SoundPlayer 
 {
 	public static final int SOUND_TEST = 1;
 	public static final int SHOOT_SOUND = 2;
 	public static final int ENEMY_DEATH = 3;
 	public static final int PIT_FALL = 4;
 	public static final int TELEPORT = 5;
-	private boolean enableSound = true, enableMusic = true;
+	private boolean enableSound = true;
+	private boolean enableMusic = true;
 	private float effectVolume, musicVolume;
 	
 	private static SoundPlayer p_sp;
@@ -22,7 +23,7 @@ public class SoundPlayer
 	private HashMap<Integer, Integer> poolMap;
 	private Context context;
 	
-	private SoundPlayer()	
+	private SoundPlayer()
 	{
 		pool = new SoundPool(6, AudioManager.STREAM_MUSIC, 100);
 		poolMap = new HashMap<Integer, Integer>();
@@ -32,7 +33,7 @@ public class SoundPlayer
 	{
 		if (p_sp == null)
 		{
-			synchronized(SoundPlayer.class)
+			synchronized (SoundPlayer.class)
 			{
 				if (p_sp == null)
 				{
@@ -55,7 +56,7 @@ public class SoundPlayer
 	
 	public void playSound(int sound)
 	{
-		if(enableSound)
+		if (enableSound)
 		{
 			AudioManager mgr = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
 			float streamVolumeCurrent = mgr.getStreamVolume(AudioManager.STREAM_MUSIC);
@@ -66,13 +67,43 @@ public class SoundPlayer
 		}
 	}
 	
-	public boolean getSoundEnabled()	{ return enableSound; }
-	public boolean getMusicEnabled()	{ return enableMusic; }
-	public float getEffectVolume()		{ return effectVolume; }
-	public float getMusicVolume()		{ return musicVolume; }
+	public boolean getSoundEnabled()
+	{
+	    return enableSound;
+	}
 	
-	public void setSoundEnabled(boolean state)	{ enableSound = state; }
-	public void setMusicEnabled(boolean state)	{ enableMusic = state; }
-	public void setEffectVolume(float volume)	{ effectVolume = volume; }
-	public void setMusicVolume(float volume)	{ musicVolume = volume; }
+	public boolean getMusicEnabled()
+	{
+	    return enableMusic;
+	}
+	
+	public float getEffectVolume()
+	{
+	    return effectVolume;
+	}
+	
+	public float getMusicVolume()
+	{
+	    return musicVolume;
+	}
+	
+	public void setSoundEnabled(boolean state)
+	{
+	    enableSound = state;
+	}
+	
+	public void setMusicEnabled(boolean state)
+	{
+	    enableMusic = state;
+	}
+	
+	public void setEffectVolume(float volume)
+	{
+	    effectVolume = volume;
+	}
+	
+	public void setMusicVolume(float volume)
+	{
+	    musicVolume = volume;
+	}
 }

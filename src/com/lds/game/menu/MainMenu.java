@@ -1,21 +1,12 @@
 package com.lds.game.menu;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Vibrator;
-import android.text.Editable;
 import android.view.View;
 import android.view.Window;
 import android.view.animation.Animation;
@@ -27,7 +18,6 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
-import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.SeekBar;
@@ -39,12 +29,15 @@ import com.lds.game.GameRenderer;
 import com.lds.game.R;
 import com.lds.game.Run;
 import com.lds.game.SoundPlayer;
-import com.lds.game.entity.Player;
-import com.lds.trigger.EffectEndGame;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 public class MainMenu extends Activity
 {	
-	public boolean vibrateSettingMain = true, test = true;
+	public boolean vibrateSettingMain = true;
+	public boolean test = true;
 	public Context context;
 	public SeekBar mSeekBar;
 	private ViewAnimator animator;
@@ -128,9 +121,18 @@ public class MainMenu extends Activity
 			SoundPlayer.getInstance().setEffectVolume(StorageHelper.byteArrayToFloat(buffer));
 			fis.close();
 		}
-		catch (FileNotFoundException e) { SoundPlayer.getInstance().setEffectVolume(0.5f);  } 
-		catch (IOException e) { e.printStackTrace(); }
-		catch (ArrayIndexOutOfBoundsException e) { e.printStackTrace(); }
+		catch (FileNotFoundException e)
+		{
+		    SoundPlayer.getInstance().setEffectVolume(0.5f);
+		}
+		catch (IOException e)
+		{
+		    e.printStackTrace();
+		}
+		catch (ArrayIndexOutOfBoundsException e)
+		{
+		    e.printStackTrace();
+		}
 		
 		try
 		{
@@ -140,21 +142,39 @@ public class MainMenu extends Activity
 			SoundPlayer.getInstance().setMusicVolume(StorageHelper.byteArrayToFloat(buffer));
 			fis.close();
 		}
-		catch (FileNotFoundException e) { SoundPlayer.getInstance().setMusicVolume(0.5f); } 
-		catch (IOException e) { e.printStackTrace(); }
-		catch (ArrayIndexOutOfBoundsException e) { e.printStackTrace(); }
+		catch (FileNotFoundException e)
+		{
+		    SoundPlayer.getInstance().setMusicVolume(0.5f);
+		}
+		catch (IOException e)
+		{
+		    e.printStackTrace();
+		}
+		catch (ArrayIndexOutOfBoundsException e)
+		{
+		    e.printStackTrace();
+		}
 		
 		try
 		{
 			FileInputStream fis = openFileInput("vibration_enabled");
 			byte[] buffer = new byte[1];
 			fis.read(buffer, 0, 1);
-			GameRenderer.vibrateSetting = (buffer[0] != 0);
+			GameRenderer.vibrateSetting = buffer[0] != 0;
 			fis.close();
 		}
-		catch (FileNotFoundException e) { e.printStackTrace(); } 
-		catch (IOException e) { e.printStackTrace(); }
-		catch (ArrayIndexOutOfBoundsException e) { e.printStackTrace(); }
+		catch (FileNotFoundException e)
+		{
+		    e.printStackTrace();
+		}
+		catch (IOException e)
+		{
+		    e.printStackTrace();
+		}
+		catch (ArrayIndexOutOfBoundsException e)
+		{
+		    e.printStackTrace();
+		}
 		
 		try
 		{
@@ -164,9 +184,18 @@ public class MainMenu extends Activity
 			SoundPlayer.getInstance().setMusicEnabled(buffer[0] != 0);
 			fis.close();
 		}
-		catch (FileNotFoundException e) { e.printStackTrace(); } 
-		catch (IOException e) { e.printStackTrace(); }
-		catch (ArrayIndexOutOfBoundsException e) { e.printStackTrace(); }
+		catch (FileNotFoundException e)
+		{
+		    e.printStackTrace();
+		}
+		catch (IOException e)
+		{
+		    e.printStackTrace();
+		}
+		catch (ArrayIndexOutOfBoundsException e)
+		{
+		    e.printStackTrace();
+		}
 		
 		try
 		{
@@ -176,9 +205,18 @@ public class MainMenu extends Activity
 			SoundPlayer.getInstance().setSoundEnabled(buffer[0] != 0);
 			fis.close();
 		}
-		catch (FileNotFoundException e) { e.printStackTrace(); } 
-		catch (IOException e) { e.printStackTrace(); }
-		catch (ArrayIndexOutOfBoundsException e) { e.printStackTrace(); }
+		catch (FileNotFoundException e)
+		{
+		    e.printStackTrace();
+		}
+		catch (IOException e)
+		{
+		    e.printStackTrace();
+		}
+		catch (ArrayIndexOutOfBoundsException e)
+		{
+		    e.printStackTrace();
+		}
 		
 		try
 		{
@@ -188,11 +226,23 @@ public class MainMenu extends Activity
 			unlockedLevel = (int)StorageHelper.byteArrayToFloat(buffer);
 			fis.close();
 		}
-		catch (FileNotFoundException e) { SoundPlayer.getInstance().setEffectVolume(0.5f);  } 
-		catch (IOException e) { e.printStackTrace(); }
-		catch (ArrayIndexOutOfBoundsException e) { e.printStackTrace(); }
 		
-		pd = ProgressDialog.show(this,"Loading","...Please wait.",true, false);
+		catch (FileNotFoundException e)
+		{
+		    SoundPlayer.getInstance().setEffectVolume(0.5f);
+		}
+		
+		catch (IOException e)
+		{
+		    e.printStackTrace();
+		}
+		
+		catch (ArrayIndexOutOfBoundsException e)
+		{
+		    e.printStackTrace();
+		}
+		
+		pd = ProgressDialog.show(this, "Loading", "...Please wait.", true, false);
 		pd.hide();
 		
 		//Defaults, settings, and other stuff
@@ -299,11 +349,17 @@ public class MainMenu extends Activity
         			fos.write(StorageHelper.floatToByteArray(newVol));
         			fos.close();
         		} 
-        		catch (FileNotFoundException e) { e.printStackTrace(); } 
-        		catch (IOException e) { e.printStackTrace(); }
+        		catch (FileNotFoundException e)
+        		{
+        		    e.printStackTrace();
+        		}
+        		catch (IOException e)
+        		{
+        		    e.printStackTrace();
+        		}
         	}
-            public void onStartTrackingTouch(SeekBar volumeControl)	{	}
-            public void onStopTrackingTouch(SeekBar volumeControl)	{	}	
+            public void onStartTrackingTouch(SeekBar volumeControl){}
+            public void onStopTrackingTouch(SeekBar volumeControl){}
         });
         /******************************************************************************************************************************/
         
@@ -321,11 +377,17 @@ public class MainMenu extends Activity
         			fos.write(StorageHelper.floatToByteArray(newVol));
         			fos.close();
         		} 
-        		catch (FileNotFoundException e) { e.printStackTrace(); } 
-        		catch (IOException e) { e.printStackTrace(); }
+        		catch (FileNotFoundException e)
+        		{
+        		    e.printStackTrace();
+        		}
+        		catch (IOException e)
+        		{
+        		    e.printStackTrace();
+        		}
         	}
-            public void onStartTrackingTouch(SeekBar volumeControl)	{	}
-            public void onStopTrackingTouch(SeekBar volumeControl)	{	}	
+            public void onStartTrackingTouch(SeekBar volumeControl){}
+            public void onStopTrackingTouch(SeekBar volumeControl){}
         });
         /******************************************************************************************************************************/
         
@@ -344,8 +406,14 @@ public class MainMenu extends Activity
         			fos.write(value);
         			fos.close();
         		} 
-        		catch (FileNotFoundException e) { e.printStackTrace(); } 
-        		catch (IOException e) { e.printStackTrace(); }
+        		catch (FileNotFoundException e)
+        		{
+        		    e.printStackTrace();
+        		}
+        		catch (IOException e)
+        		{
+        		    e.printStackTrace();
+        		}
 		    }
 		});
 		/******************************************************************************************************************************/
@@ -386,8 +454,14 @@ public class MainMenu extends Activity
         			fos.write(value);
         			fos.close();
         		} 
-        		catch (FileNotFoundException e) { e.printStackTrace(); } 
-        		catch (IOException e) { e.printStackTrace(); }
+        		catch (FileNotFoundException e)
+        		{
+        		    e.printStackTrace();
+        		}
+        		catch (IOException e)
+        		{
+        		    e.printStackTrace();
+        		}
 		    }
 		});
 		/******************************************************************************************************************************/
@@ -407,8 +481,14 @@ public class MainMenu extends Activity
         			fos.write(value);
         			fos.close();
         		} 
-        		catch (FileNotFoundException e) { e.printStackTrace(); } 
-        		catch (IOException e) { e.printStackTrace(); }
+        		catch (FileNotFoundException e)
+        		{
+        		    e.printStackTrace();
+        		}
+        		catch (IOException e)
+        		{
+        		    e.printStackTrace();
+        		}
 		    }
 		});
 		/******************************************************************************************************************************/  
@@ -467,44 +547,46 @@ public class MainMenu extends Activity
 				
 				switch (position)
 				{
-					case 0:
-						//Run Game
-						if (animator.getDisplayedChild() != 0)
-							animator.setDisplayedChild(0);
-						break;
-					case 1:
-						//Run Tutorial Level
-						if (animator.getDisplayedChild() != 1)
-							animator.setDisplayedChild(1);
-						break;
-					case 2:
-						//Settings
-						if (animator.getDisplayedChild() != 2)
-							animator.setDisplayedChild(2);
-						break;
-					case 3:
-						//Donate Button
-						Intent browserIntent = new Intent("android.intent.action.VIEW", Uri.parse("https://www.networkforgood.org/donation/ExpressDonation.aspx?ORGID2=912125886"));
-						startActivity(browserIntent);
-						break;
-					case 4:
-						//About YTF
-						if (animator.getDisplayedChild() != 3)
-							animator.setDisplayedChild(3);
-						break;
-					case 5:
-						//About LDS
-						if (animator.getDisplayedChild() != 4)
-							animator.setDisplayedChild(4);
-						break;
-					case 6:
-						//Credits
-						if (animator.getDisplayedChild() != 5)
-							animator.setDisplayedChild(5);
-						break;
-					case 7:
-						//Quit
-						finish();
+				case 0:
+					//Run Game
+					if (animator.getDisplayedChild() != 0)
+						animator.setDisplayedChild(0);
+					break;
+				case 1:
+					//Run Tutorial Level
+					if (animator.getDisplayedChild() != 1)
+						animator.setDisplayedChild(1);
+					break;
+				case 2:
+					//Settings
+					if (animator.getDisplayedChild() != 2)
+						animator.setDisplayedChild(2);
+					break;
+				case 3:
+					//Donate Button
+					Intent browserIntent = new Intent("android.intent.action.VIEW", Uri.parse("https://www.networkforgood.org/donation/ExpressDonation.aspx?ORGID2=912125886"));
+					startActivity(browserIntent);
+					break;
+				case 4:
+					//About YTF
+					if (animator.getDisplayedChild() != 3)
+						animator.setDisplayedChild(3);
+					break;
+				case 5:
+					//About LDS
+					if (animator.getDisplayedChild() != 4)
+						animator.setDisplayedChild(4);
+					break;
+				case 6:
+					//Credits
+					if (animator.getDisplayedChild() != 5)
+						animator.setDisplayedChild(5);
+					break;
+				case 7:
+					//Quit
+					finish();
+                default:
+                    break;
 				}
 			}	
 		});
@@ -572,8 +654,14 @@ public class MainMenu extends Activity
     			fos.write(StorageHelper.floatToByteArray((float)unlockedLevel));
     			fos.close();
     		} 
-    		catch (FileNotFoundException e) { e.printStackTrace(); } 
-    		catch (IOException e) { e.printStackTrace(); }
+    		catch (FileNotFoundException e)
+    		{
+    		    e.printStackTrace();
+    		}
+    		catch (IOException e)
+    		{
+    		    e.printStackTrace();
+    		}
 		}
 		
 		else if (resultCode == 3)
@@ -591,17 +679,17 @@ public class MainMenu extends Activity
 			Vibrator vibrator = null; 
 			try 
 			{ 
-				vibrator=(Vibrator)context.getSystemService(Context.VIBRATOR_SERVICE); 
+				vibrator = (Vibrator)context.getSystemService(Context.VIBRATOR_SERVICE); 
 			} 
-			catch (Exception e) {}
+			catch (Exception e) { }
 			
 			if (vibrator != null)
 			{ 
 			  try 
 			  { 
-				  vibrator.vibrate(((long)time)); 
+				  vibrator.vibrate((long)time); 
 			  } 
-			  catch (Exception e) {} 
+			  catch (Exception e) { } 
 			} 
 	}
 	

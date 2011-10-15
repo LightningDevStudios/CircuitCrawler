@@ -1,10 +1,10 @@
 package com.lds.parser;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
 import com.lds.game.entity.Entity;
 import com.lds.game.entity.WallButton;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class WallButtonData extends StaticEntData
 {
@@ -20,7 +20,7 @@ public class WallButtonData extends StaticEntData
 		
 		//COLOR
 		if (color != null)
-			wallButtonRef.enableColorMode(color[0],color[1],color[2],color[3]);
+			wallButtonRef.enableColorMode(color[0], color[1], color[2], color[3]);
 		
 		//GRADIENT
 		if (gradient != null)

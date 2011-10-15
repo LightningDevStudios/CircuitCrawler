@@ -1,12 +1,12 @@
 package com.lds.game.entity;
 
-import java.util.ArrayList;
-
+import com.lds.Stopwatch;
 import com.lds.game.Game;
 import com.lds.game.SoundPlayer;
 import com.lds.math.Matrix4;
 import com.lds.math.Vector2;
-import com.lds.Stopwatch;
+
+import java.util.ArrayList;
 
 public abstract class PhysEnt extends Entity //physics objects are movable, such as doors, blocks, etc.
 {
@@ -57,7 +57,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	}
 	
 	//happens upon touching a tile at all
-	public void tileInteract (Tile tile)
+	public void tileInteract(Tile tile)
 	{
 		
 	}
@@ -95,7 +95,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	 ***************************************/
 	
 	//sets position to to new x and y and interpolates
-	public void moveTo (final float x, final float y)
+	public void moveTo(final float x, final float y)
 	{
 		moveInterpVec.set(0, 0);
 		isMoving = false;
@@ -110,12 +110,12 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 		movedVec.set(0, 0);
 	}
 	
-	public void moveTo (final Vector2 moveToVec)
+	public void moveTo(final Vector2 moveToVec)
 	{
 		this.moveTo(moveToVec.getX(), moveToVec.getY());
 	}
 	
-	public void push (final float x, final float y)
+	public void push(final float x, final float y)
 	{
 		gettingPushed = true;
 		moveInterpVec.set(x, y);
@@ -123,19 +123,19 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 		Game.worldOutdated = true;
 	}
 	
-	public void push (final Vector2 initVec)
+	public void push(final Vector2 initVec)
 	{
 		push(initVec.getX(), initVec.getY());
 	}
 	
 	//sets angle of an entity to a new value
-	public void rotateTo (float degrees)
+	public void rotateTo(float degrees)
 	{
 		//clamp between 0 and 360
 		if (degrees == 360.0f)
 			degrees = 0.0f;
 		else if (degrees > 360.0f)
-			degrees -= 360.0f * (int)(degrees/360);
+			degrees -= 360.0f * (int)(degrees / 360);
 		else if (degrees < 0.0f)
 			degrees = degrees + 360;
 		
@@ -195,7 +195,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	
 	//sets scaling of an entity to a new value
 	//note, we will probably never scale to 0.0f (that will be infinitely small) or negative numbers (you can get the same results with positives)
-	public void scaleTo (final float x, final float y)
+	public void scaleTo(final float x, final float y)
 	{
 		sclInterpCount = 0;
 		sclVec.set(x - getXScl(), y - getYScl());
@@ -204,7 +204,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	}
 	
 	//much like moveTo, but instead of going to a specific point, move() moves relative to the current position
-	public void move (final float x, final float y)
+	public void move(final float x, final float y)
 	{
 		moveInterpVec.set(0, 0);
 		isMoving = false;
@@ -220,21 +220,21 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 
 	}
 	
-	public void moveBy (final Vector2 moveByVec)
+	public void moveBy(final Vector2 moveByVec)
 	{
 		move(moveByVec.getX(), moveByVec.getY());
 	}
 	
 	//much like rotateTo, but rotate() adds or subtracts the number of degrees from the current number
 	//i.e. ent1 is rotated 30 degrees, if you do ent1.rotate(30.0f) it will be at 60 degrees
-	public void rotate (final float degrees)
+	public void rotate(final float degrees)
 	{
 		rotateTo(angle + degrees);
 	}
 	
 	//scales relative to current scaling
 	//i.e. if ent1 is scaled (2.0f, 2.0f), if you do ent1.scale(3.0f, 3.0f) the final scaling will be (6.0f, 6.0f)
-	public void scale (final float x, final float y)
+	public void scale(final float x, final float y)
 	{
 		sclInterpCount = 0;
 		sclVec.set((x - 1) * getXScl(), (y - 1) * getYScl());
@@ -248,7 +248,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	 *********************/
 	
 	@Override
-	public void circleBounceAgainstCircle (Entity ent)
+	public void circleBounceAgainstCircle(Entity ent)
 	{
 		//checks if this entity is moving; if it is not, do nothing
 		if (this.moveInterpVec.getX() == 0.0f && this.moveInterpVec.getY() == 0.0f)
@@ -268,7 +268,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	}
 	
 	@Override
-	public void circleBounceAgainstRectangle (Entity ent)
+	public void circleBounceAgainstRectangle(Entity ent)
 	{
 		ent.updateAbsolutePointLocations();
 		 
@@ -289,18 +289,18 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	    	maxPos = 0; 
 	        for (int i = 1; i < k; i++)
 	        {
-	             if (vertDistVecs[i].magnitude() > vertDistVecs[maxPos].magnitude()) 
+	             if (vertDistVecs[i].length() > vertDistVecs[maxPos].length()) 
 	                  maxPos = i; 
 	        }
 	        temp.copy(vertDistVecs[maxPos]); 
-	        vertDistVecs[maxPos].copy(vertDistVecs[k-1]); 
-	        vertDistVecs[k-1].copy(temp);
+	        vertDistVecs[maxPos].copy(vertDistVecs[k - 1]); 
+	        vertDistVecs[k - 1].copy(temp);
 	    }
 	    
 	    Vector2 bounceSide = Vector2.subtract(vertDistVecs[0], vertDistVecs[1]).normalize();
 	    Vector2 bounceNormal = Vector2.getNormal(bounceSide);
 	    Vector2 mpDist = Vector2.getMidpoint(vertDistVecs[0].add(this.posVec), vertDistVecs[1].add(this.posVec)).subtract(ent.posVec);
-		if (mpDist.magnitude() > mpDist.add(bounceNormal).magnitude())
+		if (mpDist.length() > mpDist.add(bounceNormal).length())
 			bounceNormal.negate();
 		
 		//get max of projection of ent
@@ -321,7 +321,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	}
 	
 	@Override
-	public void rectangleBounceAgainstCircle (Entity ent)
+	public void rectangleBounceAgainstCircle(Entity ent)
 	{
 		 this.updateAbsolutePointLocations();
 		 
@@ -342,18 +342,18 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	    	maxPos = 0; 
 	        for (int i = 1; i < k; i++)
 	        {
-	             if (vertDistVecs[i].magnitude() > vertDistVecs[maxPos].magnitude()) 
+	             if (vertDistVecs[i].length() > vertDistVecs[maxPos].length()) 
 	                  maxPos = i; 
 	        }
 	        temp.copy(vertDistVecs[maxPos]); 
-	        vertDistVecs[maxPos].copy(vertDistVecs[k-1]); 
-	        vertDistVecs[k-1].copy(temp);
+	        vertDistVecs[maxPos].copy(vertDistVecs[k - 1]); 
+	        vertDistVecs[k - 1].copy(temp);
 	    }
 	    
 	    Vector2 bounceSide = Vector2.subtract(vertDistVecs[0], vertDistVecs[1]).normalize();
 	    Vector2 bounceNormal = Vector2.getNormal(bounceSide);
 	    Vector2 mpDist = Vector2.getMidpoint(vertDistVecs[0].add(this.posVec), vertDistVecs[1].add(this.posVec)).subtract(ent.posVec);
-		if (mpDist.magnitude() > mpDist.add(bounceNormal).magnitude())
+		if (mpDist.length() > mpDist.add(bounceNormal).length())
 			bounceNormal.negate();
 		
 		//get max of projection of ent
@@ -374,7 +374,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	}
 
 	@Override
-	public void rectangleBounceAgainstRectangle (Entity ent) 
+	public void rectangleBounceAgainstRectangle(Entity ent) 
 	{
 		this.updateAbsolutePointLocations();
 		ent.updateAbsolutePointLocations();
@@ -396,18 +396,18 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	    	maxPos = 0; 
 	        for (int i = 1; i < k; i++) 
 	        {
-	             if (vertDistVecs[i].magnitude() > vertDistVecs[maxPos].magnitude()) 
+	             if (vertDistVecs[i].length() > vertDistVecs[maxPos].length()) 
 	                  maxPos = i; 
 	        }
 	        temp.copy(vertDistVecs[maxPos]); 
-	        vertDistVecs[maxPos].copy(vertDistVecs[k-1]); 
-	        vertDistVecs[k-1].copy(temp);
+	        vertDistVecs[maxPos].copy(vertDistVecs[k - 1]); 
+	        vertDistVecs[k - 1].copy(temp);
 	    }
 	    
 	    Vector2 bounceSide = Vector2.subtract(vertDistVecs[0], vertDistVecs[1]).normalize();
 	    Vector2 bounceNormal = Vector2.getNormal(bounceSide);
 	    Vector2 mpDist = Vector2.getMidpoint(vertDistVecs[0].add(this.posVec), vertDistVecs[1].add(this.posVec)).subtract(ent.posVec);
-		if (mpDist.magnitude() > mpDist.add(bounceNormal).magnitude())
+		if (mpDist.length() > mpDist.add(bounceNormal).length())
 			bounceNormal.negate();
 		
 		//get min of projection of this entity
@@ -456,7 +456,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	}
 	
 	//mutators for position
-	public void setPos (final Vector2 v)
+	public void setPos(final Vector2 v)
 	{
 		moveInterpVec = Vector2.subtract(v, posVec);
 		posVec.copy(v);
@@ -465,7 +465,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 		Game.worldOutdated = true;
 	}
 	
-	public void addPos (final Vector2 v)
+	public void addPos(final Vector2 v)
 	{
 		if (!gettingPushed && (v.getX() != 0.0f || v.getY() != 0.0f))
 			moveInterpVec.copy(v);
@@ -475,13 +475,13 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 		Game.worldOutdated = true;
 	}
 	
-	public void setPos (final float x, final float y)
+	public void setPos(final float x, final float y)
 	{
 		setPos(new Vector2(x, y));
 	}
 	
 	//mutator for angle
-	public void setAngle (float degrees)
+	public void setAngle(float degrees)
 	{	
 		//clamp angle between 0 and 360
 		if (degrees == 360.0f)
@@ -499,7 +499,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	}
 	
 	//mutator for scale
-	public void setScale (final float x, final float y)
+	public void setScale(final float x, final float y)
 	{
 		sclVec.set(x, y);
 		sclMat = Matrix4.scale(scaleVec.getX(), scaleVec.getY(), 1);
@@ -511,12 +511,12 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	 * Interpolation Methods *
 	 *************************/
 	
-	public void moveInterpolate ()
+	public void moveInterpolate()
 	{	
 		//if the object needs to be interpolated
 		if (isMoving)
 		{	
-			if(moveSpeed <= 0)
+			if (moveSpeed <= 0)
 			{
 				moveSpeed = 0;
 				isMoving = false;
@@ -527,7 +527,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 			{
 				if (gettingPushed)
 				{
-					moveInterpVec.scaleTo(moveInterpVec.magnitude() - friction);
+					moveInterpVec.scaleTo(moveInterpVec.length() - friction);
 				}
 				else
 				{
@@ -535,7 +535,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 					moveInterpVec = Vector2.normalize(moveVec).scale(moveSpeed / 1000 * Stopwatch.getFrameTime());
 				}
 				
-				if (!gettingPushed && movedVec.magnitude() > moveVec.magnitude())
+				if (!gettingPushed && movedVec.length() > moveVec.length())
 				{
 					moveInterpVec.set(0, 0);
 					posVec = endPosVec;
@@ -545,7 +545,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 				}
 				else
 				{
-					if (moveInterpVec.magnitude() > 0.1)
+					if (moveInterpVec.length() > 0.1)
 					{
 						posVec.add(moveInterpVec);
 						movedVec.add(moveInterpVec);
@@ -562,7 +562,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 		}
 	}
 	
-	public void rotateInterpolate ()
+	public void rotateInterpolate()
 	{
 		if (isRotating)
 		{			
@@ -596,11 +596,11 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 		}
 	}
 	
-	public void scaleInterpolate ()
+	public void scaleInterpolate()
 	{
 		if (isScaling)
 		{
-			if(sclSpeed <= 0)
+			if (sclSpeed <= 0)
 			{
 				sclSpeed = 0;
 				isScaling = false;
@@ -611,7 +611,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 				sclInterpCount++;
 				sclInterpVec = Vector2.normalize(sclVec).scale(sclSpeed / 1000 * Stopwatch.getFrameTime());
 				
-				if (sclVec.magnitude() - sclInterpVec.magnitude() * sclInterpCount <= sclInterpVec.magnitude())
+				if (sclVec.length() - sclInterpVec.length() * sclInterpCount <= sclInterpVec.length())
 				{
 					sclInterpVec.set(0, 0);
 					scaleVec = endScaleVec;
@@ -651,7 +651,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 	{
 	 	if (bounceList.isEmpty())
 		{
-			return Vector2.zero();
+			return new Vector2();
 		}
 		else
 		{
@@ -666,7 +666,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 		}
 	}
 	
-	public void addBounceVec (final Vector2 v)
+	public void addBounceVec(final Vector2 v)
 	{
 		bounceList.add(v);
 	}
@@ -681,12 +681,12 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 		return bounceList.size();
 	}
 	
-	public Vector2 getMoveInterpVec ()
+	public Vector2 getMoveInterpVec()
 	{
 		return moveInterpVec;
 	}
 	
-	public void setMoveInterpVec (final Vector2 v)
+	public void setMoveInterpVec(final Vector2 v)
 	{
 		moveInterpVec = v;
 	}

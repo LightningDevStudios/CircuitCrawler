@@ -1,12 +1,12 @@
 package com.lds;
 
-import java.io.InputStream;
-
-import javax.microedition.khronos.opengles.GL10;
-
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+
+import java.io.InputStream;
+
+import javax.microedition.khronos.opengles.GL10;
 
 //In C++ this would be a struct, but alas...
 public class Texture 
@@ -84,29 +84,115 @@ public class Texture
 		id = text;
 	}
 	
-	public int getXSize()		{ return xSize; }
-	public int getYSize()		{ return ySize; }
-	public int getXPixPerTile()	{ return xPixels; }
-	public int getYPixPerTile()	{ return yPixels; }
-	public int getXTiles()		{ return xTiles; }
-	public int getYTiles()		{ return yTiles; }
-	public int getTexture()		{ return texturePtr; }
-	public int getMinFilter()	{ return minFilter; }
-	public int getMagFilter()	{ return magFilter; }
-	public int getWrapS()		{ return wrapS; }
-	public int getWrapT()		{ return wrapT; }
-	public String getID()		{ return id; }
-	public Bitmap getBitmap()	{ return bmp; }
-	public float getOffsetX()	{ return offsetX; }
-	public float getOffsetY()	{ return offsetY; }
+	public int getXSize()
+	{
+	    return xSize;
+	}
 	
-	public void setTexture(int texturePtr)	{ this.texturePtr = texturePtr; }
-	public void setBitmap(Bitmap bmp)		{ this.bmp = bmp; }
-	public void setMinFilter(int glCap)		{ this.minFilter = glCap; }
-	public void setMagFilter(int glCap)		{ this.magFilter = glCap; }
-	public void setWrapS(int glCap)			{ this.wrapS = glCap; }
-	public void setWrapT(int glCap)			{ this.wrapT = glCap; }
-	public void setID(String id)			{ this.id = id; }
+	public int getYSize()
+	{
+	    return ySize;
+	}
+	
+	public int getXPixPerTile()
+	{
+	    return xPixels;
+	}
+	
+	public int getYPixPerTile()
+	{
+	    return yPixels;
+	}
+	
+	public int getXTiles()
+	{
+	    return xTiles;
+	}
+	
+	public int getYTiles()
+	{
+	    return yTiles;
+	}
+	
+	public int getTexture()
+	{
+	    return texturePtr;
+	}
+	
+	public int getMinFilter()
+	{
+	    return minFilter;
+	}
+	
+	public int getMagFilter()
+	{
+	    return magFilter;
+	}
+	
+	public int getWrapS()
+	{
+	    return wrapS;
+	}
+	
+	public int getWrapT()
+	{
+	    return wrapT;
+	}
+	
+	public String getID()
+	{
+	    return id;
+	}
+	
+	public Bitmap getBitmap()
+	{
+	    return bmp;
+	}
+	
+	public float getOffsetX()
+	{
+	    return offsetX;
+	}
+	
+	public float getOffsetY()
+	{
+	    return offsetY;
+	}
+	
+	public void setTexture(int texturePtr)
+	{
+	    this.texturePtr = texturePtr;
+	}
+	
+	public void setBitmap(Bitmap bmp)
+	{
+	    this.bmp = bmp;
+	}
+	
+	public void setMinFilter(int glCap)
+	{
+	    this.minFilter = glCap;
+	}
+	
+	public void setMagFilter(int glCap)	
+	{
+	    this.magFilter = glCap;
+	}
+	
+	public void setWrapS(int glCap)
+	{
+	    this.wrapS = glCap;
+	}
+	
+	public void setWrapT(int glCap)
+	{
+	    this.wrapT = glCap;
+	}
+	
+	public void setID(String id)
+	{
+	    this.id = id;
+	}
 	
 	private static Bitmap genBitmapFromRawStream(Context context, int texID)
 	{
@@ -123,7 +209,11 @@ public class Texture
 				is.close();
 				is = null;
 			}
-			catch (Exception e) { e.printStackTrace(); }
+			
+			catch (Exception e)
+			{
+			    e.printStackTrace();
+			}
 		}
 		return tempBmp;
 	}

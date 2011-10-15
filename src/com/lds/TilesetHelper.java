@@ -1,8 +1,9 @@
 package com.lds;
 
 import com.lds.game.entity.Tile;
+import com.lds.math.Vector2;
 
-public class TilesetHelper 
+public final class TilesetHelper 
 {
 	private TilesetHelper()
 	{
@@ -18,8 +19,8 @@ public class TilesetHelper
 	{
 		if (x >= minX && x <= maxX && y >= minY && y <= maxY)
 		{
-			final float intervalX = 1.0f/(float)(maxX - minX + 1);
-			final float intervalY = 1.0f/(float)(maxY - minY + 1);
+			final float intervalX = 1.0f / (float)(maxX - minX + 1);
+			final float intervalY = 1.0f / (float)(maxY - minY + 1);
 			
 			final float negX = x * intervalX + offsetX;
 			final float posX = (x + 1) * intervalX - offsetX;
@@ -27,10 +28,13 @@ public class TilesetHelper
 			final float negY = y * intervalY + offsetY;
 			final float posY = (y + 1) * intervalY - offsetY;
 			
-			final float[] coords = { 	negX, negY,
-										posX, negY,
-										negX, posY,
-										posX, posY };
+			final float[] coords = 
+		    {
+		        negX, negY,
+				posX, negY,
+				negX, posY,
+				posX, posY 
+		    };
 			
 			return coords;
 								
@@ -49,12 +53,12 @@ public class TilesetHelper
 	
 	public static int getTilesetIndex(float[] vertices, int min, int max)
 	{
-		final float interval = (1.0f / (float)(max - min + 1));
+		final float interval = 1.0f / (float)(max - min + 1);
 		
 		final int x = (int)(vertices[4] / interval);
 		final int y = (int)(vertices[1] / interval);
 		
-		return (y * (max - min + 1) -+ x);
+		return y * (max - min + 1) - x;
 	}
 
 	public static int getTilesetX(int tileID, Texture tex)
@@ -64,12 +68,12 @@ public class TilesetHelper
 	
 	public static int getTilesetY(int tileID, Texture tex)
 	{
-		return (tileID / tex.getXTiles());
+		return tileID / tex.getXTiles();
 	}
 	
 	public static int getTilesetID(int x, int y, Texture tex)
 	{
-		return (y * tex.getXTiles() + x);
+		return y * tex.getXTiles() + x;
 	}
 	
 	public static void setInitialTilesetOffset(Tile[][] tileset)
@@ -79,16 +83,15 @@ public class TilesetHelper
 		{
 			for (int j = 0; j < width; j++)
 			{
-				tileset[i][j].setXPos((-(float)width / 2 * Tile.TILE_SIZE_F) + (j * Tile.TILE_SIZE_F));
-				tileset[i][j].setYPos(((float)length / 2 * Tile.TILE_SIZE_F) - (i * Tile.TILE_SIZE_F));
+			    tileset[i][j].setPos(new Vector2((-(float)width / 2 * Tile.TILE_SIZE_F) + (j * Tile.TILE_SIZE_F), ((float)length / 2 * Tile.TILE_SIZE_F) - (i * Tile.TILE_SIZE_F)));
 			}
 		}
 	}
 	
 	public static void setInitialTileOffset(Tile tile, int y, int x, int length, int width)
 	{
-		tile.setXPos((-(float)width / 2.0f * Tile.TILE_SIZE_F) + (x * Tile.TILE_SIZE_F) + (Tile.TILE_SIZE_F / 2));
-		tile.setYPos(((float)length / 2.0f * Tile.TILE_SIZE_F) - (y * Tile.TILE_SIZE_F) - (Tile.TILE_SIZE_F / 2));
+	    tile.setPos(new Vector2((-(float)width / 2.0f * Tile.TILE_SIZE_F) + (x * Tile.TILE_SIZE_F) + (Tile.TILE_SIZE_F / 2), 
+	            ((float)length / 2.0f * Tile.TILE_SIZE_F) - (y * Tile.TILE_SIZE_F) - (Tile.TILE_SIZE_F / 2)));
 		
 	}
 }

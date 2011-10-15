@@ -1,13 +1,15 @@
 package com.lds.parser;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import com.lds.game.entity.Button;
 import com.lds.game.entity.Entity;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class ButtonData extends StaticEntData
 {
 	private Button buttonRef;
+	
 	public ButtonData(HashMap<String, String> buttonHM)
 	{
 		super(buttonHM);
@@ -20,7 +22,7 @@ public class ButtonData extends StaticEntData
 		
 		//COLOR
 		if (color != null)
-			buttonRef.enableColorMode(color[0],color[1],color[2],color[3]);
+			buttonRef.enableColorMode(color[0], color[1], color[2], color[3]);
 		
 		//GRADIENT
 		if (gradient != null)

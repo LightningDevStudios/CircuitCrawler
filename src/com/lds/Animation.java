@@ -37,9 +37,9 @@ public class Animation
 			if (timeElapsed > framerate)
 			{
 				//take the amount of time that has passed, see if we need to skip a frame or two in order to keep up animation in low-FPS times
-				int framesPassed = timeElapsed / (framerate);
+				int framesPassed = timeElapsed / framerate;
 				
-				for(int i = 0; i < framesPassed; i++)
+				for (int i = 0; i < framesPassed; i++)
 					incrementCount();
 			}
 		}

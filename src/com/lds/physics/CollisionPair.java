@@ -1,6 +1,7 @@
 package com.lds.physics;
 
 //import com.lds.math.Vector2;
+
 import com.lds.game.entity.Entity;
 
 public class CollisionPair 
@@ -18,8 +19,15 @@ public class CollisionPair
 		//nearestExit2 = Vector2.negate(nearestExit1);
 	}
 	
-	public Entity getEnt1() { return ent1; }
-	public Entity getEnt2() { return ent2; }
+	public Entity getEnt1()
+	{
+	    return ent1;
+	}
+	
+	public Entity getEnt2()
+	{
+	    return ent2;
+	}
 	//public Vector2 getNearestExit1() { return nearestExit1; }
 	//public Vector2 getNearestExit2() { return nearestExit2; }
 }

@@ -1,8 +1,8 @@
 package com.lds.physics;
 
-import java.util.ArrayList;
-
 import com.lds.game.entity.Entity;
+
+import java.util.ArrayList;
 
 public class QuadTreeList 
 {
@@ -15,9 +15,23 @@ public class QuadTreeList
 		this.setOnLineEntity(onLineEntity);
 	}
 
-	public ArrayList<ArrayList<Entity>> getOnLineEntity() { return onLineEntity; }
-	public void setOnLineEntity(ArrayList<ArrayList<Entity>> onLineEntity) { this.onLineEntity = onLineEntity; }
+	public ArrayList<ArrayList<Entity>> getOnLineEntity()
+	{
+	    return onLineEntity;
+	}
 	
-	public ArrayList<ArrayList<Entity>> getNormalEntity() { return normalEntity; }
-	public void setNormalEntity(ArrayList<ArrayList<Entity>> normalEntity) { this.normalEntity = normalEntity; }
+	public void setOnLineEntity(ArrayList<ArrayList<Entity>> onLineEntity)
+	{
+	    this.onLineEntity = onLineEntity;
+	}
+	
+	public ArrayList<ArrayList<Entity>> getNormalEntity()
+	{
+	    return normalEntity;
+	}
+	
+	public void setNormalEntity(ArrayList<ArrayList<Entity>> normalEntity)
+	{
+	    this.normalEntity = normalEntity;
+	}
 }

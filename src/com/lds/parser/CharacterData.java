@@ -9,15 +9,21 @@ public class CharacterData extends PhysEntData
 	{
 		super(characterHM);
 		
-		if(characterHM.get("health") != null)
+		if (characterHM.get("health") != null)
 			health = Integer.parseInt(characterHM.get("health"));
 		else
 			health = 100;
 	}
 		
-	public int getHealth()			{return health;}
+	public int getHealth()
+	{
+	    return health;
+	}
 
 	
-	public void setHealth(int newHealth)		{health = newHealth;}
+	public void setHealth(int newHealth)
+	{
+	    health = newHealth;
+	}
 
 }

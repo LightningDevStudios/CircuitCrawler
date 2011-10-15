@@ -8,16 +8,17 @@ import com.lds.math.Vector2;
 
 public class Player extends Character //your character, protagonist
 {
-	public static final int ENERGY_LIMIT = 100, HEALTH_LIMIT = 100;
+    public static boolean godMode, noclip;
+	public static final int ENERGY_LIMIT = 100;
+	public static final int HEALTH_LIMIT = 100;
+	protected Context context;
 	private int energy;
 	private boolean holdingObject;
 	private HoldObject hObj;
 	private boolean controlled;
 	private float nextAngle;
-	public static boolean godMode, noclip;
-	protected Context context;
 	
-	public Player (float xPos, float yPos, float angle)
+	public Player(float xPos, float yPos, float angle)
 	{
 		//initialize Character and Entity data
 		super(Entity.DEFAULT_SIZE, xPos, yPos, angle, 1.0f, 1.0f, true, HEALTH_LIMIT, 30.0f, 1.0f);
@@ -25,24 +26,24 @@ public class Player extends Character //your character, protagonist
 		energy = ENERGY_LIMIT;
 		nextAngle = angle;
 		controlled = true;
-		if(godMode)
+		if (godMode)
 		{
-			health = 9999999;//LOLS
-			energy = 9999999;//LOLS Again
+			health = 9999999; //LOLS
+			energy = 9999999; //LOLS Again
 		}
-		if(noclip)
+		if (noclip)
 		{
 			this.isSolid = false;
 		}
 	}
 	
-	public void attack ()
+	public void attack()
 	{
 		energy -= 5;
 	}
 	
 	@Override
-	public void interact (Entity ent)
+	public void interact(Entity ent)
 	{
 		if (ent instanceof PickupEnergy)
 		{
@@ -132,17 +133,17 @@ public class Player extends Character //your character, protagonist
 		Vibrator vibrator = null; 
 		try 
 		{ 
-			vibrator=(Vibrator)context.getSystemService(Context.VIBRATOR_SERVICE); 
+			vibrator = (Vibrator)context.getSystemService(Context.VIBRATOR_SERVICE); 
 		} 
-		catch (Exception e) {}
+		catch (Exception e) { }
 		
 		if (vibrator != null)
 		{ 
 		  try 
 		  { 
-			  vibrator.vibrate(((long)time)); 
+			  vibrator.vibrate((long)time); 
 		  } 
-		  catch (Exception e) {} 
+		  catch (Exception e) { }
 		} 
 	}
 
