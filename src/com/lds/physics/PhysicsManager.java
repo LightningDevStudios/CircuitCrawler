@@ -56,6 +56,7 @@ public class PhysicsManager
 		{
 			for (Shape shape : shapes)
 			{
+			    //TODO this is O(n^2), use regular iteration and start at shape's index. That will make this O(n).
 				for (Shape s : shapes)
 				{
 					if (shape != s && CollisionDetector.RadiusCheck(shape, s))
