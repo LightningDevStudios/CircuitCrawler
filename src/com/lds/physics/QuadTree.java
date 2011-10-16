@@ -46,7 +46,7 @@ public class QuadTree
 		for(Entity ent : entList)
 		{
 			boolean inBox = true;
-			for(Vector2 vert : ent.getVertVecs()) //What if it is circle are there 360 verts?
+			for(Vector2 vert : ent.getVertVecs())
 			{
 				if(!(vert.getX() > center.getX() - size.getX() / 2 && vert.getX() < center.getX() + size.getX() / 2 && vert.getY() > center.getY() - size.getY() / 2 && vert.getY() < center.getY() + size.getY() / 2))
 				{
