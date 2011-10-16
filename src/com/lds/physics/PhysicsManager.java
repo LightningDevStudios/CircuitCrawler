@@ -48,20 +48,20 @@ public class PhysicsManager
 	 */
 	public ArrayList<CollisionPair> SolveCollision()
 	{
-		ArrayList<CollisionPair> pairList= new ArrayList<CollisionPair>();
+		ArrayList<CollisionPair> pairList = new ArrayList<CollisionPair>();
 		
 		ArrayList<ArrayList<Shape>> quadList = collisionDetector.QuadTreeDetection();
 		
-		for(ArrayList<Shape> shapes : quadList)
+		for (ArrayList<Shape> shapes : quadList)
 		{
-			for(Shape shape : shapes)
+			for (Shape shape : shapes)
 			{
-				for(Shape s : shapes)
+				for (Shape s : shapes)
 				{
-					if(shape != s && CollisionDetector.RadiusCheck(shape, s))
+					if (shape != s && CollisionDetector.RadiusCheck(shape, s))
 					{
 						CollisionPair pair = CollisionDetector.CheckCollision(shape, s);
-						if(pair != null)
+						if (pair != null)
 						{
 							pairList.add(pair);
 						}

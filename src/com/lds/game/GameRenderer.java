@@ -22,7 +22,8 @@ import javax.microedition.khronos.opengles.GL10;
 public class GameRenderer implements com.lds.Graphics.Renderer
 {
 	//public static boolean vibrateSetting = true;
-	
+    public boolean paused, charlieSheen;
+    
 	private Game game;
 	private Context context;
 	private Object syncObj;
@@ -31,7 +32,6 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	private GameOverListener gameOverListener;
 	private int levelId;
 	private MediaPlayer mp;
-	public boolean paused, charlieSheen;
 	
 	private Matrix4 projWorld, projUI;
 	private PhysicsManager physMan;

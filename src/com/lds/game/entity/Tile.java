@@ -17,9 +17,9 @@ public class Tile extends Entity
 	public static final int TILE_SIZE = 72;
 	public static final float TILE_SIZE_F = 72.0f;
 	
-	private TileState state;
 	public int tileX, tileY, tileID, xIndex, yIndex;
 	
+	private TileState state;
 	private boolean tempBridge;
 	private int origTileX, origTileY;
 	

@@ -1,7 +1,5 @@
 package com.lds.physics;
 
-import com.lds.game.entity.Entity;
-
 import com.lds.math.Vector2;
 
 import java.util.ArrayList;
@@ -10,7 +8,7 @@ public class CollisionDetector
 {	
 	private Vector2 size;
 	private ArrayList<Shape> shapeList;
-	private Vector2 MinLeafSize = new Vector2(10,10);
+	private Vector2 minLeafSize = new Vector2(10, 10);
 	
 	public CollisionDetector(Vector2 size, ArrayList<Shape> shapeList) 
 	{
@@ -20,7 +18,7 @@ public class CollisionDetector
 
 	public ArrayList<ArrayList<Shape>> QuadTreeDetection()
 	{
-		QuadTree qt = new QuadTree(size, new Vector2(0,0), null, MinLeafSize, shapeList); //TODO: convert to shapes
+		QuadTree qt = new QuadTree(size, new Vector2(0, 0), null, minLeafSize, shapeList); //TODO: convert to shapes
 		return qt.collidingEntities;
 	}
 	
@@ -32,7 +30,7 @@ public class CollisionDetector
     }
 	
 	/**
-	 * \todo rethink collision, maybe remove CollisionPair and stop calling this from PhysicsManager
+	 * \todo rethink collision, maybe remove CollisionPair and stop calling this from PhysicsManager.
 	 * @param a
 	 * @param b
 	 * @return

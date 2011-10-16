@@ -6,7 +6,7 @@ import com.lds.game.entity.Player;
 
 public class UIHealthBar extends UIProgressBar
 {
-	Player player;
+	private Player player;
 	
 	public UIHealthBar(float xSize, float ySize, UIPosition position, Direction dir, Player player)
 	{

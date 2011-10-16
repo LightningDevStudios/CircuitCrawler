@@ -29,6 +29,8 @@ public class Gate
 				input = new Gate[1];
 				//false
 				break;
+        default:
+            break;
 		}
 	}
 

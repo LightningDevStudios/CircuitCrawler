@@ -1,11 +1,10 @@
 package com.lds.physics;
 
-import java.util.ArrayList;
-import java.util.IllegalFormatException;
-
 import com.lds.math.Matrix4;
 import com.lds.math.Vector2;
 import com.lds.math.Vector4;
+
+import java.util.ArrayList;
 
 public abstract class Shape
 {

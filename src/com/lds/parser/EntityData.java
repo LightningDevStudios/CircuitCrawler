@@ -13,13 +13,14 @@ public abstract class EntityData
 	protected boolean circular;
 	protected boolean willCollide;
 	protected boolean textureModeEnabled, tilesetModeEnabled;
-	private String tileCoordsStr, id;
 	protected float size, xPos, yPos, xScl, yScl, angle;	
 	protected float[] color, gradient, texture;
 	protected int tileX, tileY;
 	protected Texture tex;
 	
 	protected Entity ent;
+	
+	private String tileCoordsStr, id;
 	
 	public EntityData(HashMap<String, String> entHM)
 	{

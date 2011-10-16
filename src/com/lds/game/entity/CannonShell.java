@@ -11,7 +11,7 @@ public class CannonShell extends Entity
 	private int removeTime;
 	
 	/**
-	 * \todo add real physics
+	 * \todo add real physics.
 	 */
 	public CannonShell(Vector2 position, float angle, float moveSpeed, int removeTime)
 	{

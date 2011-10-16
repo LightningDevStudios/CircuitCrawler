@@ -2,7 +2,6 @@ package com.lds.game.entity;
 
 import com.lds.EntityManager;
 import com.lds.Stopwatch;
-import com.lds.game.SoundPlayer;
 import com.lds.math.Vector2;
 import com.lds.physics.Circle;
 
@@ -62,7 +61,7 @@ public class Player extends Entity
 	}
 	
 	/**
-	 * \todo fall into pits
+	 * \todo fall into pits.
 	 */
 	@Override
 	public void tileInteract(Tile tile)
@@ -99,7 +98,7 @@ public class Player extends Entity
 	}
 	
 	/**
-	 * \todo actually push the object with physics
+	 * \todo actually push the object with physics.
 	 */
 	public void throwObject()
 	{
@@ -107,7 +106,7 @@ public class Player extends Entity
 	}
 
 	/**
-	 * \todo do this with physics
+	 * \todo do this with physics.
 	 */
 	public void updateHeldObjectPosition()
 	{
@@ -119,7 +118,7 @@ public class Player extends Entity
 	}
 	
 	/**
-	 * \todo make player flash once it is hit
+	 * \todo make player flash once it is hit.
 	 */
 	@Override
     public void update()

@@ -18,7 +18,7 @@ public class Sprite extends Entity
 	}
 	
 	/**
-	 * \todo some animation stuff
+	 * \todo some animation stuff.
 	 */
 	@Override
 	public void update()
@@ -27,7 +27,7 @@ public class Sprite extends Entity
 	}
 	
 	/**
-	 * \todo some animation stuff
+	 * \todo some animation stuff.
 	 */
 	public void renderNextFrame()
 	{

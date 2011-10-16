@@ -1,7 +1,5 @@
 package com.lds.game.entity;
 
-import com.lds.game.SoundPlayer;
-import com.lds.math.Vector2;
 import com.lds.physics.Shape;
 
 public abstract class HoldObject extends Entity
@@ -15,7 +13,7 @@ public abstract class HoldObject extends Entity
 	}
 	
 	/**
-	 * \todo fall down pit
+	 * \todo fall down pit.
 	 */
 	@Override
 	public void tileInteract(Tile tile)

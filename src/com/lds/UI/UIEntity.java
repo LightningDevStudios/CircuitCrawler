@@ -49,8 +49,6 @@ public abstract class UIEntity
 	//graphics data
 	protected Vector2 size, pos, relativePos, halfSize;
 	//protected float xSize, ySize, xPos, yPos, xRelative, yRelative, halfXSize, halfYSize;
-	private float topPad, leftPad, bottomPad, rightPad;
-	private float colorR, colorG, colorB, colorA;
 	protected UIPosition position;
 	protected EnumSet<RenderMode> renderMode;
 	protected Texture tex;
@@ -65,6 +63,9 @@ public abstract class UIEntity
 	
 	protected int VBOVertPtr, VBOGradientPtr, VBOTexturePtr;
 	protected boolean needToUpdateTexVBO, needToUpdateGradientVBO, needToUpdateVertexVBO;
+	
+	private float topPad, leftPad, bottomPad, rightPad;
+    private float colorR, colorG, colorB, colorA;
 	
 	//constructors
 	public UIEntity(float xSize, float ySize, UIPosition position)

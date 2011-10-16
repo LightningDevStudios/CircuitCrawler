@@ -86,24 +86,24 @@ public final class Vector2
 	
 	/**
      * Adds two vectors together.
-     * @param v1 The vector to be added to.
-     * @param v2 The vector to be added by.
+     * @param left The vector to be added to.
+     * @param right The vector to be added by.
      * @return The resultant vector of the addition.
      */
-	public static Vector2 add(Vector2 v1, Vector2 v2)
+	public static Vector2 add(Vector2 left, Vector2 right)
 	{
-		return new Vector2(v1.getX() + v2.getX(), v1.getY() + v2.getY());
+		return new Vector2(left.getX() + right.getX(), left.getY() + right.getY());
 	}
 	
 	/**
      * Subtracts one vector from another.
-     * @param v1 The vector to subtract from.
-     * @param v2 The vector to subtract by.
+     * @param left The vector to subtract from.
+     * @param right The vector to subtract by.
      * @return The resultant vector of the subtraction.
      */
-	public static Vector2 subtract(Vector2 v1, Vector2 v2)
+	public static Vector2 subtract(Vector2 left, Vector2 right)
 	{
-		return new Vector2(v1.getX() - v2.getX(), v1.getY() - v2.getY());
+		return new Vector2(left.getX() - right.getX(), left.getY() - right.getY());
 	}
 	
 	/**
@@ -154,13 +154,13 @@ public final class Vector2
 	/**
      * Creates a vector pointing to the midpoint of the directed line segment between two vectors.
      * \todo turn into a lerp method, add float 0-1 for distance.
-     * @param v1 The first vector.
-     * @param v2 The second vector.
+     * @param left The left vector.
+     * @param right The right vector.
      * @return A vector with components averaged from the two vectors.
      */
-	public static Vector2 getMidpoint(Vector2 v1, Vector2 v2)
+	public static Vector2 getMidpoint(Vector2 left, Vector2 right)
 	{
-		return new Vector2((v1.x + v2.x) / 2, (v1.y + v2.y) / 2);
+		return new Vector2((left.x + right.x) / 2, (left.y + right.y) / 2);
 	}
 	
 	/**
@@ -174,14 +174,14 @@ public final class Vector2
 	}
 	
 	/**
-	 * Finds the dot product of two vectors
-	 * @param a The first vector
-	 * @param b The second vector
-	 * @return The dot product of a and b
+	 * Finds the dot product of two vectors.
+	 * @param left The left vector.
+	 * @param right The right vector.
+	 * @return The dot product.
 	 */
-	public static float dot(Vector2 a, Vector2 b)
+	public static float dot(Vector2 left, Vector2 right)
 	{
-	    return a.getX() * b.getX() + a.getY() * b.getY();
+	    return left.getX() * right.getX() + left.getY() * right.getY();
 	}
 	
 	/************************************************************************************************************

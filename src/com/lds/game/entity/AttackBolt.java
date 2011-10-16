@@ -1,18 +1,15 @@
 package com.lds.game.entity;
 
 import com.lds.EntityManager;
-import com.lds.math.Matrix4;
 import com.lds.math.Vector2;
 import com.lds.physics.Rectangle;
-
-import java.util.ArrayList;
 
 public class AttackBolt extends Entity
 {
 	private Entity parent;
 	
 	/**
-	 * \todo add real physics
+	 * \todo add real physics.
 	 */
 	public AttackBolt(Vector2 position, Vector2 direction, Entity parent)
 	{

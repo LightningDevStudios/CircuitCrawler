@@ -25,7 +25,7 @@ public class QuadTree
 		
 		SplitQuad(entList);
 		
-		if(parent != null)
+		if (parent != null)
 			parent.collidingEntities.add(quadTreeEntities);
 		else
 			collidingEntities.add(quadTreeEntities);
@@ -33,7 +33,7 @@ public class QuadTree
 
 	public void SplitQuad(ArrayList<Shape> entList) 
 	{
-		if(entList.size() < 2)
+		if (entList.size() < 2)
 			return;
 		
 		ArrayList<Shape> Quad1Entities = new ArrayList<Shape>();
@@ -41,35 +41,35 @@ public class QuadTree
 		ArrayList<Shape> Quad3Entities = new ArrayList<Shape>();
 		ArrayList<Shape> Quad4Entities = new ArrayList<Shape>();
 		
-		for(Shape shape : entList)
+		for (Shape shape : entList)
 		{
 			boolean inBox = true;
-			for(Vector2 vert : shape.getWorldVertices())
+			for (Vector2 vert : shape.getWorldVertices())
 			{
-				if(!(vert.getX() > center.getX() - size.getX() / 2 && vert.getX() < center.getX() + size.getX() / 2 && vert.getY() > center.getY() - size.getY() / 2 && vert.getY() < center.getY() + size.getY() / 2))
+				if (!(vert.getX() > center.getX() - size.getX() / 2 && vert.getX() < center.getX() + size.getX() / 2 && vert.getY() > center.getY() - size.getY() / 2 && vert.getY() < center.getY() + size.getY() / 2))
 				{
 					inBox = false;
 				}
 			}
-			if(inBox)
+			if (inBox)
 			{
 				//Quadrant1
-				if(shape.getPos().getX() > center.getX() && shape.getPos().getX() < center.getX() + size.getX() / 2 &&  shape.getPos().getY() > center.getY() && shape.getPos().getY() < center.getY() + size.getY() / 2)
+				if (shape.getPos().getX() > center.getX() && shape.getPos().getX() < center.getX() + size.getX() / 2 &&  shape.getPos().getY() > center.getY() && shape.getPos().getY() < center.getY() + size.getY() / 2)
 				{
 					Quad1Entities.add(shape);
 				}
 				//Quadrant2
-				else if(shape.getPos().getX() > center.getX() - size.getX() / 2 && shape.getPos().getX() < center.getX() &&  shape.getPos().getY() > center.getY() && shape.getPos().getY() < center.getY() + size.getY() / 2)
+				else if (shape.getPos().getX() > center.getX() - size.getX() / 2 && shape.getPos().getX() < center.getX() &&  shape.getPos().getY() > center.getY() && shape.getPos().getY() < center.getY() + size.getY() / 2)
 				{
 					Quad2Entities.add(shape);
 				}
 				//Quadrant3
-				else if(shape.getPos().getX() > center.getX() - size.getX() / 2 && shape.getPos().getX() < center.getX() &&  shape.getPos().getY() > center.getY() - size.getY() / 2 && shape.getPos().getY() < center.getY())
+				else if (shape.getPos().getX() > center.getX() - size.getX() / 2 && shape.getPos().getX() < center.getX() &&  shape.getPos().getY() > center.getY() - size.getY() / 2 && shape.getPos().getY() < center.getY())
 				{
 					Quad3Entities.add(shape);
 				}
 				//Quadrant4
-				else if(shape.getPos().getX() > center.getX() && shape.getPos().getX() < center.getX() + size.getX() / 2 &&  shape.getPos().getY() > center.getY() - size.getY() / 2 && shape.getPos().getY() < center.getY())
+				else if (shape.getPos().getX() > center.getX() && shape.getPos().getX() < center.getX() + size.getX() / 2 &&  shape.getPos().getY() > center.getY() - size.getY() / 2 && shape.getPos().getY() < center.getY())
 				{
 					Quad4Entities.add(shape);
 				}
@@ -80,9 +80,9 @@ public class QuadTree
 			}
 		}
 		
-		if(Quad1Entities.size() > 1)
+		if (Quad1Entities.size() > 1)
 		{
-			if(size.getX() <= minimumLeafSize.getX() && size.getY() <= minimumLeafSize.getY())
+			if (size.getX() <= minimumLeafSize.getX() && size.getY() <= minimumLeafSize.getY())
 				quadTreeEntities.addAll(Quad1Entities);
 			else
 			{
@@ -92,9 +92,9 @@ public class QuadTree
 		}
 		else
 			quadTreeEntities.addAll(Quad1Entities);
-		if(Quad2Entities.size() > 1)
+		if (Quad2Entities.size() > 1)
 		{
-			if(size.getX() <= minimumLeafSize.getX() && size.getY() <= minimumLeafSize.getY())
+			if (size.getX() <= minimumLeafSize.getX() && size.getY() <= minimumLeafSize.getY())
 				quadTreeEntities.addAll(Quad2Entities);
 			else
 			{
@@ -104,9 +104,9 @@ public class QuadTree
 		}
 		else
 			quadTreeEntities.addAll(Quad1Entities);
-		if(Quad3Entities.size() > 1)
+		if (Quad3Entities.size() > 1)
 		{
-			if(size.getX() <= minimumLeafSize.getX() && size.getY() <= minimumLeafSize.getY())
+			if (size.getX() <= minimumLeafSize.getX() && size.getY() <= minimumLeafSize.getY())
 				quadTreeEntities.addAll(Quad3Entities);
 			else
 			{
@@ -116,9 +116,9 @@ public class QuadTree
 		}
 		else
 			quadTreeEntities.addAll(Quad1Entities);
-		if(Quad4Entities.size() > 1)
+		if (Quad4Entities.size() > 1)
 		{
-			if(size.getX() <= minimumLeafSize.getX() && size.getY() <= minimumLeafSize.getY())
+			if (size.getX() <= minimumLeafSize.getX() && size.getY() <= minimumLeafSize.getY())
 				quadTreeEntities.addAll(Quad4Entities);
 			else
 			{

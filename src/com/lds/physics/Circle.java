@@ -9,7 +9,7 @@ public class Circle extends Shape
      ***************/
     
     /**
-     * Initializes a new instance of the Circle class
+     * Initializes a new instance of the Circle class.
      */
     public Circle()
     {
@@ -17,7 +17,7 @@ public class Circle extends Shape
     }
     
     /**
-     * Initializes a new instance of the Circle class
+     * Initializes a new instance of the Circle class.
      * @param solid The solidity of the circle
      */
     public Circle(boolean solid)
@@ -26,7 +26,7 @@ public class Circle extends Shape
     }
     
     /**
-     * Initializes a new instance of the Circle class
+     * Initializes a new instance of the Circle class.
      * @param size The size of the circle
      * @param solid The solidity of the circle
      */
@@ -36,7 +36,7 @@ public class Circle extends Shape
     }
     
     /**
-     * Initializes a new instance of the Circle class
+     * Initializes a new instance of the Circle class.
      * @param size The size of the circle
      * @param position The position of the circle
      * @param solid The solidity of the circle
@@ -47,7 +47,7 @@ public class Circle extends Shape
     }
     
     /**
-     * Initializes a new instance of the Shape class
+     * Initializes a new instance of the Shape class.
      * @param size The size of the circle
      * @param position The position of the circle
      * @param angle The angle of the circle in radians
@@ -59,7 +59,7 @@ public class Circle extends Shape
     }
     
     /**
-     * Initializes a new instance of the Circle class
+     * Initializes a new instance of the Circle class.
      * @param size The size of the circle
      * @param position The position of the circle
      * @param angle The angle of the circle in radians
@@ -85,15 +85,19 @@ public class Circle extends Shape
      * Accessors and Mutators *
      **************************/
     
+    /**
+     * Gets the circle's radius.
+     * @return The circle's radius.
+     */
+    public float getRadius()
+    {
+        return vertices[5] * scale.getX();
+    }
+    
     @Override
     public void setScale(Vector2 scale)
     {
         if (scale.getX() == scale.getY())
             super.setScale(scale);
-    }
-    
-    public float getRadius()
-    {
-        return vertices[5] * scale.getX();
     }
 }

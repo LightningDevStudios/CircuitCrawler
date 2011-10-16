@@ -17,6 +17,11 @@ import org.xmlpull.v1.XmlPullParserException;
  
 public class Parser
 {
+    public static final int START_DOCUMENT = 0;
+    public static final int END_DOCUMENT = 1; 
+    public static final int START_TAG = 2;
+    public static final int END_TAG = 3;
+    
 	public ArrayList<EntityData> parsedList;
 	public ArrayList<Entity> entList;
 	public ArrayList<Trigger> triggerList;
@@ -30,11 +35,6 @@ public class Parser
 	
 	public XmlResourceParser xrp;  
 	public HashMap<String, String> dataHM;
-	
-	public static final int START_DOCUMENT = 0;
-	public static final int END_DOCUMENT = 1; 
-	public static final int START_TAG = 2;
-	public static final int END_TAG = 3;
 
 	public Parser(Context context, int res)
 	{

@@ -1,7 +1,7 @@
 package com.lds.parser;
 
-import com.lds.game.entity.Entity;
 import com.lds.game.entity.Block;
+import com.lds.game.entity.Entity;
 import com.lds.math.Vector2;
 
 import java.util.ArrayList;

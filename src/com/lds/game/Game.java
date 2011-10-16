@@ -207,7 +207,7 @@ public class Game
 	}
 	
 	/**
-	 * \todo legit AABB stuff
+	 * \todo legit AABB stuff.
 	 */
 	public ArrayList<Entity> getRenderedEnts()
 	{
@@ -326,7 +326,7 @@ public class Game
 	}
 	
 	/**
-	 * rayfiring should not be here
+	 * rayfiring should not be here.
 	 */
 	public boolean pathIsClear(final Vector2 startVec, final Vector2 endVec)
 	{
@@ -367,7 +367,7 @@ public class Game
 	}
 	
 	/**
-	 * \todo add real physics for player movement
+	 * \todo add real physics for player movement.
 	 */
 	public void updatePlayerPos()
 	{

@@ -23,6 +23,11 @@ import javax.microedition.khronos.opengles.GL11;
 public abstract class Entity 
 {
 	public static final float DEFAULT_SIZE = 32.0f;
+	public static final byte[] indices = {0, 1, 2, 3};
+	
+	public static ByteBuffer indexBuffer;
+	public static int VBOIndexPtr;
+    public static boolean useVBOs;
 	
 	//behavior data
 	protected boolean isColorInterp, isGradientInterp;
@@ -37,17 +42,13 @@ public abstract class Entity
 	
 	protected float[] texture;
 	protected float[] color, endColor;
-	public static final byte[] indices = {0, 1, 2, 3};
 	
 	protected FloatBuffer vertexBuffer;
 	protected FloatBuffer textureBuffer;
 	protected FloatBuffer colorBuffer;
-	public static ByteBuffer indexBuffer;
 	
 	protected int VBOVertPtr, VBOGradientPtr, VBOTexturePtr;
 	protected boolean needToUpdateTexVBO, needToUpdateGradientVBO, needToUpdateVertexVBO;
-	public static int VBOIndexPtr;
-	public static boolean useVBOs;
 	
 	public Entity(Shape shape)
 	{		
@@ -215,19 +216,19 @@ public abstract class Entity
 	}
 	
 	/**
-	 * Called when the entity collides with another entity
+	 * Called when the entity collides with another entity.
 	 * @param ent The entity to interact with.
 	 */
 	public void interact(Entity ent) {}
 	
 	/**
-	 * Called when the entity stops colliding with another entity
+	 * Called when the entity stops colliding with another entity.
 	 * @param ent The entity that was interacted with.
 	 */
 	public void uninteract(Entity ent) {}
 	
 	/**
-	 * Called when the entity collides with a tile
+	 * Called when the entity collides with a tile.
 	 * @param tile The tile to interact with.
 	 */
 	public void tileInteract(Tile tile) {}

@@ -25,7 +25,6 @@ import android.widget.TextView;
 import android.widget.ViewAnimator;
 
 import com.lds.Vibrator;
-import com.lds.game.GameRenderer;
 import com.lds.game.R;
 import com.lds.game.Run;
 import com.lds.game.SoundPlayer;
@@ -44,7 +43,7 @@ public class MainMenu extends Activity
 	private ViewAnimator animator;
 	private ProgressDialog pd;
 	private int unlockedLevel;
-	GridView levelList;
+	private GridView levelList;
 
     
 	@Override
