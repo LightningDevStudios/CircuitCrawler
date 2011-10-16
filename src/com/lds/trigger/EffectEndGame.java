@@ -30,4 +30,10 @@ public class EffectEndGame extends Effect
 		if (listener != null)
 			listener.onGameOver(winning);
 	}
+	
+	@Override
+	public void unfireOutput()
+	{
+	    
+	}
 }

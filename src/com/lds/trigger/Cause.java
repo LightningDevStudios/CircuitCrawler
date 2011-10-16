@@ -1,30 +1,53 @@
 package com.lds.trigger;
 
+/**
+ * Abstract class used with an {@code Effect} to create a {@code Trigger}.<br/><br/>
+ * 
+ * Extending Cause is relatively simple. A subclass only needs to implement
+ * update() and at some point call trigger() and optionally untrigger(). A triggered 
+ * {@code Cause} in a {@code Trigger} will immediately fire the {@code Effect}'s output.
+ * @author Lightning Development Studios
+ * @see Effect
+ * @see Trigger
+ */
 public abstract class Cause 
 {
 	private boolean triggered;
 	
+	/**
+	 * Creates a new instance of the Cause class.
+	 */
 	public Cause()
 	{
 		triggered = false;
 	}
 	
-	public void update()
-	{
-		
-	}
+	/**
+	 * An abstract method that gets called once per frame per trigger.
+	 */
+	public abstract void update();
 	
-	public boolean isTriggered()
+	/**
+	 * Gets a value indicating whether the Cause is currently triggered or not.
+	 * @return A value indicating whether the Cause is currently triggered or not.
+	 */
+	public final boolean isTriggered()
 	{
 		return triggered;
 	}
 	
-	public void trigger()
+	/**
+	 * Triggers the {@code Cause}.
+	 */
+	public final void trigger()
 	{
 		this.triggered = true;
 	}
 	
-	public void untrigger()
+	/**
+	 * Untriggers the {@code Cause}.
+	 */
+	public final void untrigger()
 	{
 		this.triggered = false;
 	}

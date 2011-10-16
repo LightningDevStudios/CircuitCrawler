@@ -9,20 +9,23 @@ import java.util.ArrayList;
 public class CollisionDetector 
 {	
 	private Vector2 size;
+<<<<<<< HEAD
 	private ArrayList<Shape> shapeList;
+=======
+	private ArrayList<Entity> entList;
+	private Vector2 MinLeafSize = new Vector2(10,10);
+>>>>>>> refs/remotes/origin/robert_rouhani_master
 	
 	public CollisionDetector(Vector2 size, ArrayList<Shape> shapeList) 
 	{
 		this.size = size;
 		this.shapeList = shapeList;
 	}
-	
-	public QuadTreeList QuadTreeDetection()
+
+	public ArrayList<ArrayList<Entity>> QuadTreeDetection()
 	{
-	    //TODO: shapes
-		Grid masterGrid = new Grid(size, new Vector2(0, 0), 0, entList, null);	
-		masterGrid.SearchGrid(masterGrid);
-		return new QuadTreeList(masterGrid.getColEnts(), masterGrid.getColEntsOnLines());
+		QuadTree qt = new QuadTree(size, new Vector2(0,0), null, MinLeafSize, entList);	
+		return qt.collidingEntities;
 	}
 	
 	public static boolean RadiusCheck(Shape a, Shape b)

@@ -1,5 +1,8 @@
 package com.lds.physics;
 
+import java.util.ArrayList;
+import com.lds.game.entity.*;
+
 public class PhysicsManager 
 {
 	/***********
@@ -23,7 +26,7 @@ public class PhysicsManager
 	{
 		this.collisionDetector = collisionDetector;
 	}
-	
+
 	/**
 	 * Get entities from a Collision Detector.
 	 * <ol>
@@ -42,10 +45,31 @@ public class PhysicsManager
 	 *     if onLineEntity contains 1 list which has 6 entities in it; entity 1 is compared to
 	 *     entity 2, 3, 4, 5, and 6.</li>
 	 * </ol>
-	 * \todo Put all physics calculations in here 
+	 * @return 
 	 */
-	public void solveCollision()
+	public ArrayList<CollisionPair> SolveCollision()
 	{
-	    
+		ArrayList<CollisionPair> pairList= new ArrayList<CollisionPair>();
+		
+		ArrayList<ArrayList<Entity>> quadList = collisionDetector.QuadTreeDetection();
+		
+		for(ArrayList<Entity> ents : quadList)
+		{
+			for(Entity ent : ents)
+			{
+				for(Entity en : ents)
+				{
+					if((!(ent.equals(en))) && collisionDetector.RadiusCheck(ent, en))
+					{
+						CollisionPair pair = collisionDetector.SeperatingAxisTheorem(ent, en);
+						if(pair != null)
+						{
+							pairList.add(pair);
+						}
+					}
+				}
+			}
+		}
+		return pairList;
 	}
 }

@@ -16,6 +16,16 @@ public class EffectRemoveEntity extends Effect
 	@Override
 	public void fireOutput()
 	{
-		EntityManager.removeEntity(ent);
+	    if (ent != null)
+	    {
+	        EntityManager.removeEntity(ent);
+	        ent = null;
+	    }
+	}
+	
+	@Override
+	public void unfireOutput()
+	{
+	    
 	}
 }

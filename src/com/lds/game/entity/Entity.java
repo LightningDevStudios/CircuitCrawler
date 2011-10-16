@@ -588,8 +588,13 @@ public abstract class Entity
 	/**************************
 	 * Accessors and Mutators *
 	 **************************/
+<<<<<<< HEAD
 	
 	public Shape getShape()
+=======
+
+	public float getSize()
+>>>>>>> refs/remotes/origin/robert_rouhani_master
 	{
 	    return shape;
 	}
@@ -657,8 +662,51 @@ public abstract class Entity
     public int getGradientVBO()
     {
         return VBOGradientPtr;
+<<<<<<< HEAD
     }
 	
+=======
+    }
+	
+	public void setSize(float size)
+	{ 
+		this.size = size; 
+		this.halfSize = size / 2; 
+		float[] initVerts =
+		{
+		        halfSize, halfSize, 	//top left
+				halfSize, -halfSize, 	//bottom left
+				-halfSize, halfSize, 	//top right
+				-halfSize, -halfSize    //bottom right
+		};
+		
+		vertices = initVerts;
+		this.vertexBuffer = setBuffer(vertexBuffer, vertices);
+		needToUpdateVertexVBO = true;
+	}
+	
+	public void setAngle(float angle)
+	{
+		this.angle = angle;
+		rotMat = Matrix4.rotateZ((float)Math.toRadians(angle));
+		rebuildModelMatrix();
+	}
+	
+	public void setPos(Vector2 position)
+	{
+	    posVec = position;
+	    posMat = Matrix4.translate(position);
+	    rebuildModelMatrix();
+	}
+	
+	public void setScale(Vector2 scale)
+	{
+	    scaleVec = scale;
+	    sclMat = Matrix4.scale(scale.getX(), scale.getY(), 1);
+	    rebuildModelMatrix();
+	}
+	
+>>>>>>> refs/remotes/origin/robert_rouhani_master
 	public void setColorInterpSpeed(float s)
 	{
 	    this.colorInterpSpeed = s;

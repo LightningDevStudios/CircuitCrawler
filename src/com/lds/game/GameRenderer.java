@@ -282,6 +282,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 			}
 		}
 		
+		
 		//outside of ent for loop
 		//causes button A to shoot when pressed
 		if (game.btnA.isPressed())
