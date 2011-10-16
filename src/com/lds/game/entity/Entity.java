@@ -759,6 +759,7 @@ public abstract class Entity
 	public int getVertexVBO()			{ return VBOVertPtr; }
 	public int getTextureVBO()			{ return VBOTexturePtr; }
 	public int getGradientVBO()			{ return VBOGradientPtr; }
+	public Matrix4 getModelMatrix() 	{ return model; }
 	
 	public void setSize(float size)
 	{ 
