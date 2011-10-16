@@ -56,37 +56,53 @@ public abstract class Shape
     /**
      * The shape's x and y scale
      */
-    protected Vector2 scale;  
+    protected Vector2 scale; 
+    
+    /**
+     * Whether or not the shape has physics
+     */
+    private boolean solid;
     
     /****************
      * Constructors *
      ****************/
     
     /**
-     * Initializes a new instance of the Shape class
+     * Initializes a new, solid instance of the Shape class
      */
     public Shape()
     {
-        this(new Vector2(0, 0));
+        this(new Vector2(0, 0), true);
+    }
+    
+    /**
+     * Initializes a new instance of the Shape class
+     * @param solid The solidity of the shape
+     */
+    public Shape(boolean solid)
+    {
+        this(new Vector2(0, 0), solid);
     }
     
     /**
      * Initializes a new instance of the Shape class
      * @param position The position of the shape
+     * @param solid The solidity of the shape
      */
-    public Shape(Vector2 position)
+    public Shape(Vector2 position, boolean solid)
     {
-        this(position, 0);
+        this(position, 0, solid);
     }
     
     /**
      * Initializes a new instance of the Shape class
      * @param position The position of the shape
      * @param angle The angle of the shape in radians
+     * @param solid The solidity of the shape
      */
-    public Shape(Vector2 position, float angle)
+    public Shape(Vector2 position, float angle, boolean solid)
     {
-        this(position, angle, new Vector2(1, 1));
+        this(position, angle, new Vector2(1, 1), solid);
     }
     
     /**
@@ -94,9 +110,11 @@ public abstract class Shape
      * @param position The position of the shape
      * @param angle The angle of the shape in radians
      * @param scale The scale of the shape
+     * @param solid The solidity of the shape
      */
-    public Shape(Vector2 position, float angle, Vector2 scale)
+    public Shape(Vector2 position, float angle, Vector2 scale, boolean solid)
     {
+        this.solid = solid;
         transMat = Matrix4.translate(position);
         rotMat = Matrix4.rotateZ(angle);
         scaleMat = Matrix4.scale(scale);
@@ -154,6 +172,12 @@ public abstract class Shape
         return worldVertices;
     }
     
+    public void setVertices(float[] vertices)
+    {
+        this.vertices = vertices;
+        transformVertices();
+    }
+    
     public Matrix4 getModel()
     {
         return model;
@@ -164,7 +188,7 @@ public abstract class Shape
         return position;
     }
     
-    public void setPosition(Vector2 position)
+    public void setPos(Vector2 position)
     {
         this.position = position;
         transMat = Matrix4.translate(position);
@@ -196,5 +220,15 @@ public abstract class Shape
         rotMat = Matrix4.rotateZ(angle);
         rebuildModel();
         transformVertices();
+    }
+    
+    public boolean isSolid()
+    {
+        return solid;
+    }
+    
+    public void setSolid(boolean solid)
+    {
+        this.solid = solid;
     }
 }

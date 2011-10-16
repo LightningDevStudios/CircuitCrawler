@@ -1,32 +1,31 @@
 package com.lds.game.entity;
 
 import com.lds.game.SoundPlayer;
+import com.lds.math.Vector2;
+import com.lds.physics.Rectangle;
 
 public class WallButton extends Entity
 {
 	private boolean active;
 	
-	public WallButton(float xPos, float yPos, float angle)
+	public WallButton(Vector2 position, float angle)
 	{
-		super(64.0f, xPos, yPos, angle, 0.2f, 0.0f, true, false, true);
+	    super(new Rectangle(64, position, angle, true));
 		active = false;
 	}
 	
 	@Override
 	public void interact(Entity ent)
 	{
-		if (ent instanceof PhysEnt)
+		if (active)
 		{
-			if (active)
-			{
-				active = false;
-				SoundPlayer.getInstance().playSound(SoundPlayer.SOUND_TEST);
-			}
-			else
-			{
-				active = true;
-				SoundPlayer.getInstance().playSound(SoundPlayer.SOUND_TEST);
-			}
+			active = false;
+			SoundPlayer.getInstance().playSound(SoundPlayer.SOUND_TEST);
+		}
+		else
+		{
+			active = true;
+			SoundPlayer.getInstance().playSound(SoundPlayer.SOUND_TEST);
 		}
 	}
 	

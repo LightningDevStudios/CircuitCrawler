@@ -1,20 +1,16 @@
 package com.lds.physics;
 
 import com.lds.game.entity.Entity;
-import com.lds.game.entity.Rectangle;
-import com.lds.math.*;
+
+import com.lds.math.Vector2;
 
 import java.util.ArrayList;
 
 public class CollisionDetector 
 {	
 	private Vector2 size;
-<<<<<<< HEAD
 	private ArrayList<Shape> shapeList;
-=======
-	private ArrayList<Entity> entList;
 	private Vector2 MinLeafSize = new Vector2(10,10);
->>>>>>> refs/remotes/origin/robert_rouhani_master
 	
 	public CollisionDetector(Vector2 size, ArrayList<Shape> shapeList) 
 	{
@@ -22,9 +18,9 @@ public class CollisionDetector
 		this.shapeList = shapeList;
 	}
 
-	public ArrayList<ArrayList<Entity>> QuadTreeDetection()
+	public ArrayList<ArrayList<Shape>> QuadTreeDetection()
 	{
-		QuadTree qt = new QuadTree(size, new Vector2(0,0), null, MinLeafSize, entList);	
+		QuadTree qt = new QuadTree(size, new Vector2(0,0), null, MinLeafSize, shapeList); //TODO: convert to shapes
 		return qt.collidingEntities;
 	}
 	
@@ -34,6 +30,17 @@ public class CollisionDetector
         float diagonalB = Vector2.subtract(b.getPos(), b.getWorldVertices()[0]).length();
         return Vector2.subtract(a.getPos(), b.getPos()).length() < (float)(diagonalA + diagonalB);
     }
+	
+	/**
+	 * \todo rethink collision, maybe remove CollisionPair and stop calling this from PhysicsManager
+	 * @param a
+	 * @param b
+	 * @return
+	 */
+	public static CollisionPair CheckCollision(Shape a, Shape b)
+	{
+	    return null;
+	}
 	
 	public static boolean RadiusCheckCircles(Circle a, Circle b)
 	{

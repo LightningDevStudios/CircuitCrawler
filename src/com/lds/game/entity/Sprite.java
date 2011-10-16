@@ -1,37 +1,34 @@
  package com.lds.game.entity;
 
 import com.lds.Animation;
+import com.lds.math.Vector2;
+import com.lds.physics.Rectangle;
 
-public class Sprite extends PhysEnt
+public class Sprite extends Entity
 {
 	public Animation anim;
 	
-	public Sprite(float size, float xPos, float yPos)
+	public Sprite(float size, Vector2 position, Animation anim)
 	{
-		this(size, xPos, yPos, 0.0f, 0.0f, 0.0f, null);
-	}
-
-	public Sprite(float size, float xPos, float yPos, float moveSpeed, float rotSpeed, float sclSpeed, Animation anim)
-	{
-		this(size, xPos, yPos, 0.0f, 1.0f, 1.0f, moveSpeed, rotSpeed, sclSpeed, anim);
-	}
-	
-	public Sprite(float size, float xPos, float yPos, float angle, float xScl, float yScl, float moveSpeed, float rotSpeed, float sclSpeed, Animation anim)
-	{
-		super(size, xPos, yPos, angle, xScl, yScl, false, false, true, moveSpeed, rotSpeed, sclSpeed, 0.0f);
+		super(new Rectangle(size, position, false));
 		this.anim = anim;
+		
 		//texture = anim.getCurrentFrame();
-
-		//this.textureBuffer = setBuffer(textureBuffer, texture);
+        //this.textureBuffer = setBuffer(textureBuffer, texture);
 	}
 	
+	/**
+	 * \todo some animation stuff
+	 */
 	@Override
 	public void update()
 	{
 		super.update();	
 	}
 	
-	@Override
+	/**
+	 * \todo some animation stuff
+	 */
 	public void renderNextFrame()
 	{
 		//this.texture = anim.getCurrentFrame();

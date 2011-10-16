@@ -2,6 +2,7 @@ package com.lds.parser;
 
 import com.lds.game.entity.Entity;
 import com.lds.game.entity.PickupHealth;
+import com.lds.math.Vector2;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,7 +19,7 @@ public class PickupHealthData extends PickupData
 	
 	public void createInst(ArrayList<Entity> entData)
 	{
-		pickupHealthRef = new PickupHealth(value, xPos, yPos);
+		pickupHealthRef = new PickupHealth(new Vector2(xPos, yPos), value);
 		
 		//COLOR
 		if (color != null)

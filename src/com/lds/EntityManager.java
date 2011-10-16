@@ -19,7 +19,6 @@ public class EntityManager
 	
 	public static void removeEntity(Entity ent)
 	{
-		ent.setExists(false);
 		if (!trashList.contains(ent))
 			trashList.add(ent);
 	}
@@ -35,11 +34,6 @@ public class EntityManager
 		for (Entity ent : trashList)
 		{
 			ent.freeHardwareBuffers(gl);
-			for (Entity cEnt : entList)
-			{
-				if (cEnt.colList.contains(ent))
-					cEnt.colList.remove(ent);
-			}
 			entList.remove(ent);
 			ent = null;
 		}

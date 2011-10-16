@@ -2,6 +2,7 @@ package com.lds.parser;
 
 import com.lds.game.entity.Entity;
 import com.lds.game.entity.Teleporter;
+import com.lds.math.Vector2;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,7 +18,7 @@ public class TeleporterData extends StaticEntData
 	
 	public void createInst(ArrayList<Entity> entData)
 	{
-		teleporterRef = new Teleporter(size, xPos, yPos);
+		teleporterRef = new Teleporter(size, new Vector2(xPos, yPos));
 
 		//COLOR
 		if (color != null)

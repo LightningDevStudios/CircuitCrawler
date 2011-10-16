@@ -1,40 +1,30 @@
 package com.lds.game.entity;
 
-import android.content.Context;
-import android.os.Vibrator;
-
+import com.lds.EntityManager;
+import com.lds.Stopwatch;
 import com.lds.game.SoundPlayer;
 import com.lds.math.Vector2;
+import com.lds.physics.Circle;
 
-public class Player extends Character //your character, protagonist
+public class Player extends Entity
 {
-    public static boolean godMode, noclip;
 	public static final int ENERGY_LIMIT = 100;
 	public static final int HEALTH_LIMIT = 100;
-	protected Context context;
+	
+	private int health;
 	private int energy;
-	private boolean holdingObject;
 	private HoldObject hObj;
 	private boolean controlled;
-	private float nextAngle;
+	private int damageTime;
 	
-	public Player(float xPos, float yPos, float angle)
+	public Player(Vector2 position, float angle)
 	{
-		//initialize Character and Entity data
-		super(Entity.DEFAULT_SIZE, xPos, yPos, angle, 1.0f, 1.0f, true, HEALTH_LIMIT, 30.0f, 1.0f);
-		//initialize Player data
+		super(new Circle(DEFAULT_SIZE, position, angle, true));
+		
 		energy = ENERGY_LIMIT;
-		nextAngle = angle;
+		health = HEALTH_LIMIT;
 		controlled = true;
-		if (godMode)
-		{
-			health = 9999999; //LOLS
-			energy = 9999999; //LOLS Again
-		}
-		if (noclip)
-		{
-			this.isSolid = false;
-		}
+		damageTime = 0;
 	}
 	
 	public void attack()
@@ -47,15 +37,13 @@ public class Player extends Character //your character, protagonist
 	{
 		if (ent instanceof PickupEnergy)
 		{
-			colList.remove(ent);
-			energy += ((PickupEnergy)ent).getEnergyValue();
+			energy += ((PickupEnergy)ent).getValue();
 			if (energy > ENERGY_LIMIT)
 				energy = ENERGY_LIMIT;
 		}
 		else if (ent instanceof PickupHealth)
 		{
-			colList.remove(ent);
-			health += ((PickupHealth)ent).getHealthValue();
+			health += ((PickupHealth)ent).getValue();
 			if (health > HEALTH_LIMIT)
 				health = HEALTH_LIMIT;
 		}
@@ -67,17 +55,19 @@ public class Player extends Character //your character, protagonist
 		{
 			takeDamage(5);
 		}
-		else if (ent instanceof AttackBolt && !((AttackBolt)ent).doesIgnore(this))
+		else if (ent instanceof AttackBolt && this != ((AttackBolt)ent).getParent())
 		{
-			colList.remove(ent);
 			takeDamage(5);
 		}
 	}
 	
+	/**
+	 * \todo fall into pits
+	 */
 	@Override
-	public void onTileInteract(Tile tile)
+	public void tileInteract(Tile tile)
 	{
-		if (tile != null)
+		/*if (tile != null)
 		{
 			if (tile.isPit())
 			{
@@ -91,83 +81,74 @@ public class Player extends Character //your character, protagonist
 				}
 				falling = true;
 			}
-		}
+		}*/
 	}
 	
 	public void holdObject(HoldObject hObj)
 	{
-		holdingObject = true;
 		this.hObj = hObj;
 		hObj.hold();
 		updateHeldObjectPosition();
-		colIgnoreList.add(hObj);
-		hObj.colIgnoreList.add(this);
 	}
 	
 	public void dropObject()
 	{
-		holdingObject = false;
-		colIgnoreList.remove(hObj);
-		hObj.colIgnoreList.remove(this);
-		final Vector2 addVec = new Vector2(angle).scale(10);
-		hObj.addPos(addVec);
 		hObj.drop();
-		hObj = new PhysBlock(0.0f, 0.0f, 0.0f, 0.03f);
+		hObj = new Block(0, new Vector2(0, 0));
 		hObj = null;
 	}
 	
+	/**
+	 * \todo actually push the object with physics
+	 */
 	public void throwObject()
 	{
-		holdingObject = false;
-		colIgnoreList.remove(hObj);
-		hObj.colIgnoreList.remove(this);
-		final Vector2 addVec = new Vector2(angle).scale(10);
-		hObj.addPos(addVec);
-		hObj.push();
-		hObj = new PhysBlock(0.0f, 0.0f, 0.0f, 0.03f);
-		hObj = null;
-	}
-	
-	public void vibrator(int time)
-	{
-		Vibrator vibrator = null; 
-		try 
-		{ 
-			vibrator = (Vibrator)context.getSystemService(Context.VIBRATOR_SERVICE); 
-		} 
-		catch (Exception e) { }
-		
-		if (vibrator != null)
-		{ 
-		  try 
-		  { 
-			  vibrator.vibrate((long)time); 
-		  } 
-		  catch (Exception e) { }
-		} 
+		dropObject();
 	}
 
+	/**
+	 * \todo do this with physics
+	 */
 	public void updateHeldObjectPosition()
 	{
-			float heldDistance = hObj.halfSize * hObj.getXScl() + this.halfSize + 10.0f;
-			Vector2 directionVec = new Vector2(angle);
-			directionVec.scale(heldDistance).add(posVec);
-			hObj.setPos(directionVec);
-			hObj.setAngle(angle);
+		/*float heldDistance = hObj.halfSize * hObj.getXScl() + this.halfSize + 10.0f;
+		Vector2 directionVec = new Vector2(angle);
+		directionVec.scale(heldDistance).add(posVec);
+		hObj.setPos(directionVec);
+		hObj.setAngle(angle);*/
 	}
 	
+	/**
+	 * \todo make player flash once it is hit
+	 */
 	@Override
-	public boolean isColliding(Entity ent)
-	{
-		if (ent == this.getHeldObject() || ent instanceof Tile && !((Tile)ent).isRendered())
-			return false;
-		return super.isColliding(ent);
-	}
+    public void update()
+    {
+        super.update();
+        
+        damageTime += Stopwatch.getFrameTime();
+        
+        if (getXScale() <= 0 && getYScale() <= 0)
+            health = 0;
+        if (health <= 0)
+            EntityManager.removeEntity(this); 
+    }
+    
+    public int getHealth()
+    {
+        return health;
+    }
+    
+    public void takeDamage(int damage)
+    {
+        health -= damage;
+        damageTime = 0;
+    }
 	
 	public void disableUserControl()
 	{
-		if (holdingObject)
-			this.dropObject();
+		if (hObj != null)
+			dropObject();
 		controlled = false;
 	}
 	
@@ -180,29 +161,19 @@ public class Player extends Character //your character, protagonist
 	{
 		return hObj;
 	}
+	
+	public boolean isHoldingObject()
+	{
+	    return hObj != null;
+	}
 
 	public int getEnergy()
 	{
 		return energy;
 	}
 	
-	public boolean isHoldingObject()
-	{
-		return holdingObject;
-	}
-	
 	public void loseEnergy(int energyLost)
 	{
 		energy -= energyLost;
-	}
-	
-	public float getNextAngle()
-	{
-		return nextAngle;
-	}
-	
-	public void setNextAngle(float angle)
-	{
-		nextAngle = angle;
 	}
 }

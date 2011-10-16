@@ -2,6 +2,7 @@ package com.lds.parser;
 
 import com.lds.game.entity.Button;
 import com.lds.game.entity.Entity;
+import com.lds.math.Vector2;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,7 +18,7 @@ public class ButtonData extends StaticEntData
 	
 	public void createInst(ArrayList<Entity> entData)
 	{
-		buttonRef = new Button(xPos, yPos);
+		buttonRef = new Button(new Vector2(xPos, yPos));
 		buttonRef.setAngle(angle);
 		
 		//COLOR

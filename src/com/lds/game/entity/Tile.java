@@ -4,6 +4,8 @@ import com.lds.Enums;
 import com.lds.Enums.*;
 import com.lds.Texture;
 import com.lds.TilesetHelper;
+import com.lds.math.Vector2;
+import com.lds.physics.Rectangle;
 
 import java.util.EnumSet;
 
@@ -23,15 +25,17 @@ public class Tile extends Entity
 	
 	public Tile(float size, int tilePosX, int tilePosY, int tilesetX, int tilesetY)
 	{
-		super(size, 0, 0, false, true);
+		super(new Rectangle(size, new Vector2(0, 0), false));
 		TilesetHelper.setInitialTileOffset(this, tilePosY, tilePosX, tilesetX, tilesetY);
+		float[] vertices = new float[8];
 		for (int i = 0; i < vertices.length; i++)
 		{
 			if (i % 2 == 0)
-				vertices[i] += posVec.getX();
+				vertices[i] += getXPos();
 			else
-				vertices[i] += posVec.getY();
+				vertices[i] += getYPos();
 		}
+		shape.setVertices(vertices);
 		xIndex = tilePosX;
 		yIndex = tilePosY;
 		vertexBuffer = setBuffer(vertexBuffer, vertices);
@@ -117,15 +121,6 @@ public class Tile extends Entity
 		textureBuffer = setBuffer(textureBuffer, texture);
 	}
 	
-	@Override
-	public boolean isColliding(Entity ent)
-	{
-		if (state != TileState.WALL || ent instanceof Tile || ent instanceof StaticEnt || ent instanceof Teleporter)
-			return false;
-		else
-			return super.isColliding(ent);
-	}
-	
 	public void setAsWall()
 	{
 		state = TileState.WALL;
@@ -138,7 +133,7 @@ public class Tile extends Entity
 		{
 			updateTileset(2, 0);
 		}
-		isSolid = true;
+		shape.setSolid(true);
 		rotateTilesetCoords();
 	}
 	
@@ -146,7 +141,7 @@ public class Tile extends Entity
 	{
 		state = TileState.FLOOR;
 		updateTileset((int)(Math.random() * 4), (int)(Math.random() * 4));
-		isSolid = false;
+		shape.setSolid(false);
 		rotateTilesetCoords();
 	}
 	
@@ -154,7 +149,7 @@ public class Tile extends Entity
 	{
 		state = TileState.SlipperyTile;
 		updateTileset(15, 0);
-		isSolid = false;
+		shape.setSolid(false);
 		rotateTilesetCoords();
 	}
 	
@@ -170,7 +165,7 @@ public class Tile extends Entity
 		{
 			updateTileset(7, 3);
 		}
-		isSolid = false;
+		shape.setSolid(false);
 		rotateTilesetCoords();
 	}
 	
@@ -190,9 +185,8 @@ public class Tile extends Entity
 			updateTileset(1, 1);
 			tempBridge = true;
 		}
-		isSolid = false;
+		shape.setSolid(false);
 		rotateTilesetCoords();
-		
 	}
 	
 	public boolean isWall()

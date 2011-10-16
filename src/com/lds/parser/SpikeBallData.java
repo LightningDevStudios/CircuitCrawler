@@ -2,6 +2,7 @@ package com.lds.parser;
 
 import com.lds.game.entity.Entity;
 import com.lds.game.entity.SpikeBall;
+import com.lds.math.Vector2;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,7 +26,7 @@ public class SpikeBallData extends PhysEntData
 	
 	public  void createInst(ArrayList<Entity> entData)
 	{
-		spikeBallRef = new SpikeBall(size, xPos, yPos, circular, willCollide, moveSpeed, rotSpeed, sclSpeed, friction, moveX, moveY, rotateDir);
+		spikeBallRef = new SpikeBall(size, new Vector2(xPos, yPos));
 		
 		//COLOR
 		if (color != null)

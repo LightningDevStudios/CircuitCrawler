@@ -12,13 +12,18 @@ public class CauseEntityDestruction extends Cause
 		this.ent = ent;
 	}
 	
+	/**
+	 * \todo implement some way of detecting entity destruction
+	 */
 	@Override
 	public void update()
 	{
+	    /*
 		if (!ent.exists())
 			trigger();
 		
 		else
 			untrigger();
+		*/
 	}
 }

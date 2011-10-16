@@ -2,6 +2,7 @@ package com.lds.parser;
 
 import com.lds.game.entity.Cannon;
 import com.lds.game.entity.Entity;
+import com.lds.math.Vector2;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,7 +26,7 @@ public class CannonData extends StaticEntData
 	
 	public void createInst(ArrayList<Entity> entData)
 	{
-		cannonRef = new Cannon(size, xPos, yPos, angle, xScl, yScl, isSolid, circular, willCollide, speed, 5);
+		cannonRef = new Cannon(size, new Vector2(xPos, yPos), angle, speed, 5.0f);
 		
 		//COLOR
 		if (color != null)

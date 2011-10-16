@@ -4,21 +4,31 @@ import com.lds.EntityManager;
 import com.lds.Stopwatch;
 import com.lds.game.Game;
 import com.lds.math.Vector2;
+import com.lds.physics.Rectangle;
 
 public class Cannon extends Entity
 {
-	protected float speed, shotsPerSecond;
-	protected long time;
+	private float shotVelocity;
+	private float shotsPerSecond;
+	private long time;
 	
-	public Cannon(float size, float xPos, float yPos, float angle, float xScl, float yScl, boolean isSolid, boolean circular, boolean willCollide, float fireSpeed, float newShotsPerSecond)
+	public Cannon(Vector2 position, float angle, float shotVelocity, float shotsPerSecond)
 	{
-		super(size, xPos, yPos, angle, xScl, yScl, isSolid, circular, willCollide);
-		speed = fireSpeed;
-		shotsPerSecond = newShotsPerSecond;
-		time = 0;
+		this(69, position, angle, shotVelocity, shotsPerSecond);
 	}
+	
+	public Cannon(float size, Vector2 position, float angle, float shotVelocity, float shotsPerSecond)
+    {
+        super(new Rectangle(size, position, angle, true));
+        this.shotVelocity = shotVelocity;
+        this.shotsPerSecond = shotsPerSecond;
+        time = 0;
+    }
 
 	@Override
+	/**
+	 * \todo add real physics
+	 */
 	public void update()
 	{
 		super.update();
@@ -28,9 +38,9 @@ public class Cannon extends Entity
 		if (time > shotsPerSecond * 1000) // Time loop
 		{
 			time = 0;
-			CannonShell cannonShot = new CannonShell(getXPos(), getYPos(), angle, speed, 2);
+			CannonShell cannonShot = new CannonShell(getPos(), getAngle(), shotVelocity, 2);
 			cannonShot.enableTilesetMode(Game.tilesetwire, 1, 3);
-			cannonShot.push(new Vector2(angle).scale(speed));
+			//cannonShot.push(new Vector2(angle).scale(shotVelocity));
 			EntityManager.addEntity(cannonShot);
 		}
 	}

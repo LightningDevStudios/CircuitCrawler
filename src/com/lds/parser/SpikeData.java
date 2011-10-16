@@ -2,6 +2,7 @@ package com.lds.parser;
 
 import com.lds.game.entity.Entity;
 import com.lds.game.entity.Spike;
+import com.lds.math.Vector2;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,8 +17,7 @@ public class SpikeData extends StaticEntData
 
 	public void createInst(ArrayList<Entity> entData)
 	{
-		spikeRef = new Spike(xPos, yPos, angle);
-		spikeRef.setSize(size);
+		spikeRef = new Spike(size, new Vector2(xPos, yPos), angle);
 		
 		//COLOR
 		if (color != null)

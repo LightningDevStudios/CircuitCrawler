@@ -2,6 +2,7 @@ package com.lds.parser;
 
 import com.lds.game.entity.Entity;
 import com.lds.game.entity.PickupEnergy;
+import com.lds.math.Vector2;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,7 +19,7 @@ public class PickupEnergyData extends PickupData
 	
 	public void createInst(ArrayList<Entity> entData)
 	{
-		pickupEnergyRef = new PickupEnergy(value, xPos, yPos);
+		pickupEnergyRef = new PickupEnergy(new Vector2(xPos, yPos), value);
 
 		//COLOR
 		if (color != null)

@@ -13,57 +13,70 @@ public class Circle extends Shape
      */
     public Circle()
     {
-        this(1);
+        this(true);
     }
     
     /**
      * Initializes a new instance of the Circle class
-     * @param size The diameter of the circle
+     * @param solid The solidity of the circle
      */
-    public Circle(float size)
+    public Circle(boolean solid)
     {
-        this(size, new Vector2(0, 0));
+        this(1, solid);
     }
     
     /**
      * Initializes a new instance of the Circle class
-     * @param size The diameter of the circle
+     * @param size The size of the circle
+     * @param solid The solidity of the circle
+     */
+    public Circle(float size, boolean solid)
+    {
+        this(size, new Vector2(0, 0), solid);
+    }
+    
+    /**
+     * Initializes a new instance of the Circle class
+     * @param size The size of the circle
      * @param position The position of the circle
+     * @param solid The solidity of the circle
      */
-    public Circle(float size, Vector2 position)
+    public Circle(float size, Vector2 position, boolean solid)
     {
-        this(size, position, 0);
+        this(size, position, 0, solid);
     }
     
     /**
      * Initializes a new instance of the Shape class
-     * @param size The diameter of the circle
+     * @param size The size of the circle
      * @param position The position of the circle
      * @param angle The angle of the circle in radians
+     * @param solid The solidity of the circle
      */
-    public Circle(float size, Vector2 position, float angle)
+    public Circle(float size, Vector2 position, float angle, boolean solid)
     {
-        this(size, position, angle, 1);
+        this(size, position, angle, new Vector2(1, 1), solid);
     }
     
     /**
      * Initializes a new instance of the Circle class
-     * @param size The diameter of the circle
+     * @param size The size of the circle
      * @param position The position of the circle
      * @param angle The angle of the circle in radians
      * @param scale The scale of the circle
+     * @param solid The solidity of the circle
      */
-    public Circle(float size, Vector2 position, float angle, float scale)
+    public Circle(float size, Vector2 position, float angle, Vector2 scale, boolean solid)
     {
-        super(position, angle, new Vector2(scale));
+        super(position, angle, scale, solid);
         
         float halfSize = size / 2;
         float[] vertices = 
             {
-                -halfSize, halfSize,     //top left
-                -halfSize, -halfSize,    //bottom left
-                halfSize, halfSize,    //top right
-                halfSize, -halfSize    //bottom right
+                halfSize, halfSize,     //top left
+                halfSize, -halfSize,    //bottom left
+                -halfSize, halfSize,    //top right
+                -halfSize, -halfSize    //bottom right
             };
         this.vertices = vertices;
     }

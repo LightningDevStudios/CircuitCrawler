@@ -1,6 +1,6 @@
 package com.lds.physics;
 
-import com.lds.game.entity.Entity;
+import com.lds.physics.Shape;
 import com.lds.math.*;
 
 import java.util.ArrayList;
@@ -8,52 +8,52 @@ import java.util.ArrayList;
 public class World 
 {
 	private Vector2 size;
-	private ArrayList<Entity> entList;
+	private ArrayList<Shape> shapeList;
 	private CollisionDetector collisionDetector;
 	private PhysicsManager physManager;
 	
-	public World(Vector2 size, ArrayList<Entity> entList)
+	public World(Vector2 size, ArrayList<Shape> shapeList)
 	{
 		this.size = size;	
-		this.entList = entList;
-		collisionDetector = new CollisionDetector(size, entList);
+		this.shapeList = shapeList;
+		collisionDetector = new CollisionDetector(this.size, shapeList);
 		physManager = new PhysicsManager(collisionDetector);
 	}
 
-	public void addEntity(Entity ent)
+	public void addShape(Shape shape)
 	{ 
-	    entList.add(ent);
+	    shapeList.add(shape);
 	}
 	
-	public void addEntities(ArrayList<Entity> ents)
+	public void addShapes(ArrayList<Shape> shapes)
 	{
-	    entList.addAll(ents);
+	    shapeList.addAll(shapes);
 	}
 	
-	public void addEntities(Entity[] ents)
+	public void addShapes(Shape[] shapes)
 	{
-	    for (Entity ent : ents)
-	        entList.add(ent);
+	    for (Shape shape : shapes)
+	        shapeList.add(shape);
 	}
 	
-	public void removeEntity(Entity ent)
+	public void removeShape(Shape shape)
 	{
-	    entList.remove(ent);
+	    shapeList.remove(shape);
 	}
 	
-	public void removeEntities(ArrayList<Entity> ents)
+	public void removeShapes(ArrayList<Shape> shapes)
 	{
-	    entList.removeAll(ents);
+	    shapeList.removeAll(shapes);
 	}
 	
-	public void removeEntities(Entity[] ents)
+	public void removeShapes(Shape[] shapes)
 	{
-	    for (Entity ent : ents)
-	        entList.remove(ent);
+	    for (Shape shape : shapes)
+	        shapeList.remove(shape);
 	}
 	
-	public void clearEntities()
+	public void clearShapes()
 	{
-	    entList.clear();
+	    shapeList.clear();
 	}
 }

@@ -164,17 +164,12 @@ public abstract class Entity
 		    gl.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 		}
 	}
-			
-	public void remove()
-	{
-		EntityManager.removeEntity(this);
-	}
 	
 	public void update()
 	{
 	    //TODO: change this?
 		if (shape.getScale().length() <= 0.0f)
-			this.remove(); //remove the entity
+			EntityManager.removeEntity(this);
 		colorInterp();
 		gradientInterp();
 	}
@@ -220,16 +215,28 @@ public abstract class Entity
 	}
 	
 	/**
-	 * Overriden for entity interaction.
+	 * Called when the entity collides with another entity
 	 * @param ent The entity to interact with.
 	 */
 	public void interact(Entity ent) {}
 	
 	/**
-	 * Overriden for entity uninteraction.
+	 * Called when the entity stops colliding with another entity
 	 * @param ent The entity that was interacted with.
 	 */
 	public void uninteract(Entity ent) {}
+	
+	/**
+	 * Called when the entity collides with a tile
+	 * @param tile The tile to interact with.
+	 */
+	public void tileInteract(Tile tile) {}
+	
+	/**
+	 * Called when the entity stops colliding with a tile.
+	 * @param tile The tile that was interacted with.
+	 */
+	public void tileUninteract(Tile tile) {}
 		
 	/**********************
 	 * RenderMode methods *
@@ -588,14 +595,9 @@ public abstract class Entity
 	/**************************
 	 * Accessors and Mutators *
 	 **************************/
-<<<<<<< HEAD
 	
 	public Shape getShape()
-=======
-
-	public float getSize()
->>>>>>> refs/remotes/origin/robert_rouhani_master
-	{
+    {   
 	    return shape;
 	}
 	
@@ -614,14 +616,39 @@ public abstract class Entity
 	    return getPos().getY();
 	}
 	
+	public void setPos(Vector2 position)
+	{
+	    shape.setPos(position);
+	}
+	
 	public float getAngle()
 	{
 	    return shape.getAngle();
 	}
 	
+	public void setAngle(float angle)
+	{
+	    shape.setAngle(angle);
+	}
+	
 	public Vector2 getScale()
 	{
 	    return shape.getScale();
+	}
+	
+	public void setScale(Vector2 scale)
+	{
+	    shape.setScale(scale);
+	}
+	
+	public float getXScale()
+	{
+	    return getScale().getX();
+	}
+	
+	public float getYScale()
+	{
+	    return getScale().getY();
 	}
 
     public Vector4 getColor()
@@ -662,51 +689,8 @@ public abstract class Entity
     public int getGradientVBO()
     {
         return VBOGradientPtr;
-<<<<<<< HEAD
     }
 	
-=======
-    }
-	
-	public void setSize(float size)
-	{ 
-		this.size = size; 
-		this.halfSize = size / 2; 
-		float[] initVerts =
-		{
-		        halfSize, halfSize, 	//top left
-				halfSize, -halfSize, 	//bottom left
-				-halfSize, halfSize, 	//top right
-				-halfSize, -halfSize    //bottom right
-		};
-		
-		vertices = initVerts;
-		this.vertexBuffer = setBuffer(vertexBuffer, vertices);
-		needToUpdateVertexVBO = true;
-	}
-	
-	public void setAngle(float angle)
-	{
-		this.angle = angle;
-		rotMat = Matrix4.rotateZ((float)Math.toRadians(angle));
-		rebuildModelMatrix();
-	}
-	
-	public void setPos(Vector2 position)
-	{
-	    posVec = position;
-	    posMat = Matrix4.translate(position);
-	    rebuildModelMatrix();
-	}
-	
-	public void setScale(Vector2 scale)
-	{
-	    scaleVec = scale;
-	    sclMat = Matrix4.scale(scale.getX(), scale.getY(), 1);
-	    rebuildModelMatrix();
-	}
-	
->>>>>>> refs/remotes/origin/robert_rouhani_master
 	public void setColorInterpSpeed(float s)
 	{
 	    this.colorInterpSpeed = s;

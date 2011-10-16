@@ -1,16 +1,17 @@
 package com.lds.game.entity;
 
 import com.lds.game.SoundPlayer;
+import com.lds.math.Vector2;
+import com.lds.physics.Circle;
 
 public class Button extends Entity
 {
 	private boolean active;
 	
-	public Button(float xPos, float yPos)
+	public Button(Vector2 position)
 	{
-		super(69.0f, xPos, yPos, 0.0f, 1.0f, 1.0f, true, true, false);
+		super(new Circle(69, position, false));
 		active = false;
-		circular = true;
 	}
 	
 	public boolean isActive()
@@ -24,6 +25,7 @@ public class Button extends Entity
 		{
 			active = true;
 			SoundPlayer.getInstance().playSound(SoundPlayer.SOUND_TEST);
+			updateTileset(1);
 		}
 	}
 	
@@ -33,6 +35,7 @@ public class Button extends Entity
 		{
 			active = false;
 			SoundPlayer.getInstance().playSound(SoundPlayer.SOUND_TEST);
+			updateTileset(0);
 		}
 	}
 	
@@ -40,19 +43,13 @@ public class Button extends Entity
 	public void interact(Entity ent)
 	{	
 		if (ent instanceof Player || ent instanceof HoldObject)
-		{
 			activate();
-			updateTileset(1);
-		}	
 	}
 	
 	@Override
-	public void uninteract(Entity ent) //runs when an entity stops colliding with Button
+	public void uninteract(Entity ent)
 	{
 		if (ent instanceof Player || ent instanceof HoldObject)
-		{
-			deactivate();
-			updateTileset(0);
-		}	
+			deactivate();	
 	}
 }
