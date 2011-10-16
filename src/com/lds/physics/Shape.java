@@ -140,8 +140,8 @@ public abstract class Shape
     public void transformVertices()
     {
         Vector2[] vectorVertices = getVectorVertices();
-        for (Vector2 v : vectorVertices)
-            v = Vector4.transform(new Vector4(v, 0, 1), model).xy();
+        for (int i = 0; i < vectorVertices.length; i++)
+            vectorVertices[i] = Vector4.transform(new Vector4(vectorVertices[i], 0, 1), model).xy();
         worldVertices = vectorVertices;
     }
     
