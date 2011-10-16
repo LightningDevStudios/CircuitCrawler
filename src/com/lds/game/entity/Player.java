@@ -87,7 +87,7 @@ public class Player extends Character //your character, protagonist
 					this.stop();
 					this.scaleTo(0, 0);
 					this.moveTo(tile.getXPos(), tile.getYPos());
-					SoundPlayer.getInstance().playSound(SoundPlayer.PIT_FALL);
+					SoundPlayer.playSound(SoundPlayer.PIT_FALL);
 				}
 				falling = true;
 			}

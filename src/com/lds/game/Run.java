@@ -176,7 +176,7 @@ public class Run extends Activity implements GameOverListener, GameInitializedLi
 	
     public void onPrepared(MediaPlayer mp)
 	{ 
-		mp.setVolume(SoundPlayer.getInstance().getMusicVolume(), SoundPlayer.getInstance().getMusicVolume());
+		mp.setVolume(SoundPlayer.getMusicVolume(), SoundPlayer.getMusicVolume());
 		mp.start(); 
     } 
 
@@ -259,7 +259,7 @@ public class Run extends Activity implements GameOverListener, GameInitializedLi
 				saveas(R.raw.song2, "song2.mp3");
 				mp.setDataSource("/sdcard/circutCrawler/media/audio/songs/song2.mp3");
 				playingSong1 = false;
-				if (SoundPlayer.getInstance().getMusicEnabled())
+				if (SoundPlayer.getMusicEnabled())
 				{
 					mp.prepare();
 				}
@@ -276,7 +276,7 @@ public class Run extends Activity implements GameOverListener, GameInitializedLi
 				saveas(R.raw.song1, "song1.mp3");
 				mp.setDataSource("/sdcard/circutCrawler/media/audio/songs/song1.mp3");
 				playingSong1 = true;
-				if (SoundPlayer.getInstance().getMusicEnabled())
+				if (SoundPlayer.getMusicEnabled())
 				{
 					mp.prepare();
 				}

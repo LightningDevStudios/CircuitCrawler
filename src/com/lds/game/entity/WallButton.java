@@ -20,12 +20,12 @@ public class WallButton extends StaticEnt
 			if (active)
 			{
 				active = false;
-				SoundPlayer.getInstance().playSound(SoundPlayer.SOUND_TEST);
+				SoundPlayer.playSound(SoundPlayer.SOUND_TEST);
 			}
 			else
 			{
 				active = true;
-				SoundPlayer.getInstance().playSound(SoundPlayer.SOUND_TEST);
+				SoundPlayer.playSound(SoundPlayer.SOUND_TEST);
 			}
 		}
 	}

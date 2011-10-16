@@ -20,8 +20,19 @@ import javax.microedition.khronos.opengles.GL10;
 
 public class Game
 {
+    public static boolean worldOutdated, windowOutdated;
+    
+    public static float screenW, screenH;
+    
+    //Texture data
+    //\TODO TextureManager class
+    public static Texture tilesetwire;
+    public static Texture text;
+    public static Texture tilesetworld;
+    public static Texture tilesetentities;
+    public static Texture baricons;
+    
 	public int frameInterval;
-	public static boolean worldOutdated, windowOutdated;
 	
 	public ArrayList<Entity> entList;
 	public Tile[][] tileset;
@@ -35,20 +46,11 @@ public class Game
 	public ArrayList<Finger> fingerList;
 	
 	//Camera data
-	public static float screenW, screenH;
 	public float camPosX;
 	public float camPosY;
 	
 	public float worldMinX, worldMinY, worldMaxX, worldMaxY;
 	public int tilesetMinX, tilesetMinY, tilesetMaxX, tilesetMaxY;
-	
-	//Texture data
-	//\TODO TextureManager class
-	public static Texture tilesetwire;
-	public static Texture text;
-	public static Texture tilesetworld;
-	public static Texture tilesetentities;
-	public static Texture baricons;
 	
 	//Testing data
 	public UIButton btnA;
@@ -83,7 +85,7 @@ public class Game
 		TextureLoader.getInstance().initialize(gl);
 		sr.loadTextTileset(text);
 				
-		SoundPlayer.getInstance().initialize(context);
+		SoundPlayer.initialize(context);
 		
 		TextureLoader tl = TextureLoader.getInstance();
 		

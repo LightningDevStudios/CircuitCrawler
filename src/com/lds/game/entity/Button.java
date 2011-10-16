@@ -23,7 +23,7 @@ public class Button extends StaticEnt
 		if (!active)
 		{
 			active = true;
-			SoundPlayer.getInstance().playSound(SoundPlayer.SOUND_TEST);
+			SoundPlayer.playSound(SoundPlayer.SOUND_TEST);
 		}
 	}
 	
@@ -32,7 +32,7 @@ public class Button extends StaticEnt
 		if (active)
 		{
 			active = false;
-			SoundPlayer.getInstance().playSound(SoundPlayer.SOUND_TEST);
+			SoundPlayer.playSound(SoundPlayer.SOUND_TEST);
 		}
 	}
 	

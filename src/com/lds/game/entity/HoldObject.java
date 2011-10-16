@@ -24,7 +24,7 @@ public abstract class HoldObject extends PhysEnt //and object that is held (bloc
 				{
 					this.scaleTo(0, 0);
 					if (!falling)
-						SoundPlayer.getInstance().playSound(SoundPlayer.PIT_FALL);
+						SoundPlayer.playSound(SoundPlayer.PIT_FALL);
 					falling = true;
 				}
 			}

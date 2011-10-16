@@ -44,7 +44,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		Game.windowOutdated = false;
 		Game.worldOutdated = false;
 		this.levelId = levelId;
-		SoundPlayer.getInstance().initialize(context);
+		SoundPlayer.initialize(context);
 		paused = false;
 		charlieSheen = false;
 	}
@@ -297,7 +297,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 					EntityManager.addEntity(attack);
 					game.player.loseEnergy(5);
 					Vibrator.vibrate(context, 100);
-					SoundPlayer.getInstance().playSound(2);
+					SoundPlayer.playSound(SoundPlayer.SHOOT_SOUND);
 					attack.enableTilesetMode(Game.tilesetentities, 1, 3);
 				}
 			}

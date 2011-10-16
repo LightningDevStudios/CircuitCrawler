@@ -34,7 +34,7 @@ public class Teleporter extends PhysEnt
 			if (newPos != null)
 			{
 				((PhysEnt)ent).setPosNoInterp(newPos);
-				SoundPlayer.getInstance().playSound(SoundPlayer.TELEPORT);
+				SoundPlayer.playSound(SoundPlayer.TELEPORT);
 			}
 		}
 	}

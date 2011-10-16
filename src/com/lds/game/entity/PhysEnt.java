@@ -79,7 +79,7 @@ public abstract class PhysEnt extends Entity //physics objects are movable, such
 				this.scaleTo(0, 0);
 				this.moveTo(tile.getXPos(), tile.getYPos());
 				if (!falling)
-					SoundPlayer.getInstance().playSound(SoundPlayer.PIT_FALL);
+					SoundPlayer.playSound(SoundPlayer.PIT_FALL);
 				falling = true;
 			}
 		}

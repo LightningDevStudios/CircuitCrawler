@@ -6,6 +6,10 @@ import android.media.SoundPool;
 
 import java.util.HashMap;
 
+/**
+ * A static class that plays short audio clips from anywhere.
+ * @author Lightning Development Studios
+ */
 public final class SoundPlayer 
 {
 	public static final int SOUND_TEST = 1;
@@ -13,40 +17,32 @@ public final class SoundPlayer
 	public static final int ENEMY_DEATH = 3;
 	public static final int PIT_FALL = 4;
 	public static final int TELEPORT = 5;
-	private boolean enableSound = true;
-	private boolean enableMusic = true;
-	private float effectVolume, musicVolume;
+	private static boolean enableSound = true;
+	private static boolean enableMusic = true;
+	private static float effectVolume, musicVolume;
+		
+	private static SoundPool pool;
+	private static HashMap<Integer, Integer> poolMap;
+	private static Context context;
 	
-	private static SoundPlayer p_sp;
-	
-	private SoundPool pool;
-	private HashMap<Integer, Integer> poolMap;
-	private Context context;
-	
+	/**
+	 * Prevents initialization of SoundPlayer.
+	 */
 	private SoundPlayer()
 	{
-		pool = new SoundPool(6, AudioManager.STREAM_MUSIC, 100);
-		poolMap = new HashMap<Integer, Integer>();
-	}
 		
-	public static SoundPlayer getInstance()
-	{
-		if (p_sp == null)
-		{
-			synchronized (SoundPlayer.class)
-			{
-				if (p_sp == null)
-				{
-					p_sp = new SoundPlayer();
-				}
-			}
-		}
-		return p_sp;
 	}
 	
-	public void initialize(Context context)
+	/**
+	 * Initializes all the sounds that can be played in the game.
+	 * @param context The Android Context containing all the audio resource references.
+	 */
+	public static void initialize(Context context)
 	{
-		this.context = context;
+	    pool = new SoundPool(6, AudioManager.STREAM_MUSIC, 100);
+        poolMap = new HashMap<Integer, Integer>();
+	    
+		SoundPlayer.context = context;
 		poolMap.put(SOUND_TEST, pool.load(context, R.raw.testclick, 1));
 		poolMap.put(SHOOT_SOUND, pool.load(context, R.raw.shootsound, 1));
 		poolMap.put(ENEMY_DEATH, pool.load(context, R.raw.enemydeath, 1));
@@ -54,7 +50,16 @@ public final class SoundPlayer
 		poolMap.put(TELEPORT, pool.load(context, R.raw.teleport, 1));
 	}
 	
-	public void playSound(int sound)
+	/**
+	 * Plays a sound.
+	 * @param sound The sound to play. Should be one of the constants in SoundPlayer.
+	 * @see #SOUND_TEST
+	 * @see #SHOOT_SOUND
+	 * @see #ENEMY_DEATH
+	 * @see #PIT_FALL
+	 * @see #TELEPORT
+	 */
+	public static void playSound(int sound)
 	{
 		if (enableSound)
 		{
@@ -67,42 +72,74 @@ public final class SoundPlayer
 		}
 	}
 	
-	public boolean getSoundEnabled()
+	/**
+	 * Gets a value indicating whether sound is enabled or not.
+	 * @return A value indicating whether sound is enabled or not.
+	 */
+	public static boolean getSoundEnabled()
 	{
 	    return enableSound;
 	}
 	
-	public boolean getMusicEnabled()
+	/**
+	 * Gets a value indicating whether music is enabled or not.
+	 * @return A value indicating whether music is enabled or not.
+	 */
+	public static boolean getMusicEnabled()
 	{
 	    return enableMusic;
 	}
 	
-	public float getEffectVolume()
+	/**
+	 * Gets the volume for sound effects.
+	 * @return A 0-1 clamped float representing volume.
+	 */
+	public static float getEffectVolume()
 	{
 	    return effectVolume;
 	}
 	
-	public float getMusicVolume()
+	/**
+	 * Gets the volume for music.
+	 * @return A 0-1 clamped float representing volume.
+	 */
+	public static float getMusicVolume()
 	{
 	    return musicVolume;
 	}
 	
-	public void setSoundEnabled(boolean state)
+	/**
+	 * Enables or disables the ability to play sounds.
+	 * @param state A value indicating whether or not sound can be played.
+	 */
+	public static void setSoundEnabled(boolean state)
 	{
 	    enableSound = state;
 	}
 	
-	public void setMusicEnabled(boolean state)
+	/**
+	 * Enables or disables the ability to play music.
+	 * @param state A value indicating whether or not music can be played.
+	 */
+	public static void setMusicEnabled(boolean state)
 	{
 	    enableMusic = state;
 	}
 	
-	public void setEffectVolume(float volume)
+	/**
+	 * Sets the volume to play sound effects at.
+	 * @param volume A 0-1 clamped float representing volume.
+	 */
+	public static void setEffectVolume(float volume)
 	{
 	    effectVolume = volume;
 	}
 	
-	public void setMusicVolume(float volume)
+	/**
+	 * Sets the volume to play music at.
+	 * @param volume A 0-1 clamped float representing volume.
+	 */
+	public static void setMusicVolume(float volume)
 	{
 	    musicVolume = volume;
 	}
