@@ -3,9 +3,9 @@ package com.lds.puzzles.logic;
 import android.content.Context;
 import android.view.MotionEvent;
 
-import com.lds.game.event.OnPuzzleFailListener;
-import com.lds.game.event.OnPuzzleInitializedListener;
-import com.lds.game.event.OnPuzzleSuccessListener;
+import com.lds.game.event.PuzzleFailListener;
+import com.lds.game.event.PuzzleInitializedListener;
+import com.lds.game.event.PuzzleSuccessListener;
 import com.lds.game.puzzle.IPuzzle;
 
 import javax.microedition.khronos.egl.EGLConfig;
@@ -57,17 +57,17 @@ public class LogicPuzzle implements IPuzzle
 		// \TODO Auto-generated method stub
 	}
 
-	public void setPuzzleInitializedEvent(OnPuzzleInitializedListener listener)
+	public void setPuzzleInitializedEvent(PuzzleInitializedListener listener)
 	{
 		// \TODO Auto-generated method stub	
 	}
 
-	public void setPuzzleSuccessEvent(OnPuzzleSuccessListener listener) 
+	public void setPuzzleSuccessEvent(PuzzleSuccessListener listener) 
 	{
 		// \TODO Auto-generated method stub		
 	}
 
-	public void setPuzzleFailEvent(OnPuzzleFailListener listener)
+	public void setPuzzleFailEvent(PuzzleFailListener listener)
 	{
 		// \TODO Auto-generated method stub		
 	}

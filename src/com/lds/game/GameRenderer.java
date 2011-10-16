@@ -25,9 +25,9 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	private Game game;
 	private Context context;
 	private Object syncObj;
-	private OnGameInitializedListener gameInitializedListener;
-	private OnPuzzleActivatedListener puzzleActivatedListener;
-	private OnGameOverListener gameOverListener;
+	private GameInitializedListener gameInitializedListener;
+	private PuzzleActivatedListener puzzleActivatedListener;
+	private GameOverListener gameOverListener;
 	private int levelId;
 	private MediaPlayer mp;
 	public boolean paused, charlieSheen;
@@ -456,18 +456,18 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		gl.glLoadIdentity();
 	}
 	
-	public void setGameOverEvent(OnGameOverListener listener) 
+	public void setGameOverEvent(GameOverListener listener) 
 	{
 		this.gameOverListener = listener;
 		game.setGameOverEvent(listener);
 	}
 	
-	public void setGameInitializedEvent(OnGameInitializedListener listener)
+	public void setGameInitializedEvent(GameInitializedListener listener)
 	{
 		this.gameInitializedListener = listener;
 	}
 
-	public void setPuzzleActivatedEvent(OnPuzzleActivatedListener listener)
+	public void setPuzzleActivatedEvent(PuzzleActivatedListener listener)
 	{
 		this.puzzleActivatedListener = listener;
 	}

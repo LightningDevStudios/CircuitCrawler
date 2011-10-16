@@ -101,19 +101,19 @@ public class Graphics extends GLSurfaceView
 		 * Sets a delegate to be called when the game is over.
 		 * @param listener The delegate container interface with an anonymous inner method.
 		 */
-		void setGameOverEvent(OnGameOverListener listener);
+		void setGameOverEvent(GameOverListener listener);
 		
 		/**
 		 * Sets the delegate to be called when the game is initialized.
 		 * @param listener The delegate container interface with an anonymous inner method.
 		 */
-		void setGameInitializedEvent(OnGameInitializedListener listener);
+		void setGameInitializedEvent(GameInitializedListener listener);
 		
 		/**
 		 * Sets the delegate to be called when the game is initialized.
 		 * @param listener The delegate container interface with an anonymous inner method.
 		 */
-		void setPuzzleActivatedEvent(OnPuzzleActivatedListener listener);
+		void setPuzzleActivatedEvent(PuzzleActivatedListener listener);
 		
 		/**
 		 * Called when a puzzle event returns successfully.

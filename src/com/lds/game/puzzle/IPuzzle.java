@@ -4,9 +4,9 @@ import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.view.MotionEvent;
 
-import com.lds.game.event.OnPuzzleFailListener;
-import com.lds.game.event.OnPuzzleInitializedListener;
-import com.lds.game.event.OnPuzzleSuccessListener;
+import com.lds.game.event.PuzzleFailListener;
+import com.lds.game.event.PuzzleInitializedListener;
+import com.lds.game.event.PuzzleSuccessListener;
 
 public interface IPuzzle extends GLSurfaceView.Renderer
 {	
@@ -14,7 +14,7 @@ public interface IPuzzle extends GLSurfaceView.Renderer
 	void setContext(Context context);
 	public void setSyncObj(Object o);
 	
-	void setPuzzleInitializedEvent(OnPuzzleInitializedListener listener);
-	void setPuzzleSuccessEvent(OnPuzzleSuccessListener listener);
-	void setPuzzleFailEvent(OnPuzzleFailListener listener);
+	void setPuzzleInitializedEvent(PuzzleInitializedListener listener);
+	void setPuzzleSuccessEvent(PuzzleSuccessListener listener);
+	void setPuzzleFailEvent(PuzzleFailListener listener);
 }

@@ -300,7 +300,7 @@ public class Game
 		
 	}
 	
-	public void setGameOverEvent(OnGameOverListener listener)
+	public void setGameOverEvent(GameOverListener listener)
 	{
 		//triggerList.add(new Trigger(new CauseDoneScaling(player), new EffectEndGame(listener, false)));
 		triggerList.add(new Trigger(new CausePlayerHealth(0, player), new EffectEndGame(listener, false)));

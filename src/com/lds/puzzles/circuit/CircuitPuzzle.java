@@ -11,9 +11,9 @@ import com.lds.Texture;
 import com.lds.TextureLoader;
 import com.lds.game.Game;
 import com.lds.game.R;
-import com.lds.game.event.OnPuzzleFailListener;
-import com.lds.game.event.OnPuzzleInitializedListener;
-import com.lds.game.event.OnPuzzleSuccessListener;
+import com.lds.game.event.PuzzleFailListener;
+import com.lds.game.event.PuzzleInitializedListener;
+import com.lds.game.event.PuzzleSuccessListener;
 import com.lds.game.puzzle.IPuzzle;
 
 import javax.microedition.khronos.egl.EGLConfig;
@@ -26,9 +26,9 @@ public class CircuitPuzzle implements IPuzzle
 	private Context context;
 	private Object syncObj;
 		
-	private OnPuzzleInitializedListener initializedListener;
-	private OnPuzzleSuccessListener successListener;
-	private OnPuzzleFailListener failListener;
+	private PuzzleInitializedListener initializedListener;
+	private PuzzleSuccessListener successListener;
+	private PuzzleFailListener failListener;
 	
 	private boolean selected;
 	private int touchEventTime;
@@ -165,18 +165,18 @@ public class CircuitPuzzle implements IPuzzle
 		}
 	}
 
-	public void setPuzzleInitializedEvent(OnPuzzleInitializedListener listener) 
+	public void setPuzzleInitializedEvent(PuzzleInitializedListener listener) 
 	{
 		this.initializedListener = listener;
 	}
 
-	public void setPuzzleSuccessEvent(OnPuzzleSuccessListener listener) 
+	public void setPuzzleSuccessEvent(PuzzleSuccessListener listener) 
 	{
 		this.successListener = listener;
 		
 	}
 
-	public void setPuzzleFailEvent(OnPuzzleFailListener listener) 
+	public void setPuzzleFailEvent(PuzzleFailListener listener) 
 	{
 		this.failListener = listener;
 		

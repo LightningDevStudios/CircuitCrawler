@@ -5,11 +5,11 @@ import android.os.Bundle;
 import android.view.Window;
 import android.view.WindowManager;
 
-import com.lds.game.event.OnPuzzleFailListener;
-import com.lds.game.event.OnPuzzleInitializedListener;
-import com.lds.game.event.OnPuzzleSuccessListener;
+import com.lds.game.event.PuzzleFailListener;
+import com.lds.game.event.PuzzleInitializedListener;
+import com.lds.game.event.PuzzleSuccessListener;
 
-public class PuzzleActivity extends Activity implements OnPuzzleInitializedListener, OnPuzzleSuccessListener, OnPuzzleFailListener
+public class PuzzleActivity extends Activity implements PuzzleInitializedListener, PuzzleSuccessListener, PuzzleFailListener
 {
 	
 	public PuzzleSurface glSurface;
