@@ -1,6 +1,6 @@
 package com.lds.game.entity;
 
-public class Spike extends StaticEnt
+public class Spike extends Entity
 {
 	public Spike(float xPos, float yPos, float angle)
 	{

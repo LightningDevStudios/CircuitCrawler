@@ -220,6 +220,17 @@ public final class Vector2
 		return new Vector2(v.getY(), -v.getX());
 	}
 	
+	/**
+	 * Finds the dot product of two vectors
+	 * @param a The first vector
+	 * @param b The second vector
+	 * @return The dot product of a and b
+	 */
+	public static float dot(Vector2 a, Vector2 b)
+	{
+	    return a.getX() * b.getX() + a.getY() * b.getY();
+	}
+	
 	/************************************************************************************************************
 	 * Non-Static Methods - return and change vectors, calculate vector quantites (i.e. dot product, magnitude) *
 	 ************************************************************************************************************/

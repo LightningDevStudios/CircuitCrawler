@@ -68,10 +68,19 @@ public class Circle extends Shape
         this.vertices = vertices;
     }
     
+    /**************************
+     * Accessors and Mutators *
+     **************************/
+    
     @Override
     public void setScale(Vector2 scale)
     {
         if (scale.getX() == scale.getY())
             super.setScale(scale);
+    }
+    
+    public float getRadius()
+    {
+        return vertices[5] * scale.getX();
     }
 }

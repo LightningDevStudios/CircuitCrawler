@@ -21,7 +21,7 @@ public abstract class Shape
     /**
      * The shape's vertices in world coordinates
      */
-    private Vector2[] worldVertices;
+    protected Vector2[] worldVertices;
     
     /**
      * The shape's scale matrix
@@ -41,22 +41,22 @@ public abstract class Shape
     /**
      * The shape's model matrix
      */
-    private Matrix4 model;
+    protected Matrix4 model;
     
     /**
      * The shape's position in world coords
      */
-    private Vector2 position;
+    protected Vector2 position;
     
     /**
      * The shape's angle in radians (counterclockwise is positive)
      */
-    private float angle;
+    protected float angle;
     
     /**
      * The shape's x and y scale
      */
-    private Vector2 scale;  
+    protected Vector2 scale;  
     
     /****************
      * Constructors *

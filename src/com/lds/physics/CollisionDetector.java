@@ -1,6 +1,7 @@
 package com.lds.physics;
 
 import com.lds.game.entity.Entity;
+import com.lds.game.entity.Rectangle;
 import com.lds.math.*;
 
 import java.util.ArrayList;
@@ -34,8 +35,18 @@ public class CollisionDetector
 	public static boolean RadiusCheckCircles(Circle a, Circle b)
 	{
 	    float distance = Vector2.subtract(a.getPos(), b.getPos()).length();
-	    float colDistance = a.getVertices()[5] * a.getScale().getX() - b.getVertices()[5] * b.getScale().getY();
-	    return distance < colDistance;
+	    return distance < a.getRadius() - b.getRadius();
+	}
+	
+	public static boolean RadiusCheckCircleRectangle(Rectangle r, Circle c)
+	{
+       for (Vector2 v : r.getWorldVertices())
+       {
+           if (Vector2.subtract(v, c.getPos()).length() < c.getRadius())
+               return true;
+       }
+       
+       return false;
 	}
 	
 	public static boolean SATRectangles(Rectangle a, Rectangle b)
@@ -55,7 +66,7 @@ public class CollisionDetector
 			float max1 = min1;
 			for (int i = 1; i < a.getWorldVertices().length; i++)
 			{
-				float dotProd1 = axis.dot(a.getWorldVertices()[i]);
+				float dotProd1 = Vector2.dot(axis, a.getWorldVertices()[i]);
 				if (dotProd1 > max1)
 					max1 = dotProd1;
 				if (dotProd1 < min1)
@@ -63,11 +74,11 @@ public class CollisionDetector
 			}
 			
 			//get mins and maxes for second entity
-			float min2 = axis.dot(b.getWorldVertices()[0]);
+			float min2 = Vector2.dot(axis, b.getWorldVertices()[0]);
 			float max2 = min2;
 			for (int i = 1; i < b.getWorldVertices().length; i++)
 			{
-				float dotProd2 = axis.dot(b.getWorldVertices()[i]);
+				float dotProd2 = Vector2.dot(axis, b.getWorldVertices()[i]);
 				if (dotProd2 > max2)
 					max2 = dotProd2;
 				if (dotProd2 < min2)
@@ -82,4 +93,44 @@ public class CollisionDetector
 		
 		return true;
 	}
+	
+	public static boolean containsPoint(Circle c, Vector2 v)
+	{
+	    return Vector2.subtract(c.getPos(), v).length() < c.getRadius();
+	}
+	
+	/**
+     *  \todo get rid of abs on line 2?
+     */
+	public static boolean containsPoint(Rectangle r, Vector2 v)
+    {
+        Vector2[] verts = r.getWorldVertices();
+        Vector2 axis = Vector2.abs(Vector2.subtract(verts[0], verts[1]));
+        
+        
+        for (int i = 0; i < 2; i++)
+        {
+            //get mins and maxes for entity
+            float min = Vector2.dot(axis, verts[0]);
+            float max = min;
+            for (int j = 1; j < verts.length; j++)
+            {
+                float dotProd = Vector2.dot(axis, verts[j]);
+                if (dotProd > max)
+                    max = dotProd;
+                if (dotProd < min)
+                    min = dotProd;
+            }
+            
+            //gets projection of vector
+            float projection = Vector2.dot(axis, v);
+            
+            if (projection < min || projection > max)
+                return false;
+            
+            axis = Vector2.getNormal(axis);
+        }
+        
+        return true;
+    }
 }

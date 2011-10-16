@@ -9,6 +9,7 @@ import com.lds.Texture;
 import com.lds.TilesetHelper;
 import com.lds.game.Game;
 import com.lds.game.entity.Entity;
+import com.lds.math.Matrix4;
 import com.lds.math.Vector2;
 
 import java.nio.ByteBuffer;
@@ -19,7 +20,11 @@ import java.util.EnumSet;
 import javax.microedition.khronos.opengles.GL10;
 import javax.microedition.khronos.opengles.GL11;
 
-//\todo allow relative sizing to scale for multiple monitors
+/**
+ * Base class for the UI class tree.
+ * @author Lightning Developemnt Studios
+ * \todo allow relative sizing to scale for different monitors
+ */
 public abstract class UIEntity
 {
 	//constants
@@ -27,7 +32,7 @@ public abstract class UIEntity
     /**
      * clamped between -1 and 1, turns UIPosition enum to relative coords.
      */
-	protected static final float[] UIPositionF =
+	protected static final float[] UI_POSITION_F =
 	{
 	    0.0f, 1.0f,
 		-1.0f, 0.0f,
@@ -39,8 +44,11 @@ public abstract class UIEntity
 		-1.0f, -1.0f,
 		1.0f, -1.0f };
 	
+	protected Matrix4 model;
+	
 	//graphics data
-	protected float xSize, ySize, xPos, yPos, xRelative, yRelative, halfXSize, halfYSize;
+	protected Vector2 size, pos, relativePos, halfSize;
+	//protected float xSize, ySize, xPos, yPos, xRelative, yRelative, halfXSize, halfYSize;
 	private float topPad, leftPad, bottomPad, rightPad;
 	private float colorR, colorG, colorB, colorA;
 	protected UIPosition position;
@@ -61,7 +69,7 @@ public abstract class UIEntity
 	//constructors
 	public UIEntity(float xSize, float ySize, UIPosition position)
 	{
-		this(xSize, ySize, UIPositionF[position.getValue() * 2], UIPositionF[(position.getValue() * 2) + 1], 0, 0, 0, 0);
+		this(xSize, ySize, UI_POSITION_F[position.getValue() * 2], UI_POSITION_F[(position.getValue() * 2) + 1], 0, 0, 0, 0);
 		this.position = position;
 	}
 
@@ -72,44 +80,49 @@ public abstract class UIEntity
 	
 	public UIEntity(float xSize, float ySize, UIPosition position, float topPad, float leftPad, float bottomPad, float rightPad)
 	{
-		this (xSize, ySize, UIPositionF[position.getValue() * 2], UIPositionF[(position.getValue() * 2) + 1], topPad, leftPad, bottomPad, rightPad);
+		this (xSize, ySize, UI_POSITION_F[position.getValue() * 2], UI_POSITION_F[(position.getValue() * 2) + 1], topPad, leftPad, bottomPad, rightPad);
 		this.position = position;
 	}
 	
 	public UIEntity(float xSize, float ySize, float xRelative, float yRelative, float topPad, float leftPad, float bottomPad, float rightPad) 
 	{
-		this.xSize = xSize;
-		this.ySize = ySize;
-		this.xRelative = xRelative;
-		this.yRelative = yRelative;
+		this.size = new Vector2(xSize, ySize);
+		this.relativePos = new Vector2(xRelative, yRelative);
 		this.topPad = topPad;
 		this.leftPad = leftPad;
 		this.bottomPad = bottomPad;
 		this.rightPad = rightPad;
 		
-		this.halfXSize = xSize / 2;
-		this.halfYSize = ySize / 2;
+		this.halfSize = Vector2.scale(size, 0.5f);
+		
+		float x = halfSize.getX();
+		float y = halfSize.getY();
 		
 		float[] initVerts =
 		{
-		    halfXSize, halfYSize,
-			halfXSize, -halfYSize,
-			-halfXSize, halfYSize,
-			-halfXSize, -halfYSize
+		    x, y,
+			x, -y,
+			-x, y,
+			-x, -y
 		};
+		
+		this.pos = new Vector2(0, 0);
+		rebuildModelMatrix();
 		
 		this.vertices = initVerts;
 		this.vertexBuffer = setBuffer(vertexBuffer, vertices);
 		needToUpdateVertexVBO = true;
-				
+		
 		renderMode = EnumSet.allOf(RenderMode.class);
 		renderMode.clear();
 	}
 	
 	public void draw(GL10 gl)
 	{
-		gl.glTranslatef(xPos, yPos, 0.0f);		
+		//gl.glTranslatef(xPos, yPos, 0.0f);		
 		
+	    gl.glMultMatrixf(model.array(), 0);
+	    
 		final boolean containsColor = renderMode.contains(RenderMode.COLOR);
 		final boolean containsGradient = renderMode.contains(RenderMode.GRADIENT);
 		final boolean containsTexture = renderMode.contains(RenderMode.TEXTURE);
@@ -260,7 +273,7 @@ public abstract class UIEntity
 				case TOP:
 				case TOPLEFT:
 				case TOPRIGHT:
-					this.topPad = halfYSize + topPad;
+					this.topPad = halfSize.getY() + topPad;
 					break;
             default:
                 break;
@@ -271,7 +284,7 @@ public abstract class UIEntity
 				case LEFT:
 				case TOPLEFT:
 				case BOTTOMLEFT:
-					this.leftPad = halfXSize + leftPad;
+					this.leftPad = halfSize.getX() + leftPad;
 					break;
 				default:
 				    break;
@@ -282,7 +295,7 @@ public abstract class UIEntity
 				case BOTTOM:
 				case BOTTOMLEFT:
 				case BOTTOMRIGHT:
-					this.bottomPad = halfYSize + bottomPad;
+					this.bottomPad = halfSize.getY() + bottomPad;
 					break;
 				default:
 			}
@@ -292,7 +305,7 @@ public abstract class UIEntity
 				case RIGHT:
 				case TOPRIGHT:
 				case BOTTOMRIGHT:
-					this.rightPad = halfXSize + rightPad;
+					this.rightPad = halfSize.getX() + rightPad;
 					break;
 				default:
 			}
@@ -306,8 +319,8 @@ public abstract class UIEntity
 	
 	public void updatePosition()
 	{
-		xPos = (Game.screenW / 2 * xRelative) + leftPad - rightPad;
-		yPos = (Game.screenH / 2 * yRelative) + bottomPad - topPad;
+	    setPos(new Vector2((Game.screenW / 2.0f * relativePos.getX()) + leftPad - rightPad, (Game.screenH / 2 * relativePos.getY()) + bottomPad - topPad));
+	    rebuildModelMatrix();
 	}
 	
 	public void rotateTilesetCoords()
@@ -566,24 +579,14 @@ public abstract class UIEntity
 	 * Accessors and Mutators *
 	 **************************/
 	
-	public float getXSize()
+	public Vector2 getSize()
 	{
-	    return xSize;
+	    return size;
 	}
 	
-	public float getYSize()
+	public Vector2 getPos()
 	{
-	    return ySize;
-	}
-	
-	public float getXPos()
-	{
-	    return xPos;
-	}
-	
-	public float getYPos()
-	{
-	    return yPos;
+	    return pos;
 	}
 	
 	public float getColorR()
@@ -636,30 +639,15 @@ public abstract class UIEntity
 	    return renderMode;
 	}
 	
-	public void setPos(Vector2 posVec)
+	public void setSize(Vector2 size)
 	{
-		xPos = posVec.getX();
-		yPos = posVec.getY();
+	    this.size = size;
 	}
 	
-	public void setXSize(float xSize)
+	public void setPos(Vector2 pos)
 	{
-	    this.xSize = xSize;
-	}
-	
-	public void setYSize(float ySize)
-	{
-	    this.ySize = ySize;
-	}
-	
-	public void setXPos(float xPos)
-	{
-	    this.xPos = xPos;
-	}
-	
-	public void setYPos(float yPos)
-	{
-	    this.yPos = yPos;
+	    this.pos = pos;
+	    rebuildModelMatrix();
 	}
 	
 	public void setTopPad(float topPad)
@@ -680,5 +668,34 @@ public abstract class UIEntity
 	public void setRightPad(float rightPad)
 	{
 	    this.rightPad = rightPad;
+	}
+	
+	@Deprecated
+	public float getXPos()
+	{
+	    return pos.getX();
+	}
+	
+	@Deprecated
+	public float getYPos()
+	{
+	    return pos.getY();
+	}
+	
+	@Deprecated
+	public float getXSize()
+	{
+	    return size.getX();
+	}
+	
+	@Deprecated
+	public float getYSize()
+	{
+	    return size.getY();
+	}
+	
+	public void rebuildModelMatrix()
+	{
+	    model = Matrix4.translate(pos);
 	}
 }

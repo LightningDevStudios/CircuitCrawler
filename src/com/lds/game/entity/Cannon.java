@@ -5,7 +5,7 @@ import com.lds.Stopwatch;
 import com.lds.game.Game;
 import com.lds.math.Vector2;
 
-public class Cannon extends StaticEnt
+public class Cannon extends Entity
 {
 	protected float speed, shotsPerSecond;
 	protected long time;

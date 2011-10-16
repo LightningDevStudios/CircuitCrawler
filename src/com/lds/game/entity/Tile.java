@@ -10,7 +10,7 @@ import java.util.EnumSet;
 import javax.microedition.khronos.opengles.GL10;
 import javax.microedition.khronos.opengles.GL11;
 
-public class Tile extends StaticEnt
+public class Tile extends Entity
 {
 	public static final int TILE_SIZE = 72;
 	public static final float TILE_SIZE_F = 72.0f;

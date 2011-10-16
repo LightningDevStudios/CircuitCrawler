@@ -1,6 +1,6 @@
 package com.lds.game.entity;
 
-public class StaticBlock extends StaticEnt
+public class StaticBlock extends Entity
 {
 	public StaticBlock(float size, float xPos, float yPos)
 	{

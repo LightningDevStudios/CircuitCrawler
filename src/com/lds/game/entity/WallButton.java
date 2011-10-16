@@ -2,7 +2,7 @@ package com.lds.game.entity;
 
 import com.lds.game.SoundPlayer;
 
-public class WallButton extends StaticEnt
+public class WallButton extends Entity
 {
 	private boolean active;
 	

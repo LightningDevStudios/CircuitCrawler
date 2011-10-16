@@ -3,7 +3,7 @@ package com.lds.game.entity;
 import com.lds.game.SoundPlayer;
 import com.lds.math.Vector2;
 
-public class Teleporter extends PhysEnt
+public class Teleporter extends Entity
 {
 	protected boolean active;
 	private TeleporterLinker tpLink;
