@@ -4,48 +4,42 @@ package com.lds.math;
  * A 4-component vector.
  * @author Lightning Development Studios
  */
-public class Vector4 
+public final class Vector4 
 {
-	/*************
-	 * Constants *
-	 *************/
-	
-	/**
-	 * A unit vector in the X direction.
-	 * @return A vector.
-	 */
-	public static Vector4 unitX() { return new Vector4(1, 0, 0, 0); }
-	
-	/**
-	 * A unit vector in the Y direction.
-	 * @return A vector.
-	 */
-	public static Vector4 unitY() { return new Vector4(0, 1, 0, 0); }
-	
-	/**
-	 * A unit vector in the Z direction.
-	 * @return A vector.
-	 */
-	public static Vector4 unitZ() { return new Vector4(0, 0, 1, 0); }
-	
-	/**
-	 * A unit vector in the W direction.
-	 * @return A vector.
-	 */
-	public static Vector4 unitW() { return new Vector4(0, 0, 0, 1); }
-	
-	/**
-	 * A vector of all components equal to 1.
-	 * @return A vector.
-	 */
-	public static Vector4 one() { return new Vector4(1, 1, 1, 1); }
-	
-	/**
-	 * A vector of all components equal to 0.
-	 * @return A vector.
-	 */
-	public static Vector4 zero() { return new Vector4(0, 0, 0, 0); }
+    /*************
+     * Constants *
+     *************/
+    
+    /**
+     * A unit vector in the X direction.
+     */
+    public static final Vector4 UNIT_X = new Vector4(1, 0, 0, 0);
+    
+    /**
+     * A unit vector in the Y direction.
+     */
+    public static final Vector4 UNIT_Y = new Vector4(0, 1, 0, 0);
+    
+    /**
+     * A unit vector in the Z direction.
+     */
+    public static final Vector4 UNIT_Z = new Vector4(0, 0, 1, 0);
+    
+    /**
+     * A unit vector in the W direction.
+     */
+    public static final Vector4 UNIT_W = new Vector4(0, 0, 0, 1);
 
+    /**
+     * A vector of all components equal to 1.
+     */
+    public static final Vector4 ONE = new Vector4(1, 1, 1, 1);
+
+    /**
+     * A vector of all components equal to 0.
+     */
+    public static final Vector4 ZERO = new Vector4(0, 0, 0, 0);
+    
 	/***********
 	 * Members *
 	 ***********/
@@ -53,22 +47,22 @@ public class Vector4
 	/**
 	 * The vector's X component.
 	 */
-	private float x;
+	private final float x;
 	
 	/**
 	 * The vector's Y component.
 	 */
-	private float y;
+	private final float y;
 	
 	/**
 	 * The vector's Z component.
 	 */
-	private float z;
+	private final float z;
 	
 	/**
 	 * The vector's W component.
 	 */
-	private float w;
+	private final float w;
 	
 	/****************
 	 * Constructors *
@@ -152,9 +146,7 @@ public class Vector4
 	 * @return A transformed vector.
 	 */
 	public static Vector4 transform(Vector4 v, Matrix4 mat)
-	{
-		Vector4 result = new Vector4();
-		
+	{		
 		float[] elements = mat.array();
 		
 		float m11 = elements[0],	m12 = elements[1],	m13 = elements[2],	m14 = elements[3],
@@ -167,12 +159,42 @@ public class Vector4
 		float vZ = v.getZ();
 		float vW = v.getW();
 		
-		result.setX(vX * m11 + vY * m21 + vZ * m31 + vW * m41);
-		result.setY(vX * m12 + vY * m22 + vZ * m32 + vW * m42);
-		result.setZ(vX * m13 + vY * m23 + vZ * m33 + vW * m43);
-		result.setW(vX * m14 + vY * m24 + vZ * m34 + vW * m44);
-		
-		return result;
+		return new Vector4(vX * m11 + vY * m21 + vZ * m31 + vW * m41,
+		                   vX * m12 + vY * m22 + vZ * m32 + vW * m42,
+		                   vX * m13 + vY * m23 + vZ * m33 + vW * m43,
+		                   vX * m14 + vY * m24 + vZ * m34 + vW * m44);
+	}
+	
+	/**
+	 * Turns all components of the vector into their absolute value equivalent.
+	 * @param v The vector to process.
+	 * @return A vector with all positive components.
+	 */
+	public static Vector4 abs(Vector4 v)
+	{
+	    return new Vector4(Math.abs(v.getX()), Math.abs(v.getY()), Math.abs(v.getZ()), Math.abs(v.getW()));
+	}
+	
+	/**
+	 * Subtacts one vector from another.
+	 * @param left The vector to subtract from.
+     * @param right The vector to subtract by.
+     * @return The resultant vector of the subtraction.
+	 */
+	public static Vector4 subtract(Vector4 left, Vector4 right)
+	{
+	    return new Vector4(left.getX() - right.getX(), left.getY() - right.getY(), left.getZ() - right.getZ(), left.getW() - right.getW());
+	}
+	
+	/**
+     * Adds two vectors together.
+     * @param left The vector to be added to.
+     * @param right The vector to be added by.
+     * @return The resultant vector of the addition.
+     */
+	public static Vector4 add(Vector4 left, Vector4 right)
+	{
+	    return new Vector4(left.getX() + right.getX(), left.getY() + right.getY(), left.getZ() + right.getZ(), left.getW() + right.getW());
 	}
 	
 	/***********
@@ -180,7 +202,7 @@ public class Vector4
 	 ***********/
 	
 	/**
-	 * Gets the vector <x, y, z>
+	 * Gets the vector <x, y, z>.
 	 * @return A Vector3 containing the x, y, and z components of this vector.
 	 * @see Vector3
 	 */
@@ -190,7 +212,7 @@ public class Vector4
 	}
 	
 	/**
-	 * Gets the vector <x, y>
+	 * Gets the vector <x, y>.
 	 * @return A Vector2 containing the x and y components of this vector.
 	 * @see Vector2
 	 */
@@ -207,56 +229,47 @@ public class Vector4
 	 * Gets the X component of the vector.
 	 * @return The vector's X component.
 	 */
-	public float getX() { return x; }
+	public float getX()
+	{
+	    return x;
+	}
 	
 	/**
 	 * Gets the Y component of the vector.
 	 * @return The vector's Y component.
 	 */
-	public float getY() { return y; }
+	public float getY()
+	{
+	    return y;
+	}
 	
 	/**
 	 * Gets the Z component of the vector.
 	 * @return The vector's Z component.
 	 */
-	public float getZ() { return z; }
+	public float getZ()
+	{
+	    return z;
+	}
 	
 	/**
 	 * Gets the W component of the vector.
 	 * @return The vector's W component.
 	 */
-	public float getW() { return w; }
-	
-	/**
-	 * Converts the vector to a float array
-	 * @return A float array containing the vector components.
-	 */
-	public float[] getArray()
+	public float getW()
 	{
-		return new float[] { x, y, z, w };
+	    return w;
 	}
 	
 	/**
-	 * Manually sets the X component of the vector.
-	 * @param x A new X component.
+	 * Converts the vector to a float array.
+	 * @return A float array containing the vector components.
 	 */
-	public void setX(float x) { this.x = x; }
-	
-	/**
-	 * Manually sets the Y component of the vector.
-	 * @param y A new Y component.
-	 */
-	public void setY(float y) { this.y = y; }
-	
-	/**
-	 * Manually sets the Z component of the vector.
-	 * @param z A new Z component.
-	 */
-	public void setZ(float z) { this.z = z; }
-	
-	/**
-	 * Manually sets the W component of the vector.
-	 * @param w A new W component.
-	 */
-	public void setW(float w) { this.w = w; }
+	public float[] array()
+	{
+		return new float[]
+		{
+		    x, y, z, w 
+		};
+	}
 }

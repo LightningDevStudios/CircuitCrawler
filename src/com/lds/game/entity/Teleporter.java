@@ -20,13 +20,13 @@ public class Teleporter extends PhysEnt
 	}
 	public  Vector2 getPos()
 	{
-		return new Vector2(getXPos(),getYPos());
+		return new Vector2(getXPos(), getYPos());
 	}
 	
 	@Override
-	public void interact (Entity ent)
+	public void interact(Entity ent)
 	{		
-		if(active && ent instanceof PhysEnt && tpLink != null)
+		if (active && ent instanceof PhysEnt && tpLink != null)
 		{
 			if (ent instanceof HoldObject && ((HoldObject)ent).isHeld())
 				return;
@@ -40,7 +40,7 @@ public class Teleporter extends PhysEnt
 	}
 	
 	@Override
-	public void uninteract (Entity ent)		
+	public void uninteract(Entity ent)		
 	{
 		active = true;
 	}
@@ -59,7 +59,7 @@ public class Teleporter extends PhysEnt
 		active = bool;
 	}
 	
-	public void setTeleporterLinker (TeleporterLinker tpLink)
+	public void setTeleporterLinker(TeleporterLinker tpLink)
 	{
 		this.tpLink = tpLink;
 	}

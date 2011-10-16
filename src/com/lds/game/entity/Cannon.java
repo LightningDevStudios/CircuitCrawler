@@ -25,7 +25,7 @@ public class Cannon extends StaticEnt
 		
 		time += Stopwatch.getFrameTime();
 		
-		if(time > shotsPerSecond * 1000) // Time loop
+		if (time > shotsPerSecond * 1000) // Time loop
 		{
 			time = 0;
 			CannonShell cannonShot = new CannonShell(getXPos(), getYPos(), angle, speed, 2);

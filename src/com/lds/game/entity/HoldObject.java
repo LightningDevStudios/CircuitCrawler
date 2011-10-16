@@ -7,7 +7,7 @@ public abstract class HoldObject extends PhysEnt //and object that is held (bloc
 {
 	private boolean held;
 	
-	public HoldObject (float size, float xPos, float yPos, float angle, float xScl, float yScl, boolean isSolid, boolean circular, float friction)
+	public HoldObject(float size, float xPos, float yPos, float angle, float xScl, float yScl, boolean isSolid, boolean circular, float friction)
 	{
 		super(size, xPos, yPos, angle, xScl, yScl, isSolid, circular, true, 10.0f, 90.0f, 2.0f, friction);
 		held = false;
@@ -18,7 +18,7 @@ public abstract class HoldObject extends PhysEnt //and object that is held (bloc
 	{
 		if (!held)
 		{
-			if (moveInterpVec.magnitude() < 1.0f && moveInterpVec.magnitude() > 0.0f)
+			if (moveInterpVec.length() < 1.0f && moveInterpVec.length() > 0.0f)
 			{
 				if (tile.isPit())
 				{
@@ -33,25 +33,25 @@ public abstract class HoldObject extends PhysEnt //and object that is held (bloc
 		}
 	}
 	
-	public boolean isHeld ()
+	public boolean isHeld()
 	{
 		return held;
 	}
 	
-	public void hold ()
+	public void hold()
 	{
 		held = true;
 	}
 	
-	public void drop ()
+	public void drop()
 	{
 		held = false;
 		stop();
 	}
 	
-	public void push ()
+	public void push()
 	{
 		held = false;
-		push(new Vector2 (angle).scale(3));
+		push(new Vector2(angle).scale(3));
 	}
 }

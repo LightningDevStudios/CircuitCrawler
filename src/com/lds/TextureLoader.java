@@ -1,10 +1,10 @@
 package com.lds;
 
-import javax.microedition.khronos.opengles.GL10;
-
 import android.opengl.GLUtils;
 
-public class TextureLoader 
+import javax.microedition.khronos.opengles.GL10;
+
+public final class TextureLoader 
 {
 	private static TextureLoader tl_s;
 	private int[] tempTexture;
@@ -19,7 +19,7 @@ public class TextureLoader
 	{
 		if (tl_s == null)
 		{
-			synchronized(TextureLoader.class)
+			synchronized (TextureLoader.class)
 			{
 				if (tl_s == null)
 				{

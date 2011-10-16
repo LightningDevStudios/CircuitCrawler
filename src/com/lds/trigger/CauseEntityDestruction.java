@@ -4,7 +4,7 @@ import com.lds.game.entity.Entity;
 
 public class CauseEntityDestruction extends Cause
 {
-	Entity ent;
+	private Entity ent;
 	
 	public CauseEntityDestruction(Entity ent)
 	{

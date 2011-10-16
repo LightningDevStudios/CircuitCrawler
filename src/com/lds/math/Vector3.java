@@ -3,44 +3,38 @@ package com.lds.math;
 /**
  * A 3-component vector.
  * @author Lightning Development Studios
- *
  */
-public class Vector3
+public final class Vector3
 {
-	/*************
-	 * Constants *
-	 *************/
-	
-	/**
-	 * A unit vector in the X direction.
-	 * @return A vector.
-	 */
-	public static Vector3 unitX() { return new Vector3(1, 0, 0); }
-	
-	/**
-	 * A unit vector in the Y direction.
-	 * @return A vector.
-	 */
-	public static Vector3 unitY() { return new Vector3(0, 1, 0); }
-	
-	/**
-	 * A unit vector in the Z direction.
-	 * @return A vector.
-	 */
-	public static Vector3 unitZ() { return new Vector3(0, 0, 1); }
-	
-	/**
-	 * A vector of all components equal to 1.
-	 * @return A vector.
-	 */
-	public static Vector3 one() { return new Vector3(1, 1, 1); }
-	
-	/**
-	 * A vector of all values components to 0.
-	 * @return A vector.
-	 */
-	public static Vector3 zero() { return new Vector3(0, 0, 0); }
-	
+    /*************
+     * Constants *
+     *************/
+    
+    /**
+     * A unit vector in the X direction.
+     */
+    public static final Vector3 UNIT_X = new Vector3(1, 0, 0);
+    
+    /**
+     * A unit vector in the Y direction.
+     */
+    public static final Vector3 UNIT_Y = new Vector3(0, 1, 0);
+
+    /**
+     * A unit vector in the Z direction.
+     */
+    public static final Vector3 UNIT_Z = new Vector3(0, 0, 1);
+
+    /**
+     * A vector of all components equal to 1.
+     */
+    public static final Vector3 ONE = new Vector3(1, 1, 1);
+    
+    /**
+     * A vector of all values components to 0.
+     */
+    public static final Vector3 ZERO = new Vector3(0, 0, 0);
+    
 	/***********
 	 * Members *
 	 ***********/
@@ -48,17 +42,17 @@ public class Vector3
 	/**
 	 * The vector's X component.
 	 */
-	private float x;
+	private final float x;
 	
 	/**
 	 * The vector's Y component.
 	 */
-	private float y;
+	private final float y;
 	
 	/**
 	 * The vector's Z component.
 	 */
-	private float z;
+	private final float z;
 	
 	/****************
 	 * Constructors *
@@ -103,117 +97,141 @@ public class Vector3
 	 * Static Methods - return new vectors, do not change plugged in vectors *
 	 *************************************************************************/
 	
+	/**
+	 * Turns all components of the vector into their absolute value equivalent.
+	 * @param v The vector to process.
+	 * @return A vector with all positive components.
+	 */
 	public static Vector3 abs(Vector3 v)
 	{
 		return new Vector3(Math.abs(v.getX()), Math.abs(v.getY()), Math.abs(v.getZ()));
 	}
-	
-	public static Vector3 add(Vector3 v, float x, float y, float z)
+		
+	/**
+	 * Adds two vectors together.
+	 * @param left The vector to be added to.
+	 * @param right The vector to be added by.
+	 * @return The resultant vector of the addition.
+	 */
+	public static Vector3 add(Vector3 left, Vector3 right)
 	{
-		return new Vector3(v.getX() + x, v.getY() + y, v.getZ() + z);
+		float x1 = left.getX(), y1 = left.getY(), z1 = left.getZ(),
+			  x2 = right.getX(), y2 = right.getY(), z2 = right.getZ();
+		
+		return new Vector3(x1 + x2, y1 + y2, z1 + z2);
+	}
+		
+	/**
+	 * Subtracts one vector from another.
+	 * @param left The vector to subtract from.
+	 * @param right The vector to subtract by.
+	 * @return The resultant vector of the subtraction.
+	 */
+	public static Vector3 subtract(Vector3 left, Vector3 right)
+	{
+		float x1 = left.getX(), y1 = left.getY(), z1 = left.getZ(),
+			  x2 = right.getX(), y2 = right.getY(), z2 = right.getZ();
+		
+		return new Vector3(x1 - x2, y1 - y2, z1 - z2);
 	}
 	
-	public static Vector3 add(Vector3 v1, Vector3 v2)
-	{
-		return Vector3.add(v1, v2.getX(), v2.getY(), v2.getZ());
-	}
-	
-	public static Vector3 subtract(Vector3 v, float x, float y, float z)
-	{
-		return new Vector3(v.getX() - x, v.getY() - y, v.getZ() - z);
-	}
-	
-	public static Vector3 subtract(Vector3 v1, Vector3 v2)
-	{
-		return Vector3.subtract(v1, v2.getX(), v2.getY(), v2.getZ());
-	}
-	
+	/**
+	 * Flips the sign of all the components of a vector.
+	 * @param v The vector to negate.
+	 * @return A vector equal in magnitude but opposite in direction.
+	 */
 	public static Vector3 negate(Vector3 v)
 	{
 		return new Vector3(-v.getX(), -v.getY(), -v.getZ());
 	}
 	
+	/**
+	 * Multiplies a vector by a scalar.
+	 * @param v The vector to scale.
+	 * @param scalar The amount to scale by.
+	 * @return A scaled vector in the direction of v.
+	 */
 	public static Vector3 scale(Vector3 v, float scalar)
 	{
 		return new Vector3(scalar * v.getX(), scalar * v.getY(), scalar * v.getZ());
 	}
 	
+	/**
+	 * Normalizes a vector then scales it to a scalar.
+	 * @param v The vector to scale.
+	 * @param scalar The magnitude of the resultant vector.
+	 * @return A vector with a magnitude of scalar in the direction of v.
+	 */
 	public static Vector3 scaleTo(Vector3 v, float scalar)
 	{
-		return Vector3.normalize(v).scale(scalar);
+		return Vector3.scale(Vector3.normalize(v), scalar);
 	}
 	
+	/**
+	 * Normalizes a vector.
+	 * @param v The vector to normalize.
+	 * @return A vector of magnitude 1 in the direction of v.
+	 */
 	public static Vector3 normalize(Vector3 v)
 	{
-		if (v.x != 0 || v.y != 0 || v.z != 0)
-			return Vector3.scale(v, 1 / v.mag());
+		float mag = v.length();
+		
+		//prevent division by 0
+		if (mag != 0)
+			return Vector3.scale(v, 1.0f / mag);
 		else
 			return v;
 	}
 	
-	public static Vector3 getMidpoint(Vector3 v1, Vector3 v2)
+	/**
+	 * Creates a vector pointing to the midpoint of the directed line segment between two vectors.
+	 * \todo turn into a lerp method, add float 0-1 for distance.
+	 * @param left The left vector.
+	 * @param right The right vector.
+	 * @return A vector with components averaged from the two vectors.
+	 */
+	public static Vector3 getMidpoint(Vector3 left, Vector3 right)
 	{
-		return new Vector3((v1.getX() + v2.getX()) / 2, (v1.getY() + v2.getY()) / 2, (v1.getZ() + v2.getZ()) / 2);
+		float x1 = left.getX(), y1 = left.getY(), z1 = left.getZ(),
+			  x2 = right.getX(), y2 = right.getY(), z2 = right.getZ();
+		
+		return new Vector3((x1 + x2) / 2, 
+						   (y1 + y2) / 2, 
+						   (z1 + z2) / 2);
 	}
 	
-	public static Vector3 cross(Vector3 v1, Vector3 v2)
+	/**
+	 * Calculates the dot product of two vectors.
+	 * @param left The left vector.
+	 * @param right The right vector.
+	 * @return The dot product.
+	 */
+	public static float dot(Vector3 left, Vector3 right)
 	{
-		float x = v1.getY() * v2.getZ() - v1.getZ() * v2.getY();
-		float y = v1.getZ() * v2.getX() - v1.getX() * v2.getZ();
-		float z = v1.getX() * v2.getY() - v1.getY() * v2.getX();
-		return new Vector3(x, y, z);
+	    return (left.getX() * right.getX()) + (left.getY() * right.getY()) + (left.getZ() * right.getZ());
 	}
 	
-	/************************************************************************************************************
-	 * Non-Static Methods - return and change vectors, calculate vector quantites (i.e. dot product, magnitude) *
-	 ************************************************************************************************************/
-	
-	public void set(float x, float y, float z)
+	/**
+	 * Calculates the cross product of two vectors.
+	 * @param left The left vector.
+	 * @param right The right vector.
+	 * @return The resultant vector of the cross product.
+	 */
+	public static Vector3 cross(Vector3 left, Vector3 right)
 	{
-		this.x = x;
-		this.y = y;
-		this.z = z;
+		float x1 = left.getX(), y1 = left.getY(), z1 = left.getZ(),
+			  x2 = right.getX(), y2 = right.getY(), z2 = right.getZ();
+
+		return new Vector3(y1 * z2 - z1 * y2, 
+						   z1 * x2 - x1 * z2, 
+						   x1 * y2 - y1 * x2);
 	}
 	
-	public void copy(Vector3 v)
-	{
-		set(v.getX(), v.getY(), v.getZ());
-	}
+	/********************
+	 * Instance methods *
+	 ********************/
 	
-	public Vector3 abs()
-	{
-		x = Math.abs(x);
-		y = Math.abs(y);
-		z = Math.abs(z);
-		return this;
-	}
-	
-	public Vector3 add(float x, float y, float z)
-	{
-		this.x += x;
-		this.y += y;
-		this.z += z;
-		return this;
-	}
-	
-	public Vector3 add(Vector3 v)
-	{
-		return add(v.getX(), v.getY(), v.getZ());
-	}
-	
-	public Vector3 subtract(float x, float y, float z)
-	{
-		this.x -= x;
-		this.y -= y;
-		this.z -= z;
-		return this;
-	}
-	
-	public Vector3 subtract(Vector3 v)
-	{
-		return subtract(v.getX(), v.getY(), v.getZ());
-	}
-	
+	/*
 	public boolean equals(Vector3 v)
 	{
 		return x == v.getX() && y == v.getY() && z == v.getZ();
@@ -223,50 +241,23 @@ public class Vector3
 	{
 		return Math.abs(x - v.x) < epsilon && Math.abs(y - v.y) < epsilon && Math.abs(z - v.z) < epsilon;
 	}
+	*/
 	
-	public Vector3 negate()
+	/**
+	 * Calculates the length (magnitude) of the vector.
+	 * @return The magnitude of the vector.
+	 */
+	public float length()
 	{
-		return scale(-1);
+		return (float)Math.sqrt((x * x) + (y * y) + (z * z));
 	}
-	
-	public Vector3 scale(float scalar)
-	{
-		x *= scalar;
-		y *= scalar;
-		z *= scalar;
-		return this;
-	}
-	
-	public Vector3 scaleTo(float scalar)
-	{
-		normalize();
-		scale(scalar);
-		return this;
-	}
-	
-	public float mag()
-	{
-		return (float)Math.sqrt(x*x + y*y + z*z);
-	}
-	
-	public float dot(Vector3 v)
-	{
-		return x * v.getX() + y * v.getY() + z * v.getZ();
-	}
-	
-	public Vector3 normalize()
-	{
-		if (x != 0 || y != 0 || z != 0)
-			scale(1 / mag());
-		return this;
-	}
-	
+
 	/***********
 	 * Swizzle *
 	 ***********/
 	
 	/**
-	 * Gets the vector <x, y>
+	 * Gets the vector <x, y>.
 	 * @return A Vector2 containing the x and y components of this vector.
 	 * @see Vector2
 	 */
@@ -283,35 +274,26 @@ public class Vector3
 	 * Gets the X component of the vector.
 	 * @return The vector's X component.
 	 */
-	public float getX() { return x; }
+	public float getX()
+	{
+	    return x;
+	}
 	
 	/**
 	 * Gets the Y component of the vector.
 	 * @return The vector's Y component.
 	 */
-	public float getY() { return y; }
+	public float getY()
+	{
+	    return y;
+	}
 	
 	/**
 	 * Gets the Z component of the vector.
 	 * @return The vector's Z component.
 	 */
-	public float getZ() { return z; }
-	
-	/**
-	 * Manually sets the X component of the vector.
-	 * @param x A new X component.
-	 */
-	public void setX(float x) { this.x = x; }
-	
-	/**
-	 * Manually sets the Y component of the vector.
-	 * @param y A new Y component.
-	 */
-	public void setY(float y) { this.y = y; }
-	
-	/**
-	 * Manually sets the Z component of the vector.
-	 * @param z A new Z component.
-	 */
-	public void setZ(float z) { this.z = z; }
+	public float getZ()
+	{
+	    return z;
+	}
 }

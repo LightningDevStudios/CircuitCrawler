@@ -11,7 +11,7 @@ public class UIImage extends UIEntity
 	
 	public UIImage(float xSize, float ySize, float xRelative, float yRelative)
 	{
-		super (xSize, ySize, xRelative, yRelative);
+		super(xSize, ySize, xRelative, yRelative);
 	}
 	
 	public UIImage(float xSize, float ySize, UIPosition position, float topPad, float leftPad, float bottomPad, float rightPad) 

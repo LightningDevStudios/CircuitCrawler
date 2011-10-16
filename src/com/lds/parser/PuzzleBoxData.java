@@ -1,10 +1,10 @@
 package com.lds.parser;
 
-import java.util.HashMap;
-import java.util.ArrayList;
-
-import com.lds.game.entity.PuzzleBox;
 import com.lds.game.entity.Entity;
+import com.lds.game.entity.PuzzleBox;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class PuzzleBoxData extends StaticEntData
 {
@@ -20,7 +20,7 @@ public class PuzzleBoxData extends StaticEntData
 
 		//COLOR
 		if (color != null)
-			puzzleBoxRef.enableColorMode(color[0],color[1],color[2],color[3]);
+			puzzleBoxRef.enableColorMode(color[0], color[1], color[2], color[3]);
 		
 		//GRADIENT
 		if (gradient != null)

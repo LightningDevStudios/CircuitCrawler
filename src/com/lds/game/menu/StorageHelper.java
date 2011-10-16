@@ -1,6 +1,6 @@
 package com.lds.game.menu;
 
-public class StorageHelper 
+public final class StorageHelper 
 {
 	private static final int MASK = 0xff;
 	
@@ -9,7 +9,7 @@ public class StorageHelper
 		
 	}
 	
-	public static float byteArrayToFloat(byte test[])
+	public static float byteArrayToFloat(byte[] test)
 	{
 		int bits = 0;
 		int i = 0;

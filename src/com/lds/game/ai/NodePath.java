@@ -1,9 +1,9 @@
 package com.lds.game.ai;
 
-import java.util.ArrayList;
-
 import com.lds.game.entity.Entity;
 import com.lds.math.Vector2;
+
+import java.util.ArrayList;
 
 public class NodePath 
 {
@@ -46,7 +46,7 @@ public class NodePath
 		for (Node node : nodeList)
 		{
 			newDistanceVec = Vector2.subtract(node.getPos(), ent.getPos());
-			if (distanceVec.magnitude() > newDistanceVec.magnitude())
+			if (distanceVec.length() > newDistanceVec.length())
 				closestNode = node;
 		}
 		return closestNode;
@@ -82,6 +82,13 @@ public class NodePath
 		return nodeList.get(index);
 	}
 	
-	public void setID (String id)	{ ID = id; }
-	public String getID ()	{ return ID; }
+	public void setID(String id)
+	{
+	    ID = id;
+	}
+	
+	public String getID()
+	{
+	    return ID;
+	}
 }

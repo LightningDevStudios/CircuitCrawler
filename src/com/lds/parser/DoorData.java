@@ -1,9 +1,11 @@
 package com.lds.parser;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import com.lds.game.entity.Door;
 import com.lds.game.entity.Entity;
+import com.lds.math.Vector2;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class DoorData extends StaticEntData
 {
@@ -19,12 +21,11 @@ public class DoorData extends StaticEntData
 		doorRef = new Door(xPos, yPos);
 		doorRef.setSize(size);
 		doorRef.setAngle(angle);
-		doorRef.setXScl(xScl);
-		doorRef.setYScl(yScl);
+		doorRef.setScale(new Vector2(xScl, yScl));
 		
 		//COLOR
 		if (color != null)
-			doorRef.enableColorMode(color[0],color[1],color[2],color[3]);
+			doorRef.enableColorMode(color[0], color[1], color[2], color[3]);
 		
 		//GRADIENT
 		if (gradient != null)

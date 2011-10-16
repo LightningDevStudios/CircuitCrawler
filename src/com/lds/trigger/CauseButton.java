@@ -4,9 +4,9 @@ import com.lds.game.entity.Button;
 
 public class CauseButton extends Cause//cause based on the state of a button
 {
-	Button button;
+	private Button button;
 	
-	public CauseButton (Button button)
+	public CauseButton(Button button)
 	{
 		super();
 		this.button = button;

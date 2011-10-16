@@ -1,8 +1,8 @@
 package com.lds.game.ai;
 
-import java.util.ArrayList;
-
 import com.lds.math.Vector2;
+
+import java.util.ArrayList;
 
 public class Node 
 {
@@ -178,30 +178,30 @@ public class Node
 		return posVec.getY();
 	}
 	
-	public float getF ()
+	public float getF()
 	{
 		return f;
 	}
 	
-	public void setF (float f)
+	public void setF(float f)
 	{
 		this.f = f;
 	}
-	public float getG ()
+	public float getG()
 	{
 		return g;
 	}
 	
-	public void setG (float g)
+	public void setG(float g)
 	{
 		this.g = g;
 	}
-	public float getH ()
+	public float getH()
 	{
 		return h;
 	}
 	
-	public void setH (float h)
+	public void setH(float h)
 	{
 		this.h = h;
 	}

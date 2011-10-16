@@ -1,11 +1,5 @@
 package com.lds.game;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.ContentValues;
@@ -25,6 +19,12 @@ import android.view.MenuItem;
 import com.lds.Graphics;
 import com.lds.game.event.*;
 import com.lds.game.puzzle.PuzzleActivity;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 
 public class Run extends Activity implements OnGameOverListener, OnGameInitializedListener, OnPuzzleActivatedListener, OnPreparedListener, OnCompletionListener
 {
@@ -80,6 +80,8 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 				break;
 			case 9:
 				levelId = R.xml.level10;
+			default:
+			    break;
 		}
 		
 		//Grab screen information
@@ -104,9 +106,9 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 	
 	public boolean saveas(int ressound, String fileName)
 	{  
-		 byte[] buffer=null;  
+		 byte[] buffer = null;  
 		 InputStream fIn = getBaseContext().getResources().openRawResource(ressound);  
-		 int size=0;  
+		 int size = 0;  
 		  
 		 try 
 		 {  
@@ -114,21 +116,25 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 			  buffer = new byte[size];  
 			  fIn.read(buffer);  
 			  fIn.close();  
-		 } catch (IOException e) 
+		 } 
+		 catch (IOException e) 
 		 {  
 		  return false;  
 		 }  
 		  
-		 String path="/sdcard/CircutCrawler/media/audio/songs/";  
-		 String filename= fileName;
+		 String path = "/sdcard/CircutCrawler/media/audio/songs/";  
+		 String filename = fileName;
 		  
 		 boolean exists = (new File(path)).exists();  
-		 if (!exists){new File(path).mkdirs();}  
+		 if (!exists)
+		 {
+		     new File(path).mkdirs();
+		 }
 		  
 		 FileOutputStream save;  
 		 try 
 		 {  
-			  save = new FileOutputStream(path+filename);  
+			  save = new FileOutputStream(path + filename);
 			  save.write(buffer);  
 			  save.flush();  
 			  save.close();  
@@ -142,7 +148,7 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 		  return false;  
 		 }      
 		  
-		 sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.parse("file://"+path+filename)));  
+		 sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.parse("file://" + path + filename)));  
 		  
 		 File k = new File(path, filename);  
 		  
@@ -162,13 +168,13 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 		 return true;  
 	}
 	
-	public void onCompletion(MediaPlayer mp) 
+	public void onCompletion(MediaPlayer mp)
 	{
 		mp.reset();
 		playMusic(false);
 	} 
 	
-    public void onPrepared(MediaPlayer mp) 
+    public void onPrepared(MediaPlayer mp)
 	{ 
 		mp.setVolume(SoundPlayer.getInstance().getMusicVolume(), SoundPlayer.getInstance().getMusicVolume());
 		mp.start(); 
@@ -178,8 +184,14 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 	{
 		gameR.setGameOverEvent(this);
 		gameR.setPuzzleActivatedEvent(this);
-		try	{ pd.dismiss(); }
-		catch (Exception e) { }
+		try
+		{
+		    pd.dismiss();
+		}
+		catch (Exception e) 
+		{
+		    e.printStackTrace();
+		}
 	}
 	
 	public void onGameOver(boolean winning)
@@ -219,7 +231,7 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 		switch(requestCode)
 		{
 		case PUZZLE_ACTIVITY:
-			if(resultCode == RESULT_OK)
+			if (resultCode == RESULT_OK)
 				glSurface.onPuzzleFailed();
 			else
 				glSurface.onPuzzleWon();
@@ -240,7 +252,7 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 			whichSong = 2;
 		else
 			whichSong = 1;
-		if(whichSong == 2)
+		if (whichSong == 2)
 		{
 			try 
 			{
@@ -269,7 +281,7 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 					mp.prepare();
 				}
 			} 
-			catch (Exception e) 
+			catch (Exception e)
 			{
 				e.printStackTrace();
 			}
@@ -328,7 +340,7 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 	}
 	
 	@Override
-	protected void onResume ()
+	protected void onResume()
 	{
 		super.onResume();
 		//mp.start();
@@ -336,11 +348,14 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 	}
 	
 	@Override
-	protected void onPause ()
+	protected void onPause()
 	{
 		super.onPause();
 		glSurface.onPause();
-		try	{ pd.dismiss(); }
+		try
+		{
+		    pd.dismiss();
+		}
 		catch (Exception e) { }
 		mp.pause();
 	}

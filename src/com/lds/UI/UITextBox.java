@@ -1,6 +1,7 @@
 package com.lds.UI;
 
 import com.lds.Enums.UIPosition;
+import com.lds.math.Vector2;
 
 public class UITextBox extends UIEntity
 {
@@ -14,7 +15,7 @@ public class UITextBox extends UIEntity
 	
 	public UITextBox(float xSize, float ySize, float xRelative, float yRelative)
 	{
-		super (xSize, ySize, xRelative, yRelative);
+		super(xSize, ySize, xRelative, yRelative);
 	}
 	
 	public UITextBox(float xSize, float ySize, UIPosition position, float topPad, float leftPad, float bottomPad, float rightPad) 
@@ -44,15 +45,20 @@ public class UITextBox extends UIEntity
 		{
 			this.text = text;
 			tex.reloadTexture(text);
-			xSize = tex.getXSize();
-			ySize = tex.getYSize();
-			halfXSize = xSize / 2;
-			halfYSize = ySize / 2;
+			size = new Vector2(tex.getXSize(), tex.getYSize());
+			halfSize = Vector2.scale(size, 0.5f);
 			
-			float[] initVerts = { 	halfXSize, halfYSize,
-									halfXSize, -halfYSize,
-									-halfXSize, halfYSize,
-									-halfXSize, -halfYSize };
+			float x = halfSize.getX();
+			float y = halfSize.getY();
+			
+			float[] initVerts =
+			{
+			    x, y,
+				x, -y,
+				-x, y,
+				-x, -y
+			};
+			
 			this.vertices = initVerts;
 			setBuffer(vertexBuffer, vertices);
 			needToUpdateVertexVBO = true;

@@ -9,7 +9,7 @@ public class PickupData extends PhysEntData
 	{
 		super(pickupHM);
 		
-		if(pickupHM.get("value") != null)
+		if (pickupHM.get("value") != null)
 			value = Integer.parseInt(pickupHM.get("value"));
 		else
 			value = 100;
