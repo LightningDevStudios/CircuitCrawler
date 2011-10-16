@@ -1,9 +1,7 @@
 package com.lds.physics;
 
 import java.util.ArrayList;
-
-import com.lds.game.entity.Entity;
-import com.lds.math.Vector2;
+import com.lds.game.entity.*;
 
 public class PhysicsManager 
 {
@@ -11,18 +9,24 @@ public class PhysicsManager
 	 * Members *
 	 ***********/
 
+    /**
+     * 
+     */
 	private CollisionDetector collisionDetector;
 	
 	/****************
-	 * Constructors 
-	 * @param collisionDetector *
+	 * Constructors *
 	 ****************/
 	
+	/**
+	 * Initializes a new instance of the PhysicsManager class.
+	 * @param collisionDetector A collision detector object.
+	 */
 	public PhysicsManager(CollisionDetector collisionDetector)
 	{
 		this.collisionDetector = collisionDetector;
 	}
-	
+
 	public ArrayList<CollisionPair> SolveCollision()
 	{
 		ArrayList<CollisionPair> pairList= new ArrayList<CollisionPair>();
