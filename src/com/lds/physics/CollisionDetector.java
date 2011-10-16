@@ -9,6 +9,7 @@ public class CollisionDetector
 {	
 	private Vector2 size;
 	private ArrayList<Entity> entList;
+	private Vector2 MinLeafSize = new Vector2(10,10);
 	
 	public CollisionDetector(Vector2 size, ArrayList<Entity> entList) 
 	{
@@ -16,11 +17,10 @@ public class CollisionDetector
 		this.entList = entList;
 	}
 	
-	public QuadTreeList QuadTreeDetection()
+	public ArrayList<ArrayList<Entity>> QuadTreeDetection()
 	{
-		Grid masterGrid = new Grid(size, new Vector2(0, 0), 0, entList, null);	
-		masterGrid.SearchGrid(masterGrid);
-		return new QuadTreeList(masterGrid.getColEnts(), masterGrid.getColEntsOnLines());
+		QuadTree qt = new QuadTree(size, new Vector2(0,0), null, MinLeafSize, entList);	
+		return qt.collidingEntities;
 	}
 	
 	public boolean RadiusCheck(Entity a, Entity b)

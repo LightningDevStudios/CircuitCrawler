@@ -758,7 +758,7 @@ public abstract class Entity
 	/**************************
 	 * Accessors and Mutators *
 	 **************************/
-	
+
 	public float getSize()
 	{
 	    return size;
