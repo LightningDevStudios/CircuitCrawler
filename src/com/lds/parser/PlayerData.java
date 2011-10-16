@@ -2,6 +2,7 @@ package com.lds.parser;
 
 import com.lds.game.entity.Entity;
 import com.lds.game.entity.Player;
+import com.lds.math.Vector2;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,7 +18,7 @@ public class PlayerData extends CharacterData
 	
 	public void createInst(ArrayList<Entity> entData)
 	{
-		playerRef = new Player(xPos, yPos, angle);
+		playerRef = new Player(new Vector2(xPos, yPos), angle);
 
 		//COLOR
 		if (color != null)

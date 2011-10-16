@@ -1,22 +1,11 @@
 package com.lds.game.entity;
 
+import com.lds.math.Vector2;
+
 public class PickupHealth extends Pickup
 {
-	private int healthValue;
-	
-	public PickupHealth(int healthValue, float xPos, float yPos)
+	public PickupHealth(Vector2 position, int healthValue)
 	{
-		super(xPos, yPos);
-		this.healthValue = healthValue;
-	}
-	
-	public int getHealthValue()
-	{
-		return healthValue;
-	}
-	
-	public void setHealthValue(int healthValue)
-	{
-		this.healthValue = healthValue;
+		super(position, healthValue);
 	}
 }

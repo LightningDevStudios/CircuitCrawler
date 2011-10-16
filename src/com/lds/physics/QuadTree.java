@@ -1,15 +1,14 @@
 package com.lds.physics;
 
-import com.lds.game.entity.Entity;
 import com.lds.math.Vector2;
 
 import java.util.ArrayList;
 
 public class QuadTree 
 {
-	public ArrayList<ArrayList<Entity>> collidingEntities = new ArrayList<ArrayList<Entity>>();
+	public ArrayList<ArrayList<Shape>> collidingEntities = new ArrayList<ArrayList<Shape>>();
 	
-	private ArrayList<Entity> quadTreeEntities = new ArrayList<Entity>();
+	private ArrayList<Shape> quadTreeEntities = new ArrayList<Shape>();
 	private QuadTree[] subQuads = new QuadTree[4];
 	
 	private QuadTree parent;
@@ -17,7 +16,7 @@ public class QuadTree
 	private Vector2 center;
 	private Vector2 minimumLeafSize;
 	
-	public QuadTree(Vector2 size, Vector2 center, QuadTree parent, Vector2 minimumLeafSize, ArrayList<Entity> entList)
+	public QuadTree(Vector2 size, Vector2 center, QuadTree parent, Vector2 minimumLeafSize, ArrayList<Shape> entList)
 	{
 		this.parent = parent;
 		this.size = size;
@@ -32,20 +31,20 @@ public class QuadTree
 			collidingEntities.add(quadTreeEntities);
 	}
 
-	public void SplitQuad(ArrayList<Entity> entList) 
+	public void SplitQuad(ArrayList<Shape> entList) 
 	{
 		if(entList.size() < 2)
 			return;
 		
-		ArrayList<Entity> Quad1Entities = new ArrayList<Entity>();
-		ArrayList<Entity> Quad2Entities = new ArrayList<Entity>();
-		ArrayList<Entity> Quad3Entities = new ArrayList<Entity>();
-		ArrayList<Entity> Quad4Entities = new ArrayList<Entity>();
+		ArrayList<Shape> Quad1Entities = new ArrayList<Shape>();
+		ArrayList<Shape> Quad2Entities = new ArrayList<Shape>();
+		ArrayList<Shape> Quad3Entities = new ArrayList<Shape>();
+		ArrayList<Shape> Quad4Entities = new ArrayList<Shape>();
 		
-		for(Entity ent : entList)
+		for(Shape shape : entList)
 		{
 			boolean inBox = true;
-			for(Vector2 vert : ent.getVertVecs())
+			for(Vector2 vert : shape.getWorldVertices())
 			{
 				if(!(vert.getX() > center.getX() - size.getX() / 2 && vert.getX() < center.getX() + size.getX() / 2 && vert.getY() > center.getY() - size.getY() / 2 && vert.getY() < center.getY() + size.getY() / 2))
 				{
@@ -55,29 +54,29 @@ public class QuadTree
 			if(inBox)
 			{
 				//Quadrant1
-				if(ent.getPos().getX() > center.getX() && ent.getPos().getX() < center.getX() + size.getX() / 2 &&  ent.getPos().getY() > center.getY() && ent.getPos().getY() < center.getY() + size.getY() / 2)
+				if(shape.getPos().getX() > center.getX() && shape.getPos().getX() < center.getX() + size.getX() / 2 &&  shape.getPos().getY() > center.getY() && shape.getPos().getY() < center.getY() + size.getY() / 2)
 				{
-					Quad1Entities.add(ent);
+					Quad1Entities.add(shape);
 				}
 				//Quadrant2
-				else if(ent.getPos().getX() > center.getX() - size.getX() / 2 && ent.getPos().getX() < center.getX() &&  ent.getPos().getY() > center.getY() && ent.getPos().getY() < center.getY() + size.getY() / 2)
+				else if(shape.getPos().getX() > center.getX() - size.getX() / 2 && shape.getPos().getX() < center.getX() &&  shape.getPos().getY() > center.getY() && shape.getPos().getY() < center.getY() + size.getY() / 2)
 				{
-					Quad2Entities.add(ent);
+					Quad2Entities.add(shape);
 				}
 				//Quadrant3
-				else if(ent.getPos().getX() > center.getX() - size.getX() / 2 && ent.getPos().getX() < center.getX() &&  ent.getPos().getY() > center.getY() - size.getY() / 2 && ent.getPos().getY() < center.getY())
+				else if(shape.getPos().getX() > center.getX() - size.getX() / 2 && shape.getPos().getX() < center.getX() &&  shape.getPos().getY() > center.getY() - size.getY() / 2 && shape.getPos().getY() < center.getY())
 				{
-					Quad3Entities.add(ent);
+					Quad3Entities.add(shape);
 				}
 				//Quadrant4
-				else if(ent.getPos().getX() > center.getX() && ent.getPos().getX() < center.getX() + size.getX() / 2 &&  ent.getPos().getY() > center.getY() - size.getY() / 2 && ent.getPos().getY() < center.getY())
+				else if(shape.getPos().getX() > center.getX() && shape.getPos().getX() < center.getX() + size.getX() / 2 &&  shape.getPos().getY() > center.getY() - size.getY() / 2 && shape.getPos().getY() < center.getY())
 				{
-					Quad4Entities.add(ent);
+					Quad4Entities.add(shape);
 				}
 			}
 			else
 			{
-				quadTreeEntities.add(ent);
+				quadTreeEntities.add(shape);
 			}
 		}
 		

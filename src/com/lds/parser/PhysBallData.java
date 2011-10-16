@@ -1,14 +1,15 @@
 package com.lds.parser;
 
 import com.lds.game.entity.Entity;
-import com.lds.game.entity.PhysBall;
+import com.lds.game.entity.Ball;
+import com.lds.math.Vector2;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
 public class PhysBallData extends HoldObjectData
 {
-	private PhysBall physBallRef;
+	private Ball physBallRef;
 	public PhysBallData(HashMap<String, String> physCircleHM)
 	{
 		super(physCircleHM);
@@ -16,7 +17,7 @@ public class PhysBallData extends HoldObjectData
 	
 	public void createInst(ArrayList<Entity> entData)
 	{
-		physBallRef = new PhysBall(size, xPos, yPos, friction);
+		physBallRef = new Ball(size, new Vector2(xPos, yPos));
 
 		//COLOR
 		if (color != null)

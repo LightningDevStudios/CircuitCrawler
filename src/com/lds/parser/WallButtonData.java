@@ -2,6 +2,7 @@ package com.lds.parser;
 
 import com.lds.game.entity.Entity;
 import com.lds.game.entity.WallButton;
+import com.lds.math.Vector2;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,7 +17,7 @@ public class WallButtonData extends StaticEntData
 	
 	public void createInst(ArrayList<Entity> entData)
 	{
-		wallButtonRef = new WallButton(xPos, yPos, angle);
+		wallButtonRef = new WallButton(new Vector2(xPos, yPos), angle);
 		
 		//COLOR
 		if (color != null)

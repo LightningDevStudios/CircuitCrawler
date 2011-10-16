@@ -1,19 +1,23 @@
 package com.lds.game.entity;
 
 import com.lds.EntityManager;
+import com.lds.math.Vector2;
+import com.lds.physics.Circle;
 
-public abstract class Pickup extends PhysEnt //pickup objects are picked up, such as keys, powerups, or batteries
+public abstract class Pickup extends Entity //pickup objects are picked up, such as keys, powerups, or batteries
 {	
-	public Pickup(float xPos, float yPos)
+    private int value;
+    
+	public Pickup(Vector2 position, int value)
 	{
-		super(20.0f, xPos, yPos, false, false, 50.0f, 90.0f, 1.0f, 0.0f);
-		setAngle(90.0f);
+	    super(new Circle(20, position, false));
+	    this.value = value;
 	}
 	
 	@Override
 	public void update()
 	{
-		//scaleTo(2, 2);
+		//TODO scaling
 	}
 	
 	@Override
@@ -21,8 +25,17 @@ public abstract class Pickup extends PhysEnt //pickup objects are picked up, suc
 	{
 		if (ent instanceof Player)
 		{
-			ent.colList.remove(this);
 			EntityManager.removeEntity(this);
 		}
 	}
+	
+	public int getValue()
+    {
+        return value;
+    }
+    
+    public void setEvergyValue(int value)
+    {
+        this.value = value;
+    }
 }

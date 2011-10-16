@@ -1,21 +1,22 @@
 package com.lds.parser;
 
 import com.lds.game.entity.Entity;
-import com.lds.game.entity.PhysBlock;
+import com.lds.game.entity.Block;
+import com.lds.math.Vector2;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
 public class PhysBlockData extends HoldObjectData
 {
-	private PhysBlock physBlockRef;
+	private Block physBlockRef;
 	public PhysBlockData(HashMap<String, String> physBlockHM)
 	{
 		super(physBlockHM);
 	}
 	public void createInst(ArrayList<Entity> entData)
 	{
-		physBlockRef = new PhysBlock(size, xPos, yPos, friction);
+		physBlockRef = new Block(size, new Vector2(xPos, yPos));
 		physBlockRef.setAngle(angle);
 		
 		//COLOR

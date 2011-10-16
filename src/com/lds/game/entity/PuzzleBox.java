@@ -1,19 +1,21 @@
 package com.lds.game.entity;
 
 import com.lds.game.event.PuzzleActivatedListener;
+import com.lds.math.Vector2;
+import com.lds.physics.Rectangle;
 
-public class PuzzleBox extends StaticEnt
+public class PuzzleBox extends Entity
 {
 	private PuzzleActivatedListener listener;
 	
-	public PuzzleBox(float size, float xPos, float yPos, boolean circular, boolean willCollide)
+	public PuzzleBox(float size, Vector2 position)
 	{
-		super(size, xPos, yPos, circular, willCollide);
+		super(new Rectangle(size, position, true));
 	}
 	
-	public PuzzleBox(float size, float xPos, float yPos, float angle, float xScl, float yScl, boolean isSolid, boolean circular, boolean willCollide)
+	public PuzzleBox(float size, Vector2 position, float angle, Vector2 scale)
 	{
-		super(size, xPos, yPos, angle, xScl, yScl, isSolid, circular, willCollide);
+		super(new Rectangle(size, position, angle, scale, true));
 	}
 	
 	public void setPuzzleInitListener(PuzzleActivatedListener listener)

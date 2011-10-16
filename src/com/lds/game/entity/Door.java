@@ -1,30 +1,29 @@
 package com.lds.game.entity;
 
-public class Door extends StaticEnt
+import com.lds.math.Vector2;
+import com.lds.physics.Rectangle;
+
+public class Door extends Entity
 {
-	
-	public Door(float xPos, float yPos)
+	public Door(Vector2 position)
 	{
-		 super(72.0f, xPos, yPos, 90.0f, 1.0f, 1.0f, true, false, true);
-		 enableColorMode(1.0f, 1.0f, 1.0f, 1.0f);
-		 colorInterpSpeed = 1.0f;
+	    this(72, position);
 	}
+	
+	public Door(float size, Vector2 position)
+    {
+        super(new Rectangle(size, position, 0, new Vector2(2, 1), true));
+        enableColorMode(1.0f, 1.0f, 1.0f, 1.0f);
+        colorInterpSpeed = 1.0f;
+    }
 
 	public void open()
 	{
 		initColorInterp(0.0f, 0.0f, 0.0f, 0.0f);
-		isSolid = false;
 	}
 	
 	public void close()
 	{	
 		initColorInterp(1.0f, 1.0f, 1.0f, 1.0f);
-		isSolid = true;
-	}
-	
-	@Override
-	public boolean doesCollide(Entity ent)
-	{
-		return (ent instanceof Tile) ? false : true;
 	}
 }

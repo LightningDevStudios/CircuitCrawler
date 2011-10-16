@@ -2,21 +2,25 @@ package com.lds.game.entity;
 
 import com.lds.game.SoundPlayer;
 import com.lds.math.Vector2;
+import com.lds.physics.Shape;
 
-public abstract class HoldObject extends PhysEnt //and object that is held (blocks, balls, etc.)
+public abstract class HoldObject extends Entity
 {
 	private boolean held;
 	
-	public HoldObject(float size, float xPos, float yPos, float angle, float xScl, float yScl, boolean isSolid, boolean circular, float friction)
+	public HoldObject(Shape shape)
 	{
-		super(size, xPos, yPos, angle, xScl, yScl, isSolid, circular, true, 10.0f, 90.0f, 2.0f, friction);
+	    super(shape);
 		held = false;
 	}
 	
+	/**
+	 * \todo fall down pit
+	 */
 	@Override
-	public void onTileInteract(Tile tile)
+	public void tileInteract(Tile tile)
 	{
-		if (!held)
+		/*if (!held)
 		{
 			if (moveInterpVec.length() < 1.0f && moveInterpVec.length() > 0.0f)
 			{
@@ -30,7 +34,7 @@ public abstract class HoldObject extends PhysEnt //and object that is held (bloc
 			}
 			else if (!gettingPushed)
 				super.onTileInteract(tile);
-		}
+		}*/
 	}
 	
 	public boolean isHeld()
@@ -46,12 +50,5 @@ public abstract class HoldObject extends PhysEnt //and object that is held (bloc
 	public void drop()
 	{
 		held = false;
-		stop();
-	}
-	
-	public void push()
-	{
-		held = false;
-		push(new Vector2(angle).scale(3));
 	}
 }

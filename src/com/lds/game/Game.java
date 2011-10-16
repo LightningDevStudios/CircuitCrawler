@@ -203,11 +203,13 @@ public class Game
 		worldMaxY = (Tile.TILE_SIZE_F * (tileset.length / 2)) - (screenH / 2);
 		
 		updateCameraPosition();
-		updateRenderedEnts();
 		updateRenderedTileset();
 	}
 	
-	public void updateRenderedEnts()
+	/**
+	 * \todo legit AABB stuff
+	 */
+	public ArrayList<Entity> getRenderedEnts()
 	{
 		//define current screen bounds
 		final float minX, maxX, minY, maxY;
@@ -216,24 +218,22 @@ public class Game
 		minY = camPosY - (screenW / 2);
 		maxY = camPosY + (screenW / 2);
 		
+		ArrayList<Entity> renderList = new ArrayList<Entity>();
 		for (Entity ent : entList)
 		{
 			//define max square bounds
-			final float entMinX = ent.getXPos() - (float)ent.getDiagonal();
-			final float entMaxX = ent.getXPos() + (float)ent.getDiagonal();
-			final float entMinY = ent.getYPos() - (float)ent.getDiagonal();
-			final float entMaxY = ent.getYPos() + (float)ent.getDiagonal();
+		    final float diagonal = Vector2.subtract(ent.getPos(), ent.getShape().getWorldVertices()[0]).length();
+			final float entMinX = ent.getXPos() - diagonal;
+			final float entMaxX = ent.getXPos() + diagonal;
+			final float entMinY = ent.getYPos() - diagonal;
+			final float entMaxY = ent.getYPos() + diagonal;
 			
 			//values are opposite for entMin/Max because only the far tips have to be inside the screen (leftmost point on right border of screen)
 			if (entMinX <= maxX && entMaxX >= minX && entMinY <= maxY && entMaxY >= minY)
-			{
-				ent.setRendered(true);
-			}
-			else
-			{
-				ent.setRendered(false);
-			}
+				renderList.add(ent);
 		}
+		
+		return renderList;
 	}
 	
 	public void updateRenderedTileset()
@@ -325,9 +325,12 @@ public class Game
 		}
 	}
 	
+	/**
+	 * rayfiring should not be here
+	 */
 	public boolean pathIsClear(final Vector2 startVec, final Vector2 endVec)
 	{
-		final Vector2 pathVec = Vector2.subtract(endVec, startVec).normalize();
+		/*final Vector2 pathVec = Vector2.subtract(endVec, startVec).normalize();
 		final Vector2 pathNormal = Vector2.getNormal(pathVec);
 		final float normProj = startVec.dot(pathNormal);
 		final float startProj = startVec.dot(pathVec);
@@ -347,7 +350,7 @@ public class Game
 				if ((tile.isWall() || tile.isPit()) && Math.abs(tile.getPos().dot(pathNormal) - normProj) < tile.getHalfSize() * 1.5f && ((tileProj > startProj && tileProj < endProj) || (tileProj < startProj && tileProj > endProj)))
 					return false;
 			}
-		}
+		}*/
 		
 		return true;
 	}
@@ -363,13 +366,16 @@ public class Game
 			t.update();
 	}
 	
+	/**
+	 * \todo add real physics for player movement
+	 */
 	public void updatePlayerPos()
 	{
 		//move player
 		if (player.userHasControl())
 		{
-			player.setAngle(joypad.getInputAngle());
-			player.addPos(joypad.getInputVec().scale(Stopwatch.getFrameTime() * (player.getMoveSpeed() / 1000)));
+			//player.setAngle(joypad.getInputAngle());
+			//player.addPos(joypad.getInputVec().scale(Stopwatch.getFrameTime() * (player.getMoveSpeed() / 1000)));
 		}
 		joypad.clearInputVec();
 		

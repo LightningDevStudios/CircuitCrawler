@@ -2,6 +2,7 @@ package com.lds.parser;
 
 import com.lds.game.entity.Entity;
 import com.lds.game.entity.PuzzleBox;
+import com.lds.math.Vector2;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,7 +17,7 @@ public class PuzzleBoxData extends StaticEntData
 	
 	public void createInst(ArrayList<Entity> entData)
 	{
-		puzzleBoxRef = new PuzzleBox(size, xPos, yPos, circular, willCollide);
+		puzzleBoxRef = new PuzzleBox(size, new Vector2(xPos, yPos));
 
 		//COLOR
 		if (color != null)

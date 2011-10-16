@@ -1,36 +1,22 @@
 package com.lds.game.entity;
 
-public class SpikeBall extends PhysEnt
-{
-	protected float moveX, moveY;
-	protected float oldXPos, oldYPos;
-	protected float rotateDir;
-	
-	public SpikeBall(float size, float xPos, float yPos, boolean circular, boolean willCollide, float moveSpeed, float rotSpeed, float sclSpeed, float friction, float moveX, float moveY, float rotateDir) 
+import com.lds.math.Vector2;
+import com.lds.physics.Circle;
+
+public class SpikeBall extends Entity
+{	
+	public SpikeBall(float size, Vector2 position)
 	{
-		super(size, xPos, yPos, circular, willCollide, moveSpeed, rotSpeed, sclSpeed, friction);
-		this.moveX = moveX;
-		this.moveY = moveY;
-		oldXPos = xPos;
-		oldYPos = yPos;
-		this.rotateDir = rotateDir;
+		super(new Circle(size, position, true));
 	}
 	
+	/**
+	 * \todo anything?
+	 */
 	@Override
 	public void update()
 	{
 		super.update();
-		
-		//\todo clean it up!
-		if (this.getXPos() == moveX && this.getYPos() == moveY)
-		{
-			this.push(oldXPos, oldYPos);
-		}
-		else if (this.getXPos() == oldXPos && this.getYPos() == oldYPos)
-		{
-			this.push(moveX, moveY);
-		}
-		this.rotate(10 * rotateDir); // negative 1 or positive 1.
 	}
 	
 }

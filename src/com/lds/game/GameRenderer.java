@@ -13,6 +13,7 @@ import com.lds.game.entity.*;
 import com.lds.game.event.*;
 import com.lds.math.Matrix4;
 import com.lds.math.Vector2;
+import com.lds.physics.CollisionDetector;
 import com.lds.physics.PhysicsManager;
 
 import javax.microedition.khronos.egl.EGLConfig;
@@ -129,7 +130,6 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		}
 		
 		game.updateTriggers();
-		game.updateRenderedEnts();
 		game.cleaner.update(game.entList, gl);
 		game.updateFingers();
 		game.renderTileset(gl);
@@ -142,106 +142,16 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 			ent.updateTextureVBO(gl);
 		}
 		
-		/**********************************************
-		 * Perform a Collision Check for all Entities *
-		 **********************************************/
-		
+		//TODO: real collision/physics update
 		//physMan.PerformCollisionCheck();
 		
+		//HACK: for the love of GOD move this out of GameRenderer
 		//Iterates through all entities
 		final int size = game.entList.size();
 		for (int i = 0; i < size; i++)
 		{
 			
 			final Entity ent = game.entList.get(i);
-						
-			//checks for collision with all other entities in entList if needed
-			if (Game.worldOutdated)
-			{
-				//checks collision and interacts with all other Entities
-				
-				for (int j = i + 1; j < size; j++)
-				{
-					final Entity colEnt = game.entList.get(j);
-					final boolean colListContains = Game.arrayListContains(ent.colList, colEnt) || Game.arrayListContains(colEnt.colList, ent);
-					if (ent.isColliding(colEnt))
-					{
-						if (!colListContains)
-						{
-							ent.colList.add(colEnt);
-							colEnt.colList.add(ent);
-							ent.interact(colEnt);
-							colEnt.interact(ent);
-						}
-					}
-					else if (colListContains)
-					{
-						//System.out.println(ent.colList.size() + " " + colEnt.colList.size());
-						ent.colList.remove(colEnt);
-						colEnt.colList.remove(ent);
-						if (ent.colList.isEmpty())
-						{
-							ent.uninteract(colEnt);
-							colEnt.uninteract(ent);
-						}
-						//else if (colEnt.colList.isEmpty())
-							//colEnt.uninteract(ent);
-					}
-				}
-				
-				if (ent instanceof PhysEnt)
-				{
-					final PhysEnt physEnt = (PhysEnt)ent;
-					final Tile nearestTile = Game.nearestTile(physEnt, game.tileset);
-					if (nearestTile == null)
-						break;
-					
-					final int nearestTileX = nearestTile.xIndex;
-					final int nearestTileY = nearestTile.yIndex;
-					
-					for (int j = nearestTileY - 1; j <= nearestTileY + 1; j++)
-					{
-						for (int k = nearestTileX - 1; k <= nearestTileX + 1; k++)
-						{
-							if (j < game.tileset.length && j >= 0 && k < game.tileset[0].length && k >= 0)
-							{
-								Tile tile = game.tileset[j][k];
-								final boolean physColListContains = Game.arrayListContains(physEnt.colList, tile) || Game.arrayListContains(tile.colList, physEnt);
-								if (tile.isColliding(physEnt))
-								{
-									if (!physColListContains)
-									{
-										physEnt.colList.add(tile);
-										tile.colList.add(physEnt);
-										physEnt.tileInteract(tile);
-									}
-								}
-								else if (physColListContains)
-								{
-									physEnt.colList.remove(physEnt.colList.indexOf(tile));
-									tile.colList.remove(physEnt);
-									if (ent.colList.isEmpty())
-										physEnt.tileUninteract(tile);
-								}
-							}
-						}
-					}
-					
-					//interacts with nearest tile to the entity; the tile it is standing on
-					physEnt.onTileInteract(nearestTile);
-					
-					//bounces PhysEnts appropriately, excluding objects held by the player
-					if (!game.player.isHoldingObject() || physEnt != game.player.getHeldObject())
-						physEnt.addPos(physEnt.getBounceVec());
-				}
-				
-				//moves the player correctly based on heldObject's bounceVecs
-				if (ent == game.player && game.player.isHoldingObject())
-				{
-					game.player.addPos(game.player.getHeldObject().getBounceVec());
-					game.player.updateHeldObjectPosition();
-				}
-			}
 			
 			/***************************
 			 * Performs Button Actions *
@@ -255,7 +165,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 				{
 					if (!game.player.isHoldingObject()) //not holding anything and is close enough
 					{
-						if (game.player.closeEnough(ent) && game.player.isFacing(ent))
+						if (CollisionDetector.RadiusCheck(game.player.getShape(), ent.getShape()) && game.player.isFacing(ent))
 						{
 							game.player.holdObject((HoldObject)ent);
 							Vibrator.vibrate(context, 100);
@@ -271,7 +181,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 				}
 				else if (ent instanceof PuzzleBox)
 				{
-					if (game.player.closeEnough(ent) && game.player.isFacing(ent))
+					if (CollisionDetector.RadiusCheck(game.player.getShape(), ent.getShape()) && game.player.isFacing(ent))
 					{
 						((PuzzleBox)ent).run();
 						Vibrator.vibrate(context, 100);
@@ -291,8 +201,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 				if (game.player.getEnergy() != 0)
 				{
 					final Vector2 directionVec = new Vector2(game.player.getAngle());
-					final AttackBolt attack = new AttackBolt(Vector2.add(game.player.getPos(), directionVec), directionVec.scale(25), game.player.getAngle());
-					attack.ignore(game.player);
+					final AttackBolt attack = new AttackBolt(Vector2.add(game.player.getPos(), directionVec), Vector2.scale(directionVec, 25), game.player);
 					attack.genHardwareBuffers(gl);
 					EntityManager.addEntity(attack);
 					game.player.loseEnergy(5);
@@ -314,13 +223,10 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		 * Render all Entites *
 		 **********************/
 					
-		for (Entity ent : game.entList)
-		{
-			if (ent.isRendered())
-			{								
-				ent.draw(gl);
-				gl.glLoadIdentity();
-			}
+		for (Entity ent : game.getRenderedEnts())
+		{								
+			ent.draw(gl);
+			gl.glLoadIdentity();
 		}
 		
 		game.btnB.unpress();

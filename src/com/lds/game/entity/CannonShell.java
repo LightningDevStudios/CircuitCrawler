@@ -1,21 +1,22 @@
 package com.lds.game.entity;
 
+import com.lds.EntityManager;
 import com.lds.Stopwatch;
+import com.lds.math.Vector2;
+import com.lds.physics.Circle;
 
-public class CannonShell extends PhysEnt //A Large Ball of Doom
+public class CannonShell extends Entity
 {	
-	protected int time, remove;
+	private int time;
+	private int removeTime;
 	
-	public CannonShell(float size, float xPos, float yPos, float angle, float xScl, float yScl, boolean isSolid, boolean circular, boolean willCollide, float moveSpeed, float rotSpeed, float sclSpeed, float friction, int secondsUntilRemove)
+	/**
+	 * \todo add real physics
+	 */
+	public CannonShell(Vector2 position, float angle, float moveSpeed, int removeTime)
 	{
-		super(size, xPos, yPos, angle, 1.0f, 1.0f, true, circular, willCollide, moveSpeed, rotSpeed, sclSpeed, friction);
-		time = 0;
-		remove = secondsUntilRemove;
-	}
-	
-	public CannonShell(float xPos, float yPos, float angle, float moveSpeed, int secondsUntilRemove)
-	{
-		this(15, xPos, yPos, angle, 1.0f, 1.0f, true, true, true, moveSpeed, 0.0f, 0.0f, 0.07f, secondsUntilRemove);
+		super(new Circle(15, position, angle, true));
+		
 	}
 	
 	@Override
@@ -25,10 +26,10 @@ public class CannonShell extends PhysEnt //A Large Ball of Doom
 		
 		time += Stopwatch.getFrameTime();
 		
-		if (time > remove * 1000) // Time loop are cools
+		if (time > removeTime * 1000)
 		{
 			time = 0;
-			this.remove();
+			EntityManager.removeEntity(this);
 		}
 	}
 }

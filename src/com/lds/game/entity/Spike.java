@@ -1,9 +1,17 @@
 package com.lds.game.entity;
 
-public class Spike extends StaticEnt
+import com.lds.math.Vector2;
+import com.lds.physics.Rectangle;
+
+public class Spike extends Entity
 {
-	public Spike(float xPos, float yPos, float angle)
+	public Spike(Vector2 position, float angle)
 	{
-		super(Entity.DEFAULT_SIZE, xPos, yPos, angle, 1.0f, 1.0f, true, false, true);
+	    this(DEFAULT_SIZE, position, angle);
 	}
+	
+	public Spike(float size, Vector2 position, float angle)
+    {
+        super(new Rectangle(size, position, angle, true));
+    }
 }
