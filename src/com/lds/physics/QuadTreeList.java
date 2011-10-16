@@ -4,7 +4,7 @@ import com.lds.game.entity.Entity;
 
 import java.util.ArrayList;
 
-public class QuadTreeList 
+public class QuadTreeList
 {
 	private ArrayList<ArrayList<Entity>> normalEntity;
 	private ArrayList<ArrayList<Entity>> onLineEntity;

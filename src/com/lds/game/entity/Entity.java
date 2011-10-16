@@ -10,6 +10,7 @@ import com.lds.TilesetHelper;
 import com.lds.game.Game;
 import com.lds.math.*;
 import com.lds.math.Vector2;
+import com.lds.physics.Shape;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -20,31 +21,24 @@ import java.util.EnumSet;
 import javax.microedition.khronos.opengles.GL10;
 import javax.microedition.khronos.opengles.GL11;
 
-//Highest level abstract class in game
 
 public abstract class Entity 
 {
 	public static final float DEFAULT_SIZE = 32.0f;
 	
 	//behavior data
-	protected boolean isSolid;
 	protected boolean isColorInterp, isGradientInterp;
-	protected boolean rendered;
-	protected boolean circular;
-	protected boolean willCollide;
-	protected boolean exists;
+	
+	protected Shape shape;
 	
 	//graphics data
-	protected float angle, size, halfSize;
+	//TODO: remove most of this
 	protected float colorR, colorG, colorB, colorA;
 	protected float endColorR, endColorG, endColorB, endColorA;
 	protected float colorInterpSpeed;
-	protected EnumSet<RenderMode> renderMode;
 	protected Texture tex;
-	protected Vector2 posVec, scaleVec;
-	protected Matrix4 posMat, rotMat, sclMat, model;
+	protected EnumSet<RenderMode> renderMode;
 	
-	protected float[] vertices;
 	protected float[] texture;
 	protected float[] color, endColor;
 	public static final byte[] indices = {0, 1, 2, 3};
@@ -63,69 +57,20 @@ public abstract class Entity
 	private int entID;
 	private static int entCount = 0;
 	
-	//collision data
-	protected Vector2[] vertVecs;
-	protected double diagonal, rad;
-	
-	public ArrayList<Entity> colList = new ArrayList<Entity>();
-	public ArrayList<Entity> colIgnoreList = new ArrayList<Entity>();
-	
-	public Entity(float size, float xPos, float yPos, boolean circular, boolean willCollide)
-	{
-		this(size, xPos, yPos, 0.0f, 1.0f, 1.0f, true, circular, willCollide);
-	}
-	
-	public Entity(float size, float xPos, float yPos, float angle, float xScl, float yScl, boolean isSolid, boolean circular, boolean willCollide)
+	public Entity(Shape shape)
 	{
 		//initialize debug data
 		entID = entCount;
 		entCount++;
 		
-		//initialize behavior variables
-		this.isSolid = isSolid;
-		this.circular = circular;
-		this.willCollide = willCollide;
-		exists = true;
-		
-		//initializes graphics variables
-		this.size = size;
-		halfSize = size / 2;
-		this.angle = angle;
-		posVec = new Vector2(xPos, yPos);
-		scaleVec = new Vector2(xScl, yScl);
-		
-		posMat = Matrix4.translate(posVec);
-		rotMat = Matrix4.rotateZ((float)Math.toRadians(angle));
-		sclMat = Matrix4.scale(xScl, yScl, 1);
-		rebuildModelMatrix();
-		
-		//initializes collision variables
-		rad = Math.toRadians((double)angle);
-		diagonal = Math.sqrt(Math.pow(halfSize * xScl, 2) + Math.pow(halfSize * yScl, 2)); //distance from center to corner
-		 
-		vertVecs = new Vector2[4];
-		for (int i = 0; i < vertVecs.length; i++)
-		{
-			vertVecs[i] = new Vector2();
-		}
-		
-		float[] initVerts = 
-		{
-		    halfSize, halfSize, 	//top left
-			halfSize, -halfSize, 	//bottom left
-			-halfSize, halfSize, 	//top right
-			-halfSize, -halfSize    //bottom right
-		}; 
-
-		vertices = initVerts;
-		this.vertexBuffer = setBuffer(vertexBuffer, vertices);
-		
+		this.shape = shape;
+		this.vertexBuffer = setBuffer(vertexBuffer, shape.getVertices());
 		renderMode = EnumSet.noneOf(RenderMode.class);
 	}
 	
 	public void draw(GL10 gl)
 	{
-		gl.glLoadMatrixf(model.array(), 0);
+		gl.glLoadMatrixf(shape.getModel().array(), 0);
 		
 		final boolean containsColor = renderMode.contains(RenderMode.COLOR);
 		final boolean containsGradient = renderMode.contains(RenderMode.GRADIENT);
@@ -237,7 +182,8 @@ public abstract class Entity
 	
 	public void update()
 	{
-		if (scaleVec.length() <= 0.0f)
+	    //TODO: change this?
+		if (shape.getScale().length() <= 0.0f)
 			this.remove(); //remove the entity
 		colorInterp();
 		gradientInterp();
@@ -267,33 +213,8 @@ public abstract class Entity
 	{
 		return ent.willCollide();
 	}
-	
-	//reinitialize colllision variables
-	public void initializeCollisionVariables()
-	{
-		rad = Math.toRadians(angle);
-		diagonal = Math.sqrt((halfSize * getXScl()) * (halfSize * getXScl()) + (halfSize * getYScl()) * (halfSize * getYScl()));	
-	}
-	
-	//used to get the absolute, not relative, positions of the entity's 4 points in the XY Plane
-	public void updateAbsolutePointLocations()
-	{	
-		final Vector2 unscaledVec = new Vector2((float)Math.cos(Math.toRadians(angle)), (float)Math.sin(Math.toRadians(angle))).scale(halfSize);
-		final Vector2 xVec = Vector2.scale(unscaledVec, getXScl());
-		final Vector2 yVec = Vector2.scale(Vector2.getNormal(unscaledVec), getYScl());
-		 																 //these are assuming the entity is facing right: angle = 0.0f
-		vertVecs[0].copy(Vector2.add(xVec, yVec).add(posVec)); //top  right
-		vertVecs[1].copy(Vector2.subtract(yVec, xVec).add(posVec)); //top left
-		vertVecs[2].copy(Vector2.add(Vector2.negate(xVec), Vector2.negate(yVec)).add(posVec)); //bottom left
-		vertVecs[3].copy(Vector2.subtract(xVec, yVec).add(posVec)); //bottom right
-	}
-	
-	public boolean closeEnough(Entity ent)
-	{
-		initializeCollisionVariables();
-		return Vector2.subtract(this.posVec, ent.posVec).length() < (float)(diagonal + ent.diagonal);
-	}
 
+	//TODO: I don't even...
 	public boolean isFacing(Entity ent)
 	{
 		float angleBetween = (float)Math.toDegrees(Math.atan2(ent.getYPos() - this.getYPos() , ent.getXPos() - this.getXPos()));
@@ -311,35 +232,6 @@ public abstract class Entity
 			angleDiff -= 360.0f;
 		
 		return angleDiff > -45 && angleDiff < 45;
-	}
-	
-	public boolean isColliding(Entity ent) //if both entities are polygons
-	{	
-		if (this == ent)
-			return false;
-		
-		//checks to see if either object is not solid
-		if (!this.isSolid || !ent.isSolid)
-			return false;
-		
-		if (Game.arrayListContains(colIgnoreList, ent))
-			return false;
-		
-		//makes sure the entities are close enough so that collision testing is actually necessary
-		if (!closeEnough(ent))
-			return false;
-		
-		if (this.isCircular() && ent.isCircular())
-			return this.isCircleCollidingWithCircle(ent);
-		
-		else if (ent.isCircular() && !this.isCircular())
-			return this.isRectangleCollidingWithCircle(ent);
-		
-		else if (this.isCircular() && !ent.isCircular())
-			return ent.isRectangleCollidingWithCircle(this);
-		
-		else
-			return this.isRectangleCollidingWithRectangle(ent);
 	}
 	
 	protected boolean isCircleCollidingWithCircle(Entity ent) //if both entities are circles
@@ -769,50 +661,10 @@ public abstract class Entity
 	 * Accessors and Mutators *
 	 **************************/
 	
-	public float getSize()
+	public Shape getShape()
 	{
-	    return size;
+	    return shape;
 	}
-	
-	public float getHalfSize()
-	{
-	    return halfSize;
-	}
-	
-	public Vector2 getPos()
-	{
-	    return posVec;
-	}
-	
-    public Vector2 getScl()
-    {
-        return scaleVec;
-    }
-
-    public float getXPos()
-    {
-        return posVec.getX();
-    }
-
-    public float getYPos()
-    {
-        return posVec.getY();
-    }
-
-    public float getAngle()
-    {
-        return angle;
-    }
-
-    public float getXScl()
-    {
-        return scaleVec.getX();
-    }
-
-    public float getYScl()
-    {
-        return scaleVec.getY();
-    }
 
     public float getColorR()
     {
@@ -834,11 +686,6 @@ public abstract class Entity
         return colorA;
     }
 
-    public float[] getVertices()
-    {
-        return vertices;
-    }
-
     public float[] getColorCoords()
     {
         return color;
@@ -854,54 +701,9 @@ public abstract class Entity
         return tex;
     }
 
-    public Vector2[] getVertVecs()
-    {
-        return vertVecs;
-    }
-
-    public double getDiagonal()
-    {
-        return diagonal;
-    }
-
-    public double getRad()
-    {
-        return rad;
-    }
-
-    public int getEntID()
-    {
-        return entID;
-    }
-
-    public static int getEntCount()
-    {
-        return entCount;
-    }
-
-    public boolean willCollide()
-    {
-        return willCollide;
-    }
-
-    public boolean isCircular()
-    {
-        return circular;
-    }
-
-    public boolean isRendered()
-    {
-        return rendered;
-    }
-
     public EnumSet<RenderMode> getRenderMode()
     {
         return renderMode;
-    }
-
-    public boolean isSolid()
-    {
-        return isSolid;
     }
 
     public int getVertexVBO()
@@ -919,68 +721,12 @@ public abstract class Entity
         return VBOGradientPtr;
     }
 	
-	public void setSize(float size)
-	{ 
-		this.size = size; 
-		this.halfSize = size / 2; 
-		float[] initVerts =
-		{
-		        halfSize, halfSize, 	//top left
-				halfSize, -halfSize, 	//bottom left
-				-halfSize, halfSize, 	//top right
-				-halfSize, -halfSize    //bottom right
-		};
-		
-		vertices = initVerts;
-		this.vertexBuffer = setBuffer(vertexBuffer, vertices);
-		needToUpdateVertexVBO = true;
-	}
-	
-	public void setAngle(float angle)
-	{
-		this.angle = angle;
-		rotMat = Matrix4.rotateZ((float)Math.toRadians(angle));
-		rebuildModelMatrix();
-	}
-	
-	public void setPos(Vector2 position)
-	{
-	    posVec = position;
-	    posMat = Matrix4.translate(position);
-	}
-	
-	public void setScale(Vector2 scale)
-	{
-	    scaleVec = scale;
-	    sclMat = Matrix4.scale(scale.getX(), scale.getY(), 1);
-	    rebuildModelMatrix();
-	}
-	
 	public void setColorInterpSpeed(float s)
 	{
 	    this.colorInterpSpeed = s;
 	}
-	
-	public void setRendered(boolean state)
-	{
-	    rendered = state;
-	}
-	
-	public void setSolidity(boolean solid)
-	{
-	    isSolid = solid;
-	}
-	
-	public void setWillCollide(boolean willCollide)
-	{
-	    this.willCollide = willCollide;
-	}
-	
-	public void setVertexVecs(Vector2[] vertVecs)
-	{
-		if (vertVecs.length == 4)
-			this.vertVecs = vertVecs;
-	}
+
+
 	
 	public void resetAllBuffers()
 	{
@@ -1115,20 +861,5 @@ public abstract class Entity
 			gl11.glDeleteBuffers(3, buffer, 0);
 			
 		}
-	}
-
-	public boolean exists()
-	{
-		return exists;
-	}
-	
-	public void setExists(boolean exists)
-	{
-		this.exists = exists;
-	}
-	
-	protected void rebuildModelMatrix()
-	{
-		model = Matrix4.multiply(Matrix4.multiply(sclMat, rotMat), posMat);
 	}
 }

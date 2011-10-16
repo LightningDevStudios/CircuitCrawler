@@ -49,7 +49,7 @@ public final class Vector2
 	 ****************/
 	
 	/**
-	 * Creates a new instance of the Vector2 class with all components equal to 0.
+	 * Initializes a new instance of the Vector2 class with all components equal to 0.
 	 * @deprecated Using "new Vector2(0, 0)" is better for readability.
 	 */
 	public Vector2()
@@ -59,7 +59,7 @@ public final class Vector2
 	}
 	
 	/**
-	 * Creates a new instance of the Vector2 class.
+	 * Initializes a new instance of the Vector2 class.
 	 * @param x The X component of the vector.
 	 * @param y The Y component of the vector.
 	 */
@@ -81,7 +81,7 @@ public final class Vector2
 	}
 	
 	/**
-	 * Creates a new instance of the Vector2 class from an angle.
+	 * Initializes a new instance of the Vector2 class from an angle.
 	 * @param angle The angle (in degrees) which will be the vector's direction.
 	 */
 	public Vector2(float angle)
