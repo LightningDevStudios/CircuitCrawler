@@ -1,9 +1,18 @@
 package com.lds.trigger;
 
+/**
+ * A Cause that acts as an XOR gate between two other causes.
+ * @author Lightning Development Studios
+ */
 public class CauseXOR extends Cause
 {
 	private Cause cause1, cause2;
 	
+	/**
+	 * Initializes a new instance of the CauseXOR class.
+	 * @param cause1 The first Cause to use.
+	 * @param cause2 The second Cause to use.
+	 */
 	public CauseXOR(Cause cause1, Cause cause2)
 	{
 		this.cause1 = cause1;

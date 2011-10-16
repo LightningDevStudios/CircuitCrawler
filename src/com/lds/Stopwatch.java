@@ -25,13 +25,13 @@ public final class Stopwatch
 	 */
 	public static void start()
 	{
-		//first frame will have a frametime of 0
 		previousFrame = SystemClock.elapsedRealtime();
 		currentFrame = SystemClock.elapsedRealtime();
 	}
 	
 	/**
 	 * Declares the beginning of a new frame and updates the time.
+	 * \bug First frame will have a frametime of 0.
 	 */
 	public static void tick()
 	{

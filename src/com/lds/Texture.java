@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
+import java.io.IOException;
 import java.io.InputStream;
 
 import javax.microedition.khronos.opengles.GL10;
@@ -210,7 +211,7 @@ public class Texture
 				is = null;
 			}
 			
-			catch (Exception e)
+			catch (IOException e)
 			{
 			    e.printStackTrace();
 			}

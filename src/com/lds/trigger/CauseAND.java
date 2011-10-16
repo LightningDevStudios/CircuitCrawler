@@ -1,9 +1,18 @@
 package com.lds.trigger;
 
+/**
+ * A Cause that acts as an AND gate for other Causes.
+ * @author Lightning Development Studios
+ */
 public class CauseAND extends Cause
 {
 	private Cause cause1, cause2;
 	
+	/**
+	 * Initializes a new instance of the CauseAND class.
+	 * @param cause1 The first cause to use.
+	 * @param cause2 The second cause to use.
+	 */
 	public CauseAND(Cause cause1, Cause cause2)
 	{
 		this.cause1 = cause1;

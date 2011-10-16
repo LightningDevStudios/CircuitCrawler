@@ -1,10 +1,9 @@
 package com.lds.physics;
 
-import java.util.ArrayList;
-
 import com.lds.game.entity.Entity;
 import com.lds.math.Vector2;
-import com.lds.math.Vector4;
+
+import java.util.ArrayList;
 
 public class QuadTree 
 {

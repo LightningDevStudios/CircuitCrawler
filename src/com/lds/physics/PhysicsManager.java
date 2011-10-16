@@ -1,7 +1,8 @@
 package com.lds.physics;
 
-import java.util.ArrayList;
 import com.lds.game.entity.*;
+
+import java.util.ArrayList;
 
 public class PhysicsManager 
 {

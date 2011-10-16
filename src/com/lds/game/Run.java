@@ -352,11 +352,7 @@ public class Run extends Activity implements OnGameOverListener, OnGameInitializ
 	{
 		super.onPause();
 		glSurface.onPause();
-		try
-		{
-		    pd.dismiss();
-		}
-		catch (Exception e) { }
+	    pd.dismiss();
 		mp.pause();
 	}
 	

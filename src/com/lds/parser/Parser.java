@@ -384,18 +384,6 @@ Parse A Tileset
 		{
 			cause = new CauseButton(this.<Button>stringToSubEntity(parameters[0]));
 		}
-		else if (type.equalsIgnoreCase("CauseDoneMoving"))
-		{
-			cause = new CauseDoneMoving(this.<PhysEnt>stringToSubEntity(parameters[0]));
-		}
-		else if (type.equalsIgnoreCase("CauseDoneRotating"))
-		{
-			cause = new CauseDoneRotating(this.<PhysEnt>stringToSubEntity(parameters[0]));
-		}
-		else if (type.equalsIgnoreCase("CauseDoneScaling"))
-		{
-			cause = new CauseDoneScaling(this.<PhysEnt>stringToSubEntity(parameters[0]));
-		}
 		else if (type.equalsIgnoreCase("CauseEntityDestruction"))
 		{
 			cause = new CauseEntityDestruction(this.<Entity>stringToSubEntity(parameters[0]));

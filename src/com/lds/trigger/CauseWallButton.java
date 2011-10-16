@@ -2,10 +2,18 @@ package com.lds.trigger;
 
 import com.lds.game.entity.WallButton;
 
-public class CauseWallButton extends Cause//cause based on the state of a button
+/**
+ * A Cause that depends on the pressed state of a WallButton.
+ * @author Lightning Development Studios
+ */
+public class CauseWallButton extends Cause
 {
 	private WallButton button;
 	
+	/**
+	 * Initializes a new instance of the CauseWallButton class.
+	 * @param button The WallButton to check.
+	 */
 	public CauseWallButton(WallButton button)
 	{
 		this.button = button;

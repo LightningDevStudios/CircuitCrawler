@@ -2,7 +2,6 @@ package com.lds.game;
 
 import android.content.Context;
 import android.media.MediaPlayer;
-import android.opengl.GLU;
 import android.view.MotionEvent;
 
 import com.lds.EntityManager;

@@ -2,10 +2,19 @@ package com.lds.trigger;
 
 import com.lds.game.entity.Button;
 
-public class CauseButton extends Cause//cause based on the state of a button
+/**
+ * A Cause that depends on the pressed state of a button.
+ * @author Lightning Development Studios
+ * @see Button
+ */
+public class CauseButton extends Cause
 {
 	private Button button;
 	
+	/**
+	 * Initializes a new instance of the CauseButton class.
+	 * @param button The button to check the pressed state of.
+	 */
 	public CauseButton(Button button)
 	{
 		super();
