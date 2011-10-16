@@ -12,6 +12,7 @@ import com.lds.UI.*;
 import com.lds.Vibrator;
 import com.lds.game.entity.*;
 import com.lds.game.event.*;
+import com.lds.math.Matrix4;
 import com.lds.math.Vector2;
 import com.lds.physics.PhysicsManager;
 
@@ -32,6 +33,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	private MediaPlayer mp;
 	public boolean paused, charlieSheen;
 	
+	private Matrix4 projWorld, projUI;
 	private PhysicsManager physMan;
 	
 	public GameRenderer(float screenW, float screenH, Context context, Object syncObj, int levelId)
@@ -49,8 +51,9 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	}
 	
 	public void onSurfaceCreated(GL10 gl, EGLConfig config)
-	{	
+	{
 		//openGL settings
+	    gl.glViewport(0, 0, (int)Game.screenW, (int)Game.screenH);
 		gl.glShadeModel(GL10.GL_SMOOTH);
 		gl.glEnable(GL10.GL_BLEND);
 		gl.glBlendFunc(GL10.GL_ONE, GL10.GL_ONE_MINUS_SRC_ALPHA);
@@ -58,9 +61,6 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		gl.glClearColor(0.39f, 0.58f, 0.93f, 1.0f);
 		
 		gl.glDisable(GL10.GL_DEPTH_TEST);
-		gl.glDepthMask(false);
-		gl.glEnable(GL10.GL_DITHER);
-		gl.glHint(GL10.GL_PERSPECTIVE_CORRECTION_HINT, GL10.GL_FASTEST);	
 		
 		//start the timer and use an initial tick to prevent errors where elapsed time is a very large negative number
 		Stopwatch.start();
@@ -68,7 +68,11 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		
 		Entity.resetIndexBuffer();
 		game = new Game(context, gl, levelId);
-				
+		
+		//projWorld = Matrix4.ortho(game.camPosX - (Game.screenW / 2), game.camPosX + (Game.screenW / 2), game.camPosY + (Game.screenH / 2), game.camPosY - (Game.screenH / 2), 0, 1);
+		projWorld = Matrix4.IDENTITY;
+		projUI = Matrix4.ortho(-Game.screenW / 2 , Game.screenW / 2, Game.screenH / 2, -Game.screenH / 2, 0, 1);
+		
 		//Use VBOs if available
 		Entity.genIndexBuffer(gl);
 		
@@ -425,10 +429,9 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	//redraw the perspective
 	public void updateCamPosition(GL10 gl)
 	{
-		gl.glViewport(0, 0, (int)Game.screenW, (int)Game.screenH);
+	    projWorld = Matrix4.ortho(game.camPosX - (Game.screenW / 2), game.camPosX + (Game.screenW / 2), game.camPosY + (Game.screenH / 2),  game.camPosY - (Game.screenH / 2), 0, 1);
 		gl.glMatrixMode(GL10.GL_PROJECTION);
-		gl.glLoadIdentity();
-		GLU.gluOrtho2D(gl, game.camPosX - (Game.screenW / 2), game.camPosX + (Game.screenW / 2), game.camPosY - (Game.screenH / 2), game.camPosY + (Game.screenH / 2));
+		gl.glLoadMatrixf(projWorld.array(), 0);
 		gl.glMatrixMode(GL10.GL_MODELVIEW);
 		gl.glLoadIdentity();
 		
@@ -439,11 +442,8 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	public void viewHUD(GL10 gl)
 	{
 		gl.glMatrixMode(GL10.GL_PROJECTION);
-		gl.glPushMatrix();
-		gl.glLoadIdentity();
-		GLU.gluOrtho2D(gl, -Game.screenW / 2 , Game.screenW / 2, -Game.screenH / 2, Game.screenH / 2);
+		gl.glLoadMatrixf(projUI.array(), 0);
 		gl.glMatrixMode(GL10.GL_MODELVIEW);
-		gl.glPushMatrix();
 		gl.glLoadIdentity();
 	}
 	
@@ -451,9 +451,9 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	public void viewWorld(GL10 gl)
 	{
 		gl.glMatrixMode(GL10.GL_PROJECTION);
-		gl.glPopMatrix();
+		gl.glLoadMatrixf(projWorld.array(), 0);
 		gl.glMatrixMode(GL10.GL_MODELVIEW);
-		gl.glPopMatrix();
+		gl.glLoadIdentity();
 	}
 	
 	public void setGameOverEvent(OnGameOverListener listener) 

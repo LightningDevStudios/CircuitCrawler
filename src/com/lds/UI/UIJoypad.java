@@ -73,7 +73,7 @@ public class UIJoypad extends UIEntity
 		
 		//\TODO choose one method of moving inner circle
 		//fingerCircle.setPos(Vector2f.scaleTo(inputVec, inputVec.mag() - fingerCircle.xSize / 2));
-		fingerCircle.setPos(Vector2.add(inputVec, pos));
+		fingerCircle.setPos(inputVec);
 		
 		inputVec.scaleTo(inputVec.length() * MAX_SCALAR / size.getX());
 	}
@@ -130,13 +130,6 @@ public class UIJoypad extends UIEntity
 	{
 		super.updateTextureVBO(gl);
 		fingerCircle.updateTextureVBO(gl);
-	}
-	
-	@Override
-	public void setPos(Vector2 pos)
-	{
-	    super.setPos(pos);
-	    fingerCircle.setPos(pos);
 	}
 	
 	public UIImage getFingerCircle()

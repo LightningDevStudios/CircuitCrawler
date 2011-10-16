@@ -121,7 +121,7 @@ public abstract class UIEntity
 	{
 		//gl.glTranslatef(xPos, yPos, 0.0f);		
 		
-	    gl.glLoadMatrixf(model.array(), 0);
+	    gl.glMultMatrixf(model.array(), 0);
 	    
 		final boolean containsColor = renderMode.contains(RenderMode.COLOR);
 		final boolean containsGradient = renderMode.contains(RenderMode.GRADIENT);

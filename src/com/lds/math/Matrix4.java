@@ -352,21 +352,14 @@ public final class Matrix4
 	 */
 	public static Matrix4 ortho(float left, float right, float top, float bottom, float near, float far)
 	{
-		float[] result = new float[16];
-		
 		float rl = 1.0f / (right - left);
 		float tb = 1.0f / (top - bottom);
 		float fn = 1.0f / (far - near);
 		
-		result[0] = 2 * rl;
-		result[5] = 2 * tb;
-		result[10] = -2 * fn;
-		
-		result[3] = rl * -(right + left);
-		result[7] = tb * -(top + bottom);
-		result[11] = fn * -(far + near);
-		
-		return new Matrix4(result);
+		return new Matrix4(2 * rl,                0,                      0,                  0,
+		                   0,                     2 * tb,                 0,                  0,
+		                   0,                     0,                      -2 * fn,            0,
+		                   -(right + left) * rl,  -(top + bottom) * tb,   -(far + near) * fn, 1);
 	}
 	
 	/**************************
