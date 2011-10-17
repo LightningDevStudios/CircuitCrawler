@@ -24,10 +24,6 @@ public class TeleporterData extends StaticEntData
 		if (color != null)
 			teleporterRef.enableColorMode(color[0], color[1], color[2], color[3]);
 		
-		//GRADIENT
-		if (gradient != null)
-			teleporterRef.enableGradientMode(gradient);
-		
 		//TEXTURE
 		if (textureModeEnabled)
 			teleporterRef.enableTextureMode(tex, texture);

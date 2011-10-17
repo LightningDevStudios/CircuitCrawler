@@ -23,10 +23,6 @@ public class PhysBallData extends HoldObjectData
 		if (color != null)
 			physBallRef.enableColorMode(color[0], color[1], color[2], color[3]);
 		
-		//GRADIENT
-		if (gradient != null)
-			physBallRef.enableGradientMode(gradient);
-		
 		//TEXTURE
 		if (textureModeEnabled)
 			physBallRef.enableTextureMode(tex, texture);

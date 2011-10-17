@@ -1,6 +1,8 @@
 package com.lds.parser;
 
-import com.lds.game.Game;
+import javax.microedition.khronos.opengles.GL11;
+
+import com.lds.Enums.TileState;
 import com.lds.game.entity.Tile;
 
 public class TileData
@@ -8,23 +10,23 @@ public class TileData
 	private int tilePosX, tilePosY;
 	private Tile tile;
 	
-	public TileData(String state, int x, int y, int tilesetX, int tilesetY)
+	public TileData(GL11 gl, String state, int x, int y, int tilesetX, int tilesetY)
 	{
 		this.tilePosX = x;
 		this.tilePosY = y;
 		
-		tile = new Tile(Tile.TILE_SIZE_F, x, y, tilesetY, tilesetX);
-		tile.enableTilesetMode(Game.tilesetworld, 0, 0);
+		TileState tState = TileState.FLOOR;
 		
 		if (state.equalsIgnoreCase("floor"))
-			tile.setAsFloor();
-		else if (state.equalsIgnoreCase("wall"))
-			tile.setAsWall();
-		else if (state.equalsIgnoreCase("pit"))
-			tile.setAsPit();
-		else if (state.equalsIgnoreCase("bridge"))
-			tile.setAsBridge();
-		
+            tState = TileState.FLOOR;
+        else if (state.equalsIgnoreCase("wall"))
+            tState = TileState.WALL;
+        else if (state.equalsIgnoreCase("pit"))
+            tState = TileState.PIT;
+        else if (state.equalsIgnoreCase("bridge"))
+            tState = TileState.BRIDGE;
+				
+		tile = new Tile(gl, Tile.TILE_SIZE_F, x, y, tilesetY, tilesetX, tState);
 	}
 	
 	public int getTilePosX()

@@ -25,10 +25,6 @@ public class PickupEnergyData extends PickupData
 		if (color != null)
 			pickupEnergyRef.enableColorMode(color[0], color[1], color[2], color[3]);
 		
-		//GRADIENT
-		if (gradient != null)
-			pickupEnergyRef.enableGradientMode(gradient);
-		
 		//TEXTURE
 		if (textureModeEnabled)
 			pickupEnergyRef.enableTextureMode(tex, texture);

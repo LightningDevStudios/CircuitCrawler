@@ -18,7 +18,7 @@ public class Graphics extends GLSurfaceView
 	/**
 	 * Initializes a new instance of the Graphics class.
 	 * @param context An Android context.
-	 * @param r A 
+	 * @param r A Renderer that the GLSurfaceView will use.
 	 * @param syncObj An object to sync between the main thread and the rendering thread.
 	 */
 	public Graphics(Context context, Renderer r, Object syncObj) 

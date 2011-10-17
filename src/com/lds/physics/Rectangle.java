@@ -79,5 +79,6 @@ public class Rectangle extends Shape
                 -halfSize, -halfSize    //bottom right
             };
         this.vertices = vertices;
+        transformVertices();
     }
 }

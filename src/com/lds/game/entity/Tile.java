@@ -4,121 +4,126 @@ import com.lds.Enums;
 import com.lds.Enums.*;
 import com.lds.Texture;
 import com.lds.TilesetHelper;
+import com.lds.game.Game;
 import com.lds.math.Vector2;
 import com.lds.physics.Rectangle;
+import com.lds.physics.Shape;
 
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.nio.FloatBuffer;
 import java.util.EnumSet;
 
-import javax.microedition.khronos.opengles.GL10;
 import javax.microedition.khronos.opengles.GL11;
 
-public class Tile extends Entity
+public class Tile
 {
 	public static final int TILE_SIZE = 72;
 	public static final float TILE_SIZE_F = 72.0f;
 	
-	public int tileX, tileY, tileID, xIndex, yIndex;
+	public int tileX, tileY, xIndex, yIndex;
 	
 	private TileState state;
 	private boolean tempBridge;
 	private int origTileX, origTileY;
+	private Shape shape;
 	
-	public Tile(float size, int tilePosX, int tilePosY, int tilesetX, int tilesetY)
+	private Vector2 pos;	
+	
+	private int vertVBO, texVBO, indexVBO;
+	
+	public Tile(GL11 gl, float size, int tileIndexX, int tileIndexY, int tilesetLengthX, int tilesetLengthY, TileState state)
 	{
-		super(new Rectangle(size, new Vector2(0, 0), false));
-		TilesetHelper.setInitialTileOffset(this, tilePosY, tilePosX, tilesetX, tilesetY);
+		TilesetHelper.setInitialTileOffset(this, tileIndexY, tileIndexX, tilesetLengthX, tilesetLengthY);
 		float[] vertices = new float[8];
 		for (int i = 0; i < vertices.length; i++)
 		{
 			if (i % 2 == 0)
-				vertices[i] += getXPos();
+				vertices[i] += pos.getX();
 			else
-				vertices[i] += getYPos();
+				vertices[i] += pos.getY();
 		}
-		shape.setVertices(vertices);
-		xIndex = tilePosX;
-		yIndex = tilePosY;
-		vertexBuffer = setBuffer(vertexBuffer, vertices);
-	}
-	
-	@Override
-	public void draw(GL10 gl)
-	{
-		if (!useVBOs)
+		
+		shape = new Rectangle(size, new Vector2(0, 0), false);
+		//shape.setVertices(vertices);
+		xIndex = tileIndexX;
+		yIndex = tileIndexY;
+		this.state = state;
+		
+		switch (state)
 		{
-			gl.glVertexPointer(2, GL10.GL_FLOAT, 0, vertexBuffer);
-			gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, textureBuffer);
-			gl.glDrawElements(GL10.GL_TRIANGLE_STRIP, 4, GL10.GL_UNSIGNED_BYTE, indexBuffer);
+		case WALL:
+		    setAsWall();
+		    break;
+		case FLOOR:
+		    setAsFloor();
+		    break;
+		case PIT:
+		    setAsPit();
+		    break;
+		case BRIDGE:
+		    setAsBridge();
+		    break;
+	    default:
+	        break;
 		}
-		else
-		{
-			GL11 gl11 = (GL11)gl;
-			gl11.glBindBuffer(GL11.GL_ARRAY_BUFFER, VBOVertPtr);
-			gl11.glVertexPointer(2, GL11.GL_FLOAT, 0, 0);
-			
-			gl11.glBindBuffer(GL11.GL_ARRAY_BUFFER, VBOTexturePtr);
-			gl11.glTexCoordPointer(2, GL11.GL_FLOAT, 0, 0);
-			
-			gl11.glBindBuffer(GL11.GL_ELEMENT_ARRAY_BUFFER, VBOIndexPtr);
-			gl11.glDrawElements(GL11.GL_TRIANGLE_STRIP, 4, GL11.GL_UNSIGNED_BYTE, 0);
-			
-			gl11.glBindBuffer(GL11.GL_ARRAY_BUFFER, 0);
-			gl11.glBindBuffer(GL11.GL_ELEMENT_ARRAY_BUFFER, 0);
-		}
+		
+		ByteBuffer byteBuf = ByteBuffer.allocateDirect(shape.getVertices().length * 4);
+		byteBuf.order(ByteOrder.nativeOrder());
+		FloatBuffer vertBuffer = byteBuf.asFloatBuffer();
+		vertBuffer.put(shape.getVertices());
+		vertBuffer.position(0);
+		
+		float[] texCoords = TilesetHelper.getTextureVertices(Game.tilesetworld, tileX, tileY);
+		ByteBuffer texByteBuf = ByteBuffer.allocateDirect(texCoords.length * 4);
+		texByteBuf.order(ByteOrder.nativeOrder());
+		FloatBuffer texBuffer = texByteBuf.asFloatBuffer();
+		texBuffer.put(texCoords);
+		texBuffer.position(0);
+		
+		byte[] indices = { 0, 1, 2, 3 };
+		ByteBuffer indBuf = ByteBuffer.allocateDirect(indices.length);
+		indBuf.order(ByteOrder.nativeOrder());
+		indBuf.put(indices);
+		indBuf.position(0);
+		
+		int[] buffers = new int[3];
+		gl.glGenBuffers(3, buffers, 0);
+		vertVBO = buffers[0];
+		texVBO = buffers[1];
+		indexVBO = buffers[2];
+		
+		gl.glBindBuffer(GL11.GL_ARRAY_BUFFER, vertVBO);
+		gl.glBufferData(GL11.GL_ARRAY_BUFFER, shape.getVertices().length * 4, vertBuffer, GL11.GL_STATIC_DRAW);
+		
+		gl.glBindBuffer(GL11.GL_ARRAY_BUFFER, texVBO);
+		gl.glBufferData(GL11.GL_ARRAY_BUFFER, texCoords.length * 4, texBuffer, GL11.GL_STATIC_DRAW);
+		gl.glBindBuffer(GL11.GL_ARRAY_BUFFER, 0);
+		
+		gl.glBindBuffer(GL11.GL_ELEMENT_ARRAY_BUFFER, indexVBO);
+		gl.glBufferData(GL11.GL_ELEMENT_ARRAY_BUFFER, indices.length, indBuf, GL11.GL_STATIC_DRAW);
+		gl.glBindBuffer(GL11.GL_ELEMENT_ARRAY_BUFFER, 0);
 	}
 	
-	@Override
-	public void updateTileset(Texture tex, int x, int y)
+	public void draw(GL11 gl)
 	{
-		super.updateTileset(tex, x, y);
-		tileX = x;
-		tileY = y;
+        gl.glBindBuffer(GL11.GL_ARRAY_BUFFER, vertVBO);
+        gl.glVertexPointer(2, GL11.GL_FLOAT, 0, 0);
+        
+        gl.glBindBuffer(GL11.GL_ARRAY_BUFFER, texVBO);
+        gl.glTexCoordPointer(2, GL11.GL_FLOAT, 0, 0);
+        
+        gl.glBindBuffer(GL11.GL_ELEMENT_ARRAY_BUFFER, indexVBO);
+        gl.glDrawElements(GL11.GL_TRIANGLE_STRIP, 4, GL11.GL_UNSIGNED_BYTE, 0);
+        
+        gl.glBindBuffer(GL11.GL_ARRAY_BUFFER, 0);
+        gl.glBindBuffer(GL11.GL_ELEMENT_ARRAY_BUFFER, 0);
 	}
 	
-	@Override
-	public void updateTileset(Texture tex, int tileID)
-	{
-		super.updateTileset(tex, tileID);
-		tileX = TilesetHelper.getTilesetX(tileID, tex);
-		tileY = TilesetHelper.getTilesetY(tileID, tex);
-	}
-	
-	@Override
 	public void updateTileset(int x, int y)
 	{
-		super.updateTileset(x, y);
 		tileX = x;
 		tileY = y;
-	}
-	
-	@Override
-	public void updateTileset(int tileID)
-	{
-		super.updateTileset(tileID);
-		if (tex != null)
-		{
-			tileX = TilesetHelper.getTilesetX(tileID, tex);
-			tileY = TilesetHelper.getTilesetY(tileID, tex);
-		}
-	}
-	
-	public void rotateTilesetCoords()
-	{
-		float negX = texture[0];
-		float negY = texture[1];
-		float posX = texture[2];
-		float posY = texture[5];
-		
-		float[] coords =
-		{ 
-		    posX, negY,
-			posX, posY,
-			negX, negY,
-			negX, posY
-		};
-		
-		this.texture = coords;
-		textureBuffer = setBuffer(textureBuffer, texture);
 	}
 	
 	public void setAsWall()
@@ -134,7 +139,6 @@ public class Tile extends Entity
 			updateTileset(2, 0);
 		}
 		shape.setSolid(true);
-		rotateTilesetCoords();
 	}
 	
 	public void setAsFloor()
@@ -142,7 +146,6 @@ public class Tile extends Entity
 		state = TileState.FLOOR;
 		updateTileset((int)(Math.random() * 4), (int)(Math.random() * 4));
 		shape.setSolid(false);
-		rotateTilesetCoords();
 	}
 	
 	public void setAsSlipperyTile()
@@ -150,7 +153,6 @@ public class Tile extends Entity
 		state = TileState.SlipperyTile;
 		updateTileset(15, 0);
 		shape.setSolid(false);
-		rotateTilesetCoords();
 	}
 	
 	public void setAsPit()
@@ -166,7 +168,6 @@ public class Tile extends Entity
 			updateTileset(7, 3);
 		}
 		shape.setSolid(false);
-		rotateTilesetCoords();
 	}
 	
 	public void setAsBridge()
@@ -186,52 +187,36 @@ public class Tile extends Entity
 			tempBridge = true;
 		}
 		shape.setSolid(false);
-		rotateTilesetCoords();
 	}
 	
 	public boolean isWall()
 	{
-		if (state == TileState.WALL)
-			return true;
-		return false;
+		return state == TileState.WALL;
 	}
 	
 	public boolean isFloor()
 	{
-		if (state == TileState.FLOOR)
-			return true;
-		return false;
+	    return state == TileState.FLOOR;
 	}
 	
 	public boolean isPit()
 	{
-		if (state == TileState.PIT)
-			return true;
-		return false;
+		return state == TileState.PIT;
 	}
 	
 	public boolean isSlipperyTile()
 	{
-		if (state == TileState.SlipperyTile)
-			return true;
-		return false;
+		return state == TileState.SlipperyTile;
 	}
 	
 	public boolean isBridge()
 	{
-		if (state == TileState.BRIDGE)
-			return true;
-		return false;
+		return state == TileState.BRIDGE;
 	}
 	
 	public TileState getTileState()
 	{
 		return state;
-	}
-	
-	public void setTexture(Texture tex)
-	{
-		this.tex = tex;
 	}
 	
 	public void updateBordersPit(Tile[][] tileset, int x, int y)
@@ -351,8 +336,6 @@ public class Tile extends Entity
         {
         	updateTileset(7, 3);
         }
-
-        rotateTilesetCoords();
     }
 
     public void updateBordersWall(Tile[][] tileset, int x, int y)
@@ -505,8 +488,6 @@ public class Tile extends Entity
         	//updateTileset(3, 7);
             noneInnerWallEdgeDetection(tileset, x, y);
         }
-
-        rotateTilesetCoords();
     }
 
     private void noneInnerWallEdgeDetection(Tile[][] tileset, int x, int y)
@@ -792,5 +773,10 @@ public class Tile extends Entity
         {
         	updateTileset(0, 5);
         }
+    }
+    
+    public void setPos(Vector2 pos)
+    {
+        this.pos = pos;
     }
 }

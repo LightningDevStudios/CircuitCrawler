@@ -25,10 +25,6 @@ public class PickupHealthData extends PickupData
 		if (color != null)
 			pickupHealthRef.enableColorMode(color[0], color[1], color[2], color[3]);
 		
-		//GRADIENT
-		if (gradient != null)
-			pickupHealthRef.enableGradientMode(gradient);
-		
 		//TEXTURE
 		if (textureModeEnabled)
 			pickupHealthRef.enableTextureMode(tex, texture);

@@ -31,11 +31,7 @@ public class SpikeBallData extends PhysEntData
 		//COLOR
 		if (color != null)
 			spikeBallRef.enableColorMode(color[0], color[1], color[2], color[3]);
-		
-		//GRADIENT
-		if (gradient != null)
-			spikeBallRef.enableGradientMode(gradient);
-		
+				
 		//TEXTURE
 		if (textureModeEnabled)
 			spikeBallRef.enableTextureMode(tex, texture);

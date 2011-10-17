@@ -34,6 +34,10 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+/**
+ * The Main Menu activity.
+ * @author Lightning Development Studios
+ */
 public class MainMenu extends Activity
 {	
 	public boolean vibrateSettingMain = true;
@@ -92,13 +96,13 @@ public class MainMenu extends Activity
 		final CheckBox vibrationCheckbox = (CheckBox) findViewById(R.id.checkbox);
 		final CheckBox volumeCheckbox = (CheckBox) findViewById(R.id.volumeCheckbox);
 		final CheckBox enableMusic = (CheckBox) findViewById(R.id.EnableMusic);
-		final SeekBar volumeControl = (SeekBar)findViewById(R.id.volume);
+		//final SeekBar volumeControl = (SeekBar)findViewById(R.id.volume);
 		final SeekBar musicVolumeControl = (SeekBar)findViewById(R.id.volume);
 		final TextView musicVolumeSeekBarText = (TextView)findViewById(R.id.volumeText);
 		final Button ldsButton = (Button)findViewById(R.id.LDS_Button);
 		final Button ytfButton = (Button)findViewById(R.id.YTF_Button);
 		//final Button reset = (Button)findViewById(R.id.reset);
-		final TextView seekBarValue = (TextView)findViewById(R.id.volumeText);
+		//final TextView seekBarValue = (TextView)findViewById(R.id.volumeText);
 		final SeekBar effectVolumeControl = (SeekBar)findViewById(R.id.effectVolume);
 		final TextView effectVolumeSeekBarText = (TextView)findViewById(R.id.effectVolumeText);
 		//final TextView ResetText = (TextView)findViewById(R.id.ResetText);
@@ -300,7 +304,6 @@ public class MainMenu extends Activity
 							noclip.setVisibility(View.VISIBLE);
 							cheatText.setVisibility(View.VISIBLE);
 							cheatText.setText("Correct!");
-<<<<<<< HEAD
 						}
 						else if(Run.onLastLevel)
 						{
@@ -308,8 +311,6 @@ public class MainMenu extends Activity
 							noclip.setVisibility(View.VISIBLE);
 							cheatText.setVisibility(View.VISIBLE);
 							cheatText.setText("Unlocked!");
-=======
->>>>>>> refs/remotes/origin/matthew_masarik_master
 						}
 						else
 						{
@@ -596,6 +597,9 @@ public class MainMenu extends Activity
 		});
 	}
 	
+	/**
+	 * Reloads the level list.
+	 */
 	public void restart()
 	{
 		levelList.setAdapter(new ButtonAdapter(this));
@@ -629,6 +633,11 @@ public class MainMenu extends Activity
 		super.onDestroy();
 	}
 	
+	/**
+	 * Starts a new level.
+	 * @param levelIndex The level to start playing.
+	 * \todo check if the level is unlocked?
+	 */
 	public void runGame(int levelIndex)
 	{
 		Intent i = new Intent(MainMenu.this, Run.class);
@@ -669,6 +678,10 @@ public class MainMenu extends Activity
 		}
 	}
 	
+	/**
+	 * Gets the highest unlocked level.
+	 * @return The index of the highest unlocked level.
+	 */
 	public int getUnlockedLevel()
 	{
 		return unlockedLevel;

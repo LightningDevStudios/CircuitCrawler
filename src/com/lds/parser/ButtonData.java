@@ -24,11 +24,7 @@ public class ButtonData extends StaticEntData
 		//COLOR
 		if (color != null)
 			buttonRef.enableColorMode(color[0], color[1], color[2], color[3]);
-		
-		//GRADIENT
-		if (gradient != null)
-			buttonRef.enableGradientMode(gradient);
-		
+
 		//TEXTURE
 		if (textureModeEnabled)
 			buttonRef.enableTextureMode(tex, texture);

@@ -23,10 +23,6 @@ public class WallButtonData extends StaticEntData
 		if (color != null)
 			wallButtonRef.enableColorMode(color[0], color[1], color[2], color[3]);
 		
-		//GRADIENT
-		if (gradient != null)
-			wallButtonRef.enableGradientMode(gradient);
-		
 		//TEXTURE
 		if (textureModeEnabled)
 			wallButtonRef.enableTextureMode(tex, texture);

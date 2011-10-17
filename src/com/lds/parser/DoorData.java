@@ -26,10 +26,6 @@ public class DoorData extends StaticEntData
 		if (color != null)
 			doorRef.enableColorMode(color[0], color[1], color[2], color[3]);
 		
-		//GRADIENT
-		if (gradient != null)
-			doorRef.enableGradientMode(gradient);
-		
 		//TEXTURE
 		if (textureModeEnabled)
 			doorRef.enableTextureMode(tex, texture);

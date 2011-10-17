@@ -13,6 +13,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import javax.microedition.khronos.opengles.GL10;
+import javax.microedition.khronos.opengles.GL11;
+
 import org.xmlpull.v1.XmlPullParserException;
  
 public class Parser
@@ -53,7 +56,7 @@ public class Parser
  General parsing methods
  **********************/
 	
-	public void parseLevel() throws XmlPullParserException, IOException
+	public void parseLevel(GL11 gl) throws XmlPullParserException, IOException
 	{
 		while (xrp.getEventType() != END_DOCUMENT)
 		{
@@ -63,7 +66,7 @@ public class Parser
 				if (xrp.getName().equalsIgnoreCase("Entities"))
 					parseEntities();
 				else if (xrp.getName().equalsIgnoreCase("Tileset"))
-					parseTileset();
+					parseTileset(gl);
 				else if (xrp.getName().equalsIgnoreCase("Triggers"))
 					parseTriggers();
 				else if (xrp.getName().equalsIgnoreCase("Nodes"))
@@ -249,7 +252,7 @@ public class Parser
 /***************
 Parse A Tileset
 ***************/
-	public void parseTileset() throws XmlPullParserException, IOException
+	public void parseTileset(GL11 gl) throws XmlPullParserException, IOException
 	{
 		int x, y, curX, curY;
 		
@@ -273,7 +276,7 @@ Parse A Tileset
 			
 			if (xrp.getName().equals("Tile"))
 			{
-				tilesetData[curY][curX] = new TileData(xrp.getAttributeValue(0), curX, curY, x, y);
+				tilesetData[curY][curX] = new TileData(gl, xrp.getAttributeValue(0), curX, curY, x, y);
 				curX++;
 				
 				xrp.next();

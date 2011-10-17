@@ -18,7 +18,12 @@ import com.lds.physics.PhysicsManager;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
+import javax.microedition.khronos.opengles.GL11;
 
+/**
+ * The class that renders the game (and fires off all the other code, which is hax).
+ * @author Lightning Development Studios
+ */
 public class GameRenderer implements com.lds.Graphics.Renderer
 {
 	//public static boolean vibrateSetting = true;
@@ -36,6 +41,14 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	private Matrix4 projWorld, projUI;
 	private PhysicsManager physMan;
 	
+	/**
+	 * Initializes a new instance of the GameRenderer class.
+	 * @param screenW The width of the screen in pixels.
+	 * @param screenH The height of the screen in pixels.
+	 * @param context The active Android context.
+	 * @param syncObj An object used to synchronize the rendering thread and the main thread.
+	 * @param levelId The ID of the level to be played.
+	 */
 	public GameRenderer(float screenW, float screenH, Context context, Object syncObj, int levelId)
 	{
 		Game.screenW = screenW;
@@ -49,7 +62,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		paused = false;
 		charlieSheen = false;
 	}
-	
+
 	public void onSurfaceCreated(GL10 gl, EGLConfig config)
 	{
 		//openGL settings
@@ -81,14 +94,6 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 			for (Entity ent : game.entList)
 			{
 				ent.genHardwareBuffers(gl);
-			}
-			
-			for (Tile[] ta : game.tileset)
-			{
-				for (Tile t : ta)
-				{
-					t.genHardwareBuffers(gl);
-				}
 			}
 			
 			for (UIEntity ent : game.UIList)
@@ -132,7 +137,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		game.updateTriggers();
 		game.cleaner.update(game.entList, gl);
 		game.updateFingers();
-		game.renderTileset(gl);
+		game.renderTileset((GL11)gl);
 		
 		//update all entites
 		for (Entity ent : game.entList)
@@ -332,19 +337,23 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		}
 		
 	}
-	//redraw the perspective
+	
+	/**
+	 * Update the projection matrix with camera position.
+	 * @param gl The active OpenGL context.
+	 * \todo make a Camera class, use a view matrix instead and keep the projection the same.
+	 */
 	public void updateCamPosition(GL10 gl)
 	{
 	    projWorld = Matrix4.ortho(game.camPosX - (Game.screenW / 2), game.camPosX + (Game.screenW / 2), game.camPosY + (Game.screenH / 2),  game.camPosY - (Game.screenH / 2), 0, 1);
-		gl.glMatrixMode(GL10.GL_PROJECTION);
-		gl.glLoadMatrixf(projWorld.array(), 0);
-		gl.glMatrixMode(GL10.GL_MODELVIEW);
-		gl.glLoadIdentity();
-		
+		viewWorld(gl);
 		game.updateRenderedTileset();
 	}
 	
-	//draw a screen-based perspective, push the world perspective onto the OpenGL matrix stack
+	/**
+	 * Loads the UI projection matrix.
+	 * @param gl The active OpenGL context.
+	 */
 	public void viewHUD(GL10 gl)
 	{
 		gl.glMatrixMode(GL10.GL_PROJECTION);
@@ -353,7 +362,10 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		gl.glLoadIdentity();
 	}
 	
-	//pop that perspective back from the stack
+	/**
+	 * Load the world projection matrix.
+	 * @param gl The active OpenGL context.
+	 */
 	public void viewWorld(GL10 gl)
 	{
 		gl.glMatrixMode(GL10.GL_PROJECTION);
@@ -393,6 +405,9 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		gameOverListener.onGameOver(charlieSheen);
 	}
 	
+	/**
+	 * Remove all Fingers currently touching the screen.
+	 */
 	public void clearTouchInput()
 	{
 		game.fingerList.clear();

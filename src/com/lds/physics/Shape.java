@@ -114,11 +114,12 @@ public abstract class Shape
     public Shape(Vector2 position, float angle, Vector2 scale, boolean solid)
     {
         this.solid = solid;
+        this.position = position;
+        this.scale = scale;
         transMat = Matrix4.translate(position);
         rotMat = Matrix4.rotateZ(angle);
         scaleMat = Matrix4.scale(scale);
         rebuildModel();
-        transformVertices();
     }
     
     /******************
@@ -150,11 +151,14 @@ public abstract class Shape
      */
     public Vector2[] getVectorVertices()
     {
-        ArrayList<Vector2> verts = new ArrayList<Vector2>();
-        for (int i = 0; i < vertices.length - 1; i += 2)
-            verts.add(new Vector2(vertices[i], vertices[i + 1]));
+        Vector2[] verts = new Vector2[vertices.length / 2];
+        for (int i = 0; i < verts.length; i++)
+            verts[i] = new Vector2(vertices[i * 2], vertices[i * 2 + 1]);
 
-        return (Vector2[])verts.toArray();
+        return verts;
+        
+        //return verts.toArray(null);
+        //return (Vector2[])verts.toArray();
     }
     
     /**************************

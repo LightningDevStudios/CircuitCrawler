@@ -23,10 +23,6 @@ public class PuzzleBoxData extends StaticEntData
 		if (color != null)
 			puzzleBoxRef.enableColorMode(color[0], color[1], color[2], color[3]);
 		
-		//GRADIENT
-		if (gradient != null)
-			puzzleBoxRef.enableGradientMode(gradient);
-		
 		//TEXTURE
 		if (textureModeEnabled)
 			puzzleBoxRef.enableTextureMode(tex, texture);

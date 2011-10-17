@@ -38,7 +38,6 @@ public abstract class Entity
 	protected Vector4 colorVec, endColorVec;
 	protected float colorInterpSpeed;
 	protected Texture tex;
-	protected EnumSet<RenderMode> renderMode;
 	
 	protected float[] texture;
 	protected float[] color, endColor;
@@ -54,123 +53,59 @@ public abstract class Entity
 	{		
 		this.shape = shape;
 		this.vertexBuffer = setBuffer(vertexBuffer, shape.getVertices());
-		this.colorVec = new Vector4(0, 0, 0, 1);
-		this.endColorVec = new Vector4(0, 0, 0, 1);
-		renderMode = EnumSet.noneOf(RenderMode.class);
+		this.colorVec = new Vector4(1, 1, 1, 1);
+		this.endColorVec = new Vector4(1, 1, 1, 1);
 	}
 	
 	public void draw(GL10 gl)
 	{
 		gl.glMultMatrixf(shape.getModel().array(), 0);
 		
-		final boolean containsColor = renderMode.contains(RenderMode.COLOR);
-		final boolean containsGradient = renderMode.contains(RenderMode.GRADIENT);
-		final boolean containsTexture = renderMode.contains(RenderMode.TEXTURE);
-		final boolean containsTileset = renderMode.contains(RenderMode.TILESET);
-		
-		//Enable texturing and bind the current texture pointer (texturePtr) to GL_TEXTURE_2D
-		if (containsTexture || containsTileset)
-		{
-			gl.glEnable(GL10.GL_TEXTURE_2D);
-			gl.glBindTexture(GL10.GL_TEXTURE_2D, tex.getTexture());
-		}
-		
-		//Backface culling
-		gl.glFrontFace(GL10.GL_CW);
-		gl.glEnable(GL10.GL_CULL_FACE);
-		gl.glCullFace(GL10.GL_BACK);
+		gl.glEnable(GL10.GL_TEXTURE_2D);
+		gl.glBindTexture(GL10.GL_TEXTURE_2D, tex.getTexture());
 		
 		//Enable settings for this polygon
 		gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
-		if (containsTexture || containsTileset) 
-		{
-		    gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
-		}
-		
-		if (containsGradient) 
-		{
-		    gl.glEnableClientState(GL10.GL_COLOR_ARRAY);
-		}
-		
-		//Sets color
-		if (containsColor) 
-		{
-		    gl.glColor4f(colorVec.getX(), colorVec.getY(), colorVec.getZ(), colorVec.getW());
-		}
+	    gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
+
+	    gl.glColor4f(colorVec.getX(), colorVec.getY(), colorVec.getZ(), colorVec.getW());
 		
 		//Bind vertices, texture coordinates, and/or color coordinates to the OpenGL system
 		if (!useVBOs)
 		{
 			gl.glVertexPointer(2, GL10.GL_FLOAT, 0, vertexBuffer);
-			if (containsTexture || containsTileset) 
-			{
-			    gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, textureBuffer);
-			}
-			
-			if (containsGradient) 
-			{
-			    gl.glColorPointer(4, GL10.GL_FLOAT, 0, colorBuffer);
-			}
-			
+		    gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, textureBuffer);
+		    
 			//Draw the vertices
 			gl.glDrawElements(GL10.GL_TRIANGLE_STRIP, 4, GL10.GL_UNSIGNED_BYTE, indexBuffer);	
 		}
 		else
 		{
 			GL11 gl11 = (GL11)gl;
+			
 			gl11.glBindBuffer(GL11.GL_ARRAY_BUFFER, VBOVertPtr);
 			gl11.glVertexPointer(2, GL11.GL_FLOAT, 0, 0);
-			
-			if (containsTexture || containsTileset)
-			{
-				gl11.glBindBuffer(GL11.GL_ARRAY_BUFFER, VBOTexturePtr);
-				gl11.glTexCoordPointer(2, GL11.GL_FLOAT, 0, 0);
-			}
-			if (containsGradient)
-			{
-				gl11.glBindBuffer(GL11.GL_ARRAY_BUFFER, VBOGradientPtr);
-				gl11.glColorPointer(4, GL11.GL_FLOAT, 0, 0);
-			}
+
+			gl11.glBindBuffer(GL11.GL_ARRAY_BUFFER, VBOTexturePtr);
+			gl11.glTexCoordPointer(2, GL11.GL_FLOAT, 0, 0);
+			gl11.glBindBuffer(GL11.GL_ARRAY_BUFFER, 0);
+
 			gl11.glBindBuffer(GL11.GL_ELEMENT_ARRAY_BUFFER, VBOIndexPtr);
 			gl11.glDrawElements(GL11.GL_TRIANGLE_STRIP, 4, GL11.GL_UNSIGNED_BYTE, 0);
-			
-			gl11.glBindBuffer(GL11.GL_ARRAY_BUFFER, 0);
 			gl11.glBindBuffer(GL11.GL_ELEMENT_ARRAY_BUFFER, 0);
-			
-			final int error = gl11.glGetError();
-			if (error != GL11.GL_NO_ERROR)
-			{
-				Log.e("LDS_Game", "Entity rendering generates GL_ERROR: " + error);
-			}
 		}
 				
 		//Disable things for next polygon
 		gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
-		if (containsGradient)
-		{
-		    gl.glDisableClientState(GL10.GL_COLOR_ARRAY);
-		}
-		gl.glDisable(GL10.GL_CULL_FACE);
-		
-		//Disable texturing for next polygon
-		if (containsTexture || containsTileset)
-		{
-			gl.glDisableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
-			gl.glDisable(GL10.GL_TEXTURE_2D);
-		}
-		
-		//Reset color for next polygon.
-		if (containsColor) 
-		{
-		    gl.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-		}
+		gl.glDisableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
+		gl.glDisable(GL10.GL_TEXTURE_2D);
 	}
 	
 	public void update()
 	{
 	    //TODO: change this?
-		if (shape.getScale().length() <= 0.0f)
-			EntityManager.removeEntity(this);
+		//if (shape.getScale().length() <= 0.0f)
+			//EntityManager.removeEntity(this);
 		colorInterp();
 		gradientInterp();
 	}
@@ -242,18 +177,10 @@ public abstract class Entity
 	/**********************
 	 * RenderMode methods *
 	 **********************/
-	
-	//BLANK
-	public void clearRenderModes()
-	{
-		renderMode.clear();
-	}
-	
+		
 	//COLOR
 	public void enableColorMode(float r, float g, float b, float a)
 	{
-		if (!renderMode.contains(RenderMode.COLOR))
-			renderMode.add(RenderMode.COLOR);
 		updateColor(r, g, b, a);
 	}
 	
@@ -264,7 +191,7 @@ public abstract class Entity
 	
 	public void updateColor(float r, float g, float b, float a)
 	{
-			colorVec = new Vector4(r, g, b, a);
+		colorVec = new Vector4(r, g, b, a);
 	}
 	
 	public void updateColor(int r, int g, int b, int a)
@@ -272,45 +199,14 @@ public abstract class Entity
 		updateColor((float) r / 255.0f, (float) g / 255.0f, (float) b / 255.0f, (float) a / 255.0f);
 	}
 	
-	public void disableColorMode()
-	{
-		if (renderMode.contains(RenderMode.COLOR))
-			renderMode.remove(RenderMode.COLOR);
-	}
-	
-	//GRADIENT
-	public void enableGradientMode(float[] color)
-	{
-		if (!renderMode.contains(RenderMode.GRADIENT))
-			renderMode.add(RenderMode.GRADIENT);
-		updateGradient(color);
-	}
-	
-	public void updateGradient(float[] color)
-	{
-			this.color = color;
-			this.colorBuffer = setBuffer(colorBuffer, color);
-			needToUpdateGradientVBO = true;
-	}
-	
-	public void disableGradientMode()
-	{
-		if (renderMode.contains(RenderMode.GRADIENT))
-			renderMode.remove(RenderMode.GRADIENT);
-	}
-	
 	//TEXTURE
 	public void enableTextureMode(Texture tex)
 	{
-		if (!renderMode.contains(RenderMode.TEXTURE))
-			renderMode.add(RenderMode.TEXTURE);
 		updateTexture(tex);
 	}
 	
 	public void enableTextureMode(Texture tex, float[] texture)
 	{
-		if (!renderMode.contains(RenderMode.TEXTURE))
-			renderMode.add(RenderMode.TEXTURE);
 		updateTexture(tex, texture);
 	}
 		
@@ -337,22 +233,16 @@ public abstract class Entity
 	
 	public void disableTextureMode()
 	{
-		if (renderMode.contains(RenderMode.TEXTURE))
-			renderMode.remove(RenderMode.TEXTURE);
 	}
 	
 	//TILESET
 	public void enableTilesetMode(Texture tex, int x, int y)
 	{
-		if (!renderMode.contains(RenderMode.TILESET))
-			renderMode.add(RenderMode.TILESET);
 		updateTileset(tex, x, y);
 	}
 	
 	public void enableTilesetMode(Texture tex, int tileID)
 	{
-		if (!renderMode.contains(RenderMode.TILESET))
-			renderMode.add(RenderMode.TILESET);
 		updateTileset(tex, tileID);
 	}
 		
@@ -383,8 +273,6 @@ public abstract class Entity
 	
 	public void disableTilesetMode()
 	{
-		if (renderMode.contains(RenderMode.TILESET))
-			renderMode.remove(RenderMode.TILESET);
 	}
 		
 	public void initColorInterp(float r, float g, float b, float a)
@@ -492,28 +380,12 @@ public abstract class Entity
             final int vertSize = vertexBuffer.capacity() * 4;
             gl11.glBufferData(GL11.GL_ARRAY_BUFFER, vertSize, vertexBuffer, GL11.GL_STATIC_DRAW); //\TODO choose static/draw settings..?
             
-            if (renderMode.contains(RenderMode.GRADIENT))
-            {
-                gl11.glGenBuffers(1, tempPtr, 0);
-                VBOGradientPtr = tempPtr[0];
-                needToUpdateGradientVBO = true;
-                updateGradientVBO(gl);
-            }
-            if (renderMode.contains(RenderMode.TEXTURE) || renderMode.contains(RenderMode.TILESET))
-            {
-                gl11.glGenBuffers(1, tempPtr, 0);
-                VBOTexturePtr = tempPtr[0];
-                needToUpdateTexVBO = true;
-                updateTextureVBO(gl);
-            }
-            
+            gl11.glGenBuffers(1, tempPtr, 0);
+            VBOTexturePtr = tempPtr[0];
+            needToUpdateTexVBO = true;
+            updateTextureVBO(gl);
+
             gl11.glBindBuffer(GL11.GL_ARRAY_BUFFER, 0);
-            
-            final int error = gl11.glGetError();
-            if (error != GL11.GL_NO_ERROR)
-            {
-                Log.e("LDS_Game", "Buffers generate GL_ERROR: " + error);
-            }
         }
     }
     
@@ -609,12 +481,12 @@ public abstract class Entity
 	
 	public float getXPos()
 	{
-	    return getPos().getX();
+	    return shape.getPos().getX();
 	}
 	
 	public float getYPos()
 	{
-	    return getPos().getY();
+	    return shape.getPos().getY();
 	}
 	
 	public void setPos(Vector2 position)
@@ -670,11 +542,6 @@ public abstract class Entity
     public Texture getTexture()
     {
         return tex;
-    }
-
-    public EnumSet<RenderMode> getRenderMode()
-    {
-        return renderMode;
     }
 
     public int getVertexVBO()

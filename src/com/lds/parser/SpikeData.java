@@ -23,10 +23,6 @@ public class SpikeData extends StaticEntData
 		if (color != null)
 			spikeRef.enableColorMode(color[0], color[1], color[2], color[3]);
 		
-		//GRADIENT
-		if (gradient != null)
-			spikeRef.enableGradientMode(gradient);
-		
 		//TEXTURE
 		if (textureModeEnabled)
 			spikeRef.enableTextureMode(tex, texture);

@@ -31,11 +31,7 @@ public class CannonData extends StaticEntData
 		//COLOR
 		if (color != null)
 			cannonRef.enableColorMode(color[0], color[1], color[2], color[3]);
-		
-		//GRADIENT
-		if (gradient != null)
-			cannonRef.enableGradientMode(gradient);
-		
+				
 		//TEXTURE
 		if (textureModeEnabled)
 			cannonRef.enableTextureMode(tex, texture);

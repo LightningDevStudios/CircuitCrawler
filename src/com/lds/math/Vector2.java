@@ -37,12 +37,12 @@ public final class Vector2
 	/**
 	 * The vector's X component.
 	 */
-	private float x;
+	private final float x;
 	
 	/**
 	 * The vector's Y component.
 	 */
-	private float y;
+	private final float y;
 	
 	/****************
 	 * Constructors *

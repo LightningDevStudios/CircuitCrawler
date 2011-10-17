@@ -17,6 +17,7 @@ import com.lds.trigger.*;
 import java.util.ArrayList;
 
 import javax.microedition.khronos.opengles.GL10;
+import javax.microedition.khronos.opengles.GL11;
 
 public class Game
 {
@@ -106,7 +107,7 @@ public class Game
 		
 		try	
 		{ 
-			parser.parseLevel(); 
+			parser.parseLevel((GL11)gl); 
 		}
 		
 		catch (Exception e) 
@@ -384,20 +385,18 @@ public class Game
 			player.updateHeldObjectPosition();
 	}
 	
-	public void renderTileset(GL10 gl)
+	public void renderTileset(GL11 gl)
 	{
 		gl.glEnable(GL10.GL_TEXTURE_2D);
 		gl.glBindTexture(GL10.GL_TEXTURE_2D, tilesetworld.getTexture());
 				
 		gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
 		gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
-		
-		//\TODO don't iterate through all and check if visible, have bounds available
+
 		for (int i = tilesetMinY; i <= tilesetMaxY; i++)
 		{
 			for (int j = tilesetMinX; j <= tilesetMaxX; j++)
 			{
-				tileset[i][j].updateTextureVBO(gl);
 				tileset[i][j].draw(gl);
 			}
 		}
