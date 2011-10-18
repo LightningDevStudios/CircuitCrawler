@@ -16,6 +16,11 @@ import java.util.EnumSet;
 
 import javax.microedition.khronos.opengles.GL11;
 
+/**
+ * A tile class.
+ * \todo rewrite the update borders methods and get them to update the texture coordinate buffer.
+ * @author Lightning Development Studios
+ */
 public class Tile
 {
 	public static final int TILE_SIZE = 72;
@@ -35,7 +40,14 @@ public class Tile
 	public Tile(GL11 gl, float size, int tileIndexX, int tileIndexY, int tilesetLengthX, int tilesetLengthY, TileState state)
 	{
 		TilesetHelper.setInitialTileOffset(this, tileIndexY, tileIndexX, tilesetLengthX, tilesetLengthY);
-		float[] vertices = new float[8];
+		float x = size / 2;
+		float[] vertices =
+	    {
+		    -x, x,
+		    -x, -x,
+		    x, x,
+		    x, -x
+	    };
 		for (int i = 0; i < vertices.length; i++)
 		{
 			if (i % 2 == 0)
@@ -44,7 +56,7 @@ public class Tile
 				vertices[i] += pos.getY();
 		}
 		
-		shape = new Rectangle(size, new Vector2(0, 0), false);
+		shape = new Rectangle(size, pos, false);
 		//shape.setVertices(vertices);
 		xIndex = tileIndexX;
 		yIndex = tileIndexY;
@@ -68,10 +80,10 @@ public class Tile
 	        break;
 		}
 		
-		ByteBuffer byteBuf = ByteBuffer.allocateDirect(shape.getVertices().length * 4);
+		ByteBuffer byteBuf = ByteBuffer.allocateDirect(vertices.length * 4);
 		byteBuf.order(ByteOrder.nativeOrder());
 		FloatBuffer vertBuffer = byteBuf.asFloatBuffer();
-		vertBuffer.put(shape.getVertices());
+		vertBuffer.put(vertices);
 		vertBuffer.position(0);
 		
 		float[] texCoords = TilesetHelper.getTextureVertices(Game.tilesetworld, tileX, tileY);
@@ -93,8 +105,9 @@ public class Tile
 		texVBO = buffers[1];
 		indexVBO = buffers[2];
 		
+		//TODO interleave into one buffer!
 		gl.glBindBuffer(GL11.GL_ARRAY_BUFFER, vertVBO);
-		gl.glBufferData(GL11.GL_ARRAY_BUFFER, shape.getVertices().length * 4, vertBuffer, GL11.GL_STATIC_DRAW);
+		gl.glBufferData(GL11.GL_ARRAY_BUFFER, vertices.length * 4, vertBuffer, GL11.GL_STATIC_DRAW);
 		
 		gl.glBindBuffer(GL11.GL_ARRAY_BUFFER, texVBO);
 		gl.glBufferData(GL11.GL_ARRAY_BUFFER, texCoords.length * 4, texBuffer, GL11.GL_STATIC_DRAW);
@@ -136,7 +149,7 @@ public class Tile
 		}
 		else
 		{
-			updateTileset(2, 0);
+			updateTileset(3, 7);
 		}
 		shape.setSolid(true);
 	}
