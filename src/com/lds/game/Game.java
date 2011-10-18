@@ -375,8 +375,8 @@ public class Game
 		//move player
 		if (player.userHasControl())
 		{
-			//player.setAngle(joypad.getInputAngle());
-			//player.addPos(joypad.getInputVec().scale(Stopwatch.getFrameTime() * (player.getMoveSpeed() / 1000)));
+			player.setAngle(joypad.getInputAngle());
+			player.setPos(Vector2.add(player.getPos(), Vector2.scale(joypad.getInputVec(), /*Stopwatch.getFrameTime() **/ (1000 / 1000))));
 		}
 		joypad.clearInputVec();
 		

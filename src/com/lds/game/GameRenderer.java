@@ -227,7 +227,9 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		/**********************
 		 * Render all Entites *
 		 **********************/
-					
+		
+		gl.glLoadIdentity();
+		
 		for (Entity ent : game.getRenderedEnts())
 		{								
 			ent.draw(gl);

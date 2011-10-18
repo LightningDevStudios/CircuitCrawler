@@ -106,6 +106,7 @@ public abstract class Shape
     
     /**
      * Initializes a new instance of the Shape class.
+     * \todo Fix angle, remove the hax'd in degree to radians check.
      * @param position The position of the shape
      * @param angle The angle of the shape in radians
      * @param scale The scale of the shape
@@ -116,9 +117,10 @@ public abstract class Shape
         this.solid = solid;
         this.position = position;
         this.scale = scale;
-        transMat = Matrix4.translate(position);
-        rotMat = Matrix4.rotateZ(angle);
-        scaleMat = Matrix4.scale(scale);
+        this.angle = (float)Math.toRadians(angle);
+        transMat = Matrix4.translate(this.position);
+        rotMat = Matrix4.rotateZ(this.angle);
+        scaleMat = Matrix4.scale(this.scale);
         rebuildModel();
     }
     
@@ -217,10 +219,15 @@ public abstract class Shape
         return angle;
     }
     
+    /**
+     * Sets the shape's angle.
+     * \todo remove the hax'd in degrees to radians conversion
+     * @param angle
+     */
     public void setAngle(float angle)
     {
-        this.angle = angle;
-        rotMat = Matrix4.rotateZ(angle);
+        this.angle = (float)Math.toRadians(angle);
+        rotMat = Matrix4.rotateZ(this.angle);
         rebuildModel();
         transformVertices();
     }
