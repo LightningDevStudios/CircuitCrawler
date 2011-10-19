@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Intent;
+import android.content.res.AssetFileDescriptor;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
@@ -243,9 +244,13 @@ public class Run extends Activity implements GameOverListener, GameInitializedLi
 	
 	public void playMusic()
 	{	
-		try 
+		AssetFileDescriptor song1 = this.getResources().openRawResourceFd(R.raw.song1); 
+	    try 
 		{
+		    mp.reset();
+		    mp.setDataSource(song1.getFileDescriptor(), song1.getStartOffset(), song1.getDeclaredLength());
             mp.prepare();
+            mp.start();
         } 
 		catch (IllegalStateException e) 
 		{
@@ -255,10 +260,9 @@ public class Run extends Activity implements GameOverListener, GameInitializedLi
 		{
             e.printStackTrace();
         }
-		mp.setOnCompletionListener(this);
-		saveas(R.raw.readme, "readme.txt");
-		int whichSong = (int) (Math.random()*songs.length);
-		mp.seekTo(whichSong);
+		//saveas(R.raw.readme, "readme.txt");
+		//int whichSong = (int) (Math.random()*songs.length);
+		//mp.seekTo(whichSong);
 	
 	}
 	@Override
