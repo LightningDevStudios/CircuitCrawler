@@ -35,6 +35,7 @@ public class Run extends Activity implements GameOverListener, GameInitializedLi
 	private MediaPlayer mp = new MediaPlayer();
 	private ProgressDialog pd;
 	private boolean playingSong1;
+	private int[] songs = {0,1};
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -92,7 +93,7 @@ public class Run extends Activity implements GameOverListener, GameInitializedLi
 		setVolumeControlStream(AudioManager.STREAM_MUSIC);
 		pd = ProgressDialog.show(this, "", "Loading...");
 
-		playMusic(true);
+		playMusic();
 		
 		//set up OpenGL rendering
 		Object syncObj = new Object();
@@ -171,7 +172,7 @@ public class Run extends Activity implements GameOverListener, GameInitializedLi
 	public void onCompletion(MediaPlayer mp)
 	{
 		mp.reset();
-		playMusic(false);
+		playMusic();
 	} 
 	
     public void onPrepared(MediaPlayer mp)
@@ -240,54 +241,26 @@ public class Run extends Activity implements GameOverListener, GameInitializedLi
 		}
 	}
 	
-	public void playMusic(boolean random)
+	public void playMusic()
 	{	
-		mp.setOnPreparedListener(this);
+		try 
+		{
+            mp.prepare();
+        } 
+		catch (IllegalStateException e) 
+		{
+            e.printStackTrace();
+        } 
+		catch (Exception e) 
+		{
+            e.printStackTrace();
+        }
 		mp.setOnCompletionListener(this);
 		saveas(R.raw.readme, "readme.txt");
-		int whichSong;
-		if (random)
-			whichSong = (int)(Math.random() * 2 + 1);
-		else if (playingSong1)
-			whichSong = 2;
-		else
-			whichSong = 1;
-		if (whichSong == 2)
-		{
-			try 
-			{
-				saveas(R.raw.song2, "song2.mp3");
-				mp.setDataSource("/sdcard/circutCrawler/media/audio/songs/song2.mp3");
-				playingSong1 = false;
-				if (SoundPlayer.getMusicEnabled())
-				{
-					mp.prepare();
-				}
-			} 
-			catch (Exception e) 
-			{
-				e.printStackTrace();
-			}
-		}
-		else
-		{
-			try 
-			{
-				saveas(R.raw.song1, "song1.mp3");
-				mp.setDataSource("/sdcard/circutCrawler/media/audio/songs/song1.mp3");
-				playingSong1 = true;
-				if (SoundPlayer.getMusicEnabled())
-				{
-					mp.prepare();
-				}
-			} 
-			catch (Exception e)
-			{
-				e.printStackTrace();
-			}
-		}
-	}
+		int whichSong = (int) (Math.random()*songs.length);
+		mp.seekTo(whichSong);
 	
+	}
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu)
 	{
@@ -335,8 +308,7 @@ public class Run extends Activity implements GameOverListener, GameInitializedLi
 	@Override
 	public void onBackPressed()
 	{
-		mp.stop();
-		finish();
+		mp.reset();
 	}
 	
 	@Override
