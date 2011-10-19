@@ -1,10 +1,79 @@
 package com.lds;
 
+import java.util.HashMap;
+
+import android.graphics.Point;
+
 import com.lds.game.entity.Tile;
 import com.lds.math.Vector2;
 
 public final class TilesetHelper 
 {
+    public static HashMap<Byte, Point> pitTexPoints;
+    public static HashMap<Byte, Point> wallTexPoints;
+    
+    static
+    {
+        pitTexPoints = new HashMap<Byte, Point>();
+        wallTexPoints = new HashMap<Byte, Point>();
+        
+        //blank
+        pitTexPoints.put((byte)0x00, new Point(7, 3));
+        
+        //only 1 edge
+        pitTexPoints.put((byte)0x02, new Point(4, 1));
+        pitTexPoints.put((byte)0x08, new Point(5, 0));
+        pitTexPoints.put((byte)0x10, new Point(6, 0));
+        pitTexPoints.put((byte)0x14, new Point(4, 2));
+        
+        //corners
+        pitTexPoints.put((byte)0x0A, new Point(5, 1));
+        pitTexPoints.put((byte)0x12, new Point(6, 1));
+        pitTexPoints.put((byte)0x48, new Point(5, 2));
+        pitTexPoints.put((byte)0x50, new Point(6, 2));
+        
+        //opposite edges
+        pitTexPoints.put((byte)0x18, new Point(7, 1));
+        pitTexPoints.put((byte)0x42, new Point(5, 3));
+        
+        //3 edges
+        pitTexPoints.put((byte)0x4A, new Point(4, 3));
+        pitTexPoints.put((byte)0x52, new Point(6, 3));
+        pitTexPoints.put((byte)0x1A, new Point(7, 0));
+        pitTexPoints.put((byte)0x58, new Point(7, 2));
+        
+        //all 4
+        pitTexPoints.put((byte)0x5A, new Point(4, 0));
+        
+        //blank
+        wallTexPoints.put((byte)0x00, new Point(3, 7));
+        
+        //only 1 edge
+        wallTexPoints.put((byte)0x02, new Point(0, 5));
+        wallTexPoints.put((byte)0x08, new Point(1, 4));
+        wallTexPoints.put((byte)0x10, new Point(2, 4));
+        wallTexPoints.put((byte)0x14, new Point(0, 6));
+        
+        //corners
+        wallTexPoints.put((byte)0x0A, new Point(1, 5));
+        wallTexPoints.put((byte)0x12, new Point(2, 5));
+        wallTexPoints.put((byte)0x48, new Point(1, 6));
+        wallTexPoints.put((byte)0x50, new Point(2, 6));
+        
+        //opposite edges
+        wallTexPoints.put((byte)0x18, new Point(3, 5));
+        wallTexPoints.put((byte)0x42, new Point(1, 7));
+        
+        //3 edges
+        wallTexPoints.put((byte)0x4A, new Point(0, 7));
+        wallTexPoints.put((byte)0x52, new Point(2, 7));
+        wallTexPoints.put((byte)0x1A, new Point(3, 4));
+        wallTexPoints.put((byte)0x58, new Point(3, 6));
+        
+        //all 4
+        wallTexPoints.put((byte)0x5A, new Point(0, 4));
+    }
+    
 	private TilesetHelper()
 	{
 		

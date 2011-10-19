@@ -130,6 +130,8 @@ public class Game
  					tileset[i][j].updateBordersPit(tileset, j, i);
  				else if (tileset[i][j].isWall())
  					tileset[i][j].updateBordersWall(tileset, j, i);
+ 				
+ 				tileset[i][j].regenTexCoords((GL11)gl);
  			}
  		}
 		

@@ -1,5 +1,7 @@
 package com.lds.game.entity;
 
+import android.graphics.Point;
+
 import com.lds.Enums;
 import com.lds.Enums.*;
 import com.lds.Texture;
@@ -12,7 +14,9 @@ import com.lds.physics.Shape;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
+import java.util.ArrayList;
 import java.util.EnumSet;
+import java.util.HashMap;
 
 import javax.microedition.khronos.opengles.GL11;
 
@@ -139,6 +143,20 @@ public class Tile
 		tileY = y;
 	}
 	
+	public void regenTexCoords(GL11 gl)
+	{
+	    float[] texCoords = TilesetHelper.getTextureVertices(Game.tilesetworld, tileX, tileY);
+        ByteBuffer texByteBuf = ByteBuffer.allocateDirect(texCoords.length * 4);
+        texByteBuf.order(ByteOrder.nativeOrder());
+        FloatBuffer texBuffer = texByteBuf.asFloatBuffer();
+        texBuffer.put(texCoords);
+        texBuffer.position(0);
+        
+        gl.glBindBuffer(GL11.GL_ARRAY_BUFFER, texVBO);
+        gl.glBufferData(GL11.GL_ARRAY_BUFFER, texCoords.length * 4, texBuffer, GL11.GL_STATIC_DRAW);
+        gl.glBindBuffer(GL11.GL_ARRAY_BUFFER, 0);
+	}
+	
 	public void setAsWall()
 	{
 		state = TileState.WALL;
@@ -234,7 +252,47 @@ public class Tile
 	
 	public void updateBordersPit(Tile[][] tileset, int x, int y)
     {
-        EnumSet<Direction> dirsCovered = EnumSet.noneOf(Direction.class);
+	    //a bitfield for the 8 bordering tiles.
+	    byte covered = 0;
+
+	    //store all the bordering tile indices in top left to bottom right order.
+	    ArrayList<Point> points = new ArrayList<Point>();
+	    points.add(new Point(x - 1, y - 1));
+	    points.add(new Point(x, y - 1));
+	    points.add(new Point(x + 1, y - 1));
+	    points.add(new Point(x - 1, y));
+	    points.add(new Point(x + 1, y));
+	    points.add(new Point(x - 1, y + 1));
+	    points.add(new Point(x, y + 1));
+	    points.add(new Point(x + 1, y + 1));
+	    
+	    //check each of the bordering tiles
+	    for (int i = 0; i < points.size(); i++)
+	    {
+	        Point p = points.get(i);
+	        
+	        //make sure tileset index is within tileset bounds
+	        if (p.x > 0 && p.x < tileset[0].length && p.y > 0 && p.y < tileset.length)
+	        {
+	            Tile t = tileset[p.y][p.x];
+	            
+	            //if the bordering tile is not a pit, it's considered a border.
+	            if (t != null && (t.getTileState() != TileState.PIT))
+	                covered |= 1 << i;
+	        }
+	    }
+	    
+	    if (TilesetHelper.pitTexPoints.containsKey(covered))
+	    {
+	        Point p = TilesetHelper.pitTexPoints.get(covered);
+	        updateTileset(p.x, p.y);
+	    }
+	    else
+	    {
+	        updateTileset(7, 3);
+	    }
+	    
+       /*EnumSet<Direction> dirsCovered = EnumSet.noneOf(Direction.class);
 
         Tile leftTile = null, rightTile = null, upTile = null, downTile = null;
 
@@ -348,12 +406,52 @@ public class Tile
         else
         {
         	updateTileset(7, 3);
-        }
+        }*/
     }
 
     public void updateBordersWall(Tile[][] tileset, int x, int y)
     {
-        EnumSet<Direction> dirsCovered = EnumSet.noneOf(Direction.class);
+        //a bitfield for the 8 bordering tiles.
+        byte covered = 0;
+
+        //store all the bordering tile indices in top left to bottom right order.
+        ArrayList<Point> points = new ArrayList<Point>();
+        points.add(new Point(x - 1, y - 1));
+        points.add(new Point(x, y - 1));
+        points.add(new Point(x + 1, y - 1));
+        points.add(new Point(x - 1, y));
+        points.add(new Point(x + 1, y));
+        points.add(new Point(x - 1, y + 1));
+        points.add(new Point(x, y + 1));
+        points.add(new Point(x + 1, y + 1));
+        
+        //check each of the bordering tiles
+        for (int i = 0; i < points.size(); i++)
+        {
+            Point p = points.get(i);
+            
+            //make sure tileset index is within tileset bounds
+            if (p.x > 0 && p.x < tileset[0].length && p.y > 0 && p.y < tileset.length)
+            {
+                Tile t = tileset[p.y][p.x];
+                
+                //if the bordering tile is not a pit, it's considered a border.
+                if (t != null && (t.getTileState() != TileState.WALL))
+                    covered |= 1 << i;
+            }
+        }
+        
+        if (TilesetHelper.pitTexPoints.containsKey(covered))
+        {
+            Point p = TilesetHelper.wallTexPoints.get(covered);
+            updateTileset(p.x, p.y);
+        }
+        else
+        {
+            updateTileset(3, 7);
+        }
+        
+        /*EnumSet<Direction> dirsCovered = EnumSet.noneOf(Direction.class);
 
         Tile leftTile = null, rightTile = null, upTile = null, downTile = null;
 
@@ -500,7 +598,7 @@ public class Tile
         {
         	//updateTileset(3, 7);
             noneInnerWallEdgeDetection(tileset, x, y);
-        }
+        }*/
     }
 
     private void noneInnerWallEdgeDetection(Tile[][] tileset, int x, int y)
