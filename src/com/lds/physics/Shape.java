@@ -1,5 +1,6 @@
 package com.lds.physics;
 
+import com.lds.game.event.InteractListener;
 import com.lds.math.Matrix4;
 import com.lds.math.Vector2;
 import com.lds.math.Vector4;
@@ -11,7 +12,7 @@ public abstract class Shape
     /***********
      * Members *
      ***********/
-    
+    protected InteractListener onInteract;
     /**
      * The shape's vertices in local coordinates.
      */
@@ -166,6 +167,16 @@ public abstract class Shape
     /**************************
      * Accessors and Mutators *
      **************************/
+    
+    public InteractListener getInteractListener()
+    {
+        return onInteract;
+    }
+    
+    public void setInteractListener(InteractListener i)
+    {
+        onInteract = i;
+    }
     
     public float[] getVertices()
     {
