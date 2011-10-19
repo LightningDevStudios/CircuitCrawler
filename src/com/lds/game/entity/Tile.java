@@ -253,7 +253,7 @@ public class Tile
 	public void updateBordersPit(Tile[][] tileset, int x, int y)
     {
 	    //a bitfield for the 8 bordering tiles.
-	    byte covered = 0;
+	    /*byte covered = 0;
 
 	    //store all the bordering tile indices in top left to bottom right order.
 	    ArrayList<Point> points = new ArrayList<Point>();
@@ -290,9 +290,9 @@ public class Tile
 	    else
 	    {
 	        updateTileset(7, 3);
-	    }
+	    }*/
 	    
-       /*EnumSet<Direction> dirsCovered = EnumSet.noneOf(Direction.class);
+       EnumSet<Direction> dirsCovered = EnumSet.noneOf(Direction.class);
 
         Tile leftTile = null, rightTile = null, upTile = null, downTile = null;
 
@@ -406,7 +406,7 @@ public class Tile
         else
         {
         	updateTileset(7, 3);
-        }*/
+        }
     }
 
     public void updateBordersWall(Tile[][] tileset, int x, int y)
@@ -425,6 +425,15 @@ public class Tile
         points.add(new Point(x, y + 1));
         points.add(new Point(x + 1, y + 1));
         
+        points.add(new Point(x + 1, y + 1));
+        points.add(new Point(x, y + 1));
+        points.add(new Point(x - 1, y + 1));
+        points.add(new Point(x + 1, y));
+        points.add(new Point(x - 1, y));
+        points.add(new Point(x + 1, y - 1));
+        points.add(new Point(x, y - 1));
+        points.add(new Point(x - 1, y - 1));
+        
         //check each of the bordering tiles
         for (int i = 0; i < points.size(); i++)
         {
@@ -437,18 +446,19 @@ public class Tile
                 
                 //if the bordering tile is not a pit, it's considered a border.
                 if (t != null && (t.getTileState() != TileState.WALL))
-                    covered |= 1 << i;
+                    covered |= (1 << i);
+                    //covered += (byte)Math.pow(2, i) - 1;
             }
         }
         
-        if (TilesetHelper.pitTexPoints.containsKey(covered))
+        if (TilesetHelper.wallTexPoints.containsKey(covered))
         {
-            Point p = TilesetHelper.wallTexPoints.get(covered);
-            updateTileset(p.x, p.y);
+            Point po = TilesetHelper.wallTexPoints.get(covered);
+            updateTileset(po.x, po.y);
         }
         else
         {
-            updateTileset(3, 7);
+            updateTileset(7, 3);
         }
         
         /*EnumSet<Direction> dirsCovered = EnumSet.noneOf(Direction.class);

@@ -45,33 +45,72 @@ public final class TilesetHelper
         //all 4
         pitTexPoints.put((byte)0x5A, new Point(4, 0));
         
-        //blank
+        
         wallTexPoints.put((byte)0x00, new Point(3, 7));
-        
-        //only 1 edge
+        wallTexPoints.put((byte)0x01, new Point(5, 5));
         wallTexPoints.put((byte)0x02, new Point(0, 5));
+        wallTexPoints.put((byte)0x03, new Point(0, 5));
+        wallTexPoints.put((byte)0x04, new Point(4, 5));
+        wallTexPoints.put((byte)0x05, new Point(5, 7));
+        wallTexPoints.put((byte)0x06, new Point(0, 5));
+        wallTexPoints.put((byte)0x07, new Point(0, 5));
         wallTexPoints.put((byte)0x08, new Point(1, 4));
-        wallTexPoints.put((byte)0x10, new Point(2, 4));
-        wallTexPoints.put((byte)0x14, new Point(0, 6));
-        
-        //corners
+        wallTexPoints.put((byte)0x09, new Point(1, 4));
         wallTexPoints.put((byte)0x0A, new Point(1, 5));
+        wallTexPoints.put((byte)0x0B, new Point(1, 5));
+        wallTexPoints.put((byte)0x0C, new Point(7, 7));
+        wallTexPoints.put((byte)0x0D, new Point(7, 7));
+        wallTexPoints.put((byte)0x0E, new Point(1, 5));
+        wallTexPoints.put((byte)0x0F, new Point(1, 5));
+        wallTexPoints.put((byte)0x10, new Point(2, 4));
+        wallTexPoints.put((byte)0x11, new Point(8, 7));
         wallTexPoints.put((byte)0x12, new Point(2, 5));
-        wallTexPoints.put((byte)0x48, new Point(1, 6));
-        wallTexPoints.put((byte)0x50, new Point(2, 6));
-        
-        //opposite edges
+        wallTexPoints.put((byte)0x13, new Point(2, 5));
+        wallTexPoints.put((byte)0x14, new Point(0, 6));
+        wallTexPoints.put((byte)0x15, new Point(8, 7));
+        wallTexPoints.put((byte)0x16, new Point(2, 5));
+        wallTexPoints.put((byte)0x17, new Point(2, 5));
         wallTexPoints.put((byte)0x18, new Point(3, 5));
+        wallTexPoints.put((byte)0x19, new Point(3, 5));
+        wallTexPoints.put((byte)0x1A, new Point(3, 4));
+        wallTexPoints.put((byte)0x1B, new Point(3, 4));
+        wallTexPoints.put((byte)0x1C, new Point(3, 4));
+        wallTexPoints.put((byte)0x1D, new Point(3, 4));
+        wallTexPoints.put((byte)0x1E, new Point(3, 4));
+        wallTexPoints.put((byte)0x1F, new Point(3, 4));
+        wallTexPoints.put((byte)0x20, new Point(5, 4));
+        wallTexPoints.put((byte)0x21, new Point(5, 6));
+        wallTexPoints.put((byte)0x22, new Point(11, 7));
+        wallTexPoints.put((byte)0x23, new Point(11, 7));
+        wallTexPoints.put((byte)0x24, new Point(11, 6));
+        wallTexPoints.put((byte)0x25, new Point(7, 5));
+        wallTexPoints.put((byte)0x26, new Point(11, 7));
+        wallTexPoints.put((byte)0x27, new Point(11, 7));
+        wallTexPoints.put((byte)0x28, new Point(1, 4));
+        wallTexPoints.put((byte)0x29, new Point(1, 4));
+        wallTexPoints.put((byte)0x2A, new Point(1, 5));
+        wallTexPoints.put((byte)0x2B, new Point(1, 5));
+        wallTexPoints.put((byte)0x2C, new Point(7, 7));
+        wallTexPoints.put((byte)0x2D, new Point(7, 7));
+        wallTexPoints.put((byte)0x2E, new Point(1, 5));
+        wallTexPoints.put((byte)0x2F, new Point(1, 5));
+        wallTexPoints.put((byte)0x30, new Point(8, 6));
+
         wallTexPoints.put((byte)0x42, new Point(1, 7));
         
-        //3 edges
+        wallTexPoints.put((byte)0x48, new Point(1, 6));
+        
         wallTexPoints.put((byte)0x4A, new Point(0, 7));
+        
+        wallTexPoints.put((byte)0x50, new Point(2, 6));
+
         wallTexPoints.put((byte)0x52, new Point(2, 7));
-        wallTexPoints.put((byte)0x1A, new Point(3, 4));
+        
         wallTexPoints.put((byte)0x58, new Point(3, 6));
         
-        //all 4
-        wallTexPoints.put((byte)0x5A, new Point(0, 4));
+        wallTexPoints.put((byte)0x94, new Point(2, 4));
+        
+        wallTexPoints.put((byte)0xFF, new Point(0, 4));
     }
     
 	private TilesetHelper()
@@ -97,13 +136,21 @@ public final class TilesetHelper
 			final float negY = y * intervalY + offsetY;
 			final float posY = (y + 1) * intervalY - offsetY;
 			
-			final float[] coords = 
+			/*final float[] coords = 
 		    {
 		        negX, negY,
 				posX, negY,
 				negX, posY,
 				posX, posY 
-		    };
+		    };*/
+			
+			final float[] coords = 
+            {
+                negX, negY,
+                negX, posY,
+                posX, negY,
+                posX, posY 
+            };
 			
 			return coords;
 								
