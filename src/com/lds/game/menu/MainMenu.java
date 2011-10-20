@@ -45,7 +45,7 @@ public class MainMenu extends Activity
 	public Context context;
 	public SeekBar mSeekBar;
 	private ViewAnimator animator;
-	private ProgressDialog pd;
+	//private ProgressDialog pd;
 	private int unlockedLevel;
 	private GridView levelList;
 
@@ -241,8 +241,8 @@ public class MainMenu extends Activity
 		    e.printStackTrace();
 		}
 		
-		pd = ProgressDialog.show(this, "Loading", "...Please wait.", true, false);
-		pd.hide();
+		//ProgressDialog pd = ProgressDialog.show(this, "Loading", "...Please wait.", true, false);
+		//pd.hide();
 		
 		//Defaults, settings, and other stuff
 		musicVolumeControl.setMax(100);

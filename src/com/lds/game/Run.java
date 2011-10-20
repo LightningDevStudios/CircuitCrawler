@@ -27,21 +27,23 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class Run extends Activity implements GameOverListener, GameInitializedListener, PuzzleActivatedListener, OnPreparedListener, OnCompletionListener
+public class Run extends Activity implements GameOverListener, GameInitializedListener, PuzzleActivatedListener
 {
 	public static final int PUZZLE_ACTIVITY = 2;
 	private int unlockedLevel, levelIndex, levelId;
 	private Graphics glSurface;
 	private GameRenderer gameR;
-	private MediaPlayer mp = new MediaPlayer();
+	private MediaPlayer mp;
 	private ProgressDialog pd;
-	private boolean playingSong1;
-	private int[] songs = {0,1};
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
+		
+		pd = ProgressDialog.show(this, "", "Loading...");
+		
+		mp = new MediaPlayer();
 		
 		levelIndex = getIntent().getExtras().getInt("levelIndex", -1);
 		System.out.println(levelIndex);
@@ -92,9 +94,13 @@ public class Run extends Activity implements GameOverListener, GameInitializedLi
 		float screenX = (float)screen.widthPixels;
 		float screenY = (float)screen.heightPixels;
 		setVolumeControlStream(AudioManager.STREAM_MUSIC);
-		pd = ProgressDialog.show(this, "", "Loading...");
-
-		playMusic();
+		
+		int songChoice = (int)(Math.random() * 2);
+		if (songChoice == 0)
+		    playMusic(R.raw.song1);
+		else if (songChoice == 1)
+		    playMusic(R.raw.song2);
+		
 		
 		//set up OpenGL rendering
 		Object syncObj = new Object();
@@ -106,100 +112,21 @@ public class Run extends Activity implements GameOverListener, GameInitializedLi
 		setContentView(glSurface);
 	}
 	
-	public boolean saveas(int ressound, String fileName)
-	{  
-		 byte[] buffer = null;  
-		 InputStream fIn = getBaseContext().getResources().openRawResource(ressound);  
-		 int size = 0;  
-		  
-		 try 
-		 {  
-			  size = fIn.available();  
-			  buffer = new byte[size];  
-			  fIn.read(buffer);  
-			  fIn.close();  
-		 } 
-		 catch (IOException e) 
-		 {  
-		  return false;  
-		 }  
-		  
-		 String path = "/sdcard/CircutCrawler/media/audio/songs/";  
-		 String filename = fileName;
-		  
-		 boolean exists = (new File(path)).exists();  
-		 if (!exists)
-		 {
-		     new File(path).mkdirs();
-		 }
-		  
-		 FileOutputStream save;  
-		 try 
-		 {  
-			  save = new FileOutputStream(path + filename);
-			  save.write(buffer);  
-			  save.flush();  
-			  save.close();  
-		 } 
-		 catch (FileNotFoundException e) 
-		 {  
-		  return false;  
-		 } 
-		 catch (IOException e)
-		 {    
-		  return false;  
-		 }      
-		  
-		 sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.parse("file://" + path + filename)));  
-		  
-		 File k = new File(path, filename);  
-		  
-		 ContentValues values = new ContentValues();  
-		 values.put(MediaStore.MediaColumns.DATA, k.getAbsolutePath());  
-		 values.put(MediaStore.MediaColumns.TITLE, "exampletitle");  
-		 values.put(MediaStore.MediaColumns.MIME_TYPE, "audio/ogg");  
-		 values.put(MediaStore.Audio.Media.ARTIST, "cssounds ");  
-		 values.put(MediaStore.Audio.Media.IS_RINGTONE, true);  
-		 values.put(MediaStore.Audio.Media.IS_NOTIFICATION, true);  
-		 values.put(MediaStore.Audio.Media.IS_ALARM, true);  
-		 values.put(MediaStore.Audio.Media.IS_MUSIC, false);  
-		  
-		 //Insert it into the database  
-		 this.getContentResolver().insert(MediaStore.Audio.Media.getContentUriForPath(k.getAbsolutePath()), values);  
-		  
-		 return true;  
-	}
-	
-	public void onCompletion(MediaPlayer mp)
-	{
-		mp.reset();
-		playMusic();
-	} 
-	
-    public void onPrepared(MediaPlayer mp)
-	{ 
-		mp.setVolume(SoundPlayer.getMusicVolume(), SoundPlayer.getMusicVolume());
-		mp.start(); 
-    } 
-
+    /**
+     * \todo These hax should be loaded from the constructor
+     */
 	public void onGameInitialized()
 	{
 		gameR.setGameOverEvent(this);
 		gameR.setPuzzleActivatedEvent(this);
-		try
-		{
-		    pd.dismiss();
-		}
-		catch (Exception e) 
-		{
-		    e.printStackTrace();
-		}
+
+	    pd.dismiss();
 	}
 	
 	public void onGameOver(boolean winning)
 	{
 		mp.stop();
-		mp.reset();
+		//mp.reset();
 		if (winning)
 		{
 			if (levelIndex == unlockedLevel)
@@ -242,9 +169,9 @@ public class Run extends Activity implements GameOverListener, GameInitializedLi
 		}
 	}
 	
-	public void playMusic()
+	public void playMusic(int resource)
 	{	
-		AssetFileDescriptor song1 = this.getResources().openRawResourceFd(R.raw.song1); 
+		AssetFileDescriptor song1 = this.getResources().openRawResourceFd(resource); 
 	    try 
 		{
 		    mp.reset();
@@ -293,17 +220,17 @@ public class Run extends Activity implements GameOverListener, GameInitializedLi
 				return true;
 			case R.id.main_menu:
 				//return to main menu
-				mp.stop();
+				//mp.stop();
 				setResult(0);
 				finish();
 				return true;
 			case R.id.quit:
-				mp.stop();
+				//mp.stop();
 				setResult(3);
 				finish();
 				return true;
 			default:
-				mp.start();
+				//mp.start();
 				return super.onOptionsItemSelected(item);
 		
 		}
@@ -312,14 +239,14 @@ public class Run extends Activity implements GameOverListener, GameInitializedLi
 	@Override
 	public void onBackPressed()
 	{
-		mp.reset();
+		//mp.reset();
 	}
 	
 	@Override
 	protected void onResume()
 	{
 		super.onResume();
-		//mp.start();
+		mp.start();
 		glSurface.onResume();	
 	}
 	
@@ -337,5 +264,6 @@ public class Run extends Activity implements GameOverListener, GameInitializedLi
 	{
 		super.onDestroy();
 		mp.stop();
+		mp.release();
 	}
 }
