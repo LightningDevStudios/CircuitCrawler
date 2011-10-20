@@ -2,6 +2,11 @@ package com.lds.physics;
 
 import java.util.ArrayList;
 
+/**
+ * Manages Physics.
+ * \todo Implement this physics stuff
+ * @author Lightning Development Studios
+ */
 public class PhysicsManager 
 {
 	/***********
@@ -73,7 +78,7 @@ public class PhysicsManager
 		return pairList;
 	}
 	
-	/* \todo Implement this physics stuff
+	/*
 	@Override
     public void circleBounceAgainstCircle(Shape shape)
     {

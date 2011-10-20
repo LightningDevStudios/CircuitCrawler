@@ -2,25 +2,21 @@ package com.lds.game.entity;
 
 import android.util.Log;
 
-import com.lds.EntityManager;
-import com.lds.Enums.RenderMode;
 import com.lds.Stopwatch;
 import com.lds.Texture;
 import com.lds.TilesetHelper;
+import com.lds.game.event.InteractListener;
 import com.lds.math.*;
-import com.lds.math.Vector2;
 import com.lds.physics.Shape;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
-import java.util.EnumSet;
 
 import javax.microedition.khronos.opengles.GL10;
 import javax.microedition.khronos.opengles.GL11;
 
-
-public abstract class Entity 
+public abstract class Entity implements InteractListener
 {
 	public static final float DEFAULT_SIZE = 32.0f;
 	public static final byte[] indices = {0, 1, 2, 3};
@@ -52,6 +48,7 @@ public abstract class Entity
 	public Entity(Shape shape)
 	{		
 		this.shape = shape;
+		this.shape.setInteractListener(this);
 		this.vertexBuffer = setBuffer(vertexBuffer, shape.getVertices());
 		this.colorVec = new Vector4(1, 1, 1, 1);
 		this.endColorVec = new Vector4(1, 1, 1, 1);
@@ -109,12 +106,7 @@ public abstract class Entity
 		colorInterp();
 		gradientInterp();
 	}
-		
-	public void collide(Entity ent)
-	{
-		
-	}
-	
+
 	protected FloatBuffer setBuffer(FloatBuffer buffer, float[] values)
 	{
 		ByteBuffer byteBuf = ByteBuffer.allocateDirect(values.length * 4);
@@ -469,6 +461,11 @@ public abstract class Entity
 	 * Accessors and Mutators *
 	 **************************/
 	
+    public Entity getEntity()
+    {
+        return this;
+    }
+    
 	public Shape getShape()
     {   
 	    return shape;

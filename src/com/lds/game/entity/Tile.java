@@ -4,7 +4,6 @@ import android.graphics.Point;
 
 import com.lds.Enums;
 import com.lds.Enums.*;
-import com.lds.Texture;
 import com.lds.TilesetHelper;
 import com.lds.game.Game;
 import com.lds.math.Vector2;
@@ -16,7 +15,6 @@ import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import java.util.EnumSet;
-import java.util.HashMap;
 
 import javax.microedition.khronos.opengles.GL11;
 
@@ -97,7 +95,10 @@ public class Tile
 		texBuffer.put(texCoords);
 		texBuffer.position(0);
 		
-		byte[] indices = { 0, 1, 2, 3 };
+		byte[] indices =
+		{
+		    0, 1, 2, 3
+		};
 		ByteBuffer indBuf = ByteBuffer.allocateDirect(indices.length);
 		indBuf.order(ByteOrder.nativeOrder());
 		indBuf.put(indices);
@@ -611,7 +612,7 @@ public class Tile
         }*/
     }
 
-    private void noneInnerWallEdgeDetection(Tile[][] tileset, int x, int y)
+    /*private void noneInnerWallEdgeDetection(Tile[][] tileset, int x, int y)
     {
         EnumSet<DiagDir> dirsCovered = EnumSet.noneOf(DiagDir.class);
 
@@ -894,7 +895,7 @@ public class Tile
         {
         	updateTileset(0, 5);
         }
-    }
+    }*/
     
     public void setPos(Vector2 pos)
     {
