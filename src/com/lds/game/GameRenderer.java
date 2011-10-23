@@ -147,8 +147,8 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 			ent.updateTextureVBO(gl);
 		}
 		
-		//TODO: real collision/physics update
-		//physMan.PerformCollisionCheck();
+		//TODO: game.update(), chain off to world.update()
+		game.world.update();
 		
 		//HACK: for the love of GOD move this out of GameRenderer
 		//Iterates through all entities
@@ -170,7 +170,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 				{
 					if (!game.player.isHoldingObject()) //not holding anything and is close enough
 					{
-						if (CollisionDetector.RadiusCheck(game.player.getShape(), ent.getShape()) && game.player.isFacing(ent))
+						if (CollisionDetector.radiusCheck(game.player.getShape(), ent.getShape()) && game.player.isFacing(ent))
 						{
 							game.player.holdObject((HoldObject)ent);
 							Vibrator.vibrate(context, 100);
@@ -186,7 +186,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 				}
 				else if (ent instanceof PuzzleBox)
 				{
-					if (CollisionDetector.RadiusCheck(game.player.getShape(), ent.getShape()) && game.player.isFacing(ent))
+					if (CollisionDetector.radiusCheck(game.player.getShape(), ent.getShape()) && game.player.isFacing(ent))
 					{
 						((PuzzleBox)ent).run();
 						Vibrator.vibrate(context, 100);

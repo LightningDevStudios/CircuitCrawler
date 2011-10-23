@@ -103,7 +103,7 @@ public class QuadTree
 			}
 		}
 		else
-			quadTreeEntities.addAll(Quad1Entities);
+			quadTreeEntities.addAll(Quad2Entities);
 		if (Quad3Entities.size() > 1)
 		{
 			if (size.getX() <= minimumLeafSize.getX() && size.getY() <= minimumLeafSize.getY())
@@ -115,7 +115,7 @@ public class QuadTree
 			}
 		}
 		else
-			quadTreeEntities.addAll(Quad1Entities);
+			quadTreeEntities.addAll(Quad3Entities);
 		if (Quad4Entities.size() > 1)
 		{
 			if (size.getX() <= minimumLeafSize.getX() && size.getY() <= minimumLeafSize.getY())
@@ -127,6 +127,6 @@ public class QuadTree
 			}
 		}
 		else
-			quadTreeEntities.addAll(Quad1Entities);
+			quadTreeEntities.addAll(Quad4Entities);
 	}
 }

@@ -2,76 +2,42 @@ package com.lds.physics;
 
 import java.util.ArrayList;
 
-public class PhysicsManager 
+import com.lds.math.Vector2;
+
+public final class PhysicsManager 
 {
-	/***********
-	 * Members *
-	 ***********/
-
-    /**
-     * 
-     */
-	private CollisionDetector collisionDetector;
+    private PhysicsManager()
+    {
+    }
+    
+    public static void updatePairs(ArrayList<CollisionPair> pairs)
+    {
+        for (CollisionPair pair : pairs)
+            runCollisionPhysics(pair);
+    }
 	
-	/****************
-	 * Constructors *
-	 ****************/
+	public static void updateShapes(ArrayList<Shape> shapes)
+	{
+	    for (Shape s : shapes)
+        {
+            s.push(s.getImpulse());
+            s.clearImpulse();
+            
+            for (Vector2 f : s.getForces())
+                s.push(f);
+                    
+            s.setPos(Vector2.add(s.getPos(), s.getVelocity()));
+            
+            s.push(Vector2.scale(s.getVelocity(), -s.getMass() * s.getFriction()));
+        }
+	}
 	
-	/**
-	 * Initializes a new instance of the PhysicsManager class.
-	 * @param collisionDetector A collision detector object.
-	 */
-	public PhysicsManager(CollisionDetector collisionDetector)
+	public static void runCollisionPhysics(CollisionPair cp)
 	{
-		this.collisionDetector = collisionDetector;
-	}
-
-	/**
-	 * Get shapes from a Collision Detector.
-	 * <ol>
-	 *     <li>Run QuadTreeDetection();</li>
-	 *     <li>Use the QuadTreeList from QuadTreeDetection() and pass the shapes to RadiusCheck.</li>
-	 *     <li>If the RadiusCheck returns true pass them to the SeperatingAxisTheorem.</li>
-	 *     <li>Solve the Collisions from the CollisionPair.</li>
-	 * </ol>
-	 * 
-	 * Note the QuadTreeDetection() returns 2 list of lists:
-	 * <ol>
-	 *     <li>List1 called normalShape contains all shapes that could be colliding with each other so if
-	 *     there is 1 list in normalShape and it contains 3 shapes; shape 1 compares to shape 2 and 3,
-	 *     and shape 2 compares to 3</li>
-	 *     <li>List 2 called onLineShape contains all shapes that do not fall in a specific quadrant so
-	 *     if onLineShape contains 1 list which has 6 shapes in it; shape 1 is compared to
-	 *     shape 2, 3, 4, 5, and 6.</li>
-	 * </ol>
-	 * @return 
-	 */
-	public ArrayList<CollisionPair> SolveCollision()
-	{
-		ArrayList<CollisionPair> pairList = new ArrayList<CollisionPair>();
-		
-		ArrayList<ArrayList<Shape>> quadList = collisionDetector.QuadTreeDetection();
-		
-		for (ArrayList<Shape> shapes : quadList)
-		{
-			for (Shape shape : shapes)
-			{
-			    //TODO this is O(n^2), use regular iteration and start at shape's index. That will make this O(n).
-				for (Shape s : shapes)
-				{
-					if (shape != s && CollisionDetector.RadiusCheck(shape, s))
-					{
-						CollisionPair pair = CollisionDetector.CheckCollision(shape, s);
-						if (pair != null)
-						{
-							pairList.add(pair);
-						}
-					}
-				}
-			}
-		}
-		return pairList;
-	}
+	    //TODO: Better Collision Physics
+	    cp.getEnt1().addImpulse(Vector2.scale(cp.getEnt2().getVelocity(), cp.getEnt2().getMass()));
+	    cp.getEnt2().addImpulse(Vector2.scale(cp.getEnt1().getVelocity(), cp.getEnt1().getMass()));
+	}	
 	
 	/* \todo Implement this physics stuff
 	@Override

@@ -81,6 +81,13 @@ public class Circle extends Shape
         this.vertices = vertices;
         
         transformVertices();
+        updateMass();
+    }
+    
+    @Override
+    protected void updateMass()
+    {
+        mass = density * getRadius() * getRadius() * (float)Math.PI;
     }
     
     /**************************

@@ -19,6 +19,7 @@ public class Player extends Entity
 	public Player(Vector2 position, float angle)
 	{
 		super(new Circle(DEFAULT_SIZE, position, angle, true));
+		shape.setFriction(1);
 		
 		energy = ENERGY_LIMIT;
 		health = HEALTH_LIMIT;
@@ -175,4 +176,9 @@ public class Player extends Entity
 	{
 		energy -= energyLost;
 	}
+
+    public void addImpulse(Vector2 f)
+    {
+        shape.addImpulse(f);
+    }
 }

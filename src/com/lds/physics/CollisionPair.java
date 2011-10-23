@@ -2,31 +2,29 @@ package com.lds.physics;
 
 //import com.lds.math.Vector2;
 
-import com.lds.game.entity.Entity;
-
 public class CollisionPair 
 {
-	private Entity ent1;
-	private Entity ent2;
+	private Shape shape1;
+	private Shape shape2;
 	//private Vector2 nearestExit1;
 	//private Vector2 nearestExit2;
 	
-	public CollisionPair(Entity ent1, Entity ent2)
+	public CollisionPair(Shape shape1, Shape shape2)
 	{
-		this.ent1 = ent1;
-		this.ent2 = ent2;
+		this.shape1 = shape1;
+		this.shape2 = shape2;
 		//this.nearestExit1 = nearestExit1;
 		//nearestExit2 = Vector2.negate(nearestExit1);
 	}
 	
-	public Entity getEnt1()
+	public Shape getEnt1()
 	{
-	    return ent1;
+	    return shape1;
 	}
 	
-	public Entity getEnt2()
+	public Shape getEnt2()
 	{
-	    return ent2;
+	    return shape2;
 	}
 	//public Vector2 getNearestExit1() { return nearestExit1; }
 	//public Vector2 getNearestExit2() { return nearestExit2; }
