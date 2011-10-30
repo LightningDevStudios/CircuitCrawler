@@ -1,7 +1,7 @@
 package com.lds.game;
 
 import android.content.Context;
-import android.graphics.drawable.shapes.Shape;
+import android.util.Log;
 
 import com.lds.*;
 import com.lds.Enums.*;
@@ -11,14 +11,17 @@ import com.lds.game.entity.*;
 import com.lds.game.event.*;
 import com.lds.math.Vector2;
 import com.lds.parser.Parser;
-import com.lds.physics.CollisionDetector;
+import com.lds.physics.Shape;
 import com.lds.physics.World;
 import com.lds.trigger.*;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.microedition.khronos.opengles.GL10;
 import javax.microedition.khronos.opengles.GL11;
+
+import org.xmlpull.v1.XmlPullParserException;
 
 public class Game
 {
@@ -60,7 +63,7 @@ public class Game
 	public Player player;
 	
 	//Constructors
-	public Game(Context context, GL10 gl, int levelId)
+	public Game(Context context, GL11 gl, int levelId)
 	{		
 		tilesetwire = new Texture(R.drawable.tilesetwire, 128, 128, 8, 8, context, "tilesetwire");
 		text = new Texture(R.drawable.text, 256, 256, 16, 8, context, "text");
@@ -82,37 +85,41 @@ public class Game
 		tileset = new Tile[16][16];
 		cleaner = new EntityManager();
 		        		
-		StringRenderer sr = StringRenderer.getInstance();
-		TextureLoader.getInstance().initialize(gl);
-		sr.loadTextTileset(text);
+		//StringRenderer sr = StringRenderer.getInstance();
+		//sr.loadTextTileset(text);
 				
 		SoundPlayer.initialize(context);
+				
+		TextureLoader.loadTexture(gl, tilesetwire);
+		TextureLoader.loadTexture(gl, tilesetworld);
+		TextureLoader.loadTexture(gl, tilesetentities);
 		
-		TextureLoader tl = TextureLoader.getInstance();
-		
-		tl.loadTexture(tilesetwire);
-		tl.loadTexture(tilesetworld);
-		tl.loadTexture(tilesetentities);
-		
-		tl.loadTexture(joystickout);
-		tl.loadTexture(joystickin);
-		tl.loadTexture(buttona);
-		tl.loadTexture(buttonb);
-		tl.loadTexture(baricons);
-		tl.loadTexture(energybarborder);
-		tl.loadTexture(healthbarborder);
+		TextureLoader.loadTexture(gl, joystickout);
+		TextureLoader.loadTexture(gl, joystickin);
+		TextureLoader.loadTexture(gl, buttona);
+		TextureLoader.loadTexture(gl, buttonb);
+		TextureLoader.loadTexture(gl, baricons);
+		TextureLoader.loadTexture(gl, energybarborder);
+		TextureLoader.loadTexture(gl, healthbarborder);
 		 		
 		//Parser
 		Parser parser = new Parser(context, levelId);
 		
-		try	
-		{ 
+		try
+		{
 			parser.parseLevel((GL11)gl); 
 		}
 		
-		catch (Exception e) 
+		//TODO cleanly exit the game on error.
+		catch (XmlPullParserException e)
 		{
-		    e.printStackTrace();
+		    Log.e("Circuit Crawler", "Error parsing level " + levelId);
+		    return;
+		}
+		catch (IOException e)
+		{
+		    Log.e("Circuit Crawler", "Error reading level " + levelId);
+		    return;
 		}
 	
 		tileset = parser.tileset;
@@ -205,7 +212,7 @@ public class Game
 		worldMaxX = (Tile.TILE_SIZE_F * (tileset[0].length / 2)) - (screenW / 2);
 		worldMaxY = (Tile.TILE_SIZE_F * (tileset.length / 2)) - (screenH / 2);
 		
-		ArrayList<com.lds.physics.Shape> shapeList = new ArrayList<com.lds.physics.Shape>();
+		ArrayList<Shape> shapeList = new ArrayList<Shape>();
         for (Entity ent : entList)
             shapeList.add(ent.getShape());
                 
@@ -232,13 +239,13 @@ public class Game
 		{
 			//define max square bounds
 		    final float diagonal = Vector2.subtract(ent.getPos(), ent.getShape().getWorldVertices()[0]).length();
-			final float entMinX = ent.getXPos() - diagonal;
-			final float entMaxX = ent.getXPos() + diagonal;
-			final float entMinY = ent.getYPos() - diagonal;
-			final float entMaxY = ent.getYPos() + diagonal;
+		    Vector2 diagonalVec = new Vector2(diagonal, diagonal);
+		    
+		    Vector2 entMin = Vector2.subtract(ent.getPos(), diagonalVec);
+		    Vector2 entMax = Vector2.add(ent.getPos(), diagonalVec);
 			
 			//values are opposite for entMin/Max because only the far tips have to be inside the screen (leftmost point on right border of screen)
-			if (entMinX <= maxX && entMaxX >= minX && entMinY <= maxY && entMaxY >= minY)
+			if (entMin.getX() <= maxX && entMax.getX() >= minX && entMin.getY() <= maxY && entMax.getY() >= minY)
 				renderList.add(ent);
 		}
 		
@@ -275,8 +282,8 @@ public class Game
 	public void updateCameraPosition()
 	{
 		//move camera to follow player.
-		camPosX = player.getXPos();
-		camPosY = player.getYPos();
+		camPosX = player.getPos().getX();
+		camPosY = player.getPos().getY();
 		
 		
 		//camera can't go further than defined level bounds
@@ -299,8 +306,8 @@ public class Game
 		final float tilesetHalfWidth = tileset[0].length * Tile.TILE_SIZE_F / 2;
 		final float tilesetHalfHeight = tileset.length * Tile.TILE_SIZE_F / 2;
 		
-		final int x = (int)(ent.getXPos() + tilesetHalfWidth) / Tile.TILE_SIZE;
-		final int y = (int)(Math.abs(ent.getYPos() - tilesetHalfHeight)) / Tile.TILE_SIZE;
+		final int x = (int)(ent.getPos().getX() + tilesetHalfWidth) / Tile.TILE_SIZE;
+		final int y = (int)(Math.abs(ent.getPos().getY() - tilesetHalfHeight)) / Tile.TILE_SIZE;
 		
 		if (x < tileset[0].length && x >= 0 && y < tileset.length && y >= 0)
 		{

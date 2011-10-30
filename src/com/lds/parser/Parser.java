@@ -298,6 +298,12 @@ Parse A Tileset
 	 * Parse Triggers *
 	 ******************/
 	
+	/**
+	 * Parse a level file and store the associated data in this class.
+	 * \todo return a Level!
+	 * @throws XmlPullParserException Thrown when the XML file is not properly formatted.
+	 * @throws IOException Thrown when there is an issue accessing the file.
+	 */
 	public void parseTriggers() throws XmlPullParserException, IOException
 	{
 		xrp.next();

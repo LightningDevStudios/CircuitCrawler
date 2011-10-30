@@ -1,8 +1,8 @@
 package com.lds.physics;
 
-import java.util.ArrayList;
-
 import com.lds.math.Vector2;
+
+import java.util.ArrayList;
 
 public final class PhysicsManager 
 {

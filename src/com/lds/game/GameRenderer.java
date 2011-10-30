@@ -1,7 +1,6 @@
 package com.lds.game;
 
 import android.content.Context;
-import android.media.MediaPlayer;
 import android.view.MotionEvent;
 
 import com.lds.EntityManager;
@@ -36,7 +35,6 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	private PuzzleActivatedListener puzzleActivatedListener;
 	private GameOverListener gameOverListener;
 	private int levelId;
-	private MediaPlayer mp;
 	
 	private Matrix4 projWorld, projUI;
 	private PhysicsManager physMan;
@@ -80,7 +78,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		Stopwatch.tick();
 		
 		Entity.resetIndexBuffer();
-		game = new Game(context, gl, levelId);
+		game = new Game(context, (GL11)gl, levelId);
 		
 		//projWorld = Matrix4.ortho(game.camPosX - (Game.screenW / 2), game.camPosX + (Game.screenW / 2), game.camPosY + (Game.screenH / 2), game.camPosY - (Game.screenH / 2), 0, 1);
 		projWorld = Matrix4.IDENTITY;
@@ -229,11 +227,19 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		
 		gl.glLoadIdentity();
 		
+		gl.glEnable(GL11.GL_TEXTURE_2D);
+		gl.glEnableClientState(GL11.GL_VERTEX_ARRAY);
+        gl.glEnableClientState(GL11.GL_TEXTURE_COORD_ARRAY);
+		
 		for (Entity ent : game.getRenderedEnts())
-		{								
+		{						
 			ent.draw(gl);
 			gl.glLoadIdentity();
 		}
+		
+		gl.glDisable(GL11.GL_TEXTURE_2D);
+		gl.glDisableClientState(GL11.GL_VERTEX_ARRAY);
+        gl.glDisableClientState(GL11.GL_TEXTURE_COORD_ARRAY);
 		
 		game.btnB.unpress();
 		
@@ -297,7 +303,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 					for (int i = 0; i < game.UIList.size(); i++)
 					{
 						final UIEntity ent = game.UIList.get(i);
-						if (touchVec.getX() >= ent.getXPos() - ent.getXSize() / 2 && touchVec.getX() <= ent.getXPos() + ent.getXSize() / 2 && touchVec.getY() >= ent.getYPos() - ent.getYSize() / 2 && touchVec.getY() <= ent.getYPos() + ent.getYSize() / 2)
+						if (touchVec.getX() >= ent.getPos().getX() - ent.getPos().getX() / 2 && touchVec.getX() <= ent.getPos().getX() + ent.getPos().getX() / 2 && touchVec.getY() >= ent.getPos().getY() - ent.getPos().getY() / 2 && touchVec.getY() <= ent.getPos().getY() + ent.getPos().getY() / 2)
 						{
 							final Finger newFinger = new Finger(touchVec, ent, e.getPointerId(fingerIndex));
 							newFinger.onStackPush();

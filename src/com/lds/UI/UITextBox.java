@@ -44,7 +44,6 @@ public class UITextBox extends UIEntity
 		if ((this.text == null || !this.text.equalsIgnoreCase(text)) && text != null && !text.equals(""))
 		{
 			this.text = text;
-			tex.reloadTexture(text);
 			size = new Vector2(tex.getXSize(), tex.getYSize());
 			halfSize = Vector2.scale(size, 0.5f);
 			

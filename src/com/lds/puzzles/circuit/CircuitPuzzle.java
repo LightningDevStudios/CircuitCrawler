@@ -18,6 +18,7 @@ import com.lds.game.puzzle.IPuzzle;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
+import javax.microedition.khronos.opengles.GL11;
 
 public class CircuitPuzzle implements IPuzzle
 {
@@ -48,9 +49,7 @@ public class CircuitPuzzle implements IPuzzle
 		gl.glHint(GL10.GL_PERSPECTIVE_CORRECTION_HINT, GL10.GL_NICEST);
 		
 		tileTex = new Texture(R.drawable.circuitpuzzle, 128, 128, 8, 8, context, "circuitpuzzle");
-		TextureLoader tl = TextureLoader.getInstance();
-		tl.initialize(gl);
-		tl.loadTexture(tileTex);
+		TextureLoader.loadTexture((GL11)gl, tileTex);
 		
 		initializePuzzle();
 		

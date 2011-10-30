@@ -1,5 +1,10 @@
 package com.lds;
 
+/**
+ * A static helper class that stores all the enums.
+ * \todo all these enums should be moved into their respective classes.
+ * @author Lightning Development Studios
+ */
 public final class Enums 
 {
     

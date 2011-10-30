@@ -13,7 +13,6 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 
-import javax.microedition.khronos.opengles.GL10;
 import javax.microedition.khronos.opengles.GL11;
 
 public abstract class Entity implements InteractListener
@@ -56,12 +55,7 @@ public abstract class Entity implements InteractListener
 	{
 		gl.glMultMatrixf(shape.getModel().array(), 0);
 		
-		gl.glEnable(GL10.GL_TEXTURE_2D);
-		gl.glBindTexture(GL10.GL_TEXTURE_2D, tex.getTexture());
-		
-		//Enable settings for this polygon
-		gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
-	    gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
+		gl.glBindTexture(GL11.GL_TEXTURE_2D, tex.getTexture());
 
 	    gl.glColor4f(colorVec.getX(), colorVec.getY(), colorVec.getZ(), colorVec.getW());
 
@@ -75,11 +69,6 @@ public abstract class Entity implements InteractListener
 		gl.glBindBuffer(GL11.GL_ELEMENT_ARRAY_BUFFER, VBOIndexPtr);
 		gl.glDrawElements(GL11.GL_TRIANGLE_STRIP, 4, GL11.GL_UNSIGNED_BYTE, 0);
 		gl.glBindBuffer(GL11.GL_ELEMENT_ARRAY_BUFFER, 0);
-				
-		//Disable things for next polygon
-		gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
-		gl.glDisableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
-		gl.glDisable(GL10.GL_TEXTURE_2D);
 	}
 	
 	public void update()

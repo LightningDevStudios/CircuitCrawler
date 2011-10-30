@@ -2,6 +2,11 @@ package com.lds.physics;
 
 import com.lds.math.Vector2;
 
+/**
+ * A Shape used in 
+ * @author Robert Rouhani
+ *
+ */
 public class Circle extends Shape 
 {
     /****************

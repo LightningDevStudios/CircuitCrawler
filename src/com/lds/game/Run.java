@@ -2,16 +2,11 @@ package com.lds.game;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.ContentValues;
 import android.content.Intent;
 import android.content.res.AssetFileDescriptor;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
-import android.media.MediaPlayer.OnCompletionListener;
-import android.media.MediaPlayer.OnPreparedListener;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -20,12 +15,6 @@ import android.view.MenuItem;
 import com.lds.Graphics;
 import com.lds.game.event.*;
 import com.lds.game.puzzle.PuzzleActivity;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
 
 public class Run extends Activity implements GameOverListener, GameInitializedListener, PuzzleActivatedListener
 {
@@ -113,7 +102,7 @@ public class Run extends Activity implements GameOverListener, GameInitializedLi
 	}
 	
     /**
-     * \todo These hax should be loaded from the constructor
+     * \todo These hax should be loaded from the constructor.
      */
 	public void onGameInitialized()
 	{

@@ -70,21 +70,6 @@ public class Texture
 		id = text;
 	}
 	
-	public void reloadTexture(String text)
-	{
-		this.bmp = StringRenderer.getInstance().stringToBitmap(text);
-		this.xSize = bmp.getWidth();
-		this.ySize = bmp.getHeight();
-		this.xTiles = 1;
-		this.yTiles = 1;
-		this.xPixels = xSize;
-		this.yPixels = ySize;
-		
-		TextureLoader.getInstance().reload(this);
-		
-		id = text;
-	}
-	
 	public int getXSize()
 	{
 	    return xSize;

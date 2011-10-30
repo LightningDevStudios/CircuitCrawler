@@ -5,7 +5,6 @@ import com.lds.Texture;
 import com.lds.game.Game;
 import com.lds.math.Vector2;
 
-import javax.microedition.khronos.opengles.GL10;
 import javax.microedition.khronos.opengles.GL11;
 
 public class UIJoypad extends UIEntity
