@@ -87,19 +87,16 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		projUI = Matrix4.ortho(-Game.screenW / 2 , Game.screenW / 2, Game.screenH / 2, -Game.screenH / 2, 0, 1);
 		
 		//Use VBOs if available
-		Entity.genIndexBuffer(gl);
+		Entity.genIndexBuffer((GL11)gl);
 		
-		if (Entity.useVBOs)
+		for (Entity ent : game.entList)
 		{
-			for (Entity ent : game.entList)
-			{
-				ent.genHardwareBuffers(gl);
-			}
-			
-			for (UIEntity ent : game.UIList)
-			{
-				ent.genHardwareBuffers(gl);
-			}
+			ent.genHardwareBuffers((GL11)gl);
+		}
+		
+		for (UIEntity ent : game.UIList)
+		{
+			ent.genHardwareBuffers((GL11)gl);
 		}
 		
 		if (gameInitializedListener != null)
@@ -114,12 +111,15 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		}
 	}
 	
-	public void onDrawFrame(GL10 gl) 
+	public void onDrawFrame(GL10 gl10) 
 	{	
 		if (paused)
 			return;
 		
-		gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
+		//TODO get the interface to force GL11?
+		GL11 gl = (GL11)gl10;
+		
+		gl.glClear(GL11.GL_COLOR_BUFFER_BIT);
 		//remove entities that are queued for removal
 		//tick the stop watch every frame, gives relatively stable intervals
 		//frameCount++;
@@ -137,13 +137,12 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		game.updateTriggers();
 		game.cleaner.update(game.entList, gl);
 		game.updateFingers();
-		game.renderTileset((GL11)gl);
+		game.renderTileset(gl);
 		
 		//update all entites
 		for (Entity ent : game.entList)
 		{
 			ent.update();
-			ent.updateGradientVBO(gl);
 			ent.updateTextureVBO(gl);
 		}
 		

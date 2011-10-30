@@ -6,6 +6,7 @@ import com.lds.game.Game;
 import com.lds.math.Vector2;
 
 import javax.microedition.khronos.opengles.GL10;
+import javax.microedition.khronos.opengles.GL11;
 
 public class UIJoypad extends UIEntity
 {
@@ -52,7 +53,7 @@ public class UIJoypad extends UIEntity
 	}
 	
 	@Override
-	public void draw(GL10 gl)
+	public void draw(GL11 gl)
 	{
 		super.draw(gl);
 		
@@ -108,25 +109,25 @@ public class UIJoypad extends UIEntity
 		this.active = active;
 	}
 		
-	public void genHardwareBuffers(GL10 gl)
+	public void genHardwareBuffers(GL11 gl)
 	{
 		super.genHardwareBuffers(gl);
 		fingerCircle.genHardwareBuffers(gl);
 	}
 	
-	public void updateVertexVBO(GL10 gl)
+	public void updateVertexVBO(GL11 gl)
 	{
 		super.updateVertexVBO(gl);
 		fingerCircle.updateVertexVBO(gl);
 	}
 	
-	public void updateGradientVBO(GL10 gl)
+	public void updateGradientVBO(GL11 gl)
 	{
 		super.updateGradientVBO(gl);
 		fingerCircle.updateGradientVBO(gl);
 	}
 	
-	public void updateTextureVBO(GL10 gl)
+	public void updateTextureVBO(GL11 gl)
 	{
 		super.updateTextureVBO(gl);
 		fingerCircle.updateTextureVBO(gl);

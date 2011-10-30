@@ -1,11 +1,11 @@
 package com.lds.trigger;
 
 /**
- * Abstract class used with an {@code Effect} to create a {@code Trigger}.<br/><br/>
+ * Abstract class used with an Effect to create a Trigger.<br/><br/>
  * 
  * Extending Cause is relatively simple. A subclass only needs to implement
  * update() and at some point call trigger() and optionally untrigger(). A triggered 
- * {@code Cause} in a {@code Trigger} will immediately fire the {@code Effect}'s output.
+ * Cause in a Trigger will immediately fire the Effect's output.
  * @author Lightning Development Studios
  * @see Effect
  * @see Trigger
@@ -45,7 +45,7 @@ public abstract class Cause
 	}
 	
 	/**
-	 * Untriggers the {@code Cause}.
+	 * Untriggers the Cause.
 	 */
 	public final void untrigger()
 	{

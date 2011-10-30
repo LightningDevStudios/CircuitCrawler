@@ -4,7 +4,7 @@ import com.lds.game.entity.Entity;
 
 import java.util.ArrayList;
 
-import javax.microedition.khronos.opengles.GL10;
+import javax.microedition.khronos.opengles.GL11;
 
 /**
  * A class that handles the addition and removal of Entities from anywhere.
@@ -51,7 +51,7 @@ public class EntityManager
 	 * @param gl An OpenGL context used to delete the VBOs.
 	 * \todo split the hardware buffer removal into another method, call that one first? Or will we later assume a GL11 instead of a GL10?
 	 */
-	public void update(ArrayList<Entity> entList, GL10 gl)
+	public void update(ArrayList<Entity> entList, GL11 gl)
 	{
 		for (Entity ent : trashList)
 		{

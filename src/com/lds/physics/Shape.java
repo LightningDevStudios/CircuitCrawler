@@ -7,14 +7,23 @@ import com.lds.math.Vector4;
 
 import java.util.ArrayList;
 
+/**
+ * An abstract class that handles physics independently from other Entity code.
+ * @author Lightning Development Studios
+ */
 public abstract class Shape
 {
     /***********
      * Members *
      ***********/
-    protected InteractListener onInteract;
+    
     /**
-     * The current velocity of the shape
+     * Provides a callback for when this Shape collides with another one.
+     */
+    protected InteractListener onInteract;
+    
+    /**
+     * The current velocity of the shape.
      */
     protected Vector2 velocity;
     
@@ -34,7 +43,7 @@ public abstract class Shape
     protected float density;
     
     /**
-     * The friction constant (mu) between the shape and the floor
+     * The friction constant (mu) between the shape and the floor.
      */
     protected float friction;
     
@@ -197,8 +206,8 @@ public abstract class Shape
     }
     
     /**
-     * Adds a new impulse to the shape
-     * @param v The new impulse to add
+     * Adds a new impulse to the shape.
+     * @param v The new impulse to add.
      */
     public void addImpulse(Vector2 v)
     {
@@ -206,8 +215,8 @@ public abstract class Shape
     }
     
     /**
-     * Adds a new constant force to the shape
-     * @param f The new force to add
+     * Adds a new constant force to the shape.
+     * @param f The new force to add.
      */
     public void addForce(Vector2 f)
     {
@@ -218,109 +227,220 @@ public abstract class Shape
      * Abstract Methods *
      ********************/
     
+    /**
+     * Abstract method used to estimate mass.
+     */
     protected abstract void updateMass();
     
     /**************************
      * Accessors and Mutators *
      **************************/
     
-    public Vector2 getVelocity()
-    {
-        return velocity;
-    }
-    
-    public void setVelocity(Vector2 v)
-    {
-        velocity = v;
-    }
-    
-    public void push(Vector2 f)
-    {
-        velocity = Vector2.add(velocity, Vector2.scale(f, 1.0f / mass));
-    }
-    
-    public Vector2 getImpulse()
-    {
-        return impulseVec;
-    }
-    
+    /**
+     * Resets the impulse vector to <0, 0>.
+     */
     public void clearImpulse()
     {
         impulseVec = new Vector2(0, 0);
     }
     
+    /**
+     * Clears the ArrayList of forces acting on the Shape.
+     */
+    public void clearForces()
+    {
+        forces.clear();
+    }
+    
+    /**
+     * Push the Shape by a specified Vector2.
+     * \todo not sure how this is different from impulse...
+     * @param f The Vector2 to push by.
+     */
+    public void push(Vector2 f)
+    {
+        velocity = Vector2.add(velocity, Vector2.scale(f, 1.0f / mass));
+    }
+    
+    /**
+     * Gets the Shape's current velocity vector.
+     * @return The Shape's current velocity.
+     */
+    public Vector2 getVelocity()
+    {
+        return velocity;
+    }
+    
+    /**
+     * Gets a Vector2 representing all the impulses to be applied to the Shape on the next update.
+     * @return The resultant Vector2 of adding all the impulses acting on the Shape.
+     */
+    public Vector2 getImpulse()
+    {
+        return impulseVec;
+    }
+    
+    /**
+     * Gets an ArrayList<Vector2> of all the forces acting on the Shape.
+     * @return All the forces acting on the shape.
+     */
     public ArrayList<Vector2> getForces()
     {
         return forces;
     }
     
+    /**
+     * Gets the density of the Shape.
+     * @return The Shape's density.
+     */
     public float getDensity()
     {
         return density;
     }
     
+    /**
+     * Gets the mass of the Shape.
+     * \todo what units?
+     * @return The mass of the Shape.
+     */
+    public float getMass()
+    {
+        return mass;
+    }
+    
+    /**
+     * Gets the coefficient of friction for this Shape.
+     * \todo static or kinetic friction>
+     * @return The coefficient of friction.
+     */
+    public float getFriction()
+    {
+        return friction;
+    }
+    
+    /**
+     * Gets the collision callback for this Shape.
+     * @return The event listener for this Shape.
+     */
+    public InteractListener getInteractListener()
+    {
+        return onInteract;
+    }
+    
+    /**
+     * Gets the Shape's vertices as a float array.
+     * @return A float[] containing all the Shape's vertices.
+     */
+    public float[] getVertices()
+    {
+        return vertices;
+    }
+    
+    /**
+     * Gets the Shape's vertices as a Vector2 array that has been transformed to world coordinates.
+     * @return A Vector2[] of world coordinate vertices.
+     */
+    public Vector2[] getWorldVertices()
+    {
+        return worldVertices;
+    }
+    
+    /**
+     * Gets the model matrix containing scaling and rotation data for this Shape.
+     * @return The Shape's model matrix.
+     */
+    public Matrix4 getModel()
+    {
+        return model;
+    }
+    
+    /**
+     * Gets the Shape's current position in world coordinates.
+     * @return The Shape's position.
+     */
+    public Vector2 getPos()
+    {
+        return position;
+    }
+    
+    /**
+     * Gets the scale of the current Shape.
+     * @return The Shape's scale.
+     */
+    public Vector2 getScale()
+    {
+        return scale;
+    }
+    
+    /**
+     * Gets the angle of the current Shape in radians.
+     * @return The Shape's angle in radians.
+     */
+    public float getAngle()
+    {
+        return angle;
+    }
+    
+    /**
+     * Gets a value indincating whether the Shape is solid or not.
+     * @return A boolean determining solidity.
+     */
+    public boolean isSolid()
+    {
+        return solid;
+    }
+    
+    /**
+     * Overwrites the velocity vector.
+     * @param v The new velocity vector.
+     */
+    public void setVelocity(Vector2 v)
+    {
+        velocity = v;
+    }
+    
+    /**
+     * Sets the Shape's density.
+     * @param density The density of the Shape.
+     */
     public void setDensity(float density)
     {
         this.density = density;
         updateMass();
     }
     
-    public float getMass()
-    {
-        return mass;
-    }
-    
-    public float getFriction()
-    {
-        return friction;
-    }
-    
+    /**
+     * Sets the Shape's coefficient of friction.
+     * @param friction The new coefficient of friction.
+     */
     public void setFriction(float friction)
     {
         this.friction = friction;
     }
     
-    public void clearForces()
-    {
-        forces.clear();
-    }
-    
-    public InteractListener getInteractListener()
-    {
-        return onInteract;
-    }
-    
+    /**
+     * Sets the methods to be called when this Shape collides with another one.
+     * @param i The new event listener.
+     */
     public void setInteractListener(InteractListener i)
     {
         onInteract = i;
     }
     
-    public float[] getVertices()
-    {
-        return vertices;
-    }
-    
-    public Vector2[] getWorldVertices()
-    {
-        return worldVertices;
-    }
-    
+    /**
+     * Sets the Shape's vertices.
+     * @param vertices The Shape's new vectices.
+     */
     public void setVertices(float[] vertices)
     {
         this.vertices = vertices;
         transformVertices();
     }
     
-    public Matrix4 getModel()
-    {
-        return model;
-    }
-    
-    public Vector2 getPos()
-    {
-        return position;
-    }
-    
+    /**
+     * Sets the position of the Shape.
+     * @param position The Shape's new position.
+     */
     public void setPos(Vector2 position)
     {
         this.position = position;
@@ -329,11 +449,10 @@ public abstract class Shape
         transformVertices();
     }
     
-    public Vector2 getScale()
-    {
-        return scale;
-    }
-    
+    /**
+     * Sets the scale of the Shape.
+     * @param scale The Shape's new scale.
+     */
     public void setScale(Vector2 scale)
     {
         this.scale = scale;
@@ -343,15 +462,10 @@ public abstract class Shape
         updateMass();
     }
     
-    public float getAngle()
-    {
-        return angle;
-    }
-    
     /**
      * Sets the shape's angle.
      * \todo remove the hax'd in degrees to radians conversion
-     * @param angle
+     * @param angle The Shape's new angle.
      */
     public void setAngle(float angle)
     {
@@ -361,11 +475,10 @@ public abstract class Shape
         transformVertices();
     }
     
-    public boolean isSolid()
-    {
-        return solid;
-    }
-    
+    /**
+     * Sets a value indicating whether the Shape is solid or not.
+     * @param solid The solidity of this Entity.
+     */
     public void setSolid(boolean solid)
     {
         this.solid = solid;

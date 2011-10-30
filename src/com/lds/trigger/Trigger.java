@@ -1,7 +1,7 @@
 package com.lds.trigger;
 
 /**
- * Allows entities to interact with each other using a {@code Cause} and an {@code Effect}.
+ * Allows entities to interact with each other using a Cause and an Effect.
  * @author Lightning Development Studios
  * @see Cause
  * @see Effect

@@ -23,10 +23,9 @@ public abstract class Entity implements InteractListener
 	
 	public static ByteBuffer indexBuffer;
 	public static int VBOIndexPtr;
-    public static boolean useVBOs;
 	
 	//behavior data
-	protected boolean isColorInterp, isGradientInterp;
+	protected boolean isColorInterp;
 	
 	protected Shape shape;
 	
@@ -36,14 +35,13 @@ public abstract class Entity implements InteractListener
 	protected Texture tex;
 	
 	protected float[] texture;
-	protected float[] color, endColor;
 	
 	protected FloatBuffer vertexBuffer;
 	protected FloatBuffer textureBuffer;
 	protected FloatBuffer colorBuffer;
 	
 	protected int VBOVertPtr, VBOGradientPtr, VBOTexturePtr;
-	protected boolean needToUpdateTexVBO, needToUpdateGradientVBO, needToUpdateVertexVBO;
+	protected boolean needToUpdateTexVBO, needToUpdateVertexVBO;
 	
 	public Entity(Shape shape)
 	{		
@@ -54,7 +52,7 @@ public abstract class Entity implements InteractListener
 		this.endColorVec = new Vector4(1, 1, 1, 1);
 	}
 	
-	public void draw(GL10 gl)
+	public void draw(GL11 gl)
 	{
 		gl.glMultMatrixf(shape.getModel().array(), 0);
 		
@@ -66,31 +64,17 @@ public abstract class Entity implements InteractListener
 	    gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
 
 	    gl.glColor4f(colorVec.getX(), colorVec.getY(), colorVec.getZ(), colorVec.getW());
-		
-		//Bind vertices, texture coordinates, and/or color coordinates to the OpenGL system
-		if (!useVBOs)
-		{
-			gl.glVertexPointer(2, GL10.GL_FLOAT, 0, vertexBuffer);
-		    gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, textureBuffer);
-		    
-			//Draw the vertices
-			gl.glDrawElements(GL10.GL_TRIANGLE_STRIP, 4, GL10.GL_UNSIGNED_BYTE, indexBuffer);	
-		}
-		else
-		{
-			GL11 gl11 = (GL11)gl;
-			
-			gl11.glBindBuffer(GL11.GL_ARRAY_BUFFER, VBOVertPtr);
-			gl11.glVertexPointer(2, GL11.GL_FLOAT, 0, 0);
 
-			gl11.glBindBuffer(GL11.GL_ARRAY_BUFFER, VBOTexturePtr);
-			gl11.glTexCoordPointer(2, GL11.GL_FLOAT, 0, 0);
-			gl11.glBindBuffer(GL11.GL_ARRAY_BUFFER, 0);
+		gl.glBindBuffer(GL11.GL_ARRAY_BUFFER, VBOVertPtr);
+		gl.glVertexPointer(2, GL11.GL_FLOAT, 0, 0);
 
-			gl11.glBindBuffer(GL11.GL_ELEMENT_ARRAY_BUFFER, VBOIndexPtr);
-			gl11.glDrawElements(GL11.GL_TRIANGLE_STRIP, 4, GL11.GL_UNSIGNED_BYTE, 0);
-			gl11.glBindBuffer(GL11.GL_ELEMENT_ARRAY_BUFFER, 0);
-		}
+		gl.glBindBuffer(GL11.GL_ARRAY_BUFFER, VBOTexturePtr);
+		gl.glTexCoordPointer(2, GL11.GL_FLOAT, 0, 0);
+		gl.glBindBuffer(GL11.GL_ARRAY_BUFFER, 0);
+
+		gl.glBindBuffer(GL11.GL_ELEMENT_ARRAY_BUFFER, VBOIndexPtr);
+		gl.glDrawElements(GL11.GL_TRIANGLE_STRIP, 4, GL11.GL_UNSIGNED_BYTE, 0);
+		gl.glBindBuffer(GL11.GL_ELEMENT_ARRAY_BUFFER, 0);
 				
 		//Disable things for next polygon
 		gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
@@ -104,7 +88,6 @@ public abstract class Entity implements InteractListener
 		//if (shape.getScale().length() <= 0.0f)
 			//EntityManager.removeEntity(this);
 		colorInterp();
-		gradientInterp();
 	}
 
 	protected FloatBuffer setBuffer(FloatBuffer buffer, float[] values)
@@ -281,7 +264,7 @@ public abstract class Entity implements InteractListener
 			final Vector4 colorDiffVec = Vector4.abs(Vector4.subtract(endColorVec, colorVec));
 			if (colorDiffVec.getX() < colorInterp && colorDiffVec.getY() < colorInterp && colorDiffVec.getZ() < colorInterp && colorDiffVec.getW() < colorInterp)
 			{
-				color = endColor;
+				colorVec = endColorVec;
 				isColorInterp = false;
 			}
 			else
@@ -301,39 +284,6 @@ public abstract class Entity implements InteractListener
 		}
 	}
 	
-	public  void initGradientInterp(float[] c)
-	{
-		endColor = c;
-		isGradientInterp = true;
-	}
-	
-	public void gradientInterp()
-	{
-		if (isGradientInterp)
-		{
-			final float gradientInterp = colorInterpSpeed / 1000 * Stopwatch.getFrameTime();
-			int nearCount = 0;
-			for (int i = 0; i < color.length; i++)
-			{
-				if (Math.abs(endColor[i] - color[i]) < gradientInterp)
-				{
-					nearCount++;
-					color[i] = endColor[i];
-				}
-				else if (endColor[i] > color[i])
-					color[i] += gradientInterp;
-				else
-					color[i] -= gradientInterp;
-			}
-			
-			if (nearCount == color.length)
-				isGradientInterp = false;
-			
-			colorBuffer = setBuffer(colorBuffer, color);
-			needToUpdateGradientVBO = true;
-		}
-	}
-	
 	/*************
 	 * VBO Stuph *
 	 *************/
@@ -342,8 +292,6 @@ public abstract class Entity implements InteractListener
     {
         if (shape.getVertices() != null)
             vertexBuffer = setBuffer(vertexBuffer, shape.getVertices());
-        if (color != null)
-            colorBuffer = setBuffer(colorBuffer, color);
         if (texture != null)
             textureBuffer = setBuffer(textureBuffer, texture);
     }
@@ -355,215 +303,259 @@ public abstract class Entity implements InteractListener
         indexBuffer.position(0);
     }
     
-    public void genHardwareBuffers(GL10 gl)
+    public void genHardwareBuffers(GL11 gl)
     {
-        if (gl instanceof GL11)
-        {
-            
-            final GL11 gl11 = (GL11)gl;
-            
-            int[] tempPtr = new int[1];
-            
-            //VERTEX
-            gl11.glGenBuffers(1, tempPtr, 0);
-            VBOVertPtr = tempPtr[0];
-            
-            gl11.glBindBuffer(GL11.GL_ARRAY_BUFFER, VBOVertPtr);
-            final int vertSize = vertexBuffer.capacity() * 4;
-            gl11.glBufferData(GL11.GL_ARRAY_BUFFER, vertSize, vertexBuffer, GL11.GL_STATIC_DRAW); //\TODO choose static/draw settings..?
-            
-            gl11.glGenBuffers(1, tempPtr, 0);
-            VBOTexturePtr = tempPtr[0];
-            needToUpdateTexVBO = true;
-            updateTextureVBO(gl);
+        int[] tempPtr = new int[1];
+        
+        //VERTEX
+        gl.glGenBuffers(1, tempPtr, 0);
+        VBOVertPtr = tempPtr[0];
+        
+        gl.glBindBuffer(GL11.GL_ARRAY_BUFFER, VBOVertPtr);
+        final int vertSize = vertexBuffer.capacity() * 4;
+        gl.glBufferData(GL11.GL_ARRAY_BUFFER, vertSize, vertexBuffer, GL11.GL_STATIC_DRAW); //\TODO choose static/draw settings..?
+        
+        gl.glGenBuffers(1, tempPtr, 0);
+        VBOTexturePtr = tempPtr[0];
+        needToUpdateTexVBO = true;
+        updateTextureVBO(gl);
 
-            gl11.glBindBuffer(GL11.GL_ARRAY_BUFFER, 0);
-        }
+        gl.glBindBuffer(GL11.GL_ARRAY_BUFFER, 0);
     }
     
-    public void updateVertexVBO(GL10 gl)
+    public void updateVertexVBO(GL11 gl)
     {
-        if (useVBOs && needToUpdateVertexVBO)
+        if (needToUpdateVertexVBO)
         {
-            GL11 gl11 = (GL11)gl;
-            gl11.glBindBuffer(GL11.GL_ARRAY_BUFFER, VBOVertPtr);
+            gl.glBindBuffer(GL11.GL_ARRAY_BUFFER, VBOVertPtr);
             final int vertexSize = vertexBuffer.capacity() * 4;
-            gl11.glBufferData(GL11.GL_ARRAY_BUFFER, vertexSize, vertexBuffer, GL11.GL_STATIC_DRAW);
+            gl.glBufferData(GL11.GL_ARRAY_BUFFER, vertexSize, vertexBuffer, GL11.GL_STATIC_DRAW);
         }
         needToUpdateVertexVBO = false;
     }
     
-    public void updateTextureVBO(GL10 gl)
+    public void updateTextureVBO(GL11 gl)
     {
-        if (useVBOs && needToUpdateTexVBO)
+        if (needToUpdateTexVBO)
         {
-            GL11 gl11 = (GL11)gl;
-            gl11.glBindBuffer(GL11.GL_ARRAY_BUFFER, VBOTexturePtr);
+            gl.glBindBuffer(GL11.GL_ARRAY_BUFFER, VBOTexturePtr);
             final int textureSize = textureBuffer.capacity() * 4;
-            gl11.glBufferData(GL11.GL_ARRAY_BUFFER, textureSize, textureBuffer, GL11.GL_STATIC_DRAW);
+            gl.glBufferData(GL11.GL_ARRAY_BUFFER, textureSize, textureBuffer, GL11.GL_STATIC_DRAW);
         }
         needToUpdateTexVBO = false;
     }
     
-    public void updateGradientVBO(GL10 gl)
+    public static void genIndexBuffer(GL11 gl)
     {
-        if (useVBOs && needToUpdateGradientVBO)
+        int[] tempPtr = new int[1];
+        
+        gl.glGenBuffers(1, tempPtr, 0);
+        VBOIndexPtr = tempPtr[0];
+        
+        gl.glBindBuffer(GL11.GL_ELEMENT_ARRAY_BUFFER, VBOIndexPtr);
+        final int indexSize = indexBuffer.capacity();
+        gl.glBufferData(GL11.GL_ELEMENT_ARRAY_BUFFER, indexSize, indexBuffer, GL11.GL_STATIC_DRAW);
+        gl.glBindBuffer(GL11.GL_ELEMENT_ARRAY_BUFFER, 0);
+        
+        final int error = gl.glGetError();
+        if (error != GL11.GL_NO_ERROR)
         {
-            GL11 gl11 = (GL11)gl;
-            gl11.glBindBuffer(GL11.GL_ARRAY_BUFFER, VBOGradientPtr);
-            final int gradientSize = colorBuffer.capacity() * 4;
-            gl11.glBufferData(GL11.GL_ARRAY_BUFFER, gradientSize, colorBuffer, GL11.GL_STATIC_DRAW);
-        }
-        needToUpdateGradientVBO = false;
-    }
-    
-    public static void genIndexBuffer(GL10 gl)
-    {
-        if (gl instanceof GL11)
-        {
-            useVBOs = true;
-            
-            GL11 gl11 = (GL11)gl;
-            int[] tempPtr = new int[1];
-            
-            gl11.glGenBuffers(1, tempPtr, 0);
-            VBOIndexPtr = tempPtr[0];
-            
-            gl11.glBindBuffer(GL11.GL_ELEMENT_ARRAY_BUFFER, VBOIndexPtr);
-            final int indexSize = indexBuffer.capacity();
-            gl11.glBufferData(GL11.GL_ELEMENT_ARRAY_BUFFER, indexSize, indexBuffer, GL11.GL_STATIC_DRAW);
-            gl11.glBindBuffer(GL11.GL_ELEMENT_ARRAY_BUFFER, 0);
-            
-            final int error = gl11.glGetError();
-            if (error != GL11.GL_NO_ERROR)
-            {
-                Log.e("LDS_Game", "Index buffer generates GL_ERROR: " + error);
-            }
+            Log.e("LDS_Game", "Index buffer generates GL_ERROR: " + error);
         }
     }
     
-    public void freeHardwareBuffers(GL10 gl)
+    public void freeHardwareBuffers(GL11 gl)
     {
-        if (useVBOs)
-        {
-            GL11 gl11 = (GL11)gl;
-            int[] buffer = new int[3];
-            buffer[0] = VBOVertPtr;
-            buffer[1] = VBOTexturePtr;
-            buffer[2] = VBOGradientPtr;
-            
-            gl11.glDeleteBuffers(3, buffer, 0);
-            
-        }
+        GL11 gl11 = (GL11)gl;
+        int[] buffer = new int[3];
+        buffer[0] = VBOVertPtr;
+        buffer[1] = VBOTexturePtr;
+        buffer[2] = VBOGradientPtr;
+        
+        gl11.glDeleteBuffers(3, buffer, 0);
     }
 	
 	/**************************
 	 * Accessors and Mutators *
 	 **************************/
 	
+    /**
+     * Gets the current entity.
+     * Used for collision callbacks.
+     * @return The current entity as an Entity.
+     */
     public Entity getEntity()
     {
         return this;
     }
     
+    /**
+     * Gets the underlying Shape used for physics.
+     * @return The Entity's Shape.
+     */
 	public Shape getShape()
     {   
 	    return shape;
 	}
 	
 	/**
-	 * \todo get this out of here
+	 * Gets the Entity's position in world coordinates.
+	 * @return A Vector2 representing the Entity's location.
 	 */
-	public void push(Vector2 f)
-	{
-	    shape.push(f);
-	}
-	
 	public Vector2 getPos()
 	{
 	    return shape.getPos();
 	}
 	
+	/**
+	 * Gets the Entity's X position in world coordiantes.
+	 * @return The Entity's X coordinate.
+	 * @deprecated Use "getPos().getX()" instead.
+	 */
 	public float getXPos()
 	{
 	    return shape.getPos().getX();
 	}
 	
+	/**
+     * Gets the Entity's Y position in world coordiantes.
+     * @return The Entity's Y coordinate.
+     * @deprecated Use "getPos().getY()" instead.
+     */
 	public float getYPos()
 	{
 	    return shape.getPos().getY();
 	}
 	
-	public void setPos(Vector2 position)
-	{
-	    shape.setPos(position);
-	}
-	
+	/**
+	 * Gets the Entity's angle, in radians.
+	 * @return The Entity's angle.
+	 * \todo make sure it's actually in radians?
+	 */
 	public float getAngle()
-	{
-	    return shape.getAngle();
-	}
+    {
+        return shape.getAngle();
+    }
 	
-	public void setAngle(float angle)
-	{
-	    shape.setAngle(angle);
-	}
-	
+	/**
+	 * Gets the Entity's scale.
+	 * @return The Entity's scale.
+	 * \todo should only be defined by vertices, consider removing scale altogether.
+	 */
 	public Vector2 getScale()
-	{
-	    return shape.getScale();
-	}
+    {
+        return shape.getScale();
+    }
 	
-	public void setScale(Vector2 scale)
-	{
-	    shape.setScale(scale);
-	}
-	
+	/**
+	 * Get's the Entity's scale in the X direction.
+	 * @return The Entity's X scale.
+	 * @deprecated Use "getScale().getX()" instead.
+	 */
 	public float getXScale()
-	{
-	    return getScale().getX();
-	}
-	
-	public float getYScale()
-	{
-	    return getScale().getY();
-	}
+    {
+        return getScale().getX();
+    }
+    
+	/**
+     * Get's the Entity's scale in the Y direction.
+     * @return The Entity's Y scale.
+     * @deprecated Use "getScale().getY()" instead.
+     */
+    public float getYScale()
+    {
+        return getScale().getY();
+    }
 
+    /**
+     * Gets the color of the Entity.
+     * @return The Entity's color.
+     */
     public Vector4 getColor()
     {
         return colorVec;
     }
 
-    public float[] getColorCoords()
-    {
-        return color;
-    }
-
+    /**
+     * Gets the texture coordinates of the Entity.
+     * @return The Entity's texture coordinates.
+     * @deprecated Replaced by interlaced VBO system.
+     */
     public float[] getTextureCoords()
     {
         return texture;
     }
 
+    /**
+     * Gets the texture used to display this Entity.
+     * @return The Entity's texture.
+     */
     public Texture getTexture()
     {
         return tex;
     }
 
+    /**
+     * Gets the vertex VBO pointer.
+     * @return A pointer to the Entity's vertex array on the GPU.
+     * @deprecated Replaced by interlaced VBO system.
+     */
     public int getVertexVBO()
     {
         return VBOVertPtr;
     }
 
+    /**
+     * Gets the texture coordinate VBO pointer.
+     * @return A pointer to the Entity's texture coordinate array on the GPU.
+     * @deprecated Replaced by interlaced VBO system.
+     */
     public int getTextureVBO()
     {
         return VBOTexturePtr;
     }
 
+    /**
+     * Gets the index VBO pointer.
+     * @return A pointer to the Entity's indices on the GPU.
+     * @deprecated Replaced by interlaced VBO system.
+     */
     public int getGradientVBO()
     {
         return VBOGradientPtr;
     }
 	
+	/**
+	 * Sets the Entity's position in world coordinates.
+	 * @param position The Entity's new position.
+	 */
+	public void setPos(Vector2 position)
+	{
+	    shape.setPos(position);
+	}
+	
+	/**
+	 * Sets the angle of the Entity.
+	 * @param angle The Entity's new angle.
+	 */
+	public void setAngle(float angle)
+	{
+	    shape.setAngle(angle);
+	}
+	
+	/**
+	 * Sets the scale of the Entity.
+	 * @param scale The Entity's new scale.
+	 */
+	public void setScale(Vector2 scale)
+	{
+	    shape.setScale(scale);
+	}
+	
+	/**
+	 * Sets the speed at which changes in the Entity's color will smoothly transition.
+	 * @param s The speed to interpolate at.
+	 */
 	public void setColorInterpSpeed(float s)
 	{
 	    this.colorInterpSpeed = s;
