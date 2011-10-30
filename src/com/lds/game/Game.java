@@ -1,6 +1,7 @@
 package com.lds.game;
 
 import android.content.Context;
+import android.graphics.drawable.shapes.Shape;
 
 import com.lds.*;
 import com.lds.Enums.*;
@@ -42,7 +43,6 @@ public class Game
 	public ArrayList<Node> nodeList;
 	public EntityManager cleaner;
 	public World world;
-	public CollisionDetector CD;
 	
 	public ArrayList<Finger> fingerList;
 	
@@ -81,7 +81,7 @@ public class Game
 		fingerList = new ArrayList<Finger>();
 		tileset = new Tile[16][16];
 		cleaner = new EntityManager();
-		
+		        		
 		StringRenderer sr = StringRenderer.getInstance();
 		TextureLoader.getInstance().initialize(gl);
 		sr.loadTextTileset(text);
@@ -204,6 +204,12 @@ public class Game
 		worldMinY = (-Tile.TILE_SIZE_F * (tileset.length / 2)) + (screenH / 2);
 		worldMaxX = (Tile.TILE_SIZE_F * (tileset[0].length / 2)) - (screenW / 2);
 		worldMaxY = (Tile.TILE_SIZE_F * (tileset.length / 2)) - (screenH / 2);
+		
+		ArrayList<com.lds.physics.Shape> shapeList = new ArrayList<com.lds.physics.Shape>();
+        for (Entity ent : entList)
+            shapeList.add(ent.getShape());
+                
+	    world = new World(new Vector2(Tile.TILE_SIZE_F * tileset[0].length, Tile.TILE_SIZE_F * tileset.length), shapeList);
 		
 		updateCameraPosition();
 		updateRenderedTileset();
@@ -378,7 +384,8 @@ public class Game
 		if (player.userHasControl())
 		{
 			player.setAngle(joypad.getInputAngle());
-			player.setPos(Vector2.add(player.getPos(), Vector2.scale(joypad.getInputVec(), /*Stopwatch.getFrameTime() **/ (1000 / 1000))));
+			//player.setPos(Vector2.add(player.getPos(), Vector2.scale(joypad.getInputVec(), /*Stopwatch.getFrameTime() **/ (1000 / 1000))));
+			player.addImpulse(Vector2.scale(joypad.getInputVec(), player.getShape().getMass()));
 		}
 		joypad.clearInputVec();
 		

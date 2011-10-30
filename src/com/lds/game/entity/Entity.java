@@ -471,6 +471,14 @@ public abstract class Entity implements InteractListener
 	    return shape;
 	}
 	
+	/**
+	 * \todo get this out of here
+	 */
+	public void push(Vector2 f)
+	{
+	    shape.push(f);
+	}
+	
 	public Vector2 getPos()
 	{
 	    return shape.getPos();

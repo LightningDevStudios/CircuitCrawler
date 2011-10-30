@@ -80,5 +80,14 @@ public class Rectangle extends Shape
             };
         this.vertices = vertices;
         transformVertices();
+        updateMass();
+    }
+    
+    @Override
+    protected void updateMass()
+    {
+        float width = vertices[0] * scale.getX() * 2;
+        float height = vertices[0] * scale.getY() * 2;
+        mass = density * width * height;
     }
 }

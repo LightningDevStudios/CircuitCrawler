@@ -125,7 +125,7 @@ public class Run extends Activity implements GameOverListener, GameInitializedLi
 	
 	public void onGameOver(boolean winning)
 	{
-		mp.stop();
+		//mp.stop();
 		//mp.reset();
 		if (winning)
 		{
@@ -187,9 +187,6 @@ public class Run extends Activity implements GameOverListener, GameInitializedLi
 		{
             e.printStackTrace();
         }
-		//saveas(R.raw.readme, "readme.txt");
-		//int whichSong = (int) (Math.random()*songs.length);
-		//mp.seekTo(whichSong);
 	
 	}
 	@Override

@@ -14,6 +14,36 @@ public abstract class Shape
      ***********/
     protected InteractListener onInteract;
     /**
+     * The current velocity of the shape
+     */
+    protected Vector2 velocity;
+    
+    /**
+     * The shape's current impulse vector, sum of implulse forces acted on it.
+     */
+    protected Vector2 impulseVec;
+    
+    /**
+     * A list of the current continual forces acting on the shape.
+     */
+    protected ArrayList<Vector2> forces;
+    
+    /**
+     * The density of the shape. default is 1
+     */
+    protected float density;
+    
+    /**
+     * The friction constant (mu) between the shape and the floor
+     */
+    protected float friction;
+    
+    /**
+     * The shape's mass. Calculated by multiplying area by density
+     */
+    protected float mass;
+    
+    /**
      * The shape's vertices in local coordinates.
      */
     protected float[] vertices;
@@ -115,6 +145,11 @@ public abstract class Shape
      */
     public Shape(Vector2 position, float angle, Vector2 scale, boolean solid)
     {
+        density = 0.001f;
+        friction = 0.1f;
+        velocity = new Vector2(0, 0);
+        impulseVec = new Vector2(0, 0);
+        forces = new ArrayList<Vector2>();
         this.solid = solid;
         this.position = position;
         this.scale = scale;
@@ -159,14 +194,96 @@ public abstract class Shape
             verts[i] = new Vector2(vertices[i * 2], vertices[i * 2 + 1]);
 
         return verts;
-        
-        //return verts.toArray(null);
-        //return (Vector2[])verts.toArray();
     }
+    
+    /**
+     * Adds a new impulse to the shape
+     * @param v The new impulse to add
+     */
+    public void addImpulse(Vector2 v)
+    {
+        impulseVec = Vector2.add(impulseVec, v);
+    }
+    
+    /**
+     * Adds a new constant force to the shape
+     * @param f The new force to add
+     */
+    public void addForce(Vector2 f)
+    {
+        forces.add(f);
+    }
+    
+    /********************
+     * Abstract Methods *
+     ********************/
+    
+    protected abstract void updateMass();
     
     /**************************
      * Accessors and Mutators *
      **************************/
+    
+    public Vector2 getVelocity()
+    {
+        return velocity;
+    }
+    
+    public void setVelocity(Vector2 v)
+    {
+        velocity = v;
+    }
+    
+    public void push(Vector2 f)
+    {
+        velocity = Vector2.add(velocity, Vector2.scale(f, 1.0f / mass));
+    }
+    
+    public Vector2 getImpulse()
+    {
+        return impulseVec;
+    }
+    
+    public void clearImpulse()
+    {
+        impulseVec = new Vector2(0, 0);
+    }
+    
+    public ArrayList<Vector2> getForces()
+    {
+        return forces;
+    }
+    
+    public float getDensity()
+    {
+        return density;
+    }
+    
+    public void setDensity(float density)
+    {
+        this.density = density;
+        updateMass();
+    }
+    
+    public float getMass()
+    {
+        return mass;
+    }
+    
+    public float getFriction()
+    {
+        return friction;
+    }
+    
+    public void setFriction(float friction)
+    {
+        this.friction = friction;
+    }
+    
+    public void clearForces()
+    {
+        forces.clear();
+    }
     
     public InteractListener getInteractListener()
     {
@@ -223,6 +340,7 @@ public abstract class Shape
         scaleMat = Matrix4.scale(scale);
         rebuildModel();
         transformVertices();
+        updateMass();
     }
     
     public float getAngle()
