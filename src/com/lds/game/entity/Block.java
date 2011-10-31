@@ -8,5 +8,7 @@ public class Block extends HoldObject
     public Block(float size, Vector2 position)
     {
         super(new Rectangle(size, position, true));
+        this.tilesetX = 3;
+        this.tilesetY = 0;
     }
 }

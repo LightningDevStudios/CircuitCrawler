@@ -1,5 +1,7 @@
 package com.lds.game.entity;
 
+import javax.microedition.khronos.opengles.GL11;
+
 import com.lds.EntityManager;
 import com.lds.Stopwatch;
 import com.lds.math.Vector2;
@@ -17,12 +19,14 @@ public class CannonShell extends Entity
 	{
 		super(new Circle(15, position, angle, true));
 		
+		this.tilesetX = 1;
+		this.tilesetY = 3;
 	}
 	
 	@Override
-	public void update()
+	public void update(GL11 gl)
 	{
-		super.update();
+		super.update(gl);
 		
 		time += Stopwatch.getFrameTime();
 		

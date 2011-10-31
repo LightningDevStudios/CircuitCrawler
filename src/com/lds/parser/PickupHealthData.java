@@ -25,13 +25,7 @@ public class PickupHealthData extends PickupData
 		if (color != null)
 			pickupHealthRef.enableColorMode(color[0], color[1], color[2], color[3]);
 		
-		//TEXTURE
-		if (textureModeEnabled)
-			pickupHealthRef.enableTextureMode(tex, texture);
-		
-		//TILESET
-		if (tilesetModeEnabled)
-			pickupHealthRef.enableTilesetMode(tex, tileX, tileY);
+		pickupHealthRef.setTexture(tex);
 		
 		entData.add(pickupHealthRef);
 		ent = pickupHealthRef;

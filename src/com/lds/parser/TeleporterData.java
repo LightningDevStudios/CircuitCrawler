@@ -24,13 +24,7 @@ public class TeleporterData extends StaticEntData
 		if (color != null)
 			teleporterRef.enableColorMode(color[0], color[1], color[2], color[3]);
 		
-		//TEXTURE
-		if (textureModeEnabled)
-			teleporterRef.enableTextureMode(tex, texture);
-		
-		//TILESET
-		if (tilesetModeEnabled)
-			teleporterRef.enableTilesetMode(tex, tileX, tileY);
+		teleporterRef.setTexture(tex);
 		
 		entData.add(teleporterRef);
 		ent = teleporterRef;

@@ -172,11 +172,8 @@ public abstract class UIEntity
 			gl.glBindBuffer(GL11.GL_ARRAY_BUFFER, VBOGradientPtr);
 			gl.glColorPointer(4, GL11.GL_FLOAT, 0, 0);
 		}
-		gl.glBindBuffer(GL11.GL_ELEMENT_ARRAY_BUFFER, Entity.VBOIndexPtr);
-		gl.glDrawElements(GL11.GL_TRIANGLE_STRIP, 4, GL11.GL_UNSIGNED_BYTE, 0);
 		
-		gl.glBindBuffer(GL11.GL_ARRAY_BUFFER, 0);
-		gl.glBindBuffer(GL11.GL_ELEMENT_ARRAY_BUFFER, 0);
+		gl.glDrawArrays(GL11.GL_TRIANGLE_STRIP, 0, 4);
 		
 		final int error = gl.glGetError();
 		if (error != GL11.GL_NO_ERROR)

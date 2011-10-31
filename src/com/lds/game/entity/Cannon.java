@@ -1,5 +1,7 @@
 package com.lds.game.entity;
 
+import javax.microedition.khronos.opengles.GL11;
+
 import com.lds.EntityManager;
 import com.lds.Stopwatch;
 import com.lds.game.Game;
@@ -27,11 +29,11 @@ public class Cannon extends Entity
 
 	@Override
 	/**
-	 * \todo add real physics
+	 * \todo add real physics.
 	 */
-	public void update()
+	public void update(GL11 gl)
 	{
-		super.update();
+		super.update(gl);
 		
 		time += Stopwatch.getFrameTime();
 		
@@ -39,8 +41,6 @@ public class Cannon extends Entity
 		{
 			time = 0;
 			CannonShell cannonShot = new CannonShell(getPos(), getAngle(), shotVelocity, 2);
-			cannonShot.enableTilesetMode(Game.tilesetwire, 1, 3);
-			//cannonShot.push(new Vector2(angle).scale(shotVelocity));
 			EntityManager.addEntity(cannonShot);
 		}
 	}

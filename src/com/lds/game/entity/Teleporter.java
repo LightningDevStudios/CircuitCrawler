@@ -13,6 +13,9 @@ public class Teleporter extends Entity
     {
         super(new Circle(size, position, false));
         active = true;
+        
+        this.tilesetX = 2;
+        this.tilesetY = 2;
     }
 
 	@Override

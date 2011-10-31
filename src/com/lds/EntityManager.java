@@ -55,13 +55,13 @@ public class EntityManager
 	{
 		for (Entity ent : trashList)
 		{
-			ent.freeHardwareBuffers(gl);
+			ent.unload(gl);
 			entList.remove(ent);
 		}
 		
 		for (Entity ent : addList)
 		{
-			ent.genHardwareBuffers(gl);
+			ent.initialize(gl);
 			entList.add(ent);
 		}
 		

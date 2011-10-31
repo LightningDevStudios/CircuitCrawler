@@ -1,5 +1,7 @@
 package com.lds.game.entity;
 
+import javax.microedition.khronos.opengles.GL11;
+
 import com.lds.EntityManager;
 import com.lds.math.Vector2;
 import com.lds.physics.Circle;
@@ -15,7 +17,7 @@ public abstract class Pickup extends Entity //pickup objects are picked up, such
 	}
 	
 	@Override
-	public void update()
+	public void update(GL11 gl)
 	{
 		//TODO scaling
 	}

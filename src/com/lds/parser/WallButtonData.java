@@ -23,13 +23,7 @@ public class WallButtonData extends StaticEntData
 		if (color != null)
 			wallButtonRef.enableColorMode(color[0], color[1], color[2], color[3]);
 		
-		//TEXTURE
-		if (textureModeEnabled)
-			wallButtonRef.enableTextureMode(tex, texture);
-		
-		//TILESET
-		if (tilesetModeEnabled)
-			wallButtonRef.enableTilesetMode(tex, tileX, tileY);
+		wallButtonRef.setTexture(tex);
 		
 		entData.add(wallButtonRef);
 		ent = wallButtonRef;
