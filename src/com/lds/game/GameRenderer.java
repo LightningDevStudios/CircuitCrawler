@@ -303,7 +303,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 					for (int i = 0; i < game.UIList.size(); i++)
 					{
 						final UIEntity ent = game.UIList.get(i);
-						if (touchVec.getX() >= ent.getPos().getX() - ent.getPos().getX() / 2 && touchVec.getX() <= ent.getPos().getX() + ent.getPos().getX() / 2 && touchVec.getY() >= ent.getPos().getY() - ent.getPos().getY() / 2 && touchVec.getY() <= ent.getPos().getY() + ent.getPos().getY() / 2)
+						if (touchVec.getX() >= ent.getPos().getX() - ent.getSize().getX() / 2 && touchVec.getX() <= ent.getPos().getX() + ent.getSize().getX() / 2 && touchVec.getY() >= ent.getPos().getY() - ent.getSize().getY() / 2 && touchVec.getY() <= ent.getPos().getY() + ent.getSize().getY() / 2)
 						{
 							final Finger newFinger = new Finger(touchVec, ent, e.getPointerId(fingerIndex));
 							newFinger.onStackPush();
