@@ -61,40 +61,38 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		charlieSheen = false;
 	}
 
-	public void onSurfaceCreated(GL10 gl, EGLConfig config)
+	public void onSurfaceCreated(GL10 gl10, EGLConfig config)
 	{
+	    GL11 gl = (GL11)gl10;
+	    
 		//openGL settings
 	    gl.glViewport(0, 0, (int)Game.screenW, (int)Game.screenH);
-		gl.glShadeModel(GL10.GL_SMOOTH);
-		gl.glEnable(GL10.GL_BLEND);
-		gl.glBlendFunc(GL10.GL_ONE, GL10.GL_ONE_MINUS_SRC_ALPHA);
+		gl.glShadeModel(GL11.GL_SMOOTH);
+		gl.glEnable(GL11.GL_BLEND);
+		gl.glBlendFunc(GL11.GL_ONE, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
 		gl.glClearColor(0.39f, 0.58f, 0.93f, 1.0f);
 		
-		gl.glDisable(GL10.GL_DEPTH_TEST);
+		gl.glDisable(GL11.GL_DEPTH_TEST);
 		
 		//start the timer and use an initial tick to prevent errors where elapsed time is a very large negative number
 		Stopwatch.start();
 		Stopwatch.tick();
-		
-		Entity.resetIndexBuffer();
+
 		game = new Game(context, (GL11)gl, levelId);
 		
 		//projWorld = Matrix4.ortho(game.camPosX - (Game.screenW / 2), game.camPosX + (Game.screenW / 2), game.camPosY + (Game.screenH / 2), game.camPosY - (Game.screenH / 2), 0, 1);
 		projWorld = Matrix4.IDENTITY;
 		projUI = Matrix4.ortho(-Game.screenW / 2 , Game.screenW / 2, Game.screenH / 2, -Game.screenH / 2, 0, 1);
 		
-		//Use VBOs if available
-		Entity.genIndexBuffer((GL11)gl);
-		
 		for (Entity ent : game.entList)
 		{
-			ent.genHardwareBuffers((GL11)gl);
+			ent.initialize(gl);
 		}
 		
 		for (UIEntity ent : game.UIList)
 		{
-			ent.genHardwareBuffers((GL11)gl);
+			ent.genHardwareBuffers(gl);
 		}
 		
 		if (gameInitializedListener != null)
@@ -113,8 +111,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	{	
 		if (paused)
 			return;
-		
-		//TODO get the interface to force GL11?
+
 		GL11 gl = (GL11)gl10;
 		
 		gl.glClear(GL11.GL_COLOR_BUFFER_BIT);
@@ -140,8 +137,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		//update all entites
 		for (Entity ent : game.entList)
 		{
-			ent.update();
-			ent.updateTextureVBO(gl);
+			ent.update(null);
 		}
 		
 		//TODO: game.update(), chain off to world.update()
@@ -204,12 +200,13 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 				{
 					final Vector2 directionVec = new Vector2(game.player.getAngle());
 					final AttackBolt attack = new AttackBolt(Vector2.add(game.player.getPos(), directionVec), Vector2.scale(directionVec, 25), game.player);
-					attack.genHardwareBuffers(gl);
+					attack.setTexture(Game.tilesetentities);
+					//attack.setTile(gl, 1, 3);
+					attack.initialize(gl);
 					EntityManager.addEntity(attack);
 					game.player.loseEnergy(5);
 					Vibrator.vibrate(context, 100);
 					SoundPlayer.playSound(SoundPlayer.SHOOT_SOUND);
-					attack.enableTilesetMode(Game.tilesetentities, 1, 3);
 				}
 			}
 			else

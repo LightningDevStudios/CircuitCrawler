@@ -15,6 +15,9 @@ public class Door extends Entity
         super(new Rectangle(size, position, 0, new Vector2(2, 1), true));
         enableColorMode(1.0f, 1.0f, 1.0f, 1.0f);
         colorInterpSpeed = 1.0f;
+        
+        this.tilesetX = 2;
+        this.tilesetY = 1;
     }
 
 	public void open()

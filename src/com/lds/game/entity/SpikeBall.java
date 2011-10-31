@@ -1,5 +1,7 @@
 package com.lds.game.entity;
 
+import javax.microedition.khronos.opengles.GL11;
+
 import com.lds.math.Vector2;
 import com.lds.physics.Circle;
 
@@ -14,9 +16,9 @@ public class SpikeBall extends Entity
 	 * \todo anything?
 	 */
 	@Override
-	public void update()
+	public void update(GL11 gl)
 	{
-		super.update();
+		super.update(gl);
 	}
 	
 }

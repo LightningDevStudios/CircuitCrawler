@@ -20,7 +20,6 @@ public class CharacterData extends PhysEntData
 	    return health;
 	}
 
-	
 	public void setHealth(int newHealth)
 	{
 	    health = newHealth;

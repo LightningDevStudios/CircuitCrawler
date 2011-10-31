@@ -23,13 +23,7 @@ public class PuzzleBoxData extends StaticEntData
 		if (color != null)
 			puzzleBoxRef.enableColorMode(color[0], color[1], color[2], color[3]);
 		
-		//TEXTURE
-		if (textureModeEnabled)
-			puzzleBoxRef.enableTextureMode(tex, texture);
-		
-		//TILESET
-		if (tilesetModeEnabled)
-			puzzleBoxRef.enableTilesetMode(tex, tileX, tileY);
+		puzzleBoxRef.setTexture(tex);
 		
 		entData.add(puzzleBoxRef);
 		ent = puzzleBoxRef;

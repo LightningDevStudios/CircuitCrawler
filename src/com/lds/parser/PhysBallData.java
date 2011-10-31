@@ -23,13 +23,7 @@ public class PhysBallData extends HoldObjectData
 		if (color != null)
 			physBallRef.enableColorMode(color[0], color[1], color[2], color[3]);
 		
-		//TEXTURE
-		if (textureModeEnabled)
-			physBallRef.enableTextureMode(tex, texture);
-		
-		//TILESET
-		if (tilesetModeEnabled)
-			physBallRef.enableTilesetMode(tex, tileX, tileY);
+		physBallRef.setTexture(tex);
 		
 		entData.add(physBallRef);
 		ent = physBallRef;

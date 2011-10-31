@@ -24,13 +24,7 @@ public class PlayerData extends CharacterData
 		if (color != null)
 			playerRef.enableColorMode(color[0], color[1], color[2], color[3]);
 		
-		//TEXTURE
-		if (textureModeEnabled)
-			playerRef.enableTextureMode(tex, texture);
-		
-		//TILESET
-		if (tilesetModeEnabled)
-			playerRef.enableTilesetMode(tex, tileX, tileY);
+		playerRef.setTexture(tex);
 		
 		entData.add(playerRef);
 		ent = playerRef;

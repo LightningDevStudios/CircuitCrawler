@@ -25,13 +25,7 @@ public class PickupEnergyData extends PickupData
 		if (color != null)
 			pickupEnergyRef.enableColorMode(color[0], color[1], color[2], color[3]);
 		
-		//TEXTURE
-		if (textureModeEnabled)
-			pickupEnergyRef.enableTextureMode(tex, texture);
-		
-		//TILESET
-		if (tilesetModeEnabled)
-			pickupEnergyRef.enableTilesetMode(tex, tileX, tileY);
+		pickupEnergyRef.setTexture(tex);
 		
 		entData.add(pickupEnergyRef);
 		ent = pickupEnergyRef;

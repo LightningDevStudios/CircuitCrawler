@@ -1,17 +1,35 @@
 package com.lds.game.entity;
 
+import javax.microedition.khronos.opengles.GL11;
+
 import com.lds.game.SoundPlayer;
 import com.lds.math.Vector2;
 import com.lds.physics.Circle;
 
 public class Button extends Entity
 {
-	private boolean active;
+	private boolean active, prevActive;
 	
 	public Button(Vector2 position)
 	{
 		super(new Circle(69, position, false));
-		active = false;
+		
+		this.tilesetX = 0;
+		this.tilesetY = 0;
+	}
+	
+	public void update(GL11 gl)
+	{
+	    //update the texture when activated/deactivated.
+	    if (prevActive != active)
+	    {
+	        if (active)
+	            this.setTile(gl, 1, 0);
+	        else
+	            this.setTile(gl, 0, 0);
+	        
+	        prevActive = active;
+	    }
 	}
 	
 	public boolean isActive()
@@ -21,22 +39,16 @@ public class Button extends Entity
 	
 	public void activate()
 	{
-		if (!active)
-		{
-			active = true;
-			SoundPlayer.playSound(SoundPlayer.SOUND_TEST);
-			updateTileset(1);
-		}
+	    prevActive = active;
+		active = true;
+		SoundPlayer.playSound(SoundPlayer.SOUND_TEST);
 	}
 	
 	public void deactivate()
 	{
-		if (active)
-		{
-			active = false;
-			SoundPlayer.playSound(SoundPlayer.SOUND_TEST);
-			updateTileset(0);
-		}
+	    prevActive = active;
+		active = false;
+		SoundPlayer.playSound(SoundPlayer.SOUND_TEST);
 	}
 	
 	@Override

@@ -1,5 +1,7 @@
 package com.lds.game.entity;
 
+import javax.microedition.khronos.opengles.GL11;
+
 import com.lds.EntityManager;
 import com.lds.Stopwatch;
 import com.lds.math.Vector2;
@@ -25,6 +27,9 @@ public class Player extends Entity
 		health = HEALTH_LIMIT;
 		controlled = true;
 		damageTime = 0;
+		
+		this.tilesetX = 0;
+		this.tilesetY = 2;
 	}
 	
 	public void attack()
@@ -122,9 +127,9 @@ public class Player extends Entity
 	 * \todo make player flash once it is hit.
 	 */
 	@Override
-    public void update()
+    public void update(GL11 gl)
     {
-        super.update();
+        super.update(gl);
         
         damageTime += Stopwatch.getFrameTime();
         

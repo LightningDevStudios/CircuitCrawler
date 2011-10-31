@@ -24,13 +24,7 @@ public class PhysBlockData extends HoldObjectData
 		if (color != null)
 			physBlockRef.enableColorMode(color[0], color[1], color[2], color[3]);
 		
-		//TEXTURE
-		if (textureModeEnabled)
-			physBlockRef.enableTextureMode(tex, texture);
-		
-		//TILESET
-		if (tilesetModeEnabled)
-			physBlockRef.enableTilesetMode(tex, tileX, tileY);
+		physBlockRef.setTexture(tex);
 		
 		entData.add(physBlockRef);
 		ent = physBlockRef;

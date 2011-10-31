@@ -12,6 +12,9 @@ public class WallButton extends Entity
 	{
 	    super(new Rectangle(64, position, angle, true));
 		active = false;
+		
+		this.tilesetX = 0;
+		this.tilesetY = 1;
 	}
 	
 	@Override

@@ -26,13 +26,7 @@ public class DoorData extends StaticEntData
 		if (color != null)
 			doorRef.enableColorMode(color[0], color[1], color[2], color[3]);
 		
-		//TEXTURE
-		if (textureModeEnabled)
-			doorRef.enableTextureMode(tex, texture);
-		
-		//TILESET
-		if (tilesetModeEnabled)
-			doorRef.enableTilesetMode(tex, tileX, tileY);
+		doorRef.setTexture(tex);
 		
 		entData.add(doorRef);
 		ent = doorRef;

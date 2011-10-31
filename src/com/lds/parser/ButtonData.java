@@ -24,14 +24,8 @@ public class ButtonData extends StaticEntData
 		//COLOR
 		if (color != null)
 			buttonRef.enableColorMode(color[0], color[1], color[2], color[3]);
-
-		//TEXTURE
-		if (textureModeEnabled)
-			buttonRef.enableTextureMode(tex, texture);
 		
-		//TILESET
-		if (tilesetModeEnabled)
-			buttonRef.enableTilesetMode(tex, tileX, tileY);
+		buttonRef.setTexture(tex);
 		
 		entData.add(buttonRef);
 		ent = buttonRef;

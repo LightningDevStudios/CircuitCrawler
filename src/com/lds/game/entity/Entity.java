@@ -1,7 +1,5 @@
 package com.lds.game.entity;
 
-import android.util.Log;
-
 import com.lds.Stopwatch;
 import com.lds.Texture;
 import com.lds.TilesetHelper;
@@ -18,10 +16,6 @@ import javax.microedition.khronos.opengles.GL11;
 public abstract class Entity implements InteractListener
 {
 	public static final float DEFAULT_SIZE = 32.0f;
-	public static final byte[] indices = {0, 1, 2, 3};
-	
-	public static ByteBuffer indexBuffer;
-	public static int VBOIndexPtr;
 	
 	//behavior data
 	protected boolean isColorInterp;
@@ -32,46 +26,38 @@ public abstract class Entity implements InteractListener
 	protected Vector4 colorVec, endColorVec;
 	protected float colorInterpSpeed;
 	protected Texture tex;
-	
-	protected float[] texture;
-	
-	protected FloatBuffer vertexBuffer;
-	protected FloatBuffer textureBuffer;
-	protected FloatBuffer colorBuffer;
-	
-	protected int VBOVertPtr, VBOGradientPtr, VBOTexturePtr;
-	protected boolean needToUpdateTexVBO, needToUpdateVertexVBO;
+	protected int tilesetX, tilesetY;
+		
+	protected int VBO;
 	
 	public Entity(Shape shape)
 	{		
 		this.shape = shape;
 		this.shape.setInteractListener(this);
-		this.vertexBuffer = setBuffer(vertexBuffer, shape.getVertices());
 		this.colorVec = new Vector4(1, 1, 1, 1);
 		this.endColorVec = new Vector4(1, 1, 1, 1);
 	}
 	
 	public void draw(GL11 gl)
 	{
+	    //convert local space to world space.
 		gl.glMultMatrixf(shape.getModel().array(), 0);
 		
+		//bind the texture and set the color.
 		gl.glBindTexture(GL11.GL_TEXTURE_2D, tex.getTexture());
-
 	    gl.glColor4f(colorVec.getX(), colorVec.getY(), colorVec.getZ(), colorVec.getW());
 
-		gl.glBindBuffer(GL11.GL_ARRAY_BUFFER, VBOVertPtr);
+	    //bind the VBO and set up the vertex and tex coord pointers.
+		gl.glBindBuffer(GL11.GL_ARRAY_BUFFER, VBO);
 		gl.glVertexPointer(2, GL11.GL_FLOAT, 0, 0);
-
-		gl.glBindBuffer(GL11.GL_ARRAY_BUFFER, VBOTexturePtr);
-		gl.glTexCoordPointer(2, GL11.GL_FLOAT, 0, 0);
+		gl.glTexCoordPointer(2, GL11.GL_FLOAT, 0, 32);
 		gl.glBindBuffer(GL11.GL_ARRAY_BUFFER, 0);
 
-		gl.glBindBuffer(GL11.GL_ELEMENT_ARRAY_BUFFER, VBOIndexPtr);
-		gl.glDrawElements(GL11.GL_TRIANGLE_STRIP, 4, GL11.GL_UNSIGNED_BYTE, 0);
-		gl.glBindBuffer(GL11.GL_ELEMENT_ARRAY_BUFFER, 0);
+		//draw the entity.
+		gl.glDrawArrays(GL11.GL_TRIANGLE_STRIP, 0, 4);
 	}
 	
-	public void update()
+	public void update(GL11 gl)
 	{
 	    //TODO: change this?
 		//if (shape.getScale().length() <= 0.0f)
@@ -79,15 +65,59 @@ public abstract class Entity implements InteractListener
 		colorInterp();
 	}
 
-	protected FloatBuffer setBuffer(FloatBuffer buffer, float[] values)
+	/**
+	 * \todo move this to the constructor, rework parser to do that.
+	 * @param gl The OpenGL context.
+	 */
+	public void initialize(GL11 gl)
+	{	    
+	    //8 floats for 4 points, 2 sets of data.
+	    float[] verts = new float[8 * 2];
+	    
+	    //gather the required data.
+	    float[] v = shape.getVertices();
+	    float[] t = TilesetHelper.getTextureVertices(tex, tilesetX, tilesetY);
+	    
+	    //copy vertices over
+	    for(int i = 0; i < v.length; i++)
+	        verts[i] = v[i];
+	    
+	    //copy texture coordinates over.
+	    for (int i = 0; i < t.length; i++)
+	        verts[i + 8] = t[i];
+	    
+	    //store data in a float buffer, as required by Android.
+	    ByteBuffer byteBuf = ByteBuffer.allocateDirect(verts.length * 4);
+        byteBuf.order(ByteOrder.nativeOrder());
+        FloatBuffer buffer = byteBuf.asFloatBuffer();
+        buffer.put(verts);
+        buffer.position(0);
+	    
+        //generate a VBO.
+	    int[] tempPtr = new int[1];
+        gl.glGenBuffers(1, tempPtr, 0);
+        VBO = tempPtr[0];
+        
+        //send data to GPU.
+        gl.glBindBuffer(GL11.GL_ARRAY_BUFFER, VBO);
+        gl.glBufferData(GL11.GL_ARRAY_BUFFER, verts.length * 4, buffer, GL11.GL_STATIC_DRAW);
+        gl.glBindBuffer(GL11.GL_ARRAY_BUFFER, 0);
+	}
+	
+	private void updateTexCoords(GL11 gl)
 	{
-		ByteBuffer byteBuf = ByteBuffer.allocateDirect(values.length * 4);
-		byteBuf.order(ByteOrder.nativeOrder());
-		buffer = byteBuf.asFloatBuffer();
-		buffer.put(values);
-		buffer.position(0);
-		
-		return buffer;
+	    float[] t = TilesetHelper.getTextureVertices(tex, tilesetX, tilesetY);
+	    
+	    //store data in a float buffer, as required by Android.
+        ByteBuffer byteBuf = ByteBuffer.allocateDirect(t.length * 4);
+        byteBuf.order(ByteOrder.nativeOrder());
+        FloatBuffer buffer = byteBuf.asFloatBuffer();
+        buffer.put(t);
+        buffer.position(0);
+	    
+	    gl.glBindBuffer(GL11.GL_ARRAY_BUFFER, VBO);
+	    gl.glBufferSubData(GL11.GL_ARRAY_BUFFER, 32, t.length * 4, buffer);
+	    gl.glBindBuffer(GL11.GL_ARRAY_BUFFER, 0);
 	}
 	
 	/*********************
@@ -143,6 +173,13 @@ public abstract class Entity implements InteractListener
 	 **********************/
 		
 	//COLOR
+	/**
+	 * \todo use Vector4s instead (or make a Color4 class)
+	 * @param r R component.
+	 * @param g G component.
+	 * @param b B component.
+	 * @param a A component.
+	 */
 	public void enableColorMode(float r, float g, float b, float a)
 	{
 		updateColor(r, g, b, a);
@@ -161,82 +198,6 @@ public abstract class Entity implements InteractListener
 	public void updateColor(int r, int g, int b, int a)
 	{
 		updateColor((float) r / 255.0f, (float) g / 255.0f, (float) b / 255.0f, (float) a / 255.0f);
-	}
-	
-	//TEXTURE
-	public void enableTextureMode(Texture tex)
-	{
-		updateTexture(tex);
-	}
-	
-	public void enableTextureMode(Texture tex, float[] texture)
-	{
-		updateTexture(tex, texture);
-	}
-		
-	public void updateTexture(Texture tex)
-	{
-		final float[] initTexture = 
-	    {
-	        1.0f, 0.0f,
-			1.0f, 1.0f,
-			0.0f, 0.0f,
-			0.0f, 1.0f
-		};
-		
-		updateTexture(tex, initTexture);
-	}
-	
-	public void updateTexture(Texture tex, float[] texture)
-	{
-		this.tex = tex;
-		this.texture = texture;
-		this.textureBuffer = setBuffer(textureBuffer, texture);
-		needToUpdateTexVBO = true;
-	}
-	
-	public void disableTextureMode()
-	{
-	}
-	
-	//TILESET
-	public void enableTilesetMode(Texture tex, int x, int y)
-	{
-		updateTileset(tex, x, y);
-	}
-	
-	public void enableTilesetMode(Texture tex, int tileID)
-	{
-		updateTileset(tex, tileID);
-	}
-		
-	public void updateTileset(Texture tex, int x, int y)
-	{
-		updateTileset(tex, TilesetHelper.getTilesetID(x, y, tex));	
-	}
-	
-	public void updateTileset(Texture tex, int tileID)
-	{
-		this.tex = tex;
-		texture = TilesetHelper.getTextureVertices(tex, tileID);
-		this.textureBuffer = setBuffer(textureBuffer, texture);
-		needToUpdateTexVBO = true;
-	}
-	
-	public void updateTileset(int x, int y)
-	{
-		if (tex != null)
-			updateTileset(tex, x, y);
-	}
-	
-	public void updateTileset(int tileID)
-	{
-		if (tex != null)
-			updateTileset(tex, tileID);
-	}
-	
-	public void disableTilesetMode()
-	{
 	}
 		
 	public void initColorInterp(float r, float g, float b, float a)
@@ -272,96 +233,13 @@ public abstract class Entity implements InteractListener
 			}
 		}
 	}
-	
-	/*************
-	 * VBO Stuph *
-	 *************/
-	
-	public void resetAllBuffers()
-    {
-        if (shape.getVertices() != null)
-            vertexBuffer = setBuffer(vertexBuffer, shape.getVertices());
-        if (texture != null)
-            textureBuffer = setBuffer(textureBuffer, texture);
-    }
-    
-    public static void resetIndexBuffer()
-    {
-        indexBuffer = ByteBuffer.allocateDirect(indices.length);
-        indexBuffer.put(indices);
-        indexBuffer.position(0);
-    }
-    
-    public void genHardwareBuffers(GL11 gl)
-    {
-        int[] tempPtr = new int[1];
-        
-        //VERTEX
-        gl.glGenBuffers(1, tempPtr, 0);
-        VBOVertPtr = tempPtr[0];
-        
-        gl.glBindBuffer(GL11.GL_ARRAY_BUFFER, VBOVertPtr);
-        final int vertSize = vertexBuffer.capacity() * 4;
-        gl.glBufferData(GL11.GL_ARRAY_BUFFER, vertSize, vertexBuffer, GL11.GL_STATIC_DRAW); //\TODO choose static/draw settings..?
-        
-        gl.glGenBuffers(1, tempPtr, 0);
-        VBOTexturePtr = tempPtr[0];
-        needToUpdateTexVBO = true;
-        updateTextureVBO(gl);
 
-        gl.glBindBuffer(GL11.GL_ARRAY_BUFFER, 0);
-    }
-    
-    public void updateVertexVBO(GL11 gl)
+    public void unload(GL11 gl)
     {
-        if (needToUpdateVertexVBO)
-        {
-            gl.glBindBuffer(GL11.GL_ARRAY_BUFFER, VBOVertPtr);
-            final int vertexSize = vertexBuffer.capacity() * 4;
-            gl.glBufferData(GL11.GL_ARRAY_BUFFER, vertexSize, vertexBuffer, GL11.GL_STATIC_DRAW);
-        }
-        needToUpdateVertexVBO = false;
-    }
-    
-    public void updateTextureVBO(GL11 gl)
-    {
-        if (needToUpdateTexVBO)
-        {
-            gl.glBindBuffer(GL11.GL_ARRAY_BUFFER, VBOTexturePtr);
-            final int textureSize = textureBuffer.capacity() * 4;
-            gl.glBufferData(GL11.GL_ARRAY_BUFFER, textureSize, textureBuffer, GL11.GL_STATIC_DRAW);
-        }
-        needToUpdateTexVBO = false;
-    }
-    
-    public static void genIndexBuffer(GL11 gl)
-    {
-        int[] tempPtr = new int[1];
+        int[] buffer = new int[1];
+        buffer[0] = VBO;
         
-        gl.glGenBuffers(1, tempPtr, 0);
-        VBOIndexPtr = tempPtr[0];
-        
-        gl.glBindBuffer(GL11.GL_ELEMENT_ARRAY_BUFFER, VBOIndexPtr);
-        final int indexSize = indexBuffer.capacity();
-        gl.glBufferData(GL11.GL_ELEMENT_ARRAY_BUFFER, indexSize, indexBuffer, GL11.GL_STATIC_DRAW);
-        gl.glBindBuffer(GL11.GL_ELEMENT_ARRAY_BUFFER, 0);
-        
-        final int error = gl.glGetError();
-        if (error != GL11.GL_NO_ERROR)
-        {
-            Log.e("LDS_Game", "Index buffer generates GL_ERROR: " + error);
-        }
-    }
-    
-    public void freeHardwareBuffers(GL11 gl)
-    {
-        GL11 gl11 = (GL11)gl;
-        int[] buffer = new int[3];
-        buffer[0] = VBOVertPtr;
-        buffer[1] = VBOTexturePtr;
-        buffer[2] = VBOGradientPtr;
-        
-        gl11.glDeleteBuffers(3, buffer, 0);
+        gl.glDeleteBuffers(3, buffer, 0);
     }
 	
 	/**************************
@@ -466,52 +344,12 @@ public abstract class Entity implements InteractListener
     }
 
     /**
-     * Gets the texture coordinates of the Entity.
-     * @return The Entity's texture coordinates.
-     * @deprecated Replaced by interlaced VBO system.
-     */
-    public float[] getTextureCoords()
-    {
-        return texture;
-    }
-
-    /**
      * Gets the texture used to display this Entity.
      * @return The Entity's texture.
      */
     public Texture getTexture()
     {
         return tex;
-    }
-
-    /**
-     * Gets the vertex VBO pointer.
-     * @return A pointer to the Entity's vertex array on the GPU.
-     * @deprecated Replaced by interlaced VBO system.
-     */
-    public int getVertexVBO()
-    {
-        return VBOVertPtr;
-    }
-
-    /**
-     * Gets the texture coordinate VBO pointer.
-     * @return A pointer to the Entity's texture coordinate array on the GPU.
-     * @deprecated Replaced by interlaced VBO system.
-     */
-    public int getTextureVBO()
-    {
-        return VBOTexturePtr;
-    }
-
-    /**
-     * Gets the index VBO pointer.
-     * @return A pointer to the Entity's indices on the GPU.
-     * @deprecated Replaced by interlaced VBO system.
-     */
-    public int getGradientVBO()
-    {
-        return VBOGradientPtr;
     }
 	
 	/**
@@ -548,5 +386,27 @@ public abstract class Entity implements InteractListener
 	public void setColorInterpSpeed(float s)
 	{
 	    this.colorInterpSpeed = s;
+	}
+	
+	/**
+	 * Sets the Entity's texture.
+	 * @param tex The Entity's new Texture.
+	 */
+	public void setTexture(Texture tex)
+	{
+	    this.tex = tex;
+	}
+	
+	/**
+	 * Sets the Entity's tile.
+	 * @param tilesetX The X coordinate of the tile.
+	 * @param tilesetY The Y coordinate of the tile.
+	 */
+	public void setTile(GL11 gl, int tilesetX, int tilesetY)
+	{
+	    this.tilesetX = tilesetX;
+	    this.tilesetY = tilesetY;
+	    
+	    this.updateTexCoords(gl);
 	}
 }

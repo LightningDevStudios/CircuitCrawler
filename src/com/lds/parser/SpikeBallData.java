@@ -31,14 +31,8 @@ public class SpikeBallData extends PhysEntData
 		//COLOR
 		if (color != null)
 			spikeBallRef.enableColorMode(color[0], color[1], color[2], color[3]);
-				
-		//TEXTURE
-		if (textureModeEnabled)
-			spikeBallRef.enableTextureMode(tex, texture);
 		
-		//TILESET
-		if (tilesetModeEnabled)
-			spikeBallRef.enableTilesetMode(tex, tileX, tileY);
+		spikeBallRef.setTexture(tex);
 		
 		entData.add(spikeBallRef);
 		ent = spikeBallRef;
