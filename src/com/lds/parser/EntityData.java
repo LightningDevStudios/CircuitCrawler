@@ -20,7 +20,7 @@ public abstract class EntityData
 	
 	protected Entity ent;
 	
-	private String tileCoordsStr, id;
+	private String id;
 	
 	public EntityData(HashMap<String, String> entHM)
 	{

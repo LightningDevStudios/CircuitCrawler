@@ -105,13 +105,13 @@ public class Circle extends Shape
      */
     public float getRadius()
     {
-        return vertices[5] * scale.getX();
+        return vertices[5] * scale.x();
     }
     
     @Override
     public void setScale(Vector2 scale)
     {
-        if (scale.getX() == scale.getY())
+        if (scale.x() == scale.y())
             super.setScale(scale);
     }
 }

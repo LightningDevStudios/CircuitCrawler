@@ -4,7 +4,6 @@ import javax.microedition.khronos.opengles.GL11;
 
 import com.lds.EntityManager;
 import com.lds.Stopwatch;
-import com.lds.game.Game;
 import com.lds.math.Vector2;
 import com.lds.physics.Rectangle;
 

@@ -43,7 +43,7 @@ public class AttackBolt extends Entity
 	public void update(GL11 gl)
 	{
 		super.update(gl);
-		if (colorVec.getW() == 0.0f) //if transparent
+		if (colorVec.w() == 0.0f) //if transparent
 			EntityManager.removeEntity(this);
 	}
 	

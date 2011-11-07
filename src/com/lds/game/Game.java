@@ -41,7 +41,7 @@ public class Game
 	
 	public ArrayList<Entity> entList;
 	public Tile[][] tileset;
-	public ArrayList<UIEntity> UIList;
+	public ArrayList<Control> UIList;
 	public ArrayList<Trigger> triggerList;
 	public ArrayList<Node> nodeList;
 	public EntityManager cleaner;
@@ -79,7 +79,7 @@ public class Game
 		final Texture healthbarborder = new Texture(R.raw.healthbarborder, 256, 16, 1, 1, context, "healthbarborder");
 			
 		entList = new ArrayList<Entity>();
-		UIList = new ArrayList<UIEntity>();
+		UIList = new ArrayList<Control>();
 		triggerList = new ArrayList<Trigger>();
 		fingerList = new ArrayList<Finger>();
 		tileset = new Tile[16][16];
@@ -107,7 +107,7 @@ public class Game
 		
 		try
 		{
-			parser.parseLevel((GL11)gl); 
+			parser.parseLevel(gl); 
 		}
 		
 		//TODO cleanly exit the game on error.
@@ -133,12 +133,14 @@ public class Game
  		{
  			for (int j = 0; j < tileset[0].length; j++)
  			{
- 				if (tileset[i][j].isPit())
+ 			    /*TileState state = tileset[i][j].getTileState();
+ 				if (state == TileState.PIT)
  					tileset[i][j].updateBordersPit(tileset, j, i);
- 				else if (tileset[i][j].isWall())
- 					tileset[i][j].updateBordersWall(tileset, j, i);
- 				
- 				tileset[i][j].regenTexCoords((GL11)gl);
+ 				else if (state == TileState.WALL)
+ 					tileset[i][j].updateBordersWall(tileset, j, i);*/
+ 				tileset[i][j].calculateBorders(tileset);
+ 				tileset[i][j].updateBorders();
+ 				tileset[i][j].regenTexCoords(gl);
  			}
  		}
 		
@@ -245,7 +247,7 @@ public class Game
 		    Vector2 entMax = Vector2.add(ent.getPos(), diagonalVec);
 			
 			//values are opposite for entMin/Max because only the far tips have to be inside the screen (leftmost point on right border of screen)
-			if (entMin.getX() <= maxX && entMax.getX() >= minX && entMin.getY() <= maxY && entMax.getY() >= minY)
+			if (entMin.x() <= maxX && entMax.x() >= minX && entMin.y() <= maxY && entMax.y() >= minY)
 				renderList.add(ent);
 		}
 		
@@ -282,8 +284,8 @@ public class Game
 	public void updateCameraPosition()
 	{
 		//move camera to follow player.
-		camPosX = player.getPos().getX();
-		camPosY = player.getPos().getY();
+		camPosX = player.getPos().x();
+		camPosY = player.getPos().y();
 		
 		
 		//camera can't go further than defined level bounds
@@ -306,8 +308,8 @@ public class Game
 		final float tilesetHalfWidth = tileset[0].length * Tile.TILE_SIZE_F / 2;
 		final float tilesetHalfHeight = tileset.length * Tile.TILE_SIZE_F / 2;
 		
-		final int x = (int)(ent.getPos().getX() + tilesetHalfWidth) / Tile.TILE_SIZE;
-		final int y = (int)(Math.abs(ent.getPos().getY() - tilesetHalfHeight)) / Tile.TILE_SIZE;
+		final int x = (int)(ent.getPos().x() + tilesetHalfWidth) / Tile.TILE_SIZE;
+		final int y = (int)(Math.abs(ent.getPos().y() - tilesetHalfHeight)) / Tile.TILE_SIZE;
 		
 		if (x < tileset[0].length && x >= 0 && y < tileset.length && y >= 0)
 		{

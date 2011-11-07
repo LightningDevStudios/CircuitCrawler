@@ -5,7 +5,7 @@ import com.lds.Enums.RenderMode;
 import com.lds.Enums.UIPosition;
 import com.lds.math.Vector2;
 
-public abstract class UIProgressBar extends UIEntity
+public abstract class UIProgressBar extends Control
 {
 	private int value, maximum, minimum, originalValue;
 	private float[] originalColor;
@@ -120,8 +120,8 @@ public abstract class UIProgressBar extends UIEntity
 		
 		halfSize = Vector2.scale(size, 0.5f);
 		
-		float x = halfSize.getX();
-		float y = halfSize.getY();
+		float x = halfSize.x();
+		float y = halfSize.y();
 		
 		float[] initVerts = 
 		{
@@ -181,8 +181,8 @@ public abstract class UIProgressBar extends UIEntity
 	@Override 
 	public void setSize(Vector2 size)
 	{
-	    this.originalXSize = size.getX();
-	    this.originalYSize = size.getY();
+	    this.originalXSize = size.x();
+	    this.originalYSize = size.y();
 	    updateVertices();
 	}
 	

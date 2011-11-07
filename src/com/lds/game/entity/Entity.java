@@ -45,7 +45,7 @@ public abstract class Entity implements InteractListener
 		
 		//bind the texture and set the color.
 		gl.glBindTexture(GL11.GL_TEXTURE_2D, tex.getTexture());
-	    gl.glColor4f(colorVec.getX(), colorVec.getY(), colorVec.getZ(), colorVec.getW());
+	    gl.glColor4f(colorVec.x(), colorVec.y(), colorVec.z(), colorVec.w());
 
 	    //bind the VBO and set up the vertex and tex coord pointers.
 		gl.glBindBuffer(GL11.GL_ARRAY_BUFFER, VBO);
@@ -212,23 +212,23 @@ public abstract class Entity implements InteractListener
 		{
 			final float colorInterp = colorInterpSpeed / 1000 * Stopwatch.getFrameTime();
 			final Vector4 colorDiffVec = Vector4.abs(Vector4.subtract(endColorVec, colorVec));
-			if (colorDiffVec.getX() < colorInterp && colorDiffVec.getY() < colorInterp && colorDiffVec.getZ() < colorInterp && colorDiffVec.getW() < colorInterp)
+			if (colorDiffVec.x() < colorInterp && colorDiffVec.y() < colorInterp && colorDiffVec.z() < colorInterp && colorDiffVec.w() < colorInterp)
 			{
 				colorVec = endColorVec;
 				isColorInterp = false;
 			}
 			else
 			{
-				if (endColorVec.getX() > colorVec.getX())   colorVec = Vector4.add(colorVec, new Vector4(colorInterp, 0, 0, 0));
+				if (endColorVec.x() > colorVec.x())   colorVec = Vector4.add(colorVec, new Vector4(colorInterp, 0, 0, 0));
 				else					                    colorVec = Vector4.subtract(colorVec, new Vector4(colorInterp, 0, 0, 0));
 				
-				if (endColorVec.getY() > colorVec.getY())	colorVec = Vector4.add(colorVec, new Vector4(0, colorInterp, 0, 0));
+				if (endColorVec.y() > colorVec.y())	colorVec = Vector4.add(colorVec, new Vector4(0, colorInterp, 0, 0));
 				else					                    colorVec = Vector4.subtract(colorVec, new Vector4(0, colorInterp, 0, 0));
 				
-				if (endColorVec.getZ() > colorVec.getZ())	colorVec = Vector4.add(colorVec, new Vector4(0, 0, colorInterp, 0));
+				if (endColorVec.z() > colorVec.z())	colorVec = Vector4.add(colorVec, new Vector4(0, 0, colorInterp, 0));
 				else					                    colorVec = Vector4.subtract(colorVec, new Vector4(0, 0, colorInterp, 0));
 				
-				if (endColorVec.getW() > colorVec.getW())	colorVec = Vector4.add(colorVec, new Vector4(0, 0, 0, colorInterp));
+				if (endColorVec.w() > colorVec.w())	colorVec = Vector4.add(colorVec, new Vector4(0, 0, 0, colorInterp));
 				else					                    colorVec = Vector4.subtract(colorVec, new Vector4(0, 0, 0, colorInterp));
 			}
 		}
@@ -281,7 +281,7 @@ public abstract class Entity implements InteractListener
 	 */
 	public float getXPos()
 	{
-	    return shape.getPos().getX();
+	    return shape.getPos().x();
 	}
 	
 	/**
@@ -291,7 +291,7 @@ public abstract class Entity implements InteractListener
      */
 	public float getYPos()
 	{
-	    return shape.getPos().getY();
+	    return shape.getPos().y();
 	}
 	
 	/**
@@ -312,26 +312,6 @@ public abstract class Entity implements InteractListener
 	public Vector2 getScale()
     {
         return shape.getScale();
-    }
-	
-	/**
-	 * Get's the Entity's scale in the X direction.
-	 * @return The Entity's X scale.
-	 * @deprecated Use "getScale().getX()" instead.
-	 */
-	public float getXScale()
-    {
-        return getScale().getX();
-    }
-    
-	/**
-     * Get's the Entity's scale in the Y direction.
-     * @return The Entity's Y scale.
-     * @deprecated Use "getScale().getY()" instead.
-     */
-    public float getYScale()
-    {
-        return getScale().getY();
     }
 
     /**
@@ -399,6 +379,7 @@ public abstract class Entity implements InteractListener
 	
 	/**
 	 * Sets the Entity's tile.
+	 * @param gl The OpenGL context.
 	 * @param tilesetX The X coordinate of the tile.
 	 * @param tilesetY The Y coordinate of the tile.
 	 */

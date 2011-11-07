@@ -2,10 +2,10 @@ package com.lds.game.entity;
 
 import android.graphics.Point;
 
-import com.lds.Enums;
 import com.lds.Enums.*;
 import com.lds.TilesetHelper;
 import com.lds.game.Game;
+import com.lds.math.MathHelper;
 import com.lds.math.Vector2;
 import com.lds.physics.Rectangle;
 import com.lds.physics.Shape;
@@ -14,7 +14,7 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 import java.util.ArrayList;
-import java.util.EnumSet;
+import java.util.Map;
 
 import javax.microedition.khronos.opengles.GL11;
 
@@ -28,7 +28,7 @@ public class Tile
 	public static final int TILE_SIZE = 72;
 	public static final float TILE_SIZE_F = 72.0f;
 	
-	public int tileX, tileY, xIndex, yIndex;
+	private int tileX, tileY, xIndex, yIndex;
 	
 	private TileState state;
 	private boolean tempBridge;
@@ -38,6 +38,8 @@ public class Tile
 	private Vector2 pos;	
 	
 	private int vertVBO, texVBO, indexVBO;
+	
+	private byte borders;
 	
 	public Tile(GL11 gl, float size, int tileIndexX, int tileIndexY, int tilesetLengthX, int tilesetLengthY, TileState state)
 	{
@@ -53,9 +55,9 @@ public class Tile
 		for (int i = 0; i < vertices.length; i++)
 		{
 			if (i % 2 == 0)
-				vertices[i] += pos.getX();
+				vertices[i] += pos.x();
 			else
-				vertices[i] += pos.getY();
+				vertices[i] += pos.y();
 		}
 		
 		shape = new Rectangle(size, pos, false);
@@ -251,652 +253,160 @@ public class Tile
 		return state;
 	}
 	
-	public void updateBordersPit(Tile[][] tileset, int x, int y)
-    {
-	    //a bitfield for the 8 bordering tiles.
-	    /*byte covered = 0;
-
-	    //store all the bordering tile indices in top left to bottom right order.
-	    ArrayList<Point> points = new ArrayList<Point>();
-	    points.add(new Point(x - 1, y - 1));
-	    points.add(new Point(x, y - 1));
-	    points.add(new Point(x + 1, y - 1));
-	    points.add(new Point(x - 1, y));
-	    points.add(new Point(x + 1, y));
-	    points.add(new Point(x - 1, y + 1));
-	    points.add(new Point(x, y + 1));
-	    points.add(new Point(x + 1, y + 1));
-	    
-	    //check each of the bordering tiles
-	    for (int i = 0; i < points.size(); i++)
+	/**
+	 * Chooses the right texture for tiles that have borders.
+	 * \todo design this better, the only difference between updateBordersWall and updateBordersPit is which HashSet is used to look up points.
+	 */
+	public void updateBorders()
+	{	    
+	    switch (state)
 	    {
-	        Point p = points.get(i);
-	        
-	        //make sure tileset index is within tileset bounds
-	        if (p.x > 0 && p.x < tileset[0].length && p.y > 0 && p.y < tileset.length)
-	        {
-	            Tile t = tileset[p.y][p.x];
-	            
-	            //if the bordering tile is not a pit, it's considered a border.
-	            if (t != null && (t.getTileState() != TileState.PIT))
-	                covered |= 1 << i;
-	        }
+	        case WALL:
+	            updateBordersWall();
+	            break;
+	        case PIT:
+	            updateBordersPit();
+	            break;
+            default:
+                break;
 	    }
-	    
-	    if (TilesetHelper.pitTexPoints.containsKey(covered))
+	}
+	
+	/**
+	 * Calculates which texture tile to use based on the bordering tileset tiles.
+     * The texture tileset has all it's combinations of bordering tiles defined at TilesetHelper.pitTexPoints.
+	 */
+	public void updateBordersPit()
+    {    
+	    if (TilesetHelper.pitTexPoints.containsKey(borders))
 	    {
-	        Point p = TilesetHelper.pitTexPoints.get(covered);
+	        Point p = TilesetHelper.pitTexPoints.get(borders);
 	        updateTileset(p.x, p.y);
 	    }
 	    else
 	    {
-	        updateTileset(7, 3);
-	    }*/
-	    
-       EnumSet<Direction> dirsCovered = EnumSet.noneOf(Direction.class);
+	      //set defaults, in case of undefined behavior.
+            Point finalPt = new Point(7, 3);
+            int borderBitsSet = 8;
+            
+            for (Map.Entry<Byte, Point> entry : TilesetHelper.pitTexPoints.entrySet())
+            {
+                if ((entry.getKey() & borders) == borders)
+                {
+                    //Since there will be multiple texture tiles that contain all the borders,
+                    //we want to look for the one with the least number of bordering tiles.
+                    //This gives us the closest match. Repeat until the smallest texture tile is found.
+                    int entryBitsSet = MathHelper.numberOfBitsSet(entry.getKey());
+                    if (entryBitsSet < borderBitsSet)
+                    {
+                        finalPt = entry.getValue();
+                        borderBitsSet = entryBitsSet;
+                    }
+                }
+            }
 
-        Tile leftTile = null, rightTile = null, upTile = null, downTile = null;
-
-        if (x > 0)
-            leftTile = tileset[y][x - 1];
-        if (x < tileset[0].length - 1)
-            rightTile = tileset[y][x + 1];
-        if (y > 0)
-            upTile = tileset[y - 1][x];
-        if (y < tileset.length - 1)
-            downTile = tileset[y + 1][x];
-
-        if (leftTile != null && (leftTile.getTileState() == Enums.TileState.FLOOR || leftTile.getTileState() == Enums.TileState.WALL))
-        { 
-            dirsCovered.add(Direction.LEFT);
-        }
-        if (rightTile != null && (rightTile.getTileState() == Enums.TileState.FLOOR || rightTile.getTileState() == Enums.TileState.WALL))
-        {
-            dirsCovered.add(Direction.RIGHT);
-        }
-        if (upTile != null && (upTile.getTileState() == Enums.TileState.FLOOR || upTile.getTileState() == Enums.TileState.WALL))
-        {
-            dirsCovered.add(Direction.UP);
-        }
-        if (downTile != null && (downTile.getTileState() == Enums.TileState.FLOOR || downTile.getTileState() == Enums.TileState.WALL))
-        {
-            dirsCovered.add(Direction.DOWN);
-        }
-
-        if (dirsCovered.contains(Direction.LEFT))
-        {
-        	if (dirsCovered.contains(Direction.RIGHT))
-        	{
-        		if (dirsCovered.contains(Direction.UP))
-        		{
-        			if (dirsCovered.contains(Direction.DOWN))
-        			{
-        				updateTileset(4, 0);
-        			}
-        			else
-        			{
-        				updateTileset(7, 0);
-        			}
-        		}
-        		else if (dirsCovered.contains(Direction.DOWN))
-        		{
-        			updateTileset(7, 2);
-        		}
-        		else
-        		{
-        			updateTileset(7, 1);
-        		}
-        	}
-        	else if (dirsCovered.contains(Direction.UP))
-        	{
-        		if (dirsCovered.contains(Direction.DOWN))
-        		{
-        			updateTileset(4, 3);
-        		}
-        		else
-        		{
-        			updateTileset(5, 1);
-        		}
-        	}
-        	else if (dirsCovered.contains(Direction.DOWN))
-        	{
-        		updateTileset(5, 2);
-        	}
-        	else
-        	{
-        		updateTileset(5, 0);
-        	}
-        }
-        else if (dirsCovered.contains(Direction.RIGHT))
-        {
-        	if (dirsCovered.contains(Direction.UP))
-        	{
-        		if (dirsCovered.contains(Direction.DOWN))
-        		{
-        			updateTileset(6, 3);
-        		}
-        		else
-        		{
-        			updateTileset(6, 1);
-        		}
-        	}
-        	else if (dirsCovered.contains(Direction.DOWN))
-        	{
-        		updateTileset(6, 2);
-        	}
-        	else
-        	{
-        		updateTileset(6, 0);
-        	}
-        }
-        else if (dirsCovered.contains(Direction.UP))
-        {
-        	if (dirsCovered.contains(Direction.DOWN))
-        	{
-        		updateTileset(5, 3);
-        	}
-        	else
-        	{
-        		updateTileset(4, 1);
-        	}
-        }
-        else if (dirsCovered.contains(Direction.DOWN))
-        {
-        	updateTileset(4, 2);
-        }
-        else
-        {
-        	updateTileset(7, 3);
-        }
+            updateTileset(finalPt.x, finalPt.y);
+	    }
     }
 
-    public void updateBordersWall(Tile[][] tileset, int x, int y)
+	/**
+	 * Calculates which texture tile to use based on the bordering tileset tiles.
+	 * The texture tileset has all it's combinations of bordering tiles defined at TilesetHelper.wallTexPoints.
+	 */
+    public void updateBordersWall()
     {
-        //a bitfield for the 8 bordering tiles.
-        byte covered = 0;
+        //if the bordering tiles are the exact arrangement as one of the texture tiles, use that directly.
+        if (TilesetHelper.wallTexPoints.containsKey(borders))
+        {
+            Point po = TilesetHelper.wallTexPoints.get(borders);
+            updateTileset(po.x, po.y);
+        }
+        
+        //otherwise find a texture tile that contains all the bordering tiles.
+        else
+        {
+            //set defaults, in case of undefined behavior.
+            Point finalPt = new Point(3, 7);
+            int borderBitsSet = 8;
+            
+            for (Map.Entry<Byte, Point> entry : TilesetHelper.wallTexPoints.entrySet())
+            {
+                if ((entry.getKey() & borders) == borders)
+                {
+                    //Since there will be multiple texture tiles that contain all the borders,
+                    //we want to look for the one with the least number of bordering tiles.
+                    //This gives us the closest match. Repeat until the smallest texture tile is found.
+                    int entryBitsSet = MathHelper.numberOfBitsSet(entry.getKey());
+                    if (entryBitsSet < borderBitsSet)
+                    {
+                        finalPt = entry.getValue();
+                        borderBitsSet = entryBitsSet;
+                    }
+                }
+            }
 
+            updateTileset(finalPt.x, finalPt.y);
+        }
+    }
+    
+    /**
+     * Calculates the bordering tile bitfield. 
+     * A tile is considered a "bordering tile" of a given tile if it meets the following criteria:
+     * <ul>
+     * <li> The bordering tile shares an edge or vertex with the given tile.</li>
+     * <li> The bordering tile is not of the same type as the given tile.</li>
+     * </ul>
+     * The result of this method is stored as a byte. Each potential bordering tile is represented as a flag in a bitfield.
+     * The flags are defined as follows:
+     * +------+------+------+
+     * |      |      |      |
+     * | 0x01 | 0x02 | 0x04 |
+     * |      |      |      |
+     * +------+------+------+
+     * |      |      |      |
+     * | 0x08 |      | 0x10 |
+     * |      |      |      |
+     * +------+------+------+
+     * |      |      |      |
+     * | 0x20 | 0x40 | 0x80 |
+     * |      |      |      |
+     * +------+------+------+
+     * @param tileset The tileset that contains this tile.
+     */
+    public void calculateBorders(Tile[][] tileset)
+    {
         //store all the bordering tile indices in top left to bottom right order.
         ArrayList<Point> points = new ArrayList<Point>();
-        points.add(new Point(x - 1, y - 1));
-        points.add(new Point(x, y - 1));
-        points.add(new Point(x + 1, y - 1));
-        points.add(new Point(x - 1, y));
-        points.add(new Point(x + 1, y));
-        points.add(new Point(x - 1, y + 1));
-        points.add(new Point(x, y + 1));
-        points.add(new Point(x + 1, y + 1));
+        points.add(new Point(xIndex - 1, yIndex - 1));
+        points.add(new Point(xIndex,     yIndex - 1));
+        points.add(new Point(xIndex + 1, yIndex - 1));
+        points.add(new Point(xIndex - 1, yIndex));
+        points.add(new Point(xIndex + 1, yIndex));
+        points.add(new Point(xIndex - 1, yIndex + 1));
+        points.add(new Point(xIndex,     yIndex + 1));
+        points.add(new Point(xIndex + 1, yIndex + 1));
         
-        points.add(new Point(x + 1, y + 1));
-        points.add(new Point(x, y + 1));
-        points.add(new Point(x - 1, y + 1));
-        points.add(new Point(x + 1, y));
-        points.add(new Point(x - 1, y));
-        points.add(new Point(x + 1, y - 1));
-        points.add(new Point(x, y - 1));
-        points.add(new Point(x - 1, y - 1));
-        
-        //check each of the bordering tiles
+        //check each of the bordering tiles, set it's corresponding bit to 1 if it's not the same type of tile.
         for (int i = 0; i < points.size(); i++)
         {
             Point p = points.get(i);
             
             //make sure tileset index is within tileset bounds
-            if (p.x > 0 && p.x < tileset[0].length && p.y > 0 && p.y < tileset.length)
+            if (p.x >= 0 && p.x < tileset[0].length && p.y >= 0 && p.y < tileset.length)
             {
                 Tile t = tileset[p.y][p.x];
                 
-                //if the bordering tile is not a pit, it's considered a border.
-                if (t != null && (t.getTileState() != TileState.WALL))
-                    covered |= (1 << i);
-                    //covered += (byte)Math.pow(2, i) - 1;
+                //if the tile type is not the same, it's considered a bordering tile.
+                if (t != null && t.getTileState() != state)
+                    borders |= 0x01 << i;
             }
         }
-        
-        if (TilesetHelper.wallTexPoints.containsKey(covered))
-        {
-            Point po = TilesetHelper.wallTexPoints.get(covered);
-            updateTileset(po.x, po.y);
-        }
-        else
-        {
-            updateTileset(7, 3);
-        }
-        
-        /*EnumSet<Direction> dirsCovered = EnumSet.noneOf(Direction.class);
-
-        Tile leftTile = null, rightTile = null, upTile = null, downTile = null;
-
-        if (x > 0)
-            leftTile = tileset[y][x - 1];
-        if (x < tileset[0].length - 1)
-            rightTile = tileset[y][x + 1];
-        if (y > 0)
-            upTile = tileset[y - 1][x];
-        if (y < tileset.length - 1)
-            downTile = tileset[y + 1][x];
-
-        if (leftTile != null && (leftTile.getTileState() == Enums.TileState.FLOOR || leftTile.getTileState() == Enums.TileState.PIT))
-        {
-            dirsCovered.add(Direction.LEFT);
-        }
-        if (rightTile != null && (rightTile.getTileState() == Enums.TileState.FLOOR || rightTile.getTileState() == Enums.TileState.PIT))
-        {
-            dirsCovered.add(Direction.RIGHT);
-        }
-        if (upTile != null && (upTile.getTileState() == Enums.TileState.FLOOR || upTile.getTileState() == Enums.TileState.PIT))
-        {
-            dirsCovered.add(Direction.UP);
-        }
-        if (downTile != null && (downTile.getTileState() == Enums.TileState.FLOOR || downTile.getTileState() == Enums.TileState.PIT))
-        {
-            dirsCovered.add(Direction.DOWN);
-        }
-
-        if (dirsCovered.contains(Direction.LEFT))
-        {
-        	if (dirsCovered.contains(Direction.RIGHT))
-        	{
-        		if (dirsCovered.contains(Direction.UP))
-        		{
-        			if (dirsCovered.contains(Direction.DOWN))
-        			{
-        				updateTileset(0, 4);
-        			}
-        			else
-        			{
-        				updateTileset(3, 4);
-        			}
-        		}
-        		else if (dirsCovered.contains(Direction.DOWN))
-        		{
-        			updateTileset(3, 6);
-        		}
-        		else
-        		{
-        			updateTileset(3, 5);
-        		}
-        	}
-        	else if (dirsCovered.contains(Direction.UP))
-        	{
-        		if (dirsCovered.contains(Direction.DOWN))
-        		{
-        			updateTileset(0, 7);
-        		}
-        		else
-        		{
-        			if (x < tileset[0].length - 1 && y < tileset.length - 1)
-                    {
-                        if (tileset[y + 1][x + 1].getTileState() == Enums.TileState.PIT || tileset[y + 1][x + 1].getTileState() == Enums.TileState.FLOOR)
-                            updateTileset(8, 4);
-                        else
-                            updateTileset(1, 5);
-                    }
-                    else
-                        updateTileset(1, 5);
-        		}
-        	}
-        	else if (dirsCovered.contains(Direction.DOWN))
-        	{
-        		if (x < tileset[0].length - 1 && y > 0)
-                {
-                    if (tileset[y - 1][x + 1].getTileState() == Enums.TileState.PIT || tileset[y - 1][x + 1].getTileState() == Enums.TileState.FLOOR)
-                        updateTileset(8, 5);
-                    else
-                        updateTileset(1, 6);
-                }
-                else
-                    updateTileset(1, 6);
-        	}
-        	else
-        	{
-        		leftInnerWallEdgeDetection(tileset, x, y);
-        	}
-        }
-        else if (dirsCovered.contains(Direction.RIGHT))
-        {
-        	if (dirsCovered.contains(Direction.UP))
-        	{
-        		if (dirsCovered.contains(Direction.DOWN))
-        		{
-        			updateTileset(2, 7);
-        		}
-        		else
-        		{
-        			if (x > 0 && y < tileset.length - 1)
-                    {
-                        if (tileset[y + 1][x - 1].getTileState() == Enums.TileState.PIT || tileset[y + 1][x - 1].getTileState() == Enums.TileState.FLOOR)
-                            updateTileset(9, 4);
-                        else
-                            updateTileset(2, 5);
-                    }
-                    else
-                        updateTileset(2, 5);
-        		}
-        	}
-        	else if (dirsCovered.contains(Direction.DOWN))
-        	{
-        		if (x > 0 && y > 0)
-                {
-                    if (tileset[y - 1][x - 1].getTileState() == Enums.TileState.PIT || tileset[y - 1][x - 1].getTileState() == Enums.TileState.FLOOR)
-                        updateTileset(9, 5);
-                    else
-                        updateTileset(2, 6);
-                }
-                else
-                    updateTileset(2, 6);
-        	}
-        	else
-        	{
-        		rightInnerWallEdgeDetection(tileset, x, y);
-        	}
-        }
-        else if (dirsCovered.contains(Direction.UP))
-        {
-        	if (dirsCovered.contains(Direction.DOWN))
-        	{
-        		updateTileset(1, 7);
-        	}
-        	else
-        	{
-        		upInnerWallEdgeDetection(tileset, x, y);
-        	}
-        }
-        else if (dirsCovered.contains(Direction.DOWN))
-        {
-        	downInnerWallEdgeDetection(tileset, x, y);
-        }
-        else
-        {
-        	//updateTileset(3, 7);
-            noneInnerWallEdgeDetection(tileset, x, y);
-        }*/
     }
-
-    /*private void noneInnerWallEdgeDetection(Tile[][] tileset, int x, int y)
-    {
-        EnumSet<DiagDir> dirsCovered = EnumSet.noneOf(DiagDir.class);
-
-        Tile tlTile = null, trTile = null, blTile = null, brTile = null;
-
-        if (x > 0 && y > 0)
-            tlTile = tileset[y - 1][x - 1];
-        if (x < tileset[0].length - 1 && y > 0)
-            trTile = tileset[y - 1][x + 1];
-        if (x > 0 && y < tileset.length - 1)
-            blTile = tileset[y + 1][x - 1];
-        if (x < tileset[0].length - 1 && y < tileset.length - 1)
-            brTile = tileset[y + 1][x + 1];
-
-        if (tlTile != null && (tlTile.getTileState() == Enums.TileState.FLOOR || tlTile.getTileState() == Enums.TileState.PIT))
-        {
-            dirsCovered.add(DiagDir.TOPLEFT);
-        }
-        if (trTile != null && (trTile.getTileState() == Enums.TileState.FLOOR || trTile.getTileState() == Enums.TileState.PIT))
-        {
-            dirsCovered.add(DiagDir.TOPRIGHT);
-        }
-        if (blTile != null && (blTile.getTileState() == Enums.TileState.FLOOR || blTile.getTileState() == Enums.TileState.PIT))
-        {
-            dirsCovered.add(DiagDir.BOTTOMLEFT);
-        }
-        if (brTile != null && (brTile.getTileState() == Enums.TileState.FLOOR || brTile.getTileState() == Enums.TileState.PIT))
-        {
-            dirsCovered.add(DiagDir.BOTTOMRIGHT);
-        }
-
-        //LEFT RIGHT UP DOWN
-        //TL   TR    BL BR
-        if (dirsCovered.contains(DiagDir.TOPLEFT))
-        {
-        	if (dirsCovered.contains(DiagDir.TOPRIGHT))
-        	{
-        		if (dirsCovered.contains(DiagDir.BOTTOMLEFT))
-        		{
-        			if (dirsCovered.contains(DiagDir.BOTTOMRIGHT))
-        			{
-        				updateTileset(6, 6);
-        			}
-        			else
-        			{
-        				updateTileset(7, 5);
-        			}
-        		}
-        		else if (dirsCovered.contains(DiagDir.BOTTOMRIGHT))
-        		{
-        			updateTileset(6, 5);
-        		}
-        		else
-        		{
-        			updateTileset(5, 7);
-        		}
-        	}
-        	else if (dirsCovered.contains(DiagDir.BOTTOMLEFT))
-        	{
-        		if (dirsCovered.contains(DiagDir.BOTTOMRIGHT))
-        		{
-        			updateTileset(7, 4);
-        		}
-        		else
-        		{
-        			updateTileset(5, 6);
-        		}
-        	}
-        	else if (dirsCovered.contains(DiagDir.BOTTOMRIGHT))
-        	{
-        		updateTileset(11, 5);
-        	}
-        	else
-        	{
-        		updateTileset(5, 5);
-        	}
-        }
-        else if (dirsCovered.contains(DiagDir.TOPRIGHT))
-        {
-        	if (dirsCovered.contains(DiagDir.BOTTOMLEFT))
-        	{
-        		if (dirsCovered.contains(DiagDir.BOTTOMRIGHT))
-        		{
-        			updateTileset(6, 4);
-        		}
-        		else
-        		{
-        			updateTileset(11, 6);
-        		}
-        	}
-        	else if (dirsCovered.contains(DiagDir.BOTTOMRIGHT))
-        	{
-        		updateTileset(4, 6);
-        	}
-        	else
-        	{
-        		updateTileset(4, 5);
-        	}
-        }
-        else if (dirsCovered.contains(DiagDir.BOTTOMLEFT))
-        {
-        	if (dirsCovered.contains(DiagDir.BOTTOMRIGHT))
-        	{
-        		updateTileset(4, 7);
-        	}
-        	else
-        	{
-        		updateTileset(5, 4);
-        	}
-        }
-        else if (dirsCovered.contains(DiagDir.BOTTOMRIGHT))
-        {
-        	updateTileset(4, 4);
-        }
-        else
-        {
-        	updateTileset(3, 7);
-        }
-    }
-
-    private void leftInnerWallEdgeDetection(Tile[][] tileset, int x, int y)
-    {
-        EnumSet<DiagDir> dirsCovered = EnumSet.noneOf(DiagDir.class);
-
-        Tile trTile = null, brTile = null;
-
-        if (x < tileset[0].length - 1 && y > 0)
-            trTile = tileset[y - 1][x + 1];
-        if (x < tileset[0].length - 1 && y < tileset.length - 1)
-            brTile = tileset[y + 1][x + 1];
-
-        if (trTile != null && (trTile.getTileState() == Enums.TileState.FLOOR || trTile.getTileState() == Enums.TileState.PIT))
-        {
-            dirsCovered.add(DiagDir.TOPRIGHT);
-        }
-        if (brTile != null && (brTile.getTileState() == Enums.TileState.FLOOR || brTile.getTileState() == Enums.TileState.PIT))
-        {
-            dirsCovered.add(DiagDir.BOTTOMRIGHT);
-        }
-
-        if (dirsCovered.contains(DiagDir.BOTTOMRIGHT))
-        {
-        	if (dirsCovered.contains(DiagDir.TOPRIGHT))
-        	{
-        		updateTileset(6, 7);
-        	}
-        	else
-        	{
-        		updateTileset(7, 6);
-        	}
-        }
-        else if (dirsCovered.contains(DiagDir.TOPRIGHT))
-        {
-        	updateTileset(7, 7);
-        }
-        else
-        {
-        	updateTileset(1, 4);
-        }
-    }
-
-    private void rightInnerWallEdgeDetection(Tile[][] tileset, int x, int y)
-    {
-        EnumSet<DiagDir> dirsCovered = EnumSet.noneOf(DiagDir.class);
-
-        Tile tlTile = null, blTile = null;
-
-        if (x > 0 && y > 0)
-            tlTile = tileset[y - 1][x - 1];
-        if (x > 0 && y < tileset.length - 1)
-            blTile = tileset[y + 1][x - 1];
-
-        if (tlTile != null && (tlTile.getTileState() == Enums.TileState.FLOOR || tlTile.getTileState() == Enums.TileState.PIT))
-        {
-            dirsCovered.add(DiagDir.TOPLEFT);
-        }
-        if (blTile != null && (blTile.getTileState() == Enums.TileState.FLOOR || blTile.getTileState() == Enums.TileState.PIT))
-        {
-            dirsCovered.add(DiagDir.BOTTOMLEFT);
-        }
-
-        if (dirsCovered.contains(DiagDir.BOTTOMLEFT))
-        {
-        	if (dirsCovered.contains(DiagDir.TOPLEFT))
-        	{
-        		updateTileset(9, 7);
-        	}
-        	else
-        	{
-        		updateTileset(8, 6);
-        	}
-        }
-        else if (dirsCovered.contains(DiagDir.TOPLEFT))
-        {
-        	updateTileset(8, 7);
-        }
-        else
-        {
-        	updateTileset(2, 4);
-        }
-    }
-
-    private void downInnerWallEdgeDetection(Tile[][] tileset, int x, int y)
-    {
-        EnumSet<DiagDir> dirsCovered = EnumSet.noneOf(DiagDir.class);
-
-        Tile tlTile = null, trTile = null;
-
-        if (x > 0 && y > 0)
-            tlTile = tileset[y - 1][x - 1];
-        if (x < tileset[0].length - 1 && y > 0)
-            trTile = tileset[y - 1][x + 1];
-
-        if (tlTile != null && (tlTile.getTileState() == Enums.TileState.FLOOR || tlTile.getTileState() == Enums.TileState.PIT))
-        {
-            dirsCovered.add(DiagDir.TOPLEFT);
-        }
-        if (trTile != null && (trTile.getTileState() == Enums.TileState.FLOOR || trTile.getTileState() == Enums.TileState.PIT))
-        {
-            dirsCovered.add(DiagDir.TOPRIGHT);
-        }
-
-        if (dirsCovered.contains(DiagDir.TOPRIGHT))
-        {
-        	if (dirsCovered.contains(DiagDir.TOPLEFT))
-        	{
-        		updateTileset(9, 6);
-        	}
-        	else
-        	{
-        		updateTileset(10, 7);
-        	}
-        }
-        else if (dirsCovered.contains(DiagDir.TOPLEFT))
-        {
-        	updateTileset(10, 6);
-        }
-        else
-        {
-        	updateTileset(0, 6);
-        }
-    }
-
-    private void upInnerWallEdgeDetection(Tile[][] tileset, int x, int y)
-    {
-        EnumSet<DiagDir> dirsCovered = EnumSet.noneOf(DiagDir.class);
-
-        Tile blTile = null, brTile = null;
-
-        if (x > 0 && y < tileset.length - 1)
-            blTile = tileset[y + 1][x - 1];
-        if (x < tileset[0].length - 1 && y < tileset.length - 1)
-            brTile = tileset[y + 1][x + 1];
-
-        if (blTile != null && (blTile.getTileState() == Enums.TileState.FLOOR || blTile.getTileState() == Enums.TileState.PIT))
-        {
-            dirsCovered.add(DiagDir.BOTTOMLEFT);
-        }
-        if (brTile != null && (brTile.getTileState() == Enums.TileState.FLOOR || brTile.getTileState() == Enums.TileState.PIT))
-        {
-            dirsCovered.add(DiagDir.BOTTOMRIGHT);
-        }
-
-        if (dirsCovered.contains(DiagDir.BOTTOMLEFT))
-        {
-        	if (dirsCovered.contains(DiagDir.BOTTOMRIGHT))
-        	{
-        		updateTileset(10, 5);
-        	}
-        	else
-        	{
-        		updateTileset(11, 7);
-        	}
-        }
-        else if (dirsCovered.contains(DiagDir.BOTTOMRIGHT))
-        {
-        	updateTileset(10, 4);
-        }
-        else
-        {
-        	updateTileset(0, 5);
-        }
-    }*/
     
+    /**
+     * Sets the tile's position.
+     * @param pos The tile's new position.
+     */
     public void setPos(Vector2 pos)
     {
         this.pos = pos;

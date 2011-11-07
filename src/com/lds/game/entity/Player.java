@@ -133,7 +133,7 @@ public class Player extends Entity
         
         damageTime += Stopwatch.getFrameTime();
         
-        if (getXScale() <= 0 && getYScale() <= 0)
+        if (shape.getScale().x() <= 0 && shape.getScale().x() <= 0)
             health = 0;
         if (health <= 0)
             EntityManager.removeEntity(this); 

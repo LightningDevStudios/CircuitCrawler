@@ -90,7 +90,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 			ent.initialize(gl);
 		}
 		
-		for (UIEntity ent : game.UIList)
+		for (Control ent : game.UIList)
 		{
 			ent.genHardwareBuffers(gl);
 		}
@@ -247,7 +247,9 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		//Render UI, in the UI perspective
 		viewHUD(gl);
 		
-		for (UIEntity ent : game.UIList)
+		gl.glEnableClientState(GL11.GL_VERTEX_ARRAY);
+		
+		for (Control ent : game.UIList)
 		{
 			ent.update();
 			ent.updateVertexVBO(gl);
@@ -256,6 +258,8 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 			ent.draw(gl);
 			gl.glLoadIdentity();
 		}
+		
+		gl.glDisableClientState(GL11.GL_VERTEX_ARRAY);
 		
 		viewWorld(gl);
 				
@@ -299,8 +303,8 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 					boolean onEnt = false;
 					for (int i = 0; i < game.UIList.size(); i++)
 					{
-						final UIEntity ent = game.UIList.get(i);
-						if (touchVec.getX() >= ent.getPos().getX() - ent.getSize().getX() / 2 && touchVec.getX() <= ent.getPos().getX() + ent.getSize().getX() / 2 && touchVec.getY() >= ent.getPos().getY() - ent.getSize().getY() / 2 && touchVec.getY() <= ent.getPos().getY() + ent.getSize().getY() / 2)
+						final Control ent = game.UIList.get(i);
+						if (touchVec.x() >= ent.getPos().x() - ent.getSize().x() / 2 && touchVec.x() <= ent.getPos().x() + ent.getSize().x() / 2 && touchVec.y() >= ent.getPos().y() - ent.getSize().y() / 2 && touchVec.y() <= ent.getPos().y() + ent.getSize().y() / 2)
 						{
 							final Finger newFinger = new Finger(touchVec, ent, e.getPointerId(fingerIndex));
 							newFinger.onStackPush();

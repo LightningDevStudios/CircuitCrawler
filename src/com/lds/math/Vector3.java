@@ -88,14 +88,40 @@ public final class Vector3
 	 */
 	public Vector3(Vector2 xy, float z)
 	{
-		this.x = xy.getX();
-		this.y = xy.getY();
+		this.x = xy.x();
+		this.y = xy.y();
 		this.z = z;
 	}
 	
-	/*************************************************************************
-	 * Static Methods - return new vectors, do not change plugged in vectors *
-	 *************************************************************************/
+	/********************
+     * Instance methods *
+     ********************/
+    
+	 /*
+    public boolean equals(Vector3 v)
+    {
+        return x == v.getX() && y == v.getY() && z == v.getZ();
+    }
+    
+    public boolean approxEquals(Vector3 v, float epsilon)
+    {
+        return Math.abs(x - v.x) < epsilon && Math.abs(y - v.y) < epsilon && Math.abs(z - v.z) < epsilon;
+    }
+    */
+	
+    /**
+     * Formats the vector for text output.
+     * @return A formatted string.
+     */
+    @Override
+    public String toString()
+    {
+        return "<" + x + ", " + y + ", " + z + ">";
+    }
+	
+	/******************
+	 * Static Methods *
+	 ******************/
 	
 	/**
 	 * Turns all components of the vector into their absolute value equivalent.
@@ -104,7 +130,7 @@ public final class Vector3
 	 */
 	public static Vector3 abs(Vector3 v)
 	{
-		return new Vector3(Math.abs(v.getX()), Math.abs(v.getY()), Math.abs(v.getZ()));
+		return new Vector3(Math.abs(v.x()), Math.abs(v.y()), Math.abs(v.z()));
 	}
 		
 	/**
@@ -115,8 +141,8 @@ public final class Vector3
 	 */
 	public static Vector3 add(Vector3 left, Vector3 right)
 	{
-		float x1 = left.getX(), y1 = left.getY(), z1 = left.getZ(),
-			  x2 = right.getX(), y2 = right.getY(), z2 = right.getZ();
+		float x1 = left.x(), y1 = left.y(), z1 = left.z(),
+			  x2 = right.x(), y2 = right.y(), z2 = right.z();
 		
 		return new Vector3(x1 + x2, y1 + y2, z1 + z2);
 	}
@@ -129,8 +155,8 @@ public final class Vector3
 	 */
 	public static Vector3 subtract(Vector3 left, Vector3 right)
 	{
-		float x1 = left.getX(), y1 = left.getY(), z1 = left.getZ(),
-			  x2 = right.getX(), y2 = right.getY(), z2 = right.getZ();
+		float x1 = left.x(), y1 = left.y(), z1 = left.z(),
+			  x2 = right.x(), y2 = right.y(), z2 = right.z();
 		
 		return new Vector3(x1 - x2, y1 - y2, z1 - z2);
 	}
@@ -142,7 +168,7 @@ public final class Vector3
 	 */
 	public static Vector3 negate(Vector3 v)
 	{
-		return new Vector3(-v.getX(), -v.getY(), -v.getZ());
+		return new Vector3(-v.x(), -v.y(), -v.z());
 	}
 	
 	/**
@@ -153,7 +179,7 @@ public final class Vector3
 	 */
 	public static Vector3 scale(Vector3 v, float scalar)
 	{
-		return new Vector3(scalar * v.getX(), scalar * v.getY(), scalar * v.getZ());
+		return new Vector3(scalar * v.x(), scalar * v.y(), scalar * v.z());
 	}
 	
 	/**
@@ -192,8 +218,8 @@ public final class Vector3
 	 */
 	public static Vector3 getMidpoint(Vector3 left, Vector3 right)
 	{
-		float x1 = left.getX(), y1 = left.getY(), z1 = left.getZ(),
-			  x2 = right.getX(), y2 = right.getY(), z2 = right.getZ();
+		float x1 = left.x(), y1 = left.y(), z1 = left.z(),
+			  x2 = right.x(), y2 = right.y(), z2 = right.z();
 		
 		return new Vector3((x1 + x2) / 2, 
 						   (y1 + y2) / 2, 
@@ -208,7 +234,7 @@ public final class Vector3
 	 */
 	public static float dot(Vector3 left, Vector3 right)
 	{
-	    return (left.getX() * right.getX()) + (left.getY() * right.getY()) + (left.getZ() * right.getZ());
+	    return (left.x() * right.x()) + (left.y() * right.y()) + (left.z() * right.z());
 	}
 	
 	/**
@@ -219,29 +245,13 @@ public final class Vector3
 	 */
 	public static Vector3 cross(Vector3 left, Vector3 right)
 	{
-		float x1 = left.getX(), y1 = left.getY(), z1 = left.getZ(),
-			  x2 = right.getX(), y2 = right.getY(), z2 = right.getZ();
+		float x1 = left.x(), y1 = left.y(), z1 = left.z(),
+			  x2 = right.x(), y2 = right.y(), z2 = right.z();
 
 		return new Vector3(y1 * z2 - z1 * y2, 
 						   z1 * x2 - x1 * z2, 
 						   x1 * y2 - y1 * x2);
 	}
-	
-	/********************
-	 * Instance methods *
-	 ********************/
-	
-	/*
-	public boolean equals(Vector3 v)
-	{
-		return x == v.getX() && y == v.getY() && z == v.getZ();
-	}
-	
-	public boolean approxEquals(Vector3 v, float epsilon)
-	{
-		return Math.abs(x - v.x) < epsilon && Math.abs(y - v.y) < epsilon && Math.abs(z - v.z) < epsilon;
-	}
-	*/
 	
 	/**
 	 * Calculates the length (magnitude) of the vector.
@@ -274,7 +284,7 @@ public final class Vector3
 	 * Gets the X component of the vector.
 	 * @return The vector's X component.
 	 */
-	public float getX()
+	public float x()
 	{
 	    return x;
 	}
@@ -283,7 +293,7 @@ public final class Vector3
 	 * Gets the Y component of the vector.
 	 * @return The vector's Y component.
 	 */
-	public float getY()
+	public float y()
 	{
 	    return y;
 	}
@@ -292,8 +302,17 @@ public final class Vector3
 	 * Gets the Z component of the vector.
 	 * @return The vector's Z component.
 	 */
-	public float getZ()
+	public float z()
 	{
 	    return z;
+	}
+	
+	/**
+	 * Converts the vector to a float array.
+     * @return A float array containing the vector components.
+	 */
+	public float[] array()
+	{
+	    return new float[] { x, y, z };
 	}
 }
