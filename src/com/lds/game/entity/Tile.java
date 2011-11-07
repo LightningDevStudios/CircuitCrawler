@@ -362,14 +362,15 @@ public class Tile
     }
     
     /**
-     * Calculates the bordering tile bitfield. 
+     * Calculates the bordering tile bitfield.
      * A tile is considered a "bordering tile" of a given tile if it meets the following criteria:
      * <ul>
      * <li> The bordering tile shares an edge or vertex with the given tile.</li>
      * <li> The bordering tile is not of the same type as the given tile.</li>
      * </ul>
-     * The result of this method is stored as a byte. Each potential bordering tile is represented as a flag in a bitfield.
+     * The result of this method is stored as a byte. Each potential bordering tile is represented as a flag in a bitfield. 
      * The flags are defined as follows:
+     * \verbatim
      * +------+------+------+
      * |      |      |      |
      * | 0x01 | 0x02 | 0x04 |
@@ -383,6 +384,7 @@ public class Tile
      * | 0x20 | 0x40 | 0x80 |
      * |      |      |      |
      * +------+------+------+
+     * \endverbatim
      * @param tileset The tileset that contains this tile.
      */
     public void calculateBorders(Tile[][] tileset)
