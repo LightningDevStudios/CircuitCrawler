@@ -11,10 +11,7 @@ public class SpikeBall extends Entity
 	{
 		super(new Circle(size, position, true));
 	}
-	
-	/**
-	 * \todo anything?
-	 */
+
 	@Override
 	public void update(GL11 gl)
 	{

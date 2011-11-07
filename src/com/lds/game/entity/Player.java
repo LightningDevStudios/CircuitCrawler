@@ -1,11 +1,11 @@
 package com.lds.game.entity;
 
-import javax.microedition.khronos.opengles.GL11;
-
 import com.lds.EntityManager;
 import com.lds.Stopwatch;
 import com.lds.math.Vector2;
 import com.lds.physics.Circle;
+
+import javax.microedition.khronos.opengles.GL11;
 
 public class Player extends Entity
 {
@@ -68,6 +68,7 @@ public class Player extends Entity
 	
 	/**
 	 * \todo fall into pits.
+	 * @param tile The tile to interact with.
 	 */
 	@Override
 	public void tileInteract(Tile tile)
@@ -125,6 +126,7 @@ public class Player extends Entity
 	
 	/**
 	 * \todo make player flash once it is hit.
+	 * @param gl The OpenGL context.
 	 */
 	@Override
     public void update(GL11 gl)

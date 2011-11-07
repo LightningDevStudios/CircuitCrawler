@@ -1,9 +1,23 @@
 package com.lds.puzzles.logic;
 
-import com.lds.Enums.GateType;
-
 public class Gate 
 {
+    /**
+     * An enum of the different types of logic gates.
+     * @author Lightning Development Studios
+     */
+    public enum GateType
+    {
+        NONE,
+        AND,
+        OR,
+        XOR,
+        NOT,
+        NAND,
+        NOR,
+        XNOR
+    }
+    
 	protected GateType type;
 	protected Gate[] input;
 	protected Gate output;

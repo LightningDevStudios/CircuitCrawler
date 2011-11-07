@@ -3,9 +3,8 @@ package com.lds.physics;
 import com.lds.math.Vector2;
 
 /**
- * A Shape used in 
- * @author Robert Rouhani
- *
+ * A Shape that represents a circle.
+ * @author Lightning Development Studios
  */
 public class Circle extends Shape 
 {

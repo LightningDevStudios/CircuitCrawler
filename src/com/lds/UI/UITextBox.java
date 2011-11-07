@@ -1,6 +1,5 @@
 package com.lds.UI;
 
-import com.lds.Enums.UIPosition;
 import com.lds.math.Vector2;
 
 public class UITextBox extends Control

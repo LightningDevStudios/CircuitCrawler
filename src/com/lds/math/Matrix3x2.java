@@ -79,12 +79,22 @@ public final class Matrix3x2
      * Static Methods *
      ******************/
     
+    /**
+     * Creates a translation matrix.
+     * @param position The position to translate to.
+     * @return A translation matrix.
+     */
     public static Matrix3x2 translate(Vector2 position)
     {
         return new Matrix3x2(1, 0, position.x(),
                              0, 1, position.y());
     }
     
+    /**
+     * Creates a rotation matrix.
+     * @param radians The angle to rotate to, in radians.
+     * @return A rotation matrix.
+     */
     public static Matrix3x2 rotate(float radians)
     {
         float sin = (float)Math.sin(radians);
@@ -94,6 +104,11 @@ public final class Matrix3x2
                             -sin, cos, 0);
     }
     
+    /**
+     * Creates a scale matrix.
+     * @param scale The scale to scale to.
+     * @return A scale matrix.
+     */
     public static Matrix3x2 scale(float scale)
     {
         return new Matrix3x2(scale, 0, 0,
@@ -113,7 +128,7 @@ public final class Matrix3x2
         float[] array = new float[6];
         float[] c0 = col0.array(), c1 = col1.array();
         
-        for(int i = 0; i < 3; i++)
+        for (int i = 0; i < 3; i++)
         {
             array[i] = c0[i];
             array[i + 3] = c1[i];

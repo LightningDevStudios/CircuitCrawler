@@ -2,7 +2,6 @@ package com.lds.game.entity;
 
 import android.graphics.Point;
 
-import com.lds.Enums.*;
 import com.lds.TilesetHelper;
 import com.lds.game.Game;
 import com.lds.math.MathHelper;
@@ -25,12 +24,25 @@ import javax.microedition.khronos.opengles.GL11;
  */
 public class Tile
 {
+    /**
+     * An enum of different types of tiles.
+     * @author Lightning Development Studios
+     */
+    public enum TileType
+    {
+        FLOOR,
+        WALL,
+        PIT,
+        BRIDGE,
+        SlipperyTile 
+    }
+    
 	public static final int TILE_SIZE = 72;
 	public static final float TILE_SIZE_F = 72.0f;
 	
 	private int tileX, tileY, xIndex, yIndex;
 	
-	private TileState state;
+	private TileType type;
 	private boolean tempBridge;
 	private int origTileX, origTileY;
 	private Shape shape;
@@ -41,7 +53,7 @@ public class Tile
 	
 	private byte borders;
 	
-	public Tile(GL11 gl, float size, int tileIndexX, int tileIndexY, int tilesetLengthX, int tilesetLengthY, TileState state)
+	public Tile(GL11 gl, float size, int tileIndexX, int tileIndexY, int tilesetLengthX, int tilesetLengthY, TileType type)
 	{
 		TilesetHelper.setInitialTileOffset(this, tileIndexY, tileIndexX, tilesetLengthX, tilesetLengthY);
 		float x = size / 2;
@@ -64,9 +76,9 @@ public class Tile
 		//shape.setVertices(vertices);
 		xIndex = tileIndexX;
 		yIndex = tileIndexY;
-		this.state = state;
+		this.type = type;
 		
-		switch (state)
+		switch (type)
 		{
 		case WALL:
 		    setAsWall();
@@ -162,7 +174,7 @@ public class Tile
 	
 	public void setAsWall()
 	{
-		state = TileState.WALL;
+		type = TileType.WALL;
 		if (tempBridge)
 		{
 			updateTileset(origTileX, origTileY);
@@ -177,21 +189,21 @@ public class Tile
 	
 	public void setAsFloor()
 	{
-		state = TileState.FLOOR;
+		type = TileType.FLOOR;
 		updateTileset((int)(Math.random() * 4), (int)(Math.random() * 4));
 		shape.setSolid(false);
 	}
 	
 	public void setAsSlipperyTile()
 	{
-		state = TileState.SlipperyTile;
+		type = TileType.SlipperyTile;
 		updateTileset(15, 0);
 		shape.setSolid(false);
 	}
 	
 	public void setAsPit()
 	{
-		state = TileState.PIT;
+		type = TileType.PIT;
 		if (tempBridge)
 		{
 			updateTileset(origTileX, origTileY);
@@ -206,7 +218,7 @@ public class Tile
 	
 	public void setAsBridge()
 	{
-		state = TileState.BRIDGE;
+		type = TileType.BRIDGE;
 		
 		if (tempBridge)
 		{
@@ -225,32 +237,32 @@ public class Tile
 	
 	public boolean isWall()
 	{
-		return state == TileState.WALL;
+		return type == TileType.WALL;
 	}
 	
 	public boolean isFloor()
 	{
-	    return state == TileState.FLOOR;
+	    return type == TileType.FLOOR;
 	}
 	
 	public boolean isPit()
 	{
-		return state == TileState.PIT;
+		return type == TileType.PIT;
 	}
 	
 	public boolean isSlipperyTile()
 	{
-		return state == TileState.SlipperyTile;
+		return type == TileType.SlipperyTile;
 	}
 	
 	public boolean isBridge()
 	{
-		return state == TileState.BRIDGE;
+		return type == TileType.BRIDGE;
 	}
 	
-	public TileState getTileState()
+	public TileType getTileType()
 	{
-		return state;
+		return type;
 	}
 	
 	/**
@@ -259,7 +271,7 @@ public class Tile
 	 */
 	public void updateBorders()
 	{	    
-	    switch (state)
+	    switch (type)
 	    {
 	        case WALL:
 	            updateBordersWall();
@@ -397,7 +409,7 @@ public class Tile
                 Tile t = tileset[p.y][p.x];
                 
                 //if the tile type is not the same, it's considered a bordering tile.
-                if (t != null && t.getTileState() != state)
+                if (t != null && t.getTileType() != type)
                     borders |= 0x01 << i;
             }
         }

@@ -1,9 +1,9 @@
 package com.lds.parser;
 
-import javax.microedition.khronos.opengles.GL11;
-
-import com.lds.Enums.TileState;
 import com.lds.game.entity.Tile;
+import com.lds.game.entity.Tile.TileType;
+
+import javax.microedition.khronos.opengles.GL11;
 
 public class TileData
 {
@@ -15,16 +15,16 @@ public class TileData
 		this.tilePosX = x;
 		this.tilePosY = y;
 		
-		TileState tState = TileState.FLOOR;
+		TileType tState = TileType.FLOOR;
 		
 		if (state.equalsIgnoreCase("floor"))
-            tState = TileState.FLOOR;
+            tState = TileType.FLOOR;
         else if (state.equalsIgnoreCase("wall"))
-            tState = TileState.WALL;
+            tState = TileType.WALL;
         else if (state.equalsIgnoreCase("pit"))
-            tState = TileState.PIT;
+            tState = TileType.PIT;
         else if (state.equalsIgnoreCase("bridge"))
-            tState = TileState.BRIDGE;
+            tState = TileType.BRIDGE;
 				
 		tile = new Tile(gl, Tile.TILE_SIZE_F, x, y, tilesetY, tilesetX, tState);
 	}

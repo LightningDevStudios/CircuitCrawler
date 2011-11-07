@@ -4,8 +4,8 @@ import android.content.Context;
 import android.util.Log;
 
 import com.lds.*;
-import com.lds.Enums.*;
 import com.lds.UI.*;
+import com.lds.UI.Control.UIPosition;
 import com.lds.game.ai.Node;
 import com.lds.game.entity.*;
 import com.lds.game.event.*;
@@ -36,14 +36,11 @@ public class Game
     public static Texture tilesetworld;
     public static Texture tilesetentities;
     public static Texture baricons;
-    
-	public int frameInterval;
 	
 	public ArrayList<Entity> entList;
-	public Tile[][] tileset;
+	private Tile[][] tileset;
 	public ArrayList<Control> UIList;
-	public ArrayList<Trigger> triggerList;
-	public ArrayList<Node> nodeList;
+	private ArrayList<Trigger> triggerList;
 	public EntityManager cleaner;
 	public World world;
 	
@@ -53,8 +50,8 @@ public class Game
 	public float camPosX;
 	public float camPosY;
 	
-	public float worldMinX, worldMinY, worldMaxX, worldMaxY;
-	public int tilesetMinX, tilesetMinY, tilesetMaxX, tilesetMaxY;
+	private float worldMinX, worldMinY, worldMaxX, worldMaxY;
+	private int tilesetMinX, tilesetMinY, tilesetMaxX, tilesetMaxY;
 	
 	//Testing data
 	public UIButton btnA;
@@ -142,10 +139,7 @@ public class Game
  				tileset[i][j].updateBorders();
  				tileset[i][j].regenTexCoords(gl);
  			}
- 		}
-		
-		nodeList = parser.nodeList;
-		
+ 		}		
 		
 		//\TODO UIHealthBar is a UIEntity sub that contains 2 UIImages and a UIProgressBar (which will no longer be abstract)
 		UIHealthBar healthBar = new UIHealthBar(246.0f, 8.0f, UIPosition.TOPRIGHT, Direction.LEFT, player);

@@ -18,6 +18,7 @@ public class Button extends Entity
 		this.tilesetY = 0;
 	}
 	
+	@Override
 	public void update(GL11 gl)
 	{
 	    //update the texture when activated/deactivated.

@@ -12,8 +12,8 @@ import com.lds.game.event.PuzzleSuccessListener;
 public class PuzzleActivity extends Activity implements PuzzleInitializedListener, PuzzleSuccessListener, PuzzleFailListener
 {
 	
-	public PuzzleSurface glSurface;
-	public IPuzzle puzzle;
+	private PuzzleSurface glSurface;
+	private IPuzzle puzzle;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState)
@@ -85,6 +85,9 @@ public class PuzzleActivity extends Activity implements PuzzleInitializedListene
 		finish();
 	}
 	
+	/**
+	 * Returns to the main game with a failed result.
+	 */
 	public void finishPuzzleFailed()
 	{
 		System.out.println("FAILURE");
@@ -92,6 +95,9 @@ public class PuzzleActivity extends Activity implements PuzzleInitializedListene
 		finish();
 	}
 	
+	/**
+	 * Returns to the game with a success result.
+	 */
 	public void finishPuzzleSuccess()
 	{
 		System.out.println("SUCCESS");

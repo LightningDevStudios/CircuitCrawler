@@ -1,6 +1,5 @@
 package com.lds.UI;
 
-import com.lds.Enums.UIPosition;
 import com.lds.Texture;
 import com.lds.game.Game;
 import com.lds.math.Vector2;

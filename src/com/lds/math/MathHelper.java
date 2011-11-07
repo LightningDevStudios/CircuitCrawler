@@ -4,12 +4,15 @@ package com.lds.math;
  * A class containing various math helper methods.
  * @author Lightning Development Studios
  */
-public class MathHelper
+public final class MathHelper
 {
     /**
      * Prevents initialization of MathHelper.
      */
-    private MathHelper() { }
+    private MathHelper()
+    {
+        
+    }
 
     /**
      * Returns the number of bits set in a byte bitfield.

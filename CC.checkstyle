@@ -100,7 +100,7 @@ The official Circuit Crawler checkstyle configuration.
       <property name="tokens" value="COMMA,SEMI"/>
     </module>
     <module name="NoWhitespaceAfter">
-      <property name="tokens" value="ARRAY_INIT,BNOT,DEC,DOT,INC,LNOT,UNARY_MINUS,UNARY_PLUS"/>
+      <property name="tokens" value="BNOT,DEC,DOT,INC,LNOT,UNARY_MINUS,UNARY_PLUS"/>
     </module>
     <module name="StringLiteralEquality"/>
   </module>

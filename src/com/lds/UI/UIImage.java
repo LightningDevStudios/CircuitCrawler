@@ -1,7 +1,5 @@
 package com.lds.UI;
 
-import com.lds.Enums.UIPosition;
-
 public class UIImage extends Control
 {
 	public UIImage(float xSize, float ySize, UIPosition position)

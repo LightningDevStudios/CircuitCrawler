@@ -85,6 +85,28 @@ public final class Vector2
         return x == v.x() && y == v.y();
     }
     
+    @Override
+    public boolean equals(Object o)
+    {
+        if (o == null)
+            return false;
+        
+        if (!(o instanceof Vector2))
+            return false;
+        
+        Vector2 v = (Vector2)o;
+        if (v.x() != x || v.y() != y)
+            return false;
+        
+        return true;
+    }
+    
+    @Override
+    public int hashCode()
+    {
+        return new Float(x).hashCode() ^ new Float(y).hashCode();
+    }
+    
     /**
      * Checks for near equality of two vectors.
      * @param v The vector to compare to.

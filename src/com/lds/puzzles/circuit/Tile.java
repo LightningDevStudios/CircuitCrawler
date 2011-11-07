@@ -1,6 +1,6 @@
 package com.lds.puzzles.circuit;
 
-import com.lds.Enums.Direction;
+import com.lds.Direction;
 import com.lds.Texture;
 import com.lds.TilesetHelper;
 

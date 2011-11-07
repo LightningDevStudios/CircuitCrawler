@@ -1,7 +1,5 @@
 package com.lds.UI;
 
-import com.lds.Enums.UIPosition;
-
 public class UIButton extends Control
 {
 	private boolean pressed;

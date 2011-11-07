@@ -1,8 +1,6 @@
 package com.lds.UI;
 
-import com.lds.Enums.Direction;
-import com.lds.Enums.RenderMode;
-import com.lds.Enums.UIPosition;
+import com.lds.Direction;
 import com.lds.math.Vector2;
 
 public abstract class UIProgressBar extends Control

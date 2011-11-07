@@ -14,6 +14,7 @@ public abstract class HoldObject extends Entity
 	
 	/**
 	 * \todo fall down pit.
+	 * @param tile The tile to interact with.
 	 */
 	@Override
 	public void tileInteract(Tile tile)

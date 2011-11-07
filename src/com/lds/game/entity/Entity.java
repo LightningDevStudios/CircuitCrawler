@@ -28,7 +28,7 @@ public abstract class Entity implements InteractListener
 	protected Texture tex;
 	protected int tilesetX, tilesetY;
 		
-	protected int VBO;
+	protected int vbo;
 	
 	public Entity(Shape shape)
 	{		
@@ -48,7 +48,7 @@ public abstract class Entity implements InteractListener
 	    gl.glColor4f(colorVec.x(), colorVec.y(), colorVec.z(), colorVec.w());
 
 	    //bind the VBO and set up the vertex and tex coord pointers.
-		gl.glBindBuffer(GL11.GL_ARRAY_BUFFER, VBO);
+		gl.glBindBuffer(GL11.GL_ARRAY_BUFFER, vbo);
 		gl.glVertexPointer(2, GL11.GL_FLOAT, 0, 0);
 		gl.glTexCoordPointer(2, GL11.GL_FLOAT, 0, 32);
 		gl.glBindBuffer(GL11.GL_ARRAY_BUFFER, 0);
@@ -79,7 +79,7 @@ public abstract class Entity implements InteractListener
 	    float[] t = TilesetHelper.getTextureVertices(tex, tilesetX, tilesetY);
 	    
 	    //copy vertices over
-	    for(int i = 0; i < v.length; i++)
+	    for (int i = 0; i < v.length; i++)
 	        verts[i] = v[i];
 	    
 	    //copy texture coordinates over.
@@ -96,10 +96,10 @@ public abstract class Entity implements InteractListener
         //generate a VBO.
 	    int[] tempPtr = new int[1];
         gl.glGenBuffers(1, tempPtr, 0);
-        VBO = tempPtr[0];
+        vbo = tempPtr[0];
         
         //send data to GPU.
-        gl.glBindBuffer(GL11.GL_ARRAY_BUFFER, VBO);
+        gl.glBindBuffer(GL11.GL_ARRAY_BUFFER, vbo);
         gl.glBufferData(GL11.GL_ARRAY_BUFFER, verts.length * 4, buffer, GL11.GL_STATIC_DRAW);
         gl.glBindBuffer(GL11.GL_ARRAY_BUFFER, 0);
 	}
@@ -115,7 +115,7 @@ public abstract class Entity implements InteractListener
         buffer.put(t);
         buffer.position(0);
 	    
-	    gl.glBindBuffer(GL11.GL_ARRAY_BUFFER, VBO);
+	    gl.glBindBuffer(GL11.GL_ARRAY_BUFFER, vbo);
 	    gl.glBufferSubData(GL11.GL_ARRAY_BUFFER, 32, t.length * 4, buffer);
 	    gl.glBindBuffer(GL11.GL_ARRAY_BUFFER, 0);
 	}
@@ -127,7 +127,7 @@ public abstract class Entity implements InteractListener
 	//TODO: I don't even...
 	public boolean isFacing(Entity ent)
 	{
-		float angleBetween = (float)Math.toDegrees(Math.atan2(ent.getYPos() - this.getYPos() , ent.getXPos() - this.getXPos()));
+		float angleBetween = (float)Math.toDegrees(Math.atan2(ent.getPos().y() - this.getPos().y() , ent.getPos().x() - this.getPos().x()));
 		//clamp angle between 0 and 360
 		if (angleBetween == 360.0f)
 			angleBetween = 0.0f;
@@ -174,7 +174,7 @@ public abstract class Entity implements InteractListener
 		
 	//COLOR
 	/**
-	 * \todo use Vector4s instead (or make a Color4 class)
+	 * \todo use Vector4s instead (or make a Color4 class).
 	 * @param r R component.
 	 * @param g G component.
 	 * @param b B component.
@@ -237,7 +237,7 @@ public abstract class Entity implements InteractListener
     public void unload(GL11 gl)
     {
         int[] buffer = new int[1];
-        buffer[0] = VBO;
+        buffer[0] = vbo;
         
         gl.glDeleteBuffers(3, buffer, 0);
     }
@@ -272,26 +272,6 @@ public abstract class Entity implements InteractListener
 	public Vector2 getPos()
 	{
 	    return shape.getPos();
-	}
-	
-	/**
-	 * Gets the Entity's X position in world coordiantes.
-	 * @return The Entity's X coordinate.
-	 * @deprecated Use "getPos().getX()" instead.
-	 */
-	public float getXPos()
-	{
-	    return shape.getPos().x();
-	}
-	
-	/**
-     * Gets the Entity's Y position in world coordiantes.
-     * @return The Entity's Y coordinate.
-     * @deprecated Use "getPos().getY()" instead.
-     */
-	public float getYPos()
-	{
-	    return shape.getPos().y();
 	}
 	
 	/**

@@ -4,7 +4,7 @@ import android.content.Context;
 import android.opengl.GLU;
 import android.view.MotionEvent;
 
-import com.lds.Enums.Direction;
+import com.lds.Direction;
 
 import com.lds.Stopwatch;
 import com.lds.Texture;
@@ -323,7 +323,9 @@ public class CircuitPuzzle implements IPuzzle
 		}
 	}
 	
-	//randomly initialize a 6x3 grid of Tile objects
+	/**
+	 * randomly initialize a 6x3 grid of Tile objects.
+	 */
 	public void initializeGrid()
 	{
 		grid = new Tile[3][6];

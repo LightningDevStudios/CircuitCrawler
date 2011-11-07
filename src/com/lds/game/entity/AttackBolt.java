@@ -12,6 +12,9 @@ public class AttackBolt extends Entity
 	
 	/**
 	 * \todo add real physics.
+	 * @param position Position.
+	 * @param direction Direction.
+	 * @param parent Parent.
 	 */
 	public AttackBolt(Vector2 position, Vector2 direction, Entity parent)
 	{
@@ -48,6 +51,10 @@ public class AttackBolt extends Entity
 			EntityManager.removeEntity(this);
 	}
 	
+	/**
+	 * Gets the parent Entity.
+	 * @return The parent Entity.
+	 */
 	public Entity getParent()
 	{
 	    return parent;

@@ -2,9 +2,6 @@ package com.lds.UI;
 
 import android.util.Log;
 
-import com.lds.Enums.RenderMode;
-import com.lds.Enums.UIPosition;
-
 import com.lds.Texture;
 import com.lds.TilesetHelper;
 import com.lds.game.Game;
@@ -26,6 +23,48 @@ import javax.microedition.khronos.opengles.GL11;
  */
 public abstract class Control
 {
+    /**
+     * An enum of different modes that a UI Control can render with.
+     * \todo get rid of this!
+     * @author Lightning Developemnt Studios
+     */
+    public enum RenderMode
+    {
+        COLOR,
+        GRADIENT,
+        TEXTURE,
+        TILESET
+    }
+    
+    /**
+     * An enum of different relative positions that a UI Control can be located at.
+     * @author Lightning Development Studios
+     */
+    public enum UIPosition
+    {
+        TOP(0),
+        LEFT(1),
+        BOTTOM(2),
+        RIGHT(3),
+        CENTER(4),
+        TOPLEFT(5),
+        TOPRIGHT(6),
+        BOTTOMLEFT(7),
+        BOTTOMRIGHT(8);
+        
+        private int value;
+        
+        private UIPosition(int value)
+        {
+            this.value = value;
+        }
+        
+        public int getValue()
+        {
+            return value;
+        }
+    }
+    
 	//constants
     
     /**
@@ -603,30 +642,6 @@ public abstract class Control
 	public void setRightPad(float rightPad)
 	{
 	    this.rightPad = rightPad;
-	}
-	
-	@Deprecated
-	public float getXPos()
-	{
-	    return pos.x();
-	}
-	
-	@Deprecated
-	public float getYPos()
-	{
-	    return pos.y();
-	}
-	
-	@Deprecated
-	public float getXSize()
-	{
-	    return size.x();
-	}
-	
-	@Deprecated
-	public float getYSize()
-	{
-	    return size.y();
 	}
 	
 	public void rebuildModelMatrix()
