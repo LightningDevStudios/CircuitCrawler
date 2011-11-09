@@ -188,36 +188,7 @@ public class LevelRenderer implements com.lds.LevelSurfaceView.Renderer
 				}
 			}
 		}
-		
-		
-		//outside of ent for loop
-		//causes button A to shoot when pressed
-		if (game.btnA.isPressed())
-		{
-			if (!game.player.isHoldingObject())
-			{
-				if (game.player.getEnergy() != 0)
-				{
-					final Vector2 directionVec = new Vector2(game.player.getAngle());
-					final AttackBolt attack = new AttackBolt(Vector2.add(game.player.getPos(), directionVec), Vector2.scale(directionVec, 25), game.player);
-					attack.setTexture(Game.tilesetentities);
-					//attack.setTile(gl, 1, 3);
-					attack.initialize(gl);
-					EntityManager.addEntity(attack);
-					game.player.loseEnergy(5);
-					Vibrator.vibrate(context, 100);
-					SoundPlayer.playSound(SoundPlayer.SHOOT_SOUND);
-				}
-			}
-			else
-			{
-				game.player.throwObject();
-				Vibrator.vibrate(context, 100);
-			}
-			
-			game.btnA.unpress();
-		}
-		
+				
 		/**********************
 		 * Render all Entites *
 		 **********************/

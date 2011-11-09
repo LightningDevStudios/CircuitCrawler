@@ -135,20 +135,7 @@ public class Parser
 					pd.createInst(tempPlayerList);
 					player = (Player)tempPlayerList.get(0);
 				}
-				else if (xrp.getName().equalsIgnoreCase("PickupHealth"))
-				{
-					parseObj("PickupHealth");
-					PickupHealthData phD = new PickupHealthData(dataHM);
-					parsedList.add(phD);
-					phD.createInst(entList);
-				}
-				else if (xrp.getName().equalsIgnoreCase("PickupEnergy"))
-				{
-					parseObj("PickupEnergy");
-					PickupEnergyData pbD = new PickupEnergyData(dataHM);
-					parsedList.add(pbD);
-					pbD.createInst(entList);
-				}
+				
 				else if (xrp.getName().equalsIgnoreCase("Cannon"))
 				{
 					parseObj("Cannon");
@@ -404,10 +391,7 @@ Parse A Tileset
 					Float.parseFloat(parameters[3]), 
 					Float.parseFloat(parameters[4]));
 		}
-		else if (type.equalsIgnoreCase("CausePlayerHealth"))
-		{
-			cause = new CausePlayerHealth(Integer.parseInt(parameters[0]), this.<Player>stringToSubEntity(parameters[1]));
-		}
+		
 		else if (type.equalsIgnoreCase("CauseTimePassed"))
 		{
 			if (parameters.length == 2)
