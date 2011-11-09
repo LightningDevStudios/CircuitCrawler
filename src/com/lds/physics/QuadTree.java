@@ -4,138 +4,251 @@ import com.lds.math.Vector2;
 
 import java.util.ArrayList;
 
+/**
+ * A Quadtree class designed for collision detection
+ * @author Devin Reed
+ * \todo: rename to Quadtree
+ */
 public class QuadTree 
 {
-	public ArrayList<ArrayList<Shape>> collidingEntities = new ArrayList<ArrayList<Shape>>();
+    /*************
+     * Constants *
+     *************/
+    
+    /**
+     * The maximum number of times a quadtree can divide
+     */
+    public static final int maxLevel = 2;
+    
+    /***********
+     * Members *
+     ***********/
 	
-	private ArrayList<Shape> quadTreeEntities = new ArrayList<Shape>();
-	private QuadTree[] subQuads = new QuadTree[4];
+    /**
+     * All shapes contained partially or wholly within the Quadtre
+     */
+	private ArrayList<Shape> shapes;
 	
+	/**
+	 * A list of all branches of the Quadtree. Should contain four or be null.
+	 * Order is: Top Left, Top Right, Bottom Right, Bottom Left
+	 */
+	private QuadTree[] branches;
+	
+	/**
+	 * Stores the parent Quadtree
+	 * \todo: get rid of or use
+	 */
 	private QuadTree parent;
-	private Vector2 size;
-	private Vector2 center;
-	private Vector2 minimumLeafSize;
 	
-	public QuadTree(Vector2 size, Vector2 center, QuadTree parent, Vector2 minimumLeafSize, ArrayList<Shape> entList)
+	/**
+	 * A Vector2 representing the world coordinates of the Quadtree's bottom left corner
+	 */
+	private Vector2 position;
+	
+	/**
+	 * A Vector2 representing the size of the Quadtree, in world coordinates
+	 */
+	private Vector2 size;
+	
+	/**
+	 * The subdivision level of the tree. Root tree is zero, lowest tree possible is maxLevel
+	 */
+	private int level;
+	
+	/****************
+	 * Constructors *
+	 ****************/
+	
+	/**
+	 * Initializes a new root instance of the Quadtree Class
+	 * @param position The top left coordinate of the Quadtree, in world coords
+	 * @param size The size of the Quadtree, in world coords
+	 * @param shapes The list of shapes to be dealt with (all shapes in world)
+	 */
+	public QuadTree(Vector2 position, Vector2 size, ArrayList<Shape> shapes)
+	{
+	    this.position = position;
+	    this.size = size;
+	    this.shapes = shapes;
+	    
+	    parent = null;
+	    level = 0;
+	}
+	
+	/**
+	 * Initializes a new branch instance of the Quadtree class
+	 * @param parent The parent Quadtree (should be this)
+	 * @param position The top left coordinate of the Quadtree, in world coords
+	 * @param size The size of the Quadtree, in world coords
+	 */
+	private QuadTree(QuadTree parent, Vector2 position, Vector2 size)
 	{
 		this.parent = parent;
+		this.position = position;
 		this.size = size;
-		this.center = center;
-		this.minimumLeafSize = minimumLeafSize;
 		
-		SplitQuad(entList);
+		level = this.parent.level + 1;
 		
-		if (parent != null)
-			parent.collidingEntities.add(quadTreeEntities);
-		else
-			collidingEntities.add(quadTreeEntities);
+		shapes = new ArrayList<Shape>();
 	}
-
-	public void SplitQuad(ArrayList<Shape> entList) 
+	
+	/******************
+	 * Public Methods *
+	 ******************/
+	
+	/**
+	 * Updates the Quadtree
+	 * <ol>
+	 *     <li>Returns if Quadtree is at lowest level</li>
+	 *     <li>If neccessary, branches out down the tree</li>
+	 *     <li>Updates branches</li>
+	 *     <li>Prunes up the tree</li>
+	 * </ol> 
+	 */
+	public void update()
 	{
-		if (entList.size() < 2)
-			return;
-		
-		ArrayList<Shape> Quad1Entities = new ArrayList<Shape>();
-		ArrayList<Shape> Quad2Entities = new ArrayList<Shape>();
-		ArrayList<Shape> Quad3Entities = new ArrayList<Shape>();
-		ArrayList<Shape> Quad4Entities = new ArrayList<Shape>();
-		
-		for (Shape shape : entList)
-		{
-			boolean inBox = true;
-			for (Vector2 vert : shape.getWorldVertices())
-			{
-				if (!(vert.getX() > center.getX() - size.getX() / 2 && vert.getX() < center.getX() + size.getX() / 2 
-				        && vert.getY() > center.getY() - size.getY() / 2 && vert.getY() < center.getY() + size.getY() / 2))
-				{
-					inBox = false;
-				}
-			}
-			if (inBox)
-			{
-				//Quadrant1
-				if (shape.getPos().getX() > center.getX() && shape.getPos().getX() < center.getX() + size.getX() / 2 
-				        &&  shape.getPos().getY() > center.getY() && shape.getPos().getY() < center.getY() + size.getY() / 2)
-				{
-					Quad1Entities.add(shape);
-				}
-				//Quadrant2
-				else if (shape.getPos().getX() > center.getX() - size.getX() / 2 && shape.getPos().getX() < center.getX() 
-				        &&  shape.getPos().getY() > center.getY() && shape.getPos().getY() < center.getY() + size.getY() / 2)
-				{
-					Quad2Entities.add(shape);
-				}
-				//Quadrant3
-				else if (shape.getPos().getX() > center.getX() - size.getX() / 2 && shape.getPos().getX() < center.getX() 
-				        &&  shape.getPos().getY() > center.getY() - size.getY() / 2 && shape.getPos().getY() < center.getY())
-				{
-					Quad3Entities.add(shape);
-				}
-				//Quadrant4
-				else if (shape.getPos().getX() > center.getX() && shape.getPos().getX() < center.getX() + size.getX() / 2
-				        &&  shape.getPos().getY() > center.getY() - size.getY() / 2 && shape.getPos().getY() < center.getY())
-				{
-					Quad4Entities.add(shape);
-				}
-			}
-			else
-			{
-				quadTreeEntities.add(shape);
-			}
-		}
-		
-		if (Quad1Entities.size() > 1)
-		{
-			if (size.getX() <= minimumLeafSize.getX() && size.getY() <= minimumLeafSize.getY())
-				quadTreeEntities.addAll(Quad1Entities);
-			else
-			{
-				subQuads[0] = new QuadTree(new Vector2(size.getX() / 2, size.getY() / 2), 
-				        new Vector2(center.getX() + size.getX() / 4, center.getY() + size.getY() / 4), this, minimumLeafSize, Quad1Entities);
-				Quad1Entities.clear();
-			}
-		}
-		else
-			quadTreeEntities.addAll(Quad1Entities);
-		if (Quad2Entities.size() > 1)
-		{
-			if (size.getX() <= minimumLeafSize.getX() && size.getY() <= minimumLeafSize.getY())
-				quadTreeEntities.addAll(Quad2Entities);
-			else
-			{
-				subQuads[1] = new QuadTree(new Vector2(size.getX() / 2, size.getY() / 2), 
-				        new Vector2(center.getX() - size.getX() / 4, center.getY() + size.getY() / 4), this, minimumLeafSize, Quad2Entities);
-				Quad2Entities.clear();
-			}
-		}
-		else
-			quadTreeEntities.addAll(Quad2Entities);
-		if (Quad3Entities.size() > 1)
-		{
-			if (size.getX() <= minimumLeafSize.getX() && size.getY() <= minimumLeafSize.getY())
-				quadTreeEntities.addAll(Quad3Entities);
-			else
-			{
-				subQuads[2] = new QuadTree(new Vector2(size.getX() / 2, size.getY() / 2), 
-				        new Vector2(center.getX() - size.getX() / 4, center.getY() - size.getY() / 4), this, minimumLeafSize, Quad3Entities);
-				Quad3Entities.clear();
-			}
-		}
-		else
-			quadTreeEntities.addAll(Quad3Entities);
-		if (Quad4Entities.size() > 1)
-		{
-			if (size.getX() <= minimumLeafSize.getX() && size.getY() <= minimumLeafSize.getY())
-				quadTreeEntities.addAll(Quad4Entities);
-			else
-			{
-				subQuads[3] = new QuadTree(new Vector2(size.getX() / 2, size.getY() / 2), 
-				        new Vector2(center.getX() + size.getX() / 4, center.getY() - size.getY() / 4), this, minimumLeafSize, Quad4Entities);
-				Quad4Entities.clear();
-			}
-		}
-		else
-			quadTreeEntities.addAll(Quad4Entities);
+	    //if at the lowest subdivision, do nothing
+	    if (level == maxLevel)
+	        return;
+	    
+	    //BRANCH: if there is more than one shape in the Quadtree
+	    if (shapes.size() > 1)
+	    {
+	        //split into four branches if neccessary
+	        if (branches == null)
+	            split();
+	        
+	        //initialize a bounding box
+	        AABB bb = new AABB();
+	        //for each shape
+	        for (Shape s : shapes)
+	        {
+	            //generate bounding box for the shape
+	            bb.generateBounds(s.getWorldVertices());
+	            
+	            //for each branch
+	            for (QuadTree branch : branches)
+	            {
+	                if (!branch.shapes.contains(s))
+	                {
+    	                float halfSizeX = branch.size.getX() / 2;
+    	                float halfSizeY = branch.size.getY() / 2;
+    	                //if shape's bounding box is contained in the branch
+    	                if (bb.getLeftBound() >= branch.position.getX() + halfSizeX) continue;
+    	                if (bb.getRightBound() <= branch.position.getX() - halfSizeX) continue;
+    	                if (bb.getTopBound() <= branch.position.getY() - halfSizeY) continue;
+    	                if (bb.getBottomBound() >= branch.position.getY() + halfSizeY) continue;
+    	                /*if ((bb.getLeftBound() < branch.position.getX() + halfSizeX && bb.getRightBound() > branch.position.getX() + halfSizeX) 
+    	                        || (bb.getTopBound() > branch.position.getY() - halfSizeY && bb.getBottomBound() < branch.position.getY() - halfSizeY) 
+    	                        || (bb.getRightBound() > branch.position.getX() - halfSizeX && bb.getLeftBound() < branch.position.getX() - halfSizeX) 
+    	                        || (bb.getBottomBound() < branch.position.getY() + halfSizeY && bb.getTopBound() > branch.position.getY() + halfSizeY))*/
+    	                    //add the shape to the branch
+    	                    branch.addShape(s);
+	                }
+	            }
+	        }
+	        
+	        //update all branches
+	        for (QuadTree branch : branches)
+	            branch.update();
+	    }
+	    
+	    //PRUNE: if there is one or no shapes in the Quadtree
+	    else
+	    {
+	        //clear all lower branches (unsplit)
+	        branches = null;
+	    }
 	}
+	
+	/**
+	 * Recursively gets all combinations of entities likely to be colliding
+	 * @return An ArrayList of CollisionPairs: one pair for each two entities in the same lowest-level tree
+	 */
+	public ArrayList<CollisionPair> getCollisionPairs()
+	{
+	    //initialize a new list of collision pairs
+	    ArrayList<CollisionPair> pairs = new ArrayList<CollisionPair>();
+	    
+	    //if at the lowest level
+	    if (level == maxLevel)
+	    {
+	        //if two shapes, add the twp
+	        if (shapes.size() == 2)
+	        {
+	            pairs.add(new CollisionPair(shapes.get(0), shapes.get(1)));
+	        }
+	        //TODO: more efficient linking
+	        //if more than two, add all the combinations (if less than two, leave list blank)
+	        else if (shapes.size() > 2)
+	        {
+	            for (int i = 0; i < shapes.size() - 1; i++)
+	            {
+	                for (int j = i + 1; j < shapes.size(); j++)
+	                {
+	                    pairs.add(new CollisionPair(shapes.get(i), shapes.get(j)));
+	                }
+	            }
+	        }
+	    }
+	    //if not at lowest level, and is split
+	    else if (branches != null)
+	    {
+	        //get collision pairs for all branches and add them together
+	        for (QuadTree branch : branches)
+	        {
+	            ArrayList<CollisionPair> cps = branch.getCollisionPairs();
+	            for (CollisionPair cp : cps)
+	                pairs.add(cp);
+	        }
+	    }
+	    
+	    return pairs;
+	}
+	
+	/**
+	 * Adds an ArrayList of new shapes to shapes
+	 * @param newShapes
+	 */
+	public void addShapes(ArrayList<Shape> newShapes)
+    {
+        shapes.addAll(newShapes);
+    }
+	
+	/*******************
+	 * Private Methods *
+	 *******************/
+	
+	/**
+	 * Splits the quadtree into four of 1/4 the size
+	 */
+	private void split()
+	{
+	    branches = new QuadTree[4];
+	    
+	    Vector2 branchSize = Vector2.scale(size, 0.5f);
+	    Vector2 fourthSize = Vector2.scale(size, 0.25f);
+	    
+	    //Top Right
+	    branches[0] = new QuadTree(this, Vector2.add(position, fourthSize), branchSize);
+	    
+	    //Top Left
+	    branches[1] = new QuadTree(this, Vector2.add(position, new Vector2(-fourthSize.getX(), fourthSize.getY())), branchSize);
+	    
+	    //Bottom Left
+	    branches[2] = new QuadTree(this, Vector2.subtract(position, fourthSize), branchSize);
+	    
+	    //Bottom Right
+	    branches[3] = new QuadTree(this, Vector2.add(position, new Vector2(fourthSize.getX(), -fourthSize.getY())), branchSize);
+	}
+	
+	/**
+	 * Adds a new shape to shapes
+	 * @param shape The new Shape to add
+	 */
+	private void addShape(Shape shape)
+    {
+        shapes.add(shape);
+    }
 }

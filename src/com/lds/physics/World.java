@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public class World 
 {
-	private Vector2 size;
+	private Vector2 size; //assume centered at 0, 0
 	private ArrayList<Shape> shapes;
 	private CollisionDetector collisionDetector;
 	
@@ -14,13 +14,13 @@ public class World
 	{
 		this.size = size;	
 		this.shapes = shapeList;
-		collisionDetector = new CollisionDetector(this.size, shapeList);
+		collisionDetector = new CollisionDetector(new Vector2(0, 0), this.size, shapeList);
 	}
 	
 	public void update()
 	{
-	    ArrayList<CollisionPair> collidingPairs = collisionDetector.SolveCollision();
-	    PhysicsManager.updatePairs(collidingPairs);
+	    collisionDetector.update();
+	    //PhysicsManager.updatePairs(collidingPairs);
 	    PhysicsManager.updateShapes(shapes);
 	}
 

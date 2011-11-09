@@ -5,84 +5,108 @@ import com.lds.math.Vector2;
 import java.util.ArrayList;
  
 /**
- * \todo: BETTER NAMES FOR ALL METHODS
+ * A class which handles interaction and collision detection
+ * @author Devin Reed
+ * @author Matt Masarik
+ * \todo: rename to CollisionManager
  * \todo: IMPLEMENT INTERACTION
  */
 public class CollisionDetector 
 {	
+    /***********
+     * Members *
+     **********/
+    
+    /**
+     * The top left position of the CollisionDetector, in world coords
+     */
+    private Vector2 position;
+    
+    /**
+     * The size of the CollisionDetector, in world coords
+     */
 	private Vector2 size;
-	private ArrayList<Shape> shapeList;
-	private Vector2 minLeafSize = new Vector2(10, 10);
-	
-	public CollisionDetector(Vector2 size, ArrayList<Shape> shapeList) 
-	{
-		this.size = size;
-		this.shapeList = shapeList;
-	}
-
-	public ArrayList<ArrayList<Shape>> QuadTreeDetection()
-	{
-		QuadTree qt = new QuadTree(size, new Vector2(0, 0), null, new Vector2(50, 50), shapeList);
-		return qt.collidingEntities;
-	}
 	
 	/**
-     * Get colliding shapes
-     * <ol>
-     *     <li>Run QuadTreeDetection();</li>
-     *     <li>Use the QuadTreeList from QuadTreeDetection() and pass the shapes to RadiusCheck.</li>
-     *     <li>If the RadiusCheck returns true pass them to the SeperatingAxisTheorem.</li>
-     *     <li>Solve the Collisions from the CollisionPair.</li>
-     * </ol>
-     * 
-     * Note the QuadTreeDetection() returns 2 list of lists:
-     * <ol>
-     *     <li>List 1 called normalShape contains all shapes that could be colliding with each other so if
-     *     there is 1 list in normalShape and it contains 3 shapes; shape 1 compares to shape 2 and 3,
-     *     and shape 2 compares to 3</li>
-     *     <li>List 2 called onLineShape contains all shapes that do not fall in a specific quadrant so
-     *     if onLineShape contains 1 list which has 6 shapes in it; shape 1 is compared to
-     *     shape 2, 3, 4, 5, and 6.</li>
-     * </ol>
-     * @return 
-     */
-    public ArrayList<CollisionPair> SolveCollision()
-    {
-        ArrayList<CollisionPair> pairs = new ArrayList<CollisionPair>();
-        ArrayList<ArrayList<Shape>> shapeListList = QuadTreeDetection();
-        
-        //TODO: moer effiecency
-        for (ArrayList<Shape> shapeList : shapeListList)
-        {
-            for (Shape shape : shapeList)
-            {
-                for (Shape s : shapeList)
-                {
-                    if (s != shape)
-                    {
-                        CollisionPair pair = medAndNearPhase(shape, s);
-                        if (pair != null)
-                            pairs.add(pair);
-                    }
-                }
-            }
-        }
-        
-        return pairs;
-    }
+	 * All shapes to be checked for detection
+	 */
+	private ArrayList<Shape> shapes;
+	
+	/**
+	 * A quadtree to be used in the broadPhase
+	 */
+	private QuadTree qt;
+	 
+	/**
+	 * All currently colliding pairs of collisions
+	 */
+	private ArrayList<CollisionPair> collidingPairs;
+	
+	/****************
+	 * Constructors *
+	 ****************/
+	
+	/**
+	 * Initializes a new instance of the CollisionDetector class
+	 * @param position The top left position of the detector, in world coords
+	 * @param size The size of the detecotr, in world coords
+	 * @param shapes A list of shapes to be checked for detection
+	 */
+	public CollisionDetector(Vector2 position, Vector2 size, ArrayList<Shape> shapes) 
+	{
+		this.position = position;
+		this.size = size;
+		this.shapes = shapes;
+		
+		qt = new QuadTree(this.position, this.size, this.shapes);
+		collidingPairs = new ArrayList<CollisionPair>();
+	}
+	
+	/*****************************
+	 * Public Non-Static Methods *
+	 *****************************/
+	
+	/**
+	 * Updates the detector
+	 * <ol>
+	 *     <li>Updates Quadtree</li>
+	 *     <li>Runs Collision Detection</li>
+	 *     \todo: run entity interaction
+	 * </ol>
+	 */
+	public void update()
+	{
+	    qt.update();
+	    collidingPairs = updateCollisions();
+	}
+	
+	public ArrayList<CollisionPair> updateCollisions()
+	{
+	    ArrayList<CollisionPair> broadPhasePairs = qt.getCollisionPairs();
+	    if (broadPhasePairs.size() > 0)
+	        System.out.println(broadPhasePairs.size());
+	    ArrayList<CollisionPair> nearPhasePairs = new ArrayList<CollisionPair>();
+	    
+	    for (CollisionPair pair : broadPhasePairs)
+	    {
+	       CollisionPair cp = colliding(pair);
+	       if (cp != null)
+	           nearPhasePairs.add(cp);
+	    }
+	    
+	    return nearPhasePairs;
+	}
     
-    /******************
-     * Static Methods *
-     ******************/
+    /********************************************
+     * Static Methods (Med and Near Phase Math) *
+     ********************************************/
 	
-	public static boolean radiusCheck(Shape a, Shape b)
-    {
-        float diagonalA = Vector2.subtract(a.getPos(), a.getWorldVertices()[0]).length();
-        float diagonalB = Vector2.subtract(b.getPos(), b.getWorldVertices()[0]).length();
-        return Vector2.subtract(a.getPos(), b.getPos()).length() < (float)(diagonalA + diagonalB);
-    }
+	public static CollisionPair colliding(CollisionPair cp)
+	{
+	    return colliding(cp.getShape1(), cp.getShape2());
+	}
 	
-	public static CollisionPair medAndNearPhase(Shape a, Shape b)
+	public static CollisionPair colliding(Shape a, Shape b)
 	{
 	    if (a instanceof Circle && b instanceof Circle)
     	    return radiusCheckCircles((Circle)a, (Circle)b);
@@ -103,6 +127,13 @@ public class CollisionDetector
 	    
 	    return null;
 	}
+	
+	public static boolean radiusCheck(Shape a, Shape b)
+    {
+        float diagonalA = Vector2.subtract(a.getPos(), a.getWorldVertices()[0]).length();
+        float diagonalB = Vector2.subtract(b.getPos(), b.getWorldVertices()[0]).length();
+        return Vector2.subtract(a.getPos(), b.getPos()).length() < (float)(diagonalA + diagonalB);
+    }
 	
 	public static CollisionPair radiusCheckCircles(Circle a, Circle b)
 	{
@@ -154,7 +185,7 @@ public class CollisionDetector
                max2 = temp;
            }
            
-           if ((max1 > max2 || max1 < min2) && (max2 > max1 || max2 < min1))
+           if (!((max1 > min2 && max1 < max2) || (max2 > min1 || max2 < max1)))
                return null;
        }
        
@@ -168,6 +199,8 @@ public class CollisionDetector
 		axes[1] = Vector2.getNormal(axes[0]);
 		axes[2] = Vector2.abs(Vector2.subtract(b.getWorldVertices()[0], b.getWorldVertices()[1]));
 		axes[3] = Vector2.getNormal(axes[2]);
+		
+		Vector2 nearestOut = null;
 		
 		for (Vector2 axis : axes)
 		{
@@ -197,11 +230,15 @@ public class CollisionDetector
 					min2 = dotProd2;
 			}
 			
-			if ((max1 > max2 || max1 < min2) && (max2 > max1 || max2 < min1))	
-				return null;
+			if (max1 > min2 && max1 < max2)
+			    nearestOut = Vector2.scale(axis, max1 - min2);
+			else if (max2 > min1 || max2 < max1)
+			    nearestOut = Vector2.scale(axis, max2 - min1);   
+			else
+			    return null;
 		}
 		
-		return new CollisionPair(a, b);
+		return new CollisionPair(a, b, nearestOut);
 	}
 	
 	public static boolean containsPoint(Circle c, Vector2 v)
@@ -239,4 +276,13 @@ public class CollisionDetector
         
         return true;
     }
+	
+	/***********************
+	 * Getters and Setters *
+	 ***********************/
+	
+	public ArrayList<CollisionPair> getCollidingPairs()
+	{
+	    return collidingPairs;
+	}
 }
