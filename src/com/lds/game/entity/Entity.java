@@ -28,7 +28,7 @@ public abstract class Entity implements InteractListener
 	protected Texture tex;
 	protected int tilesetX, tilesetY;
 		
-	protected int VBO;
+	protected int vbo;
 	
 	public Entity(Shape shape)
 	{		
@@ -45,10 +45,10 @@ public abstract class Entity implements InteractListener
 		
 		//bind the texture and set the color.
 		gl.glBindTexture(GL11.GL_TEXTURE_2D, tex.getTexture());
-	    gl.glColor4f(colorVec.getX(), colorVec.getY(), colorVec.getZ(), colorVec.getW());
+	    gl.glColor4f(colorVec.x(), colorVec.y(), colorVec.z(), colorVec.w());
 
 	    //bind the VBO and set up the vertex and tex coord pointers.
-		gl.glBindBuffer(GL11.GL_ARRAY_BUFFER, VBO);
+		gl.glBindBuffer(GL11.GL_ARRAY_BUFFER, vbo);
 		gl.glVertexPointer(2, GL11.GL_FLOAT, 0, 0);
 		gl.glTexCoordPointer(2, GL11.GL_FLOAT, 0, 32);
 		gl.glBindBuffer(GL11.GL_ARRAY_BUFFER, 0);
@@ -79,7 +79,7 @@ public abstract class Entity implements InteractListener
 	    float[] t = TilesetHelper.getTextureVertices(tex, tilesetX, tilesetY);
 	    
 	    //copy vertices over
-	    for(int i = 0; i < v.length; i++)
+	    for (int i = 0; i < v.length; i++)
 	        verts[i] = v[i];
 	    
 	    //copy texture coordinates over.
@@ -96,10 +96,10 @@ public abstract class Entity implements InteractListener
         //generate a VBO.
 	    int[] tempPtr = new int[1];
         gl.glGenBuffers(1, tempPtr, 0);
-        VBO = tempPtr[0];
+        vbo = tempPtr[0];
         
         //send data to GPU.
-        gl.glBindBuffer(GL11.GL_ARRAY_BUFFER, VBO);
+        gl.glBindBuffer(GL11.GL_ARRAY_BUFFER, vbo);
         gl.glBufferData(GL11.GL_ARRAY_BUFFER, verts.length * 4, buffer, GL11.GL_STATIC_DRAW);
         gl.glBindBuffer(GL11.GL_ARRAY_BUFFER, 0);
 	}
@@ -115,7 +115,7 @@ public abstract class Entity implements InteractListener
         buffer.put(t);
         buffer.position(0);
 	    
-	    gl.glBindBuffer(GL11.GL_ARRAY_BUFFER, VBO);
+	    gl.glBindBuffer(GL11.GL_ARRAY_BUFFER, vbo);
 	    gl.glBufferSubData(GL11.GL_ARRAY_BUFFER, 32, t.length * 4, buffer);
 	    gl.glBindBuffer(GL11.GL_ARRAY_BUFFER, 0);
 	}
@@ -127,7 +127,7 @@ public abstract class Entity implements InteractListener
 	//TODO: I don't even...
 	public boolean isFacing(Entity ent)
 	{
-		float angleBetween = (float)Math.toDegrees(Math.atan2(ent.getYPos() - this.getYPos() , ent.getXPos() - this.getXPos()));
+		float angleBetween = (float)Math.toDegrees(Math.atan2(ent.getPos().y() - this.getPos().y() , ent.getPos().x() - this.getPos().x()));
 		//clamp angle between 0 and 360
 		if (angleBetween == 360.0f)
 			angleBetween = 0.0f;
@@ -174,7 +174,7 @@ public abstract class Entity implements InteractListener
 		
 	//COLOR
 	/**
-	 * \todo use Vector4s instead (or make a Color4 class)
+	 * \todo use Vector4s instead (or make a Color4 class).
 	 * @param r R component.
 	 * @param g G component.
 	 * @param b B component.
@@ -212,23 +212,23 @@ public abstract class Entity implements InteractListener
 		{
 			final float colorInterp = colorInterpSpeed / 1000 * Stopwatch.getFrameTime();
 			final Vector4 colorDiffVec = Vector4.abs(Vector4.subtract(endColorVec, colorVec));
-			if (colorDiffVec.getX() < colorInterp && colorDiffVec.getY() < colorInterp && colorDiffVec.getZ() < colorInterp && colorDiffVec.getW() < colorInterp)
+			if (colorDiffVec.x() < colorInterp && colorDiffVec.y() < colorInterp && colorDiffVec.z() < colorInterp && colorDiffVec.w() < colorInterp)
 			{
 				colorVec = endColorVec;
 				isColorInterp = false;
 			}
 			else
 			{
-				if (endColorVec.getX() > colorVec.getX())   colorVec = Vector4.add(colorVec, new Vector4(colorInterp, 0, 0, 0));
+				if (endColorVec.x() > colorVec.x())   colorVec = Vector4.add(colorVec, new Vector4(colorInterp, 0, 0, 0));
 				else					                    colorVec = Vector4.subtract(colorVec, new Vector4(colorInterp, 0, 0, 0));
 				
-				if (endColorVec.getY() > colorVec.getY())	colorVec = Vector4.add(colorVec, new Vector4(0, colorInterp, 0, 0));
+				if (endColorVec.y() > colorVec.y())	colorVec = Vector4.add(colorVec, new Vector4(0, colorInterp, 0, 0));
 				else					                    colorVec = Vector4.subtract(colorVec, new Vector4(0, colorInterp, 0, 0));
 				
-				if (endColorVec.getZ() > colorVec.getZ())	colorVec = Vector4.add(colorVec, new Vector4(0, 0, colorInterp, 0));
+				if (endColorVec.z() > colorVec.z())	colorVec = Vector4.add(colorVec, new Vector4(0, 0, colorInterp, 0));
 				else					                    colorVec = Vector4.subtract(colorVec, new Vector4(0, 0, colorInterp, 0));
 				
-				if (endColorVec.getW() > colorVec.getW())	colorVec = Vector4.add(colorVec, new Vector4(0, 0, 0, colorInterp));
+				if (endColorVec.w() > colorVec.w())	colorVec = Vector4.add(colorVec, new Vector4(0, 0, 0, colorInterp));
 				else					                    colorVec = Vector4.subtract(colorVec, new Vector4(0, 0, 0, colorInterp));
 			}
 		}
@@ -237,7 +237,7 @@ public abstract class Entity implements InteractListener
     public void unload(GL11 gl)
     {
         int[] buffer = new int[1];
-        buffer[0] = VBO;
+        buffer[0] = vbo;
         
         gl.glDeleteBuffers(3, buffer, 0);
     }
@@ -275,26 +275,6 @@ public abstract class Entity implements InteractListener
 	}
 	
 	/**
-	 * Gets the Entity's X position in world coordiantes.
-	 * @return The Entity's X coordinate.
-	 * @deprecated Use "getPos().getX()" instead.
-	 */
-	public float getXPos()
-	{
-	    return shape.getPos().getX();
-	}
-	
-	/**
-     * Gets the Entity's Y position in world coordiantes.
-     * @return The Entity's Y coordinate.
-     * @deprecated Use "getPos().getY()" instead.
-     */
-	public float getYPos()
-	{
-	    return shape.getPos().getY();
-	}
-	
-	/**
 	 * Gets the Entity's angle, in radians.
 	 * @return The Entity's angle.
 	 * \todo make sure it's actually in radians?
@@ -312,26 +292,6 @@ public abstract class Entity implements InteractListener
 	public Vector2 getScale()
     {
         return shape.getScale();
-    }
-	
-	/**
-	 * Get's the Entity's scale in the X direction.
-	 * @return The Entity's X scale.
-	 * @deprecated Use "getScale().getX()" instead.
-	 */
-	public float getXScale()
-    {
-        return getScale().getX();
-    }
-    
-	/**
-     * Get's the Entity's scale in the Y direction.
-     * @return The Entity's Y scale.
-     * @deprecated Use "getScale().getY()" instead.
-     */
-    public float getYScale()
-    {
-        return getScale().getY();
     }
 
     /**
@@ -399,6 +359,7 @@ public abstract class Entity implements InteractListener
 	
 	/**
 	 * Sets the Entity's tile.
+	 * @param gl The OpenGL context.
 	 * @param tilesetX The X coordinate of the tile.
 	 * @param tilesetY The Y coordinate of the tile.
 	 */

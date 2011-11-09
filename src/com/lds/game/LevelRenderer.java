@@ -23,7 +23,7 @@ import javax.microedition.khronos.opengles.GL11;
  * The class that renders the game (and fires off all the other code, which is hax).
  * @author Lightning Development Studios
  */
-public class GameRenderer implements com.lds.Graphics.Renderer
+public class LevelRenderer implements com.lds.LevelSurfaceView.Renderer
 {
 	//public static boolean vibrateSetting = true;
     public boolean paused, charlieSheen;
@@ -47,7 +47,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	 * @param syncObj An object used to synchronize the rendering thread and the main thread.
 	 * @param levelId The ID of the level to be played.
 	 */
-	public GameRenderer(float screenW, float screenH, Context context, Object syncObj, int levelId)
+	public LevelRenderer(float screenW, float screenH, Context context, Object syncObj, int levelId)
 	{
 		Game.screenW = screenW;
 		Game.screenH = screenH;
@@ -90,7 +90,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 			ent.initialize(gl);
 		}
 		
-		for (UIEntity ent : game.UIList)
+		for (Control ent : game.UIList)
 		{
 			ent.genHardwareBuffers(gl);
 		}
@@ -188,36 +188,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 				}
 			}
 		}
-		
-		
-		//outside of ent for loop
-		//causes button A to shoot when pressed
-		if (game.btnA.isPressed())
-		{
-			if (!game.player.isHoldingObject())
-			{
-				if (game.player.getEnergy() != 0)
-				{
-					final Vector2 directionVec = new Vector2(game.player.getAngle());
-					final AttackBolt attack = new AttackBolt(Vector2.add(game.player.getPos(), directionVec), Vector2.scale(directionVec, 25), game.player);
-					attack.setTexture(Game.tilesetentities);
-					//attack.setTile(gl, 1, 3);
-					attack.initialize(gl);
-					EntityManager.addEntity(attack);
-					game.player.loseEnergy(5);
-					Vibrator.vibrate(context, 100);
-					SoundPlayer.playSound(SoundPlayer.SHOOT_SOUND);
-				}
-			}
-			else
-			{
-				game.player.throwObject();
-				Vibrator.vibrate(context, 100);
-			}
-			
-			game.btnA.unpress();
-		}
-		
+				
 		/**********************
 		 * Render all Entites *
 		 **********************/
@@ -247,7 +218,9 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 		//Render UI, in the UI perspective
 		viewHUD(gl);
 		
-		for (UIEntity ent : game.UIList)
+		gl.glEnableClientState(GL11.GL_VERTEX_ARRAY);
+		
+		for (Control ent : game.UIList)
 		{
 			ent.update();
 			ent.updateVertexVBO(gl);
@@ -256,6 +229,8 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 			ent.draw(gl);
 			gl.glLoadIdentity();
 		}
+		
+		gl.glDisableClientState(GL11.GL_VERTEX_ARRAY);
 		
 		viewWorld(gl);
 				
@@ -299,8 +274,8 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 					boolean onEnt = false;
 					for (int i = 0; i < game.UIList.size(); i++)
 					{
-						final UIEntity ent = game.UIList.get(i);
-						if (touchVec.getX() >= ent.getPos().getX() - ent.getSize().getX() / 2 && touchVec.getX() <= ent.getPos().getX() + ent.getSize().getX() / 2 && touchVec.getY() >= ent.getPos().getY() - ent.getSize().getY() / 2 && touchVec.getY() <= ent.getPos().getY() + ent.getSize().getY() / 2)
+						final Control ent = game.UIList.get(i);
+						if (touchVec.x() >= ent.getPos().x() - ent.getSize().x() / 2 && touchVec.x() <= ent.getPos().x() + ent.getSize().x() / 2 && touchVec.y() >= ent.getPos().y() - ent.getSize().y() / 2 && touchVec.y() <= ent.getPos().y() + ent.getSize().y() / 2)
 						{
 							final Finger newFinger = new Finger(touchVec, ent, e.getPointerId(fingerIndex));
 							newFinger.onStackPush();

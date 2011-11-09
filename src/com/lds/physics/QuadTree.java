@@ -132,17 +132,13 @@ public class QuadTree
 	            {
 	                if (!branch.shapes.contains(s))
 	                {
-    	                float halfSizeX = branch.size.getX() / 2;
-    	                float halfSizeY = branch.size.getY() / 2;
+    	                float halfSizeX = branch.size.x() / 2;
+    	                float halfSizeY = branch.size.y() / 2;
     	                //if shape's bounding box is contained in the branch
-    	                if (bb.getLeftBound() >= branch.position.getX() + halfSizeX) continue;
-    	                if (bb.getRightBound() <= branch.position.getX() - halfSizeX) continue;
-    	                if (bb.getTopBound() <= branch.position.getY() - halfSizeY) continue;
-    	                if (bb.getBottomBound() >= branch.position.getY() + halfSizeY) continue;
-    	                /*if ((bb.getLeftBound() < branch.position.getX() + halfSizeX && bb.getRightBound() > branch.position.getX() + halfSizeX) 
-    	                        || (bb.getTopBound() > branch.position.getY() - halfSizeY && bb.getBottomBound() < branch.position.getY() - halfSizeY) 
-    	                        || (bb.getRightBound() > branch.position.getX() - halfSizeX && bb.getLeftBound() < branch.position.getX() - halfSizeX) 
-    	                        || (bb.getBottomBound() < branch.position.getY() + halfSizeY && bb.getTopBound() > branch.position.getY() + halfSizeY))*/
+    	                if (bb.getLeftBound() >= branch.position.x() + halfSizeX) continue;
+    	                if (bb.getRightBound() <= branch.position.x() - halfSizeX) continue;
+    	                if (bb.getTopBound() <= branch.position.y() - halfSizeY) continue;
+    	                if (bb.getBottomBound() >= branch.position.y() + halfSizeY) continue;
     	                    //add the shape to the branch
     	                    branch.addShape(s);
 	                }
@@ -234,13 +230,13 @@ public class QuadTree
 	    branches[0] = new QuadTree(this, Vector2.add(position, fourthSize), branchSize);
 	    
 	    //Top Left
-	    branches[1] = new QuadTree(this, Vector2.add(position, new Vector2(-fourthSize.getX(), fourthSize.getY())), branchSize);
+	    branches[1] = new QuadTree(this, Vector2.add(position, new Vector2(-fourthSize.x(), fourthSize.y())), branchSize);
 	    
 	    //Bottom Left
 	    branches[2] = new QuadTree(this, Vector2.subtract(position, fourthSize), branchSize);
 	    
 	    //Bottom Right
-	    branches[3] = new QuadTree(this, Vector2.add(position, new Vector2(fourthSize.getX(), -fourthSize.getY())), branchSize);
+	    branches[3] = new QuadTree(this, Vector2.add(position, new Vector2(fourthSize.x(), -fourthSize.y())), branchSize);
 	}
 	
 	/**

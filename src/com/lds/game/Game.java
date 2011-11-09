@@ -4,8 +4,8 @@ import android.content.Context;
 import android.util.Log;
 
 import com.lds.*;
-import com.lds.Enums.*;
 import com.lds.UI.*;
+import com.lds.UI.Control.UIPosition;
 import com.lds.game.ai.Node;
 import com.lds.game.entity.*;
 import com.lds.game.event.*;
@@ -36,14 +36,11 @@ public class Game
     public static Texture tilesetworld;
     public static Texture tilesetentities;
     public static Texture baricons;
-    
-	public int frameInterval;
 	
 	public ArrayList<Entity> entList;
-	public Tile[][] tileset;
-	public ArrayList<UIEntity> UIList;
-	public ArrayList<Trigger> triggerList;
-	public ArrayList<Node> nodeList;
+	private Tile[][] tileset;
+	public ArrayList<Control> UIList;
+	private ArrayList<Trigger> triggerList;
 	public EntityManager cleaner;
 	public World world;
 	
@@ -53,11 +50,10 @@ public class Game
 	public float camPosX;
 	public float camPosY;
 	
-	public float worldMinX, worldMinY, worldMaxX, worldMaxY;
-	public int tilesetMinX, tilesetMinY, tilesetMaxX, tilesetMaxY;
+	private float worldMinX, worldMinY, worldMaxX, worldMaxY;
+	private int tilesetMinX, tilesetMinY, tilesetMaxX, tilesetMaxY;
 	
 	//Testing data
-	public UIButton btnA;
 	public UIButton btnB;	
 	public UIJoypad joypad;
 	public Player player;
@@ -79,7 +75,7 @@ public class Game
 		final Texture healthbarborder = new Texture(R.raw.healthbarborder, 256, 16, 1, 1, context, "healthbarborder");
 			
 		entList = new ArrayList<Entity>();
-		UIList = new ArrayList<UIEntity>();
+		UIList = new ArrayList<Control>();
 		triggerList = new ArrayList<Trigger>();
 		fingerList = new ArrayList<Finger>();
 		tileset = new Tile[16][16];
@@ -107,7 +103,7 @@ public class Game
 		
 		try
 		{
-			parser.parseLevel((GL11)gl); 
+			parser.parseLevel(gl); 
 		}
 		
 		//TODO cleanly exit the game on error.
@@ -133,68 +129,16 @@ public class Game
  		{
  			for (int j = 0; j < tileset[0].length; j++)
  			{
- 				if (tileset[i][j].isPit())
+ 			    /*TileState state = tileset[i][j].getTileState();
+ 				if (state == TileState.PIT)
  					tileset[i][j].updateBordersPit(tileset, j, i);
- 				else if (tileset[i][j].isWall())
- 					tileset[i][j].updateBordersWall(tileset, j, i);
- 				
- 				tileset[i][j].regenTexCoords((GL11)gl);
+ 				else if (state == TileState.WALL)
+ 					tileset[i][j].updateBordersWall(tileset, j, i);*/
+ 				tileset[i][j].calculateBorders(tileset);
+ 				tileset[i][j].updateBorders();
+ 				tileset[i][j].regenTexCoords(gl);
  			}
  		}
-		
-		nodeList = parser.nodeList;
-		
-		
-		//\TODO UIHealthBar is a UIEntity sub that contains 2 UIImages and a UIProgressBar (which will no longer be abstract)
-		UIHealthBar healthBar = new UIHealthBar(246.0f, 8.0f, UIPosition.TOPRIGHT, Direction.LEFT, player);
-		healthBar.setTopPad(9.0f);
-		healthBar.setRightPad(10.0f);
-		healthBar.autoPadding(9, 0, 0, 10);
-		healthBar.enableColorMode(0.8f, 0.0f, 0.0f, 0.9f);
-		healthBar.setValue(100);
-		UIList.add(healthBar);
-		
-		UIImage healthBarCover = new UIImage(256, 16, UIPosition.TOPRIGHT);
-		healthBarCover.setTopPad(5.0f);
-		healthBarCover.setRightPad(5.0f);
-		healthBarCover.autoPadding(5, 0, 0, 5);
-		healthBarCover.enableTextureMode(healthbarborder);
-		UIList.add(healthBarCover);
-		
-		UIImage healthIcon = new UIImage(16, 16, UIPosition.TOPRIGHT);
-		healthIcon.setTopPad(5.0f);
-		healthIcon.setRightPad(266.0f);
-		healthIcon.autoPadding(5, 0, 0, 266);
-		healthIcon.enableTilesetMode(baricons, 0, 0);
-		UIList.add(healthIcon);
-		
-		UIEnergyBar energyBar = new UIEnergyBar(118.0f, 8.0f, UIPosition.TOPRIGHT, Direction.LEFT, player);
-		energyBar.setTopPad(30.0f);
-		energyBar.setRightPad(10.0f);
-		energyBar.autoPadding(30, 0, 0, 10);
-		energyBar.enableColorMode(0.0f, 0.0f, 0.8f, 0.9f);
-		energyBar.setValue(100);
-		UIList.add(energyBar);
-		
-		UIImage energyBarCover = new UIImage(128, 16, UIPosition.TOPRIGHT);
-		energyBarCover.setTopPad(26.0f);
-		energyBarCover.setRightPad(5.0f);
-		energyBarCover.autoPadding(26, 0, 0, 5);
-		energyBarCover.enableTextureMode(energybarborder);
-		UIList.add(energyBarCover);
-		
-		UIImage energyIcon = new UIImage(16, 16, UIPosition.TOPRIGHT);
-		energyIcon.setTopPad(26.0f);
-		energyIcon.setRightPad(138.0f);
-		energyIcon.autoPadding(26, 0, 0, 138);
-		energyIcon.enableTilesetMode(baricons, 1, 0);
-		UIList.add(energyIcon);
-		
-		btnA = new UIButton(80.0f, 80.0f, UIPosition.BOTTOMRIGHT);
-		btnA.autoPadding(0.0f, 0.0f, 5.0f, 90.0f);
-		btnA.enableTextureMode(buttona);
-		//btnA.setIntervalTime(Stopwatch.elapsedTimeMs());
-		UIList.add(btnA);
 		
 		btnB = new UIButton(80.0f, 80.0f, UIPosition.BOTTOMRIGHT);
 		btnB.autoPadding(0.0f, 0.0f, 90.0f, 5.0f);
@@ -245,7 +189,7 @@ public class Game
 		    Vector2 entMax = Vector2.add(ent.getPos(), diagonalVec);
 			
 			//values are opposite for entMin/Max because only the far tips have to be inside the screen (leftmost point on right border of screen)
-			if (entMin.getX() <= maxX && entMax.getX() >= minX && entMin.getY() <= maxY && entMax.getY() >= minY)
+			if (entMin.x() <= maxX && entMax.x() >= minX && entMin.y() <= maxY && entMax.y() >= minY)
 				renderList.add(ent);
 		}
 		
@@ -282,8 +226,8 @@ public class Game
 	public void updateCameraPosition()
 	{
 		//move camera to follow player.
-		camPosX = player.getPos().getX();
-		camPosY = player.getPos().getY();
+		camPosX = player.getPos().x();
+		camPosY = player.getPos().y();
 		
 		
 		//camera can't go further than defined level bounds
@@ -306,8 +250,8 @@ public class Game
 		final float tilesetHalfWidth = tileset[0].length * Tile.TILE_SIZE_F / 2;
 		final float tilesetHalfHeight = tileset.length * Tile.TILE_SIZE_F / 2;
 		
-		final int x = (int)(ent.getPos().getX() + tilesetHalfWidth) / Tile.TILE_SIZE;
-		final int y = (int)(Math.abs(ent.getPos().getY() - tilesetHalfHeight)) / Tile.TILE_SIZE;
+		final int x = (int)(ent.getPos().x() + tilesetHalfWidth) / Tile.TILE_SIZE;
+		final int y = (int)(Math.abs(ent.getPos().y() - tilesetHalfHeight)) / Tile.TILE_SIZE;
 		
 		if (x < tileset[0].length && x >= 0 && y < tileset.length && y >= 0)
 		{
@@ -321,7 +265,6 @@ public class Game
 	public void setGameOverEvent(GameOverListener listener)
 	{
 		//triggerList.add(new Trigger(new CauseDoneScaling(player), new EffectEndGame(listener, false)));
-		triggerList.add(new Trigger(new CausePlayerHealth(0, player), new EffectEndGame(listener, false)));
 		
 		for (Trigger t : triggerList)
 		{

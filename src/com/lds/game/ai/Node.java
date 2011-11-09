@@ -22,7 +22,7 @@ public class Node
 	
 	public Node(Vector2 posVec)
 	{
-		this(posVec.getX(), posVec.getY());
+		this(posVec.x(), posVec.y());
 	}
 	
 	public void setParentNode(Node parent)
@@ -170,12 +170,12 @@ public class Node
 	
 	public float getXPos()
 	{
-		return posVec.getX();
+		return posVec.x();
 	}
 	
 	public float getYPos()
 	{
-		return posVec.getY();
+		return posVec.y();
 	}
 	
 	public float getF()

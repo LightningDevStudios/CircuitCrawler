@@ -1,8 +1,6 @@
 package com.lds.UI;
 
-import com.lds.Enums.UIPosition;
-
-public class UIFadeIn extends UIEntity
+public class UIFadeIn extends Control
 {
 	public UIFadeIn(float xSize, float ySize, UIPosition position)
 	{

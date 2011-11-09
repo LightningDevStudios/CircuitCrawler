@@ -2,13 +2,9 @@ package com.lds.UI;
 
 import android.util.Log;
 
-import com.lds.Enums.RenderMode;
-import com.lds.Enums.UIPosition;
-
 import com.lds.Texture;
 import com.lds.TilesetHelper;
 import com.lds.game.Game;
-import com.lds.game.entity.Entity;
 import com.lds.math.Matrix4;
 import com.lds.math.Vector2;
 
@@ -25,8 +21,50 @@ import javax.microedition.khronos.opengles.GL11;
  * @author Lightning Developemnt Studios
  * \todo allow relative sizing to scale for different monitors
  */
-public abstract class UIEntity
+public abstract class Control
 {
+    /**
+     * An enum of different modes that a UI Control can render with.
+     * \todo get rid of this!
+     * @author Lightning Developemnt Studios
+     */
+    public enum RenderMode
+    {
+        COLOR,
+        GRADIENT,
+        TEXTURE,
+        TILESET
+    }
+    
+    /**
+     * An enum of different relative positions that a UI Control can be located at.
+     * @author Lightning Development Studios
+     */
+    public enum UIPosition
+    {
+        TOP(0),
+        LEFT(1),
+        BOTTOM(2),
+        RIGHT(3),
+        CENTER(4),
+        TOPLEFT(5),
+        TOPRIGHT(6),
+        BOTTOMLEFT(7),
+        BOTTOMRIGHT(8);
+        
+        private int value;
+        
+        private UIPosition(int value)
+        {
+            this.value = value;
+        }
+        
+        public int getValue()
+        {
+            return value;
+        }
+    }
+    
 	//constants
     
     /**
@@ -68,24 +106,24 @@ public abstract class UIEntity
     private float colorR, colorG, colorB, colorA;
 	
 	//constructors
-	public UIEntity(float xSize, float ySize, UIPosition position)
+	public Control(float xSize, float ySize, UIPosition position)
 	{
 		this(xSize, ySize, UI_POSITION_F[position.getValue() * 2], UI_POSITION_F[(position.getValue() * 2) + 1], 0, 0, 0, 0);
 		this.position = position;
 	}
 
-	public UIEntity(float xSize, float ySize, float xRelative, float yRelative) 
+	public Control(float xSize, float ySize, float xRelative, float yRelative) 
 	{
 		this(xSize, ySize, xRelative, yRelative, 0, 0, 0, 0);
 	}
 	
-	public UIEntity(float xSize, float ySize, UIPosition position, float topPad, float leftPad, float bottomPad, float rightPad)
+	public Control(float xSize, float ySize, UIPosition position, float topPad, float leftPad, float bottomPad, float rightPad)
 	{
 		this (xSize, ySize, UI_POSITION_F[position.getValue() * 2], UI_POSITION_F[(position.getValue() * 2) + 1], topPad, leftPad, bottomPad, rightPad);
 		this.position = position;
 	}
 	
-	public UIEntity(float xSize, float ySize, float xRelative, float yRelative, float topPad, float leftPad, float bottomPad, float rightPad) 
+	public Control(float xSize, float ySize, float xRelative, float yRelative, float topPad, float leftPad, float bottomPad, float rightPad) 
 	{
 		this.size = new Vector2(xSize, ySize);
 		this.relativePos = new Vector2(xRelative, yRelative);
@@ -96,8 +134,8 @@ public abstract class UIEntity
 		
 		this.halfSize = Vector2.scale(size, 0.5f);
 		
-		float x = halfSize.getX();
-		float y = halfSize.getY();
+		float x = halfSize.x();
+		float y = halfSize.y();
 		
 		float[] initVerts =
 		{
@@ -120,37 +158,24 @@ public abstract class UIEntity
 	
 	public void draw(GL11 gl)
 	{
-		//gl.glTranslatef(xPos, yPos, 0.0f);		
-		
 	    gl.glMultMatrixf(model.array(), 0);
 	    
 		final boolean containsColor = renderMode.contains(RenderMode.COLOR);
-		final boolean containsGradient = renderMode.contains(RenderMode.GRADIENT);
+		//final boolean containsGradient = renderMode.contains(RenderMode.GRADIENT);
 		final boolean containsTexture = renderMode.contains(RenderMode.TEXTURE);
 		final boolean containsTileset = renderMode.contains(RenderMode.TILESET);
 		
 		//Enable texturing and bind the current texture pointer (texturePtr) to GL_TEXTURE_2D
 		if (containsTexture || containsTileset)
 		{
-			gl.glEnable(GL10.GL_TEXTURE_2D);
-			gl.glBindTexture(GL10.GL_TEXTURE_2D, tex.getTexture());
+			gl.glEnable(GL11.GL_TEXTURE_2D);
+			gl.glBindTexture(GL11.GL_TEXTURE_2D, tex.getTexture());
 		}
-		
-		//Backface culling
-		gl.glFrontFace(GL10.GL_CW);
-		gl.glEnable(GL10.GL_CULL_FACE);
-		gl.glCullFace(GL10.GL_BACK);
-		
+				
 		//Enable settings for this polygon
-		gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
 		if (containsTexture || containsTileset)
 		{
-		    gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
-		}
-		
-		if (containsGradient)
-		{
-		    gl.glEnableClientState(GL10.GL_COLOR_ARRAY);
+		    gl.glEnableClientState(GL11.GL_TEXTURE_COORD_ARRAY);
 		}
 		
 		//Sets color
@@ -167,34 +192,14 @@ public abstract class UIEntity
 			gl.glBindBuffer(GL11.GL_ARRAY_BUFFER, VBOTexturePtr);
 			gl.glTexCoordPointer(2, GL11.GL_FLOAT, 0, 0);
 		}
-		if (containsGradient)
-		{
-			gl.glBindBuffer(GL11.GL_ARRAY_BUFFER, VBOGradientPtr);
-			gl.glColorPointer(4, GL11.GL_FLOAT, 0, 0);
-		}
 		
 		gl.glDrawArrays(GL11.GL_TRIANGLE_STRIP, 0, 4);
-		
-		final int error = gl.glGetError();
-		if (error != GL11.GL_NO_ERROR)
-		{
-			Log.e("LDS_Game", "Entity rendering generates GL_ERROR: " + error);
-		}
-			
-		//Disable things for next polygon
-		gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
-		if (containsGradient)
-		{
-		    gl.glDisableClientState(GL10.GL_COLOR_ARRAY);
-		}
-		
-		gl.glDisable(GL10.GL_CULL_FACE);
-		
+				
 		//Disable texturing for next polygon
 		if (containsTexture || containsTileset)
 		{
-			gl.glDisableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
-			gl.glDisable(GL10.GL_TEXTURE_2D);
+			gl.glDisableClientState(GL11.GL_TEXTURE_COORD_ARRAY);
+			gl.glDisable(GL11.GL_TEXTURE_2D);
 		}
 		
 		//Reset color for next polygon.
@@ -250,7 +255,7 @@ public abstract class UIEntity
 				case TOP:
 				case TOPLEFT:
 				case TOPRIGHT:
-					this.topPad = halfSize.getY() + topPad;
+					this.topPad = halfSize.y() + topPad;
 					break;
             default:
                 break;
@@ -261,7 +266,7 @@ public abstract class UIEntity
 				case LEFT:
 				case TOPLEFT:
 				case BOTTOMLEFT:
-					this.leftPad = halfSize.getX() + leftPad;
+					this.leftPad = halfSize.x() + leftPad;
 					break;
 				default:
 				    break;
@@ -272,7 +277,7 @@ public abstract class UIEntity
 				case BOTTOM:
 				case BOTTOMLEFT:
 				case BOTTOMRIGHT:
-					this.bottomPad = halfSize.getY() + bottomPad;
+					this.bottomPad = halfSize.y() + bottomPad;
 					break;
 				default:
 			}
@@ -282,7 +287,7 @@ public abstract class UIEntity
 				case RIGHT:
 				case TOPRIGHT:
 				case BOTTOMRIGHT:
-					this.rightPad = halfSize.getX() + rightPad;
+					this.rightPad = halfSize.x() + rightPad;
 					break;
 				default:
 			}
@@ -296,7 +301,7 @@ public abstract class UIEntity
 	
 	public void updatePosition()
 	{
-	    setPos(new Vector2((Game.screenW / 2.0f * relativePos.getX()) + leftPad - rightPad, (Game.screenH / 2 * relativePos.getY()) + bottomPad - topPad));
+	    setPos(new Vector2((Game.screenW / 2.0f * relativePos.x()) + leftPad - rightPad, (Game.screenH / 2 * relativePos.y()) + bottomPad - topPad));
 	    rebuildModelMatrix();
 	}
 	
@@ -637,30 +642,6 @@ public abstract class UIEntity
 	public void setRightPad(float rightPad)
 	{
 	    this.rightPad = rightPad;
-	}
-	
-	@Deprecated
-	public float getXPos()
-	{
-	    return pos.getX();
-	}
-	
-	@Deprecated
-	public float getYPos()
-	{
-	    return pos.getY();
-	}
-	
-	@Deprecated
-	public float getXSize()
-	{
-	    return size.getX();
-	}
-	
-	@Deprecated
-	public float getYSize()
-	{
-	    return size.getY();
 	}
 	
 	public void rebuildModelMatrix()

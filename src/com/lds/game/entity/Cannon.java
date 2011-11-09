@@ -4,7 +4,6 @@ import javax.microedition.khronos.opengles.GL11;
 
 import com.lds.EntityManager;
 import com.lds.Stopwatch;
-import com.lds.game.Game;
 import com.lds.math.Vector2;
 import com.lds.physics.Rectangle;
 
@@ -30,6 +29,7 @@ public class Cannon extends Entity
 	@Override
 	/**
 	 * \todo add real physics.
+	 * @param gl The OpenGL context.
 	 */
 	public void update(GL11 gl)
 	{

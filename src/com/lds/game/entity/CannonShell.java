@@ -14,6 +14,10 @@ public class CannonShell extends Entity
 	
 	/**
 	 * \todo add real physics.
+	 * @param position Position.
+	 * @param angle Angle, in radians.
+	 * @param moveSpeed the Speed to interpolate movement at.
+	 * @param removeTime The amount of time this CannonShell can exist for, in seconds.
 	 */
 	public CannonShell(Vector2 position, float angle, float moveSpeed, int removeTime)
 	{
@@ -22,6 +26,7 @@ public class CannonShell extends Entity
 		this.tilesetX = 1;
 		this.tilesetY = 3;
 	}
+	
 	
 	@Override
 	public void update(GL11 gl)

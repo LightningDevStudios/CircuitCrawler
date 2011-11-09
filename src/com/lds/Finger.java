@@ -7,10 +7,10 @@ import com.lds.math.Vector2;
 public class Finger 
 {
 	private Vector2 position;
-	private UIEntity ent;
+	private Control ent;
 	private int ptrId;
 	
-	public Finger(final Vector2 position, final UIEntity ent, final int ptrId)
+	public Finger(final Vector2 position, final Control ent, final int ptrId)
 	{
 		this.position = position;
 		this.ent = ent;

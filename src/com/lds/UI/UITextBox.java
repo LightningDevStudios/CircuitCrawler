@@ -1,9 +1,8 @@
 package com.lds.UI;
 
-import com.lds.Enums.UIPosition;
 import com.lds.math.Vector2;
 
-public class UITextBox extends UIEntity
+public class UITextBox extends Control
 {
 	private String text;
 	private float originalTopPad, originalLeftPad, originalBottomPad, originalRightPad;
@@ -47,8 +46,8 @@ public class UITextBox extends UIEntity
 			size = new Vector2(tex.getXSize(), tex.getYSize());
 			halfSize = Vector2.scale(size, 0.5f);
 			
-			float x = halfSize.getX();
-			float y = halfSize.getY();
+			float x = halfSize.x();
+			float y = halfSize.y();
 			
 			float[] initVerts =
 			{

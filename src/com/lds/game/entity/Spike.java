@@ -1,5 +1,6 @@
 package com.lds.game.entity;
 
+import com.lds.EntityManager;
 import com.lds.math.Vector2;
 import com.lds.physics.Rectangle;
 
@@ -17,4 +18,11 @@ public class Spike extends Entity
         this.tilesetX = 3;
         this.tilesetY = 1;
     }
+	
+	@Override
+	public void interact(Entity ent)
+	{
+	    if(ent instanceof Player)
+	        EntityManager.removeEntity(ent);
+	}
 }

@@ -101,9 +101,9 @@ public final class Vector4
 	 */
 	public Vector4(Vector3 xyz, float w)
 	{
-		this.x = xyz.getX();
-		this.y = xyz.getY();
-		this.z = xyz.getZ();
+		this.x = xyz.x();
+		this.y = xyz.y();
+		this.z = xyz.z();
 		this.w = w;
 	}
 	
@@ -115,8 +115,8 @@ public final class Vector4
 	 */
 	public Vector4(Vector2 xy, float z, float w)
 	{
-		this.x = xy.getX();
-		this.y = xy.getY();
+		this.x = xy.x();
+		this.y = xy.y();
 		this.z = z;
 		this.w = w;
 	}
@@ -124,16 +124,16 @@ public final class Vector4
 	/********************
 	 * Instance Methods *
 	 ********************/
-	
+		
 	/**
-	 * Creates a shallow copy of a vector.
-	 * @param v The vector to be copied.
-	 * @return A shallow copy of the vector.
-	 */
-	public Vector4 copy(Vector4 v)
-	{
-		return new Vector4(v.getX(), v.getY(), v.getZ(), v.getW());
-	}
+     * Formats the vector for text output.
+     * @return A formatted string.
+     */
+    @Override
+    public String toString()
+    {
+        return "<" + x + ", " + y + ", " + z + ", " + w + ">";
+    }
 	
 	/******************
 	 * Static Methods *
@@ -154,10 +154,10 @@ public final class Vector4
 			  m31 = elements[8],	m32 = elements[9],	m33 = elements[10],	m34 = elements[11],
 			  m41 = elements[12],	m42 = elements[13],	m43 = elements[14],	m44 = elements[15];
 		
-		float vX = v.getX();
-		float vY = v.getY();
-		float vZ = v.getZ();
-		float vW = v.getW();
+		float vX = v.x();
+		float vY = v.y();
+		float vZ = v.z();
+		float vW = v.w();
 		
 		return new Vector4(vX * m11 + vY * m21 + vZ * m31 + vW * m41,
 		                   vX * m12 + vY * m22 + vZ * m32 + vW * m42,
@@ -172,7 +172,7 @@ public final class Vector4
 	 */
 	public static Vector4 abs(Vector4 v)
 	{
-	    return new Vector4(Math.abs(v.getX()), Math.abs(v.getY()), Math.abs(v.getZ()), Math.abs(v.getW()));
+	    return new Vector4(Math.abs(v.x()), Math.abs(v.y()), Math.abs(v.z()), Math.abs(v.w()));
 	}
 	
 	/**
@@ -183,7 +183,7 @@ public final class Vector4
 	 */
 	public static Vector4 subtract(Vector4 left, Vector4 right)
 	{
-	    return new Vector4(left.getX() - right.getX(), left.getY() - right.getY(), left.getZ() - right.getZ(), left.getW() - right.getW());
+	    return new Vector4(left.x() - right.x(), left.y() - right.y(), left.z() - right.z(), left.w() - right.w());
 	}
 	
 	/**
@@ -194,7 +194,7 @@ public final class Vector4
      */
 	public static Vector4 add(Vector4 left, Vector4 right)
 	{
-	    return new Vector4(left.getX() + right.getX(), left.getY() + right.getY(), left.getZ() + right.getZ(), left.getW() + right.getW());
+	    return new Vector4(left.x() + right.x(), left.y() + right.y(), left.z() + right.z(), left.w() + right.w());
 	}
 	
 	/***********
@@ -229,7 +229,7 @@ public final class Vector4
 	 * Gets the X component of the vector.
 	 * @return The vector's X component.
 	 */
-	public float getX()
+	public float x()
 	{
 	    return x;
 	}
@@ -238,7 +238,7 @@ public final class Vector4
 	 * Gets the Y component of the vector.
 	 * @return The vector's Y component.
 	 */
-	public float getY()
+	public float y()
 	{
 	    return y;
 	}
@@ -247,7 +247,7 @@ public final class Vector4
 	 * Gets the Z component of the vector.
 	 * @return The vector's Z component.
 	 */
-	public float getZ()
+	public float z()
 	{
 	    return z;
 	}
@@ -256,7 +256,7 @@ public final class Vector4
 	 * Gets the W component of the vector.
 	 * @return The vector's W component.
 	 */
-	public float getW()
+	public float w()
 	{
 	    return w;
 	}

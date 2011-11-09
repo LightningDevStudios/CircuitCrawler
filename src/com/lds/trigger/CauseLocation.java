@@ -32,7 +32,10 @@ public class CauseLocation extends Cause
 	@Override
 	public void update()
 	{
-		if (player.getXPos() >= minX && player.getXPos() <= maxX && player.getYPos() >= minY && player.getYPos() <= maxY)
+		if (player.getPos().x() >= minX
+		 && player.getPos().x() <= maxX 
+		 && player.getPos().y() >= minY 
+		 && player.getPos().y() <= maxY)
 		{
 			trigger();
 		}

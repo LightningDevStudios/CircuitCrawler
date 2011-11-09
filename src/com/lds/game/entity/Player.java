@@ -1,73 +1,30 @@
 package com.lds.game.entity;
 
-import javax.microedition.khronos.opengles.GL11;
-
-import com.lds.EntityManager;
-import com.lds.Stopwatch;
 import com.lds.math.Vector2;
 import com.lds.physics.Circle;
 
+import javax.microedition.khronos.opengles.GL11;
+
 public class Player extends Entity
 {
-	public static final int ENERGY_LIMIT = 100;
-	public static final int HEALTH_LIMIT = 100;
-	
-	private int health;
-	private int energy;
 	private HoldObject hObj;
 	private boolean controlled;
-	private int damageTime;
 	
 	public Player(Vector2 position, float angle)
 	{
 		super(new Circle(DEFAULT_SIZE, position, angle, true));
-		shape.setFriction(1);
-		
-		energy = ENERGY_LIMIT;
-		health = HEALTH_LIMIT;
-		controlled = true;
-		damageTime = 0;
-		
-		this.tilesetX = 0;
-		this.tilesetY = 2;
 	}
 	
-	public void attack()
-	{
-		energy -= 5;
-	}
 	
 	@Override
 	public void interact(Entity ent)
 	{
-		if (ent instanceof PickupEnergy)
-		{
-			energy += ((PickupEnergy)ent).getValue();
-			if (energy > ENERGY_LIMIT)
-				energy = ENERGY_LIMIT;
-		}
-		else if (ent instanceof PickupHealth)
-		{
-			health += ((PickupHealth)ent).getValue();
-			if (health > HEALTH_LIMIT)
-				health = HEALTH_LIMIT;
-		}
-		else if (ent instanceof SpikeBall)
-		{
-			takeDamage(25);
-		}
-		else if (ent instanceof CannonShell)
-		{
-			takeDamage(5);
-		}
-		else if (ent instanceof AttackBolt && this != ((AttackBolt)ent).getParent())
-		{
-			takeDamage(5);
-		}
+				    
 	}
 	
 	/**
 	 * \todo fall into pits.
+	 * @param tile The tile to interact with.
 	 */
 	@Override
 	public void tileInteract(Tile tile)
@@ -125,29 +82,12 @@ public class Player extends Entity
 	
 	/**
 	 * \todo make player flash once it is hit.
+	 * @param gl The OpenGL context.
 	 */
 	@Override
     public void update(GL11 gl)
     {
-        super.update(gl);
-        
-        damageTime += Stopwatch.getFrameTime();
-        
-        if (getXScale() <= 0 && getYScale() <= 0)
-            health = 0;
-        if (health <= 0)
-            EntityManager.removeEntity(this); 
-    }
-    
-    public int getHealth()
-    {
-        return health;
-    }
-    
-    public void takeDamage(int damage)
-    {
-        health -= damage;
-        damageTime = 0;
+        super.update(gl); 
     }
 	
 	public void disableUserControl()
@@ -170,16 +110,6 @@ public class Player extends Entity
 	public boolean isHoldingObject()
 	{
 	    return hObj != null;
-	}
-
-	public int getEnergy()
-	{
-		return energy;
-	}
-	
-	public void loseEnergy(int energyLost)
-	{
-		energy -= energyLost;
 	}
 
     public void addImpulse(Vector2 f)

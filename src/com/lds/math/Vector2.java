@@ -70,10 +70,134 @@ public final class Vector2
 		y = (float)Math.sin(angleRad);
 	}
 	
-	/*************************************************************************
-	 * Static Methods - return new vectors, do not change plugged in vectors *
-	 *************************************************************************/
+	/********************
+     * Instance Methods *
+     ********************/
+    
+    /**
+     * Checks for equality with another vector.
+     * @param v The vector to compare against
+     * @return A value indicating whether the two vectors are equal.
+     * \todo Override Object.equals too!
+     */
+    public boolean equals(Vector2 v)
+    {
+        return x == v.x() && y == v.y();
+    }
+    
+    @Override
+    public boolean equals(Object o)
+    {
+        if (o == null)
+            return false;
+        
+        if (!(o instanceof Vector2))
+            return false;
+        
+        Vector2 v = (Vector2)o;
+        if (v.x() != x || v.y() != y)
+            return false;
+        
+        return true;
+    }
+    
+    @Override
+    public int hashCode()
+    {
+        return new Float(x).hashCode() ^ new Float(y).hashCode();
+    }
+    
+    /**
+     * Checks for near equality of two vectors.
+     * @param v The vector to compare to.
+     * @param epsilon The accuracy of the comparison.
+     * @return A value indicating whether the two vectors are nearly equal.
+     */
+    public boolean approxEquals(Vector2 v, float epsilon)
+    {
+        return Math.abs(x - v.x) < epsilon && Math.abs(y - v.y) < epsilon;
+    }
+    
+    /**
+     * Gets the length (magnitude) of the vector.
+     * @return The magnitude of the vector.
+     */
+    public float length()
+    {
+        return (float)Math.sqrt((x * x) + (y * y));
+    }
+    
+    /**
+     * The angle of this vector compared to the unit X axis vector.
+     * @return The angle of this vector.
+     */
+    public float angleRad()
+    {
+        float rad = (float)(Math.atan2(y, x));
+        //clamp angle between 0 and 360
+        if (rad == 2 * Math.PI)
+            rad = 0.0f;
+        else if (rad > 2 * Math.PI)
+            rad -= 2 * Math.PI * (int)(rad / 2 * Math.PI);
+        else if (rad < 0.0f)
+            rad += 2 * Math.PI;
+        
+        return rad;
+    }
+    
+    /**
+     * Same as angleRad(), only in degrees.
+     * @return degrees
+     */
+    public float angleDeg()
+    {
+        float deg = (float)Math.toDegrees(Math.atan2(y, x));
+        //clamp angle between 0 and 360
+        if (deg == 360.0f)
+            deg = 0.0f;
+        else if (deg > 360.0f)
+            deg -= 360 * (int)(deg / 360);
+        else if (deg < 0.0f)
+            deg += 360;
+        
+        return deg;
+    }
+    
+    /**
+     * Formats the vector for text output.
+     * @return A formatted string.
+     */
+    @Override
+    public String toString()
+    {
+        return "<" + x + ", " + y + ">";
+    }
 	
+	/******************
+	 * Static Methods *
+	 ******************/
+	
+    /**
+     * Transforms a Vector2 by a Matrix3x2.
+     * @param v The Vector2 to transform.
+     * @param mat A Matrix3x2 to transform by.
+     * @return A transformed Vector2.
+     */
+    public static Vector2 transform(Vector2 v, Matrix3x2 mat)
+    {
+        float[] array = mat.array();
+        
+        float m11 = array[0], m12 = array[1], m13 = array[2],
+              m21 = array[3], m22 = array[4], m23 = array[5];
+        
+        float vX = v.x();
+        float vY = v.y();
+        
+        return new Vector2(vX * m11 + vY * m12 + m13,
+                           vX * m21 + vY * m22 + m23);
+    }
+    
+    
 	/**
      * Turns all components of the vector into their absolute value equivalent.
      * @param v The vector to process.
@@ -81,7 +205,7 @@ public final class Vector2
      */
 	public static Vector2 abs(Vector2 v)
 	{
-		return new Vector2(Math.abs(v.getX()), Math.abs(v.getY()));
+		return new Vector2(Math.abs(v.x()), Math.abs(v.y()));
 	}
 	
 	/**
@@ -92,7 +216,7 @@ public final class Vector2
      */
 	public static Vector2 add(Vector2 left, Vector2 right)
 	{
-		return new Vector2(left.getX() + right.getX(), left.getY() + right.getY());
+		return new Vector2(left.x() + right.x(), left.y() + right.y());
 	}
 	
 	/**
@@ -103,7 +227,7 @@ public final class Vector2
      */
 	public static Vector2 subtract(Vector2 left, Vector2 right)
 	{
-		return new Vector2(left.getX() - right.getX(), left.getY() - right.getY());
+		return new Vector2(left.x() - right.x(), left.y() - right.y());
 	}
 	
 	/**
@@ -113,7 +237,7 @@ public final class Vector2
      */
 	public static Vector2 negate(Vector2 v)
 	{
-		return new Vector2(-v.getX(), -v.getY());
+		return new Vector2(-v.x(), -v.y());
 	}
 	
 	/**
@@ -124,7 +248,7 @@ public final class Vector2
      */
 	public static Vector2 scale(Vector2 v, float scalar)
 	{
-		return new Vector2(scalar * v.getX(), scalar * v.getY());
+		return new Vector2(scalar * v.x(), scalar * v.y());
 	}
 	
 	/**
@@ -145,7 +269,7 @@ public final class Vector2
      */
 	public static Vector2 normalize(Vector2 v)
 	{
-		if (v.x != 0.0f || v.y != 0.0f)
+		if (v.x() != 0.0f || v.y() != 0.0f)
 			return Vector2.scale(v, 1 / v.length());
 		else
 			return v;
@@ -160,7 +284,7 @@ public final class Vector2
      */
 	public static Vector2 getMidpoint(Vector2 left, Vector2 right)
 	{
-		return new Vector2((left.x + right.x) / 2, (left.y + right.y) / 2);
+		return new Vector2((left.x() + right.x()) / 2, (left.y() + right.y()) / 2);
 	}
 	
 	/**
@@ -170,7 +294,7 @@ public final class Vector2
 	 */
 	public static Vector2 getNormal(Vector2 v)
 	{
-		return new Vector2(v.getY(), -v.getX());
+		return new Vector2(v.y(), -v.x());
 	}
 	
 	/**
@@ -181,87 +305,7 @@ public final class Vector2
 	 */
 	public static float dot(Vector2 left, Vector2 right)
 	{
-	    return left.getX() * right.getX() + left.getY() * right.getY();
-	}
-	
-	/************************************************************************************************************
-	 * Non-Static Methods - return and change vectors, calculate vector quantites (i.e. dot product, magnitude) *
-	 ************************************************************************************************************/
-	
-	/**
-	 * Checks for equality with another vector.
-	 * @param v The vector to compare against
-	 * @return A value indicating whether the two vectors are equal.
-	 * \todo Override Object.equals too!
-	 */
-	public boolean equals(Vector2 v)
-	{
-		return x == v.getX() && y == v.getY();
-	}
-	
-	/**
-	 * Checks for near equality of two vectors.
-	 * @param v The vector to compare to.
-	 * @param epsilon The accuracy of the comparison.
-	 * @return A value indicating whether the two vectors are nearly equal.
-	 */
-	public boolean approxEquals(Vector2 v, float epsilon)
-	{
-		return Math.abs(x - v.x) < epsilon && Math.abs(y - v.y) < epsilon;
-	}
-	
-	/**
-	 * Gets the length (magnitude) of the vector.
-	 * @return The magnitude of the vector.
-	 */
-	public float length()
-	{
-		return (float)Math.sqrt((x * x) + (y * y));
-	}
-	
-	/**
-	 * The angle of this vector compared to the unit X axis vector.
-	 * @return The angle of this vector.
-	 */
-	public float angleRad()
-	{
-		float rad = (float)(Math.atan2(y, x));
-		//clamp angle between 0 and 360
-		if (rad == 2 * Math.PI)
-			rad = 0.0f;
-		else if (rad > 2 * Math.PI)
-			rad -= 2 * Math.PI * (int)(rad / 2 * Math.PI);
-		else if (rad < 0.0f)
-			rad += 2 * Math.PI;
-		
-		return rad;
-	}
-	
-	/**
-	 * Same as angleRad(), only in degrees.
-	 * @return degrees
-	 */
-	public float angleDeg()
-	{
-		float deg = (float)Math.toDegrees(Math.atan2(y, x));
-		//clamp angle between 0 and 360
-		if (deg == 360.0f)
-			deg = 0.0f;
-		else if (deg > 360.0f)
-			deg -= 360 * (int)(deg / 360);
-		else if (deg < 0.0f)
-			deg += 360;
-		
-		return deg;
-	}
-	
-	/**
-	 * Formats the vector for text output.
-	 * @return A formatted string.
-	 */
-	public String toString()
-	{
-		return "<" + x + ", " + y + ">";
+	    return left.x() * right.x() + left.y() * right.y();
 	}
 	
 	/***********************
@@ -272,7 +316,7 @@ public final class Vector2
 	 * Gets the X component of the vector.
 	 * @return The vector's X component.
 	 */
-	public float getX()
+	public float x()
 	{
 	    return x;
 	}
@@ -281,8 +325,17 @@ public final class Vector2
 	 * Gets the Y component of the vector.
 	 * @return The vector's Y component.
 	 */
-	public float getY()
+	public float y()
 	{
 	    return y;
 	}
+	
+	/**
+     * Converts the vector to a float array.
+     * @return A float array containing the vector components.
+     */
+    public float[] array()
+    {
+        return new float[] { x, y };
+    }
 }

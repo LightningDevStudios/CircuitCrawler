@@ -12,6 +12,9 @@ public class AttackBolt extends Entity
 	
 	/**
 	 * \todo add real physics.
+	 * @param position Position.
+	 * @param direction Direction.
+	 * @param parent Parent.
 	 */
 	public AttackBolt(Vector2 position, Vector2 direction, Entity parent)
 	{
@@ -43,10 +46,15 @@ public class AttackBolt extends Entity
 	public void update(GL11 gl)
 	{
 		super.update(gl);
-		if (colorVec.getW() == 0.0f) //if transparent
+		
+		if (colorVec.w() == 0.0f) //if transparent
 			EntityManager.removeEntity(this);
 	}
 	
+	/**
+	 * Gets the parent Entity.
+	 * @return The parent Entity.
+	 */
 	public Entity getParent()
 	{
 	    return parent;

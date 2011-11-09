@@ -1,7 +1,5 @@
 package com.lds.puzzles.logic;
 
-import com.lds.Enums.GateType;
-
 public class EndGate extends Gate
 {	
 	public EndGate(GateType type, float posX, float posY)
@@ -10,5 +8,8 @@ public class EndGate extends Gate
 		input = new Gate[1];
 	}
 	
-	public void update(){}
+	public void update()
+	{
+	    
+	}
 }

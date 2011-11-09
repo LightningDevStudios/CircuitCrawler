@@ -1,6 +1,6 @@
 package com.lds.puzzles.circuit;
 
-import com.lds.Enums.Direction;
+import com.lds.Direction;
 
 //\TODO HAX, get a proper UP/DOWN on the angled types...
 public enum TileType 

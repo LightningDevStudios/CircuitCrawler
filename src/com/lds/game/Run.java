@@ -12,7 +12,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
-import com.lds.Graphics;
+import com.lds.LevelSurfaceView;
 import com.lds.game.event.*;
 import com.lds.game.puzzle.PuzzleActivity;
 
@@ -20,8 +20,8 @@ public class Run extends Activity implements GameOverListener, GameInitializedLi
 {
 	public static final int PUZZLE_ACTIVITY = 2;
 	private int unlockedLevel, levelIndex, levelId;
-	private Graphics glSurface;
-	private GameRenderer gameR;
+	private LevelSurfaceView glSurface;
+	private LevelRenderer gameR;
 	private MediaPlayer mp;
 	private ProgressDialog pd;
 	
@@ -93,10 +93,10 @@ public class Run extends Activity implements GameOverListener, GameInitializedLi
 		
 		//set up OpenGL rendering
 		Object syncObj = new Object();
-		gameR = new GameRenderer(screenX, screenY, this, syncObj, levelId);
+		gameR = new LevelRenderer(screenX, screenY, this, syncObj, levelId);
 				
 		gameR.setGameInitializedEvent(this);
-		glSurface = new Graphics(this, gameR, syncObj);
+		glSurface = new LevelSurfaceView(this, gameR, syncObj);
 		
 		setContentView(glSurface);
 	}
