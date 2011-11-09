@@ -10,7 +10,7 @@ import com.lds.game.event.*;
  * A subclass of GLSurfaceView that contains Circuit Crawler-specific code.
  * @author Lightning Development Studios
  */
-public class Graphics extends GLSurfaceView
+public class LevelSurfaceView extends GLSurfaceView
 {
 	private Renderer renderer;
 	private Object syncObj;
@@ -21,7 +21,7 @@ public class Graphics extends GLSurfaceView
 	 * @param r A Renderer that the GLSurfaceView will use.
 	 * @param syncObj An object to sync between the main thread and the rendering thread.
 	 */
-	public Graphics(Context context, Renderer r, Object syncObj) 
+	public LevelSurfaceView(Context context, Renderer r, Object syncObj) 
 	{
 		super(context);
 		this.syncObj = syncObj;

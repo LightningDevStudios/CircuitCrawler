@@ -23,7 +23,7 @@ import javax.microedition.khronos.opengles.GL11;
  * The class that renders the game (and fires off all the other code, which is hax).
  * @author Lightning Development Studios
  */
-public class GameRenderer implements com.lds.Graphics.Renderer
+public class LevelRenderer implements com.lds.LevelSurfaceView.Renderer
 {
 	//public static boolean vibrateSetting = true;
     public boolean paused, charlieSheen;
@@ -47,7 +47,7 @@ public class GameRenderer implements com.lds.Graphics.Renderer
 	 * @param syncObj An object used to synchronize the rendering thread and the main thread.
 	 * @param levelId The ID of the level to be played.
 	 */
-	public GameRenderer(float screenW, float screenH, Context context, Object syncObj, int levelId)
+	public LevelRenderer(float screenW, float screenH, Context context, Object syncObj, int levelId)
 	{
 		Game.screenW = screenW;
 		Game.screenH = screenH;
