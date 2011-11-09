@@ -2,8 +2,7 @@ package com.lds.game.entity;
 
 import android.util.Log;
 
-import com.lds.EntityManager;
-import com.lds.Enums.RenderMode;
+
 import com.lds.Stopwatch;
 import com.lds.Texture;
 import com.lds.TilesetHelper;
@@ -14,7 +13,6 @@ import com.lds.physics.Shape;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
-import java.util.EnumSet;
 
 import javax.microedition.khronos.opengles.GL10;
 import javax.microedition.khronos.opengles.GL11;

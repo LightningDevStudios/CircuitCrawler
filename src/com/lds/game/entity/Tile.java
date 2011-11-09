@@ -2,7 +2,6 @@ package com.lds.game.entity;
 
 import com.lds.Enums;
 import com.lds.Enums.*;
-import com.lds.Texture;
 import com.lds.TilesetHelper;
 import com.lds.game.Game;
 import com.lds.math.Vector2;

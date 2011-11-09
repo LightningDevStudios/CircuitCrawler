@@ -135,58 +135,6 @@ public class Game
 		
 		nodeList = parser.nodeList;
 		
-		
-		//\TODO UIHealthBar is a UIEntity sub that contains 2 UIImages and a UIProgressBar (which will no longer be abstract)
-		UIHealthBar healthBar = new UIHealthBar(246.0f, 8.0f, UIPosition.TOPRIGHT, Direction.LEFT, player);
-		healthBar.setTopPad(9.0f);
-		healthBar.setRightPad(10.0f);
-		healthBar.autoPadding(9, 0, 0, 10);
-		healthBar.enableColorMode(0.8f, 0.0f, 0.0f, 0.9f);
-		healthBar.setValue(100);
-		UIList.add(healthBar);
-		
-		UIImage healthBarCover = new UIImage(256, 16, UIPosition.TOPRIGHT);
-		healthBarCover.setTopPad(5.0f);
-		healthBarCover.setRightPad(5.0f);
-		healthBarCover.autoPadding(5, 0, 0, 5);
-		healthBarCover.enableTextureMode(healthbarborder);
-		UIList.add(healthBarCover);
-		
-		UIImage healthIcon = new UIImage(16, 16, UIPosition.TOPRIGHT);
-		healthIcon.setTopPad(5.0f);
-		healthIcon.setRightPad(266.0f);
-		healthIcon.autoPadding(5, 0, 0, 266);
-		healthIcon.enableTilesetMode(baricons, 0, 0);
-		UIList.add(healthIcon);
-		
-		UIEnergyBar energyBar = new UIEnergyBar(118.0f, 8.0f, UIPosition.TOPRIGHT, Direction.LEFT, player);
-		energyBar.setTopPad(30.0f);
-		energyBar.setRightPad(10.0f);
-		energyBar.autoPadding(30, 0, 0, 10);
-		energyBar.enableColorMode(0.0f, 0.0f, 0.8f, 0.9f);
-		energyBar.setValue(100);
-		UIList.add(energyBar);
-		
-		UIImage energyBarCover = new UIImage(128, 16, UIPosition.TOPRIGHT);
-		energyBarCover.setTopPad(26.0f);
-		energyBarCover.setRightPad(5.0f);
-		energyBarCover.autoPadding(26, 0, 0, 5);
-		energyBarCover.enableTextureMode(energybarborder);
-		UIList.add(energyBarCover);
-		
-		UIImage energyIcon = new UIImage(16, 16, UIPosition.TOPRIGHT);
-		energyIcon.setTopPad(26.0f);
-		energyIcon.setRightPad(138.0f);
-		energyIcon.autoPadding(26, 0, 0, 138);
-		energyIcon.enableTilesetMode(baricons, 1, 0);
-		UIList.add(energyIcon);
-		
-		btnA = new UIButton(80.0f, 80.0f, UIPosition.BOTTOMRIGHT);
-		btnA.autoPadding(0.0f, 0.0f, 5.0f, 90.0f);
-		btnA.enableTextureMode(buttona);
-		//btnA.setIntervalTime(Stopwatch.elapsedTimeMs());
-		UIList.add(btnA);
-		
 		btnB = new UIButton(80.0f, 80.0f, UIPosition.BOTTOMRIGHT);
 		btnB.autoPadding(0.0f, 0.0f, 90.0f, 5.0f);
 		btnB.enableTextureMode(buttonb);
@@ -306,7 +254,6 @@ public class Game
 	public void setGameOverEvent(GameOverListener listener)
 	{
 		//triggerList.add(new Trigger(new CauseDoneScaling(player), new EffectEndGame(listener, false)));
-		triggerList.add(new Trigger(new CausePlayerHealth(0, player), new EffectEndGame(listener, false)));
 		
 		for (Trigger t : triggerList)
 		{
