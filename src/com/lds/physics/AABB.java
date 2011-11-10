@@ -19,22 +19,22 @@ public class AABB
     
     public void generateBounds(Vector2[] vertices)
     {
-        leftBound = vertices[0].getX();
-        rightBound = vertices[0].getX();
-        topBound = vertices[0].getY();
-        bottomBound = vertices[0].getY();
+        leftBound = vertices[0].x();
+        rightBound = vertices[0].x();
+        topBound = vertices[0].y();
+        bottomBound = vertices[0].y();
         
         for (int i = 1; i < vertices.length; i++)
         {
             Vector2 v = vertices[i];
-            if (v.getX() < leftBound)
-                leftBound = v.getX();
-            else if (v.getX() > rightBound)
-                rightBound = v.getX();
-            if (v.getY() > topBound)
-                topBound = v.getY();
-            else if (v.getY() < bottomBound)
-                bottomBound = v.getY();
+            if (v.x() < leftBound)
+                leftBound = v.x();
+            else if (v.x() > rightBound)
+                rightBound = v.x();
+            if (v.y() > topBound)
+                topBound = v.y();
+            else if (v.y() < bottomBound)
+                bottomBound = v.y();
         }
     }
     
