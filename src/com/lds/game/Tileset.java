@@ -1,12 +1,12 @@
 package com.lds.game;
 
+import com.lds.Texture;
+
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 
 import javax.microedition.khronos.opengles.GL11;
-
-import com.lds.Texture;
 
 public class Tileset 
 {

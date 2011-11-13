@@ -50,7 +50,6 @@ public class Game
 	public float camPosY;
 	
 	private float worldMinX, worldMinY, worldMaxX, worldMaxY;
-	private int tilesetMinX, tilesetMinY, tilesetMaxX, tilesetMaxY;
 	private Tileset tileset;
 	
 	//Testing data

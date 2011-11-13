@@ -26,31 +26,15 @@ public class TileData
         else if (state.equalsIgnoreCase("pit"))
             tState = TileType.PIT;
 				
-		tile = new Tile(new Point(x, y), tilesetY, tilesetX, tState);
+		tile = new Tile(new Point(tilePosX, tilePosY), tilesetY, tilesetX, tState);
 	}
 	
-	public int getTilePosX()
-	{
-	    return tilePosX; 
-	}
-	
-	public int getTilePosY()
-	{
-	    return tilePosY;
-	}
-	
+	/**
+	 * Gets the contained Tile instance.
+	 * @return An instance of the tile.
+	 */
 	public Tile getTile()
 	{
 	    return tile;
-	}
-
-	public void setTilePosX(int newTilePosX)
-	{
-	    tilePosX = newTilePosX;
-	}
-	
-	public void setTilePosY(int newTilePosY)
-	{
-	    tilePosY = newTilePosY;
 	}
 }

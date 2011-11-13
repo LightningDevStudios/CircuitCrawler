@@ -5,8 +5,6 @@ import android.graphics.Point;
 import com.lds.TilesetHelper;
 import com.lds.math.MathHelper;
 import com.lds.math.Vector2;
-import com.lds.physics.Rectangle;
-import com.lds.physics.Shape;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -36,17 +34,24 @@ public class Tile
 	private Point tilesetPos, texPos;
 	
 	private TileType type;
-	private Shape shape;
+	//private Shape shape;
 	
 	private Vector2 pos;
 	
 	private byte borders;
 	
+	/**
+	 * Initializes a new instance of the Tile class.
+	 * @param tilesetPos The position of the current tile in the tileset.
+	 * @param tilesetLengthX The length of the tileset in the X direction.
+	 * @param tilesetLengthY The length of the tileset in the Y direction.
+	 * @param type The way this tile will react with entities/other tiles.
+	 */
 	public Tile(Point tilesetPos, int tilesetLengthX, int tilesetLengthY, TileType type)
 	{
 		TilesetHelper.setInitialTileOffset(this, tilesetPos, tilesetLengthX, tilesetLengthY);
 		
-		shape = new Rectangle(TILE_SIZE, pos, false);
+		//shape = new Rectangle(TILE_SIZE, pos, false);
 		//shape.setVertices(vertices);
 		this.tilesetPos = tilesetPos;
 		this.type = type;
@@ -96,26 +101,10 @@ public class Tile
         return vertexData;
 	}
 	
-	public boolean isWall()
-	{
-		return type == TileType.WALL;
-	}
-	
-	public boolean isFloor()
-	{
-	    return type == TileType.FLOOR;
-	}
-	
-	public boolean isPit()
-	{
-		return type == TileType.PIT;
-	}
-	
-	public boolean isSlipperyTile()
-	{
-		return type == TileType.SlipperyTile;
-	}
-	
+	/**
+	 * Returns this tile's type.
+	 * @return This tile's type.
+	 */
 	public TileType getTileType()
 	{
 		return type;

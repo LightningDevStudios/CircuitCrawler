@@ -3,7 +3,6 @@ package com.lds.game;
 import android.content.Context;
 import android.view.MotionEvent;
 
-import com.lds.EntityManager;
 import com.lds.Finger;
 import com.lds.Stopwatch;
 import com.lds.UI.*;
