@@ -1,7 +1,7 @@
 package com.lds.game.event;
 
+import com.lds.game.Tile;
 import com.lds.game.entity.Entity;
-import com.lds.game.entity.Tile;
 
 /**
  * A delegate that allows an Entity to run some code when two Shapes interact.

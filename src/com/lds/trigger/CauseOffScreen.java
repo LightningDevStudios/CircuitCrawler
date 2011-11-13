@@ -1,8 +1,8 @@
 package com.lds.trigger;
 
 import com.lds.game.Game;
+import com.lds.game.Tile;
 import com.lds.game.entity.Player;
-import com.lds.game.entity.Tile;
 
 /**
  * A Cause that triggers when the Player is outside the bounds of the world.

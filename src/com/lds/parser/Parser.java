@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.XmlResourceParser;
 import android.util.Log;
 
+import com.lds.game.Tile;
 import com.lds.game.ai.Node;
 import com.lds.game.ai.NodePath;
 import com.lds.game.entity.*;
@@ -61,7 +62,6 @@ public class Parser
 		{
 			if (xrp.getEventType() == START_TAG)
 			{
-				System.out.println(xrp.getName());
 				if (xrp.getName().equalsIgnoreCase("Entities"))
 					parseEntities();
 				else if (xrp.getName().equalsIgnoreCase("Tileset"))

@@ -566,6 +566,8 @@ public final class Matrix4
 	    float[] array = new float[16];
 	    float[] c0 = col0.array(), c1 = col1.array(), c2 = col2.array(), c3 = col3.array();
 	    
+	    //iterate through the components (x, y, z, w)
+	    //add that component from every vector to the properly offset array location.
 	    for (int i = 0; i < 4; i++)
 	    {
 	        array[i] = c0[i];

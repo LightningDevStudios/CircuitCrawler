@@ -18,7 +18,6 @@ import com.lds.trigger.*;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import javax.microedition.khronos.opengles.GL10;
 import javax.microedition.khronos.opengles.GL11;
 
 import org.xmlpull.v1.XmlPullParserException;
@@ -38,7 +37,7 @@ public class Game
     public static Texture baricons;
 	
 	public ArrayList<Entity> entList;
-	private Tile[][] tileset;
+	//private Tile[][] tileset;
 	public ArrayList<Control> UIList;
 	private ArrayList<Trigger> triggerList;
 	public EntityManager cleaner;
@@ -52,6 +51,7 @@ public class Game
 	
 	private float worldMinX, worldMinY, worldMaxX, worldMaxY;
 	private int tilesetMinX, tilesetMinY, tilesetMaxX, tilesetMaxY;
+	private Tileset tileset;
 	
 	//Testing data
 	public UIButton btnB;	
@@ -78,7 +78,6 @@ public class Game
 		UIList = new ArrayList<Control>();
 		triggerList = new ArrayList<Trigger>();
 		fingerList = new ArrayList<Finger>();
-		tileset = new Tile[16][16];
 		cleaner = new EntityManager();
 		        		
 		//StringRenderer sr = StringRenderer.getInstance();
@@ -118,27 +117,16 @@ public class Game
 		    return;
 		}
 	
-		tileset = parser.tileset;
+		//retreive data from parser
+		Tile[][] tileset = parser.tileset;
 		entList.addAll(parser.entList);
 		triggerList.addAll(parser.triggerList);
 		
+		this.tileset = new Tileset(tileset, tilesetworld);
+		this.tileset.initialize(gl);
+		
 		player = parser.player;
 		entList.add(player);
-		
-		for (int i = 0; i < tileset.length; i++)
- 		{
- 			for (int j = 0; j < tileset[0].length; j++)
- 			{
- 			    /*TileState state = tileset[i][j].getTileState();
- 				if (state == TileState.PIT)
- 					tileset[i][j].updateBordersPit(tileset, j, i);
- 				else if (state == TileState.WALL)
- 					tileset[i][j].updateBordersWall(tileset, j, i);*/
- 				tileset[i][j].calculateBorders(tileset);
- 				tileset[i][j].updateBorders();
- 				tileset[i][j].regenTexCoords(gl);
- 			}
- 		}
 		
 		btnB = new UIButton(80.0f, 80.0f, UIPosition.BOTTOMRIGHT);
 		btnB.autoPadding(0.0f, 0.0f, 90.0f, 5.0f);
@@ -150,7 +138,8 @@ public class Game
 		joypad.autoPadding(0.0f, 5.0f, 5.0f, 0.0f);
 		joypad.enableTextureMode(joystickout);
 		UIList.add(joypad);
-				
+		
+		//TODO camera class
 		worldMinX = (-Tile.TILE_SIZE_F * (tileset[0].length / 2)) + (screenW / 2);
 		worldMinY = (-Tile.TILE_SIZE_F * (tileset.length / 2)) + (screenH / 2);
 		worldMaxX = (Tile.TILE_SIZE_F * (tileset[0].length / 2)) - (screenW / 2);
@@ -163,7 +152,7 @@ public class Game
 	    world = new World(new Vector2(Tile.TILE_SIZE_F * tileset[0].length, Tile.TILE_SIZE_F * tileset.length), shapeList);
 		
 		updateCameraPosition();
-		updateRenderedTileset();
+		//updateRenderedTileset();
 	}
 	
 	/**
@@ -196,7 +185,7 @@ public class Game
 		return renderList;
 	}
 	
-	public void updateRenderedTileset()
+	/*public void updateRenderedTileset()
 	{
 		final float minX, maxX, minY, maxY, tilesetHalfWidth, tilesetHalfHeight;
 		minX = camPosX - (screenW / 2);
@@ -221,7 +210,7 @@ public class Game
 			tilesetMaxX = tileset[0].length - 1;
 		if (tilesetMaxY > tileset.length - 1)
 			tilesetMaxY = tileset.length - 1;
-	}
+	}*/
 	
 	public void updateCameraPosition()
 	{
@@ -346,23 +335,7 @@ public class Game
 	
 	public void renderTileset(GL11 gl)
 	{
-		gl.glEnable(GL10.GL_TEXTURE_2D);
-		gl.glBindTexture(GL10.GL_TEXTURE_2D, tilesetworld.getTexture());
-				
-		gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
-		gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
-
-		for (int i = tilesetMinY; i <= tilesetMaxY; i++)
-		{
-			for (int j = tilesetMinX; j <= tilesetMaxX; j++)
-			{
-				tileset[i][j].draw(gl);
-			}
-		}
-		
-		gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
-		gl.glDisableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
-		gl.glDisable(GL10.GL_TEXTURE_2D);
+		tileset.draw(gl);
 	}
 	
 	public static boolean arrayListContains(ArrayList<Entity> entList, Entity ent)

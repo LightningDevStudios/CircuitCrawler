@@ -1,5 +1,7 @@
 package com.lds;
 
+import android.graphics.Point;
+
 public class Animation 
 {
 	private Texture tex;
@@ -87,6 +89,6 @@ public class Animation
 	
 	public float[] getCurrentFrame()
 	{
-		return TilesetHelper.getTextureVertices(tex, curX + startX, curY + startY);
+		return TilesetHelper.getTextureVertices(tex, new Point(curX + startX, curY + startY));
 	}
 }

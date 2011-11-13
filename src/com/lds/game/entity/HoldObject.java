@@ -1,5 +1,6 @@
 package com.lds.game.entity;
 
+import com.lds.game.Tile;
 import com.lds.physics.Shape;
 
 public abstract class HoldObject extends Entity

@@ -1,5 +1,7 @@
 package com.lds.puzzles.circuit;
 
+import android.graphics.Point;
+
 import com.lds.Direction;
 import com.lds.Texture;
 import com.lds.TilesetHelper;
@@ -147,7 +149,7 @@ public class Tile
 	
 	public void updateTexture()
 	{
-		this.texture = TilesetHelper.getTextureVertices(tex, type.getValue(), tileState);
+		this.texture = TilesetHelper.getTextureVertices(tex, new Point(type.getValue(), tileState));
 		
 		float negX = texture[0];
 		float negY = texture[1];

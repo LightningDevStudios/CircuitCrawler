@@ -1,8 +1,11 @@
 package com.lds.game.entity;
 
+import android.graphics.Point;
+
 import com.lds.Stopwatch;
 import com.lds.Texture;
 import com.lds.TilesetHelper;
+import com.lds.game.Tile;
 import com.lds.game.event.InteractListener;
 import com.lds.math.*;
 import com.lds.physics.Shape;
@@ -76,7 +79,7 @@ public abstract class Entity implements InteractListener
 	    
 	    //gather the required data.
 	    float[] v = shape.getVertices();
-	    float[] t = TilesetHelper.getTextureVertices(tex, tilesetX, tilesetY);
+	    float[] t = TilesetHelper.getTextureVertices(tex, new Point(tilesetX, tilesetY));
 	    
 	    //copy vertices over
 	    for (int i = 0; i < v.length; i++)
@@ -106,7 +109,7 @@ public abstract class Entity implements InteractListener
 	
 	private void updateTexCoords(GL11 gl)
 	{
-	    float[] t = TilesetHelper.getTextureVertices(tex, tilesetX, tilesetY);
+	    float[] t = TilesetHelper.getTextureVertices(tex, new Point(tilesetX, tilesetY));
 	    
 	    //store data in a float buffer, as required by Android.
         ByteBuffer byteBuf = ByteBuffer.allocateDirect(t.length * 4);

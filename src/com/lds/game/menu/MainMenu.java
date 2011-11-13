@@ -273,7 +273,6 @@ public class MainMenu extends Activity
         	public void onProgressChanged(SeekBar seekBar, int progress, boolean fromTouch)	
         	{	
         		antiTextbar.setText("Anti Aliasing: " + String.valueOf(progress) + "%");
-        		System.out.println("TROLOLOLOLOLOLOLOLOLOLOL");
         	}
             public void onStartTrackingTouch(SeekBar seekBar)	{	}
             public void onStopTrackingTouch(SeekBar seekBar)	{	}	

@@ -1,21 +1,15 @@
-package com.lds.game.entity;
+package com.lds.game;
 
 import android.graphics.Point;
 
 import com.lds.TilesetHelper;
-import com.lds.game.Game;
 import com.lds.math.MathHelper;
 import com.lds.math.Vector2;
 import com.lds.physics.Rectangle;
 import com.lds.physics.Shape;
 
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import java.util.Map;
-
-import javax.microedition.khronos.opengles.GL11;
 
 /**
  * A tile class.
@@ -33,206 +27,73 @@ public class Tile
         FLOOR,
         WALL,
         PIT,
-        BRIDGE,
         SlipperyTile 
     }
     
 	public static final int TILE_SIZE = 72;
 	public static final float TILE_SIZE_F = 72.0f;
 	
-	private int tileX, tileY, xIndex, yIndex;
+	private Point tilesetPos, texPos;
 	
 	private TileType type;
-	private boolean tempBridge;
-	private int origTileX, origTileY;
 	private Shape shape;
 	
-	private Vector2 pos;	
-	
-	private int vertVBO, texVBO, indexVBO;
+	private Vector2 pos;
 	
 	private byte borders;
 	
-	public Tile(GL11 gl, float size, int tileIndexX, int tileIndexY, int tilesetLengthX, int tilesetLengthY, TileType type)
+	public Tile(Point tilesetPos, int tilesetLengthX, int tilesetLengthY, TileType type)
 	{
-		TilesetHelper.setInitialTileOffset(this, tileIndexY, tileIndexX, tilesetLengthX, tilesetLengthY);
-		float x = size / 2;
-		float[] vertices =
-	    {
-		    -x, x,
-		    -x, -x,
-		    x, x,
-		    x, -x
-	    };
-		for (int i = 0; i < vertices.length; i++)
-		{
-			if (i % 2 == 0)
-				vertices[i] += pos.x();
-			else
-				vertices[i] += pos.y();
-		}
+		TilesetHelper.setInitialTileOffset(this, tilesetPos, tilesetLengthX, tilesetLengthY);
 		
-		shape = new Rectangle(size, pos, false);
+		shape = new Rectangle(TILE_SIZE, pos, false);
 		//shape.setVertices(vertices);
-		xIndex = tileIndexX;
-		yIndex = tileIndexY;
+		this.tilesetPos = tilesetPos;
 		this.type = type;
-		
-		switch (type)
-		{
-		case WALL:
-		    setAsWall();
-		    break;
-		case FLOOR:
-		    setAsFloor();
-		    break;
-		case PIT:
-		    setAsPit();
-		    break;
-		case BRIDGE:
-		    setAsBridge();
-		    break;
-	    default:
-	        break;
-		}
-		
-		ByteBuffer byteBuf = ByteBuffer.allocateDirect(vertices.length * 4);
-		byteBuf.order(ByteOrder.nativeOrder());
-		FloatBuffer vertBuffer = byteBuf.asFloatBuffer();
-		vertBuffer.put(vertices);
-		vertBuffer.position(0);
-		
-		float[] texCoords = TilesetHelper.getTextureVertices(Game.tilesetworld, tileX, tileY);
-		ByteBuffer texByteBuf = ByteBuffer.allocateDirect(texCoords.length * 4);
-		texByteBuf.order(ByteOrder.nativeOrder());
-		FloatBuffer texBuffer = texByteBuf.asFloatBuffer();
-		texBuffer.put(texCoords);
-		texBuffer.position(0);
-		
-		byte[] indices =
-		{
-		    0, 1, 2, 3
-		};
-		ByteBuffer indBuf = ByteBuffer.allocateDirect(indices.length);
-		indBuf.order(ByteOrder.nativeOrder());
-		indBuf.put(indices);
-		indBuf.position(0);
-		
-		int[] buffers = new int[3];
-		gl.glGenBuffers(3, buffers, 0);
-		vertVBO = buffers[0];
-		texVBO = buffers[1];
-		indexVBO = buffers[2];
-		
-		//TODO interleave into one buffer!
-		gl.glBindBuffer(GL11.GL_ARRAY_BUFFER, vertVBO);
-		gl.glBufferData(GL11.GL_ARRAY_BUFFER, vertices.length * 4, vertBuffer, GL11.GL_STATIC_DRAW);
-		
-		gl.glBindBuffer(GL11.GL_ARRAY_BUFFER, texVBO);
-		gl.glBufferData(GL11.GL_ARRAY_BUFFER, texCoords.length * 4, texBuffer, GL11.GL_STATIC_DRAW);
-		gl.glBindBuffer(GL11.GL_ARRAY_BUFFER, 0);
-		
-		gl.glBindBuffer(GL11.GL_ELEMENT_ARRAY_BUFFER, indexVBO);
-		gl.glBufferData(GL11.GL_ELEMENT_ARRAY_BUFFER, indices.length, indBuf, GL11.GL_STATIC_DRAW);
-		gl.glBindBuffer(GL11.GL_ELEMENT_ARRAY_BUFFER, 0);
 	}
 	
-	public void draw(GL11 gl)
+	/**
+	 * Gets the vertex data for this tile.
+	 * \todo Entire vertex data is still being generated, fix so that only necessary data is generated per tile.
+	 * @return A float[] containing this tile's vertices.
+	 */
+	public float[] getVertexData()
 	{
-        gl.glBindBuffer(GL11.GL_ARRAY_BUFFER, vertVBO);
-        gl.glVertexPointer(2, GL11.GL_FLOAT, 0, 0);
+	    //calculate vertices
+	    float s = TILE_SIZE / 2;
+	    float[] vertices =
+        {
+            -s,  s,
+            -s, -s,
+             s,  s,
+             s, -s
+        };
+	    
+	    //shift vertices to position
+        for (int i = 0; i < vertices.length; i++)
+        {
+            if (i % 2 == 0)
+                vertices[i] += pos.x();
+            else
+                vertices[i] += pos.y();
+        }
         
-        gl.glBindBuffer(GL11.GL_ARRAY_BUFFER, texVBO);
-        gl.glTexCoordPointer(2, GL11.GL_FLOAT, 0, 0);
+        //get texture vertices
+        float[] texCoords = TilesetHelper.getTextureVertices(Game.tilesetworld, texPos);
         
-        gl.glBindBuffer(GL11.GL_ELEMENT_ARRAY_BUFFER, indexVBO);
-        gl.glDrawElements(GL11.GL_TRIANGLE_STRIP, 4, GL11.GL_UNSIGNED_BYTE, 0);
+        //2 floats per vert * 4 verts per array * 2 arrays
+        float[] vertexData = new float[2 * 4 * 2];
         
-        gl.glBindBuffer(GL11.GL_ARRAY_BUFFER, 0);
-        gl.glBindBuffer(GL11.GL_ELEMENT_ARRAY_BUFFER, 0);
-	}
-	
-	public void updateTileset(int x, int y)
-	{
-		tileX = x;
-		tileY = y;
-	}
-	
-	public void regenTexCoords(GL11 gl)
-	{
-	    float[] texCoords = TilesetHelper.getTextureVertices(Game.tilesetworld, tileX, tileY);
-        ByteBuffer texByteBuf = ByteBuffer.allocateDirect(texCoords.length * 4);
-        texByteBuf.order(ByteOrder.nativeOrder());
-        FloatBuffer texBuffer = texByteBuf.asFloatBuffer();
-        texBuffer.put(texCoords);
-        texBuffer.position(0);
+        //interleave arrays
+        for (int i = 0; i < 4; i++)
+        {
+            vertexData[i * 4]     = vertices[i * 2];
+            vertexData[i * 4 + 1] = vertices[i * 2 + 1];
+            vertexData[i * 4 + 2] = texCoords[i * 2];
+            vertexData[i * 4 + 3] = texCoords[i * 2 + 1];
+        }
         
-        gl.glBindBuffer(GL11.GL_ARRAY_BUFFER, texVBO);
-        gl.glBufferData(GL11.GL_ARRAY_BUFFER, texCoords.length * 4, texBuffer, GL11.GL_STATIC_DRAW);
-        gl.glBindBuffer(GL11.GL_ARRAY_BUFFER, 0);
-	}
-	
-	public void setAsWall()
-	{
-		type = TileType.WALL;
-		if (tempBridge)
-		{
-			updateTileset(origTileX, origTileY);
-			tempBridge = false;
-		}
-		else
-		{
-			updateTileset(3, 7);
-		}
-		shape.setSolid(true);
-	}
-	
-	public void setAsFloor()
-	{
-		type = TileType.FLOOR;
-		updateTileset((int)(Math.random() * 4), (int)(Math.random() * 4));
-		shape.setSolid(false);
-	}
-	
-	public void setAsSlipperyTile()
-	{
-		type = TileType.SlipperyTile;
-		updateTileset(15, 0);
-		shape.setSolid(false);
-	}
-	
-	public void setAsPit()
-	{
-		type = TileType.PIT;
-		if (tempBridge)
-		{
-			updateTileset(origTileX, origTileY);
-			tempBridge = false;
-		}
-		else
-		{
-			updateTileset(7, 3);
-		}
-		shape.setSolid(false);
-	}
-	
-	public void setAsBridge()
-	{
-		type = TileType.BRIDGE;
-		
-		if (tempBridge)
-		{
-			updateTileset(origTileX, origTileY);
-			tempBridge = false;
-		}
-		else
-		{
-			origTileX = tileX;
-			origTileY = tileY;
-			updateTileset(1, 1);
-			tempBridge = true;
-		}
-		shape.setSolid(false);
+        return vertexData;
 	}
 	
 	public boolean isWall()
@@ -255,11 +116,6 @@ public class Tile
 		return type == TileType.SlipperyTile;
 	}
 	
-	public boolean isBridge()
-	{
-		return type == TileType.BRIDGE;
-	}
-	
 	public TileType getTileType()
 	{
 		return type;
@@ -269,10 +125,13 @@ public class Tile
 	 * Chooses the right texture for tiles that have borders.
 	 * \todo design this better, the only difference between updateBordersWall and updateBordersPit is which HashSet is used to look up points.
 	 */
-	public void updateBorders()
+	public void updateTexturePos()
 	{	    
 	    switch (type)
 	    {
+	    case FLOOR:
+	            texPos = new Point((int)(Math.random() * 4), (int)(Math.random() * 4));
+	            break;
 	        case WALL:
 	            updateBordersWall();
 	            break;
@@ -292,13 +151,12 @@ public class Tile
     {    
 	    if (TilesetHelper.pitTexPoints.containsKey(borders))
 	    {
-	        Point p = TilesetHelper.pitTexPoints.get(borders);
-	        updateTileset(p.x, p.y);
+	        texPos = TilesetHelper.pitTexPoints.get(borders);
 	    }
 	    else
 	    {
-	      //set defaults, in case of undefined behavior.
-            Point finalPt = new Point(7, 3);
+	        //set defaults, in case of undefined behavior.
+            texPos = new Point(7, 3);
             int borderBitsSet = 8;
             
             for (Map.Entry<Byte, Point> entry : TilesetHelper.pitTexPoints.entrySet())
@@ -311,13 +169,11 @@ public class Tile
                     int entryBitsSet = MathHelper.numberOfBitsSet(entry.getKey());
                     if (entryBitsSet < borderBitsSet)
                     {
-                        finalPt = entry.getValue();
+                        texPos = entry.getValue();
                         borderBitsSet = entryBitsSet;
                     }
                 }
             }
-
-            updateTileset(finalPt.x, finalPt.y);
 	    }
     }
 
@@ -330,15 +186,14 @@ public class Tile
         //if the bordering tiles are the exact arrangement as one of the texture tiles, use that directly.
         if (TilesetHelper.wallTexPoints.containsKey(borders))
         {
-            Point po = TilesetHelper.wallTexPoints.get(borders);
-            updateTileset(po.x, po.y);
+            texPos = TilesetHelper.wallTexPoints.get(borders);
         }
         
         //otherwise find a texture tile that contains all the bordering tiles.
         else
         {
             //set defaults, in case of undefined behavior.
-            Point finalPt = new Point(3, 7);
+            texPos = new Point(3, 7);
             int borderBitsSet = 8;
             
             for (Map.Entry<Byte, Point> entry : TilesetHelper.wallTexPoints.entrySet())
@@ -351,13 +206,11 @@ public class Tile
                     int entryBitsSet = MathHelper.numberOfBitsSet(entry.getKey());
                     if (entryBitsSet < borderBitsSet)
                     {
-                        finalPt = entry.getValue();
+                        texPos = entry.getValue();
                         borderBitsSet = entryBitsSet;
                     }
                 }
             }
-
-            updateTileset(finalPt.x, finalPt.y);
         }
     }
     
@@ -389,16 +242,18 @@ public class Tile
      */
     public void calculateBorders(Tile[][] tileset)
     {
+        int x = tilesetPos.x;
+        int y = tilesetPos.y;
         //store all the bordering tile indices in top left to bottom right order.
         ArrayList<Point> points = new ArrayList<Point>();
-        points.add(new Point(xIndex - 1, yIndex - 1));
-        points.add(new Point(xIndex,     yIndex - 1));
-        points.add(new Point(xIndex + 1, yIndex - 1));
-        points.add(new Point(xIndex - 1, yIndex));
-        points.add(new Point(xIndex + 1, yIndex));
-        points.add(new Point(xIndex - 1, yIndex + 1));
-        points.add(new Point(xIndex,     yIndex + 1));
-        points.add(new Point(xIndex + 1, yIndex + 1));
+        points.add(new Point(x - 1, y - 1));
+        points.add(new Point(x,     y - 1));
+        points.add(new Point(x + 1, y - 1));
+        points.add(new Point(x - 1, y));
+        points.add(new Point(x + 1, y));
+        points.add(new Point(x - 1, y + 1));
+        points.add(new Point(x,     y + 1));
+        points.add(new Point(x + 1, y + 1));
         
         //check each of the bordering tiles, set it's corresponding bit to 1 if it's not the same type of tile.
         for (int i = 0; i < points.size(); i++)

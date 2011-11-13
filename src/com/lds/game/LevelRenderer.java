@@ -132,7 +132,6 @@ public class LevelRenderer implements com.lds.LevelSurfaceView.Renderer
 		game.updateTriggers();
 		game.cleaner.update(game.entList, gl);
 		game.updateFingers();
-		game.renderTileset(gl);
 		
 		//update all entites
 		for (Entity ent : game.entList)
@@ -199,6 +198,8 @@ public class LevelRenderer implements com.lds.LevelSurfaceView.Renderer
 		gl.glEnableClientState(GL11.GL_VERTEX_ARRAY);
         gl.glEnableClientState(GL11.GL_TEXTURE_COORD_ARRAY);
 		
+        game.renderTileset(gl);
+        
 		for (Entity ent : game.getRenderedEnts())
 		{						
 			ent.draw(gl);
@@ -326,7 +327,7 @@ public class LevelRenderer implements com.lds.LevelSurfaceView.Renderer
 	{
 	    projWorld = Matrix4.ortho(game.camPosX - (Game.screenW / 2), game.camPosX + (Game.screenW / 2), game.camPosY + (Game.screenH / 2),  game.camPosY - (Game.screenH / 2), 0, 1);
 		viewWorld(gl);
-		game.updateRenderedTileset();
+		//game.updateRenderedTileset();
 	}
 	
 	/**

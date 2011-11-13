@@ -1,33 +1,33 @@
 package com.lds.trigger;
 
-import com.lds.game.entity.Tile;
+import com.lds.game.Tile;
 
 /**
  * An Effect that raises a bridge when fired and lowers it when unfired.
+ * \todo get an Entity to raise that prevents falling into pits
  * @author Lightning Development Studios
+ * @deprecated Tileset is now static. Can't set tiles to a different state.
  */
 public class EffectRaiseBridge extends Effect
-{
-	private Tile t;
-	
+{	
 	/**
 	 * Initializes a new instance of the EffectRaiseBridge class.
 	 * @param t The tile to raise and unraise.
 	 */
 	public EffectRaiseBridge(Tile t)
 	{
-		this.t = t;
+	    
 	}
 	
 	@Override
 	public void fireOutput()
 	{
-		t.setAsBridge();
+	    
 	}
 	
 	@Override
 	public void unfireOutput()
 	{
-		t.setAsPit();
+	    
 	}
 }

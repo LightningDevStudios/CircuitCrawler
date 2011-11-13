@@ -84,7 +84,8 @@ public class CollisionDetector
 	{
 	    ArrayList<CollisionPair> broadPhasePairs = qt.getCollisionPairs();
 	    if (broadPhasePairs.size() > 0)
-	        System.out.println(broadPhasePairs.size());
+	        ;
+	        //System.out.println(broadPhasePairs.size());
 	    ArrayList<CollisionPair> nearPhasePairs = new ArrayList<CollisionPair>();
 	    
 	    for (CollisionPair pair : broadPhasePairs)

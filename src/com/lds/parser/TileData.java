@@ -1,7 +1,9 @@
 package com.lds.parser;
 
-import com.lds.game.entity.Tile;
-import com.lds.game.entity.Tile.TileType;
+import android.graphics.Point;
+
+import com.lds.game.Tile;
+import com.lds.game.Tile.TileType;
 
 import javax.microedition.khronos.opengles.GL11;
 
@@ -23,10 +25,8 @@ public class TileData
             tState = TileType.WALL;
         else if (state.equalsIgnoreCase("pit"))
             tState = TileType.PIT;
-        else if (state.equalsIgnoreCase("bridge"))
-            tState = TileType.BRIDGE;
 				
-		tile = new Tile(gl, Tile.TILE_SIZE_F, x, y, tilesetY, tilesetX, tState);
+		tile = new Tile(new Point(x, y), tilesetY, tilesetX, tState);
 	}
 	
 	public int getTilePosX()

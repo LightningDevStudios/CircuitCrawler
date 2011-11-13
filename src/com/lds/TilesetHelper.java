@@ -4,7 +4,7 @@ import java.util.HashMap;
 
 import android.graphics.Point;
 
-import com.lds.game.entity.Tile;
+import com.lds.game.Tile;
 import com.lds.math.Vector2;
 
 public final class TilesetHelper 
@@ -92,9 +92,9 @@ public final class TilesetHelper
 		
 	}
 	
-	public static float[] getTextureVertices(Texture tex, int x, int y)
+	public static float[] getTextureVertices(Texture tex, Point p)
 	{
-		return getTextureVertices(x, y, 0, tex.getXTiles() - 1, 0, tex.getYTiles() - 1, tex.getOffsetX(), tex.getOffsetY());
+		return getTextureVertices(p.x, p.y, 0, tex.getXTiles() - 1, 0, tex.getYTiles() - 1, tex.getOffsetX(), tex.getOffsetY());
 	}
 	
 	public static float[] getTextureVertices(int x, int y, int minX, int maxX, int minY, int maxY, float offsetX, float offsetY)
@@ -178,10 +178,10 @@ public final class TilesetHelper
 		}
 	}
 	
-	public static void setInitialTileOffset(Tile tile, int y, int x, int length, int width)
+	public static void setInitialTileOffset(Tile tile, Point p, int length, int width)
 	{
-	    tile.setPos(new Vector2((-(float)width / 2.0f * Tile.TILE_SIZE_F) + (x * Tile.TILE_SIZE_F) + (Tile.TILE_SIZE_F / 2), 
-	            ((float)length / 2.0f * Tile.TILE_SIZE_F) - (y * Tile.TILE_SIZE_F) - (Tile.TILE_SIZE_F / 2)));
+	    tile.setPos(new Vector2((-(float)width / 2.0f * Tile.TILE_SIZE_F) + (p.x * Tile.TILE_SIZE_F) + (Tile.TILE_SIZE_F / 2), 
+	            ((float)length / 2.0f * Tile.TILE_SIZE_F) - (p.y * Tile.TILE_SIZE_F) - (Tile.TILE_SIZE_F / 2)));
 		
 	}
 }

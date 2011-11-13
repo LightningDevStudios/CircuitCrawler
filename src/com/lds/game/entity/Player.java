@@ -1,5 +1,6 @@
 package com.lds.game.entity;
 
+import com.lds.game.Tile;
 import com.lds.math.Vector2;
 import com.lds.physics.Circle;
 
@@ -13,6 +14,7 @@ public class Player extends Entity
 	public Player(Vector2 position, float angle)
 	{
 		super(new Circle(DEFAULT_SIZE, position, angle, true));
+		controlled = true;
 	}
 	
 	

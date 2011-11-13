@@ -90,7 +90,6 @@ public class PuzzleActivity extends Activity implements PuzzleInitializedListene
 	 */
 	public void finishPuzzleFailed()
 	{
-		System.out.println("FAILURE");
 		this.setResult(RESULT_CANCELED);
 		finish();
 	}
@@ -100,7 +99,6 @@ public class PuzzleActivity extends Activity implements PuzzleInitializedListene
 	 */
 	public void finishPuzzleSuccess()
 	{
-		System.out.println("SUCCESS");
 		this.setResult(RESULT_OK);
 		finish();
 	}

@@ -35,9 +35,7 @@ public class Run extends Activity implements GameOverListener, GameInitializedLi
 		mp = new MediaPlayer();
 		
 		levelIndex = getIntent().getExtras().getInt("levelIndex", -1);
-		System.out.println(levelIndex);
 		unlockedLevel = getIntent().getExtras().getInt("unlockedLevel", -1);
-		System.out.println(unlockedLevel);
 		
 		if (levelIndex == -1 || unlockedLevel == -1)
 			finish();
