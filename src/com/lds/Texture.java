@@ -9,6 +9,8 @@ import java.io.InputStream;
 
 import javax.microedition.khronos.opengles.GL10;
 
+import com.lds.game.Game;
+
 //In C++ this would be a struct, but alas...
 public class Texture 
 {
@@ -54,7 +56,7 @@ public class Texture
 	
 	public Texture(String text, StringRenderer sr)
 	{
-		this.bmp = sr.stringToBitmap(text);
+		this.bmp = sr.stringToBitmap(text, Game.text);
 		this.xSize = bmp.getWidth();
 		this.ySize = bmp.getHeight();
 		this.xTiles = 1;

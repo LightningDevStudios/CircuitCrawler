@@ -16,6 +16,8 @@ import com.lds.LevelSurfaceView;
 import com.lds.game.event.*;
 import com.lds.game.puzzle.PuzzleActivity;
 
+import java.io.IOException;
+
 public class Run extends Activity implements GameOverListener, GameInitializedListener, PuzzleActivatedListener
 {
 	public static final int PUZZLE_ACTIVITY = 2;
@@ -156,6 +158,10 @@ public class Run extends Activity implements GameOverListener, GameInitializedLi
 		}
 	}
 	
+	/**
+	 * Plays a background audio track from a resource.
+	 * @param resource The resource ID for the audio track to be played. (e.g. R.raw.song1)
+	 */
 	public void playMusic(int resource)
 	{	
 		AssetFileDescriptor song1 = this.getResources().openRawResourceFd(resource); 
@@ -169,12 +175,11 @@ public class Run extends Activity implements GameOverListener, GameInitializedLi
 		catch (IllegalStateException e) 
 		{
             e.printStackTrace();
-        } 
-		catch (Exception e) 
-		{
-            e.printStackTrace();
         }
-	
+	    catch (IOException e)
+	    {
+	        e.printStackTrace();
+	    }
 	}
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu)

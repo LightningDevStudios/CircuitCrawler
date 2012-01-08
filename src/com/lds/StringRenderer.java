@@ -2,33 +2,26 @@ package com.lds;
 
 import android.graphics.Bitmap;
 
+/**
+ * Renders text.
+ * @author Lightning Development Studios
+ */
 public final class StringRenderer 
 {
-	private static StringRenderer instance;
-	
-	private Texture text;
-	
+	/**
+	 * Prevents initialization of StringRenderer.
+	 */
 	private StringRenderer()
 	{
 	}
 	
-	public static StringRenderer getInstance()
-	{
-		if (instance == null)
-		{
-			synchronized (StringRenderer.class)
-			{
-				if (instance == null)
-				{
-					instance = new StringRenderer();
-				}
-			}
-		}
-		
-		return instance;
-	}
-	
-	public Bitmap stringToBitmap(String input)
+	/**
+	 * Draws a bitmap from an inputted string.
+	 * @param input The string to render.
+	 * @param text The fontsheet.
+	 * @return A Bitmap containing the text.
+	 */
+	public Bitmap stringToBitmap(String input, Texture text)
 	{
 		//Create a new, blank bitmap. Also allocate an int array which the Bitmap class uses to store in getPixels() and read in setPixels()
 		//\todo check for ySize with the number of \n chars
@@ -48,10 +41,5 @@ public final class StringRenderer
 		}
 		
 		return bmp;
-	}
-	
-	public void loadTextTileset(Texture text)
-	{
-		this.text = text;
 	}
 }

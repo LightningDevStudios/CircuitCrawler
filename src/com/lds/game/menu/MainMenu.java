@@ -1,7 +1,6 @@
 package com.lds.game.menu;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -39,10 +38,6 @@ import java.io.IOException;
  */
 public class MainMenu extends Activity
 {	
-	public boolean vibrateSettingMain = true;
-	public boolean test = true;
-	public Context context;
-	public SeekBar mSeekBar;
 	private ViewAnimator animator;
 	//private ProgressDialog pd;
 	private int unlockedLevel;

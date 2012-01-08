@@ -1,11 +1,12 @@
 package com.lds.game.entity;
 
-import javax.microedition.khronos.opengles.GL11;
-
 import com.lds.EntityManager;
 import com.lds.game.Tile;
+import com.lds.game.Tile.TileType;
 import com.lds.math.Vector2;
 import com.lds.physics.Rectangle;
+
+import javax.microedition.khronos.opengles.GL11;
 
 public class AttackBolt extends Entity
 {
@@ -39,7 +40,7 @@ public class AttackBolt extends Entity
 	@Override
 	public void tileInteract(Tile tile)
 	{
-		if (tile.isWall())
+		if (tile.getTileType() == TileType.WALL)
 			EntityManager.removeEntity(this);
 	}
 	
