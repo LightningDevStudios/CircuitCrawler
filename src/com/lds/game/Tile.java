@@ -101,6 +101,15 @@ public class Tile
         return vertexData;
 	}
 	
+	public short[] getIndices()
+	{
+	    return new short[]
+        {
+	        0, 1, 2,
+	        0, 2, 3
+        };
+	}
+	
 	/**
 	 * Returns this tile's type.
 	 * @return This tile's type.
