@@ -83,7 +83,10 @@ public class Game
 		//sr.loadTextTileset(text);
 				
 		SoundPlayer.initialize(context);
-				
+		
+		tilesetworld.setMinFilter(GL11.GL_LINEAR);
+		tilesetworld.setMagFilter(GL11.GL_LINEAR);
+		
 		TextureLoader.loadTexture(gl, tilesetwire);
 		TextureLoader.loadTexture(gl, tilesetworld);
 		TextureLoader.loadTexture(gl, tilesetentities);

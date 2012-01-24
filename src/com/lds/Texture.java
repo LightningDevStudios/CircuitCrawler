@@ -48,8 +48,8 @@ public class Texture
 		
 		minFilter = GL10.GL_NEAREST;
 		magFilter = GL10.GL_NEAREST;
-		wrapS = GL10.GL_REPEAT;
-		wrapT = GL10.GL_REPEAT;
+		wrapS = GL10.GL_CLAMP_TO_EDGE;
+        wrapT = GL10.GL_CLAMP_TO_EDGE;
 		
 		this.id = id;
 	}
@@ -66,8 +66,8 @@ public class Texture
 		
 		minFilter = GL10.GL_NEAREST;
 		magFilter = GL10.GL_NEAREST;
-		wrapS = GL10.GL_REPEAT;
-		wrapT = GL10.GL_REPEAT;
+		wrapS = GL10.GL_CLAMP_TO_EDGE;
+		wrapT = GL10.GL_CLAMP_TO_EDGE;
 		
 		id = text;
 	}

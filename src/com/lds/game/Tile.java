@@ -6,6 +6,7 @@ import com.lds.TilesetHelper;
 import com.lds.math.MathHelper;
 import com.lds.math.Vector2;
 
+import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -62,7 +63,7 @@ public class Tile
 	 * \todo Entire vertex data is still being generated, fix so that only necessary data is generated per tile.
 	 * @return A float[] containing this tile's vertices.
 	 */
-	public float[] getVertexData()
+	public void addVertexData(FloatBuffer buffer)
 	{
 	    //calculate vertices
 	    float s = TILE_SIZE / 2;
@@ -70,8 +71,8 @@ public class Tile
         {
             -s,  s,
             -s, -s,
-             s,  s,
-             s, -s
+             s, -s,
+             s,  s
         };
 	    
 	    //shift vertices to position
@@ -86,28 +87,40 @@ public class Tile
         //get texture vertices
         float[] texCoords = TilesetHelper.getTextureVertices(Game.tilesetworld, texPos);
         
-        //2 floats per vert * 4 verts per array * 2 arrays
-        float[] vertexData = new float[2 * 4 * 2];
-        
-        //interleave arrays
-        for (int i = 0; i < 4; i++)
+        if (this.type == TileType.FLOOR)
         {
-            vertexData[i * 4]     = vertices[i * 2];
-            vertexData[i * 4 + 1] = vertices[i * 2 + 1];
-            vertexData[i * 4 + 2] = texCoords[i * 2];
-            vertexData[i * 4 + 3] = texCoords[i * 2 + 1];
+            texCoords = new float[]
+            {
+                0, 0,
+                0, 64f / 256f - 1f / 512f,
+                64f / 512f - 1f / 1024f, 0,
+                64f / 512f - 1f / 1024f, 64.0f / 256.0f - 1f / 512f
+            };
         }
         
-        return vertexData;
-	}
-	
-	public short[] getIndices()
-	{
-	    return new short[]
+        float[] texCoordTempSwap = { texCoords[4], texCoords[5] };
+        
+        texCoords[4] = texCoords[6];
+        texCoords[5] = texCoords[7];
+        
+        texCoords[6] = texCoordTempSwap[0];
+        texCoords[7] = texCoordTempSwap[1];
+        
+        //2 floats per vert * 4 verts per array * 2 arrays
+        float[] vertexData = new float[2 * 6 * 2];
+        
+        int[] order = { 0, 1, 2, 0, 2, 3 };
+        
+        //interleave arrays
+        for (int i = 0; i < order.length; i++)
         {
-	        0, 1, 2,
-	        0, 2, 3
-        };
+            vertexData[i * 4]     = vertices[order[i] * 2];
+            vertexData[i * 4 + 1] = vertices[order[i] * 2 + 1];
+            vertexData[i * 4 + 2] = texCoords[order[i] * 2];
+            vertexData[i * 4 + 3] = texCoords[order[i] * 2 + 1];
+        }
+        
+        buffer.put(vertexData);
 	}
 	
 	/**
