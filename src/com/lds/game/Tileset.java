@@ -8,6 +8,11 @@ import java.nio.FloatBuffer;
 
 import javax.microedition.khronos.opengles.GL11;
 
+/**
+ * Contains and manages a 2d array of tiles.
+ * @author Lightning Development Studios
+ *
+ */
 public class Tileset 
 {
     private Tile[][] tiles;
@@ -15,12 +20,21 @@ public class Tileset
     private int vertCount;
     private int vertBuffer;
     
+    /**
+     * Initializes a new instance of the Tileset class.
+     * @param tiles A 2d array of tiles.
+     * @param tex The texture that the tileset will use.
+     */
     public Tileset(Tile[][] tiles, Texture tex)
     {
         this.tiles = tiles;
         this.tex = tex;
     }
     
+    /**
+     * Initializes the parts of the tileset that rely on OpenGL.
+     * @param gl The OpenGL context to use.
+     */
     public void initialize(GL11 gl)
     {
         //4 vertices * number of tiles
@@ -58,6 +72,10 @@ public class Tileset
         gl.glBindBuffer(GL11.GL_ARRAY_BUFFER, 0);
     }
     
+    /**
+     * Draws the tileset.
+     * @param gl The OpenGL context to draw with.
+     */
     public void draw(GL11 gl)
     {        
         gl.glBindTexture(GL11.GL_TEXTURE_2D, tex.getTexture());
@@ -71,6 +89,12 @@ public class Tileset
         gl.glBindTexture(GL11.GL_TEXTURE_2D, 0);
     }
     
+    /**
+     * Gets the tile at a specified location.
+     * @param x The X location of a tile.
+     * @param y The Y location of a tile.
+     * @return The tile at (x, y).
+     */
     public Tile get(int x, int y)
     {
         return tiles[y][x];

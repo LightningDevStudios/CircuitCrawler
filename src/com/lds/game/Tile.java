@@ -60,8 +60,8 @@ public class Tile
 	
 	/**
 	 * Gets the vertex data for this tile.
-	 * \todo Entire vertex data is still being generated, fix so that only necessary data is generated per tile.
-	 * @return A float[] containing this tile's vertices.
+	 * \todo maybe use an ArrayList instead of the buffer?
+	 * @param buffer The buffer to store the vertices in.
 	 */
 	public void addVertexData(FloatBuffer buffer)
 	{

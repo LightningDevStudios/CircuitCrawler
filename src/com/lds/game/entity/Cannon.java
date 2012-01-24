@@ -1,11 +1,11 @@
 package com.lds.game.entity;
 
-import javax.microedition.khronos.opengles.GL11;
-
 import com.lds.EntityManager;
 import com.lds.Stopwatch;
 import com.lds.math.Vector2;
 import com.lds.physics.Rectangle;
+
+import javax.microedition.khronos.opengles.GL11;
 
 public class Cannon extends Entity
 {

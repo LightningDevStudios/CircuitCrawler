@@ -3,8 +3,8 @@ package com.lds.physics;
 import com.lds.math.Vector2;
 
 /**
- * An Axis-Aligned Bounding Box
- * @author Devin Reed
+ * An Axis-Aligned Bounding Box.
+ * @author Lightning Development Studios
  */
 public class AABB 
 {
