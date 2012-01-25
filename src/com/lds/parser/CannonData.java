@@ -26,7 +26,7 @@ public class CannonData extends StaticEntData
 	
 	public void createInst(ArrayList<Entity> entData)
 	{
-		cannonRef = new Cannon(size, new Vector2(xPos, yPos), angle, speed, time);
+		cannonRef = new Cannon(size, new Vector2(xPos, yPos), angle, speed, time, null);
 		
 		//COLOR
 		if (color != null)
