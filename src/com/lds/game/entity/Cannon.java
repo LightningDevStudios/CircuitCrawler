@@ -12,19 +12,29 @@ public class Cannon extends Entity
 	private float shotVelocity;
 	private float shotsPerSecond;
 	private long time;
+	private Player player;
 	
-	public Cannon(Vector2 position, float angle, float shotVelocity, float shotsPerSecond)
+	public Cannon(Vector2 position, float angle, float shotVelocity, float shotsPerSecond, Player p)
 	{
-		this(69, position, angle, shotVelocity, shotsPerSecond);
+		this(69, position, angle, shotVelocity, shotsPerSecond, p);
 	}
 	
-	public Cannon(float size, Vector2 position, float angle, float shotVelocity, float shotsPerSecond)
+	public Cannon(float size, Vector2 position, float angle, float shotVelocity, float shotsPerSecond, Player p)
     {
         super(new Rectangle(size, position, angle, true));
         this.shotVelocity = shotVelocity;
         this.shotsPerSecond = shotsPerSecond;
         time = 0;
+        this.player = p;
     }
+	
+	public void facePlayer()
+	{
+	    Vector2 distance = Vector2.subtract(shape.getPos(), player.getPos());
+	    float angle = Math.atan2(perpdot(Vector2.UNIT_X,distance),Vector2.dot(Vector2.UNIT_X,distance));
+	    shape.setAngle(angle);
+	    
+	}
 
 	@Override
 	/**
@@ -39,7 +49,8 @@ public class Cannon extends Entity
 		
 		if (time > shotsPerSecond * 1000) // Time loop
 		{
-			time = 0;
+			facePlayer();
+		    time = 0;
 			CannonShell cannonShot = new CannonShell(getPos(), getAngle(), shotVelocity, 2);
 			EntityManager.addEntity(cannonShot);
 		}
