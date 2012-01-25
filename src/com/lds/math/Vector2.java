@@ -82,7 +82,7 @@ public final class Vector2
      */
     public boolean equals(Vector2 v)
     {
-        return x == v.x() && y == v.y();
+        return x == v.x && y == v.y;
     }
     
     @Override
@@ -190,8 +190,8 @@ public final class Vector2
         float m11 = array[0], m12 = array[1], m13 = array[2],
               m21 = array[3], m22 = array[4], m23 = array[5];
         
-        float vX = v.x();
-        float vY = v.y();
+        float vX = v.x;
+        float vY = v.y;
         
         return new Vector2(vX * m11 + vY * m12 + m13,
                            vX * m21 + vY * m22 + m23);
@@ -205,7 +205,18 @@ public final class Vector2
      */
 	public static Vector2 abs(Vector2 v)
 	{
-		return new Vector2(Math.abs(v.x()), Math.abs(v.y()));
+		return new Vector2(Math.abs(v.x), Math.abs(v.y));
+	}
+	
+	/**
+	 * Calculates the perpendicular dot product between the two vectors.
+	 * @param left The left vector.
+	 * @param right The right vector.
+	 * @return The perpendicular dot product.
+	 */
+	public static float perpDot(Vector2 left, Vector2 right)
+	{
+	    return left.x * right.y - left.y * right.x;
 	}
 	
 	/**
@@ -227,7 +238,7 @@ public final class Vector2
      */
 	public static Vector2 subtract(Vector2 left, Vector2 right)
 	{
-		return new Vector2(left.x() - right.x(), left.y() - right.y());
+		return new Vector2(left.x - right.x, left.y - right.y);
 	}
 	
 	/**
@@ -237,7 +248,7 @@ public final class Vector2
      */
 	public static Vector2 negate(Vector2 v)
 	{
-		return new Vector2(-v.x(), -v.y());
+		return new Vector2(-v.x, -v.y);
 	}
 	
 	/**
@@ -248,7 +259,7 @@ public final class Vector2
      */
 	public static Vector2 scale(Vector2 v, float scalar)
 	{
-		return new Vector2(scalar * v.x(), scalar * v.y());
+		return new Vector2(scalar * v.x, scalar * v.y);
 	}
 	
 	/**
@@ -284,7 +295,7 @@ public final class Vector2
      */
 	public static Vector2 getMidpoint(Vector2 left, Vector2 right)
 	{
-		return new Vector2((left.x() + right.x()) / 2, (left.y() + right.y()) / 2);
+		return new Vector2((left.x + right.x) / 2, (left.y + right.y) / 2);
 	}
 	
 	/**
@@ -294,7 +305,7 @@ public final class Vector2
 	 */
 	public static Vector2 getNormal(Vector2 v)
 	{
-		return new Vector2(v.y(), -v.x());
+		return new Vector2(v.y, -v.x);
 	}
 	
 	/**
@@ -305,7 +316,7 @@ public final class Vector2
 	 */
 	public static float dot(Vector2 left, Vector2 right)
 	{
-	    return left.x() * right.x() + left.y() * right.y();
+	    return left.x * right.x + left.y * right.y;
 	}
 	
 	/***********************
