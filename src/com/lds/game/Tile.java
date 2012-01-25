@@ -60,10 +60,9 @@ public class Tile
 	
 	/**
 	 * Gets the vertex data for this tile.
-	 * \todo maybe use an ArrayList instead of the buffer?
 	 * @param buffer The buffer to store the vertices in.
 	 */
-	public void addVertexData(FloatBuffer buffer)
+	public float[] getVertexData()
 	{
 	    //calculate vertices
 	    float s = TILE_SIZE / 2;
@@ -120,7 +119,7 @@ public class Tile
             vertexData[i * 4 + 3] = texCoords[order[i] * 2 + 1];
         }
         
-        buffer.put(vertexData);
+        return vertexData;
 	}
 	
 	/**

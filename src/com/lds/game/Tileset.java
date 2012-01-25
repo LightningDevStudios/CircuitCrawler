@@ -5,6 +5,7 @@ import com.lds.Texture;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
+import java.util.ArrayList;
 
 import javax.microedition.khronos.opengles.GL11;
 
@@ -18,6 +19,7 @@ public class Tileset
     private Tile[][] tiles;
     private Texture tex;
     private int vertCount;
+    private int indCount;
     private int vertBuffer;
     
     /**
@@ -37,17 +39,9 @@ public class Tileset
      */
     public void initialize(GL11 gl)
     {
-        //4 vertices * number of tiles
-        vertCount = 6 * tiles.length * tiles[0].length;
-        
-        //4 bytes per float * 4 floats per vertex attribute(vert AND texcoord) * number of vertices
-        int byteCount = 4 * 4 * vertCount;
+        ArrayList<Float> verts = new ArrayList<Float>();
         
         //store data in a float buffer, as required by Android.
-        //4 bytes per float * floats in tileset buffer
-        ByteBuffer byteBuf = ByteBuffer.allocateDirect(byteCount);
-        byteBuf.order(ByteOrder.nativeOrder());
-        FloatBuffer buffer = byteBuf.asFloatBuffer();
         
         //iterate through tileset, generate vertex data, then append to the buffer.
         for (int i = 0; i < tiles.length; i++)
@@ -56,10 +50,25 @@ public class Tileset
             {
                 tiles[i][j].calculateBorders(tiles);
                 tiles[i][j].updateTexturePos();
-                tiles[i][j].addVertexData(buffer);
+                for (Float f : tiles[i][j].getVertexData())
+                {
+                    verts.add(f);
+                }
             }
         }
         
+        vertCount = verts.size();
+        indCount = vertCount / 4;
+        
+        ByteBuffer byteBuf = ByteBuffer.allocateDirect(vertCount * 4);
+        byteBuf.order(ByteOrder.nativeOrder());
+        FloatBuffer buffer = byteBuf.asFloatBuffer();
+        
+        for (float f : verts)
+        {
+            buffer.put(f);
+        }
+             
         buffer.position(0);
         
         //generate VBO
@@ -68,7 +77,7 @@ public class Tileset
         vertBuffer = glBuffers[0];
         
         gl.glBindBuffer(GL11.GL_ARRAY_BUFFER, vertBuffer);
-        gl.glBufferData(GL11.GL_ARRAY_BUFFER, byteCount, buffer, GL11.GL_STATIC_DRAW);
+        gl.glBufferData(GL11.GL_ARRAY_BUFFER, vertCount * 4, buffer, GL11.GL_STATIC_DRAW);
         gl.glBindBuffer(GL11.GL_ARRAY_BUFFER, 0);
     }
     
@@ -83,7 +92,7 @@ public class Tileset
         gl.glVertexPointer(2, GL11.GL_FLOAT, 16, 0);
         gl.glTexCoordPointer(2, GL11.GL_FLOAT, 16, 8);
         
-        gl.glDrawArrays(GL11.GL_TRIANGLES, 0, 6 * tiles.length * tiles[0].length);
+        gl.glDrawArrays(GL11.GL_TRIANGLES, 0, indCount);
         
         gl.glBindBuffer(GL11.GL_ARRAY_BUFFER, 0);
         gl.glBindTexture(GL11.GL_TEXTURE_2D, 0);
