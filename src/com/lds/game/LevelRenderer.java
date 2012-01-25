@@ -11,6 +11,7 @@ import com.lds.game.entity.*;
 import com.lds.game.event.*;
 import com.lds.math.Matrix4;
 import com.lds.math.Vector2;
+import com.lds.math.Vector3;
 import com.lds.physics.CollisionDetector;
 import com.lds.physics.PhysicsManager;
 
@@ -78,10 +79,12 @@ public class LevelRenderer implements com.lds.LevelSurfaceView.Renderer
 		Stopwatch.start();
 		Stopwatch.tick();
 
-		game = new Game(context, (GL11)gl, levelId);
+		game = new Game(context, gl, levelId);
+		
+		float aspectRatio = Game.screenW / Game.screenH;
 		
 		//projWorld = Matrix4.ortho(game.camPosX - (Game.screenW / 2), game.camPosX + (Game.screenW / 2), game.camPosY + (Game.screenH / 2), game.camPosY - (Game.screenH / 2), 0, 1);
-		projWorld = Matrix4.IDENTITY;
+		projWorld = Matrix4.perspective(-2.5f, 2.5f, 2.5f / aspectRatio, -2.5f / aspectRatio, 0.01f, 1);
 		projUI = Matrix4.ortho(-Game.screenW / 2 , Game.screenW / 2, Game.screenH / 2, -Game.screenH / 2, 0, 1);
 		
 		for (Entity ent : game.entList)
@@ -191,8 +194,6 @@ public class LevelRenderer implements com.lds.LevelSurfaceView.Renderer
 		 * Render all Entites *
 		 **********************/
 		
-		gl.glLoadIdentity();
-		
 		gl.glEnable(GL11.GL_TEXTURE_2D);
 		gl.glEnableClientState(GL11.GL_VERTEX_ARRAY);
         gl.glEnableClientState(GL11.GL_TEXTURE_COORD_ARRAY);
@@ -200,9 +201,10 @@ public class LevelRenderer implements com.lds.LevelSurfaceView.Renderer
         game.renderTileset(gl);
         
 		for (Entity ent : game.getRenderedEnts())
-		{						
+		{
+		    gl.glPushMatrix();
 			ent.draw(gl);
-			gl.glLoadIdentity();
+			gl.glPopMatrix();
 		}
 		
 		gl.glDisable(GL11.GL_TEXTURE_2D);
@@ -222,12 +224,13 @@ public class LevelRenderer implements com.lds.LevelSurfaceView.Renderer
 		
 		for (Control ent : game.UIList)
 		{
+		    gl.glPushMatrix();
 			ent.update();
 			ent.updateVertexVBO(gl);
 			ent.updateGradientVBO(gl);
 			ent.updateTextureVBO(gl);
 			ent.draw(gl);
-			gl.glLoadIdentity();
+			gl.glPopMatrix();
 		}
 		
 		gl.glDisableClientState(GL11.GL_VERTEX_ARRAY);
@@ -324,7 +327,7 @@ public class LevelRenderer implements com.lds.LevelSurfaceView.Renderer
 	 */
 	public void updateCamPosition(GL10 gl)
 	{
-	    projWorld = Matrix4.ortho(game.camPosX - (Game.screenW / 2), game.camPosX + (Game.screenW / 2), game.camPosY + (Game.screenH / 2),  game.camPosY - (Game.screenH / 2), 0, 1);
+	    //projWorld = Matrix4.ortho(game.camPosX - (Game.screenW / 2), game.camPosX + (Game.screenW / 2), game.camPosY + (Game.screenH / 2),  game.camPosY - (Game.screenH / 2), 0, 1);
 		viewWorld(gl);
 		//game.updateRenderedTileset();
 	}
@@ -351,6 +354,7 @@ public class LevelRenderer implements com.lds.LevelSurfaceView.Renderer
 		gl.glLoadMatrixf(projWorld.array(), 0);
 		gl.glMatrixMode(GL10.GL_MODELVIEW);
 		gl.glLoadIdentity();
+		gl.glMultMatrixf(Matrix4.translate(new Vector3(-game.camPosX, -game.camPosY, -1)).array(), 0);//Matrix4.rotateX((float)Math.PI / 4f).array(), 0);
 	}
 	
 	public void setGameOverEvent(GameOverListener listener) 
