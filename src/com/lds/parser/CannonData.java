@@ -24,6 +24,9 @@ public class CannonData extends StaticEntData
 			time = Integer.parseInt(cannonHM.get("time"));
 	}
 	
+	/**
+	 * \bug Cannons will crash the game. Restructure the parser to fix this.
+	 */
 	public void createInst(ArrayList<Entity> entData)
 	{
 		cannonRef = new Cannon(size, new Vector2(xPos, yPos), angle, speed, time, null);
