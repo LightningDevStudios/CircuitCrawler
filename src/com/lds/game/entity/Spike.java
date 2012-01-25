@@ -2,7 +2,7 @@ package com.lds.game.entity;
 
 import com.lds.EntityManager;
 import com.lds.math.Vector2;
-import com.lds.physics.Rectangle;
+import com.lds.physics.primatives.Rectangle;
 
 public class Spike extends Entity
 {

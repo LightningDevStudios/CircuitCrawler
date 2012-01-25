@@ -11,8 +11,8 @@ import com.lds.game.entity.*;
 import com.lds.game.event.*;
 import com.lds.math.Vector2;
 import com.lds.parser.Parser;
-import com.lds.physics.Shape;
 import com.lds.physics.World;
+import com.lds.physics.primatives.Shape;
 import com.lds.trigger.*;
 
 import java.io.IOException;

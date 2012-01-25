@@ -13,8 +13,9 @@ public class AABB
     private float topBound;
     private float bottomBound;
     
-    public AABB()
+    public AABB(Vector2[] vertices)
     {
+        generateBounds(vertices);
     }
     
     public void generateBounds(Vector2[] vertices)

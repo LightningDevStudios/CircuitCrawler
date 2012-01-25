@@ -1,7 +1,7 @@
 package com.lds.game.entity;
 
 import com.lds.math.Vector2;
-import com.lds.physics.Circle;
+import com.lds.physics.primatives.Circle;
 
 public class Ball extends HoldObject
 {	

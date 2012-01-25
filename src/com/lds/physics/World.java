@@ -1,6 +1,7 @@
 package com.lds.physics;
 
 import com.lds.math.Vector2;
+import com.lds.physics.primatives.Shape;
 
 import java.util.ArrayList;
 

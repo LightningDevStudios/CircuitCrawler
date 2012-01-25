@@ -1,4 +1,4 @@
-package com.lds.physics;
+package com.lds.physics.primatives;
 
 import com.lds.math.Vector2;
 
@@ -6,8 +6,10 @@ import com.lds.math.Vector2;
  * A Shape that represents a circle.
  * @author Lightning Development Studios
  */
-public class Circle extends Shape 
+public class Circle extends Shape
 {
+    public float radius;
+    
     /****************
      * Constructors *
      ***************/
@@ -59,20 +61,7 @@ public class Circle extends Shape
      */
     public Circle(float size, Vector2 position, float angle, boolean solid)
     {
-        this(size, position, angle, new Vector2(1, 1), solid);
-    }
-    
-    /**
-     * Initializes a new instance of the Circle class.
-     * @param size The size of the circle
-     * @param position The position of the circle
-     * @param angle The angle of the circle in radians
-     * @param scale The scale of the circle
-     * @param solid The solidity of the circle
-     */
-    public Circle(float size, Vector2 position, float angle, Vector2 scale, boolean solid)
-    {
-        super(position, angle, scale, solid);
+        super(position, angle, solid);
         
         float halfSize = size / 2;
         float[] vertices = 
@@ -92,6 +81,7 @@ public class Circle extends Shape
     protected void updateMass()
     {
         mass = density * getRadius() * getRadius() * (float)Math.PI;
+        momentOfInertia = 0.5f * mass * radius * radius;
     }
     
     /**************************
@@ -105,12 +95,5 @@ public class Circle extends Shape
     public float getRadius()
     {
         return vertices[5] * scale.x();
-    }
-    
-    @Override
-    public void setScale(Vector2 scale)
-    {
-        if (scale.x() == scale.y())
-            super.setScale(scale);
     }
 }

@@ -8,7 +8,7 @@ import com.lds.TilesetHelper;
 import com.lds.game.Tile;
 import com.lds.game.event.InteractListener;
 import com.lds.math.*;
-import com.lds.physics.Shape;
+import com.lds.physics.primatives.Shape;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
