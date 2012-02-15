@@ -12,8 +12,7 @@ public class Contact
     public float restitution;
 
     public Vector2 contactNormal;
-    public Vector2 contactPoint;
-
+    
     public Contact(Shape a, Shape b)
     {
         this.a = a;
@@ -21,13 +20,12 @@ public class Contact
         restitution = 1;
     }
 
-    public Contact(Shape a, Shape b, float penetration, Vector2 contactNormal, Vector2 contactPoint)
+    public Contact(Shape a, Shape b, float penetration, Vector2 contactNormal)
     {
         this(a, b);
         
         this.penetration = penetration;
         this.contactNormal = contactNormal;
-        this.contactPoint = contactPoint;
     }
 
     public void Resolve(float duration)
@@ -78,6 +76,8 @@ public class Contact
     private float GetSeperatingVelocity()
     {
         Vector2 relativeVelocity = Vector2.subtract(a.getVelocity(), b.getVelocity());
+        if (contactNormal == null)
+            return 0;
         return Vector2.dot(relativeVelocity, contactNormal);
     }
 }

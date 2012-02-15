@@ -93,12 +93,14 @@ public class CollisionDetector
         contactNormal = Vector2.scale(contactNormal,  1 / penetration);
         Vector2 contactPoint = Vector2.add(b.getPos(), Vector2.scale(contactNormal, b.getRadius()));
 
-        return new Contact(a, b, penetration, contactNormal, contactPoint);
+        return new Contact(a, b, penetration, contactNormal);
     }
 
     public static Contact SATRectangleCircle(Rectangle r, Circle c)
     {
         Vector2[] axes = new Vector2[3];
+        float penetration = Float.MAX_VALUE;
+        Vector2 contactNormal = new Vector2(0, 0);
 
         Vector2 v = Vector2.subtract(r.getWorldVertices()[0], r.getWorldVertices()[1]);
         axes[0] = new Vector2(Math.abs(v.x()), Math.abs(v.y()));
@@ -137,19 +139,33 @@ public class CollisionDetector
                 max2 = temp;
             }
 
-            if (!((max1 > min2 && max1 < max2) || (max2 > min1 || max2 < max1)))
+            if (max1 >= min2 && max1 <= max2)
+            {
+                if (max1 - min2 < penetration)
+                {
+                    penetration = max1 - min2;
+                    contactNormal = Vector2.negate(axes[i]);
+                }
+            }
+            else if (max2 >= min1 && max2 <= max1)
+            {
+                if (max2 - min1 < penetration)
+                {
+                    penetration = max2 - min1;
+                    contactNormal = axes[i];
+                }
+            }
+            else
                 return null;
         }
 
-        return new Contact(r, c);
+        return new Contact(r, c, penetration, contactNormal);
     }
 
     public static Contact SATRectangles(Rectangle a, Rectangle b)
     {
         float penetration = Float.MAX_VALUE;
         Vector2 contactNormal = new Vector2(0, 0);
-        Vector2 contactPoint = new Vector2(0, 0);
-
         Vector2[] axes = new Vector2[4];
 
         Vector2 v = Vector2.subtract(a.getWorldVertices()[0], a.getWorldVertices()[1]);
@@ -171,39 +187,31 @@ public class CollisionDetector
         {
             float minA = Vector2.dot(axes[i], a.getWorldVertices()[0]);
             float maxA = minA;
-            int minAPoint = 0;
-            int maxAPoint = 0;
             for (int j = 1; j < a.getWorldVertices().length; j++)
             {
                 float dotProd1 = Vector2.dot(axes[i], a.getWorldVertices()[j]);
                 if (dotProd1 > maxA)
                 {
                     maxA = dotProd1;
-                    maxAPoint = j;
                 }
                 if (dotProd1 < minA)
                 {
                     minA = dotProd1;
-                    minAPoint = j;
                 }
             }
 
             float minB = Vector2.dot(axes[i], b.getWorldVertices()[0]);
             float maxB = minB;
-            int minBPoint = 0;
-            int maxBPoint = 0;
             for (int j = 1; j < b.getWorldVertices().length; j++)
             {
                 float dotProd2 = Vector2.dot(axes[i], b.getWorldVertices()[j]);
                 if (dotProd2 > maxB)
                 {
                     maxB = dotProd2;
-                    maxBPoint = j;
                 }
                 if (dotProd2 < minB)
                 {
                     minB = dotProd2;
-                    minBPoint = j;
                 }
             }
 
@@ -213,10 +221,6 @@ public class CollisionDetector
                 {
                     penetration = maxA - minB;
                     contactNormal = Vector2.negate(axes[i]);
-                    if (i < 2)
-                        contactPoint = b.getWorldVertices()[minBPoint];
-                    else
-                        contactPoint = a.getWorldVertices()[maxAPoint];
                 }
             }
             else if (maxB >= minA && maxB <= maxA)
@@ -225,17 +229,13 @@ public class CollisionDetector
                 {
                     penetration = maxB - minA;
                     contactNormal = axes[i];
-                    if (i < 2)
-                        contactPoint = b.getWorldVertices()[maxBPoint];
-                    else
-                        contactPoint = a.getWorldVertices()[minAPoint];
                 }
             }
             else
                 return null;
         }
 
-        return new Contact(a, b, penetration, contactNormal, contactPoint);
+        return new Contact(a, b, penetration, contactNormal);
     }
 
     public static boolean ContainsPoint(Circle c, Vector2 v)

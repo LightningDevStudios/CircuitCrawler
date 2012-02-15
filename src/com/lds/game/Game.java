@@ -6,12 +6,14 @@ import android.util.Log;
 import com.lds.*;
 import com.lds.UI.*;
 import com.lds.UI.Control.UIPosition;
+import com.lds.game.Tile.TileType;
 import com.lds.game.ai.Node;
 import com.lds.game.entity.*;
 import com.lds.game.event.*;
 import com.lds.math.Vector2;
 import com.lds.parser.Parser;
 import com.lds.physics.World;
+import com.lds.physics.primatives.Rectangle;
 import com.lds.physics.primatives.Shape;
 import com.lds.trigger.*;
 
@@ -36,7 +38,7 @@ public class Game
     public static Texture tilesetentities;
     public static Texture baricons;
 	
-	public ArrayList<Entity> entList;
+	public ArrayList<Entity> entities;
 	//private Tile[][] tileset;
 	public ArrayList<Control> UIList;
 	private ArrayList<Trigger> triggerList;
@@ -73,7 +75,7 @@ public class Game
 		final Texture energybarborder = new Texture(R.raw.energybarborder, 128, 16, 1, 1, context, "energybarborder");
 		final Texture healthbarborder = new Texture(R.raw.healthbarborder, 256, 16, 1, 1, context, "healthbarborder");
 			
-		entList = new ArrayList<Entity>();
+		entities = new ArrayList<Entity>();
 		UIList = new ArrayList<Control>();
 		triggerList = new ArrayList<Trigger>();
 		fingerList = new ArrayList<Finger>();
@@ -121,14 +123,14 @@ public class Game
 	
 		//retreive data from parser
 		Tile[][] tileset = parser.tileset;
-		entList.addAll(parser.entList);
+		entities.addAll(parser.entList);
 		triggerList.addAll(parser.triggerList);
 		
 		this.tileset = new Tileset(tileset, tilesetworld);
 		this.tileset.initialize(gl);
 		
 		player = parser.player;
-		entList.add(player);
+		entities.add(player);
 		
 		btnB = new UIButton(80.0f, 80.0f, UIPosition.BOTTOMRIGHT);
 		btnB.autoPadding(0.0f, 0.0f, 90.0f, 5.0f);
@@ -146,8 +148,28 @@ public class Game
 		worldMinY = (-Tile.TILE_SIZE_F * (tileset.length / 2)) + (screenH / 2);
 		worldMaxX = (Tile.TILE_SIZE_F * (tileset[0].length / 2)) - (screenW / 2);
 		worldMaxY = (Tile.TILE_SIZE_F * (tileset.length / 2)) - (screenH / 2);
+		
+		Vector2 worldSize = new Vector2(Tile.TILE_SIZE_F * tileset[0].length, Tile.TILE_SIZE_F * tileset.length);
+		
+		ArrayList<Shape> shapes = new ArrayList<Shape>();
+        for (Entity ent : entities)
+            shapes.add(ent.getShape());
+		
+		for (int i = 0; i < tileset.length; i++)
+		{
+		    for (int j = 0; j < tileset[i].length; j++)
+		    {
+		        if (tileset[i][j].getTileType() == TileType.WALL)
+		        {
+		            Vector2 position = new Vector2((j + 0.5f) * Tile.TILE_SIZE_F - 0.5f * worldSize.x(), -((i + 0.5f) * Tile.TILE_SIZE_F - 0.5f * worldSize.y()));
+		            Rectangle r = new Rectangle(new Vector2(Tile.TILE_SIZE_F, Tile.TILE_SIZE_F), position, true);
+		            r.isStatic = true;
+		            shapes.add(r);
+		        }
+		    }
+		}		
                 
-	    world = new World(new Vector2(Tile.TILE_SIZE_F * tileset[0].length, Tile.TILE_SIZE_F * tileset.length), entList);
+	    world = new World(worldSize, shapes);
 		
 		updateCameraPosition();
 		//updateRenderedTileset();
@@ -166,7 +188,7 @@ public class Game
 		maxY = camPosY + (screenW / 2);
 		
 		ArrayList<Entity> renderList = new ArrayList<Entity>();
-		for (Entity ent : entList)
+		for (Entity ent : entities)
 		{
 			//define max square bounds
 		    final float diagonal = Vector2.subtract(ent.getPos(), ent.getShape().getWorldVertices()[0]).length();
@@ -246,7 +268,6 @@ public class Game
 		}
 		
 		return null;
-		
 	}
 	
 	public void setGameOverEvent(GameOverListener listener)

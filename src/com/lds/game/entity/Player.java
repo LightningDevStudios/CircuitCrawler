@@ -3,6 +3,7 @@ package com.lds.game.entity;
 import com.lds.game.Tile;
 import com.lds.math.Vector2;
 import com.lds.physics.primatives.Circle;
+import com.lds.physics.primatives.Rectangle;
 
 import javax.microedition.khronos.opengles.GL11;
 
@@ -13,7 +14,7 @@ public class Player extends Entity
 	
 	public Player(Vector2 position, float angle)
 	{
-		super(new Circle(DEFAULT_SIZE, position, angle, true));
+		super(new Rectangle(new Vector2(DEFAULT_SIZE, DEFAULT_SIZE), position, angle, true));
 		controlled = true;
 	}
 	

@@ -83,7 +83,7 @@ public class LevelRenderer implements com.lds.LevelSurfaceView.Renderer
 		projWorld = Matrix4.IDENTITY;
 		projUI = Matrix4.ortho(-Game.screenW / 2 , Game.screenW / 2, Game.screenH / 2, -Game.screenH / 2, 0, 1);
 		
-		for (Entity ent : game.entList)
+		for (Entity ent : game.entities)
 		{
 			ent.initialize(gl);
 		}
@@ -96,7 +96,7 @@ public class LevelRenderer implements com.lds.LevelSurfaceView.Renderer
 		if (gameInitializedListener != null)
 			gameInitializedListener.onGameInitialized();
 		
-		for (Entity ent : game.entList)
+		for (Entity ent : game.entities)
 		{
 			if (ent instanceof PuzzleBox)
 			{
@@ -128,11 +128,11 @@ public class LevelRenderer implements com.lds.LevelSurfaceView.Renderer
 		}
 		
 		game.updateTriggers();
-		game.cleaner.update(game.entList, gl);
+		game.cleaner.update(game.entities, gl);
 		game.updateFingers();
 		
 		//update all entites
-		for (Entity ent : game.entList)
+		for (Entity ent : game.entities)
 		{
 			ent.update(null);
 		}
@@ -142,11 +142,11 @@ public class LevelRenderer implements com.lds.LevelSurfaceView.Renderer
 		
 		//HACK: for the love of GOD move this out of GameRenderer
 		//Iterates through all entities
-		final int size = game.entList.size();
+		final int size = game.entities.size();
 		for (int i = 0; i < size; i++)
 		{
 			
-			final Entity ent = game.entList.get(i);
+			final Entity ent = game.entities.get(i);
 			
 			/***************************
 			 * Performs Button Actions *
