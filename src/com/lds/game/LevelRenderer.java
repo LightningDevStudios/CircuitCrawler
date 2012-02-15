@@ -13,7 +13,7 @@ import com.lds.math.Matrix4;
 import com.lds.math.Vector2;
 import com.lds.math.Vector3;
 import com.lds.physics.CollisionDetector;
-import com.lds.physics.PhysicsManager;
+import com.lds.physics.*;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
@@ -37,7 +37,7 @@ public class LevelRenderer implements com.lds.LevelSurfaceView.Renderer
 	private int levelId;
 	
 	private Matrix4 projWorld, projUI;
-	private PhysicsManager physMan;
+	private World world;
 	
 	/**
 	 * Initializes a new instance of the GameRenderer class.
@@ -89,7 +89,7 @@ public class LevelRenderer implements com.lds.LevelSurfaceView.Renderer
 		projWorld = Matrix4.perspective(-2.5f, 2.5f, 2.5f / aspectRatio, -2.5f / aspectRatio, 0.01f, 1);
 		projUI = Matrix4.ortho(-Game.screenW / 2 , Game.screenW / 2, Game.screenH / 2, -Game.screenH / 2, 0, 1);
 		
-		for (Entity ent : game.entList)
+		for (Entity ent : game.entities)
 		{
 			ent.initialize(gl);
 		}
@@ -102,7 +102,7 @@ public class LevelRenderer implements com.lds.LevelSurfaceView.Renderer
 		if (gameInitializedListener != null)
 			gameInitializedListener.onGameInitialized();
 		
-		for (Entity ent : game.entList)
+		for (Entity ent : game.entities)
 		{
 			if (ent instanceof PuzzleBox)
 			{
@@ -134,25 +134,25 @@ public class LevelRenderer implements com.lds.LevelSurfaceView.Renderer
 		}
 		
 		game.updateTriggers();
-		game.cleaner.update(game.entList, gl);
+		game.cleaner.update(game.entities, gl);
 		game.updateFingers();
 		
 		//update all entites
-		for (Entity ent : game.entList)
+		for (Entity ent : game.entities)
 		{
 			ent.update(null);
 		}
 		
 		//TODO: game.update(), chain off to world.update()
-		game.world.update();
+		game.world.integrate(Stopwatch.getFrameTime());
 		
 		//HACK: for the love of GOD move this out of GameRenderer
 		//Iterates through all entities
-		final int size = game.entList.size();
+		final int size = game.entities.size();
 		for (int i = 0; i < size; i++)
 		{
 			
-			final Entity ent = game.entList.get(i);
+			final Entity ent = game.entities.get(i);
 			
 			/***************************
 			 * Performs Button Actions *
@@ -160,7 +160,7 @@ public class LevelRenderer implements com.lds.LevelSurfaceView.Renderer
 	
 			//inside of ent for loop
 			//checks for whatever happens when B is pressed.
-			if (game.btnB.isPressed())
+			/*if (game.btnB.isPressed())
 			{
 				if (ent instanceof HoldObject)
 				{
@@ -189,7 +189,7 @@ public class LevelRenderer implements com.lds.LevelSurfaceView.Renderer
 					}
 					game.btnB.unpress();
 				}
-			}
+			}*/
 		}
 				
 		/**********************

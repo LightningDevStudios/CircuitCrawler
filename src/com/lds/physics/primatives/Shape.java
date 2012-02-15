@@ -1,9 +1,10 @@
-package com.lds.physics;
+package com.lds.physics.primatives;
 
 import com.lds.game.event.InteractListener;
 import com.lds.math.Matrix4;
 import com.lds.math.Vector2;
 import com.lds.math.Vector4;
+import com.lds.physics.forcegenerators.IndivForce;
 
 import java.util.ArrayList;
 
@@ -23,19 +24,39 @@ public abstract class Shape
     protected InteractListener onInteract;
     
     /**
+     * A list of the current continual forces acting on the shape.
+     */
+    protected ArrayList<IndivForce> forces;
+    
+    /**
+     * The shape's current impulse vector, sum of implulse forces acted on it.
+     */
+    protected Vector2 totalImpulse;
+    
+    /**
+     * The shape's vertices in world coordinates.
+     */
+    protected Vector2[] worldVertices;
+    
+    /**
      * The current velocity of the shape.
      */
     protected Vector2 velocity;
     
     /**
-     * The shape's current impulse vector, sum of implulse forces acted on it.
+     * The shape's mass. Calculated by multiplying area by density
      */
-    protected Vector2 impulseVec;
+    protected float mass;
     
     /**
-     * A list of the current continual forces acting on the shape.
+     * Damping for velocity
      */
-    protected ArrayList<Vector2> forces;
+    protected float velocityDamping;
+    
+    /**
+     * Determines whether the shape can move or not
+     */
+    public boolean isStatic;
     
     /**
      * The density of the shape. default is 1
@@ -48,19 +69,9 @@ public abstract class Shape
     protected float friction;
     
     /**
-     * The shape's mass. Calculated by multiplying area by density
-     */
-    protected float mass;
-    
-    /**
      * The shape's vertices in local coordinates.
      */
     protected float[] vertices;
-    
-    /**
-     * The shape's vertices in world coordinates.
-     */
-    protected Vector2[] worldVertices;
     
     /**
      * The shape's model matrix.
@@ -76,16 +87,6 @@ public abstract class Shape
      * The shape's angle in radians (counterclockwise is positive).
      */
     protected float angle;
-    
-    /**
-     * The shape's x and y scale.
-     */
-    protected Vector2 scale; 
-    
-    /**
-     * The shape's scale matrix.
-     */
-    private Matrix4 scaleMat;
     
     /**
      * The shape's rotation matrix.
@@ -133,39 +134,27 @@ public abstract class Shape
         this(position, 0, solid);
     }
     
-    /**
-     * Initializes a new instance of the Shape class.
-     * @param position The position of the shape
-     * @param angle The angle of the shape in radians
-     * @param solid The solidity of the shape
-     */
-    public Shape(Vector2 position, float angle, boolean solid)
-    {
-        this(position, angle, new Vector2(1, 1), solid);
-    }
     
     /**
      * Initializes a new instance of the Shape class.
      * \todo Fix angle, remove the hax'd in degree to radians check.
      * @param position The position of the shape
      * @param angle The angle of the shape in radians
-     * @param scale The scale of the shape
      * @param solid The solidity of the shape
      */
-    public Shape(Vector2 position, float angle, Vector2 scale, boolean solid)
+    public Shape(Vector2 position, float angle, boolean solid)
     {
         density = 0.001f;
         friction = 0.1f;
+        velocityDamping = 0.999f;
         velocity = new Vector2(0, 0);
-        impulseVec = new Vector2(0, 0);
-        forces = new ArrayList<Vector2>();
+        totalImpulse = new Vector2(0, 0);
+        forces = new ArrayList<IndivForce>();
         this.solid = solid;
         this.position = position;
-        this.scale = scale;
         this.angle = (float)Math.toRadians(angle);
         transMat = Matrix4.translate(this.position);
         rotMat = Matrix4.rotateZ(this.angle);
-        scaleMat = Matrix4.scale(this.scale);
         rebuildModel();
     }
     
@@ -173,12 +162,28 @@ public abstract class Shape
      * Public Methods *
      ******************/
     
+    public void Integrate(float frameTime)
+    {
+        if (isStatic)
+            return;
+
+        for (IndivForce f : forces)
+            f.UpdateForce(frameTime, this);
+
+        velocity = Vector2.scale(velocity, (float)Math.pow(velocityDamping, frameTime));
+        velocity = Vector2.add(velocity, Vector2.scale(totalImpulse, 1 / mass));
+
+        setPos(Vector2.add(position, Vector2.scale(velocity, frameTime)));
+
+        totalImpulse = Vector2.ZERO;
+    }
+    
     /**
      * Rebuilds the model matrix.
      */
     public void rebuildModel()
     {
-        model = Matrix4.multiply(Matrix4.multiply(scaleMat, rotMat), transMat);
+        model = Matrix4.multiply(rotMat, transMat);
     }
     
     /**
@@ -186,23 +191,14 @@ public abstract class Shape
      */
     public void transformVertices()
     {
-        Vector2[] vectorVertices = getVectorVertices();
-        for (int i = 0; i < vectorVertices.length; i++)
-            vectorVertices[i] = Vector4.transform(new Vector4(vectorVertices[i], 0, 1), model).xy();
-        worldVertices = vectorVertices;
-    }
-    
-    /**
-     * Converts vertices into a Vector2[].
-     * @return an array of Vector2s, each one representing a vertex
-     */
-    public Vector2[] getVectorVertices()
-    {
-        Vector2[] verts = new Vector2[vertices.length / 2];
-        for (int i = 0; i < verts.length; i++)
-            verts[i] = new Vector2(vertices[i * 2], vertices[i * 2 + 1]);
+        if (vertices == null || model == null)
+            return;
 
-        return verts;
+        worldVertices = new Vector2[vertices.length / 2];
+        for (int i = 0; i < worldVertices.length; i++)
+        {
+            worldVertices[i] = Vector4.transform(new Vector4(vertices[i * 2], vertices[i * 2 + 1], 0, 1), model).xy();
+        }
     }
     
     /**
@@ -211,16 +207,21 @@ public abstract class Shape
      */
     public void addImpulse(Vector2 v)
     {
-        impulseVec = Vector2.add(impulseVec, v);
+        totalImpulse = Vector2.add(totalImpulse, v);
     }
     
     /**
      * Adds a new constant force to the shape.
      * @param f The new force to add.
      */
-    public void addForce(Vector2 f)
+    public void addForce(IndivForce f)
     {
         forces.add(f);
+    }
+    
+    public void removeForce(IndivForce f)
+    {
+        forces.remove(f);
     }
     
     /********************
@@ -241,7 +242,7 @@ public abstract class Shape
      */
     public void clearImpulse()
     {
-        impulseVec = new Vector2(0, 0);
+        totalImpulse = new Vector2(0, 0);
     }
     
     /**
@@ -277,14 +278,14 @@ public abstract class Shape
      */
     public Vector2 getImpulse()
     {
-        return impulseVec;
+        return totalImpulse;
     }
     
     /**
-     * Gets an ArrayList<Vector2> of all the forces acting on the Shape.
+     * Gets an ArrayList<IndivForce> of all the forces acting on the Shape.
      * @return All the forces acting on the shape.
      */
-    public ArrayList<Vector2> getForces()
+    public ArrayList<IndivForce> getForces()
     {
         return forces;
     }
@@ -361,15 +362,6 @@ public abstract class Shape
     public Vector2 getPos()
     {
         return position;
-    }
-    
-    /**
-     * Gets the scale of the current Shape.
-     * @return The Shape's scale.
-     */
-    public Vector2 getScale()
-    {
-        return scale;
     }
     
     /**
@@ -450,26 +442,17 @@ public abstract class Shape
     }
     
     /**
-     * Sets the scale of the Shape.
-     * @param scale The Shape's new scale.
-     */
-    public void setScale(Vector2 scale)
-    {
-        this.scale = scale;
-        scaleMat = Matrix4.scale(scale);
-        rebuildModel();
-        transformVertices();
-        updateMass();
-    }
-    
-    /**
      * Sets the shape's angle.
      * \todo remove the hax'd in degrees to radians conversion
      * @param angle The Shape's new angle.
      */
     public void setAngle(float angle)
     {
-        this.angle = (float)Math.toRadians(angle);
+        if (angle == Float.NaN)
+            return;
+        
+        this.angle = angle;
+        
         rotMat = Matrix4.rotateZ(this.angle);
         rebuildModel();
         transformVertices();

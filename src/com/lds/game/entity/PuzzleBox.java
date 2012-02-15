@@ -2,7 +2,7 @@ package com.lds.game.entity;
 
 import com.lds.game.event.PuzzleActivatedListener;
 import com.lds.math.Vector2;
-import com.lds.physics.Rectangle;
+import com.lds.physics.primatives.Rectangle;
 
 public class PuzzleBox extends Entity
 {
@@ -10,12 +10,7 @@ public class PuzzleBox extends Entity
 	
 	public PuzzleBox(float size, Vector2 position)
 	{
-		super(new Rectangle(size, position, true));
-	}
-	
-	public PuzzleBox(float size, Vector2 position, float angle, Vector2 scale)
-	{
-		super(new Rectangle(size, position, angle, scale, true));
+		super(new Rectangle(new Vector2(size, size), position, true));
 	}
 	
 	public void setPuzzleInitListener(PuzzleActivatedListener listener)

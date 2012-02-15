@@ -13,8 +13,25 @@ public class AABB
     private float topBound;
     private float bottomBound;
     
-    public AABB()
+    public AABB(Vector2[] vertices)
     {
+        generateBounds(vertices);
+    }
+    
+    public AABB(float left, float right, float top, float bottom)
+    {
+        leftBound = left;
+        rightBound = right;
+        topBound = top;
+        bottomBound = bottom;
+    }
+    
+    public void convertToBottomLeftCoords(float worldX, float worldY)
+    {
+        leftBound += worldX / 2;
+        rightBound += worldX / 2;
+        topBound += worldY / 2;
+        bottomBound += worldY / 2;
     }
     
     public void generateBounds(Vector2[] vertices)

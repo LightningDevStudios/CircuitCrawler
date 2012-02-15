@@ -4,7 +4,6 @@ import javax.microedition.khronos.opengles.GL11;
 
 import com.lds.EntityManager;
 import com.lds.math.Vector2;
-import com.lds.physics.Rectangle;
 
 public class LaserShooter extends Entity
 {
@@ -17,7 +16,7 @@ public class LaserShooter extends Entity
     
     public LaserShooter(Vector2 position, float shotsPerSecond, float shotVelocity, float size, float angle, boolean isOn, long onTime, long offTime)
     {
-        super(new Rectangle(size,position,angle,true));
+        super(new com.lds.physics.primatives.Rectangle(new Vector2(size, size),position,angle,true));
         this.shotsPerSecond = shotsPerSecond;
         this.shotVelocity = shotVelocity;
         this.isOn = isOn;

@@ -1,7 +1,7 @@
 package com.lds.game.entity;
 
 import com.lds.math.Vector2;
-import com.lds.physics.Rectangle;
+import com.lds.physics.primatives.Rectangle;
 
 public class Door extends Entity
 {
@@ -12,7 +12,7 @@ public class Door extends Entity
 	
 	public Door(float size, Vector2 position)
     {
-        super(new Rectangle(size, position, 0, new Vector2(2, 1), true));
+        super(new Rectangle(new Vector2(size, size), position, 0, true));
         enableColorMode(1.0f, 1.0f, 1.0f, 1.0f);
         colorInterpSpeed = 1.0f;
         

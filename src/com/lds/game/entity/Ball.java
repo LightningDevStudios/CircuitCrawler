@@ -1,13 +1,14 @@
 package com.lds.game.entity;
 
 import com.lds.math.Vector2;
-import com.lds.physics.Circle;
+import com.lds.physics.primatives.Circle;
+import com.lds.physics.primatives.Rectangle;
 
 public class Ball extends HoldObject
 {	
 	public Ball(float size, Vector2 position)
 	{
-		super(new Circle(size, position, true));
+		super(new Rectangle(new Vector2(size, size), position, true));
 		this.tilesetX = 2;
 		this.tilesetY = 0;
 	}

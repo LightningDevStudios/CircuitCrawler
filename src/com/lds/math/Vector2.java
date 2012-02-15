@@ -299,14 +299,24 @@ public final class Vector2
 	}
 	
 	/**
-	 * Gets the vector orthogonal to v.
+	 * Gets the vector orthogonal to v on the left side.
 	 * @param v The vector.
-	 * @return A vector orthogonal to v.
+	 * @return A vector orthogonal to v on the left side.
 	 */
-	public static Vector2 getNormal(Vector2 v)
+	public static Vector2 perpendicularLeft(Vector2 v)
 	{
 		return new Vector2(v.y, -v.x);
 	}
+	
+	/**
+     * Gets the vector orthogonal to v on the right side.
+     * @param v The vector.
+     * @return A vector orthogonal to v on the right side.
+     */
+    public static Vector2 perpendicularRight(Vector2 v)
+    {
+        return new Vector2(-v.y(), v.x());
+    }
 	
 	/**
 	 * Finds the dot product of two vectors.

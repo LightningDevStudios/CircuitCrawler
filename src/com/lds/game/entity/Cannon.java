@@ -3,7 +3,7 @@ package com.lds.game.entity;
 import com.lds.EntityManager;
 import com.lds.Stopwatch;
 import com.lds.math.Vector2;
-import com.lds.physics.Rectangle;
+import com.lds.physics.primatives.Rectangle;
 
 import javax.microedition.khronos.opengles.GL11;
 
@@ -21,7 +21,7 @@ public class Cannon extends Entity
 	
 	public Cannon(float size, Vector2 position, float angle, float shotVelocity, float shotsPerSecond, Player p)
     {
-        super(new Rectangle(size, position, angle, true));
+        super(new Rectangle(new Vector2(size, size), position, angle, true));
         this.shotVelocity = shotVelocity;
         this.shotsPerSecond = shotsPerSecond;
         time = 0;

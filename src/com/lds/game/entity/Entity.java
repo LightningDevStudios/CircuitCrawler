@@ -8,7 +8,7 @@ import com.lds.TilesetHelper;
 import com.lds.game.Tile;
 import com.lds.game.event.InteractListener;
 import com.lds.math.*;
-import com.lds.physics.Shape;
+import com.lds.physics.primatives.Shape;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -62,10 +62,7 @@ public abstract class Entity implements InteractListener
 	
 	public void update(GL11 gl)
 	{
-	    //TODO: change this?
-		//if (shape.getScale().length() <= 0.0f)
-			//EntityManager.removeEntity(this);
-		colorInterp();
+	    
 	}
 
 	/**
@@ -286,16 +283,6 @@ public abstract class Entity implements InteractListener
     {
         return shape.getAngle();
     }
-	
-	/**
-	 * Gets the Entity's scale.
-	 * @return The Entity's scale.
-	 * \todo should only be defined by vertices, consider removing scale altogether.
-	 */
-	public Vector2 getScale()
-    {
-        return shape.getScale();
-    }
 
     /**
      * Gets the color of the Entity.
@@ -331,15 +318,6 @@ public abstract class Entity implements InteractListener
 	public void setAngle(float angle)
 	{
 	    shape.setAngle(angle);
-	}
-	
-	/**
-	 * Sets the scale of the Entity.
-	 * @param scale The Entity's new scale.
-	 */
-	public void setScale(Vector2 scale)
-	{
-	    shape.setScale(scale);
 	}
 	
 	/**

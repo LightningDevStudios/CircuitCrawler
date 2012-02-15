@@ -2,7 +2,7 @@ package com.lds.game.entity;
 
 import com.lds.game.SoundPlayer;
 import com.lds.math.Vector2;
-import com.lds.physics.Rectangle;
+import com.lds.physics.primatives.Rectangle;
 
 public class WallButton extends Entity
 {
@@ -10,7 +10,7 @@ public class WallButton extends Entity
 	
 	public WallButton(Vector2 position, float angle)
 	{
-	    super(new Rectangle(64, position, angle, true));
+	    super(new Rectangle(new Vector2(64, 64), position, angle, true));
 		active = false;
 		
 		this.tilesetX = 0;
