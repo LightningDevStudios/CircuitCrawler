@@ -6,13 +6,11 @@ import com.lds.TilesetHelper;
 import com.lds.math.MathHelper;
 import com.lds.math.Vector2;
 
-import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import java.util.Map;
 
 /**
  * A tile class.
- * \todo rewrite the update borders methods and get them to update the texture coordinate buffer.
  * @author Lightning Development Studios
  */
 public class Tile
