@@ -92,38 +92,9 @@ public class Tile
 	            order = new int[] { 0, 1, 2, 0, 2, 3 };
 	            break;
 	        case WALL:
-	            vertices = new float[]
-                {
-                    -s,  s, 0.175f,
-                    -s, -s, 0.175f,
-                     s, -s, 0.175f,
-                     s,  s, 0.175f,
-                     
-                    -s, -s, 0.175f,
-                    -s, -s, 0,
-                     s, -s, 0,
-                     s, -s, 0.175f
-                };
-	            texCoords = new float[]
-                {
-	                128f / 512f + 1f / 1024f, 64.0f / 256.0f + 1f / 512f,
-	                128f / 512f + 1f / 1024f, 128f / 256f - 1f / 512f,
-                    192f / 512f - 1f / 1024f, 128.0f / 256.0f - 1f / 512f,
-                    192f / 512f - 1f / 1024f, 64.0f / 256.0f + 1f / 512f,
-                    
-                    0, 64f / 256f + 1f / 512f,
-                    0, 128f / 256f - 1f / 512f,
-                    64f / 512f - 1f / 1024f, 128f / 256f - 1f / 512f,
-                    64f / 512f - 1f / 1024f, 64f / 256f + 1f / 512f
-                    
-                };
-	            order = new int[]
-                {
-                    0, 1, 2, 
-                    0, 2, 3,
-                    4, 5, 6,
-                    4, 6, 7
-                };
+	            vertices = TilesetHelper.getWallVertices(this.borders, s);
+	            texCoords = TilesetHelper.getWallTextureVertices(this.borders);
+	            order = TilesetHelper.getWallIndices(this.borders);
 	            break;
 	        default:
 	            //by default use the same vertices as the floor.

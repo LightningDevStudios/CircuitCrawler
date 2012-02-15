@@ -91,6 +91,187 @@ public final class TilesetHelper
 	{
 		
 	}
+
+	/**
+	 * Gets the vertices for a wall tile.
+	 * @param borders The borders of the wall.
+	 * @param size The size of the tile.
+	 * @return The vertices for the wall tile.
+	 */
+	public static float[] getWallVertices(byte borders, float size)
+	{
+	    boolean left = (borders & 0x08) == 0x08;
+	    boolean right = (borders & 0x10) == 0x10;
+	    boolean top = (borders & 0x02) == 0x02;
+	    boolean bottom = (borders & 0x40) == 0x40;
+	    
+	    int vertLength = 12;
+	    if (left) vertLength += 12;
+	    if (right) vertLength += 12;
+	    if (bottom) vertLength += 12;
+	    if (top) vertLength += 12;
+	    
+	    float[] vertices = new float[vertLength];
+	    
+	    vertices[0] = -size;
+	    vertices[1] = size;
+	    vertices[2] = 0.175f;
+	    vertices[3] = -size;
+	    vertices[4] = -size;
+	    vertices[5] = 0.175f;
+	    vertices[6] = size;
+	    vertices[7] = -size;
+	    vertices[8] = 0.175f;
+	    vertices[9] = size;
+	    vertices[10] = size;
+	    vertices[11] = 0.175f;
+	    
+	    int addPosition = 12;
+	    
+	    if (left)
+	    {
+	        vertices[addPosition] = -size;
+	        vertices[addPosition + 1] = size;
+	        vertices[addPosition + 2] = 0.175f;
+	        vertices[addPosition + 3] = -size;
+	        vertices[addPosition + 4] = size;
+	        vertices[addPosition + 5] = 0f;
+	        vertices[addPosition + 6] = -size;
+	        vertices[addPosition + 7] = -size;
+	        vertices[addPosition + 8] = 0f;
+	        vertices[addPosition + 9] = -size;
+	        vertices[addPosition + 10] = -size;
+	        vertices[addPosition + 11] = 0.175f;
+	        addPosition += 12;
+	    }
+	    
+	    if (right)
+	    {
+	        vertices[addPosition] = size;
+            vertices[addPosition + 1] = -size;
+            vertices[addPosition + 2] = 0.175f;
+            vertices[addPosition + 3] = size;
+            vertices[addPosition + 4] = -size;
+            vertices[addPosition + 5] = 0f;
+            vertices[addPosition + 6] = size;
+            vertices[addPosition + 7] = size;
+            vertices[addPosition + 8] = 0f;
+            vertices[addPosition + 9] = size;
+            vertices[addPosition + 10] = size;
+            vertices[addPosition + 11] = 0.175f;
+            addPosition += 12;
+	    }
+	    
+	    if (top)
+	    {
+	        vertices[addPosition] = size;
+            vertices[addPosition + 1] = size;
+            vertices[addPosition + 2] = 0.175f;
+            vertices[addPosition + 3] = size;
+            vertices[addPosition + 4] = size;
+            vertices[addPosition + 5] = 0f;
+            vertices[addPosition + 6] = -size;
+            vertices[addPosition + 7] = size;
+            vertices[addPosition + 8] = 0f;
+            vertices[addPosition + 9] = -size;
+            vertices[addPosition + 10] = size;
+            vertices[addPosition + 11] = 0.175f;
+            addPosition += 12;
+	    }
+	    
+	    if (bottom)
+	    {
+	        vertices[addPosition] = -size;
+            vertices[addPosition + 1] = -size;
+            vertices[addPosition + 2] = 0.175f;
+            vertices[addPosition + 3] = -size;
+            vertices[addPosition + 4] = -size;
+            vertices[addPosition + 5] = 0f;
+            vertices[addPosition + 6] = size;
+            vertices[addPosition + 7] = -size;
+            vertices[addPosition + 8] = 0f;
+            vertices[addPosition + 9] = size;
+            vertices[addPosition + 10] = -size;
+            vertices[addPosition + 11] = 0.175f;
+            addPosition += 12;
+	    }
+	    
+	    return vertices;
+	}
+	
+	public static float[] getWallTextureVertices(byte borders)
+	{
+	    boolean left = (borders & 0x08) == 0x08;
+        boolean right = (borders & 0x10) == 0x10;
+        boolean top = (borders & 0x02) == 0x02;
+        boolean bottom = (borders & 0x40) == 0x40;
+        
+        int sideCount = 0;
+        if (left) sideCount++;
+        if (right) sideCount++;
+        if (bottom) sideCount++;
+        if (top) sideCount++;
+        
+        float[] texCoords = new float[(sideCount + 1) * 8];
+        
+        float[] baseTexCoords = new float[]
+        {
+            128f / 512f + 1f / 1024f, 64.0f / 256.0f + 1f / 512f,
+            128f / 512f + 1f / 1024f, 128f / 256f - 1f / 512f,
+            192f / 512f - 1f / 1024f, 128.0f / 256.0f - 1f / 512f,
+            192f / 512f - 1f / 1024f, 64.0f / 256.0f + 1f / 512f,            
+        };
+        
+        float[] sideTexCoords = new float[]
+        {
+            0, 64f / 256f + 1f / 512f,
+            0, 128f / 256f - 1f / 512f,
+            64f / 512f - 1f / 1024f, 128f / 256f - 1f / 512f,
+            64f / 512f - 1f / 1024f, 64f / 256f + 1f / 512f
+        };
+        
+        System.arraycopy(baseTexCoords, 0, texCoords, 0, baseTexCoords.length);
+      
+        for (int i = 0; i < sideCount; i++)
+        {
+            System.arraycopy(sideTexCoords, 0, texCoords, (i + 1) * 8, sideTexCoords.length); 
+        }
+        
+        return texCoords;
+	}
+	
+	public static int[] getWallIndices(byte borders)
+	{
+	    boolean left = (borders & 0x08) == 0x08;
+        boolean right = (borders & 0x10) == 0x10;
+        boolean top = (borders & 0x02) == 0x02;
+        boolean bottom = (borders & 0x40) == 0x40;
+        
+        int sideCount = 0;
+        if (left) sideCount++;
+        if (right) sideCount++;
+        if (bottom) sideCount++;
+        if (top) sideCount++;
+        
+        int[] indices = new int[(sideCount + 1) * 6];
+        
+        int[] trianglesIndices = new int[] { 0, 1, 2, 0, 2, 3 };
+        
+        System.arraycopy(trianglesIndices, 0, indices, 0, trianglesIndices.length);
+        
+        for (int i = 0; i < sideCount; i++)
+        {
+            int[] newIndices = new int[6];
+            for (int j = 0; j < trianglesIndices.length; j++)
+            {
+                newIndices[j] = trianglesIndices[j] + ((i + 1) * 4);
+            }
+            
+            System.arraycopy(newIndices, 0, indices, (i + 1) * 6, newIndices.length); 
+        }
+        
+        return indices;
+	}
 	
 	public static float[] getTextureVertices(Texture tex, Point p)
 	{
