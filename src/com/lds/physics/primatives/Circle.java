@@ -81,7 +81,6 @@ public class Circle extends Shape
     protected void updateMass()
     {
         mass = density * getRadius() * getRadius() * (float)Math.PI;
-        momentOfInertia = 0.5f * mass * radius * radius;
     }
     
     /**************************
@@ -94,6 +93,6 @@ public class Circle extends Shape
      */
     public float getRadius()
     {
-        return vertices[5] * scale.x();
+        return vertices[0];
     }
 }

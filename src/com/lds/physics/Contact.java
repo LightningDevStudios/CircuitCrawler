@@ -71,16 +71,8 @@ public class Contact
         Vector2 impulseA = impulsePerIMass;
         Vector2 impulseB = Vector2.negate(impulsePerIMass);
 
-        Vector2 ar = Vector2.subtract(contactPoint, a.getPos());
-        Vector2 br = Vector2.subtract(contactPoint, b.getPos());
-
-        float torqueA = (ar.x() * impulseA.y()) - (ar.y() * impulseA.x());
-        float torqueB = (br.x() * impulseB.y()) - (br.y() * impulseB.x());
-
         a.addImpulse(impulseA);
         b.addImpulse(impulseB);
-        a.addAngularImpulse(torqueA);
-        b.addAngularImpulse(torqueB);
     }
 
     private float GetSeperatingVelocity()

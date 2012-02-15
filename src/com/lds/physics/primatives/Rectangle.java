@@ -62,6 +62,5 @@ public class Rectangle extends Shape
         float width = -vertices[0] * 2;
         float height = vertices[0] * 2;
         mass = density * width * height;
-        momentOfInertia = mass * (width * width + height * height);// / 12;
     }
 }

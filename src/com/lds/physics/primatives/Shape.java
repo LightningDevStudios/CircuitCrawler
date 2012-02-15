@@ -44,34 +44,14 @@ public abstract class Shape
     protected Vector2 velocity;
     
     /**
-     * The current angular velocity of the shape.
-     */
-    protected float angularVelocity;
-    
-    /**
      * The shape's mass. Calculated by multiplying area by density
      */
     protected float mass;
     
     /**
-     * The shape's moment of inertia.
-     */
-    protected float momentOfInertia;
-    
-    /**
      * Damping for velocity
      */
     protected float velocityDamping;
-    
-    /**
-     * Damping for angular velocity
-     */
-    protected float angularDamping;
-    
-    /**
-     * Total impulsive torque
-     */
-    protected float angularImpulse;
     
     /**
      * Determines whether the shape can move or not
@@ -166,6 +146,7 @@ public abstract class Shape
     {
         density = 0.001f;
         friction = 0.1f;
+        velocityDamping = 0.999f;
         velocity = new Vector2(0, 0);
         totalImpulse = new Vector2(0, 0);
         forces = new ArrayList<IndivForce>();
@@ -189,17 +170,12 @@ public abstract class Shape
         for (IndivForce f : forces)
             f.UpdateForce(frameTime, this);
 
-        angularVelocity *= (float)Math.pow(angularDamping, frameTime);
-        angularVelocity += angularImpulse / momentOfInertia;
-
         velocity = Vector2.scale(velocity, (float)Math.pow(velocityDamping, frameTime));
         velocity = Vector2.add(velocity, Vector2.scale(totalImpulse, 1 / mass));
 
-        position = Vector2.add(position, Vector2.scale(velocity, frameTime));
-        angle = angle + angularVelocity * frameTime;
+        setPos(Vector2.add(position, Vector2.scale(velocity, frameTime)));
 
         totalImpulse = Vector2.ZERO;
-        angularImpulse = 0;
     }
     
     /**
@@ -232,16 +208,6 @@ public abstract class Shape
     public void addImpulse(Vector2 v)
     {
         totalImpulse = Vector2.add(totalImpulse, v);
-    }
-    
-    /**
-     * Adds a new impulsive torque to the shape.
-     * @param v The new impulse to add
-     */
-    public void addAngularImpulse(float v)
-    {
-        if (!isStatic)
-            angularImpulse += v;
     }
     
     /**
@@ -482,7 +448,11 @@ public abstract class Shape
      */
     public void setAngle(float angle)
     {
-        this.angle = (float)Math.toRadians(angle);
+        if (angle == Float.NaN)
+            return;
+        
+        this.angle = angle;
+        
         rotMat = Matrix4.rotateZ(this.angle);
         rebuildModel();
         transformVertices();

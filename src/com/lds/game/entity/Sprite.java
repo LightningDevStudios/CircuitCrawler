@@ -12,7 +12,7 @@ public class Sprite extends Entity
 	
 	public Sprite(float size, Vector2 position, Animation anim)
 	{
-		super(new Rectangle(size, position, false));
+		super(new Rectangle(new Vector2(size, size), position, false));
 		this.anim = anim;
 		
 		//texture = anim.getCurrentFrame();

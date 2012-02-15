@@ -10,7 +10,7 @@ public class WallButton extends Entity
 	
 	public WallButton(Vector2 position, float angle)
 	{
-	    super(new Rectangle(64, position, angle, true));
+	    super(new Rectangle(new Vector2(64, 64), position, angle, true));
 		active = false;
 		
 		this.tilesetX = 0;

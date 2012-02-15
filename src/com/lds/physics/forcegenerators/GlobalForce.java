@@ -15,7 +15,7 @@ public abstract class GlobalForce
 
     public abstract void UpdateForce(float frameTime);
 
-    public void AddShape(Shape s)
+    public void addShape(Shape s)
     {
         this.shapes.add(s);
     }

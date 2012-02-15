@@ -13,7 +13,7 @@ public class Spike extends Entity
 	
 	public Spike(float size, Vector2 position, float angle)
     {
-        super(new Rectangle(size, position, angle, true));
+        super(new Rectangle(new Vector2(size, size), position, angle, true));
         
         this.tilesetX = 3;
         this.tilesetY = 1;

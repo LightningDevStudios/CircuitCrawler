@@ -11,8 +11,7 @@ import com.lds.game.entity.*;
 import com.lds.game.event.*;
 import com.lds.math.Matrix4;
 import com.lds.math.Vector2;
-import com.lds.physics.CollisionDetector;
-import com.lds.physics.PhysicsManager;
+import com.lds.physics.*;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
@@ -36,7 +35,7 @@ public class LevelRenderer implements com.lds.LevelSurfaceView.Renderer
 	private int levelId;
 	
 	private Matrix4 projWorld, projUI;
-	private PhysicsManager physMan;
+	private World world;
 	
 	/**
 	 * Initializes a new instance of the GameRenderer class.
@@ -139,7 +138,7 @@ public class LevelRenderer implements com.lds.LevelSurfaceView.Renderer
 		}
 		
 		//TODO: game.update(), chain off to world.update()
-		game.world.update();
+		game.world.integrate(Stopwatch.getFrameTime());
 		
 		//HACK: for the love of GOD move this out of GameRenderer
 		//Iterates through all entities
@@ -155,7 +154,7 @@ public class LevelRenderer implements com.lds.LevelSurfaceView.Renderer
 	
 			//inside of ent for loop
 			//checks for whatever happens when B is pressed.
-			if (game.btnB.isPressed())
+			/*if (game.btnB.isPressed())
 			{
 				if (ent instanceof HoldObject)
 				{
@@ -184,7 +183,7 @@ public class LevelRenderer implements com.lds.LevelSurfaceView.Renderer
 					}
 					game.btnB.unpress();
 				}
-			}
+			}*/
 		}
 				
 		/**********************

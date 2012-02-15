@@ -20,7 +20,7 @@ public class Cannon extends Entity
 	
 	public Cannon(float size, Vector2 position, float angle, float shotVelocity, float shotsPerSecond)
     {
-        super(new Rectangle(size, position, angle, true));
+        super(new Rectangle(new Vector2(size, size), position, angle, true));
         this.shotVelocity = shotVelocity;
         this.shotsPerSecond = shotsPerSecond;
         time = 0;

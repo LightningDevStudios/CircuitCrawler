@@ -20,7 +20,7 @@ public class AttackBolt extends Entity
 	 */
 	public AttackBolt(Vector2 position, Vector2 direction, Entity parent)
 	{
-		super(new Rectangle(20.0f, position, direction.angleRad(), new Vector2(2, 1), true));
+		super(new Rectangle(new Vector2(20, 40), position, direction.angleRad(), true));
 		
 		this.setColorInterpSpeed(1.4f);
 		this.initColorInterp(1.0f, 1.0f, 1.0f, 0.0f);

@@ -20,7 +20,6 @@ public class DoorData extends StaticEntData
 	{
 		doorRef = new Door(size, new Vector2(xPos, yPos));
 		doorRef.setAngle(angle);
-		doorRef.setScale(new Vector2(xScl, yScl));
 		
 		//COLOR
 		if (color != null)

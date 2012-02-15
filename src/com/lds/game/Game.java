@@ -41,7 +41,7 @@ public class Game
 	public ArrayList<Control> UIList;
 	private ArrayList<Trigger> triggerList;
 	public EntityManager cleaner;
-	public World world;
+	public com.lds.physics.World world;
 	
 	public ArrayList<Finger> fingerList;
 	
@@ -146,12 +146,8 @@ public class Game
 		worldMinY = (-Tile.TILE_SIZE_F * (tileset.length / 2)) + (screenH / 2);
 		worldMaxX = (Tile.TILE_SIZE_F * (tileset[0].length / 2)) - (screenW / 2);
 		worldMaxY = (Tile.TILE_SIZE_F * (tileset.length / 2)) - (screenH / 2);
-		
-		ArrayList<Shape> shapeList = new ArrayList<Shape>();
-        for (Entity ent : entList)
-            shapeList.add(ent.getShape());
                 
-	    world = new World(new Vector2(Tile.TILE_SIZE_F * tileset[0].length, Tile.TILE_SIZE_F * tileset.length), shapeList);
+	    world = new World(new Vector2(Tile.TILE_SIZE_F * tileset[0].length, Tile.TILE_SIZE_F * tileset.length), entList);
 		
 		updateCameraPosition();
 		//updateRenderedTileset();

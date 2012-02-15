@@ -9,7 +9,7 @@ public class CollisionDetector
 {
     private Vector2 size;
     private ArrayList<Shape> shapes;
-    public SpatialHashbrown withBacon;
+    public SpatialHashGrid spatialHash;
 
     public ArrayList<Contact> contacts;
 
@@ -18,19 +18,20 @@ public class CollisionDetector
         this.size = size;
         this.shapes = shapes;
 
-        withBacon = new SpatialHashbrown(this.size, this.shapes, 0);
+        spatialHash = new SpatialHashGrid(shapes, size.x(), size.y(), 2, 2);
         contacts = new ArrayList<Contact>();
     }
 
-    public void Update()
+    public void update()
     {
-        withBacon.Fry();
+        spatialHash.populate();
         contacts = updateCollisions();
+        spatialHash.clear();
     }
 
     public ArrayList<Contact> updateCollisions()
     {
-        ArrayList<Contact> broadPhaseContacts = withBacon.OmNomNom();
+        ArrayList<Contact> broadPhaseContacts = spatialHash.getCollisionPairs();
         ArrayList<Contact> nearPhaseContacts = new ArrayList<Contact>();
     
         for (Contact contact : broadPhaseContacts)
@@ -45,7 +46,7 @@ public class CollisionDetector
 
     public static Contact colliding(Contact c)
     {
-        return Colliding(c.a, c.a);
+        return Colliding(c.a, c.b);
     }
 
     public static Contact Colliding(Shape a, Shape b)
