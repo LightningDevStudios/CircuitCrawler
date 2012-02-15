@@ -1,11 +1,11 @@
 package com.lds;
 
-import java.util.HashMap;
-
 import android.graphics.Point;
 
 import com.lds.game.Tile;
 import com.lds.math.Vector2;
+
+import java.util.HashMap;
 
 public final class TilesetHelper 
 {

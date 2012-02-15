@@ -60,63 +60,104 @@ public class Tile
 	
 	/**
 	 * Gets the vertex data for this tile.
-	 * @param buffer The buffer to store the vertices in.
+	 * @return The tile's vertices.
 	 */
 	public float[] getVertexData()
 	{
 	    //calculate vertices
 	    float s = TILE_SIZE / 2;
-	    float[] vertices =
-        {
-            -s,  s,
-            -s, -s,
-             s, -s,
-             s,  s
-        };
+	    
+	    float[] vertices = null;
+        float[] texCoords = null;
+        //TODO get actual OpenGL ordered indices working
+        int[] order = null;
+	    
+	    switch (type)
+	    {
+	        case FLOOR:
+	            vertices = new float[]
+                {
+                    -s,  s, 0,
+                    -s, -s, 0,
+                     s, -s, 0,
+                     s,  s, 0
+                };
+	            texCoords = new float[]
+                {
+                    0, 0,
+                    0, 64f / 256f - 1f / 512f,
+                    64f / 512f - 1f / 1024f, 64.0f / 256.0f - 1f / 512f,
+                    64f / 512f - 1f / 1024f, 0
+                };
+	            order = new int[] { 0, 1, 2, 0, 2, 3 };
+	            break;
+	        case WALL:
+	            vertices = new float[]
+                {
+                    -s,  s, 0.175f,
+                    -s, -s, 0.175f,
+                     s, -s, 0.175f,
+                     s,  s, 0.175f,
+                     
+                    -s, -s, 0.175f,
+                    -s, -s, 0,
+                     s, -s, 0,
+                     s, -s, 0.175f
+                };
+	            texCoords = new float[]
+                {
+	                128f / 512f + 1f / 1024f, 64.0f / 256.0f + 1f / 512f,
+	                128f / 512f + 1f / 1024f, 128f / 256f - 1f / 512f,
+                    192f / 512f - 1f / 1024f, 128.0f / 256.0f - 1f / 512f,
+                    192f / 512f - 1f / 1024f, 64.0f / 256.0f + 1f / 512f,
+                    
+                    0, 64f / 256f + 1f / 512f,
+                    0, 128f / 256f - 1f / 512f,
+                    64f / 512f - 1f / 1024f, 128f / 256f - 1f / 512f,
+                    64f / 512f - 1f / 1024f, 64f / 256f + 1f / 512f
+                    
+                };
+	            order = new int[]
+                {
+                    0, 1, 2, 
+                    0, 2, 3,
+                    4, 5, 6,
+                    4, 6, 7
+                };
+	            break;
+	        default:
+	            //by default use the same vertices as the floor.
+	            vertices = new float[]
+	            {
+                    -s,  s, 0,
+                    -s, -s, 0,
+                     s, -s, 0,
+                     s,  s, 0
+	            };
+	            //grab the default texcoords.
+	            texCoords = TilesetHelper.getTextureVertices(Game.tilesetworld, texPos);
+	            order = new int[] { 0, 1, 2, 0, 2, 3 };
+	    }
+	    
+	    
 	    
 	    //shift vertices to position
-        for (int i = 0; i < vertices.length; i++)
+        for (int i = 0; i < vertices.length; i += 3)
         {
-            if (i % 2 == 0)
-                vertices[i] += pos.x();
-            else
-                vertices[i] += pos.y();
+            vertices[i] += pos.x();
+            vertices[i + 1] += pos.y();
         }
         
-        //get texture vertices
-        float[] texCoords = TilesetHelper.getTextureVertices(Game.tilesetworld, texPos);
-        
-        if (this.type == TileType.FLOOR)
-        {
-            texCoords = new float[]
-            {
-                0, 0,
-                0, 64f / 256f - 1f / 512f,
-                64f / 512f - 1f / 1024f, 0,
-                64f / 512f - 1f / 1024f, 64.0f / 256.0f - 1f / 512f
-            };
-        }
-        
-        float[] texCoordTempSwap = { texCoords[4], texCoords[5] };
-        
-        texCoords[4] = texCoords[6];
-        texCoords[5] = texCoords[7];
-        
-        texCoords[6] = texCoordTempSwap[0];
-        texCoords[7] = texCoordTempSwap[1];
-        
-        //2 floats per vert * 4 verts per array * 2 arrays
-        float[] vertexData = new float[2 * 6 * 2];
-        
-        int[] order = { 0, 1, 2, 0, 2, 3 };
+        float[] vertexData = new float[order.length * 5];
         
         //interleave arrays
         for (int i = 0; i < order.length; i++)
         {
-            vertexData[i * 4]     = vertices[order[i] * 2];
-            vertexData[i * 4 + 1] = vertices[order[i] * 2 + 1];
-            vertexData[i * 4 + 2] = texCoords[order[i] * 2];
-            vertexData[i * 4 + 3] = texCoords[order[i] * 2 + 1];
+            vertexData[i * 5]     = vertices[order[i] * 3];
+            vertexData[i * 5 + 1] = vertices[order[i] * 3 + 1];
+            vertexData[i * 5 + 2] = vertices[order[i] * 3 + 2];
+            vertexData[i * 5 + 3] = texCoords[order[i] * 2];
+            vertexData[i * 5 + 4] = texCoords[order[i] * 2 + 1];
         }
         
         return vertexData;

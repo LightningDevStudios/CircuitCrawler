@@ -68,12 +68,14 @@ public class LevelRenderer implements com.lds.LevelSurfaceView.Renderer
 		//openGL settings
 	    gl.glViewport(0, 0, (int)Game.screenW, (int)Game.screenH);
 		gl.glShadeModel(GL11.GL_SMOOTH);
+		gl.glEnable(GL11.GL_DEPTH_TEST);
+		//gl.glDepthRangef(0.01f, 1f);
+		gl.glDepthFunc(GL11.GL_LEQUAL);
+		gl.glDepthMask(true);
 		gl.glEnable(GL11.GL_BLEND);
 		gl.glBlendFunc(GL11.GL_ONE, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
 		gl.glClearColor(0.39f, 0.58f, 0.93f, 1.0f);
-		
-		gl.glDisable(GL11.GL_DEPTH_TEST);
 		
 		//start the timer and use an initial tick to prevent errors where elapsed time is a very large negative number
 		Stopwatch.start();
@@ -116,7 +118,7 @@ public class LevelRenderer implements com.lds.LevelSurfaceView.Renderer
 
 		GL11 gl = (GL11)gl10;
 		
-		gl.glClear(GL11.GL_COLOR_BUFFER_BIT);
+		gl.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
 		//remove entities that are queued for removal
 		//tick the stop watch every frame, gives relatively stable intervals
 		//frameCount++;
@@ -194,6 +196,7 @@ public class LevelRenderer implements com.lds.LevelSurfaceView.Renderer
 		 * Render all Entites *
 		 **********************/
 		
+		
 		gl.glEnable(GL11.GL_TEXTURE_2D);
 		gl.glEnableClientState(GL11.GL_VERTEX_ARRAY);
         gl.glEnableClientState(GL11.GL_TEXTURE_COORD_ARRAY);
@@ -210,6 +213,7 @@ public class LevelRenderer implements com.lds.LevelSurfaceView.Renderer
 		gl.glDisable(GL11.GL_TEXTURE_2D);
 		gl.glDisableClientState(GL11.GL_VERTEX_ARRAY);
         gl.glDisableClientState(GL11.GL_TEXTURE_COORD_ARRAY);
+        
 		
 		game.btnB.unpress();
 		
@@ -220,6 +224,7 @@ public class LevelRenderer implements com.lds.LevelSurfaceView.Renderer
 		//Render UI, in the UI perspective
 		viewHUD(gl);
 		
+		gl.glDisable(GL11.GL_DEPTH_TEST);
 		gl.glEnableClientState(GL11.GL_VERTEX_ARRAY);
 		
 		for (Control ent : game.UIList)
@@ -234,6 +239,7 @@ public class LevelRenderer implements com.lds.LevelSurfaceView.Renderer
 		}
 		
 		gl.glDisableClientState(GL11.GL_VERTEX_ARRAY);
+		gl.glEnable(GL11.GL_DEPTH_TEST);
 		
 		viewWorld(gl);
 				

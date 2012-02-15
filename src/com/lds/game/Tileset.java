@@ -89,8 +89,8 @@ public class Tileset
     {        
         gl.glBindTexture(GL11.GL_TEXTURE_2D, tex.getTexture());
         gl.glBindBuffer(GL11.GL_ARRAY_BUFFER, vertBuffer);
-        gl.glVertexPointer(2, GL11.GL_FLOAT, 16, 0);
-        gl.glTexCoordPointer(2, GL11.GL_FLOAT, 16, 8);
+        gl.glVertexPointer(3, GL11.GL_FLOAT, 20, 0);
+        gl.glTexCoordPointer(2, GL11.GL_FLOAT, 20, 12);
         
         gl.glDrawArrays(GL11.GL_TRIANGLES, 0, indCount);
         
