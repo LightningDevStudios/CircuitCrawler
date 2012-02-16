@@ -45,10 +45,10 @@ public class Rectangle extends Shape
 
         float[] vertices = 
         {
-            -x,  y,
-            -x, -y,
-             x, -y,
-             x,  y
+            x,  y,
+            x, -y,
+            -x, y,
+            -x, -y
         };
 
         this.vertices = vertices;
