@@ -61,9 +61,7 @@ public class World
             if (s.isStatic)
                 continue;
             
-            //TODO: add friction
-            //s.addImpulse(new Vector2(0, -9.81f * s.getMass() * frameTime));
-            s.Integrate(frameTime);
+            s.integrate(frameTime);
         }
     }
 }
