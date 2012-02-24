@@ -12,7 +12,7 @@ public class CollisionDetector
     public SpatialHashGrid spatialHash;
 
     public ArrayList<Contact> contacts;
-
+    
     public CollisionDetector(Vector2 size, ArrayList<Shape> shapes)
     {
         this.size = size;
@@ -20,18 +20,19 @@ public class CollisionDetector
 
         spatialHash = new SpatialHashGrid(shapes, size.x(), size.y(), 2, 2);
         contacts = new ArrayList<Contact>();
+        
+       
     }
 
     public void update()
     {
         spatialHash.populate();
         updateCollisions();
-        spatialHash.clear();
     }
 
     public void updateCollisions()
     {        
-        contacts = spatialHash.getCollisionPairs();
+        spatialHash.getCollisionPairs(contacts);
         
         for (int i = contacts.size() - 1; i >= 0; i--)
         {

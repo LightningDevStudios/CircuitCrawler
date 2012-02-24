@@ -60,9 +60,9 @@ public class SpatialHashGrid
     /// Gets every possible pair of neighbors.
     /// </summary>
     /// <returns>A ArrayList of neighbor pairs.</returns>
-    public ArrayList<Contact> getCollisionPairs()
+    public void getCollisionPairs(ArrayList<Contact> neighbors)
     {
-        ArrayList<Contact> neighbors = new ArrayList<Contact>();
+        neighbors.clear();
 
         //iterate through all the buckets
         for (ArrayList<Shape> bucket : buckets.values())
@@ -75,8 +75,6 @@ public class SpatialHashGrid
                 for (int j = i + 1; j < itemCount; j++)
                     neighbors.add(new Contact(bucket.get(i), bucket.get(j)));
         }
-
-        return neighbors;
     }
 
     /// <summary>
@@ -158,11 +156,6 @@ public class SpatialHashGrid
     {
         ArrayList<Integer> bucketIDs = new ArrayList<Integer>();
 
-        int idBL = GetBucketID(bbox.getLeftBound(), bbox.getBottomBound());
-        int idTR = GetBucketID(bbox.getRightBound(), bbox.getTopBound());
-
-        int colStart, colEnd, rowStart, rowEnd;
-
         //if the entire bounding box is outside of the scene, don't add any buckets.
         if (bbox.getLeftBound() > sceneWidth
             || bbox.getRightBound() < 0
@@ -170,11 +163,14 @@ public class SpatialHashGrid
             || bbox.getTopBound() < 0)
             return bucketIDs;
 
+        int idBL = GetBucketID(bbox.getLeftBound(), bbox.getBottomBound());
+        int idTR = GetBucketID(bbox.getRightBound(), bbox.getTopBound());
+        
         //Calculate columns/rows from bucket IDs.
-        colStart = idBL % cellsX;
-        colEnd = idTR % cellsX;
-        rowStart = idBL / cellsX;
-        rowEnd = idTR / cellsX;
+        int colStart = idBL % cellsX;
+        int colEnd = idTR % cellsX;
+        int rowStart = idBL / cellsX;
+        int rowEnd = idTR / cellsX;
 
         //iterate through all the containing tiles and add them.
         for (int i = rowStart; i <= rowEnd; i++)
@@ -236,7 +232,7 @@ public class SpatialHashGrid
         return elements.remove(item);
     }
     
-    public static float Clamp(float value, float min, float max)
+    private static float Clamp(float value, float min, float max)
     {
         return (value < min) ? min : ((value > max) ? max : value);
     }
