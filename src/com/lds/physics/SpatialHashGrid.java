@@ -163,7 +163,7 @@ public class SpatialHashGrid
 
         int colStart, colEnd, rowStart, rowEnd;
 
-        //if the entire bounding box is outside of the scene, don'Shape add any buckets.
+        //if the entire bounding box is outside of the scene, don't add any buckets.
         if (bbox.getLeftBound() > sceneWidth
             || bbox.getRightBound() < 0
             || bbox.getBottomBound() > sceneHeight

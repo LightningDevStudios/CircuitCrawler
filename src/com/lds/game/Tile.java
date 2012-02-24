@@ -90,9 +90,14 @@ public class Tile
 	            order = new int[] { 0, 1, 2, 0, 2, 3 };
 	            break;
 	        case WALL:
-	            vertices = TilesetHelper.getWallVertices(this.borders, s);
-	            texCoords = TilesetHelper.getWallTextureVertices(this.borders);
-	            order = TilesetHelper.getWallIndices(this.borders);
+	            vertices = TilesetHelper.getTileVertices(this.borders, s, 0.2f);
+	            texCoords = TilesetHelper.getWallTexCoords(this.borders);
+	            order = TilesetHelper.getTileIndices(this.borders);
+	            break;
+	        case PIT:
+	            vertices = TilesetHelper.getTileVertices(this.borders, s, -0.2f);
+	            texCoords = TilesetHelper.getPitTexCoords(this.borders);
+	            order = TilesetHelper.getTileIndices(this.borders);
 	            break;
 	        default:
 	            //by default use the same vertices as the floor.

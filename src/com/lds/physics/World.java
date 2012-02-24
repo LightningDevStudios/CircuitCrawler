@@ -1,6 +1,5 @@
 package com.lds.physics;
 
-import com.lds.game.entity.Entity;
 import com.lds.math.Vector2;
 import com.lds.physics.primatives.*;
 import com.lds.physics.forcegenerators.*;
@@ -45,12 +44,8 @@ public class World
         //Update the detector
         collisionDetector.update();
 
-        //resolve collisions
-        if (collisionDetector.contacts.size() >= 1)
-        {
-            for (Contact c : collisionDetector.contacts)
-                c.Resolve(frameTime);
-        }
+        for (Contact c : collisionDetector.contacts)
+            c.Resolve(frameTime);
 
         for (GlobalForce f : forces)
             f.UpdateForce(frameTime);

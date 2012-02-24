@@ -86,7 +86,7 @@ public class LevelRenderer implements com.lds.LevelSurfaceView.Renderer
 		float aspectRatio = Game.screenW / Game.screenH;
 		
 		//projWorld = Matrix4.ortho(game.camPosX - (Game.screenW / 2), game.camPosX + (Game.screenW / 2), game.camPosY + (Game.screenH / 2), game.camPosY - (Game.screenH / 2), 0, 1);
-		projWorld = Matrix4.perspective(-2.5f, 2.5f, 2.5f / aspectRatio, -2.5f / aspectRatio, 0.01f, 1);
+		projWorld = Matrix4.perspective(-2.5f, 2.5f, 2.5f / aspectRatio, -2.5f / aspectRatio, 0.01f, 1.5f);
 		projUI = Matrix4.ortho(-Game.screenW / 2 , Game.screenW / 2, Game.screenH / 2, -Game.screenH / 2, 0, 1);
 		
 		for (Entity ent : game.entities)
