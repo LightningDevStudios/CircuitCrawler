@@ -34,7 +34,7 @@ public class Contact
         ResolveVelocity();
     }
 
-    protected void ResolveInterpenetration()
+    private void ResolveInterpenetration()
     {
         if (penetration <= 0 || a.isStatic && b.isStatic)
             return;
@@ -48,7 +48,7 @@ public class Contact
             b.setPos(Vector2.subtract(b.getPos(), Vector2.scale(movePerIMass, b.getMass())));
     }
 
-    protected void ResolveVelocity()
+    private void ResolveVelocity()
     {
         if (a.isStatic && b.isStatic)
             return;

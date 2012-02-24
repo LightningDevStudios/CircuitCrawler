@@ -12,7 +12,7 @@ public class CollisionDetector
     public SpatialHashGrid spatialHash;
 
     public ArrayList<Contact> contacts;
-
+    
     public CollisionDetector(Vector2 size, ArrayList<Shape> shapes)
     {
         this.size = size;
@@ -20,59 +20,54 @@ public class CollisionDetector
 
         spatialHash = new SpatialHashGrid(shapes, size.x(), size.y(), 2, 2);
         contacts = new ArrayList<Contact>();
+        
+       
     }
 
     public void update()
     {
         spatialHash.populate();
-        contacts = updateCollisions();
-        spatialHash.clear();
+        updateCollisions();
     }
 
-    public ArrayList<Contact> updateCollisions()
-    {
-        ArrayList<Contact> broadPhaseContacts = spatialHash.getCollisionPairs();
-        ArrayList<Contact> nearPhaseContacts = new ArrayList<Contact>();
-    
-        for (Contact contact : broadPhaseContacts)
+    public void updateCollisions()
+    {        
+        spatialHash.getCollisionPairs(contacts);
+        
+        for (int i = contacts.size() - 1; i >= 0; i--)
         {
-            Contact c = colliding(contact);
-            if (c != null)
-                nearPhaseContacts.add(c);
+            if (!colliding(contacts.get(i)))
+                contacts.remove(i);
         }
-    
-        return nearPhaseContacts;
     }
 
-    public static Contact colliding(Contact c)
+    public static boolean colliding(Contact c)
     {
-        return Colliding(c.a, c.b);
-    }
-
-    public static Contact Colliding(Shape a, Shape b)
-    {
+        Shape a = c.a;
+        Shape b = c.b;
+        
         if (a == b)
-            return null;
+            return false;
 
         //TODO check a and b with "instanceof" once and store the Types.
         if (a instanceof Circle && b instanceof Circle)
-            return RadiusCheckCircles((Circle)a, (Circle)b);
+            return RadiusCheckCircles(c);
         else if (!RadiusCheck(a, b))
-                return null;
+                return false;
         
         if (a instanceof Rectangle)
         {
             if (b instanceof Circle)
-                return SATRectangleCircle((Rectangle)a, (Circle)b);
+                return SATRectangleCircle(c, true);
             else if (b instanceof Rectangle)
-                return SATRectangles((Rectangle)a, (Rectangle)b);
+                return SATRectangles(c);
         }
         else if (b instanceof Circle && b instanceof Rectangle)
         {
-            return SATRectangleCircle((Rectangle)b, (Circle)a);
+            return SATRectangleCircle(c, false);
         }
     
-        return null;
+        return false;
     }
 
     public static boolean RadiusCheck(Shape a, Shape b)
@@ -82,25 +77,46 @@ public class CollisionDetector
         return Vector2.subtract(a.getPos(), b.getPos()).length() < (float)(diagonalA + diagonalB);
     }
 
-    public static Contact RadiusCheckCircles(Circle a, Circle b)
+    public static boolean RadiusCheckCircles(Contact c)
     {
+        Circle a = (Circle)c.a;
+        Circle b = (Circle)c.b;
+        
         Vector2 contactNormal = Vector2.subtract(a.getPos(), b.getPos());
         float penetration = contactNormal.length();
 
         if (penetration > a.getRadius() + b.getRadius())
-            return null;
+            return false;
 
         contactNormal = Vector2.scale(contactNormal,  1 / penetration);
         Vector2 contactPoint = Vector2.add(b.getPos(), Vector2.scale(contactNormal, b.getRadius()));
 
-        return new Contact(a, b, penetration, contactNormal);
+        c.penetration = penetration;
+        c.contactNormal = contactNormal;
+        
+        return true;
     }
 
-    public static Contact SATRectangleCircle(Rectangle r, Circle c)
+    public static boolean SATRectangleCircle(Contact contact, boolean aIsRect)
     {
+        Rectangle r;
+        Circle c;
+        
+        if (aIsRect)
+        {
+            r = (Rectangle)contact.a;
+            c = (Circle)contact.b;
+        }
+        
+        else
+        {
+            r = (Rectangle)contact.b;
+            c = (Circle)contact.a;
+        }
+        
         Vector2[] axes = new Vector2[3];
         float penetration = Float.MAX_VALUE;
-        Vector2 contactNormal = new Vector2(0, 0);
+        Vector2 contactNormal = null;
 
         Vector2 v = Vector2.subtract(r.getWorldVertices()[0], r.getWorldVertices()[1]);
         axes[0] = new Vector2(Math.abs(v.x()), Math.abs(v.y()));
@@ -156,16 +172,22 @@ public class CollisionDetector
                 }
             }
             else
-                return null;
+                return false;
         }
 
-        return new Contact(r, c, penetration, contactNormal);
+        contact.penetration = penetration;
+        contact.contactNormal = contactNormal;
+        
+        return true;
     }
 
-    public static Contact SATRectangles(Rectangle a, Rectangle b)
+    public static boolean SATRectangles(Contact c)
     {
+        Rectangle a = (Rectangle)c.a;
+        Rectangle b = (Rectangle)c.b;
+        
         float penetration = Float.MAX_VALUE;
-        Vector2 contactNormal = new Vector2(0, 0);
+        Vector2 contactNormal = null;
         Vector2[] axes = new Vector2[4];
 
         Vector2 v = Vector2.subtract(a.getWorldVertices()[0], a.getWorldVertices()[1]);
@@ -232,10 +254,13 @@ public class CollisionDetector
                 }
             }
             else
-                return null;
+                return false;
         }
 
-        return new Contact(a, b, penetration, contactNormal);
+        c.penetration = penetration;
+        c.contactNormal = contactNormal;
+        
+        return true;
     }
 
     public static boolean ContainsPoint(Circle c, Vector2 v)
