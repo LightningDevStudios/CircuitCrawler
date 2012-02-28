@@ -172,15 +172,18 @@ public abstract class Shape
             f.UpdateForce(frameTime, this);
                 
         //apply friction
-        float impulseLength = totalImpulse.length();
-        if (impulseLength < staticFriction * mass)
-            totalImpulse = Vector2.ZERO;
-        else
-            totalImpulse = Vector2.subtract(totalImpulse, Vector2.scale(totalImpulse, -frameTime * kineticFriction * mass / impulseLength));
+        //float impulseLength = totalImpulse.length();
+        //if (impulseLength < staticFriction * mass)
+           // totalImpulse = Vector2.ZERO;
+        //else
+            //totalImpulse = Vector2.subtract(totalImpulse, Vector2.scale(totalImpulse, -frameTime * kineticFriction * mass / impulseLength));
         
         //add impulse
-        velocity = Vector2.add(velocity, Vector2.scale(totalImpulse, 1 / mass));
-
+        if (totalImpulse.length() > 0)
+        {
+            velocity = Vector2.add(velocity, Vector2.scale(totalImpulse, 1 / mass));
+        }
+        
         setPos(Vector2.add(position, Vector2.scale(velocity, frameTime)));
 
         totalImpulse = Vector2.ZERO;
