@@ -144,8 +144,8 @@ public abstract class Shape
     public Shape(Vector2 position, float angle, boolean solid)
     {
         density = 1;
-        staticFriction = 2.3f;
-        kineticFriction = 4f;
+        staticFriction = 0.4f;
+        kineticFriction = 10;
         velocity = new Vector2(0, 0);
         totalImpulse = new Vector2(0, 0);
         forces = new ArrayList<IndivForce>();
@@ -172,17 +172,21 @@ public abstract class Shape
             f.UpdateForce(frameTime, this);
                 
         //apply friction
-        //float impulseLength = totalImpulse.length();
-        //if (impulseLength < staticFriction * mass)
-           // totalImpulse = Vector2.ZERO;
-        //else
-            //totalImpulse = Vector2.subtract(totalImpulse, Vector2.scale(totalImpulse, -frameTime * kineticFriction * mass / impulseLength));
+        float speed = velocity.length();
+        if (speed == 0)
+        {
+            if (totalImpulse.length() < staticFriction * mass)
+                totalImpulse = Vector2.ZERO;
+        }
+        else
+            addImpulse(Vector2.scale(velocity, -kineticFriction * mass / speed * frameTime));
+        
+        //velocity damping
+        velocity = Vector2.scale(velocity, 0.9f);
         
         //add impulse
         if (totalImpulse.length() > 0)
-        {
             velocity = Vector2.add(velocity, Vector2.scale(totalImpulse, 1 / mass));
-        }
         
         setPos(Vector2.add(position, Vector2.scale(velocity, frameTime)));
 
