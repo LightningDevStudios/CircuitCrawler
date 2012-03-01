@@ -42,9 +42,12 @@ public class CollisionDetector
     }
 
     public static boolean colliding(Contact c)
-    {
+    {        
         Shape a = c.a;
         Shape b = c.b;
+        
+        if (a instanceof Circle || b instanceof Circle)
+            System.out.println("lol");
         
         if (a == b)
             return false;
@@ -55,7 +58,7 @@ public class CollisionDetector
         else if (!RadiusCheck(a, b))
                 return false;
         
-        if (a instanceof Rectangle)
+        /*if (a instanceof Rectangle)
         {
             if (b instanceof Circle)
                 return SATRectangleCircle(c, true);
@@ -65,9 +68,10 @@ public class CollisionDetector
         else if (b instanceof Circle && b instanceof Rectangle)
         {
             return SATRectangleCircle(c, false);
-        }
+        }*/
+        return SAT(c);
     
-        return false;
+        //return false;
     }
 
     public static boolean RadiusCheck(Shape a, Shape b)
@@ -89,99 +93,66 @@ public class CollisionDetector
             return false;
 
         contactNormal = Vector2.scale(contactNormal,  1 / penetration);
-        Vector2 contactPoint = Vector2.add(b.getPos(), Vector2.scale(contactNormal, b.getRadius()));
 
         c.penetration = penetration;
         c.contactNormal = contactNormal;
         
         return true;
     }
-
-    public static boolean SATRectangleCircle(Contact contact, boolean aIsRect)
-    {
-        Rectangle r;
-        Circle c;
+    
+    public static boolean SAT(Contact c)
+    {   
+        float a;
+        if (c.a instanceof Circle || c.b instanceof Circle)
+            a = 4;
         
-        if (aIsRect)
-        {
-            r = (Rectangle)contact.a;
-            c = (Circle)contact.b;
-        }
-        
-        else
-        {
-            r = (Rectangle)contact.b;
-            c = (Circle)contact.a;
-        }
-        
-        Vector2[] axes = new Vector2[3];
         float penetration = Float.MAX_VALUE;
         Vector2 contactNormal = null;
-
-        Vector2 v = Vector2.subtract(r.getWorldVertices()[0], r.getWorldVertices()[1]);
-        axes[0] = new Vector2(Math.abs(v.x()), Math.abs(v.y()));
-        axes[1] = Vector2.perpendicularLeft(axes[0]);
-        axes[2] = Vector2.subtract(r.getWorldVertices()[0], c.getPos());
-        for (int i = 1; i < r.getWorldVertices().length; i++)
+        
+        Vector2[] axesA = c.a.getSATAxes(c.b);
+        int lengthA = axesA.length;
+        Vector2[] axesB = c.b.getSATAxes(c.a);
+        int lengthB = axesB.length;
+        Vector2[] axes = new Vector2[lengthA +  lengthB];
+        
+        for (int i = 0; i < lengthA; i++)
+            axes[i] = axesA[i];
+        
+        for (int i = 0; i < lengthB; i++)
+            axes[i + lengthA] = axesB[i];
+        
+        for (int i = 0; i < axes.length; i++)
         {
-            Vector2 tempVec = Vector2.subtract(r.getWorldVertices()[i], c.getPos());
-            if (axes[2].length() > tempVec.length())
+            float[] projA = c.a.project(axes[i]);
+            float[] projB = c.b.project(axes[i]);
+            
+            if (projA[1] >= projB[0] && projA[1] <= projB[1])
             {
-                axes[2] = tempVec;
-            }
-        }
-
-        for(int i = 0; i < axes.length; i++)
-        {
-            axes[i] = Vector2.normalize(axes[i]);
-
-            float min1 = Vector2.dot(axes[i], r.getWorldVertices()[0]);
-            float max1 = min1;
-            for (int j = 1; j < r.getWorldVertices().length; j++)
-            {
-                float dotProd1 = Vector2.dot(axes[i], r.getWorldVertices()[j]);
-                if (dotProd1 > max1)
-                    max1 = dotProd1;
-                if (dotProd1 < min1)
-                    min1 = dotProd1;
-            }
-
-            float min2 = Vector2.dot(axes[i], Vector2.add(c.getPos(), new Vector2(c.getRadius() * axes[i].x(), c.getRadius() * axes[i].y())));
-            float max2 = Vector2.dot(axes[i], Vector2.subtract(c.getPos(), new Vector2(c.getRadius() * axes[i].x(), c.getRadius() * axes[i].y())));
-            if (min2 > max2)
-            {
-                float temp = min2;
-                min2 = max2;
-                max2 = temp;
-            }
-
-            if (max1 >= min2 && max1 <= max2)
-            {
-                if (max1 - min2 < penetration)
+                if (projA[1] - projB[0] < penetration)
                 {
-                    penetration = max1 - min2;
+                    penetration = projA[1] - projB[0];
                     contactNormal = Vector2.negate(axes[i]);
                 }
             }
-            else if (max2 >= min1 && max2 <= max1)
+            else if (projB[1] >= projA[0] && projB[1] <= projA[1])
             {
-                if (max2 - min1 < penetration)
+                if (projB[1] - projA[0] < penetration)
                 {
-                    penetration = max2 - min1;
+                    penetration = projB[1] - projA[0];
                     contactNormal = axes[i];
                 }
             }
             else
                 return false;
         }
-
-        contact.penetration = penetration;
-        contact.contactNormal = contactNormal;
+        
+        c.penetration = penetration;
+        c.contactNormal = contactNormal;
         
         return true;
     }
 
-    public static boolean SATRectangles(Contact c)
+   /* public static boolean SATRectangles(Contact c)
     {
         Rectangle a = (Rectangle)c.a;
         Rectangle b = (Rectangle)c.b;
@@ -261,7 +232,7 @@ public class CollisionDetector
         c.contactNormal = contactNormal;
         
         return true;
-    }
+    }*/
 
     public static boolean ContainsPoint(Circle c, Vector2 v)
     {
