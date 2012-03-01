@@ -34,47 +34,21 @@ public class CollisionDetector
         
         boolean colliding = false;
         
-        float accuracy = 16;
+        float accuracy = 2;
         float maxLength = 4096;
         
-        float x = 0;
-        float y = 0;
-        
-        if(angle >= 0 && angle < 90)
-        {
-            y = (float) Math.sin(angle);
-            x = (float) Math.cos(angle);
-        }
-        else if(angle >= 90 && angle < 180)
-        {
-            angle = 180 - angle;
-            y = (float) Math.sin(angle);
-            x = (float) Math.cos(angle);
-        }
-        else if(angle >= 180 && angle < 270)
-        {
-            angle = -(180 - angle);
-            y = (float) Math.sin(angle);
-            x = (float) Math.cos(angle);
-        }
-        else if(angle >= 270 && angle <= 360)
-        {
-            angle = 360 - angle;
-            y = (float) Math.sin(angle);
-            x = (float) Math.cos(angle);
-        }
-        
-        Vector2 ray = new Vector2(start.x() + x, start.y() + y);
+        Vector2 ray = new Vector2(start.x() + (float) Math.sin(angle), start.y() + (float) Math.cos(angle));
         
         ArrayList<Shape> doNotCount = new ArrayList<Shape>();
         for(int i = 0; i < shapes.size(); i++)
             if(ContainsPoint(shapes.get(i), start))
                 doNotCount.add(shapes.get(i));
         
+        float mag = 0;
         float length = 1;
         while(!colliding && length < maxLength)
         {
-            Vector2 newRay = new Vector2(ray.x() * length, ray.y() * length);
+            Vector2 newRay = new Vector2(ray.x() + length, ray.y() + length);
             for(int i = 0; i < shapes.size(); i++)
             {
                 if(!doNotCount.contains(shapes.get(i)))
@@ -82,6 +56,7 @@ public class CollisionDetector
                     if(ContainsPoint(shapes.get(i), newRay))
                     {
                         colliding = true;
+                        mag = newRay.length();
                         break;
                     }
                 }
@@ -90,10 +65,10 @@ public class CollisionDetector
                 length += accuracy;
         }
         
-        if(length > maxLength)
-            length = maxLength;
+        if(mag > maxLength)
+            mag = maxLength;
         
-        return length;
+        return mag;
     }
     
     public void updateCollisions()
