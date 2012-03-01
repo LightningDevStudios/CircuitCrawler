@@ -9,6 +9,10 @@ public class CollisionDetector
 {
     private Vector2 size;
     private ArrayList<Shape> shapes;
+    
+    private boolean reverse;
+    private ArrayList<RayPoint> points;
+    
     public SpatialHashGrid spatialHash;
 
     public ArrayList<Contact> contacts;
@@ -17,6 +21,8 @@ public class CollisionDetector
     {
         this.size = size;
         this.shapes = shapes;
+        
+        reverse = false;
 
         spatialHash = new SpatialHashGrid(shapes, size.x(), size.y(), 2, 2);
         contacts = new ArrayList<Contact>();
@@ -31,7 +37,9 @@ public class CollisionDetector
     public ArrayList<RayPoint> rayCast(Vector2 start, Vector2 end)
     {
         //TODO check quad tree for grids before doing this
-        ArrayList<RayPoint> points = new ArrayList<RayPoint>();
+        
+        if(!reverse)
+            points = new ArrayList<RayPoint>();
         
         for(int i = 1; i < Vector2.subtract(start, end).length(); i++)
         {
@@ -48,16 +56,27 @@ public class CollisionDetector
                     for(int k = 0; k < points.size(); k++)
                     {
                         if(points.get(k).getShape() == shapes.get(j))
+                        {
                             contains = true;
+                            if(reverse)
+                            {
+                                points.get(k).setExitPoint(point);
+                            }
+                        }
                     }
                     
-                    if(!contains)
+                    if(!contains && !reverse)
                     {
-                        points.add(new RayPoint(shapes.get(j), point));
+                        RayPoint r = new RayPoint(shapes.get(j));
+                        r.setEntrancePoint(point);
                     }
                 }
             }
         }
+        reverse = true;
+        rayCast(end, start);
+        reverse = false;
+        
         return points;
     }
     
