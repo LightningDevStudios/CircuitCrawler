@@ -33,7 +33,7 @@ public class CollisionDetector
         //TODO check quad tree for grids before doing this
         ArrayList<RayPoint> points = new ArrayList<RayPoint>();
         
-        for(int i = 0; i < Vector2.subtract(start, end).length(); i++)
+        for(int i = 1; i < Vector2.subtract(start, end).length(); i++)
         {
             Vector2 lineMag = Vector2.subtract(start, end);
             Vector2 line = Vector2.normalize(lineMag);
@@ -42,7 +42,7 @@ public class CollisionDetector
             
             for(int j = 0; j < shapes.size(); j++)
             {
-                if(isInRectangle(shapes.get(j).getWorldVertices(), point))
+                if(ContainsPoint(shapes.get(j), point))
                 {
                     boolean contains = false;
                     for(int k = 0; k < points.size(); k++)
@@ -59,16 +59,6 @@ public class CollisionDetector
             }
         }
         return points;
-    }
-    
-    public boolean isInRectangle(Vector2[] vecs, Vector2 point) 
-    {       
-        Vector2 vec14 = Vector2.subtract(vecs[0], vecs[4]);
-        Vector2 vec34 = Vector2.subtract(vecs[3], vecs[4]);
-        Vector2 pointCenter = Vector2.subtract(new Vector2(point.x() * 2.0f, point.y() * 2.0f), Vector2.subtract(vecs[0], vecs[3]));
-       
-        return (Vector2.dot(vec34, Vector2.subtract(pointCenter, vec34)) <= 0 && Vector2.dot(vec34, Vector2.add(pointCenter, vec34)) >= 0) &&
-               (Vector2.dot(vec14, Vector2.subtract(pointCenter, vec14)) <= 0 && Vector2.dot(vec14, Vector2.add(pointCenter, vec14)) >= 0);
     }
     
     public void updateCollisions()
@@ -304,37 +294,39 @@ public class CollisionDetector
         return true;
     }
 
-    public static boolean ContainsPoint(Circle c, Vector2 v)
+    public static boolean ContainsPoint(Shape shape, Vector2 v)
     {
-        return Vector2.subtract(c.getPos(), v).length() < c.getRadius();
-    }
-
-    public static boolean ContainsPoint(Rectangle r, Vector2 v)
-    {
-        Vector2[] verts = r.getWorldVertices();
-        Vector2 axis = Vector2.subtract(verts[0], verts[1]);
-
-        for (int i = 0; i < 2; i++)
+        if(shape instanceof Circle)
+            return Vector2.subtract(shape.getPos(), v).length() < ((Circle)shape).getRadius();
+        
+        else if(shape instanceof Rectangle)
         {
-            float min = Vector2.dot(axis, verts[0]);
-            float max = min;
-            for (int j = 1; j < verts.length; j++)
+            Vector2[] verts = shape.getWorldVertices();
+            Vector2 axis = Vector2.subtract(verts[0], verts[1]);
+
+            for (int i = 0; i < 2; i++)
             {
-                float dotProd = Vector2.dot(axis, verts[j]);
-                if (dotProd > max)
-                    max = dotProd;
-                if (dotProd < min)
-                    min = dotProd;
+                float min = Vector2.dot(axis, verts[0]);
+                float max = min;
+                for (int j = 1; j < verts.length; j++)
+                {
+                    float dotProd = Vector2.dot(axis, verts[j]);
+                    if (dotProd > max)
+                        max = dotProd;
+                    if (dotProd < min)
+                        min = dotProd;
+                }
+
+                float projection = Vector2.dot(axis, v);
+
+                if (projection < min || projection > max)
+                    return false;
+
+                axis = Vector2.normalize(axis);
             }
 
-            float projection = Vector2.dot(axis, v);
-
-            if (projection < min || projection > max)
-                return false;
-
-            axis = Vector2.normalize(axis);
+            return true;
         }
-
-        return true;
+        return false;
     }
 }
