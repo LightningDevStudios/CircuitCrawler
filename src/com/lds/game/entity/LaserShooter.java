@@ -48,12 +48,9 @@ public class LaserShooter extends Entity
             if(laser != null)
                 EntityManager.removeEntity(laser);
             
-
-            //Vector2 end = null;
-           // physWorld.rayCast(getPos(), end);
-            
-            //laser = new Laser(beamWidth, shape.getAngle(), shape.getPos());
-            //EntityManager.addEntity(laser);
+            float length = physWorld.rayCast(getPos(), shape.getAngle());
+            laser = new Laser(beamWidth, length, shape.getAngle(), shape.getPos());
+            EntityManager.addEntity(laser);
         }
     }
 }

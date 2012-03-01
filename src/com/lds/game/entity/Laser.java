@@ -17,7 +17,7 @@ public class Laser extends Entity
     {
         if(ent instanceof Player)
         {
-          
+         
         }
     }
 }
