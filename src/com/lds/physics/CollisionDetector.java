@@ -20,8 +20,6 @@ public class CollisionDetector
 
         spatialHash = new SpatialHashGrid(shapes, size.x(), size.y(), 2, 2);
         contacts = new ArrayList<Contact>();
-        
-       
     }
 
     public void update()
@@ -30,6 +28,49 @@ public class CollisionDetector
         updateCollisions();
     }
 
+    public ArrayList<RayPoint> rayCast(Vector2 start, Vector2 end)
+    {
+        //TODO check quad tree for grids before doing this
+        ArrayList<RayPoint> points = new ArrayList<RayPoint>();
+        
+        for(int i = 0; i < Vector2.subtract(start, end).length(); i++)
+        {
+            Vector2 lineMag = Vector2.subtract(start, end);
+            Vector2 line = Vector2.normalize(lineMag);
+            
+            Vector2 point = Vector2.add(start, new Vector2((lineMag.length() + (float)i) * line.x(), (lineMag.length() + (float)i) * line.y()));
+            
+            for(int j = 0; j < shapes.size(); j++)
+            {
+                if(isInRectangle(shapes.get(j).getWorldVertices(), point))
+                {
+                    boolean contains = false;
+                    for(int k = 0; k < points.size(); k++)
+                    {
+                        if(points.get(k).getShape() == shapes.get(j))
+                            contains = true;
+                    }
+                    
+                    if(!contains)
+                    {
+                        points.add(new RayPoint(shapes.get(j), point));
+                    }
+                }
+            }
+        }
+        return points;
+    }
+    
+    public boolean isInRectangle(Vector2[] vecs, Vector2 point) 
+    {       
+        Vector2 vec14 = Vector2.subtract(vecs[0], vecs[4]);
+        Vector2 vec34 = Vector2.subtract(vecs[3], vecs[4]);
+        Vector2 pointCenter = Vector2.subtract(new Vector2(point.x() * 2.0f, point.y() * 2.0f), Vector2.subtract(vecs[0], vecs[3]));
+       
+        return (Vector2.dot(vec34, Vector2.subtract(pointCenter, vec34)) <= 0 && Vector2.dot(vec34, Vector2.add(pointCenter, vec34)) >= 0) &&
+               (Vector2.dot(vec14, Vector2.subtract(pointCenter, vec14)) <= 0 && Vector2.dot(vec14, Vector2.add(pointCenter, vec14)) >= 0);
+    }
+    
     public void updateCollisions()
     {        
         spatialHash.getCollisionPairs(contacts);

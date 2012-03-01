@@ -27,6 +27,11 @@ public class World
         collisionDetector = new CollisionDetector(this.size, shapes);
     }
 
+    public ArrayList<RayPoint> rayCast(Vector2 start, Vector2 end)
+    {
+        return collisionDetector.rayCast(start, end);
+    }
+    
     public void integrate(float frameTime)
     {
         frameTime /= 1000;
