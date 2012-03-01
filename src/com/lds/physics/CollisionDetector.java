@@ -10,20 +10,14 @@ public class CollisionDetector
     private Vector2 size;
     private ArrayList<Shape> shapes;
     
-    private boolean reverse;
-    private ArrayList<RayPoint> points;
-    
     public SpatialHashGrid spatialHash;
-
     public ArrayList<Contact> contacts;
     
     public CollisionDetector(Vector2 size, ArrayList<Shape> shapes)
     {
         this.size = size;
         this.shapes = shapes;
-        
-        reverse = false;
-
+       
         spatialHash = new SpatialHashGrid(shapes, size.x(), size.y(), 2, 2);
         contacts = new ArrayList<Contact>();
     }
@@ -34,51 +28,72 @@ public class CollisionDetector
         updateCollisions();
     }
 
-    public ArrayList<RayPoint> rayCast(Vector2 start, Vector2 end)
+    public float rayCast(Vector2 start, float angle)
     {
-        //TODO check quad tree for grids before doing this
+        //TODO check spatial grids before doing this to only use possible shapes
         
-        if(!reverse)
-            points = new ArrayList<RayPoint>();
+        boolean colliding = false;
         
-        for(int i = 1; i < Vector2.subtract(start, end).length(); i++)
+        float accuracy = 16;
+        float maxLength = 4096;
+        
+        float x = 0;
+        float y = 0;
+        
+        if(angle >= 0 && angle < 90)
         {
-            Vector2 lineMag = Vector2.subtract(start, end);
-            Vector2 line = Vector2.normalize(lineMag);
-            
-            Vector2 point = Vector2.add(start, new Vector2((lineMag.length() + (float)i) * line.x(), (lineMag.length() + (float)i) * line.y()));
-            
-            for(int j = 0; j < shapes.size(); j++)
+            y = (float) Math.sin(angle);
+            x = (float) Math.cos(angle);
+        }
+        else if(angle >= 90 && angle < 180)
+        {
+            angle = 180 - angle;
+            y = (float) Math.sin(angle);
+            x = (float) Math.cos(angle);
+        }
+        else if(angle >= 180 && angle < 270)
+        {
+            angle = -(180 - angle);
+            y = (float) Math.sin(angle);
+            x = (float) Math.cos(angle);
+        }
+        else if(angle >= 270 && angle <= 360)
+        {
+            angle = 360 - angle;
+            y = (float) Math.sin(angle);
+            x = (float) Math.cos(angle);
+        }
+        
+        Vector2 ray = new Vector2(start.x() + x, start.y() + y);
+        
+        ArrayList<Shape> doNotCount = new ArrayList<Shape>();
+        for(int i = 0; i < shapes.size(); i++)
+            if(ContainsPoint(shapes.get(i), start))
+                doNotCount.add(shapes.get(i));
+        
+        float length = 1;
+        while(!colliding && length < maxLength)
+        {
+            Vector2 newRay = new Vector2(ray.x() * length, ray.y() * length);
+            for(int i = 0; i < shapes.size(); i++)
             {
-                if(ContainsPoint(shapes.get(j), point))
+                if(!doNotCount.contains(shapes.get(i)))
                 {
-                    boolean contains = false;
-                    for(int k = 0; k < points.size(); k++)
+                    if(ContainsPoint(shapes.get(i), newRay))
                     {
-                        if(points.get(k).getShape() == shapes.get(j))
-                        {
-                            contains = true;
-                            if(reverse)
-                            {
-                                if(points.get(k).getExitPoint() == null)
-                                    points.get(k).setExitPoint(point);
-                            }
-                        }
-                    }
-                    
-                    if(!contains && !reverse)
-                    {
-                        RayPoint r = new RayPoint(shapes.get(j));
-                        r.setEntrancePoint(point);
+                        colliding = true;
+                        break;
                     }
                 }
             }
+            if(!colliding)
+                length += accuracy;
         }
-        reverse = true;
-        rayCast(end, start);
-        reverse = false;
         
-        return points;
+        if(length > maxLength)
+            length = maxLength;
+        
+        return length;
     }
     
     public void updateCollisions()
