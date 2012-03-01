@@ -31,42 +31,46 @@ public class CollisionDetector
     public float rayCast(Vector2 start, float angle)
     {
         //TODO check spatial grids before doing this to only use possible shapes
+        //TODO I think angles are off need to do mre testing once the player has a real texture
         
         boolean colliding = false;
         
         float accuracy = 2;
         float maxLength = 4096;
         
+        //Create a vector out of the angle with a magnitude of 1
         Vector2 ray = new Vector2((float) Math.sin(angle), (float) Math.cos(angle));
         
+        //Do not count any shapes that the ray originates on.
         ArrayList<Shape> doNotCount = new ArrayList<Shape>();
         for(int i = 0; i < shapes.size(); i++)
-            if(ContainsPoint(shapes.get(i), start))
+            if(ContainsPoint(shapes.get(i), start)) 
                 doNotCount.add(shapes.get(i));
         
         float mag = 0;
         float length = 1;
         while(!colliding && length < maxLength)
         {
+            //Create a ray that starts at the ray origin and has a magnitude of length
             Vector2 newRay = new Vector2(start.x() + ray.x() * length, start.y() + ray.y() * length);
             for(int i = 0; i < shapes.size(); i++)
             {
-                if(!doNotCount.contains(shapes.get(i)))
+                if(!doNotCount.contains(shapes.get(i))) // Make sure the colliding shape did not have the ray origionate inside of it
                 {
-                    if(ContainsPoint(shapes.get(i), newRay))
+                    if(ContainsPoint(shapes.get(i), newRay)) //If the ray hits something set the colliding flag
                     {
                         colliding = true;
-                        mag = newRay.length();
+                        mag = newRay.length(); //record the length.
                         break;
                     }
                 }
             }
-            if(!colliding)
+            if(!colliding) //if you did not collide yet increment the ray forward
                 length += accuracy;
         }
         
         if(mag > maxLength)
-            mag = maxLength;
+            mag = maxLength; // Cap mag to max
         
         return mag;
     }
