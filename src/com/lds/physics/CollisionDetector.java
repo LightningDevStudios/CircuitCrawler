@@ -37,7 +37,7 @@ public class CollisionDetector
         float accuracy = 2;
         float maxLength = 4096;
         
-        Vector2 ray = new Vector2(start.x() + (float) Math.sin(angle), start.y() + (float) Math.cos(angle));
+        Vector2 ray = new Vector2((float) Math.sin(angle), (float) Math.cos(angle));
         
         ArrayList<Shape> doNotCount = new ArrayList<Shape>();
         for(int i = 0; i < shapes.size(); i++)
@@ -48,7 +48,7 @@ public class CollisionDetector
         float length = 1;
         while(!colliding && length < maxLength)
         {
-            Vector2 newRay = new Vector2(ray.x() + length, ray.y() + length);
+            Vector2 newRay = new Vector2(start.x() + ray.x() * length, start.y() + ray.y() * length);
             for(int i = 0; i < shapes.size(); i++)
             {
                 if(!doNotCount.contains(shapes.get(i)))
