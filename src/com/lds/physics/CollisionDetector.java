@@ -60,7 +60,8 @@ public class CollisionDetector
                             contains = true;
                             if(reverse)
                             {
-                                points.get(k).setExitPoint(point);
+                                if(points.get(k).getExitPoint() == null)
+                                    points.get(k).setExitPoint(point);
                             }
                         }
                     }
