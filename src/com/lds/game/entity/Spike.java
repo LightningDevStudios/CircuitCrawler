@@ -22,7 +22,7 @@ public class Spike extends Entity
 	@Override
 	public void interact(Entity ent)
 	{
-	    if(ent instanceof Player)
+	    if (ent instanceof Player)
 	        EntityManager.removeEntity(ent);
 	}
 }

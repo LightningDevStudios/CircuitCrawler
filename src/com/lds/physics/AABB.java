@@ -13,6 +13,10 @@ public final class AABB
     private final float topBound;
     private final float bottomBound;
     
+    /**
+     * Initializes a new instance of the AABB class.
+     * @param vertices An array of vertices to calculate the bounding box for.
+     */
     public AABB(Vector2[] vertices)
     {
         float left = vertices[0].x();
@@ -39,6 +43,13 @@ public final class AABB
         bottomBound = bottom;
     }
     
+    /**
+     * Initializes a new instance of the AABB class.
+     * @param left The left bound.
+     * @param right The right bound.
+     * @param top The top bound.
+     * @param bottom The bottom bound.
+     */
     public AABB(float left, float right, float top, float bottom)
     {
         leftBound = left;
@@ -47,6 +58,12 @@ public final class AABB
         bottomBound = bottom;
     }
     
+    /**
+     * Converts an AABB from world-centered-at-(0,0) coordinates to bottom-left-at-(0,0) coordinates.
+     * @param worldX The size of the world in the X direction.
+     * @param worldY The size of the world in the Y direction.
+     * @return Another AABB in the new coordinate system.
+     */
     public AABB toBottomLeftCoords(float worldX, float worldY)
     {
         float halfX = worldX / 2;
@@ -55,21 +72,37 @@ public final class AABB
         return new AABB(leftBound + halfX, rightBound + halfX, topBound + halfY, bottomBound + halfY);
     }
     
+    /**
+     * Gets the left bound.
+     * @return The left bound.
+     */
     public float getLeftBound()
     {
         return leftBound;
     }
     
+    /**
+     * Gets the right bound.
+     * @return The right bound.
+     */
     public float getRightBound()
     {
         return rightBound;
     }
     
+    /**
+     * Gets the top bound.
+     * @return The top bound.
+     */
     public float getTopBound()
     {
         return topBound;
     }
     
+    /**
+     * Gets the bottom bound.
+     * @return The bottom bound.
+     */
     public float getBottomBound()
     {
         return bottomBound;

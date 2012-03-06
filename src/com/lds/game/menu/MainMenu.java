@@ -24,7 +24,7 @@ import android.widget.ViewAnimator;
 
 import com.lds.Vibrator;
 import com.lds.game.R;
-import com.lds.game.Run;
+import com.lds.game.LevelActivity;
 import com.lds.game.SoundPlayer;
 
 import java.io.FileInputStream;
@@ -633,7 +633,7 @@ public class MainMenu extends Activity
 	 */
 	public void runGame(int levelIndex)
 	{
-		Intent i = new Intent(MainMenu.this, Run.class);
+		Intent i = new Intent(MainMenu.this, LevelActivity.class);
 		i.putExtra("levelIndex", levelIndex);
 		i.putExtra("unlockedLevel", unlockedLevel);
 		startActivityForResult(i, 1);

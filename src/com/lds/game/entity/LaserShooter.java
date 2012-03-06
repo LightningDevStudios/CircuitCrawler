@@ -20,7 +20,7 @@ public class LaserShooter extends Entity
     
     public LaserShooter(Vector2 position, float size, float angle, float stupidity, float beamWidth, float shotsPerSecond, Player player, World physWorld)
     {
-        super(new Rectangle(new Vector2(size, size),position,angle,true));
+        super(new Rectangle(new Vector2(size, size), position, angle, true));
         
         this.shotsPerSecond = shotsPerSecond;
         this.stupidity = stupidity;
@@ -33,7 +33,7 @@ public class LaserShooter extends Entity
     public void facePlayer()
     {
         Vector2 distance = Vector2.subtract(shape.getPos(), player.getPos());
-        float angle = (float) (((float)Math.atan2(Vector2.perpDot(Vector2.UNIT_X,distance), Vector2.dot(Vector2.UNIT_X,distance))) + (Math.random() * 2 - 1) * stupidity);
+        float angle = (float)((Math.atan2(Vector2.perpDot(Vector2.UNIT_X, distance), Vector2.dot(Vector2.UNIT_X, distance))) + (Math.random() * 2 - 1) * stupidity);
         shape.setAngle(angle);
     }
     
@@ -47,10 +47,10 @@ public class LaserShooter extends Entity
         if (time / 1000 > shotsPerSecond)
         {
             time = 0;
-            if(laser != null)
+            if (laser != null)
                 EntityManager.removeEntity(laser);
             
-            float length = 6;//physWorld.rayCast(getPos(), shape.getAngle());
+            float length = 6; //physWorld.rayCast(getPos(), shape.getAngle());
             laser = new Laser(beamWidth, length, shape.getAngle(), shape.getPos());
             EntityManager.addEntity(laser);
         }

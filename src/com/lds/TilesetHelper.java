@@ -5,10 +5,15 @@ import android.graphics.Point;
 import com.lds.game.Tile;
 import com.lds.math.Vector2;
 
-import java.util.HashMap;
-
+/**
+ * A class that helps with tilesets and texture coordinates.
+ * @author Lightning Development Studios
+ */
 public final class TilesetHelper 
-{    
+{
+    /**
+     * Prevents initialization of this static class.
+     */
 	private TilesetHelper()
 	{
 		
@@ -122,6 +127,11 @@ public final class TilesetHelper
 	    return vertices;
 	}
 	
+	/**
+	 * Gets the texture coordinates for a wall tile.
+	 * @param borders A byte representing the tiles around the tile.
+	 * @return The texture coordinates as a float array.
+	 */
 	public static float[] getWallTexCoords(byte borders)
 	{
 	    boolean left = (borders & 0x08) == 0x08;
@@ -163,6 +173,11 @@ public final class TilesetHelper
         return texCoords;
 	}
 	
+	/**
+	 * Gets the texture coordinates for a pit tile.
+	 * @param borders A byte representing the tiles around the tile.
+	 * @return The texture coordinates as a float array.
+	 */
 	public static float[] getPitTexCoords(byte borders)
 	{
 	    boolean left = (borders & 0x08) == 0x08;
@@ -204,6 +219,11 @@ public final class TilesetHelper
         return texCoords;
 	}
 	
+	/**
+	 * Get the vertex normals for a tile.
+	 * @param borders A byte representing the tiles around the tile.
+	 * @return The normals as a float array.
+	 */
 	public static float[] getTileNormals(byte borders)
 	{
 	    float[] baseNormals =
@@ -270,6 +290,11 @@ public final class TilesetHelper
         return normals;
 	}
 	
+	/**
+	 * Gets the indices of the tile.
+	 * @param borders A byte representing the tiles around the tile.
+	 * @return The indices as an int array.
+	 */
 	public static int[] getTileIndices(byte borders)
 	{
 	    boolean left = (borders & 0x08) == 0x08;
@@ -321,14 +346,6 @@ public final class TilesetHelper
 			final float negY = y * intervalY + offsetY;
 			final float posY = (y + 1) * intervalY - offsetY;
 			
-			/*final float[] coords = 
-		    {
-		        negX, negY,
-				posX, negY,
-				negX, posY,
-				posX, posY 
-		    };*/
-			
 			final float[] coords = 
             {
                 negX, negY,
@@ -375,18 +392,6 @@ public final class TilesetHelper
 	public static int getTilesetID(int x, int y, Texture tex)
 	{
 		return y * tex.getXTiles() + x;
-	}
-	
-	public static void setInitialTilesetOffset(Tile[][] tileset)
-	{
-		final int length = tileset.length, width = tileset[0].length;
-		for (int i = 0; i < length; i++)
-		{
-			for (int j = 0; j < width; j++)
-			{
-			    tileset[i][j].setPos(new Vector2((-(float)width / 2 * Tile.TILE_SIZE_F) + (j * Tile.TILE_SIZE_F), ((float)length / 2 * Tile.TILE_SIZE_F) - (i * Tile.TILE_SIZE_F)));
-			}
-		}
 	}
 	
 	public static void setInitialTileOffset(Tile tile, Point p, int length, int width)

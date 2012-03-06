@@ -3,11 +3,9 @@ package com.lds.game;
 import android.graphics.Point;
 
 import com.lds.TilesetHelper;
-import com.lds.math.MathHelper;
 import com.lds.math.Vector2;
 
 import java.util.ArrayList;
-import java.util.Map;
 
 /**
  * A tile class.

@@ -4,7 +4,6 @@ import com.lds.math.Vector2;
 import com.lds.physics.primitives.*;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.TreeMap;
  
 public class CollisionDetector
@@ -35,7 +34,7 @@ public class CollisionDetector
         ArrayList<Shape> shapes = new ArrayList<Shape>();
         Vector2 dir = new Vector2((float)Math.cos(angle), (float)Math.sin(angle));
         float slope = dir.y() / dir.x();
-        float invSlope = - dir.x() / dir.y();
+        float invSlope = -dir.x() / dir.y();
         float yIntersect = dir.y() - slope * dir.x();
         float xIntersect = dir.x() - invSlope * dir.y();
         
@@ -117,10 +116,10 @@ public class CollisionDetector
         }       
         
         TreeMap<Float, Shape> distanceHash = new TreeMap<Float, Shape>();
-        for(int i = 0; i < shapes.size(); i++)
+        for (int i = 0; i < shapes.size(); i++)
             distanceHash.put(Vector2.subtract(start, shapes.get(i).getPos()).length(), shapes.get(i));       
         
-        for(int i = 0; i < distanceHash.size(); i++)
+        for (int i = 0; i < distanceHash.size(); i++)
         {
             Shape s = distanceHash.get(i);
             if (s instanceof Rectangle)
@@ -190,19 +189,19 @@ public class CollisionDetector
     
     public Vector2 PointOfIntersection(Vector2 line1Start, Vector2 line1End, Vector2 line2Start, Vector2 line2End)
     {
-        float s1_x, s1_y, s2_x, s2_y;
-        s1_x = line1End.x() - line1Start.x();     
-        s1_y = line1End.y() - line1Start.y();
-        s2_x = line2End.x() - line2Start.x();     
-        s2_y = line2End.y() - line2Start.y();
+        float s1x, s1y, s2x, s2y;
+        s1x = line1End.x() - line1Start.x();     
+        s1y = line1End.y() - line1Start.y();
+        s2x = line2End.x() - line2Start.x();     
+        s2y = line2End.y() - line2Start.y();
 
         float s, t;
-        s = (-s1_y * (line1Start.x() - line2Start.x()) + s1_x * (line1Start.y() - line2Start.y())) / (-s2_x * s1_y + s1_x * s2_y);
-        t = ( s2_x * (line1Start.y() - line2Start.y()) - s2_y * (line1Start.x() - line2Start.x())) / (-s2_x * s1_y + s1_x * s2_y);
+        s = (-s1y * (line1Start.x() - line2Start.x()) + s1x * (line1Start.y() - line2Start.y())) / (-s2x * s1y + s1x * s2y);
+        t = (s2x * (line1Start.y() - line2Start.y()) - s2y * (line1Start.x() - line2Start.x())) / (-s2x * s1y + s1x * s2y);
 
         if (s >= 0 && s <= 1 && t >= 0 && t <= 1)
         {
-            return new Vector2( line1Start.x() + (t * s1_x), line1Start.y() + (t * s1_y));
+            return new Vector2(line1Start.x() + (t * s1x), line1Start.y() + (t * s1y));
         }
         return null;
     }
@@ -410,10 +409,10 @@ public class CollisionDetector
 
     public static boolean ContainsPoint(Shape shape, Vector2 v)
     {
-        if(shape instanceof Circle)
+        if (shape instanceof Circle)
             return Vector2.subtract(shape.getPos(), v).length() < ((Circle)shape).getRadius();
         
-        else if(shape instanceof Rectangle)
+        else if (shape instanceof Rectangle)
         {
             Vector2[] verts = shape.getWorldVertices();
             Vector2 axis = Vector2.subtract(verts[0], verts[1]);

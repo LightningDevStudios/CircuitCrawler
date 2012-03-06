@@ -13,7 +13,7 @@ public class Laser extends Entity
     @Override
     public void interact(Entity ent)
     {
-        if(ent instanceof Player)
+        if (ent instanceof Player)
         {
          
         }

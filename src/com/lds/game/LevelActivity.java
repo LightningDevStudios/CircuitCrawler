@@ -18,12 +18,16 @@ import com.lds.game.puzzle.PuzzleActivity;
 
 import java.io.IOException;
 
-public class Run extends Activity implements GameOverListener, GameInitializedListener, PuzzleActivatedListener
+/**
+ * An activity that loads and plays a level.
+ * @author Lightning Development Studios
+ */
+public class LevelActivity extends Activity implements GameOverListener, GameInitializedListener, PuzzleActivatedListener
 {
 	public static final int PUZZLE_ACTIVITY = 2;
 	private int unlockedLevel, levelIndex, levelId;
 	private LevelSurfaceView glSurface;
-	private LevelRenderer gameR;
+	private LevelRenderer levelRenderer;
 	private MediaPlayer mp;
 	private ProgressDialog pd;
 	
@@ -93,10 +97,10 @@ public class Run extends Activity implements GameOverListener, GameInitializedLi
 		
 		//set up OpenGL rendering
 		Object syncObj = new Object();
-		gameR = new LevelRenderer(screenX, screenY, this, syncObj, levelId);
+		levelRenderer = new LevelRenderer(screenX, screenY, this, syncObj, levelId);
 				
-		gameR.setGameInitializedEvent(this);
-		glSurface = new LevelSurfaceView(this, gameR, syncObj);
+		levelRenderer.setGameInitializedEvent(this);
+		glSurface = new LevelSurfaceView(this, levelRenderer, syncObj);
 		
 		setContentView(glSurface);
 	}
@@ -106,8 +110,8 @@ public class Run extends Activity implements GameOverListener, GameInitializedLi
      */
 	public void onGameInitialized()
 	{
-		gameR.setGameOverEvent(this);
-		gameR.setPuzzleActivatedEvent(this);
+		levelRenderer.setGameOverEvent(this);
+		levelRenderer.setPuzzleActivatedEvent(this);
 
 	    pd.dismiss();
 	}
@@ -136,11 +140,14 @@ public class Run extends Activity implements GameOverListener, GameInitializedLi
 		}
 	}
 	
+	/**
+	 * Callback for when a puzzle is started.
+	 */
 	public void onPuzzleActivated()
 	{
-		gameR.clearTouchInput();
+		levelRenderer.clearTouchInput();
 		//glSurface.onPause();
-		Intent i = new Intent(Run.this, PuzzleActivity.class);
+		Intent i = new Intent(LevelActivity.this, PuzzleActivity.class);
 		i.putExtra("PUZZLE_RENDERER", "circuit.CircuitPuzzle");
 		startActivityForResult(i, PUZZLE_ACTIVITY);
 	}
@@ -190,7 +197,7 @@ public class Run extends Activity implements GameOverListener, GameInitializedLi
 	{
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.options_menu, menu);
-		gameR.paused = true;
+		levelRenderer.setPausedState(true);
 		return true;
 	}
 	
@@ -198,7 +205,7 @@ public class Run extends Activity implements GameOverListener, GameInitializedLi
 	public void onOptionsMenuClosed(Menu menu)
 	{
 		super.onOptionsMenuClosed(menu);
-		gameR.paused = false;
+		levelRenderer.setPausedState(false);
 	}
 	
 	@Override

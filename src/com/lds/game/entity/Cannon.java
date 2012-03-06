@@ -31,15 +31,15 @@ public class Cannon extends Entity
 	public void facePlayer()
 	{
 	    Vector2 distance = Vector2.subtract(shape.getPos(), player.getPos());
-	    float angle = (float)Math.atan2(Vector2.perpDot(Vector2.UNIT_X,distance), Vector2.dot(Vector2.UNIT_X,distance));
+	    float angle = (float)Math.atan2(Vector2.perpDot(Vector2.UNIT_X, distance), Vector2.dot(Vector2.UNIT_X, distance));
 	    shape.setAngle(angle);
 	}
 
-	@Override
 	/**
 	 * \todo add real physics.
 	 * @param gl The OpenGL context.
 	 */
+	@Override
 	public void update(GL11 gl)
 	{
 		super.update(gl);

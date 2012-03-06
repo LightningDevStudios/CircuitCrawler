@@ -6,14 +6,11 @@ import android.view.MotionEvent;
 import com.lds.Finger;
 import com.lds.Stopwatch;
 import com.lds.UI.*;
-import com.lds.Vibrator;
 import com.lds.game.entity.*;
 import com.lds.game.event.*;
 import com.lds.math.Matrix4;
 import com.lds.math.Vector2;
 import com.lds.math.Vector3;
-import com.lds.physics.CollisionDetector;
-import com.lds.physics.*;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
@@ -26,7 +23,7 @@ import javax.microedition.khronos.opengles.GL11;
 public class LevelRenderer implements com.lds.LevelSurfaceView.Renderer
 {
 	//public static boolean vibrateSetting = true;
-    public boolean paused, charlieSheen;
+    private boolean paused, charlieSheen;
     
 	private Game game;
 	private Context context;
@@ -37,7 +34,6 @@ public class LevelRenderer implements com.lds.LevelSurfaceView.Renderer
 	private int levelId;
 	
 	private Matrix4 projWorld, projUI;
-	private World world;
 	
 	/**
 	 * Initializes a new instance of the GameRenderer class.
@@ -61,6 +57,11 @@ public class LevelRenderer implements com.lds.LevelSurfaceView.Renderer
 		charlieSheen = false;
 	}
 
+	/**
+	 * Called when the OpenGL context is initialized and the surface is created.
+	 * @param gl10 An OpenGL|ES 1.0 context.
+	 * @param config The EGL configuration context.
+	 */
 	public void onSurfaceCreated(GL10 gl10, EGLConfig config)
 	{
 	    GL11 gl = (GL11)gl10;
@@ -111,7 +112,11 @@ public class LevelRenderer implements com.lds.LevelSurfaceView.Renderer
 		}
 	}
 	
-	public void onDrawFrame(GL10 gl10) 
+	/**
+	 * Draws a frame.
+	 * @param gl10 An OpenGL|ES 1.0 context.
+	 */
+	public void onDrawFrame(GL10 gl10)
 	{	
 		if (paused)
 			return;
@@ -152,7 +157,7 @@ public class LevelRenderer implements com.lds.LevelSurfaceView.Renderer
 		for (int i = 0; i < size; i++)
 		{
 			
-			final Entity ent = game.entities.get(i);
+			//final Entity ent = game.entities.get(i);
 			
 			/***************************
 			 * Performs Button Actions *
@@ -215,8 +220,8 @@ public class LevelRenderer implements com.lds.LevelSurfaceView.Renderer
         gl.glLightfv(GL11.GL_LIGHT0, GL11.GL_AMBIENT, new float[] { 0.8f, 0.8f, 0.8f, 1f }, 0);
         gl.glLightfv(GL11.GL_LIGHT0, GL11.GL_DIFFUSE, new float[] { 1f, 1f, 1f, 1f }, 0);
         gl.glLightf(GL11.GL_LIGHT0, GL11.GL_CONSTANT_ATTENUATION, 0f);
-        gl.glLightf(GL11.GL_LIGHT0, GL11.GL_LINEAR_ATTENUATION, 1/8192f);
-        gl.glLightf(GL11.GL_LIGHT0, GL11.GL_QUADRATIC_ATTENUATION, 1/20000f);
+        gl.glLightf(GL11.GL_LIGHT0, GL11.GL_LINEAR_ATTENUATION, 1 / 8192f);
+        gl.glLightf(GL11.GL_LIGHT0, GL11.GL_QUADRATIC_ATTENUATION, 1 / 20000f);
         //gl.glPopMatrix();
         game.renderTileset(gl);
         
@@ -279,11 +284,21 @@ public class LevelRenderer implements com.lds.LevelSurfaceView.Renderer
 		}*/
 	}
 	
+	/**
+	 * Called when the screen rotates or the screen otherwise changes.
+	 * @param gl The OpenGL context.
+	 * @param width The screen width.
+	 * @param height The screen height.
+	 */
 	public void onSurfaceChanged(GL10 gl, int width, int height)
 	{		
-		updateCamPosition(gl);
+		updateCamPosition((GL11)gl);
 	}
 
+	/**
+	 * Called when the user touches the screen.
+	 * @param e The MotionEvent created by the touch event.
+	 */
 	public void onTouchInput(MotionEvent e) 
 	{
 		if (game.player.userHasControl())
@@ -353,7 +368,7 @@ public class LevelRenderer implements com.lds.LevelSurfaceView.Renderer
 	 * @param gl The active OpenGL context.
 	 * \todo make a Camera class, use a view matrix instead and keep the projection the same.
 	 */
-	public void updateCamPosition(GL10 gl)
+	public void updateCamPosition(GL11 gl)
 	{
 	    //projWorld = Matrix4.ortho(game.camPosX - (Game.screenW / 2), game.camPosX + (Game.screenW / 2), game.camPosY + (Game.screenH / 2),  game.camPosY - (Game.screenH / 2), 0, 1);
 		viewWorld(gl);
@@ -364,11 +379,11 @@ public class LevelRenderer implements com.lds.LevelSurfaceView.Renderer
 	 * Loads the UI projection matrix.
 	 * @param gl The active OpenGL context.
 	 */
-	public void viewHUD(GL10 gl)
+	public void viewHUD(GL11 gl)
 	{
-		gl.glMatrixMode(GL10.GL_PROJECTION);
+		gl.glMatrixMode(GL11.GL_PROJECTION);
 		gl.glLoadMatrixf(projUI.array(), 0);
-		gl.glMatrixMode(GL10.GL_MODELVIEW);
+		gl.glMatrixMode(GL11.GL_MODELVIEW);
 		gl.glLoadIdentity();
 	}
 	
@@ -376,41 +391,80 @@ public class LevelRenderer implements com.lds.LevelSurfaceView.Renderer
 	 * Load the world projection matrix.
 	 * @param gl The active OpenGL context.
 	 */
-	public void viewWorld(GL10 gl)
+	public void viewWorld(GL11 gl)
 	{
-		gl.glMatrixMode(GL10.GL_PROJECTION);
+		gl.glMatrixMode(GL11.GL_PROJECTION);
 		gl.glLoadMatrixf(projWorld.array(), 0);
-		gl.glMatrixMode(GL10.GL_MODELVIEW);
+		gl.glMatrixMode(GL11.GL_MODELVIEW);
 		gl.glLoadIdentity();
-		gl.glMultMatrixf(Matrix4.translate(new Vector3(-game.camPosX, -game.camPosY, -1)).array(), 0);//Matrix4.rotateX((float)Math.PI / 4f).array(), 0);
+		gl.glMultMatrixf(Matrix4.translate(new Vector3(-game.camPosX, -game.camPosY, -1)).array(), 0);
 	}
 	
+	/**
+	 * Gets the paused state of the renderer.
+	 * @return A value indicating whether the game is paused.
+	 */
+	public boolean getPausedState()
+	{
+	    return paused;
+	}
+	
+	/**
+	 * Sets the game's paused state.
+	 * @param state A value indicating whether the game is paused.
+	 */
+	public void setPausedState(boolean state)
+	{
+	    paused = state;
+	}
+	
+	/**
+	 * Sets the callback event for when the game ends.
+	 * @param listener The callback.
+	 */
 	public void setGameOverEvent(GameOverListener listener) 
 	{
 		this.gameOverListener = listener;
 		game.setGameOverEvent(listener);
 	}
 	
+	/**
+	 * Sets the callback event for when the game is done loading.
+	 * @param listener The callback.
+	 */
 	public void setGameInitializedEvent(GameInitializedListener listener)
 	{
 		this.gameInitializedListener = listener;
 	}
 
+	/**
+	 * Sets the callback event for when a puzzle is activated.
+	 * @param listener The callback.
+	 */
 	public void setPuzzleActivatedEvent(PuzzleActivatedListener listener)
 	{
 		this.puzzleActivatedListener = listener;
 	}
 	
+	/**
+	 * Called when a puzzle is won.
+	 */
 	public void onPuzzleWon() 
 	{
 		// \TODO Auto-generated method stub
 	}
 
+	/**
+	 * Called when a puzzle is lost.
+	 */
 	public void onPuzzleFailed() 
 	{
 		// \TODO Auto-generated method stub
 	}
 	
+	/**
+	 * Ends the game.
+	 */
 	public void gameOver()
 	{
 		gameOverListener.onGameOver(charlieSheen);

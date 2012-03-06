@@ -8,7 +8,7 @@ import com.lds.math.Vector2;
  */
 public class Circle extends Shape
 {
-    public float radius;
+    private float radius;
     
     /****************
      * Constructors *

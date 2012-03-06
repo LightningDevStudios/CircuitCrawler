@@ -2,7 +2,7 @@ package com.lds.parser;
 
 import com.lds.trigger.Cause;
 
-public class CauseData 
+public class CauseData
 {
 	private Cause cause;
 	private String id;
