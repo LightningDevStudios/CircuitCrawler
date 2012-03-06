@@ -144,8 +144,8 @@ public abstract class Shape
     public Shape(Vector2 position, float angle, boolean solid)
     {
         density = 1;
-        staticFriction = 0.4f;
-        kineticFriction = 10;
+        staticFriction = 0f;
+        kineticFriction = 0f;
         velocity = new Vector2(0, 0);
         totalImpulse = new Vector2(0, 0);
         forces = new ArrayList<IndivForce>();
@@ -182,7 +182,7 @@ public abstract class Shape
             addImpulse(Vector2.scale(velocity, -kineticFriction * mass / speed * frameTime));
         
         //velocity damping
-        velocity = Vector2.scale(velocity, 0.9f);
+        //velocity = Vector2.scale(velocity, 0.9f);
         
         //add impulse
         if (totalImpulse.length() > 0)
@@ -247,6 +247,20 @@ public abstract class Shape
      * Abstract method used to estimate mass.
      */
     protected abstract void updateMass();
+    
+    /**
+     * Gets the axes to test for SAT
+     * @param s The other shape involved in the collision
+     * @return An array of unit vector2s representing axes to test
+     */
+    public abstract Vector2[] getSATAxes(Shape s);
+    
+    /**
+     * Projects the shape onto an axis, returning the mins and maxes
+     * @param axis The axis to project on
+     * @return A two-float array: [0] is the min, [1] is the max
+     */
+    public abstract float[] project(Vector2 axis);
     
     /**************************
      * Accessors and Mutators *
