@@ -4,6 +4,8 @@ import com.lds.math.Vector2;
 import com.lds.physics.primatives.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.TreeMap;
  
 public class CollisionDetector
 {
@@ -28,51 +30,105 @@ public class CollisionDetector
         updateCollisions();
     }
 
-    public float rayCast(Vector2 start, float angle)
+    public RaycastData rayCast(Vector2 start, float angle)
     {
-        //TODO check spatial grids before doing this to only use possible shapes
-        //TODO I think angles are off need to do mre testing once the player has a real texture
+        ArrayList<Shape> shapes = new ArrayList<Shape>();
+        Vector2 dir = new Vector2((float)Math.cos(angle), (float)Math.sin(angle));
+        float slope = dir.y() / dir.x();
+        float invSlope = - dir.x() / dir.y();
+        float yIntersect = dir.y() - slope * dir.x();
+        float xIntersect = dir.x() - invSlope * dir.y();
         
-        boolean colliding = false;
+        boolean xIsMax = dir.x() < 0;
+        boolean yIsMax = dir.y() < 0;
         
-        float accuracy = 2;
-        float maxLength = 4096;
-        
-        //Create a vector out of the angle with a magnitude of 1
-        Vector2 ray = new Vector2((float) Math.sin(angle), (float) Math.cos(angle));
-        
-        //Do not count any shapes that the ray originates on.
-        ArrayList<Shape> doNotCount = new ArrayList<Shape>();
-        for(int i = 0; i < shapes.size(); i++)
-            if(ContainsPoint(shapes.get(i), start)) 
-                doNotCount.add(shapes.get(i));
-        
-        float mag = 0;
-        float length = 1;
-        while(!colliding && length < maxLength)
+        for (int i = 0; i <= spatialHash.cellsX; i++)
         {
-            //Create a ray that starts at the ray origin and has a magnitude of length
-            Vector2 newRay = new Vector2(start.x() + ray.x() * length, start.y() + ray.y() * length);
-            for(int i = 0; i < shapes.size(); i++)
+            float xValue = i * spatialHash.cellSizeX;
+            
+            if (xIsMax)
             {
-                if(!doNotCount.contains(shapes.get(i))) // Make sure the colliding shape did not have the ray origionate inside of it
-                {
-                    if(ContainsPoint(shapes.get(i), newRay)) //If the ray hits something set the colliding flag
-                    {
-                        colliding = true;
-                        mag = newRay.length(); //record the length.
-                        break;
-                    }
-                }
+                if (xValue < start.x())
+                    continue;
             }
-            if(!colliding) //if you did not collide yet increment the ray forward
-                length += accuracy;
+            else
+            {
+                if (xValue > start.x())
+                    continue;
+            }
+            
+            float yValue = slope * xValue + yIntersect;
+            int yIndex = (int)(yValue / spatialHash.cellSizeY);
+            ArrayList<Shape> hashShapes;
+            if (i > 0)
+            {
+                hashShapes = spatialHash.getBucketShapes(i - 1, yIndex);
+                for (Shape s : hashShapes)
+                {
+                    if (!shapes.contains(s))
+                        shapes.add(s);
+                }
+                
+            }
+            
+            hashShapes = spatialHash.getBucketShapes(i, yIndex);
+            for (Shape s : hashShapes)
+            {
+                if (!shapes.contains(s))
+                    shapes.add(s);
+            }
+        }       
+        
+        for (int i = 0; i <= spatialHash.cellsY; i++)
+        {
+            float yValue = i * spatialHash.cellSizeY;
+            
+            if (yIsMax)
+            {
+                if (yValue < start.y())
+                    continue;
+            }
+            else
+            {
+                if (yValue > start.y())
+                    continue;
+            }
+            
+            float xValue = invSlope * yValue + xIntersect;
+            int xIndex = (int)(xValue / spatialHash.cellSizeX);
+            ArrayList<Shape> hashShapes;
+            if (i > 0)
+            {
+                hashShapes = spatialHash.getBucketShapes(i - 1, xIndex);
+                for (Shape s : hashShapes)
+                {
+                    if (!shapes.contains(s))
+                        shapes.add(s);
+                }
+                
+            }
+            
+            hashShapes = spatialHash.getBucketShapes(i, xIndex);
+            for (Shape s : hashShapes)
+            {
+                if (!shapes.contains(s))
+                    shapes.add(s);
+            }
+        }       
+        
+        TreeMap<Float, Shape> distanceHash = new TreeMap<Float, Shape>();
+        for(int i = 0; i < shapes.size(); i++)
+            distanceHash.put(Vector2.subtract(start, shapes.get(i).getPos()).length(), shapes.get(i));       
+        
+        for(int i = 0; i < distanceHash.size(); i++)
+        {
+            Vector2 axis = Vector2.perpendicularLeft(dir);
+            
+            float startProj = Vector2.dot(start, axis);
+            
         }
         
-        if(mag > maxLength)
-            mag = maxLength; // Cap mag to max
-        
-        return mag;
+        return null;
     }
     
     public void updateCollisions()
