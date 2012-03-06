@@ -174,6 +174,9 @@ public class CollisionDetector
                         }
                     }
                     
+                    if (intersect1 == null || intersect2 == null)
+                        continue;
+                    
                     float distance1 = Vector2.subtract(intersect1, start).length();
                     float distance2 = Vector2.subtract(intersect2, start).length();
                     if (distance1 < distance2)
@@ -181,6 +184,8 @@ public class CollisionDetector
                     else
                         return new RaycastData(distance2, s, intersect2, intersect1);
                 }
+                else
+                    continue;
             }
         }
         
