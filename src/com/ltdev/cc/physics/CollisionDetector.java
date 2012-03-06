@@ -3,6 +3,7 @@ package com.ltdev.cc.physics;
 import com.ltdev.cc.physics.primitives.*;
 import com.ltdev.math.Vector2;
 
+import java.util.Collection;
 import java.util.ArrayList;
 import java.util.TreeMap;
  
@@ -115,13 +116,23 @@ public class CollisionDetector
             }
         }       
         
+        for (int i = shapes.size() - 1; i >= 0; i--)
+        {
+            if (ContainsPoint(shapes.get(i), start))
+            {
+                shapes.remove(shapes.get(i));
+            }
+        }
+        
         TreeMap<Float, Shape> distanceHash = new TreeMap<Float, Shape>();
+        
+        Object[] shapeList = distanceHash.values().toArray();
         for (int i = 0; i < shapes.size(); i++)
             distanceHash.put(Vector2.subtract(start, shapes.get(i).getPos()).length(), shapes.get(i));       
         
-        for (int i = 0; i < distanceHash.size(); i++)
+        for (int i = 0; i < distanceHash.size( ); i++)
         {
-            Shape s = distanceHash.get(i);
+            Shape s = (Shape)shapeList[i];
             if (s instanceof Rectangle)
             {
                 Vector2 axis = Vector2.perpendicularLeft(dir);
@@ -158,7 +169,7 @@ public class CollisionDetector
                 {
                     Vector2 intersect1 = null;
                     Vector2 intersect2 = null;
-                    intersect1 = PointOfIntersection(start, Vector2.scale(dir, 10000), verts[4], verts[0]);
+                    intersect1 = PointOfIntersection(start, Vector2.scale(dir, 10000), verts[3], verts[0]);
                     for (int j = 0; j < 3; j++)
                     {
                         Vector2 tempIntersect = PointOfIntersection(start, Vector2.scale(dir, 10000), verts[j], verts[j + 1]);

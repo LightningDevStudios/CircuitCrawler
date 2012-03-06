@@ -7,6 +7,7 @@ import com.ltdev.Finger;
 import com.ltdev.Stopwatch;
 import com.ltdev.cc.entity.*;
 import com.ltdev.cc.event.*;
+import com.ltdev.cc.physics.RaycastData;
 import com.ltdev.cc.ui.*;
 import com.ltdev.math.Matrix4;
 import com.ltdev.math.Vector2;
@@ -165,7 +166,8 @@ public class LevelRenderer implements com.ltdev.LevelSurfaceView.Renderer
 	
 			if (game.btnB.isPressed())
 			{
-			    game.world.rayCast(game.player.getPos(), game.player.getAngle());
+			    RaycastData dat = game.world.rayCast(game.player.getPos(), game.player.getAngle());
+			    System.out.println("LOLZ");
 			}
 			
 			//inside of ent for loop
