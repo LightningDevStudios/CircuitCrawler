@@ -1,4 +1,4 @@
-package com.lds.physics.primatives;
+package com.lds.physics.primitives;
 
 import com.lds.math.Vector2;
 

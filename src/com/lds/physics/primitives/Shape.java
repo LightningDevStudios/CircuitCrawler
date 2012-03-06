@@ -1,4 +1,4 @@
-package com.lds.physics.primatives;
+package com.lds.physics.primitives;
 
 import com.lds.game.event.InteractListener;
 import com.lds.math.Matrix4;

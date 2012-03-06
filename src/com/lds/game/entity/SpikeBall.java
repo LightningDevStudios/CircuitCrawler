@@ -2,7 +2,7 @@ package com.lds.game.entity;
 
 import com.lds.EntityManager;
 import com.lds.math.Vector2;
-import com.lds.physics.primatives.Circle;
+import com.lds.physics.primitives.Circle;
 
 import javax.microedition.khronos.opengles.GL11;
 

@@ -1,6 +1,6 @@
 package com.lds.physics;
 
-import com.lds.physics.primatives.Shape;
+import com.lds.physics.primitives.Shape;
 import com.lds.math.*;
 
 import java.util.ArrayList;
@@ -38,28 +38,27 @@ public class SpatialHashGrid
         this.elements.addAll(elements);
     }
 
-    /// <summary>
-    /// Clears and re-creates the grid. Faster than updating all existing items.
-    /// </summary>
+    /**
+     * Clears and re-creates the grid. Faster than updating all existing items.
+     */
     public void populate()
     {
         clear();
 
         for (Shape item : elements)
         {
-            AABB bbox = new AABB(item.getWorldVertices());
-            bbox.convertToBottomLeftCoords(sceneWidth, sceneHeight);
-            for (int i : GetBuckets(bbox))
+
+            for (int i : GetBuckets(new AABB(item.getWorldVertices()).toBottomLeftCoords(sceneWidth, sceneHeight)))
             {
                 buckets.get(i).add(item);
             }
         }
     }
 
-    /// <summary>
-    /// Gets every possible pair of neighbors.
-    /// </summary>
-    /// <returns>A ArrayList of neighbor pairs.</returns>
+    /**
+     * Gets every possible pair of neighbors.
+     * @param neighbors An ArrayList of Contacts to store the pairs in.
+     */
     public void getCollisionPairs(ArrayList<Contact> neighbors)
     {
         neighbors.clear();
@@ -77,11 +76,11 @@ public class SpatialHashGrid
         }
     }
 
-    /// <summary>
-    /// Gets all the items that are near a specified item.
-    /// </summary>
-    /// <param name="item">An item contained in the grid.</param>
-    /// <returns>All of the items near item.</returns>
+    /**
+     * Gets all the items that are near a specified item.
+     * @param item An item contained in the grid.
+     * @return All of the items near item.
+     */
     public ArrayList<Shape> GetNeighbors(Shape item)
     {
         ArrayList<Shape> neighbors = new ArrayList<Shape>();
@@ -89,9 +88,7 @@ public class SpatialHashGrid
         if (!elements.contains(item))
             return null;
         
-        AABB bbox = new AABB(item.getWorldVertices());
-        bbox.convertToBottomLeftCoords(sceneWidth, sceneHeight);
-        for (int i : GetBuckets(bbox))
+        for (int i : GetBuckets(new AABB(item.getWorldVertices()).toBottomLeftCoords(sceneWidth, sceneHeight)))
         {
             neighbors.addAll(buckets.get(i));
             neighbors.remove(item);
@@ -100,48 +97,46 @@ public class SpatialHashGrid
         return neighbors;
     }
 
-    /// <summary>
-    /// Gets all the items located in the box centered at a point with a specified size.
-    /// </summary>
-    /// <param name="point">The center of the area to check.</param>
-    /// <param name="size">The size of the area to check.</param>
-    /// <returns>A ArrayList of items contained roughly in the specified area.</returns>
-    public ArrayList<Shape> GetContainedItems(Shape s, Vector2 size)
+    /**
+     * Gets all the items located in the box centered at a point with a specified size.
+     * @param point The center of the area to check.
+     * @param size The size of the area to check.
+     * @return An ArrayList of items contained roughly in the specified area.
+     */
+    public ArrayList<Shape> GetContainedItems(Vector2 point, Vector2 size)
     {
-        float x = s.getPos().x();
-        float y = s.getPos().y();
+        float x = point.x();
+        float y = point.y();
 
-        float left = x - size.x() / 2;
-        float right = x + size.x() / 2;
-        float top = y + size.y() / 2;
-        float bottom = y - size.y() / 2;
-
-        AABB bbox = new AABB(left, right, top, bottom);
-        bbox.convertToBottomLeftCoords(sceneWidth, sceneHeight);
-        return GetContainedItems(bbox);
+        float halfX = sceneWidth / 2;
+        float halfY = sceneHeight / 2;
+        
+        float left = x - size.x() / 2 + halfX;
+        float right = x + size.x() / 2 + halfX;
+        float top = y + size.y() / 2 + halfY;
+        float bottom = y - size.y() / 2 + halfY;
+        
+        return GetContainedItems(new AABB(left, right, top, bottom));
     }
 
-    /// <summary>
-    /// Gets all the items located in a bounding box.
-    /// </summary>
-    /// <remarks>
-    /// This method assumes that item is not contained in the grid, unlike <see cref="GetNeighbors"/>.
-    /// Assuming box is of the type Shape, this method and GetNeighbors will return the same data, except GetNeighbors won'Shape include "box".
-    /// </remarks>
-    /// <param name="box">An object that has a bounding box.</param>
-    /// <returns>A ArrayList of items contained roughly in the specified area.</returns>
+    /**
+     * Gets all the items located in a bounding box.
+     * 
+     * This method assumes that item is not contained in the grid, unlike GetNeighbors.
+     * Assuming box is of the type Shape, this method and GetNeighbors will return the same data, except GetNeighbors won't include "box".
+     * @param box A shape to check for containment.
+     * @return An ArrayList of items contained roughly in the specified area.
+     */
     public ArrayList<Shape> GetContainedItems(Shape box)
     {
-        AABB bbox = new AABB(box.getWorldVertices());
-        bbox.convertToBottomLeftCoords(sceneWidth, sceneHeight);
-        return GetContainedItems(bbox);
+        return GetContainedItems(new AABB(box.getWorldVertices()).toBottomLeftCoords(sceneWidth, sceneHeight));
     }
 
-    /// <summary>
-    /// Gets all the items located in a bounding box.
-    /// </summary>
-    /// <param name="boundingBox">The bounding box.</param>
-    /// <returns>A ArrayList of items contained roughly in the specified area.</returns>
+    /**
+     * Gets all the items located in a bounding box.
+     * @param boundingBox The bounding box.
+     * @return An ArrayList of items contained roughly in the specified area.
+     */
     public ArrayList<Shape> GetContainedItems(AABB boundingBox)
     {
         ArrayList<Shape> items = new ArrayList<Shape>();

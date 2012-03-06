@@ -1,7 +1,7 @@
 package com.lds.physics;
 
 import com.lds.math.Vector2;
-import com.lds.physics.primatives.*;
+import com.lds.physics.primitives.*;
 
 import java.util.ArrayList;
  
@@ -43,9 +43,6 @@ public class CollisionDetector
     {        
         Shape a = c.a;
         Shape b = c.b;
-        
-        if (a instanceof Circle || b instanceof Circle)
-            System.out.println("lol");
         
         if (a == b)
             return false;

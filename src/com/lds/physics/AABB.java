@@ -6,16 +6,37 @@ import com.lds.math.Vector2;
  * An Axis-Aligned Bounding Box.
  * @author Lightning Development Studios
  */
-public class AABB 
+public final class AABB 
 {
-    private float leftBound;
-    private float rightBound;
-    private float topBound;
-    private float bottomBound;
+    private final float leftBound;
+    private final float rightBound;
+    private final float topBound;
+    private final float bottomBound;
     
     public AABB(Vector2[] vertices)
     {
-        generateBounds(vertices);
+        float left = vertices[0].x();
+        float right = left;
+        float top = vertices[0].y();
+        float bottom = top;
+        
+        for (int i = 1; i < vertices.length; i++)
+        {
+            Vector2 v = vertices[i];
+            if (v.x() < left)
+                left = v.x();
+            else if (v.x() > right)
+                right = v.x();
+            if (v.y() > top)
+                top = v.y();
+            else if (v.y() < bottom)
+                bottom = v.y();
+        }
+        
+        leftBound = left;
+        rightBound = right;
+        topBound = top;
+        bottomBound = bottom;
     }
     
     public AABB(float left, float right, float top, float bottom)
@@ -26,33 +47,12 @@ public class AABB
         bottomBound = bottom;
     }
     
-    public void convertToBottomLeftCoords(float worldX, float worldY)
+    public AABB toBottomLeftCoords(float worldX, float worldY)
     {
-        leftBound += worldX / 2;
-        rightBound += worldX / 2;
-        topBound += worldY / 2;
-        bottomBound += worldY / 2;
-    }
-    
-    public void generateBounds(Vector2[] vertices)
-    {
-        leftBound = vertices[0].x();
-        rightBound = vertices[0].x();
-        topBound = vertices[0].y();
-        bottomBound = vertices[0].y();
+        float halfX = worldX / 2;
+        float halfY = worldY / 2;
         
-        for (int i = 1; i < vertices.length; i++)
-        {
-            Vector2 v = vertices[i];
-            if (v.x() < leftBound)
-                leftBound = v.x();
-            else if (v.x() > rightBound)
-                rightBound = v.x();
-            if (v.y() > topBound)
-                topBound = v.y();
-            else if (v.y() < bottomBound)
-                bottomBound = v.y();
-        }
+        return new AABB(leftBound + halfX, rightBound + halfX, topBound + halfY, bottomBound + halfY);
     }
     
     public float getLeftBound()

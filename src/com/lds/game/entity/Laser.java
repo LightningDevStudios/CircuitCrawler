@@ -7,7 +7,7 @@ public class Laser extends Entity
 {
     public Laser(float size, float angle, Vector2 position)
     {
-        super(new com.lds.physics.primatives.Rectangle(new Vector2(size, size), position, angle, true));
+        super(new com.lds.physics.primitives.Rectangle(new Vector2(size, size), position, angle, true));
     }
     
     @Override

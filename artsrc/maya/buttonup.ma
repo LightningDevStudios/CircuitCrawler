@@ -1,6 +1,6 @@
 //Maya ASCII 2012 scene
 //Name: buttonup.ma
-//Last modified: Mon, Mar 05, 2012 05:40:40 PM
+//Last modified: Mon, Mar 05, 2012 09:58:15 PM
 //Codeset: 1252
 requires maya "2012";
 currentUnit -l centimeter -a degree -t film;
@@ -12,14 +12,14 @@ fileInfo "osv" "Microsoft Windows 7 Business Edition, 64-bit Windows 7 Service P
 fileInfo "license" "student";
 createNode transform -s -n "persp";
 	setAttr ".v" no;
-	setAttr ".t" -type "double3" -82.204344184782684 22.430072222723165 22.642848816094116 ;
-	setAttr ".r" -type "double3" -14.738352729643463 -74.599999999948722 0 ;
+	setAttr ".t" -type "double3" -33.432613535790935 25.797351571851188 15.025212279517735 ;
+	setAttr ".r" -type "double3" -35.138352729642911 -65.799999999947801 1.5517813925461397e-014 ;
 createNode camera -s -n "perspShape" -p "persp";
 	setAttr -k off ".v" no;
 	setAttr ".pze" yes;
 	setAttr ".fl" 34.999999999999993;
 	setAttr ".fcp" 1000;
-	setAttr ".coi" 88.166665726196427;
+	setAttr ".coi" 44.821869662025115;
 	setAttr ".imn" -type "string" "persp";
 	setAttr ".den" -type "string" "persp_depth";
 	setAttr ".man" -type "string" "persp_mask";

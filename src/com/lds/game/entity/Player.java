@@ -2,8 +2,8 @@ package com.lds.game.entity;
 
 import com.lds.game.Tile;
 import com.lds.math.Vector2;
-import com.lds.physics.primatives.Circle;
-import com.lds.physics.primatives.Rectangle;
+import com.lds.physics.primitives.Circle;
+import com.lds.physics.primitives.Rectangle;
 
 import javax.microedition.khronos.opengles.GL11;
 

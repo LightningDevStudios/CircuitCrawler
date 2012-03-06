@@ -2,7 +2,7 @@ package com.lds.game.entity;
 
 import com.lds.game.SoundPlayer;
 import com.lds.math.Vector2;
-import com.lds.physics.primatives.Circle;
+import com.lds.physics.primitives.Circle;
 
 public class Teleporter extends Entity
 {

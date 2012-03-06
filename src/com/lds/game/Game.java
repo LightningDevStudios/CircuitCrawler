@@ -12,10 +12,8 @@ import com.lds.game.entity.*;
 import com.lds.game.event.*;
 import com.lds.math.Vector2;
 import com.lds.parser.Parser;
-import com.lds.physics.AABB;
-import com.lds.physics.World;
-import com.lds.physics.primatives.Rectangle;
-import com.lds.physics.primatives.Shape;
+import com.lds.physics.*;
+import com.lds.physics.primitives.*;
 import com.lds.trigger.*;
 
 import java.io.IOException;
@@ -39,12 +37,13 @@ public class Game
     public static Texture tilesetentities;
     public static Texture baricons;
 	
+    private Tileset tileset;
 	public ArrayList<Entity> entities;
-	//private Tile[][] tileset;
 	public ArrayList<Control> UIList;
 	private ArrayList<Trigger> triggerList;
-	public EntityManager cleaner;
-	public com.lds.physics.World world;
+	
+	public EntityManager entManager;
+	public World world;
 	
 	public ArrayList<Finger> fingerList;
 	
@@ -53,7 +52,6 @@ public class Game
 	public float camPosY;
 	
 	private float worldMinX, worldMinY, worldMaxX, worldMaxY;
-	private Tileset tileset;
 	
 	//Testing data
 	public UIButton btnB;	
@@ -80,7 +78,7 @@ public class Game
 		UIList = new ArrayList<Control>();
 		triggerList = new ArrayList<Trigger>();
 		fingerList = new ArrayList<Finger>();
-		cleaner = new EntityManager();
+		entManager = new EntityManager();
 		        		
 		//StringRenderer sr = StringRenderer.getInstance();
 		//sr.loadTextTileset(text);
@@ -156,6 +154,7 @@ public class Game
         for (Entity ent : entities)
             shapes.add(ent.getShape());
 		
+        //TODO optimize into larger rectangles
 		for (int i = 0; i < tileset.length; i++)
 		{
 		    for (int j = 0; j < tileset[i].length; j++)
@@ -173,7 +172,6 @@ public class Game
 	    world = new World(worldSize, shapes);
 		
 		updateCameraPosition();
-		//updateRenderedTileset();
 	}
 	
 	/**
@@ -200,33 +198,6 @@ public class Game
 		
 		return renderList;
 	}
-	
-	/*public void updateRenderedTileset()
-	{
-		final float minX, maxX, minY, maxY, tilesetHalfWidth, tilesetHalfHeight;
-		minX = camPosX - (screenW / 2);
-		maxX = camPosX + (screenW / 2);
-		minY = camPosY - (screenH / 2);
-		maxY = camPosY + (screenH / 2);
-		
-		tilesetHalfWidth = tileset[0].length * Tile.TILE_SIZE_F / 2;
-		tilesetHalfHeight = tileset.length * Tile.TILE_SIZE_F / 2;
-		
-		tilesetMinX = (int)(minX + tilesetHalfWidth) / Tile.TILE_SIZE;
-		tilesetMaxX = (int)((Math.ceil(maxX + tilesetHalfWidth) - 1) / Tile.TILE_SIZE_F);
-		tilesetMinY = (int)((Math.abs(maxY - tilesetHalfHeight) - 1) / Tile.TILE_SIZE_F);
-		tilesetMaxY = (int)((Math.ceil(Math.abs(minY - tilesetHalfHeight)) - 1) / Tile.TILE_SIZE_F);
-		
-		//make sure bounds don't exceed level edges
-		if (tilesetMinX < 0)
-			tilesetMinX = 0;
-		if (tilesetMinY < 0)
-			tilesetMinY = 0;
-		if (tilesetMaxX > tileset[0].length - 1)
-			tilesetMaxX = tileset[0].length - 1;
-		if (tilesetMaxY > tileset.length - 1)
-			tilesetMaxY = tileset.length - 1;
-	}*/
 	
 	public void updateCameraPosition()
 	{

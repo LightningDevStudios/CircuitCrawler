@@ -134,7 +134,7 @@ public class LevelRenderer implements com.lds.LevelSurfaceView.Renderer
 		}
 		
 		game.updateTriggers();
-		game.cleaner.update(game.entities, gl);
+		game.entManager.update(game.entities, gl);
 		game.updateFingers();
 		
 		//update all entites

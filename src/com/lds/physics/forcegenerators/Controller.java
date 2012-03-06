@@ -1,6 +1,6 @@
 package com.lds.physics.forcegenerators;
 
-import com.lds.physics.primatives.Shape;
+import com.lds.physics.primitives.Shape;
 import com.lds.math.Vector2;
 
 public class Controller implements IndivForce

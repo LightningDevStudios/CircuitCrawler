@@ -2,7 +2,7 @@ package com.lds.game.entity;
 
 import com.lds.game.SoundPlayer;
 import com.lds.math.Vector2;
-import com.lds.physics.primatives.Rectangle;
+import com.lds.physics.primitives.Rectangle;
 
 public class WallButton extends Entity
 {
