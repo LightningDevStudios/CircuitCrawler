@@ -160,7 +160,8 @@ public class LevelRenderer implements com.lds.LevelSurfaceView.Renderer
 	
 			if (game.btnB.isPressed())
 			{
-			    game.world.rayCast(game.player.getPos(), game.player.getAngle());
+			    RaycastData dat = game.world.rayCast(game.player.getPos(), game.player.getAngle());
+			    System.out.print("LOLZ");
 			}
 			
 			//inside of ent for loop
