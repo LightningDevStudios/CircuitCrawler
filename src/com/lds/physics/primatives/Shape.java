@@ -49,11 +49,6 @@ public abstract class Shape
     protected float mass;
     
     /**
-     * Damping for velocity
-     */
-    protected float velocityDamping;
-    
-    /**
      * Determines whether the shape can move or not
      */
     public boolean isStatic;
@@ -64,9 +59,14 @@ public abstract class Shape
     protected float density;
     
     /**
-     * The friction constant (mu) between the shape and the floor.
+     * The coefficient of static friction between the shape and the floor.
      */
-    protected float friction;
+    protected float staticFriction;
+    
+    /**
+     * The coefficient of kinetic friction between the shape and the floor.
+     */
+    protected float kineticFriction;
     
     /**
      * The shape's vertices in local coordinates.
@@ -134,7 +134,6 @@ public abstract class Shape
         this(position, 0, solid);
     }
     
-    
     /**
      * Initializes a new instance of the Shape class.
      * \todo Fix angle, remove the hax'd in degree to radians check.
@@ -144,9 +143,9 @@ public abstract class Shape
      */
     public Shape(Vector2 position, float angle, boolean solid)
     {
-        density = 0.001f;
-        friction = 0.1f;
-        velocityDamping = 0.999f;
+        density = 1;
+        staticFriction = 1;
+        kineticFriction = 2;
         velocity = new Vector2(0, 0);
         totalImpulse = new Vector2(0, 0);
         forces = new ArrayList<IndivForce>();
@@ -162,17 +161,36 @@ public abstract class Shape
      * Public Methods *
      ******************/
     
-    public void Integrate(float frameTime)
+    public void integrate(float frameTime)
     {
-        if (isStatic)
+        //no friction for static objects
+        if (isStatic || !solid)
             return;
 
+        //apply forces
         for (IndivForce f : forces)
             f.UpdateForce(frameTime, this);
-
-        velocity = Vector2.scale(velocity, (float)Math.pow(velocityDamping, frameTime));
-        velocity = Vector2.add(velocity, Vector2.scale(totalImpulse, 1 / mass));
-
+                
+        //apply friction
+        float speed = velocity.length();
+        if (speed == 0)
+        {
+            if (totalImpulse.length() < staticFriction * mass)
+                totalImpulse = Vector2.ZERO;
+        }
+        else
+            addImpulse(Vector2.scale(velocity, -kineticFriction * mass / speed * frameTime));
+        
+        //velocity damping
+        velocity = Vector2.scale(velocity, 0.99f);
+        
+        //add impulse
+        if (totalImpulse.length() > 0)
+            velocity = Vector2.add(velocity, Vector2.scale(totalImpulse, 1 / mass));
+        
+        if (velocity.length() > 1000)
+            velocity = Vector2.scale(velocity, 1000 / velocity.length());
+        
         setPos(Vector2.add(position, Vector2.scale(velocity, frameTime)));
 
         totalImpulse = Vector2.ZERO;
@@ -232,6 +250,20 @@ public abstract class Shape
      * Abstract method used to estimate mass.
      */
     protected abstract void updateMass();
+    
+    /**
+     * Gets the axes to test for SAT
+     * @param s The other shape involved in the collision
+     * @return An array of unit vector2s representing axes to test
+     */
+    public abstract Vector2[] getSATAxes(Shape s);
+    
+    /**
+     * Projects the shape onto an axis, returning the mins and maxes
+     * @param axis The axis to project on
+     * @return A two-float array: [0] is the min, [1] is the max
+     */
+    public abstract float[] project(Vector2 axis);
     
     /**************************
      * Accessors and Mutators *
@@ -310,13 +342,21 @@ public abstract class Shape
     }
     
     /**
-     * Gets the coefficient of friction for this Shape.
-     * \todo static or kinetic friction>
+     * Gets the coefficient of static friction for this Shape.
      * @return The coefficient of friction.
      */
-    public float getFriction()
+    public float getStaticFriction()
     {
-        return friction;
+        return staticFriction;
+    }
+    
+    /**
+     * Gets the coefficient of kinetic friction for this Shape.
+     * @return The coefficient of friction.
+     */
+    public float getKineticFriction()
+    {
+        return kineticFriction;
     }
     
     /**
@@ -402,12 +442,21 @@ public abstract class Shape
     }
     
     /**
-     * Sets the Shape's coefficient of friction.
-     * @param friction The new coefficient of friction.
+     * Sets the Shape's coefficient of static friction.
+     * @param friction The new coefficient of static friction.
      */
-    public void setFriction(float friction)
+    public void setStaticFriction(float friction)
     {
-        this.friction = friction;
+       staticFriction = friction;
+    }
+    
+    /**
+     * Sets the Shape's coefficient of kinetic friction.
+     * @param friction The new coefficient of kinetic friction.
+     */
+    public void setKineticFriction(float friction)
+    {
+        kineticFriction = friction;
     }
     
     /**
@@ -451,7 +500,7 @@ public abstract class Shape
         if (angle == Float.NaN)
             return;
         
-        this.angle = angle;
+        this.angle = (float)(Math.toRadians(angle) % Math.PI);
         
         rotMat = Matrix4.rotateZ(this.angle);
         rebuildModel();

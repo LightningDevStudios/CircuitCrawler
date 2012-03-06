@@ -14,8 +14,10 @@ public class Player extends Entity
 	
 	public Player(Vector2 position, float angle)
 	{
-		super(new Rectangle(new Vector2(DEFAULT_SIZE, DEFAULT_SIZE), position, angle, true));
+		super(new Circle(DEFAULT_SIZE, position, angle, true));
 		controlled = true;
+		shape.setStaticFriction(2);
+		shape.setKineticFriction(5);
 	}
 	
 	

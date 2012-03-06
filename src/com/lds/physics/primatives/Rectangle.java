@@ -45,10 +45,10 @@ public class Rectangle extends Shape
 
         float[] vertices = 
         {
-            -x,  y,
-            -x, -y,
-             x, -y,
-             x,  y
+            x,  y,
+            x, -y,
+            -x, y,
+            -x, -y
         };
 
         this.vertices = vertices;
@@ -59,8 +59,39 @@ public class Rectangle extends Shape
     @Override
     protected void updateMass()
     {
-        float width = -vertices[0] * 2;
-        float height = vertices[0] * 2;
-        mass = density * width * height;
+        //float width = vertices[0] * 2;
+        //float height = vertices[1] * 2;
+        //mass = density * width * height;
+        mass = 1024;
+    }
+    
+    @Override
+    public Vector2[] getSATAxes(Shape s)
+    {
+       Vector2[] axes = new Vector2[2];
+       
+       axes[0] = Vector2.normalize(Vector2.subtract(worldVertices[0], worldVertices[1]));
+       axes[1] = Vector2.perpendicularLeft(axes[0]);
+       
+       return axes;
+    }
+    
+    @Override
+    public float[] project(Vector2 axis)
+    {
+        float[] bounds = new float[2];
+        
+        bounds[0] = Vector2.dot(worldVertices[0], axis);
+        bounds[1] = bounds[0];
+        for (Vector2 vert : worldVertices)
+        {
+            float dot = Vector2.dot(vert, axis);
+            if (dot > bounds[1])
+                bounds[1] = dot;
+            if (dot < bounds[0])
+                bounds[0] = dot;
+        }
+        
+        return bounds;
     }
 }

@@ -12,6 +12,7 @@ import com.lds.game.entity.*;
 import com.lds.game.event.*;
 import com.lds.math.Vector2;
 import com.lds.parser.Parser;
+import com.lds.physics.AABB;
 import com.lds.physics.World;
 import com.lds.physics.primatives.Rectangle;
 import com.lds.physics.primatives.Shape;
@@ -190,15 +191,10 @@ public class Game
 		ArrayList<Entity> renderList = new ArrayList<Entity>();
 		for (Entity ent : entities)
 		{
-			//define max square bounds
-		    final float diagonal = Vector2.subtract(ent.getPos(), ent.getShape().getWorldVertices()[0]).length();
-		    Vector2 diagonalVec = new Vector2(diagonal, diagonal);
-		    
-		    Vector2 entMin = Vector2.subtract(ent.getPos(), diagonalVec);
-		    Vector2 entMax = Vector2.add(ent.getPos(), diagonalVec);
+			AABB bbox = new AABB(ent.getShape().getWorldVertices());
 			
 			//values are opposite for entMin/Max because only the far tips have to be inside the screen (leftmost point on right border of screen)
-			if (entMin.x() <= maxX && entMax.x() >= minX && entMin.y() <= maxY && entMax.y() >= minY)
+			if (bbox.getLeftBound() <= maxX && bbox.getRightBound() >= minX && bbox.getBottomBound() <= maxY && bbox.getTopBound() >= minY)
 				renderList.add(ent);
 		}
 		

@@ -17,7 +17,7 @@ public class Contact
     {
         this.a = a;
         this.b = b;
-        restitution = 1;
+        restitution = 0.5f;
     }
 
     public Contact(Shape a, Shape b, float penetration, Vector2 contactNormal)
@@ -38,36 +38,48 @@ public class Contact
     {
         if (penetration <= 0 || a.isStatic && b.isStatic)
             return;
-
-        float totalInverseMass = 1 / (a.getMass() + b.getMass());
-        Vector2 movePerIMass = Vector2.scale(contactNormal, penetration * totalInverseMass);
+        
+        if (!a.isSolid() || !b.isSolid())
+            return;
+        
+        Vector2 moveVec = Vector2.scale(contactNormal, penetration);
 
         if (!a.isStatic)
-            a.setPos(Vector2.add(a.getPos(), Vector2.scale(movePerIMass, a.getMass())));
+            a.setPos(Vector2.add(a.getPos(), moveVec));
         if (!b.isStatic)
-            b.setPos(Vector2.subtract(b.getPos(), Vector2.scale(movePerIMass, b.getMass())));
+            b.setPos(Vector2.subtract(b.getPos(), moveVec));
     }
 
     private void ResolveVelocity()
     {
         if (a.isStatic && b.isStatic)
             return;
-
+        
+        if (!a.isSolid() || !b.isSolid())
+            return;
+        
+        Vector2 impulseA = Vector2.ZERO;
+        Vector2 impulseB = Vector2.ZERO;
+        
         float sepV = GetSeperatingVelocity();
-
+        
         if (sepV >= 0)
             return;
-
+        
         float newSepV = -sepV * (restitution);
         float deltaV = newSepV - sepV;
-
-        float totalInverseMass = 1 / (a.getMass() + b.getMass());
-
-        float impulse = deltaV * totalInverseMass;
-        Vector2 impulsePerIMass = Vector2.scale(contactNormal, impulse);
-
-        Vector2 impulseA = impulsePerIMass;
-        Vector2 impulseB = Vector2.negate(impulsePerIMass);
+        
+        if (a.isStatic)
+            impulseB = Vector2.scale(contactNormal, -deltaV * b.getMass());
+        else if (b.isStatic)
+            impulseA = Vector2.scale(contactNormal, deltaV * a.getMass());
+        else
+        {
+            Vector2 impulsePerIMass = Vector2.scale(contactNormal, deltaV / (a.getMass() + b.getMass()));
+    
+            impulseA = Vector2.scale(impulsePerIMass, b.getMass() * b.getMass());
+            impulseB = Vector2.scale(impulsePerIMass, -a.getMass() * a.getMass());
+        }
 
         a.addImpulse(impulseA);
         b.addImpulse(impulseB);

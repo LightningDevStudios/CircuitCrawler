@@ -64,6 +64,7 @@ public class Circle extends Shape
         super(position, angle, solid);
         
         float halfSize = size / 2;
+        radius = halfSize;
         float[] vertices = 
             {
                 halfSize, halfSize,     //top left
@@ -80,7 +81,40 @@ public class Circle extends Shape
     @Override
     protected void updateMass()
     {
-        mass = density * getRadius() * getRadius() * (float)Math.PI;
+        //mass = density * getRadius() * getRadius() * (float)Math.PI;
+        mass = 1024;
+    }
+    
+    @Override
+    public Vector2[] getSATAxes(Shape s)
+    {
+        Vector2[] axes = new Vector2[1];
+        Vector2[] sVerts = s.getWorldVertices();
+        
+        axes[0] = Vector2.subtract(sVerts[0], position);
+        for (int i = 1; i < sVerts.length; i++)
+        {
+            Vector2 tempVec = Vector2.subtract(sVerts[i], position);
+            if (axes[0].length() > tempVec.length())
+            {
+                axes[0] = tempVec;
+            }
+        }
+        
+        axes[0] = Vector2.normalize(axes[0]);
+        return axes;
+    }
+    
+    @Override
+    public float[] project(Vector2 axis)
+    {
+        float[] bounds = new float[2];
+        float posDot = Vector2.dot(position, axis);
+        
+        bounds[0] = posDot - radius;
+        bounds[1] = posDot + radius;
+        
+        return bounds;
     }
     
     /**************************
