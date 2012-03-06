@@ -9,8 +9,8 @@ import java.util.HashMap;
 public class SpatialHashGrid
 {
     private float sceneWidth, sceneHeight;
-    private int cellsX, cellsY;
-    private float cellSizeX, cellSizeY;
+    public int cellsX, cellsY;
+    public float cellSizeX, cellSizeY;
 
     private ArrayList<Shape> elements;
     private HashMap<Integer, ArrayList<Shape>> buckets;
@@ -177,6 +177,12 @@ public class SpatialHashGrid
         }
 
         return bucketIDs;
+    }
+    
+    public ArrayList<Shape> getBucketShapes(int x, int y)
+    {
+        int id = GetBucketID(x, y);
+        return buckets.get(id);
     }
 
     private int GetBucketID(Vector2 v)

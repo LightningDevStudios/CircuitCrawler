@@ -158,6 +158,11 @@ public class LevelRenderer implements com.lds.LevelSurfaceView.Renderer
 			 * Performs Button Actions *
 			 ***************************/
 	
+			if (game.btnB.isPressed())
+			{
+			    game.world.rayCast(game.player.getPos(), game.player.getAngle());
+			}
+			
 			//inside of ent for loop
 			//checks for whatever happens when B is pressed.
 			/*if (game.btnB.isPressed())

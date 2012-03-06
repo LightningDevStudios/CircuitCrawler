@@ -1,13 +1,13 @@
 package com.lds.game.entity;
 
-import com.lds.EntityManager;
+import com.lds.physics.primitives.*;
 import com.lds.math.Vector2;
 
 public class Laser extends Entity
 {
-    public Laser(float size, float angle, Vector2 position)
+    public Laser(float beamWidth, float beamLength, float angle, Vector2 position)
     {
-        super(new com.lds.physics.primitives.Rectangle(new Vector2(size, size), position, angle, true));
+        super(new Rectangle(new Vector2(beamWidth, beamLength), position, angle, true));
     }
     
     @Override
@@ -15,7 +15,7 @@ public class Laser extends Entity
     {
         if(ent instanceof Player)
         {
-            EntityManager.removeEntity(ent);
+         
         }
     }
 }

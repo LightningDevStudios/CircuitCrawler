@@ -33,7 +33,6 @@ public class Cannon extends Entity
 	    Vector2 distance = Vector2.subtract(shape.getPos(), player.getPos());
 	    float angle = (float)Math.atan2(Vector2.perpDot(Vector2.UNIT_X,distance), Vector2.dot(Vector2.UNIT_X,distance));
 	    shape.setAngle(angle);
-	    
 	}
 
 	@Override
