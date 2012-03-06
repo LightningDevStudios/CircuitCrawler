@@ -122,12 +122,88 @@ public class CollisionDetector
         
         for(int i = 0; i < distanceHash.size(); i++)
         {
-            Vector2 axis = Vector2.perpendicularLeft(dir);
-            
-            float startProj = Vector2.dot(start, axis);
-            
+            Shape s = distanceHash.get(i);
+            if (s instanceof Rectangle)
+            {
+                Vector2 axis = Vector2.perpendicularLeft(dir);
+                Vector2[] verts = s.getWorldVertices();
+                float startProj = Vector2.dot(start, axis);
+                boolean intersecting = false;
+                boolean toTheLeft = false;
+                boolean toTheRight = false;
+                for (Vector2 vert : verts)
+                {
+                    if (Vector2.dot(vert, axis) < startProj)
+                    {
+                        if (toTheRight)
+                        {
+                            intersecting = true;
+                            break;
+                        }
+                        else
+                            toTheLeft = true;
+                    }
+                    if (Vector2.dot(vert, axis) > startProj)
+                    {
+                        if (toTheLeft)
+                        {
+                            intersecting = true;
+                            break;
+                        }
+                        else
+                            toTheRight = true;
+                    }
+                }
+                
+                if (intersecting)
+                {
+                    Vector2 intersect1 = null;
+                    Vector2 intersect2 = null;
+                    intersect1 = PointOfIntersection(start, Vector2.scale(dir, 10000), verts[4], verts[0]);
+                    for (int j = 0; j < 3; j++)
+                    {
+                        Vector2 tempIntersect = PointOfIntersection(start, Vector2.scale(dir, 10000), verts[j], verts[j + 1]);
+                        if (tempIntersect != null)
+                        {
+                            if (intersect1 == null)
+                                intersect1 = tempIntersect;
+                            else
+                            {
+                                intersect2 = tempIntersect;
+                                break;
+                            }
+                        }
+                    }
+                    
+                    float distance1 = Vector2.subtract(intersect1, start).length();
+                    float distance2 = Vector2.subtract(intersect2, start).length();
+                    if (distance1 < distance2)
+                        return new RaycastData(distance1, s, intersect1, intersect2);
+                    else
+                        return new RaycastData(distance2, s, intersect2, intersect1);
+                }
+            }
         }
         
+        return null;
+    }
+    
+    public Vector2 PointOfIntersection(Vector2 line1Start, Vector2 line1End, Vector2 line2Start, Vector2 line2End)
+    {
+        float s1_x, s1_y, s2_x, s2_y;
+        s1_x = line1End.x() - line1Start.x();     
+        s1_y = line1End.y() - line1Start.y();
+        s2_x = line2End.x() - line2Start.x();     
+        s2_y = line2End.y() - line2Start.y();
+
+        float s, t;
+        s = (-s1_y * (line1Start.x() - line2Start.x()) + s1_x * (line1Start.y() - line2Start.y())) / (-s2_x * s1_y + s1_x * s2_y);
+        t = ( s2_x * (line1Start.y() - line2Start.y()) - s2_y * (line1Start.x() - line2Start.x())) / (-s2_x * s1_y + s1_x * s2_y);
+
+        if (s >= 0 && s <= 1 && t >= 0 && t <= 1)
+        {
+            return new Vector2( line1Start.x() + (t * s1_x), line1Start.y() + (t * s1_y));
+        }
         return null;
     }
     

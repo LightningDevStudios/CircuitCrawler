@@ -9,9 +9,9 @@ public class RaycastData
     private Shape shape;
     private Vector2 in, out;
     
-    public RaycastData(float f, Shape s, Vector2 i, Vector2 o)
+    public RaycastData(float distance, Shape s, Vector2 i, Vector2 o)
     {
-        distance = f;
+        this.distance = distance;
         shape = s;
         in = i;
         out = o;
