@@ -39,6 +39,9 @@ public class Contact
         if (penetration <= 0 || a.isStatic && b.isStatic)
             return;
         
+        if (!a.isSolid() || !b.isSolid())
+            return;
+        
         Vector2 moveVec = Vector2.scale(contactNormal, penetration);
 
         if (!a.isStatic)
@@ -50,6 +53,9 @@ public class Contact
     private void ResolveVelocity()
     {
         if (a.isStatic && b.isStatic)
+            return;
+        
+        if (!a.isSolid() || !b.isSolid())
             return;
         
         Vector2 impulseA = Vector2.ZERO;
