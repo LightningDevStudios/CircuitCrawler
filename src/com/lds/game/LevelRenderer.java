@@ -11,8 +11,9 @@ import com.lds.game.entity.*;
 import com.lds.game.event.*;
 import com.lds.math.Matrix4;
 import com.lds.math.Vector2;
+import com.lds.math.Vector3;
 import com.lds.physics.CollisionDetector;
-import com.lds.physics.PhysicsManager;
+import com.lds.physics.*;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
@@ -36,7 +37,7 @@ public class LevelRenderer implements com.lds.LevelSurfaceView.Renderer
 	private int levelId;
 	
 	private Matrix4 projWorld, projUI;
-	private PhysicsManager physMan;
+	private World world;
 	
 	/**
 	 * Initializes a new instance of the GameRenderer class.
@@ -67,24 +68,28 @@ public class LevelRenderer implements com.lds.LevelSurfaceView.Renderer
 		//openGL settings
 	    gl.glViewport(0, 0, (int)Game.screenW, (int)Game.screenH);
 		gl.glShadeModel(GL11.GL_SMOOTH);
+		gl.glEnable(GL11.GL_DEPTH_TEST);
+		//gl.glDepthRangef(0.01f, 1f);
+		gl.glDepthFunc(GL11.GL_LEQUAL);
+		gl.glDepthMask(true);
 		gl.glEnable(GL11.GL_BLEND);
 		gl.glBlendFunc(GL11.GL_ONE, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
 		gl.glClearColor(0.39f, 0.58f, 0.93f, 1.0f);
 		
-		gl.glDisable(GL11.GL_DEPTH_TEST);
-		
 		//start the timer and use an initial tick to prevent errors where elapsed time is a very large negative number
 		Stopwatch.start();
 		Stopwatch.tick();
 
-		game = new Game(context, (GL11)gl, levelId);
+		game = new Game(context, gl, levelId);
+		
+		float aspectRatio = Game.screenW / Game.screenH;
 		
 		//projWorld = Matrix4.ortho(game.camPosX - (Game.screenW / 2), game.camPosX + (Game.screenW / 2), game.camPosY + (Game.screenH / 2), game.camPosY - (Game.screenH / 2), 0, 1);
-		projWorld = Matrix4.IDENTITY;
+		projWorld = Matrix4.perspective(-2.5f, 2.5f, 2.5f / aspectRatio, -2.5f / aspectRatio, 0.01f, 1.5f);
 		projUI = Matrix4.ortho(-Game.screenW / 2 , Game.screenW / 2, Game.screenH / 2, -Game.screenH / 2, 0, 1);
 		
-		for (Entity ent : game.entList)
+		for (Entity ent : game.entities)
 		{
 			ent.initialize(gl);
 		}
@@ -97,7 +102,7 @@ public class LevelRenderer implements com.lds.LevelSurfaceView.Renderer
 		if (gameInitializedListener != null)
 			gameInitializedListener.onGameInitialized();
 		
-		for (Entity ent : game.entList)
+		for (Entity ent : game.entities)
 		{
 			if (ent instanceof PuzzleBox)
 			{
@@ -113,7 +118,7 @@ public class LevelRenderer implements com.lds.LevelSurfaceView.Renderer
 
 		GL11 gl = (GL11)gl10;
 		
-		gl.glClear(GL11.GL_COLOR_BUFFER_BIT);
+		gl.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
 		//remove entities that are queued for removal
 		//tick the stop watch every frame, gives relatively stable intervals
 		//frameCount++;
@@ -129,33 +134,38 @@ public class LevelRenderer implements com.lds.LevelSurfaceView.Renderer
 		}
 		
 		game.updateTriggers();
-		game.cleaner.update(game.entList, gl);
+		game.entManager.update(game.entities, gl);
 		game.updateFingers();
 		
 		//update all entites
-		for (Entity ent : game.entList)
+		for (Entity ent : game.entities)
 		{
 			ent.update(null);
 		}
 		
 		//TODO: game.update(), chain off to world.update()
-		game.world.update();
+		game.world.integrate(Stopwatch.getFrameTime());
 		
-		//HACK: for the love of GOD move this out of GameRenderer
+		//HACK: for the love of GOD move this out of LevelRenderer
 		//Iterates through all entities
-		final int size = game.entList.size();
+		final int size = game.entities.size();
 		for (int i = 0; i < size; i++)
 		{
 			
-			final Entity ent = game.entList.get(i);
+			final Entity ent = game.entities.get(i);
 			
 			/***************************
 			 * Performs Button Actions *
 			 ***************************/
 	
+			if (game.btnB.isPressed())
+			{
+			    game.world.rayCast(game.player.getPos(), game.player.getAngle());
+			}
+			
 			//inside of ent for loop
 			//checks for whatever happens when B is pressed.
-			if (game.btnB.isPressed())
+			/*if (game.btnB.isPressed())
 			{
 				if (ent instanceof HoldObject)
 				{
@@ -184,30 +194,48 @@ public class LevelRenderer implements com.lds.LevelSurfaceView.Renderer
 					}
 					game.btnB.unpress();
 				}
-			}
+			}*/
 		}
 				
 		/**********************
 		 * Render all Entites *
 		 **********************/
 		
-		gl.glLoadIdentity();
-		
 		gl.glEnable(GL11.GL_TEXTURE_2D);
 		gl.glEnableClientState(GL11.GL_VERTEX_ARRAY);
         gl.glEnableClientState(GL11.GL_TEXTURE_COORD_ARRAY);
+        gl.glEnableClientState(GL11.GL_NORMAL_ARRAY);
+        
+        gl.glEnable(GL11.GL_LIGHTING);
+        gl.glEnable(GL11.GL_LIGHT0);
 		
+        //gl.glPushMatrix();
+        //gl.glTranslatef(-15f, 100f, 1);
+        gl.glLightfv(GL11.GL_LIGHT0, GL11.GL_POSITION, new float[] { -50, -100f, 3, 1 }, 0);
+        gl.glLightfv(GL11.GL_LIGHT0, GL11.GL_AMBIENT, new float[] { 0.8f, 0.8f, 0.8f, 1f }, 0);
+        gl.glLightfv(GL11.GL_LIGHT0, GL11.GL_DIFFUSE, new float[] { 1f, 1f, 1f, 1f }, 0);
+        gl.glLightf(GL11.GL_LIGHT0, GL11.GL_CONSTANT_ATTENUATION, 0f);
+        gl.glLightf(GL11.GL_LIGHT0, GL11.GL_LINEAR_ATTENUATION, 1/8192f);
+        gl.glLightf(GL11.GL_LIGHT0, GL11.GL_QUADRATIC_ATTENUATION, 1/20000f);
+        //gl.glPopMatrix();
         game.renderTileset(gl);
         
+        
+        gl.glDisable(GL11.GL_LIGHT0);
+        gl.glDisable(GL11.GL_LIGHTING);
+        gl.glDisableClientState(GL11.GL_NORMAL_ARRAY);
+        
 		for (Entity ent : game.getRenderedEnts())
-		{						
+		{
+		    gl.glPushMatrix();
 			ent.draw(gl);
-			gl.glLoadIdentity();
+			gl.glPopMatrix();
 		}
 		
 		gl.glDisable(GL11.GL_TEXTURE_2D);
 		gl.glDisableClientState(GL11.GL_VERTEX_ARRAY);
         gl.glDisableClientState(GL11.GL_TEXTURE_COORD_ARRAY);
+        
 		
 		game.btnB.unpress();
 		
@@ -218,19 +246,22 @@ public class LevelRenderer implements com.lds.LevelSurfaceView.Renderer
 		//Render UI, in the UI perspective
 		viewHUD(gl);
 		
+		gl.glDisable(GL11.GL_DEPTH_TEST);
 		gl.glEnableClientState(GL11.GL_VERTEX_ARRAY);
 		
 		for (Control ent : game.UIList)
 		{
+		    gl.glPushMatrix();
 			ent.update();
 			ent.updateVertexVBO(gl);
 			ent.updateGradientVBO(gl);
 			ent.updateTextureVBO(gl);
 			ent.draw(gl);
-			gl.glLoadIdentity();
+			gl.glPopMatrix();
 		}
 		
 		gl.glDisableClientState(GL11.GL_VERTEX_ARRAY);
+		gl.glEnable(GL11.GL_DEPTH_TEST);
 		
 		viewWorld(gl);
 				
@@ -324,7 +355,7 @@ public class LevelRenderer implements com.lds.LevelSurfaceView.Renderer
 	 */
 	public void updateCamPosition(GL10 gl)
 	{
-	    projWorld = Matrix4.ortho(game.camPosX - (Game.screenW / 2), game.camPosX + (Game.screenW / 2), game.camPosY + (Game.screenH / 2),  game.camPosY - (Game.screenH / 2), 0, 1);
+	    //projWorld = Matrix4.ortho(game.camPosX - (Game.screenW / 2), game.camPosX + (Game.screenW / 2), game.camPosY + (Game.screenH / 2),  game.camPosY - (Game.screenH / 2), 0, 1);
 		viewWorld(gl);
 		//game.updateRenderedTileset();
 	}
@@ -351,6 +382,7 @@ public class LevelRenderer implements com.lds.LevelSurfaceView.Renderer
 		gl.glLoadMatrixf(projWorld.array(), 0);
 		gl.glMatrixMode(GL10.GL_MODELVIEW);
 		gl.glLoadIdentity();
+		gl.glMultMatrixf(Matrix4.translate(new Vector3(-game.camPosX, -game.camPosY, -1)).array(), 0);//Matrix4.rotateX((float)Math.PI / 4f).array(), 0);
 	}
 	
 	public void setGameOverEvent(GameOverListener listener) 

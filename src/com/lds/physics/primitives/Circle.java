@@ -1,4 +1,4 @@
-package com.lds.physics;
+package com.lds.physics.primitives;
 
 import com.lds.math.Vector2;
 
@@ -6,8 +6,10 @@ import com.lds.math.Vector2;
  * A Shape that represents a circle.
  * @author Lightning Development Studios
  */
-public class Circle extends Shape 
+public class Circle extends Shape
 {
+    public float radius;
+    
     /****************
      * Constructors *
      ***************/
@@ -59,22 +61,10 @@ public class Circle extends Shape
      */
     public Circle(float size, Vector2 position, float angle, boolean solid)
     {
-        this(size, position, angle, new Vector2(1, 1), solid);
-    }
-    
-    /**
-     * Initializes a new instance of the Circle class.
-     * @param size The size of the circle
-     * @param position The position of the circle
-     * @param angle The angle of the circle in radians
-     * @param scale The scale of the circle
-     * @param solid The solidity of the circle
-     */
-    public Circle(float size, Vector2 position, float angle, Vector2 scale, boolean solid)
-    {
-        super(position, angle, scale, solid);
+        super(position, angle, solid);
         
         float halfSize = size / 2;
+        radius = halfSize;
         float[] vertices = 
             {
                 halfSize, halfSize,     //top left
@@ -91,7 +81,40 @@ public class Circle extends Shape
     @Override
     protected void updateMass()
     {
-        mass = density * getRadius() * getRadius() * (float)Math.PI;
+        //mass = density * getRadius() * getRadius() * (float)Math.PI;
+        mass = 1024;
+    }
+    
+    @Override
+    public Vector2[] getSATAxes(Shape s)
+    {
+        Vector2[] axes = new Vector2[1];
+        Vector2[] sVerts = s.getWorldVertices();
+        
+        axes[0] = Vector2.subtract(sVerts[0], position);
+        for (int i = 1; i < sVerts.length; i++)
+        {
+            Vector2 tempVec = Vector2.subtract(sVerts[i], position);
+            if (axes[0].length() > tempVec.length())
+            {
+                axes[0] = tempVec;
+            }
+        }
+        
+        axes[0] = Vector2.normalize(axes[0]);
+        return axes;
+    }
+    
+    @Override
+    public float[] project(Vector2 axis)
+    {
+        float[] bounds = new float[2];
+        float posDot = Vector2.dot(position, axis);
+        
+        bounds[0] = posDot - radius;
+        bounds[1] = posDot + radius;
+        
+        return bounds;
     }
     
     /**************************
@@ -104,13 +127,6 @@ public class Circle extends Shape
      */
     public float getRadius()
     {
-        return vertices[5] * scale.x();
-    }
-    
-    @Override
-    public void setScale(Vector2 scale)
-    {
-        if (scale.x() == scale.y())
-            super.setScale(scale);
+        return vertices[0];
     }
 }

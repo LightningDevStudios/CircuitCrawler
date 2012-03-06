@@ -6,13 +6,14 @@ import android.util.Log;
 import com.lds.*;
 import com.lds.UI.*;
 import com.lds.UI.Control.UIPosition;
+import com.lds.game.Tile.TileType;
 import com.lds.game.ai.Node;
 import com.lds.game.entity.*;
 import com.lds.game.event.*;
 import com.lds.math.Vector2;
 import com.lds.parser.Parser;
-import com.lds.physics.Shape;
-import com.lds.physics.World;
+import com.lds.physics.*;
+import com.lds.physics.primitives.*;
 import com.lds.trigger.*;
 
 import java.io.IOException;
@@ -36,11 +37,12 @@ public class Game
     public static Texture tilesetentities;
     public static Texture baricons;
 	
-	public ArrayList<Entity> entList;
-	//private Tile[][] tileset;
+    private Tileset tileset;
+	public ArrayList<Entity> entities;
 	public ArrayList<Control> UIList;
 	private ArrayList<Trigger> triggerList;
-	public EntityManager cleaner;
+	
+	public EntityManager entManager;
 	public World world;
 	
 	public ArrayList<Finger> fingerList;
@@ -50,7 +52,6 @@ public class Game
 	public float camPosY;
 	
 	private float worldMinX, worldMinY, worldMaxX, worldMaxY;
-	private Tileset tileset;
 	
 	//Testing data
 	public UIButton btnB;	
@@ -73,17 +74,20 @@ public class Game
 		final Texture energybarborder = new Texture(R.raw.energybarborder, 128, 16, 1, 1, context, "energybarborder");
 		final Texture healthbarborder = new Texture(R.raw.healthbarborder, 256, 16, 1, 1, context, "healthbarborder");
 			
-		entList = new ArrayList<Entity>();
+		entities = new ArrayList<Entity>();
 		UIList = new ArrayList<Control>();
 		triggerList = new ArrayList<Trigger>();
 		fingerList = new ArrayList<Finger>();
-		cleaner = new EntityManager();
+		entManager = new EntityManager();
 		        		
 		//StringRenderer sr = StringRenderer.getInstance();
 		//sr.loadTextTileset(text);
 				
 		SoundPlayer.initialize(context);
-				
+		
+		tilesetworld.setMinFilter(GL11.GL_LINEAR);
+		tilesetworld.setMagFilter(GL11.GL_LINEAR);
+		
 		TextureLoader.loadTexture(gl, tilesetwire);
 		TextureLoader.loadTexture(gl, tilesetworld);
 		TextureLoader.loadTexture(gl, tilesetentities);
@@ -118,14 +122,14 @@ public class Game
 	
 		//retreive data from parser
 		Tile[][] tileset = parser.tileset;
-		entList.addAll(parser.entList);
+		entities.addAll(parser.entList);
 		triggerList.addAll(parser.triggerList);
 		
 		this.tileset = new Tileset(tileset, tilesetworld);
 		this.tileset.initialize(gl);
 		
 		player = parser.player;
-		entList.add(player);
+		entities.add(player);
 		
 		btnB = new UIButton(80.0f, 80.0f, UIPosition.BOTTOMRIGHT);
 		btnB.autoPadding(0.0f, 0.0f, 90.0f, 5.0f);
@@ -144,14 +148,30 @@ public class Game
 		worldMaxX = (Tile.TILE_SIZE_F * (tileset[0].length / 2)) - (screenW / 2);
 		worldMaxY = (Tile.TILE_SIZE_F * (tileset.length / 2)) - (screenH / 2);
 		
-		ArrayList<Shape> shapeList = new ArrayList<Shape>();
-        for (Entity ent : entList)
-            shapeList.add(ent.getShape());
+		Vector2 worldSize = new Vector2(Tile.TILE_SIZE_F * tileset[0].length, Tile.TILE_SIZE_F * tileset.length);
+		
+		ArrayList<Shape> shapes = new ArrayList<Shape>();
+        for (Entity ent : entities)
+            shapes.add(ent.getShape());
+		
+        //TODO optimize into larger rectangles
+		for (int i = 0; i < tileset.length; i++)
+		{
+		    for (int j = 0; j < tileset[i].length; j++)
+		    {
+		        if (tileset[i][j].getTileType() == TileType.WALL)
+		        {
+		            Vector2 position = new Vector2((j + 0.5f) * Tile.TILE_SIZE_F - 0.5f * worldSize.x(), -((i + 0.5f) * Tile.TILE_SIZE_F - 0.5f * worldSize.y()));
+		            Rectangle r = new Rectangle(new Vector2(Tile.TILE_SIZE_F, Tile.TILE_SIZE_F), position, true);
+		            r.isStatic = true;
+		            shapes.add(r);
+		        }
+		    }
+		}		
                 
-	    world = new World(new Vector2(Tile.TILE_SIZE_F * tileset[0].length, Tile.TILE_SIZE_F * tileset.length), shapeList);
+	    world = new World(worldSize, shapes);
 		
 		updateCameraPosition();
-		//updateRenderedTileset();
 	}
 	
 	/**
@@ -167,49 +187,17 @@ public class Game
 		maxY = camPosY + (screenW / 2);
 		
 		ArrayList<Entity> renderList = new ArrayList<Entity>();
-		for (Entity ent : entList)
+		for (Entity ent : entities)
 		{
-			//define max square bounds
-		    final float diagonal = Vector2.subtract(ent.getPos(), ent.getShape().getWorldVertices()[0]).length();
-		    Vector2 diagonalVec = new Vector2(diagonal, diagonal);
-		    
-		    Vector2 entMin = Vector2.subtract(ent.getPos(), diagonalVec);
-		    Vector2 entMax = Vector2.add(ent.getPos(), diagonalVec);
+			AABB bbox = new AABB(ent.getShape().getWorldVertices());
 			
 			//values are opposite for entMin/Max because only the far tips have to be inside the screen (leftmost point on right border of screen)
-			if (entMin.x() <= maxX && entMax.x() >= minX && entMin.y() <= maxY && entMax.y() >= minY)
+			if (bbox.getLeftBound() <= maxX && bbox.getRightBound() >= minX && bbox.getBottomBound() <= maxY && bbox.getTopBound() >= minY)
 				renderList.add(ent);
 		}
 		
 		return renderList;
 	}
-	
-	/*public void updateRenderedTileset()
-	{
-		final float minX, maxX, minY, maxY, tilesetHalfWidth, tilesetHalfHeight;
-		minX = camPosX - (screenW / 2);
-		maxX = camPosX + (screenW / 2);
-		minY = camPosY - (screenH / 2);
-		maxY = camPosY + (screenH / 2);
-		
-		tilesetHalfWidth = tileset[0].length * Tile.TILE_SIZE_F / 2;
-		tilesetHalfHeight = tileset.length * Tile.TILE_SIZE_F / 2;
-		
-		tilesetMinX = (int)(minX + tilesetHalfWidth) / Tile.TILE_SIZE;
-		tilesetMaxX = (int)((Math.ceil(maxX + tilesetHalfWidth) - 1) / Tile.TILE_SIZE_F);
-		tilesetMinY = (int)((Math.abs(maxY - tilesetHalfHeight) - 1) / Tile.TILE_SIZE_F);
-		tilesetMaxY = (int)((Math.ceil(Math.abs(minY - tilesetHalfHeight)) - 1) / Tile.TILE_SIZE_F);
-		
-		//make sure bounds don't exceed level edges
-		if (tilesetMinX < 0)
-			tilesetMinX = 0;
-		if (tilesetMinY < 0)
-			tilesetMinY = 0;
-		if (tilesetMaxX > tileset[0].length - 1)
-			tilesetMaxX = tileset[0].length - 1;
-		if (tilesetMaxY > tileset.length - 1)
-			tilesetMaxY = tileset.length - 1;
-	}*/
 	
 	public void updateCameraPosition()
 	{
@@ -247,7 +235,6 @@ public class Game
 		}
 		
 		return null;
-		
 	}
 	
 	public void setGameOverEvent(GameOverListener listener)

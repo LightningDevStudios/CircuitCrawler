@@ -11,7 +11,7 @@ import javax.microedition.khronos.opengles.GL11;
  * Created to prevent errors relating to modifying an ArrayList while iterating through it.
  * @author Lightning Development Studios
  */
-public class EntityManager 
+public class EntityManager
 {
 	private static ArrayList<Entity> trashList;
 	private static ArrayList<Entity> addList;
@@ -63,6 +63,7 @@ public class EntityManager
 		{
 			ent.initialize(gl);
 			entList.add(ent);
+			
 		}
 		
 		trashList.clear();

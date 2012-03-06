@@ -112,6 +112,10 @@ public class Run extends Activity implements GameOverListener, GameInitializedLi
 	    pd.dismiss();
 	}
 	
+	/**
+	 * Called when the game is over.
+	 * @param winning Determines whether the game was won or lost.
+	 */
 	public void onGameOver(boolean winning)
 	{
 		//mp.stop();
