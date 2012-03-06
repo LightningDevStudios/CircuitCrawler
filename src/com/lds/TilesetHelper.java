@@ -8,85 +8,7 @@ import com.lds.math.Vector2;
 import java.util.HashMap;
 
 public final class TilesetHelper 
-{
-    public static HashMap<Byte, Point> pitTexPoints;
-    public static HashMap<Byte, Point> wallTexPoints;
-        
-    static
-    {
-        pitTexPoints = new HashMap<Byte, Point>();
-        wallTexPoints = new HashMap<Byte, Point>();
-        
-        //pit tiles
-        pitTexPoints.put((byte)0xFF, new Point(4, 0));
-        pitTexPoints.put((byte)0x29, new Point(5, 0));
-        pitTexPoints.put((byte)0x94, new Point(6, 0));
-        pitTexPoints.put((byte)0xBF, new Point(7, 0));
-        pitTexPoints.put((byte)0x07, new Point(4, 1));
-        pitTexPoints.put((byte)0x2F, new Point(5, 1));
-        pitTexPoints.put((byte)0x57, new Point(6, 1));
-        pitTexPoints.put((byte)0xBD, new Point(7, 1));
-        pitTexPoints.put((byte)0xE0, new Point(4, 2));
-        pitTexPoints.put((byte)0xE9, new Point(5, 2));
-        pitTexPoints.put((byte)0xF4, new Point(6, 2));
-        pitTexPoints.put((byte)0xFD, new Point(7, 2));
-        pitTexPoints.put((byte)0xEF, new Point(4, 3));
-        pitTexPoints.put((byte)0xE7, new Point(5, 3));
-        pitTexPoints.put((byte)0xF7, new Point(6, 3));
-        pitTexPoints.put((byte)0x00, new Point(7, 3));
-        
-        //wall tiles
-        wallTexPoints.put((byte)0xFF, new Point(0, 4));
-        wallTexPoints.put((byte)0x29, new Point(1, 4));
-        wallTexPoints.put((byte)0x94, new Point(2, 4));
-        wallTexPoints.put((byte)0xBF, new Point(3, 4));
-        wallTexPoints.put((byte)0x07, new Point(0, 5));
-        wallTexPoints.put((byte)0x2F, new Point(1, 5));
-        wallTexPoints.put((byte)0x57, new Point(2, 5));
-        wallTexPoints.put((byte)0xBD, new Point(3, 5));
-        wallTexPoints.put((byte)0xE0, new Point(0, 6));
-        wallTexPoints.put((byte)0xE9, new Point(1, 6));
-        wallTexPoints.put((byte)0xF4, new Point(2, 6));
-        wallTexPoints.put((byte)0xFD, new Point(3, 6));
-        wallTexPoints.put((byte)0xEF, new Point(0, 7));
-        wallTexPoints.put((byte)0xE7, new Point(1, 7));
-        wallTexPoints.put((byte)0xF7, new Point(2, 7));
-        wallTexPoints.put((byte)0x00, new Point(3, 7));
-        
-        wallTexPoints.put((byte)0x80, new Point(4, 4));
-        wallTexPoints.put((byte)0x20, new Point(5, 4));
-        wallTexPoints.put((byte)0xA4, new Point(6, 4));
-        wallTexPoints.put((byte)0xA1, new Point(7, 4));
-        wallTexPoints.put((byte)0x04, new Point(4, 5));
-        wallTexPoints.put((byte)0x01, new Point(5, 5));
-        wallTexPoints.put((byte)0x85, new Point(6, 5));
-        wallTexPoints.put((byte)0x25, new Point(7, 5));
-        wallTexPoints.put((byte)0x84, new Point(4, 6));
-        wallTexPoints.put((byte)0x21, new Point(5, 6));
-        wallTexPoints.put((byte)0xA5, new Point(6, 6));
-        wallTexPoints.put((byte)0xA9, new Point(7, 6));
-        wallTexPoints.put((byte)0xA0, new Point(4, 7));
-        wallTexPoints.put((byte)0x05, new Point(5, 7));
-        wallTexPoints.put((byte)0xAD, new Point(6, 7));
-        wallTexPoints.put((byte)0x2D, new Point(7, 7));
-        
-        wallTexPoints.put((byte)0xAF, new Point(8,  4));
-        wallTexPoints.put((byte)0xB7, new Point(9,  4));
-        wallTexPoints.put((byte)0x87, new Point(10, 4));
-        wallTexPoints.put((byte)0xED, new Point(8,  5));
-        wallTexPoints.put((byte)0xF5, new Point(9,  5));
-        wallTexPoints.put((byte)0xA7, new Point(10, 5));
-        wallTexPoints.put((byte)0x81, new Point(11, 5));
-        wallTexPoints.put((byte)0xB4, new Point(8,  6));
-        wallTexPoints.put((byte)0xE5, new Point(9,  6));
-        wallTexPoints.put((byte)0xE1, new Point(10, 6));
-        wallTexPoints.put((byte)0x24, new Point(11, 6));
-        wallTexPoints.put((byte)0x95, new Point(8,  7));
-        wallTexPoints.put((byte)0xB5, new Point(9,  7));
-        wallTexPoints.put((byte)0xE4, new Point(10, 7));
-        wallTexPoints.put((byte)0x27, new Point(11, 7));
-    }
-    
+{    
 	private TilesetHelper()
 	{
 		
@@ -280,6 +202,72 @@ public final class TilesetHelper
         }
         
         return texCoords;
+	}
+	
+	public static float[] getTileNormals(byte borders)
+	{
+	    float[] baseNormals =
+        {
+            0, 0, 1,
+            0, 0, 1,
+            0, 0, 1,
+            0, 0, 1,
+        };
+	    
+	    boolean left = (borders & 0x08) == 0x08;
+        boolean right = (borders & 0x10) == 0x10;
+        boolean top = (borders & 0x02) == 0x02;
+        boolean bottom = (borders & 0x40) == 0x40;
+        
+        int sideCount = 0;
+        if (left) sideCount++;
+        if (right) sideCount++;
+        if (bottom) sideCount++;
+        if (top) sideCount++;
+        
+        float[] normals = new float[12 * (sideCount + 1)];
+        
+        System.arraycopy(baseNormals, 0, normals, 0, baseNormals.length);
+        
+        int addPosition = 12;
+        
+        if (left)
+        {
+            normals[addPosition] = -1;
+            normals[addPosition + 3] = -1;
+            normals[addPosition + 6] = -1;
+            normals[addPosition + 9] = -1;
+            addPosition += 12;
+        }
+        
+        if (right)
+        {
+            normals[addPosition] = 1;
+            normals[addPosition + 3] = 1;
+            normals[addPosition + 6] = 1;
+            normals[addPosition + 9] = 1;
+            addPosition += 12;
+        }
+        
+        if (top)
+        {
+            normals[addPosition + 1] = 1;
+            normals[addPosition + 4] = 1;
+            normals[addPosition + 7] = 1;
+            normals[addPosition + 10] = 1;
+            addPosition += 12;
+        }
+        
+        if (bottom)
+        {
+            normals[addPosition + 1] = -1;
+            normals[addPosition + 4] = -1;
+            normals[addPosition + 7] = -1;
+            normals[addPosition + 10] = -1;
+            addPosition += 12;
+        }
+        
+        return normals;
 	}
 	
 	public static int[] getTileIndices(byte borders)

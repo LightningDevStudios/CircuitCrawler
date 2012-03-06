@@ -49,7 +49,6 @@ public class Tileset
             for (int j = 0; j < tiles[0].length; j++)
             {
                 tiles[i][j].calculateBorders(tiles);
-                tiles[i][j].updateTexturePos();
                 for (Float f : tiles[i][j].getVertexData())
                 {
                     verts.add(f);
@@ -89,8 +88,9 @@ public class Tileset
     {        
         gl.glBindTexture(GL11.GL_TEXTURE_2D, tex.getTexture());
         gl.glBindBuffer(GL11.GL_ARRAY_BUFFER, vertBuffer);
-        gl.glVertexPointer(3, GL11.GL_FLOAT, 20, 0);
-        gl.glTexCoordPointer(2, GL11.GL_FLOAT, 20, 12);
+        gl.glVertexPointer(3, GL11.GL_FLOAT, 32, 0);
+        gl.glTexCoordPointer(2, GL11.GL_FLOAT, 32, 12);
+        gl.glNormalPointer(GL11.GL_FLOAT, 32, 20);
         
         gl.glDrawArrays(GL11.GL_TRIANGLES, 0, indCount);
         

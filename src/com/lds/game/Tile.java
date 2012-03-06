@@ -67,6 +67,7 @@ public class Tile
 	    
 	    float[] vertices = null;
         float[] texCoords = null;
+        float[] normals = null;
         //TODO get actual OpenGL ordered indices working
         int[] order = null;
 	    
@@ -87,16 +88,25 @@ public class Tile
                     64f / 512f - 1f / 1024f, 64.0f / 256.0f - 1f / 512f,
                     64f / 512f - 1f / 1024f, 0
                 };
+	            normals = new float[]
+                {
+	                0, 0, 1,
+	                0, 0, 1,
+	                0, 0, 1,
+	                0, 0, 1
+                };
 	            order = new int[] { 0, 1, 2, 0, 2, 3 };
 	            break;
 	        case WALL:
 	            vertices = TilesetHelper.getTileVertices(this.borders, s, 0.2f);
 	            texCoords = TilesetHelper.getWallTexCoords(this.borders);
+	            normals = TilesetHelper.getTileNormals(this.borders);
 	            order = TilesetHelper.getTileIndices(this.borders);
 	            break;
 	        case PIT:
 	            vertices = TilesetHelper.getTileVertices(this.borders, s, -0.2f);
 	            texCoords = TilesetHelper.getPitTexCoords(this.borders);
+	            normals = TilesetHelper.getTileNormals(this.borders);
 	            order = TilesetHelper.getTileIndices(this.borders);
 	            break;
 	        default:
@@ -110,6 +120,13 @@ public class Tile
 	            };
 	            //grab the default texcoords.
 	            texCoords = TilesetHelper.getTextureVertices(Game.tilesetworld, texPos);
+	            normals = new float[]
+                {
+                    0, 0, 1,
+                    0, 0, 1,
+                    0, 0, 1,
+                    0, 0, 1
+                };
 	            order = new int[] { 0, 1, 2, 0, 2, 3 };
 	    }
 	    
@@ -122,16 +139,19 @@ public class Tile
             vertices[i + 1] += pos.y();
         }
         
-        float[] vertexData = new float[order.length * 5];
+        float[] vertexData = new float[order.length * 8];
         
         //interleave arrays
         for (int i = 0; i < order.length; i++)
         {
-            vertexData[i * 5]     = vertices[order[i] * 3];
-            vertexData[i * 5 + 1] = vertices[order[i] * 3 + 1];
-            vertexData[i * 5 + 2] = vertices[order[i] * 3 + 2];
-            vertexData[i * 5 + 3] = texCoords[order[i] * 2];
-            vertexData[i * 5 + 4] = texCoords[order[i] * 2 + 1];
+            vertexData[i * 8]     = vertices[order[i] * 3];
+            vertexData[i * 8 + 1] = vertices[order[i] * 3 + 1];
+            vertexData[i * 8 + 2] = vertices[order[i] * 3 + 2];
+            vertexData[i * 8 + 3] = texCoords[order[i] * 2];
+            vertexData[i * 8 + 4] = texCoords[order[i] * 2 + 1];
+            vertexData[i * 8 + 5] = normals[order[i] * 3];
+            vertexData[i * 8 + 6] = normals[order[i] * 3 + 1];
+            vertexData[i * 8 + 7] = normals[order[i] * 3 + 2];
         }
         
         return vertexData;
@@ -145,99 +165,6 @@ public class Tile
 	{
 		return type;
 	}
-	
-	/**
-	 * Chooses the right texture for tiles that have borders.
-	 * \todo design this better, the only difference between updateBordersWall and updateBordersPit is which HashSet is used to look up points.
-	 */
-	public void updateTexturePos()
-	{	    
-	    switch (type)
-	    {
-	    case FLOOR:
-	            texPos = new Point((int)(Math.random() * 4), (int)(Math.random() * 4));
-	            break;
-	        case WALL:
-	            updateBordersWall();
-	            break;
-	        case PIT:
-	            updateBordersPit();
-	            break;
-            default:
-                break;
-	    }
-	}
-	
-	/**
-	 * Calculates which texture tile to use based on the bordering tileset tiles.
-     * The texture tileset has all it's combinations of bordering tiles defined at TilesetHelper.pitTexPoints.
-	 */
-	public void updateBordersPit()
-    {    
-	    if (TilesetHelper.pitTexPoints.containsKey(borders))
-	    {
-	        texPos = TilesetHelper.pitTexPoints.get(borders);
-	    }
-	    else
-	    {
-	        //set defaults, in case of undefined behavior.
-            texPos = new Point(7, 3);
-            int borderBitsSet = 8;
-            
-            for (Map.Entry<Byte, Point> entry : TilesetHelper.pitTexPoints.entrySet())
-            {
-                if ((entry.getKey() & borders) == borders)
-                {
-                    //Since there will be multiple texture tiles that contain all the borders,
-                    //we want to look for the one with the least number of bordering tiles.
-                    //This gives us the closest match. Repeat until the smallest texture tile is found.
-                    int entryBitsSet = MathHelper.numberOfBitsSet(entry.getKey());
-                    if (entryBitsSet < borderBitsSet)
-                    {
-                        texPos = entry.getValue();
-                        borderBitsSet = entryBitsSet;
-                    }
-                }
-            }
-	    }
-    }
-
-	/**
-	 * Calculates which texture tile to use based on the bordering tileset tiles.
-	 * The texture tileset has all it's combinations of bordering tiles defined at TilesetHelper.wallTexPoints.
-	 */
-    public void updateBordersWall()
-    {
-        //if the bordering tiles are the exact arrangement as one of the texture tiles, use that directly.
-        if (TilesetHelper.wallTexPoints.containsKey(borders))
-        {
-            texPos = TilesetHelper.wallTexPoints.get(borders);
-        }
-        
-        //otherwise find a texture tile that contains all the bordering tiles.
-        else
-        {
-            //set defaults, in case of undefined behavior.
-            texPos = new Point(3, 7);
-            int borderBitsSet = 8;
-            
-            for (Map.Entry<Byte, Point> entry : TilesetHelper.wallTexPoints.entrySet())
-            {
-                if ((entry.getKey() & borders) == borders)
-                {
-                    //Since there will be multiple texture tiles that contain all the borders,
-                    //we want to look for the one with the least number of bordering tiles.
-                    //This gives us the closest match. Repeat until the smallest texture tile is found.
-                    int entryBitsSet = MathHelper.numberOfBitsSet(entry.getKey());
-                    if (entryBitsSet < borderBitsSet)
-                    {
-                        texPos = entry.getValue();
-                        borderBitsSet = entryBitsSet;
-                    }
-                }
-            }
-        }
-    }
     
     /**
      * Calculates the bordering tile bitfield.

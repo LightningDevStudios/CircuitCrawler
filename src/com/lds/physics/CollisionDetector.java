@@ -20,8 +20,6 @@ public class CollisionDetector
 
         spatialHash = new SpatialHashGrid(shapes, size.x(), size.y(), 2, 2);
         contacts = new ArrayList<Contact>();
-        
-       
     }
 
     public void update()

@@ -146,7 +146,7 @@ public class LevelRenderer implements com.lds.LevelSurfaceView.Renderer
 		//TODO: game.update(), chain off to world.update()
 		game.world.integrate(Stopwatch.getFrameTime());
 		
-		//HACK: for the love of GOD move this out of GameRenderer
+		//HACK: for the love of GOD move this out of LevelRenderer
 		//Iterates through all entities
 		final int size = game.entities.size();
 		for (int i = 0; i < size; i++)
@@ -196,12 +196,29 @@ public class LevelRenderer implements com.lds.LevelSurfaceView.Renderer
 		 * Render all Entites *
 		 **********************/
 		
-		
 		gl.glEnable(GL11.GL_TEXTURE_2D);
 		gl.glEnableClientState(GL11.GL_VERTEX_ARRAY);
         gl.glEnableClientState(GL11.GL_TEXTURE_COORD_ARRAY);
+        gl.glEnableClientState(GL11.GL_NORMAL_ARRAY);
+        
+        gl.glEnable(GL11.GL_LIGHTING);
+        gl.glEnable(GL11.GL_LIGHT0);
 		
+        //gl.glPushMatrix();
+        //gl.glTranslatef(-15f, 100f, 1);
+        gl.glLightfv(GL11.GL_LIGHT0, GL11.GL_POSITION, new float[] { -50, -100f, 3, 1 }, 0);
+        gl.glLightfv(GL11.GL_LIGHT0, GL11.GL_AMBIENT, new float[] { 0.8f, 0.8f, 0.8f, 1f }, 0);
+        gl.glLightfv(GL11.GL_LIGHT0, GL11.GL_DIFFUSE, new float[] { 1f, 1f, 1f, 1f }, 0);
+        gl.glLightf(GL11.GL_LIGHT0, GL11.GL_CONSTANT_ATTENUATION, 0f);
+        gl.glLightf(GL11.GL_LIGHT0, GL11.GL_LINEAR_ATTENUATION, 1/8192f);
+        gl.glLightf(GL11.GL_LIGHT0, GL11.GL_QUADRATIC_ATTENUATION, 1/20000f);
+        //gl.glPopMatrix();
         game.renderTileset(gl);
+        
+        
+        gl.glDisable(GL11.GL_LIGHT0);
+        gl.glDisable(GL11.GL_LIGHTING);
+        gl.glDisableClientState(GL11.GL_NORMAL_ARRAY);
         
 		for (Entity ent : game.getRenderedEnts())
 		{
