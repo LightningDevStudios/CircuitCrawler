@@ -144,8 +144,8 @@ public abstract class Shape
     public Shape(Vector2 position, float angle, boolean solid)
     {
         density = 1;
-        staticFriction = 0f;
-        kineticFriction = 0f;
+        staticFriction = 1;
+        kineticFriction = 2;
         velocity = new Vector2(0, 0);
         totalImpulse = new Vector2(0, 0);
         forces = new ArrayList<IndivForce>();
@@ -164,7 +164,7 @@ public abstract class Shape
     public void integrate(float frameTime)
     {
         //no friction for static objects
-        if (isStatic)
+        if (isStatic || !solid)
             return;
 
         //apply forces
@@ -182,11 +182,14 @@ public abstract class Shape
             addImpulse(Vector2.scale(velocity, -kineticFriction * mass / speed * frameTime));
         
         //velocity damping
-        //velocity = Vector2.scale(velocity, 0.9f);
+        velocity = Vector2.scale(velocity, 0.99f);
         
         //add impulse
         if (totalImpulse.length() > 0)
             velocity = Vector2.add(velocity, Vector2.scale(totalImpulse, 1 / mass));
+        
+        if (velocity.length() > 1000)
+            velocity = Vector2.scale(velocity, 1000 / velocity.length());
         
         setPos(Vector2.add(position, Vector2.scale(velocity, frameTime)));
 
@@ -497,7 +500,7 @@ public abstract class Shape
         if (angle == Float.NaN)
             return;
         
-        this.angle = angle;
+        this.angle = (float)(Math.toRadians(angle) % Math.PI);
         
         rotMat = Matrix4.rotateZ(this.angle);
         rebuildModel();

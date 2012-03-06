@@ -59,9 +59,10 @@ public class Rectangle extends Shape
     @Override
     protected void updateMass()
     {
-        float width = vertices[0] * 2;
-        float height = vertices[1] * 2;
-        mass = density * width * height;
+        //float width = vertices[0] * 2;
+        //float height = vertices[1] * 2;
+        //mass = density * width * height;
+        mass = 1024;
     }
     
     @Override

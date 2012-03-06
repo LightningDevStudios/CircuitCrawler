@@ -81,7 +81,8 @@ public class Circle extends Shape
     @Override
     protected void updateMass()
     {
-        mass = density * getRadius() * getRadius() * (float)Math.PI;
+        //mass = density * getRadius() * getRadius() * (float)Math.PI;
+        mass = 1024;
     }
     
     @Override
