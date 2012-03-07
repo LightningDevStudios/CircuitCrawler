@@ -193,6 +193,11 @@ public class Tile
 		return type;
 	}
     
+	public void setTileType(Tile.TileType type)
+	{
+	    this.type = type;
+	}
+	
     /**
      * Calculates the bordering tile bitfield.
      * A tile is considered a "bordering tile" of a given tile if it meets the following criteria:

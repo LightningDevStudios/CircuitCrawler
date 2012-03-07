@@ -2,6 +2,7 @@ package com.ltdev.cc.entity;
 
 import javax.microedition.khronos.opengles.GL11;
 
+import com.ltdev.Direction;
 import com.ltdev.EntityManager;
 import com.ltdev.Stopwatch;
 import com.ltdev.cc.physics.primitives.Rectangle;
@@ -12,18 +13,34 @@ public class SpikeWall extends Entity
     private boolean extended;
     private Vector2 targetPos, initialPos, endPos;
     
-	public SpikeWall(float size, Vector2 position, boolean left)
+	public SpikeWall(float size, Vector2 position, Direction dir)
     {
         super(new Rectangle(new Vector2(size, size), position, 270, true));
         shape.isStatic = true;
         
         extended = false;
         initialPos = position;
-        if(left)
+        if(dir == Direction.LEFT)
+        {
             endPos = new Vector2(position.x() - 72, position.y());
-        else
+            shape.setAngle(270);
+        }
+        else if(dir == Direction.RIGHT)
+        {
             endPos = new Vector2(position.x() + 72, position.y());
-        
+            shape.setAngle(90);
+        }
+        else if(dir == Direction.DOWN)
+        {
+            endPos = new Vector2(position.x(), position.y() - 72);
+            shape.setAngle(0);
+        }
+        else if(dir == Direction.UP)
+        {
+            endPos = new Vector2(position.x() + 72, position.y() + 72);
+            shape.setAngle(180);
+        }
+
         this.tilesetX = 3;
         this.tilesetY = 1;
     }
@@ -48,6 +65,6 @@ public class SpikeWall extends Entity
 	public void interact(Entity ent)
 	{
 	    if (ent instanceof Player)
-	        EntityManager.removeEntity(ent);
+	        Player.kill();
 	}
 }

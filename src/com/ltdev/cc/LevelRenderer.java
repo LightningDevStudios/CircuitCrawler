@@ -145,7 +145,7 @@ public class LevelRenderer implements com.ltdev.LevelSurfaceView.Renderer
 		}
 		
 		game.updateTriggers();
-		game.entManager.update(game.entities, gl);
+		game.entManager.update(game.entities, game.world, gl);
 		game.updateFingers();
 		
 		//update all entites
@@ -171,16 +171,7 @@ public class LevelRenderer implements com.ltdev.LevelSurfaceView.Renderer
 	
 			if (game.btnB.isPressed())
 			{
-			    RaycastData dat = game.world.rayCast(game.player.getPos(), game.player.getAngle());
-			    
-			    if (dat != null)
-			    {
-    			    Vector2 laserPos = Vector2.add(game.player.getPos(), new Vector2(dat.distance / 2 * (float)Math.cos(game.player.getAngle()), dat.distance / 2 * (float)Math.sin(game.player.getAngle())));
-    			    Laser l = new Laser(5, dat.distance, game.player.getAngle(), laserPos);
-    			    l.setTexture(Game.tilesetentities);
-    			    EntityManager.addEntity(l);
-			    }
-			    //System.out.println("LOLZ");
+
 			}
 			
 			//inside of ent for loop

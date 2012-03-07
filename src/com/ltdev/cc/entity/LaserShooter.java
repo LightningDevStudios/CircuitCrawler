@@ -24,10 +24,16 @@ public class LaserShooter extends Entity
     {
         super(new Rectangle(new Vector2(size, size), position, angle, true));
         
+        shape.isStatic = true;
+        this.player = player;
+        
         this.shotsPerSecond = shotsPerSecond;
         this.stupidity = stupidity;
         this.beamWidth = beamWidth;
         this.physWorld = physWorld;
+        
+        this.tilesetX = 3;
+        this.tilesetY = 0;
         
         time = Stopwatch.getFrameTime();
     }
@@ -35,8 +41,8 @@ public class LaserShooter extends Entity
     public void facePlayer()
     {
         Vector2 distance = Vector2.subtract(shape.getPos(), player.getPos());
-        float angle = (float)((Math.atan2(Vector2.perpDot(Vector2.UNIT_X, distance), Vector2.dot(Vector2.UNIT_X, distance))) + (Math.random() * 2 - 1) * stupidity);
-        shape.setAngle(angle);
+        float targetAng = distance.angleDeg() + 180;
+        shape.setAngle(targetAng);
     }
     
     public void update(GL11 gl)
@@ -48,15 +54,16 @@ public class LaserShooter extends Entity
         
         if (time / 1000 > shotsPerSecond)
         {
-            time = 0;
             if (laser != null)
                 EntityManager.removeEntity(laser);
             
-            RaycastData data = physWorld.rayCast(getPos(), shape.getAngle());
+            float rand = (float)((Math.random() * 2 - 1) * stupidity);
+            RaycastData data = physWorld.rayCast(getPos(), (float) (shape.getAngle() + Math.toRadians(rand)));
             if(data != null)
             {
-                Vector2 laserPos = Vector2.add(getPos(), new Vector2(data.distance / 2 * (float)Math.cos(getAngle()), data.distance / 2 * (float)Math.sin(getAngle())));
-                laser = new Laser(5, data.distance, getAngle(), laserPos);
+                time = 0;
+                Vector2 laserPos = Vector2.add(getPos(), new Vector2(data.distance / 2 * (float)Math.cos((float) (shape.getAngle() + Math.toRadians(rand))), data.distance / 2 * (float)Math.sin((float) (shape.getAngle() + Math.toRadians(rand)))));
+                laser = new Laser(5, data.distance, (float) (shape.getAngle() + Math.toRadians(rand)), laserPos);
                 laser.setTexture(Game.tilesetentities);
                 EntityManager.addEntity(laser);
             }
