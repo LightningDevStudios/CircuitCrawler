@@ -14,8 +14,10 @@ public class Laser extends Entity
     
     public Laser(float beamWidth, float beamLength, float angle, Vector2 position)
     {
-        super(new Rectangle(new Vector2(beamWidth, beamLength), position, (float)Math.toDegrees(angle) + 90, false));
-        countdown = 1000;
+        super(new Rectangle(new Vector2(beamLength, beamWidth), position, (float)Math.toDegrees(angle), false));
+        this.tilesetX = 1;
+        this.tilesetY = 3;
+        countdown = 500;
     }
     
     @Override

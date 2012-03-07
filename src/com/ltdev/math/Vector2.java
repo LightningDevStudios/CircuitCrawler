@@ -133,7 +133,7 @@ public final class Vector2
      */
     public float angleRad()
     {
-        float rad = (float)(Math.atan2(y, x)) % (float)Math.PI * 2;
+        float rad = (float)(Math.atan2(y, x));
         
         return rad;
     }
@@ -144,7 +144,7 @@ public final class Vector2
      */
     public float angleDeg()
     {
-        float deg = (float)Math.toDegrees(Math.atan2(y, x)) % 360;
+        float deg = (float)Math.toDegrees(Math.atan2(y, x));
         
         return deg;
     }

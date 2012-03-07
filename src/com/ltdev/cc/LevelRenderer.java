@@ -167,7 +167,7 @@ public class LevelRenderer implements com.ltdev.LevelSurfaceView.Renderer
 	
 			if (game.btnB.isPressed())
 			{
-			    RaycastData dat = game.world.rayCast(game.player.getPos(), game.player.getAngle() + (float)Math.PI);
+			    RaycastData dat = game.world.rayCast(game.player.getPos(), game.player.getAngle());
 			    
 			    if (dat != null)
 			    {
