@@ -175,12 +175,13 @@ public class LevelRenderer implements com.ltdev.LevelSurfaceView.Renderer
 			    
 			    if (dat != null)
 			    {
-    			    Vector2 laserPos = Vector2.add(game.player.getPos(), new Vector2(dat.distance / 2 * (float)Math.cos(game.player.getAngle()), dat.distance / 2 * (float)Math.sin(game.player.getAngle())));
-    			    Laser l = new Laser(5, dat.distance, game.player.getAngle(), laserPos);
+    			    Vector2 laserPos = Vector2.add(game.player.getPos(), new Vector2(dat.getDistance() / 2 * (float)Math.cos(game.player.getAngle()), dat.getDistance() / 2 * (float)Math.sin(game.player.getAngle())));
+    			    Laser l = new Laser(5, dat.getDistance(), game.player.getAngle(), laserPos);
     			    l.setTexture(Game.tilesetentities);
     			    EntityManager.addEntity(l);
 			    }
-			    //System.out.println("LOLZ");
+			    else
+			        System.out.println("LOLZ");
 			}
 			
 			//inside of ent for loop
