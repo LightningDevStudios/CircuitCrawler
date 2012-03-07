@@ -115,9 +115,9 @@ public abstract class Entity implements InteractListener
         buffer.put(t);
         buffer.position(0);
 	    
-	    gl.glBindBuffer(GL11.GL_ARRAY_BUFFER, vbo);
+	    /*gl.glBindBuffer(GL11.GL_ARRAY_BUFFER, vbo);
 	    gl.glBufferSubData(GL11.GL_ARRAY_BUFFER, 32, t.length * 4, buffer);
-	    gl.glBindBuffer(GL11.GL_ARRAY_BUFFER, 0);
+	    gl.glBindBuffer(GL11.GL_ARRAY_BUFFER, 0);*/
 	}
 	
 	/*********************

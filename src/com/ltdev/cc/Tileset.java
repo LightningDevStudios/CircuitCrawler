@@ -16,7 +16,7 @@ import javax.microedition.khronos.opengles.GL11;
  */
 public class Tileset 
 {
-    private Tile[][] tiles;
+    public Tile[][] tiles;
     private Texture tex;
     private int vertCount;
     private int indCount;
