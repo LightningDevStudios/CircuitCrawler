@@ -178,7 +178,7 @@ public class Game
 	    s.setTexture(tilesetentities);
 	    EntityManager.addEntity(s);
 
-	    Cannon c = new Cannon(40,  Vector2.add(player.getPos(), new Vector2(-72, 0)), 0, 20, 50000000f, player);
+	    Cannon c = new Cannon(40,  Vector2.add(player.getPos(), new Vector2(-72, 0)), 0, 20, 500000, player);
 	    c.setTexture(tilesetentities);
 	    EntityManager.addEntity(c);
 	   

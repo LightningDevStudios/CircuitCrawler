@@ -46,9 +46,9 @@ public class Cannon extends Entity
 		
 		time += Stopwatch.getFrameTime();
 		
-		if(time > 2000)
+		if(time > 3000)
 		{
-		    if(shells.size() > 4)
+		    if(shells.size() > 2)
 		    {
 		        EntityManager.removeEntity(shells.get(0));
 		        shells.remove(0);
