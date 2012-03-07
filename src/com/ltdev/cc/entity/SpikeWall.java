@@ -12,9 +12,10 @@ public class SpikeWall extends Entity
     private boolean extended;
     private Vector2 targetPos, initialPos, endPos;
     
-	public SpikeWall(float size, Vector2 position, Vector2 endlocation, boolean left)
+	public SpikeWall(float size, Vector2 position, boolean left)
     {
-        super(new Rectangle(new Vector2(size, size), position, 0, true));
+        super(new Rectangle(new Vector2(size, size), position, 270, true));
+        shape.isStatic = true;
         
         extended = false;
         initialPos = position;
@@ -32,14 +33,14 @@ public class SpikeWall extends Entity
 	{
 	    float frameTime = (float)Stopwatch.getFrameTime() / 1000f;
         if(extended)
-            targetPos = Vector2.add(shape.getPos(), Vector2.scale( Vector2.subtract(initialPos, shape.getPos()), frameTime / 3));
+            targetPos = Vector2.add(shape.getPos(), Vector2.scale( Vector2.subtract(initialPos, shape.getPos()), frameTime));
         else
-            targetPos = Vector2.add(shape.getPos(), Vector2.scale( Vector2.subtract(endPos, shape.getPos()), frameTime));
+            targetPos = Vector2.add(shape.getPos(), Vector2.scale( Vector2.subtract(endPos, shape.getPos()), frameTime * 10));
         shape.setPos(targetPos);
         
-        if(targetPos.approxEquals(initialPos, 0.1f))
+        if(targetPos.approxEquals(initialPos, 2))
             extended = false;
-        if(targetPos.approxEquals(endPos, 0.1f))
+        if(targetPos.approxEquals(endPos, 1))
             extended = true;
 	}
 	

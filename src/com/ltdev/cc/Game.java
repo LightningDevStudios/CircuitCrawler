@@ -172,6 +172,10 @@ public class Game
 		}		
                 
 	    world = new World(worldSize, shapes);
+	    
+	    SpikeWall s = new SpikeWall(70, Vector2.add(player.getPos(), new Vector2(72 * 3 + 40, 0)), true);
+	    s.setTexture(tilesetentities);
+	    EntityManager.addEntity(s);
 		
 		updateCameraPosition();
 	}
