@@ -1,6 +1,6 @@
 //Maya ASCII 2012 scene
 //Name: buttonDown.ma
-//Last modified: Mon, Mar 05, 2012 05:39:54 PM
+//Last modified: Wed, Mar 07, 2012 01:12:30 PM
 //Codeset: 1252
 requires maya "2012";
 currentUnit -l centimeter -a degree -t film;
@@ -12,14 +12,14 @@ fileInfo "osv" "Microsoft Windows 7 Business Edition, 64-bit Windows 7 Service P
 fileInfo "license" "student";
 createNode transform -s -n "persp";
 	setAttr ".v" no;
-	setAttr ".t" -type "double3" -37.237696773704087 24.239823589762036 -5.8978717624292987 ;
-	setAttr ".r" -type "double3" -32.738352729662296 -98.999999999960565 0 ;
+	setAttr ".t" -type "double3" -36.35450716802864 45.595058436369186 15.059146939924773 ;
+	setAttr ".r" -type "double3" 308.66164726987915 663.79999999938786 5.7173822566511571e-015 ;
 createNode camera -s -n "perspShape" -p "persp";
 	setAttr -k off ".v" no;
 	setAttr ".pze" yes;
 	setAttr ".fl" 34.999999999999993;
 	setAttr ".fcp" 1000;
-	setAttr ".coi" 44.821869662017278;
+	setAttr ".coi" 62.863302488129023;
 	setAttr ".imn" -type "string" "persp";
 	setAttr ".den" -type "string" "persp_depth";
 	setAttr ".man" -type "string" "persp_mask";
@@ -79,9 +79,8 @@ createNode mesh -n "pCylinderShape1" -p "pCylinder1";
 	setAttr ".dcc" -type "string" "Ambient+Diffuse";
 	setAttr ".covm[0]"  0 1 1;
 	setAttr ".cdvm[0]"  0 1 1;
-	setAttr -s 9 ".pt[17:25]" -type "float3"  0 -0.35428745 0 0 -0.35428745 
-		0 0 -0.35428745 0 0 -0.35428745 0 0 -0.35428745 0 0 -0.35428745 0 0 -0.35428745 0 
-		0 -0.35428745 0 0 -0.35428745 0;
+	setAttr ".ndt" 2;
+	setAttr ".dn" yes;
 createNode lightLinker -s -n "lightLinker1";
 	setAttr -s 2 ".lnk";
 	setAttr -s 2 ".slnk";
@@ -166,6 +165,50 @@ createNode script -n "uiConfigurationScriptNode";
 createNode script -n "sceneConfigurationScriptNode";
 	setAttr ".b" -type "string" "playbackOptions -min 1 -max 24 -ast 1 -aet 48 ";
 	setAttr ".st" 6;
+createNode polySoftEdge -n "polySoftEdge1";
+	setAttr ".uopa" yes;
+	setAttr ".ics" -type "componentList" 1 "e[16:23]";
+	setAttr ".ix" -type "matrix" 1 0 0 0 0 1 0 0 0 0 1 0 0.0012137451759031137 0.51098310139590353 0.095992252856397897 1;
+	setAttr ".a" 180;
+createNode polyTweak -n "polyTweak1";
+	setAttr ".uopa" yes;
+	setAttr -s 9 ".tk[17:25]" -type "float3"  0 -0.35428745 0 0 -0.35428745
+		 0 0 -0.35428745 0 0 -0.35428745 0 0 -0.35428745 0 0 -0.35428745 0 0 -0.35428745 0
+		 0 -0.35428745 0 0 -0.35428745 0;
+createNode deleteComponent -n "deleteComponent1";
+	setAttr ".dc" -type "componentList" 1 "f[22:23]";
+createNode polyMergeVert -n "polyMergeVert1";
+	setAttr ".ics" -type "componentList" 2 "vtx[19]" "vtx[25]";
+	setAttr ".ix" -type "matrix" 1 0 0 0 0 1 0 0 0 0 1 0 0.0012137451759031137 0.51098310139590353 0.095992252856397897 1;
+	setAttr ".am" yes;
+createNode polyTweak -n "polyTweak2";
+	setAttr ".uopa" yes;
+	setAttr ".tk[19]" -type "float3"  9.8786974 0 0;
+createNode deleteComponent -n "deleteComponent2";
+	setAttr ".dc" -type "componentList" 1 "f[14:15]";
+createNode polyMergeVert -n "polyMergeVert2";
+	setAttr ".ics" -type "componentList" 2 "vtx[7]" "vtx[16]";
+	setAttr ".ix" -type "matrix" 1 0 0 0 0 1 0 0 0 0 1 0 0.0012137451759031137 0.51098310139590353 0.095992252856397897 1;
+	setAttr ".am" yes;
+createNode polyTweak -n "polyTweak3";
+	setAttr ".uopa" yes;
+	setAttr -s 2 ".tk";
+	setAttr ".tk[16]" -type "float3" 11.968096 0 0 ;
+createNode polySoftEdge -n "polySoftEdge2";
+	setAttr ".uopa" yes;
+	setAttr ".ics" -type "componentList" 7 "e[31]" "e[33]" "e[35]" "e[38]" "e[41]" "e[44]" "e[47:48]";
+	setAttr ".ix" -type "matrix" 1 0 0 0 0 1 0 0 0 0 1 0 0.0012137451759031137 0.51098310139590353 0.095992252856397897 1;
+	setAttr ".a" 0;
+createNode polySoftEdge -n "polySoftEdge3";
+	setAttr ".uopa" yes;
+	setAttr ".ics" -type "componentList" 1 "e[0:7]";
+	setAttr ".ix" -type "matrix" 1 0 0 0 0 1 0 0 0 0 1 0 0.0012137451759031137 0.51098310139590353 0.095992252856397897 1;
+	setAttr ".a" 0;
+createNode polySoftEdge -n "polySoftEdge4";
+	setAttr ".uopa" yes;
+	setAttr ".ics" -type "componentList" 8 "e[16:23]" "e[29:30]" "e[34]" "e[37]" "e[40]" "e[43]" "e[46]" "e[49]";
+	setAttr ".ix" -type "matrix" 1 0 0 0 0 1 0 0 0 0 1 0 0.0012137451759031137 0.51098310139590353 0.095992252856397897 1;
+	setAttr ".a" 0;
 select -ne :time1;
 	setAttr ".o" 1;
 	setAttr ".unw" 1;
@@ -187,7 +230,9 @@ select -ne :hardwareRenderGlobals;
 select -ne :defaultHardwareRenderGlobals;
 	setAttr ".fn" -type "string" "im";
 	setAttr ".res" -type "string" "ntsc_4d 646 485 1.333";
-connectAttr "polyExtrudeFace1.out" "pCylinderShape1.i";
+select -ne :ikSystem;
+	setAttr -s 4 ".sol";
+connectAttr "polySoftEdge4.out" "pCylinderShape1.i";
 relationship "link" ":lightLinker1" ":initialShadingGroup.message" ":defaultLightSet.message";
 relationship "link" ":lightLinker1" ":initialParticleSE.message" ":defaultLightSet.message";
 relationship "shadowLink" ":lightLinker1" ":initialShadingGroup.message" ":defaultLightSet.message";
@@ -196,6 +241,23 @@ connectAttr "layerManager.dli[0]" "defaultLayer.id";
 connectAttr "renderLayerManager.rlmi[0]" "defaultRenderLayer.rlid";
 connectAttr "polyCylinder1.out" "polyExtrudeFace1.ip";
 connectAttr "pCylinderShape1.wm" "polyExtrudeFace1.mp";
+connectAttr "polyTweak1.out" "polySoftEdge1.ip";
+connectAttr "pCylinderShape1.wm" "polySoftEdge1.mp";
+connectAttr "polyExtrudeFace1.out" "polyTweak1.ip";
+connectAttr "polySoftEdge1.out" "deleteComponent1.ig";
+connectAttr "polyTweak2.out" "polyMergeVert1.ip";
+connectAttr "pCylinderShape1.wm" "polyMergeVert1.mp";
+connectAttr "deleteComponent1.og" "polyTweak2.ip";
+connectAttr "polyMergeVert1.out" "deleteComponent2.ig";
+connectAttr "polyTweak3.out" "polyMergeVert2.ip";
+connectAttr "pCylinderShape1.wm" "polyMergeVert2.mp";
+connectAttr "deleteComponent2.og" "polyTweak3.ip";
+connectAttr "polyMergeVert2.out" "polySoftEdge2.ip";
+connectAttr "pCylinderShape1.wm" "polySoftEdge2.mp";
+connectAttr "polySoftEdge2.out" "polySoftEdge3.ip";
+connectAttr "pCylinderShape1.wm" "polySoftEdge3.mp";
+connectAttr "polySoftEdge3.out" "polySoftEdge4.ip";
+connectAttr "pCylinderShape1.wm" "polySoftEdge4.mp";
 connectAttr "pCylinderShape1.iog" ":initialShadingGroup.dsm" -na;
 connectAttr "defaultRenderLayer.msg" ":defaultRenderingList1.r" -na;
 // End of buttonDown.ma

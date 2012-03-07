@@ -91,12 +91,12 @@ public class Tile
                 };
 	            break;
 	        case WALL:
-	            vertices = TilesetHelper.getTileVertices(this.borders, s, 0.2f);
+	            vertices = TilesetHelper.getTileVertices(this.borders, s, TILE_SIZE_F);
 	            texCoords = TilesetHelper.getWallTexCoords(this.borders);
 	            normals = TilesetHelper.getTileNormals(this.borders);
 	            break;
 	        case PIT:
-	            vertices = TilesetHelper.getTileVertices(this.borders, s, -0.2f);
+	            vertices = TilesetHelper.getTileVertices(this.borders, s, -TILE_SIZE_F);
 	            texCoords = TilesetHelper.getPitTexCoords(this.borders);
 	            normals = TilesetHelper.getTileNormals(this.borders);
 	            break;
