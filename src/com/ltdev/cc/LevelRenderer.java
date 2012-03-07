@@ -59,7 +59,7 @@ public class LevelRenderer implements com.ltdev.LevelSurfaceView.Renderer
 		charlieSheen = false;
 		lightPos = Vector4.scale(Vector4.UNIT_X, 100);
 		lightAngle = 0;
-		lightAngleSpeed = (float)Math.PI;
+		lightAngleSpeed = (float)Math.PI / 4;
 	}
 
 	/**
@@ -147,14 +147,14 @@ public class LevelRenderer implements com.ltdev.LevelSurfaceView.Renderer
 		game.entManager.update(game.entities, gl);
 		game.updateFingers();
 		
-		//update all entites
-		for (Entity ent : game.entities)
-		{
-			ent.update(null);
-		}
-		
 		//TODO: game.update(), chain off to world.update()
 		game.world.integrate(Stopwatch.getFrameTime());
+		
+		//update all entites
+        for (Entity ent : game.entities)
+        {
+            ent.update(gl);
+        }
 		
 		//HACK: for the love of GOD move this out of LevelRenderer
 		//Iterates through all entities

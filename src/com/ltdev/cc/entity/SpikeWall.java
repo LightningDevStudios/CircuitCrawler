@@ -18,7 +18,7 @@ public class SpikeWall extends Entity
         
         extended = false;
         initialPos = position;
-        if(left)
+        if (left)
             endPos = new Vector2(position.x() - 72, position.y());
         else
             endPos = new Vector2(position.x() + 72, position.y());
@@ -30,22 +30,26 @@ public class SpikeWall extends Entity
 	@Override
 	public void update(GL11 gl)
 	{
+	    super.update(gl);
+	    
 	    float frameTime = (float)Stopwatch.getFrameTime() / 1000f;
-        if(extended)
-            targetPos = Vector2.add(shape.getPos(), Vector2.scale( Vector2.subtract(initialPos, shape.getPos()), frameTime / 3));
+        if (extended)
+            targetPos = Vector2.add(shape.getPos(), Vector2.scale(Vector2.subtract(initialPos, shape.getPos()), frameTime / 3));
         else
-            targetPos = Vector2.add(shape.getPos(), Vector2.scale( Vector2.subtract(endPos, shape.getPos()), frameTime));
+            targetPos = Vector2.add(shape.getPos(), Vector2.scale(Vector2.subtract(endPos, shape.getPos()), frameTime));
         shape.setPos(targetPos);
         
-        if(targetPos.approxEquals(initialPos, 0.1f))
+        if (targetPos.approxEquals(initialPos, 0.1f))
             extended = false;
-        if(targetPos.approxEquals(endPos, 0.1f))
+        if (targetPos.approxEquals(endPos, 0.1f))
             extended = true;
 	}
 	
 	@Override
 	public void interact(Entity ent)
 	{
+	    super.interact(ent);
+	    
 	    if (ent instanceof Player)
 	        EntityManager.removeEntity(ent);
 	}

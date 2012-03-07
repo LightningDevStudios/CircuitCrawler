@@ -1,6 +1,5 @@
 package com.ltdev.cc.event;
 
-import com.ltdev.cc.Tile;
 import com.ltdev.cc.entity.Entity;
 
 /**
@@ -20,18 +19,6 @@ public interface InteractListener
      * @param ent The Entity that stopped colliding with this one.
      */
     void uninteract(Entity ent);
-    
-    /**
-     * Called when a Shape collides, or "interacts", with a Tile.
-     * @param t The Tile that the Shape collided with.
-     */
-    void tileInteract(Tile t);
-    
-    /**
-     * Called when a Shape stops colliding, or "uninteracts", with a Tile.
-     * @param t The Tile that the Shape stopped colliding with.
-     */
-    void tileUninteract(Tile t);
     
     /**
      * Gets the Entity that implements this interface.

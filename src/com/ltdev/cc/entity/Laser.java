@@ -13,6 +13,8 @@ public class Laser extends Entity
     @Override
     public void interact(Entity ent)
     {
+        super.interact(ent);
+        
         if (ent instanceof Player)
         {
          
