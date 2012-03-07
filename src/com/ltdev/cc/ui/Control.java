@@ -368,6 +368,13 @@ public abstract class Control
 	{
 		if (needToUpdateTexVBO)
 		{
+		    if (VBOTexturePtr == 0)
+		    {
+		        int[] values = new int[1];
+		        gl.glGenBuffers(1, values, 0);
+		        VBOTexturePtr = values[0];
+		    }
+		    
 			gl.glBindBuffer(GL11.GL_ARRAY_BUFFER, VBOTexturePtr);
 			final int textureSize = textureBuffer.capacity() * 4;
 			gl.glBufferData(GL11.GL_ARRAY_BUFFER, textureSize, textureBuffer, GL11.GL_STATIC_DRAW);

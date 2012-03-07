@@ -21,11 +21,15 @@ public class LevelSurfaceView extends GLSurfaceView
 	 * @param r A Renderer that the GLSurfaceView will use.
 	 * @param syncObj An object to sync between the main thread and the rendering thread.
 	 */
-	public LevelSurfaceView(Context context, Renderer r, Object syncObj) 
+	public LevelSurfaceView(Context context, Renderer r, Object syncObj)
 	{
 		super(context);
 		this.syncObj = syncObj;
 		renderer = r;
+		
+		this.setEGLConfigChooser(true);
+		this.setDebugFlags(DEBUG_CHECK_GL_ERROR);
+		
 		setRenderer(r);
 	}
 	
