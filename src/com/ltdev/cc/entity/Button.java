@@ -21,6 +21,8 @@ public class Button extends Entity
 	@Override
 	public void update(GL11 gl)
 	{
+	    super.update(gl);
+	    
 	    //update the texture when activated/deactivated.
 	    if (prevActive != active)
 	    {
@@ -54,7 +56,9 @@ public class Button extends Entity
 	
 	@Override
 	public void interact(Entity ent)
-	{	
+	{
+	    super.interact(ent);
+	    
 		if (ent instanceof Player || ent instanceof HoldObject)
 			activate();
 	}

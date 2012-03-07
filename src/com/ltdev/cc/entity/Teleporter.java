@@ -27,7 +27,9 @@ public class Teleporter extends Entity
 
 	@Override
 	public void interact(Entity ent)
-	{		
+	{
+	    super.interact(ent);
+	    
 		if (active && tpLink != null)
 		{
 			if (ent instanceof HoldObject && ((HoldObject)ent).isHeld())
@@ -46,12 +48,15 @@ public class Teleporter extends Entity
 	@Override
 	public void update(GL11 gl)
     {
+	    super.update(gl);
+	    
         this.shape.setAngle(this.shape.getAngle() + rotationPerUpdate);
     }
 	
 	@Override
 	public void uninteract(Entity ent)		
 	{
+	    super.uninteract(ent);
 		active = true;
 		rotationPerUpdate = 0.01f;
 	}

@@ -17,12 +17,14 @@ public class Laser extends Entity
         super(new Rectangle(new Vector2(beamLength, beamWidth), position, (float)Math.toDegrees(angle), false));
         this.tilesetX = 1;
         this.tilesetY = 3;
-        countdown = 500;
+        countdown = 100;
     }
     
     @Override
     public void interact(Entity ent)
     {
+        super.interact(ent);
+        
         if (ent instanceof Player)
         {
             //Player.kill();

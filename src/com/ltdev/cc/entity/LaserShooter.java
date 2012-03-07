@@ -62,8 +62,8 @@ public class LaserShooter extends Entity
             if(data != null)
             {
                 time = 0;
-                Vector2 laserPos = Vector2.add(getPos(), new Vector2(data.distance / 2 * (float)Math.cos((float) (shape.getAngle() + Math.toRadians(rand))), data.distance / 2 * (float)Math.sin((float) (shape.getAngle() + Math.toRadians(rand)))));
-                laser = new Laser(5, data.distance, (float) (shape.getAngle() + Math.toRadians(rand)), laserPos);
+                Vector2 laserPos = Vector2.add(getPos(), new Vector2(data.getDistance() / 2 * (float)Math.cos((float) (shape.getAngle() + Math.toRadians(rand))), data.getDistance() / 2 * (float)Math.sin((float) (shape.getAngle() + Math.toRadians(rand)))));
+                laser = new Laser(5, data.getDistance(), (float) (shape.getAngle() + Math.toRadians(rand)), laserPos);
                 laser.setTexture(Game.tilesetentities);
                 EntityManager.addEntity(laser);
             }

@@ -24,31 +24,7 @@ public class Player extends Entity
 	@Override
 	public void interact(Entity ent)
 	{
-				    
-	}
-	
-	/**
-	 * \todo fall into pits.
-	 * @param tile The tile to interact with.
-	 */
-	@Override
-	public void tileInteract(Tile tile)
-	{
-		/*if (tile != null)
-		{
-			if (tile.isPit())
-			{
-				this.disableUserControl();
-				if (!falling)
-				{
-					this.stop();
-					this.scaleTo(0, 0);
-					this.moveTo(tile.getXPos(), tile.getYPos());
-					SoundPlayer.playSound(SoundPlayer.PIT_FALL);
-				}
-				falling = true;
-			}
-		}*/
+	    super.interact(ent);
 	}
 	
 	public void holdObject(HoldObject hObj)

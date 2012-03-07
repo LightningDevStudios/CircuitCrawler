@@ -13,6 +13,7 @@ import com.ltdev.math.*;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
+import java.util.ArrayList;
 
 import javax.microedition.khronos.opengles.GL11;
 
@@ -33,12 +34,18 @@ public abstract class Entity implements InteractListener
 		
 	protected int vbo;
 	
+	private ArrayList<Entity> previousFrameColliders;
+	private ArrayList<Entity> currentFrameColliders;
+	
 	public Entity(Shape shape)
 	{		
 		this.shape = shape;
 		this.shape.setInteractListener(this);
 		this.colorVec = new Vector4(1, 1, 1, 1);
 		this.endColorVec = new Vector4(1, 1, 1, 1);
+		
+		this.previousFrameColliders = new ArrayList<Entity>();
+		this.currentFrameColliders = new ArrayList<Entity>();
 	}
 	
 	public void draw(GL11 gl)
@@ -60,9 +67,24 @@ public abstract class Entity implements InteractListener
 		gl.glDrawArrays(GL11.GL_TRIANGLE_STRIP, 0, 4);
 	}
 	
-	public void update(GL11 gl)
+	/**
+	 * Updates the entity.
+	 * @param gl The OpenGL context.
+	 */
+	@SuppressWarnings("unchecked")
+    public void update(GL11 gl)
 	{
-	    
+	    if (previousFrameColliders.size() > 0 || currentFrameColliders.size() > 0)
+	    {
+    	    for (Entity ent : previousFrameColliders)
+    	    {
+    	        if (!currentFrameColliders.contains(ent))
+    	            this.uninteract(ent);
+    	    }
+    	    
+    	    previousFrameColliders = (ArrayList<Entity>)currentFrameColliders.clone();
+    	    currentFrameColliders.clear();
+	    }
 	}
 
 	/**
@@ -148,25 +170,19 @@ public abstract class Entity implements InteractListener
 	 * Called when the entity collides with another entity.
 	 * @param ent The entity to interact with.
 	 */
-	public void interact(Entity ent) {}
+	public void interact(Entity ent)
+	{
+	    currentFrameColliders.add(ent);
+	}
 	
 	/**
 	 * Called when the entity stops colliding with another entity.
 	 * @param ent The entity that was interacted with.
 	 */
-	public void uninteract(Entity ent) {}
-	
-	/**
-	 * Called when the entity collides with a tile.
-	 * @param tile The tile to interact with.
-	 */
-	public void tileInteract(Tile tile) {}
-	
-	/**
-	 * Called when the entity stops colliding with a tile.
-	 * @param tile The tile that was interacted with.
-	 */
-	public void tileUninteract(Tile tile) {}
+	public void uninteract(Entity ent)
+	{
+	    
+	}
 		
 	/**********************
 	 * RenderMode methods *

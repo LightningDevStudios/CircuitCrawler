@@ -59,7 +59,7 @@ public class CollisionDetector
         
         if (xIsMax)
         {
-            for (int i = startXIndex + 1; i < spatialHash.cellsX; i++)
+            for (int i = startXIndex + 1; i <= spatialHash.cellsX; i++)
                 xIgnoreValues.add(i);
         }
         else
@@ -70,7 +70,7 @@ public class CollisionDetector
         
         if (yIsMax)
         {
-            for (int i = startYIndex + 1; i < spatialHash.cellsY; i++)
+            for (int i = startYIndex + 1; i <= spatialHash.cellsY; i++)
                 yIgnoreValues.add(i);
         }
         else
@@ -87,7 +87,7 @@ public class CollisionDetector
             float xValue = i * spatialHash.cellSizeX;
             float yValue = slope * xValue + yIntersect;
             int yIndex = (int)(yValue / spatialHash.cellSizeY);
-            if (yIndex >= spatialHash.cellsY || (i < spatialHash.cellsX - 1 && xIgnoreValues.contains(i + 1)))
+            if (yIndex >= spatialHash.cellsY || (i != 0 && i < spatialHash.cellsX - 1 && xIgnoreValues.contains(i + 1)))
                 continue;
             
             ArrayList<Shape> hashShapes;
@@ -127,7 +127,7 @@ public class CollisionDetector
             float yValue = i * spatialHash.cellSizeY;   
             float xValue = invSlope * yValue + xIntersect;
             int xIndex = (int)(xValue / spatialHash.cellSizeX);
-            if (xIndex >= spatialHash.cellsX || (i < spatialHash.cellsY - 1 && yIgnoreValues.contains(i + 1)))
+            if (xIndex >= spatialHash.cellsX || (i != 0 && i < spatialHash.cellsY - 1 && yIgnoreValues.contains(i + 1)))
                 continue;
             
             ArrayList<Shape> hashShapes;
@@ -182,39 +182,40 @@ public class CollisionDetector
         for (int i = 0; i < shapeList.length; i++)
         {
             Shape s = (Shape)shapeList[i];
-            if (s instanceof Rectangle)
+
+            Vector2 axis = Vector2.perpendicularLeft(dir);
+            Vector2[] verts = s.getWorldVertices();
+            float startProj = Vector2.dot(start, axis);
+            boolean intersecting = false;
+            boolean toTheLeft = false;
+            boolean toTheRight = false;
+            for (Vector2 vert : verts)
             {
-                Vector2 axis = Vector2.perpendicularLeft(dir);
-                Vector2[] verts = s.getWorldVertices();
-                float startProj = Vector2.dot(start, axis);
-                boolean intersecting = false;
-                boolean toTheLeft = false;
-                boolean toTheRight = false;
-                for (Vector2 vert : verts)
+                if (Vector2.dot(vert, axis) < startProj)
                 {
-                    if (Vector2.dot(vert, axis) < startProj)
+                    if (toTheRight)
                     {
-                        if (toTheRight)
-                        {
-                            intersecting = true;
-                            break;
-                        }
-                        else
-                            toTheLeft = true;
+                        intersecting = true;
+                        break;
                     }
-                    if (Vector2.dot(vert, axis) > startProj)
-                    {
-                        if (toTheLeft)
-                        {
-                            intersecting = true;
-                            break;
-                        }
-                        else
-                            toTheRight = true;
-                    }
+                    else
+                        toTheLeft = true;
                 }
-                
-                if (intersecting)
+                if (Vector2.dot(vert, axis) > startProj)
+                {
+                    if (toTheLeft)
+                    {
+                        intersecting = true;
+                        break;
+                    }
+                    else
+                        toTheRight = true;
+                }
+            }
+            
+            if (intersecting)
+            {
+                if (s instanceof Rectangle)
                 {
                     Vector2 intersect1 = null;
                     Vector2 intersect2 = null;
@@ -240,13 +241,23 @@ public class CollisionDetector
                     float distance1 = Vector2.subtract(intersect1, start).length();
                     float distance2 = Vector2.subtract(intersect2, start).length();
                     if (distance1 < distance2)
-                        return new RaycastData(distance1, s, intersect1, intersect2);
+                        return new RaycastData(distance1, s);
                     else
-                        return new RaycastData(distance2, s, intersect2, intersect1);
+                        return new RaycastData(distance2, s);
                 }
-                else
-                    continue;
+                else if (s instanceof Circle)
+                {
+                    Vector2 toCircle = Vector2.subtract(s.getPos(), start);
+                    Vector2 scaledDir = Vector2.scale(dir, toCircle.length());
+                    if (Vector2.subtract(toCircle, scaledDir).length() < ((Circle)s).getRadius())
+                        return new RaycastData(toCircle.length(), s);
+                    else
+                        continue;
+                }
             }
+            else
+                continue;
+            
         }
         
         return null;
