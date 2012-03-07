@@ -64,8 +64,6 @@ public class Tile
 	    float[] vertices = null;
         float[] texCoords = null;
         float[] normals = null;
-        //TODO get actual OpenGL ordered indices working
-        int[] order = null;
 	    
 	    switch (type)
 	    {
@@ -91,19 +89,16 @@ public class Tile
 	                0, 0, 1,
 	                0, 0, 1
                 };
-	            order = new int[] { 0, 1, 2, 0, 2, 3 };
 	            break;
 	        case WALL:
 	            vertices = TilesetHelper.getTileVertices(this.borders, s, 0.2f);
 	            texCoords = TilesetHelper.getWallTexCoords(this.borders);
 	            normals = TilesetHelper.getTileNormals(this.borders);
-	            order = TilesetHelper.getTileIndices(this.borders);
 	            break;
 	        case PIT:
 	            vertices = TilesetHelper.getTileVertices(this.borders, s, -0.2f);
 	            texCoords = TilesetHelper.getPitTexCoords(this.borders);
 	            normals = TilesetHelper.getTileNormals(this.borders);
-	            order = TilesetHelper.getTileIndices(this.borders);
 	            break;
 	        default:
 	            //by default use the same vertices as the floor.
@@ -128,7 +123,6 @@ public class Tile
                     0, 0, 1,
                     0, 0, 1
                 };
-	            order = new int[] { 0, 1, 2, 0, 2, 3 };
 	    }
 	    
 	    
@@ -140,22 +134,54 @@ public class Tile
             vertices[i + 1] += pos.y();
         }
         
-        float[] vertexData = new float[order.length * 8];
+        float[] vertexData = new float[(vertices.length / 3) * 8];
         
         //interleave arrays
-        for (int i = 0; i < order.length; i++)
+        for (int i = 0; i < vertices.length / 3; i++)
         {
-            vertexData[i * 8]     = vertices[order[i] * 3];
-            vertexData[i * 8 + 1] = vertices[order[i] * 3 + 1];
-            vertexData[i * 8 + 2] = vertices[order[i] * 3 + 2];
-            vertexData[i * 8 + 3] = texCoords[order[i] * 2];
-            vertexData[i * 8 + 4] = texCoords[order[i] * 2 + 1];
-            vertexData[i * 8 + 5] = normals[order[i] * 3];
-            vertexData[i * 8 + 6] = normals[order[i] * 3 + 1];
-            vertexData[i * 8 + 7] = normals[order[i] * 3 + 2];
+            vertexData[i * 8]     = vertices[i * 3];
+            vertexData[i * 8 + 1] = vertices[i * 3 + 1];
+            vertexData[i * 8 + 2] = vertices[i * 3 + 2];
+            vertexData[i * 8 + 3] = texCoords[i * 2];
+            vertexData[i * 8 + 4] = texCoords[i * 2 + 1];
+            vertexData[i * 8 + 5] = normals[i * 3];
+            vertexData[i * 8 + 6] = normals[i * 3 + 1];
+            vertexData[i * 8 + 7] = normals[i * 3 + 2];
         }
         
         return vertexData;
+	}
+	
+	/**
+	 * Gets the index data for this tile.
+	 * @param startVert The starting index for this tile.
+	 * @return An int array containing the tile's indices.
+	 */
+	public int[] getIndexData(int startVert)
+	{
+	    int[] order;
+        
+        switch (type)
+        {
+            case FLOOR:
+                order = new int[] { 0, 1, 2, 0, 2, 3 };
+                break;
+            case WALL:
+                order = TilesetHelper.getTileIndices(this.borders);
+                break;
+            case PIT:
+                order = TilesetHelper.getTileIndices(this.borders);
+                break;
+            default:
+                order = new int[] { 0, 1, 2, 0, 2, 3 };
+        }
+        
+        for (int i = 0; i < order.length; i++)
+        {
+            order[i] += startVert;
+        }
+        
+        return order;
 	}
 	
 	/**
