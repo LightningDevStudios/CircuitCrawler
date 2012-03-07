@@ -10,9 +10,7 @@ import com.ltdev.cc.entity.*;
 import com.ltdev.cc.event.*;
 import com.ltdev.cc.physics.RaycastData;
 import com.ltdev.cc.ui.*;
-import com.ltdev.math.Matrix4;
-import com.ltdev.math.Vector2;
-import com.ltdev.math.Vector3;
+import com.ltdev.math.*;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
@@ -34,6 +32,9 @@ public class LevelRenderer implements com.ltdev.LevelSurfaceView.Renderer
 	private PuzzleActivatedListener puzzleActivatedListener;
 	private GameOverListener gameOverListener;
 	private int levelId;
+	
+	private float lightAngle, lightAngleSpeed;
+	private Vector4 lightPos;
 	
 	private Matrix4 projWorld, projUI;
 	
@@ -57,6 +58,9 @@ public class LevelRenderer implements com.ltdev.LevelSurfaceView.Renderer
 		SoundPlayer.initialize(context);
 		paused = false;
 		charlieSheen = false;
+		lightPos = Vector4.scale(Vector4.UNIT_X, 100);
+		lightAngle = 0;
+		lightAngleSpeed = (float)Math.PI;
 	}
 
 	/**
@@ -225,15 +229,18 @@ public class LevelRenderer implements com.ltdev.LevelSurfaceView.Renderer
         gl.glEnable(GL11.GL_LIGHTING);
         gl.glEnable(GL11.GL_LIGHT0);
 		
-        //gl.glPushMatrix();
-        //gl.glTranslatef(-15f, 100f, 1);
-        gl.glLightfv(GL11.GL_LIGHT0, GL11.GL_POSITION, new float[] { -50, -100f, 3, 1 }, 0);
+        Vector2 angVec = Vector2.fromPolar(lightAngle, 100);
+        lightPos = new Vector4(angVec.x(), angVec.y(), 3, 1);
+        lightAngle += lightAngleSpeed * Stopwatch.getFrameTime() / 1000;
+        lightAngle %= (float)Math.PI * 2;
+        gl.glLightfv(GL11.GL_LIGHT0, GL11.GL_POSITION, lightPos.array(), 0);
+        //gl.glLightfv(GL11.GL_LIGHT0, GL11.GL_POSITION, new float[] { -50, -100f, 3, 1 }, 0);
         gl.glLightfv(GL11.GL_LIGHT0, GL11.GL_AMBIENT, new float[] { 0.8f, 0.8f, 0.8f, 1f }, 0);
         gl.glLightfv(GL11.GL_LIGHT0, GL11.GL_DIFFUSE, new float[] { 1f, 1f, 1f, 1f }, 0);
         gl.glLightf(GL11.GL_LIGHT0, GL11.GL_CONSTANT_ATTENUATION, 0f);
         gl.glLightf(GL11.GL_LIGHT0, GL11.GL_LINEAR_ATTENUATION, 1 / 8192f);
         gl.glLightf(GL11.GL_LIGHT0, GL11.GL_QUADRATIC_ATTENUATION, 1 / 20000f);
-        //gl.glPopMatrix();
+        
         game.renderTileset(gl);
         
         

@@ -5,6 +5,7 @@ import com.ltdev.Texture;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
+import java.nio.ShortBuffer;
 import java.util.ArrayList;
 
 import javax.microedition.khronos.opengles.GL11;
@@ -21,6 +22,7 @@ public class Tileset
     private int vertCount;
     private int indCount;
     private int vertBuffer;
+    private int indBuffer;
     
     /**
      * Initializes a new instance of the Tileset class.
@@ -40,8 +42,9 @@ public class Tileset
     public void initialize(GL11 gl)
     {
         ArrayList<Float> verts = new ArrayList<Float>();
+        ArrayList<Short> indices = new ArrayList<Short>();
         
-        //store data in a float buffer, as required by Android.
+        int vertCount = 0;
         
         //iterate through tileset, generate vertex data, then append to the buffer.
         for (int i = 0; i < tiles.length; i++)
@@ -49,35 +52,53 @@ public class Tileset
             for (int j = 0; j < tiles[0].length; j++)
             {
                 tiles[i][j].calculateBorders(tiles);
-                for (Float f : tiles[i][j].getVertexData())
-                {
+                float[] vertData = tiles[i][j].getVertexData();
+                int[] indData = tiles[i][j].getIndexData(vertCount);
+                
+                vertCount += vertData.length / 8;
+                
+                for (Float f : vertData)
                     verts.add(f);
-                }
+                
+                for (Integer ind : indData)
+                    indices.add(ind.shortValue());
             }
         }
         
         vertCount = verts.size();
-        indCount = vertCount / 4;
+        indCount = indices.size();
         
         ByteBuffer byteBuf = ByteBuffer.allocateDirect(vertCount * 4);
         byteBuf.order(ByteOrder.nativeOrder());
         FloatBuffer buffer = byteBuf.asFloatBuffer();
         
         for (float f : verts)
-        {
             buffer.put(f);
-        }
              
         buffer.position(0);
         
+        ByteBuffer byteBufI = ByteBuffer.allocateDirect(indCount * 2);
+        byteBufI.order(ByteOrder.nativeOrder());
+        ShortBuffer bufferI = byteBufI.asShortBuffer();
+        
+        for (short s : indices)
+            bufferI.put(s);
+        
+        bufferI.position(0);
+        
         //generate VBO
-        int[] glBuffers = new int[1];
-        gl.glGenBuffers(1, glBuffers, 0);
+        int[] glBuffers = new int[2];
+        gl.glGenBuffers(2, glBuffers, 0);
         vertBuffer = glBuffers[0];
+        indBuffer = glBuffers[1];
         
         gl.glBindBuffer(GL11.GL_ARRAY_BUFFER, vertBuffer);
         gl.glBufferData(GL11.GL_ARRAY_BUFFER, vertCount * 4, buffer, GL11.GL_STATIC_DRAW);
         gl.glBindBuffer(GL11.GL_ARRAY_BUFFER, 0);
+        
+        gl.glBindBuffer(GL11.GL_ELEMENT_ARRAY_BUFFER, indBuffer);
+        gl.glBufferData(GL11.GL_ELEMENT_ARRAY_BUFFER, indCount * 2, bufferI, GL11.GL_STATIC_DRAW);
+        gl.glBindBuffer(GL11.GL_ELEMENT_ARRAY_BUFFER, 0);
     }
     
     /**
@@ -87,12 +108,16 @@ public class Tileset
     public void draw(GL11 gl)
     {        
         gl.glBindTexture(GL11.GL_TEXTURE_2D, tex.getTexture());
+        
         gl.glBindBuffer(GL11.GL_ARRAY_BUFFER, vertBuffer);
         gl.glVertexPointer(3, GL11.GL_FLOAT, 32, 0);
         gl.glTexCoordPointer(2, GL11.GL_FLOAT, 32, 12);
         gl.glNormalPointer(GL11.GL_FLOAT, 32, 20);
         
-        gl.glDrawArrays(GL11.GL_TRIANGLES, 0, indCount);
+        gl.glBindBuffer(GL11.GL_ELEMENT_ARRAY_BUFFER, indBuffer);
+        gl.glDrawElements(GL11.GL_TRIANGLES, indCount, GL11.GL_UNSIGNED_SHORT, 0);
+        gl.glBindBuffer(GL11.GL_ELEMENT_ARRAY_BUFFER, 0);
+        //gl.glDrawArrays(GL11.GL_TRIANGLES, 0, indCount);
         
         gl.glBindBuffer(GL11.GL_ARRAY_BUFFER, 0);
         gl.glBindTexture(GL11.GL_TEXTURE_2D, 0);

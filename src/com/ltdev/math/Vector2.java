@@ -164,6 +164,17 @@ public final class Vector2
 	 ******************/
 	
     /**
+     * Gets a vector from an angle and a radius.
+     * @param angle The angle.
+     * @param radius The radius.
+     * @return A vector.
+     */
+    public static Vector2 fromPolar(float angle, float radius)
+    {
+        return new Vector2((float)Math.cos(angle) * radius, (float)Math.sin(angle) * radius);
+    }
+    
+    /**
      * Transforms a Vector2 by a Matrix3x2.
      * @param v The Vector2 to transform.
      * @param mat A Matrix3x2 to transform by.

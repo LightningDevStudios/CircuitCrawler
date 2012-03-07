@@ -95,6 +95,20 @@ public final class Vector4
 	}
 	
 	/**
+     * Creates a new instance of the Vector4 class.
+     * @param xy A Vector2 containing the X and Y components of the vector.
+     * @param z The Z component of the vector.
+     * @param w The W component of the vector.
+     */
+    public Vector4(Vector2 xy, float z, float w)
+    {
+        this.x = xy.x();
+        this.y = xy.y();
+        this.z = z;
+        this.w = w;
+    }
+	
+	/**
 	 * Creates a new instance of the Vector4 class.
 	 * @param xyz A Vector3 containing the X, Y, and Z components of the vector.
 	 * @param w The W component of the vector.
@@ -104,20 +118,6 @@ public final class Vector4
 		this.x = xyz.x();
 		this.y = xyz.y();
 		this.z = xyz.z();
-		this.w = w;
-	}
-	
-	/**
-	 * Creates a new instance of the Vector4 class.
-	 * @param xy A Vector2 containing the X and Y components of the vector.
-	 * @param z The Z component of the vector.
-	 * @param w The W component of the vector.
-	 */
-	public Vector4(Vector2 xy, float z, float w)
-	{
-		this.x = xy.x();
-		this.y = xy.y();
-		this.z = z;
 		this.w = w;
 	}
 	
@@ -154,10 +154,10 @@ public final class Vector4
 			  m31 = elements[8],	m32 = elements[9],	m33 = elements[10],	m34 = elements[11],
 			  m41 = elements[12],	m42 = elements[13],	m43 = elements[14],	m44 = elements[15];
 		
-		float vX = v.x();
-		float vY = v.y();
-		float vZ = v.z();
-		float vW = v.w();
+		float vX = v.x;
+		float vY = v.y;
+		float vZ = v.z;
+		float vW = v.w;
 		
 		return new Vector4(vX * m11 + vY * m21 + vZ * m31 + vW * m41,
 		                   vX * m12 + vY * m22 + vZ * m32 + vW * m42,
@@ -172,7 +172,18 @@ public final class Vector4
 	 */
 	public static Vector4 abs(Vector4 v)
 	{
-	    return new Vector4(Math.abs(v.x()), Math.abs(v.y()), Math.abs(v.z()), Math.abs(v.w()));
+	    return new Vector4(Math.abs(v.x), Math.abs(v.y), Math.abs(v.z), Math.abs(v.w));
+	}
+	
+	/**
+	 * Scales a vector by a scalar.
+	 * @param v The vector to scale.
+	 * @param scale The scalar to scale by.
+	 * @return A scaled vector.
+	 */
+	public static Vector4 scale(Vector4 v, float scale)
+	{
+	    return new Vector4(v.x * scale, v.y * scale, v.z * scale, v.w * scale);
 	}
 	
 	/**
@@ -183,7 +194,7 @@ public final class Vector4
 	 */
 	public static Vector4 subtract(Vector4 left, Vector4 right)
 	{
-	    return new Vector4(left.x() - right.x(), left.y() - right.y(), left.z() - right.z(), left.w() - right.w());
+	    return new Vector4(left.x - right.x, left.y - right.y, left.z - right.z, left.w - right.w);
 	}
 	
 	/**
@@ -194,7 +205,7 @@ public final class Vector4
      */
 	public static Vector4 add(Vector4 left, Vector4 right)
 	{
-	    return new Vector4(left.x() + right.x(), left.y() + right.y(), left.z() + right.z(), left.w() + right.w());
+	    return new Vector4(left.x + right.x, left.y + right.y, left.z + right.z, left.w + right.w);
 	}
 	
 	/***********
