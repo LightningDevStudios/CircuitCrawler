@@ -1,11 +1,11 @@
 package com.ltdev.cc.entity;
 
-import javax.microedition.khronos.opengles.GL11;
-
 import com.ltdev.EntityManager;
 import com.ltdev.Stopwatch;
 import com.ltdev.cc.physics.primitives.Rectangle;
 import com.ltdev.math.Vector2;
+
+import javax.microedition.khronos.opengles.GL11;
 
 public class SpikeWall extends Entity
 {	
@@ -19,7 +19,7 @@ public class SpikeWall extends Entity
         
         extended = false;
         initialPos = position;
-        if(left)
+        if (left)
             endPos = new Vector2(position.x() - 72, position.y());
         else
             endPos = new Vector2(position.x() + 72, position.y());
@@ -31,22 +31,27 @@ public class SpikeWall extends Entity
 	@Override
 	public void update(GL11 gl)
 	{
+	    super.update(gl);
+	    
 	    float frameTime = (float)Stopwatch.getFrameTime() / 1000f;
-        if(extended)
-            targetPos = Vector2.add(shape.getPos(), Vector2.scale( Vector2.subtract(initialPos, shape.getPos()), frameTime));
+
+        if (extended)
+            targetPos = Vector2.add(shape.getPos(), Vector2.scale(Vector2.subtract(initialPos, shape.getPos()), frameTime));
         else
-            targetPos = Vector2.add(shape.getPos(), Vector2.scale( Vector2.subtract(endPos, shape.getPos()), frameTime * 10));
+            targetPos = Vector2.add(shape.getPos(), Vector2.scale(Vector2.subtract(endPos, shape.getPos()), frameTime * 10));
         shape.setPos(targetPos);
         
-        if(targetPos.approxEquals(initialPos, 2))
+        if (targetPos.approxEquals(initialPos, 2))
             extended = false;
-        if(targetPos.approxEquals(endPos, 1))
+        if (targetPos.approxEquals(endPos, 1))
             extended = true;
 	}
 	
 	@Override
 	public void interact(Entity ent)
 	{
+	    super.interact(ent);
+	    
 	    if (ent instanceof Player)
 	        EntityManager.removeEntity(ent);
 	}

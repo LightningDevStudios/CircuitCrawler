@@ -44,7 +44,7 @@ public class Tileset
         ArrayList<Float> verts = new ArrayList<Float>();
         ArrayList<Short> indices = new ArrayList<Short>();
         
-        int vertCount = 0;
+        int indPos = 0;
         
         //iterate through tileset, generate vertex data, then append to the buffer.
         for (int i = 0; i < tiles.length; i++)
@@ -53,9 +53,9 @@ public class Tileset
             {
                 tiles[i][j].calculateBorders(tiles);
                 float[] vertData = tiles[i][j].getVertexData();
-                int[] indData = tiles[i][j].getIndexData(vertCount);
+                int[] indData = tiles[i][j].getIndexData(indPos);
                 
-                vertCount += vertData.length / 8;
+                indPos += vertData.length / 8;
                 
                 for (Float f : vertData)
                     verts.add(f);

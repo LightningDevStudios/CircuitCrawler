@@ -60,7 +60,7 @@ public class LevelRenderer implements com.ltdev.LevelSurfaceView.Renderer
 		charlieSheen = false;
 		lightPos = Vector4.scale(Vector4.UNIT_X, 100);
 		lightAngle = 0;
-		lightAngleSpeed = (float)Math.PI;
+		lightAngleSpeed = (float)Math.PI / 4;
 	}
 
 	/**
@@ -93,7 +93,7 @@ public class LevelRenderer implements com.ltdev.LevelSurfaceView.Renderer
 		float aspectRatio = Game.screenW / Game.screenH;
 		
 		//projWorld = Matrix4.ortho(game.camPosX - (Game.screenW / 2), game.camPosX + (Game.screenW / 2), game.camPosY + (Game.screenH / 2), game.camPosY - (Game.screenH / 2), 0, 1);
-		projWorld = Matrix4.perspective(-2.5f, 2.5f, 2.5f / aspectRatio, -2.5f / aspectRatio, 0.01f, 1.5f);
+		projWorld = Matrix4.perspective(-1.5f, 1.5f, 1.5f / aspectRatio, -1.5f / aspectRatio, 1f, Tile.TILE_SIZE_F * 5);
 		projUI = Matrix4.ortho(-Game.screenW / 2 , Game.screenW / 2, Game.screenH / 2, -Game.screenH / 2, 0, 1);
 		
 		for (Entity ent : game.entities)
@@ -148,14 +148,14 @@ public class LevelRenderer implements com.ltdev.LevelSurfaceView.Renderer
 		game.entManager.update(game.entities, gl);
 		game.updateFingers();
 		
-		//update all entites
-		for (Entity ent : game.entities)
-		{
-			ent.update(null);
-		}
-		
 		//TODO: game.update(), chain off to world.update()
 		game.world.integrate(Stopwatch.getFrameTime());
+		
+		//update all entites
+        for (Entity ent : game.entities)
+        {
+            ent.update(gl);
+        }
 		
 		//HACK: for the love of GOD move this out of LevelRenderer
 		//Iterates through all entities
@@ -318,7 +318,7 @@ public class LevelRenderer implements com.ltdev.LevelSurfaceView.Renderer
 	 * Called when the user touches the screen.
 	 * @param e The MotionEvent created by the touch event.
 	 */
-	public void onTouchInput(MotionEvent e) 
+	public void onTouchInput(MotionEvent e)
 	{
 		if (game.player.userHasControl())
 		{
@@ -416,7 +416,7 @@ public class LevelRenderer implements com.ltdev.LevelSurfaceView.Renderer
 		gl.glLoadMatrixf(projWorld.array(), 0);
 		gl.glMatrixMode(GL11.GL_MODELVIEW);
 		gl.glLoadIdentity();
-		gl.glMultMatrixf(Matrix4.translate(new Vector3(-game.camPosX, -game.camPosY, -1)).array(), 0);
+		gl.glMultMatrixf(Matrix4.translate(new Vector3(-game.camPosX, -game.camPosY, -Tile.TILE_SIZE_F * 3f)).array(), 0);
 	}
 	
 	/**
