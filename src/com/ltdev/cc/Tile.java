@@ -28,7 +28,7 @@ public class Tile
 	public static final int TILE_SIZE = 72;
 	public static final float TILE_SIZE_F = 72.0f;
 	
-	private Point tilesetPos, texPos;
+	private Point tilesetPos;
 	
 	private TileType type;
 	//private Shape shape;
@@ -47,9 +47,7 @@ public class Tile
 	public Tile(Point tilesetPos, int tilesetLengthX, int tilesetLengthY, TileType type)
 	{
 		TilesetHelper.setInitialTileOffset(this, tilesetPos, tilesetLengthX, tilesetLengthY);
-		
-		//shape = new Rectangle(TILE_SIZE, pos, false);
-		//shape.setVertices(vertices);
+
 		this.tilesetPos = tilesetPos;
 		this.type = type;
 	}
@@ -116,8 +114,13 @@ public class Tile
                      s, -s, 0,
                      s,  s, 0
 	            };
-	            //grab the default texcoords.
-	            texCoords = TilesetHelper.getTextureVertices(Game.tilesetworld, texPos);
+	            texCoords = new float[]
+                {
+                    0, 0,
+                    0, 64f / 256f - 1f / 512f,
+                    64f / 512f - 1f / 1024f, 64.0f / 256.0f - 1f / 512f,
+                    64f / 512f - 1f / 1024f, 0
+                };
 	            normals = new float[]
                 {
                     0, 0, 1,
