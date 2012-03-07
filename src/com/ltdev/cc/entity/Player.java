@@ -95,6 +95,11 @@ public class Player extends Entity
         super.update(gl); 
     }
 	
+	public static void kill()
+	{
+	    System.out.println("LOLZ PLAYERZ ARE DETH");
+	}
+	
 	public void disableUserControl()
 	{
 		if (hObj != null)

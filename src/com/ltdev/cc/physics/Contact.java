@@ -32,6 +32,12 @@ public class Contact
     {
         ResolveInterpenetration();
         ResolveVelocity();
+        
+        if (a.getInteractListener() != null && b.getInteractListener() != null)
+        {
+            a.getInteractListener().interact(b.getInteractListener().getEntity());
+            b.getInteractListener().interact(a.getInteractListener().getEntity());
+        }
     }
 
     private void ResolveInterpenetration()
