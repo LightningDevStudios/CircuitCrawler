@@ -173,13 +173,14 @@ public abstract class Shape
                 
         //apply friction
         float speed = velocity.length();
-        if (speed == 0)
+        if (speed < 1)
         {
+            velocity = Vector2.ZERO;
             if (totalImpulse.length() < staticFriction * mass)
                 totalImpulse = Vector2.ZERO;
         }
         else
-            addImpulse(Vector2.scale(velocity, -kineticFriction * mass / speed * frameTime * 1000));
+            addImpulse(Vector2.scale(velocity, -kineticFriction * mass / speed * frameTime * 100));
         
         //velocity damping
         velocity = Vector2.scale(velocity, 0.999f);
