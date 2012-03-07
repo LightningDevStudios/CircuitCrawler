@@ -3,6 +3,7 @@ package com.ltdev.cc;
 import android.content.Context;
 import android.view.MotionEvent;
 
+import com.ltdev.EntityManager;
 import com.ltdev.Finger;
 import com.ltdev.Stopwatch;
 import com.ltdev.cc.entity.*;
@@ -171,7 +172,15 @@ public class LevelRenderer implements com.ltdev.LevelSurfaceView.Renderer
 			if (game.btnB.isPressed())
 			{
 			    RaycastData dat = game.world.rayCast(game.player.getPos(), game.player.getAngle());
-			    System.out.println("LOLZ");
+			    
+			    if (dat != null)
+			    {
+    			    Vector2 laserPos = Vector2.add(game.player.getPos(), new Vector2(dat.distance / 2 * (float)Math.cos(game.player.getAngle()), dat.distance / 2 * (float)Math.sin(game.player.getAngle())));
+    			    Laser l = new Laser(5, dat.distance, game.player.getAngle(), laserPos);
+    			    l.setTexture(Game.tilesetentities);
+    			    EntityManager.addEntity(l);
+			    }
+			    //System.out.println("LOLZ");
 			}
 			
 			//inside of ent for loop

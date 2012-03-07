@@ -64,7 +64,7 @@ public class UIJoypad extends Control
 	public void setInputVec(final float rawX, final float rawY)
 	{
 		inputVec = new Vector2(rawX - pos.x(), rawY - pos.y());
-		inputAngle = inputVec.angleDeg();
+		inputAngle = inputVec.angleRad();
 		
 		//scale vector properly
 		if (inputVec.length() > size.x() / 2)

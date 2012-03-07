@@ -4,6 +4,8 @@ package com.ltdev.cc.entity;
 
 import com.ltdev.EntityManager;
 import com.ltdev.Stopwatch;
+import com.ltdev.cc.Game;
+import com.ltdev.cc.physics.RaycastData;
 import com.ltdev.cc.physics.World;
 import com.ltdev.cc.physics.primitives.*;
 import com.ltdev.math.Vector2;
@@ -50,9 +52,14 @@ public class LaserShooter extends Entity
             if (laser != null)
                 EntityManager.removeEntity(laser);
             
-            float length = 6; //physWorld.rayCast(getPos(), shape.getAngle());
-            laser = new Laser(beamWidth, length, shape.getAngle(), shape.getPos());
-            EntityManager.addEntity(laser);
+            RaycastData data = physWorld.rayCast(getPos(), shape.getAngle());
+            if(data != null)
+            {
+                Vector2 laserPos = Vector2.add(getPos(), new Vector2(data.distance / 2 * (float)Math.cos(getAngle()), data.distance / 2 * (float)Math.sin(getAngle())));
+                laser = new Laser(5, data.distance, getAngle(), laserPos);
+                laser.setTexture(Game.tilesetentities);
+                EntityManager.addEntity(laser);
+            }
         }
     }
 }
