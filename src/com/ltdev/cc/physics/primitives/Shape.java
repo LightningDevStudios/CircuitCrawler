@@ -470,7 +470,7 @@ public abstract class Shape
     
     /**
      * Sets the Shape's vertices.
-     * @param vertices The Shape's new vectices.
+     * @param vertices The Shape's new vertices.
      */
     public void setVertices(float[] vertices)
     {
@@ -500,7 +500,7 @@ public abstract class Shape
         if (angle == Float.NaN)
             return;
         
-        this.angle = (float)(Math.toRadians(angle) % Math.PI);
+        this.angle = (float)(Math.toRadians(angle));
         
         rotMat = Matrix4.rotateZ(this.angle);
         rebuildModel();

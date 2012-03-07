@@ -239,7 +239,7 @@ public abstract class Entity implements InteractListener
         int[] buffer = new int[1];
         buffer[0] = vbo;
         
-        gl.glDeleteBuffers(3, buffer, 0);
+        gl.glDeleteBuffers(1, buffer, 0);
     }
 	
 	/**************************

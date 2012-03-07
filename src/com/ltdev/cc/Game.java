@@ -310,7 +310,7 @@ public class Game
 		//move player
 		if (player.userHasControl())
 		{
-			player.setAngle(joypad.getInputAngle());
+			player.setAngle((float)Math.toDegrees(joypad.getInputAngle()));
 			//player.setPos(Vector2.add(player.getPos(), Vector2.scale(joypad.getInputVec(), /*Stopwatch.getFrameTime() **/ (1000 / 1000))));
 			player.addImpulse(Vector2.scale(joypad.getInputVec(), player.getShape().getMass() * 5));
 		}

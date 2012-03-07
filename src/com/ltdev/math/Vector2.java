@@ -133,14 +133,7 @@ public final class Vector2
      */
     public float angleRad()
     {
-        float rad = (float)(Math.atan2(y, x));
-        //clamp angle between 0 and 360
-        if (rad == 2 * Math.PI)
-            rad = 0.0f;
-        else if (rad > 2 * Math.PI)
-            rad -= 2 * Math.PI * (int)(rad / 2 * Math.PI);
-        else if (rad < 0.0f)
-            rad += 2 * Math.PI;
+        float rad = (float)(Math.atan2(y, x)) % (float)Math.PI * 2;
         
         return rad;
     }
@@ -151,14 +144,7 @@ public final class Vector2
      */
     public float angleDeg()
     {
-        float deg = (float)Math.toDegrees(Math.atan2(y, x));
-        //clamp angle between 0 and 360
-        if (deg == 360.0f)
-            deg = 0.0f;
-        else if (deg > 360.0f)
-            deg -= 360 * (int)(deg / 360);
-        else if (deg < 0.0f)
-            deg += 360;
+        float deg = (float)Math.toDegrees(Math.atan2(y, x)) % 360;
         
         return deg;
     }

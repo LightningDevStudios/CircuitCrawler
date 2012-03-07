@@ -5,7 +5,7 @@ import com.ltdev.math.Vector2;
 
 public class RaycastData 
 {
-    private float distance;
+    public float distance;
     private Shape shape;
     private Vector2 in, out;
     
