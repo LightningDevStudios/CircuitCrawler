@@ -182,8 +182,7 @@ public class SpatialHashGrid
     
     public ArrayList<Shape> getBucketShapes(int x, int y)
     {
-        int id = GetBucketID(x, y);
-        return buckets.get(id);
+        return buckets.get(y * cellsX + x);
     }
 
     private int GetBucketID(Vector2 v)

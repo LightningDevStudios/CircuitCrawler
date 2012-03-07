@@ -74,11 +74,9 @@ public class Contact
         else if (b.isStatic)
             impulseA = Vector2.scale(contactNormal, deltaV * a.getMass());
         else
-        {
-            Vector2 impulsePerIMass = Vector2.scale(contactNormal, deltaV / (a.getMass() + b.getMass()));
-    
-            impulseA = Vector2.scale(impulsePerIMass, b.getMass() * b.getMass());
-            impulseB = Vector2.scale(impulsePerIMass, -a.getMass() * a.getMass());
+        {   
+            impulseA = Vector2.scale(contactNormal, deltaV / 2 * a.getMass());
+            impulseB = Vector2.scale(contactNormal, -deltaV / 2 * b.getMass());
         }
 
         a.addImpulse(impulseA);
