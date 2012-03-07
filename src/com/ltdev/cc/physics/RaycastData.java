@@ -5,16 +5,13 @@ import com.ltdev.math.Vector2;
 
 public class RaycastData 
 {
-    public float distance;
+    private float distance;
     private Shape shape;
-    private Vector2 in, out;
     
-    public RaycastData(float distance, Shape s, Vector2 i, Vector2 o)
+    public RaycastData(float distance, Shape s)
     {
         this.distance = distance;
         shape = s;
-        in = i;
-        out = o;
     }
     
     public float getDistance() 
@@ -25,15 +22,5 @@ public class RaycastData
     public Shape getShape()
     {
         return shape;
-    }
-    
-    public Vector2 getEntrancePoint()
-    {
-        return in;
-    }
-    
-    public Vector2 getExitPoint()
-    {
-        return out;
     }
 }

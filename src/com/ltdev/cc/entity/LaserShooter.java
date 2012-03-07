@@ -55,8 +55,8 @@ public class LaserShooter extends Entity
             RaycastData data = physWorld.rayCast(getPos(), shape.getAngle());
             if(data != null)
             {
-                Vector2 laserPos = Vector2.add(getPos(), new Vector2(data.distance / 2 * (float)Math.cos(getAngle()), data.distance / 2 * (float)Math.sin(getAngle())));
-                laser = new Laser(5, data.distance, getAngle(), laserPos);
+                Vector2 laserPos = Vector2.add(getPos(), new Vector2(data.getDistance() / 2 * (float)Math.cos(getAngle()), data.getDistance() / 2 * (float)Math.sin(getAngle())));
+                laser = new Laser(5, data.getDistance(), getAngle(), laserPos);
                 laser.setTexture(Game.tilesetentities);
                 EntityManager.addEntity(laser);
             }

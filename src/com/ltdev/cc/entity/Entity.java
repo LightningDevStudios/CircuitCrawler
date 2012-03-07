@@ -33,6 +33,8 @@ public abstract class Entity implements InteractListener
 		
 	protected int vbo;
 	
+	//interacting
+	
 	public Entity(Shape shape)
 	{		
 		this.shape = shape;
