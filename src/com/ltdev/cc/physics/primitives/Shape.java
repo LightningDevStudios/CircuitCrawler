@@ -182,7 +182,7 @@ public abstract class Shape
             addImpulse(Vector2.scale(velocity, -kineticFriction * mass / speed * frameTime));
         
         //velocity damping
-        velocity = Vector2.scale(velocity, 0.99f);
+        velocity = Vector2.scale(velocity, 0.91f);
         
         //add impulse
         if (totalImpulse.length() > 0)

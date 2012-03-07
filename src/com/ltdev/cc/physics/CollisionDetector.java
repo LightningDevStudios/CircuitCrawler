@@ -1,8 +1,12 @@
 package com.ltdev.cc.physics;
 
+import com.ltdev.cc.entity.Entity;
+import com.ltdev.cc.entity.Player;
+import com.ltdev.cc.entity.LaserShooter;
 import com.ltdev.cc.physics.primitives.*;
 import com.ltdev.math.Vector2;
 
+import java.util.Collection;
 import java.util.ArrayList;
 import java.util.TreeMap;
  
@@ -31,97 +35,153 @@ public class CollisionDetector
 
     public RaycastData rayCast(Vector2 start, float angle)
     {
-        ArrayList<Shape> shapes = new ArrayList<Shape>();
+        /***************
+         * Broad Phase *
+         ***************/
+        
+        start = Vector2.add(start, new Vector2(spatialHash.cellsX * spatialHash.cellSizeX / 2, spatialHash.cellsY * spatialHash.cellSizeY / 2));
+        
+        ArrayList<Shape> lineShapes = new ArrayList<Shape>();
         Vector2 dir = new Vector2((float)Math.cos(angle), (float)Math.sin(angle));
         float slope = dir.y() / dir.x();
-        float invSlope = -dir.x() / dir.y();
-        float yIntersect = dir.y() - slope * dir.x();
-        float xIntersect = dir.x() - invSlope * dir.y();
+        float invSlope = dir.x() / dir.y();
+        float yIntersect = start.y() - slope * start.x();
+        float xIntersect = start.x() - invSlope * start.y();
         
         boolean xIsMax = dir.x() < 0;
         boolean yIsMax = dir.y() < 0;
         
+        ArrayList<Integer> xIgnoreValues = new ArrayList<Integer>();
+        ArrayList<Integer> yIgnoreValues = new ArrayList<Integer>();
+        
+        int startXIndex = (int)(start.x() / spatialHash.cellSizeX);
+        int startYIndex = (int)(start.y() / spatialHash.cellSizeY);
+        
+        if (xIsMax)
+        {
+            for (int i = startXIndex + 1; i < spatialHash.cellsX; i++)
+                xIgnoreValues.add(i);
+        }
+        else
+        {           
+            for (int i = 0; i <= startXIndex; i++)
+                xIgnoreValues.add(i);
+        }
+        
+        if (yIsMax)
+        {
+            for (int i = startYIndex + 1; i < spatialHash.cellsY; i++)
+                yIgnoreValues.add(i);
+        }
+        else
+        {            
+            for (int i = 0; i <= startYIndex; i++)
+                yIgnoreValues.add(i);
+        }
+        
         for (int i = 0; i <= spatialHash.cellsX; i++)
         {
+            if (xIgnoreValues.contains(i))
+                continue;
+            
             float xValue = i * spatialHash.cellSizeX;
-            
-            if (xIsMax)
-            {
-                if (xValue < start.x())
-                    continue;
-            }
-            else
-            {
-                if (xValue > start.x())
-                    continue;
-            }
-            
             float yValue = slope * xValue + yIntersect;
             int yIndex = (int)(yValue / spatialHash.cellSizeY);
+            if (yIndex >= spatialHash.cellsY || (i < spatialHash.cellsX - 1 && xIgnoreValues.contains(i + 1)))
+                continue;
+            
             ArrayList<Shape> hashShapes;
             if (i > 0)
             {
                 hashShapes = spatialHash.getBucketShapes(i - 1, yIndex);
-                for (Shape s : hashShapes)
+                if (hashShapes != null)
                 {
-                    if (!shapes.contains(s))
-                        shapes.add(s);
+                    for (Shape s : hashShapes)
+                    {
+                        if (!lineShapes.contains(s))
+                            lineShapes.add(s);
+                    }
                 }
                 
             }
             
-            hashShapes = spatialHash.getBucketShapes(i, yIndex);
-            for (Shape s : hashShapes)
+            if (i < spatialHash.cellsX)
             {
-                if (!shapes.contains(s))
-                    shapes.add(s);
+                hashShapes = spatialHash.getBucketShapes(i, yIndex);
+                if (hashShapes != null)
+                {
+                    for (Shape s : hashShapes)
+                    {
+                        if (!lineShapes.contains(s))
+                            lineShapes.add(s);
+                    }
+                }
             }
         }       
         
         for (int i = 0; i <= spatialHash.cellsY; i++)
         {
-            float yValue = i * spatialHash.cellSizeY;
+            if (yIgnoreValues.contains(i))
+                continue;
             
-            if (yIsMax)
-            {
-                if (yValue < start.y())
-                    continue;
-            }
-            else
-            {
-                if (yValue > start.y())
-                    continue;
-            }
-            
+            float yValue = i * spatialHash.cellSizeY;   
             float xValue = invSlope * yValue + xIntersect;
             int xIndex = (int)(xValue / spatialHash.cellSizeX);
+            if (xIndex >= spatialHash.cellsX || (i < spatialHash.cellsY - 1 && yIgnoreValues.contains(i + 1)))
+                continue;
+            
             ArrayList<Shape> hashShapes;
             if (i > 0)
             {
-                hashShapes = spatialHash.getBucketShapes(i - 1, xIndex);
-                for (Shape s : hashShapes)
+                hashShapes = spatialHash.getBucketShapes(xIndex, i - 1);
+                if (hashShapes != null)
                 {
-                    if (!shapes.contains(s))
-                        shapes.add(s);
+                    for (Shape s : hashShapes)
+                    {
+                        if (!lineShapes.contains(s))
+                            lineShapes.add(s);
+                    }
                 }
-                
             }
             
-            hashShapes = spatialHash.getBucketShapes(i, xIndex);
-            for (Shape s : hashShapes)
+            if (i < spatialHash.cellsY)
             {
-                if (!shapes.contains(s))
-                    shapes.add(s);
+                hashShapes = spatialHash.getBucketShapes(xIndex, i);
+                if (hashShapes != null)
+                {
+                    for (Shape s : hashShapes)
+                    {
+                        if (!lineShapes.contains(s))
+                            lineShapes.add(s);
+                    }
+                }
             }
         }       
         
-        TreeMap<Float, Shape> distanceHash = new TreeMap<Float, Shape>();
-        for (int i = 0; i < shapes.size(); i++)
-            distanceHash.put(Vector2.subtract(start, shapes.get(i).getPos()).length(), shapes.get(i));       
+        /**************
+         * Near Phase *
+         **************/
         
-        for (int i = 0; i < distanceHash.size(); i++)
+        start = Vector2.subtract(start, new Vector2(spatialHash.cellsX * spatialHash.cellSizeX / 2, spatialHash.cellsY * spatialHash.cellSizeY / 2));
+        
+        for (int i = lineShapes.size() - 1; i >= 0; i--)
         {
-            Shape s = distanceHash.get(i);
+            if (!lineShapes.get(i).isSolid() || (lineShapes.get(i).getInteractListener() != null && lineShapes.get(i).getInteractListener().getEntity() instanceof Player))
+            {
+                lineShapes.remove(i);
+            }
+        }
+        
+        TreeMap<Float, Shape> distanceHash = new TreeMap<Float, Shape>();
+        
+        for (int i = 0; i < lineShapes.size(); i++)
+            distanceHash.put(Vector2.subtract(start, lineShapes.get(i).getPos()).length(), lineShapes.get(i));
+        
+        Object[] shapeList = distanceHash.values().toArray();
+        
+        for (int i = 0; i < shapeList.length; i++)
+        {
+            Shape s = (Shape)shapeList[i];
             if (s instanceof Rectangle)
             {
                 Vector2 axis = Vector2.perpendicularLeft(dir);
@@ -158,7 +218,7 @@ public class CollisionDetector
                 {
                     Vector2 intersect1 = null;
                     Vector2 intersect2 = null;
-                    intersect1 = PointOfIntersection(start, Vector2.scale(dir, 10000), verts[4], verts[0]);
+                    intersect1 = PointOfIntersection(start, Vector2.scale(dir, 10000), verts[3], verts[0]);
                     for (int j = 0; j < 3; j++)
                     {
                         Vector2 tempIntersect = PointOfIntersection(start, Vector2.scale(dir, 10000), verts[j], verts[j + 1]);
@@ -174,6 +234,9 @@ public class CollisionDetector
                         }
                     }
                     
+                    if (intersect1 == null || intersect2 == null)
+                        continue;
+                    
                     float distance1 = Vector2.subtract(intersect1, start).length();
                     float distance2 = Vector2.subtract(intersect2, start).length();
                     if (distance1 < distance2)
@@ -181,6 +244,8 @@ public class CollisionDetector
                     else
                         return new RaycastData(distance2, s, intersect2, intersect1);
                 }
+                else
+                    continue;
             }
         }
         
@@ -260,12 +325,12 @@ public class CollisionDetector
         Circle b = (Circle)c.b;
         
         Vector2 contactNormal = Vector2.subtract(a.getPos(), b.getPos());
-        float penetration = contactNormal.length();
+        float penetration = a.getRadius() + b.getRadius() - contactNormal.length();
 
-        if (penetration > a.getRadius() + b.getRadius())
+        if (penetration < 0)
             return false;
 
-        contactNormal = Vector2.scale(contactNormal,  1 / penetration);
+        contactNormal = Vector2.normalize(contactNormal);
 
         c.penetration = penetration;
         c.contactNormal = contactNormal;
@@ -274,11 +339,7 @@ public class CollisionDetector
     }
     
     public static boolean SAT(Contact c)
-    {   
-        float a;
-        if (c.a instanceof Circle || c.b instanceof Circle)
-            a = 4;
-        
+    {      
         float penetration = Float.MAX_VALUE;
         Vector2 contactNormal = null;
         
@@ -325,93 +386,10 @@ public class CollisionDetector
         return true;
     }
 
-   /* public static boolean SATRectangles(Contact c)
-    {
-        Rectangle a = (Rectangle)c.a;
-        Rectangle b = (Rectangle)c.b;
-        
-        float penetration = Float.MAX_VALUE;
-        Vector2 contactNormal = null;
-        Vector2[] axes = new Vector2[4];
-
-        Vector2 v = Vector2.subtract(a.getWorldVertices()[0], a.getWorldVertices()[1]);
-        axes[0] = new Vector2(Math.abs(v.x()), Math.abs(v.y()));
-        axes[1] = Vector2.perpendicularLeft(axes[0]);
-
-        v = Vector2.subtract(b.getWorldVertices()[0], b.getWorldVertices()[1]);
-        axes[2] = new Vector2(Math.abs(v.x()), Math.abs(v.y()));
-        axes[3] = Vector2.perpendicularLeft(axes[2]);
-
-        for (int i = 0; i < axes.length; i++)
-            axes[i] = Vector2.normalize(axes[i]);
-
-        int axesCount = 4;
-        if (axes[2] == axes[0] || axes[2] == axes[1])
-            axesCount = 2;
-
-        for (int i = 0; i < axesCount; i++)
-        {
-            float minA = Vector2.dot(axes[i], a.getWorldVertices()[0]);
-            float maxA = minA;
-            for (int j = 1; j < a.getWorldVertices().length; j++)
-            {
-                float dotProd1 = Vector2.dot(axes[i], a.getWorldVertices()[j]);
-                if (dotProd1 > maxA)
-                {
-                    maxA = dotProd1;
-                }
-                if (dotProd1 < minA)
-                {
-                    minA = dotProd1;
-                }
-            }
-
-            float minB = Vector2.dot(axes[i], b.getWorldVertices()[0]);
-            float maxB = minB;
-            for (int j = 1; j < b.getWorldVertices().length; j++)
-            {
-                float dotProd2 = Vector2.dot(axes[i], b.getWorldVertices()[j]);
-                if (dotProd2 > maxB)
-                {
-                    maxB = dotProd2;
-                }
-                if (dotProd2 < minB)
-                {
-                    minB = dotProd2;
-                }
-            }
-
-            if (maxA >= minB && maxA <= maxB)
-            {
-                if (maxA - minB < penetration)
-                {
-                    penetration = maxA - minB;
-                    contactNormal = Vector2.negate(axes[i]);
-                }
-            }
-            else if (maxB >= minA && maxB <= maxA)
-            {
-                if (maxB - minA < penetration)
-                {
-                    penetration = maxB - minA;
-                    contactNormal = axes[i];
-                }
-            }
-            else
-                return false;
-        }
-
-        c.penetration = penetration;
-        c.contactNormal = contactNormal;
-        
-        return true;
-    }*/
-
     public static boolean ContainsPoint(Shape shape, Vector2 v)
     {
         if (shape instanceof Circle)
-            return Vector2.subtract(shape.getPos(), v).length() < ((Circle)shape).getRadius();
-        
+            return Vector2.subtract(shape.getPos(), v).length() < ((Circle)shape).getRadius(); 
         else if (shape instanceof Rectangle)
         {
             Vector2[] verts = shape.getWorldVertices();
