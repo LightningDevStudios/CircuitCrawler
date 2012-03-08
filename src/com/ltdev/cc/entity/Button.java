@@ -26,10 +26,10 @@ public class Button extends Entity
 	    //update the texture when activated/deactivated.
 	    if (prevActive != active)
 	    {
-	        if (active)
+	        /*if (active)
 	            this.setTile(gl, 1, 0);
 	        else
-	            this.setTile(gl, 0, 0);
+	            this.setTile(gl, 0, 0);*/
 	        
 	        prevActive = active;
 	    }

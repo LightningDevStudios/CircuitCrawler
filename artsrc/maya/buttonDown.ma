@@ -1,6 +1,6 @@
 //Maya ASCII 2012 scene
 //Name: buttonDown.ma
-//Last modified: Wed, Mar 07, 2012 01:12:30 PM
+//Last modified: Thu, Mar 08, 2012 01:41:15 AM
 //Codeset: 1252
 requires maya "2012";
 currentUnit -l centimeter -a degree -t film;
@@ -12,14 +12,14 @@ fileInfo "osv" "Microsoft Windows 7 Business Edition, 64-bit Windows 7 Service P
 fileInfo "license" "student";
 createNode transform -s -n "persp";
 	setAttr ".v" no;
-	setAttr ".t" -type "double3" -36.35450716802864 45.595058436369186 15.059146939924773 ;
-	setAttr ".r" -type "double3" 308.66164726987915 663.79999999938786 5.7173822566511571e-015 ;
+	setAttr ".t" -type "double3" 4.3480753120790263 24.134695553886289 -35.687845918820521 ;
+	setAttr ".r" -type "double3" 321.26164726204144 898.59999999979971 0 ;
 createNode camera -s -n "perspShape" -p "persp";
 	setAttr -k off ".v" no;
 	setAttr ".pze" yes;
 	setAttr ".fl" 34.999999999999993;
 	setAttr ".fcp" 1000;
-	setAttr ".coi" 62.863302488129023;
+	setAttr ".coi" 37.847426671114427;
 	setAttr ".imn" -type "string" "persp";
 	setAttr ".den" -type "string" "persp_depth";
 	setAttr ".man" -type "string" "persp_mask";
@@ -74,6 +74,7 @@ createNode mesh -n "pCylinderShape1" -p "pCylinder1";
 	setAttr -k off ".v";
 	setAttr ".vir" yes;
 	setAttr ".vif" yes;
+	setAttr ".pv" -type "double2" 0.5015254020690918 0.57294270582116225 ;
 	setAttr ".uvst[0].uvsn" -type "string" "map1";
 	setAttr ".cuvs" -type "string" "map1";
 	setAttr ".dcc" -type "string" "Ambient+Diffuse";
@@ -192,8 +193,7 @@ createNode polyMergeVert -n "polyMergeVert2";
 	setAttr ".am" yes;
 createNode polyTweak -n "polyTweak3";
 	setAttr ".uopa" yes;
-	setAttr -s 2 ".tk";
-	setAttr ".tk[16]" -type "float3" 11.968096 0 0 ;
+	setAttr ".tk[16]" -type "float3"  11.96809578 0 0;
 createNode polySoftEdge -n "polySoftEdge2";
 	setAttr ".uopa" yes;
 	setAttr ".ics" -type "componentList" 7 "e[31]" "e[33]" "e[35]" "e[38]" "e[41]" "e[44]" "e[47:48]";
@@ -209,6 +209,98 @@ createNode polySoftEdge -n "polySoftEdge4";
 	setAttr ".ics" -type "componentList" 8 "e[16:23]" "e[29:30]" "e[34]" "e[37]" "e[40]" "e[43]" "e[46]" "e[49]";
 	setAttr ".ix" -type "matrix" 1 0 0 0 0 1 0 0 0 0 1 0 0.0012137451759031137 0.51098310139590353 0.095992252856397897 1;
 	setAttr ".a" 0;
+createNode polyPlanarProj -n "polyPlanarProj1";
+	setAttr ".uopa" yes;
+	setAttr ".ics" -type "componentList" 1 "f[14:19]";
+	setAttr ".ix" -type "matrix" 1 0 0 0 0 1 0 0 0 0 1 0 0.0012137451759031137 0.51098310139590353 0.095992252856397897 1;
+	setAttr ".ws" yes;
+	setAttr ".pc" -type "double3" 0.00096225738525390625 1.8454687595367432 0.095992565155029297 ;
+	setAttr ".ro" -type "double3" -90 0 0 ;
+	setAttr ".ps" -type "double2" 18.97624397277832 18.976748466491699 ;
+	setAttr ".cam" -type "matrix" 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1;
+createNode polyTweak -n "polyTweak4";
+	setAttr ".uopa" yes;
+	setAttr -s 16 ".tk[8:23]" -type "float3"  -0.33522305 0.016640503 0.33522305
+		 1.8889178e-008 0.016640503 0.47407684 0.33522305 0.016640503 0.33522305 0.47407684
+		 0.016640503 0 0.33522305 0.016640503 -0.33522305 1.8889178e-008 0.016640503 -0.47407684
+		 -0.33522305 0.016640503 -0.33522302 -0.47407684 0.016640503 0 -0.27674133 -0.016640503
+		 0.27674133 1.4794058e-008 -0.016640503 0.39137116 -0.39135039 -0.016640503 -2.9514341e-010
+		 0.27674133 -0.016640503 0.27674133 0.39137116 -0.016640503 1.7708621e-009 0.27674103
+		 -0.016640503 -0.27674133 1.2432921e-008 -0.016640503 -0.39137116 -0.27674139 -0.016640503
+		 -0.27674133;
+createNode polyTweakUV -n "polyTweakUV1";
+	setAttr ".uopa" yes;
+	setAttr -s 9 ".uvtk";
+	setAttr ".uvtk[34]" -type "float2" -0.99883193 0 ;
+	setAttr ".uvtk[43:49]" -type "float2" -0.99883193 0  -0.99883193 0  -0.99883193 
+		0  -0.99883193 0  -0.99883193 0  -0.99883193 0  -0.99883193 0 ;
+createNode polyPlanarProj -n "polyPlanarProj2";
+	setAttr ".uopa" yes;
+	setAttr ".ics" -type "componentList" 1 "f[8:13]";
+	setAttr ".ix" -type "matrix" 1 0 0 0 0 1 0 0 0 0 1 0 0.0012137451759031137 0.51098310139590353 0.095992252856397897 1;
+	setAttr ".ws" yes;
+	setAttr ".pc" -type "double3" 0.0013456344604492188 0 0.095992088317871094 ;
+	setAttr ".ic" -type "double2" 0.5 -0.50053638957273261 ;
+	setAttr ".ro" -type "double3" -90 0 0 ;
+	setAttr ".ps" -type "double2" 23.935401916503906 23.935138702392578 ;
+	setAttr ".cam" -type "matrix" 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1;
+createNode polyTweakUV -n "polyTweakUV2";
+	setAttr ".uopa" yes;
+	setAttr -s 8 ".uvtk";
+	setAttr ".uvtk[0:6]" -type "float2" -0.9960258 -0.16361821  -0.9960258 
+		-0.16361821  -0.9960258 -0.16361819  -0.9960258 -0.16361821  -0.9960258 -0.16361819  
+		-0.9960258 -0.16361825  -0.9960258 -0.16361819 ;
+	setAttr ".uvtk[33]" -type "float2" -0.9960258 -0.16361825 ;
+createNode polyCylProj -n "polyCylProj1";
+	setAttr ".uopa" yes;
+	setAttr ".ics" -type "componentList" 1 "f[0:7]";
+	setAttr ".ix" -type "matrix" 1 0 0 0 0 1 0 0 0 0 1 0 0.0012137451759031137 0.51098310139590353 0.095992252856397897 1;
+	setAttr ".ws" yes;
+	setAttr ".pc" -type "double3" 0.0013456344604492188 0.37868538381606937 0.095992088317871094 ;
+	setAttr ".ro" -type "double3" 0 -0.036257086746608554 0 ;
+	setAttr ".ps" -type "double2" 360 2.0772133705155054 ;
+	setAttr ".is" -type "double2" 1.1581642651816566 0.11918867999546878 ;
+	setAttr ".r" 23.935401916503906;
+createNode polyTweakUV -n "polyTweakUV3";
+	setAttr ".uopa" yes;
+	setAttr -s 19 ".uvtk";
+	setAttr ".uvtk[7:22]" -type "float2" 0.37397191 -1.3015399  0.37397191 
+		-1.3015399  0.37397191 -1.3015399  0.37397191 -1.3015399  0.37397191 -1.3015399  
+		0.37397191 -1.3015399  0.37397191 -1.3015399  0.37397191 -1.3015399  0.37397188 -1.3015399  
+		0.37397194 -1.3015399  0.37397191 -1.3015399  0.37397191 -1.3015399  0.37397191 -1.3015399  
+		0.37397191 -1.3015399  0.37397197 -1.3015399  0.37397197 -1.3015399 ;
+	setAttr ".uvtk[48:49]" -type "float2" 0.37397191 -1.3015399  0.37397191 
+		-1.3015399 ;
+createNode polyCylProj -n "polyCylProj2";
+	setAttr ".uopa" yes;
+	setAttr ".ics" -type "componentList" 1 "f[20:27]";
+	setAttr ".ix" -type "matrix" 1 0 0 0 0 1 0 0 0 0 1 0 0.0012137451759031137 0.51098310139590353 0.095992252856397897 1;
+	setAttr ".ws" yes;
+	setAttr ".pc" -type "double3" 0.0012145042419433594 1.4420377016067505 0.095992088317871094 ;
+	setAttr ".ps" -type "double2" 360 0.80686211585998535 ;
+	setAttr ".is" -type "double2" 2.3113555382766426 0.069487257725378115 ;
+	setAttr ".r" 22.986985206604004;
+createNode polyTweakUV -n "polyTweakUV4";
+	setAttr ".uopa" yes;
+	setAttr -s 45 ".uvtk";
+	setAttr ".uvtk[7:32]" -type "float2" -0.44080576 0.82923007  -0.28425992 
+		0.82923007  -0.28425995 0.82923007  -0.44080576 0.82923007  -0.30662355 0.82923007  
+		-0.30662355 0.82923007  -0.32898706 0.82923007  -0.32898706 0.82923007  -0.35135049 
+		0.82923007  -0.35135049 0.82923007  -0.37371409 0.82923007  -0.37371409 0.82923007  
+		-0.39607796 0.82923007  -0.39607796 0.82923007  -0.41844198 0.82923007  -0.41844198 
+		0.82923007  0.93866807 0.13462797  1.0003552 0.16017891  -0.49873552 -0.38171306  
+		0.6648432 -0.38171306  0.6648432 -0.39194596  -0.49873552 -0.39194596  0.49861777 
+		-0.38171306  0.49861777 -0.39194596  0.3323921 -0.38171306  0.3323921 -0.39194596 ;
+	setAttr ".uvtk[34:51]" -type "float2" 0.93866807 0.011257589  0.16616662 
+		-0.38171306  0.16616662 -0.39194596  -5.880848e-005 -0.38171306  -5.880848e-005 -0.39194596  
+		-0.16628449 -0.38171306  -0.16628449 -0.39194596  -0.33250996 -0.38171306  -0.33250996 
+		-0.39194596  1.0003552 -0.014293525  0.91312128 0.072942719  1.062042 0.011257589  
+		1.0875936 0.072942719  1.062042 0.13462797  -0.46316954 0.82923007  -0.46316954 0.82923007  
+		-0.66496104 -0.38171306  -0.66496104 -0.39194596 ;
+createNode deleteComponent -n "deleteComponent3";
+	setAttr ".dc" -type "componentList" 1 "f[8:13]";
+createNode polyTriangulate -n "polyTriangulate1";
+	setAttr ".ics" -type "componentList" 1 "f[*]";
 select -ne :time1;
 	setAttr ".o" 1;
 	setAttr ".unw" 1;
@@ -230,9 +322,8 @@ select -ne :hardwareRenderGlobals;
 select -ne :defaultHardwareRenderGlobals;
 	setAttr ".fn" -type "string" "im";
 	setAttr ".res" -type "string" "ntsc_4d 646 485 1.333";
-select -ne :ikSystem;
-	setAttr -s 4 ".sol";
-connectAttr "polySoftEdge4.out" "pCylinderShape1.i";
+connectAttr "polyTriangulate1.out" "pCylinderShape1.i";
+connectAttr "polyTweakUV4.uvtk[0]" "pCylinderShape1.uvst[0].uvtw";
 relationship "link" ":lightLinker1" ":initialShadingGroup.message" ":defaultLightSet.message";
 relationship "link" ":lightLinker1" ":initialParticleSE.message" ":defaultLightSet.message";
 relationship "shadowLink" ":lightLinker1" ":initialShadingGroup.message" ":defaultLightSet.message";
@@ -258,6 +349,21 @@ connectAttr "polySoftEdge2.out" "polySoftEdge3.ip";
 connectAttr "pCylinderShape1.wm" "polySoftEdge3.mp";
 connectAttr "polySoftEdge3.out" "polySoftEdge4.ip";
 connectAttr "pCylinderShape1.wm" "polySoftEdge4.mp";
+connectAttr "polyTweak4.out" "polyPlanarProj1.ip";
+connectAttr "pCylinderShape1.wm" "polyPlanarProj1.mp";
+connectAttr "polySoftEdge4.out" "polyTweak4.ip";
+connectAttr "polyPlanarProj1.out" "polyTweakUV1.ip";
+connectAttr "polyTweakUV1.out" "polyPlanarProj2.ip";
+connectAttr "pCylinderShape1.wm" "polyPlanarProj2.mp";
+connectAttr "polyPlanarProj2.out" "polyTweakUV2.ip";
+connectAttr "polyTweakUV2.out" "polyCylProj1.ip";
+connectAttr "pCylinderShape1.wm" "polyCylProj1.mp";
+connectAttr "polyCylProj1.out" "polyTweakUV3.ip";
+connectAttr "polyTweakUV3.out" "polyCylProj2.ip";
+connectAttr "pCylinderShape1.wm" "polyCylProj2.mp";
+connectAttr "polyCylProj2.out" "polyTweakUV4.ip";
+connectAttr "polyTweakUV4.out" "deleteComponent3.ig";
+connectAttr "deleteComponent3.og" "polyTriangulate1.ip";
 connectAttr "pCylinderShape1.iog" ":initialShadingGroup.dsm" -na;
 connectAttr "defaultRenderLayer.msg" ":defaultRenderingList1.r" -na;
 // End of buttonDown.ma

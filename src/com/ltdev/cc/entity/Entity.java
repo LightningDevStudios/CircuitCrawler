@@ -126,22 +126,6 @@ public abstract class Entity implements InteractListener
         gl.glBindBuffer(GL11.GL_ARRAY_BUFFER, 0);
 	}
 	
-	private void updateTexCoords(GL11 gl)
-	{
-	    float[] t = TilesetHelper.getTextureVertices(tex, new Point(tilesetX, tilesetY));
-	    
-	    //store data in a float buffer, as required by Android.
-        ByteBuffer byteBuf = ByteBuffer.allocateDirect(t.length * 4);
-        byteBuf.order(ByteOrder.nativeOrder());
-        FloatBuffer buffer = byteBuf.asFloatBuffer();
-        buffer.put(t);
-        buffer.position(0);
-	    
-	    /*gl.glBindBuffer(GL11.GL_ARRAY_BUFFER, vbo);
-	    gl.glBufferSubData(GL11.GL_ARRAY_BUFFER, 32, t.length * 4, buffer);
-	    gl.glBindBuffer(GL11.GL_ARRAY_BUFFER, 0);*/
-	}
-	
 	/*********************
 	 * Collision Methods *
 	 *********************/
@@ -360,11 +344,11 @@ public abstract class Entity implements InteractListener
 	 * @param tilesetX The X coordinate of the tile.
 	 * @param tilesetY The Y coordinate of the tile.
 	 */
-	public void setTile(GL11 gl, int tilesetX, int tilesetY)
+	/*public void setTile(GL11 gl, int tilesetX, int tilesetY)
 	{
 	    this.tilesetX = tilesetX;
 	    this.tilesetY = tilesetY;
 	    
 	    this.updateTexCoords(gl);
-	}
+	}*/
 }

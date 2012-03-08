@@ -17,7 +17,7 @@ import javax.microedition.khronos.opengles.GL11;
  */
 public class Tileset 
 {
-    public Tile[][] tiles;
+    private Tile[][] tiles;
     private Texture tex;
     private int vertCount;
     private int indCount;
@@ -129,8 +129,29 @@ public class Tileset
      * @param y The Y location of a tile.
      * @return The tile at (x, y).
      */
-    public Tile get(int x, int y)
+    public Tile getTileAt(int x, int y)
     {
+        if (y < 0 || y > tiles.length || x < 0 || x > tiles[0].length)
+            return null;
+        
         return tiles[y][x];
+    }
+    
+    /**
+     * Gets the number of tiles in the X direction.
+     * @return The tileset width.
+     */
+    public int getWidth()
+    {
+        return tiles[0].length;
+    }
+    
+    /**
+     * Gets the number of tiles in the Y direction.
+     * @return The tileset height.
+     */
+    public int getHeight()
+    {
+        return tiles.length;
     }
 }

@@ -324,23 +324,21 @@ public class Game
 		if (player.isHoldingObject())
 			player.updateHeldObjectPosition();
 		
-		int indx = (int)((player.getPos().x() + tileset.tiles[0].length * Tile.TILE_SIZE_F / 2) / Tile.TILE_SIZE_F);
-		int indy = (int)((-player.getPos().y() + tileset.tiles.length * Tile.TILE_SIZE_F/ 2) / Tile.TILE_SIZE_F);
+		int indx = (int)((player.getPos().x() + tileset.getWidth() * Tile.TILE_SIZE_F / 2) / Tile.TILE_SIZE_F);
+		int indy = (int)((-player.getPos().y() + tileset.getHeight() * Tile.TILE_SIZE_F /  2) / Tile.TILE_SIZE_F);
 		
-		Tile t = tileset.get(indx, indy);
+		Tile t = tileset.getTileAt(indx, indy);
 		
-		if(t.getTileType() == Tile.TileType.PIT)
+		if (t != null)
 		{
-		    Player.kill();
-		}
-		
-		if(t.getTileType() == Tile.TileType.SlipperyTile)
-		{
-		    player.getShape().setKineticFriction(0);
-		}
-		else
-		{
-		    player.getShape().setKineticFriction(5);
+    		if (t.getTileType() == Tile.TileType.PIT)
+    		    Player.kill();
+
+    		else if (t.getTileType() == Tile.TileType.SlipperyTile)
+    		    player.getShape().setKineticFriction(0);
+    		
+    		else
+    		    player.getShape().setKineticFriction(5);
 		}
 	}
 	
