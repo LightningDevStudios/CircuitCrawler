@@ -19,26 +19,26 @@ public class CannonShell extends Entity
 	 * @param moveSpeed the Speed to interpolate movement at.
 	 * @param removeTime The amount of time this CannonShell can exist for, in seconds.
 	 */
-	public CannonShell(Vector2 position, float angle, float moveSpeed, int removeTime)
+	public CannonShell(Vector2 position, float angle)
 	{
 		super(new Circle(15, position, angle, true));
 		
-		this.tilesetX = 1;
-		this.tilesetY = 3;
+		shape.setKineticFriction(0);
+        shape.setStaticFriction(0);
+		
+		this.tilesetX = 2;
+		this.tilesetY = 0;
 	}
 	
+	@Override
+	public void interact(Entity ent)
+    {
+	    
+    }	
 	
 	@Override
 	public void update(GL11 gl)
 	{
-		super.update(gl);
-		
-		time += Stopwatch.getFrameTime();
-		
-		if (time > removeTime * 1000)
-		{
-			time = 0;
-			EntityManager.removeEntity(this);
-		}
+	    
 	}
 }

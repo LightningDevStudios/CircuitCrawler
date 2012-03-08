@@ -1,6 +1,7 @@
 package com.ltdev;
 
 import com.ltdev.cc.entity.Entity;
+import com.ltdev.cc.physics.World;
 
 import java.util.ArrayList;
 
@@ -51,19 +52,20 @@ public class EntityManager
 	 * @param gl An OpenGL context used to delete the VBOs.
 	 * \todo split the hardware buffer removal into another method, call that one first? Or will we later assume a GL11 instead of a GL10?
 	 */
-	public void update(ArrayList<Entity> entList, GL11 gl)
+	public void update(ArrayList<Entity> entList, World physWorld, GL11 gl)
 	{
 		for (Entity ent : trashList)
 		{
 			ent.unload(gl);
 			entList.remove(ent);
+			physWorld.Remove(ent.getShape());
 		}
 		
 		for (Entity ent : addList)
 		{
 			ent.initialize(gl);
 			entList.add(ent);
-			
+			physWorld.Add(ent.getShape());
 		}
 		
 		trashList.clear();

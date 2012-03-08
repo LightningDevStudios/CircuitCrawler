@@ -166,7 +166,7 @@ public class CollisionDetector
         
         for (int i = lineShapes.size() - 1; i >= 0; i--)
         {
-            if (!lineShapes.get(i).isSolid() || (lineShapes.get(i).getInteractListener() != null && lineShapes.get(i).getInteractListener().getEntity() instanceof Player))
+            if (!lineShapes.get(i).isSolid() || (lineShapes.get(i).getInteractListener() != null && lineShapes.get(i).getInteractListener().getEntity() instanceof LaserShooter))
             {
                 lineShapes.remove(i);
             }

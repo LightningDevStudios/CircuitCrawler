@@ -124,6 +124,7 @@ public class Game
 	
 		//retreive data from parser
 		Tile[][] tileset = parser.tileset;
+		
 		entities.addAll(parser.entList);
 		triggerList.addAll(parser.triggerList);
 		
@@ -173,10 +174,18 @@ public class Game
                 
 	    world = new World(worldSize, shapes);
 	    
-	    SpikeWall s = new SpikeWall(70, Vector2.add(player.getPos(), new Vector2(72 * 3 + 40, 0)), true);
+	    SpikeWall s = new SpikeWall(70, Vector2.add(player.getPos(), new Vector2(72 * 3 + 40, 0)), Direction.LEFT);
 	    s.setTexture(tilesetentities);
 	    EntityManager.addEntity(s);
-		
+
+	    Cannon c = new Cannon(40,  Vector2.add(player.getPos(), new Vector2(-72, 0)), 0, 20, 500000, player);
+	    c.setTexture(tilesetentities);
+	    EntityManager.addEntity(c);
+	   
+	    //LaserShooter LAZOR = new LaserShooter(Vector2.add(player.getPos(), new Vector2(-72, 0)), 40, 0, 20, 5, 1, player, world);
+	    //LAZOR.setTexture(tilesetentities);
+	    //EntityManager.addEntity(LAZOR); 
+	    
 		updateCameraPosition();
 	}
 	
