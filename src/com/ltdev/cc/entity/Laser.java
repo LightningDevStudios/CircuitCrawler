@@ -4,7 +4,6 @@ import javax.microedition.khronos.opengles.GL11;
 
 import com.ltdev.EntityManager;
 import com.ltdev.Stopwatch;
-import com.ltdev.cc.physics.RaycastData;
 import com.ltdev.cc.physics.primitives.*;
 import com.ltdev.math.Vector2;
 

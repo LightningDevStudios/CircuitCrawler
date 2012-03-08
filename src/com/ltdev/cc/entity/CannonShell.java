@@ -1,7 +1,5 @@
 package com.ltdev.cc.entity;
 
-import com.ltdev.EntityManager;
-import com.ltdev.Stopwatch;
 import com.ltdev.cc.physics.primitives.Circle;
 import com.ltdev.math.Vector2;
 
@@ -9,15 +7,9 @@ import javax.microedition.khronos.opengles.GL11;
 
 public class CannonShell extends Entity
 {	
-	private int time;
-	private int removeTime;
-	
 	/**
-	 * \todo add real physics.
 	 * @param position Position.
-	 * @param angle Angle, in radians.
-	 * @param moveSpeed the Speed to interpolate movement at.
-	 * @param removeTime The amount of time this CannonShell can exist for, in seconds.
+	 * @param angle The shell's angle in radians.
 	 */
 	public CannonShell(Vector2 position, float angle)
 	{

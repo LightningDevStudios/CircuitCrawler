@@ -337,6 +337,16 @@ public final class Matrix4
 		                   -(right + left) * rl,  -(top + bottom) * tb,   -(far + near) * fn, 1);
 	}
 	
+	/**
+	 * Creates a perspective projection matrix (viewing frustum).
+	 * @param left The left bound.
+	 * @param right The right bound.
+	 * @param top The upper bound.
+	 * @param bottom The lower bound.
+	 * @param near The near clipping plane.
+	 * @param far The far clipping plane.
+	 * @return A perspective projection matrix.
+	 */
 	public static Matrix4 perspective(float left, float right, float top, float bottom, float near, float far)
 	{
 	    float x = (2 * near) / (right - left);

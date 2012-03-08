@@ -27,23 +27,26 @@ public class World
         collisionDetector = new CollisionDetector(this.size, shapes);
     }
 
-    public void Add(Shape s)
+    public void add(Shape s)
     {
         shapes.add(s);
     }
     
-    public void Remove(Shape s)
+    public void remove(Shape s)
     {
         shapes.remove(s);
     }
     
-    public RaycastData rayCast(Vector2 start, float angle)
+    public RaycastData raycast(Vector2 start, float angle)
     {
+        //TODO make this actually work all the time.
         try
         {
             return collisionDetector.rayCast(start, angle);
         }
-        catch(Exception e) { }
+        catch (Exception e)
+        { }
+        
         return null;
     }
     
@@ -65,7 +68,7 @@ public class World
         collisionDetector.update();
 
         for (Contact c : collisionDetector.contacts)
-            c.Resolve(frameTime);
+            c.resolve(frameTime);
 
         for (GlobalForce f : forces)
             f.UpdateForce(frameTime);
@@ -73,7 +76,7 @@ public class World
         //Apply Forces and Integrate
         for (Shape s : shapes)
         {
-            if (s.isStatic)
+            if (s.isStatic())
                 continue;
             
             s.integrate(frameTime);

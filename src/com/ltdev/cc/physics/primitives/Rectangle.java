@@ -2,6 +2,10 @@ package com.ltdev.cc.physics.primitives;
 
 import com.ltdev.math.Vector2;
 
+/**
+ * A Shape that represents a rectangle.
+ * @author Lightning Development Studios
+ */
 public class Rectangle extends Shape 
 {
     /****************

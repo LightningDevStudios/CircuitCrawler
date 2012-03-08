@@ -1,6 +1,5 @@
 package com.ltdev.trigger;
 
-
 /**
  * Abstract class used with an Effect to create a Trigger.<br/><br/>
  * 

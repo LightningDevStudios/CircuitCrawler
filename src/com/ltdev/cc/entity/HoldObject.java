@@ -1,6 +1,5 @@
 package com.ltdev.cc.entity;
 
-import com.ltdev.cc.Tile;
 import com.ltdev.cc.physics.primitives.Shape;
 
 public abstract class HoldObject extends Entity

@@ -24,7 +24,7 @@ public class LaserShooter extends Entity
     {
         super(new Rectangle(new Vector2(size, size), position, angle, true));
         
-        shape.isStatic = true;
+        shape.setStatic(true);
         this.player = player;
         
         this.shotsPerSecond = shotsPerSecond;
@@ -58,8 +58,8 @@ public class LaserShooter extends Entity
                 EntityManager.removeEntity(laser);
             
             float rand = (float)((Math.random() * 2 - 1) * stupidity);
-            RaycastData data = physWorld.rayCast(getPos(), (float) (shape.getAngle() + Math.toRadians(rand)));
-            if(data != null)
+            RaycastData data = physWorld.raycast(getPos(), (float) (shape.getAngle() + Math.toRadians(rand)));
+            if (data != null)
             {
                 time = 0;
                 Vector2 laserPos = Vector2.add(getPos(), new Vector2(data.getDistance() / 2 * (float)Math.cos((float) (shape.getAngle() + Math.toRadians(rand))), data.getDistance() / 2 * (float)Math.sin((float) (shape.getAngle() + Math.toRadians(rand)))));

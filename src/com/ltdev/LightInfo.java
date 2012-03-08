@@ -1,8 +1,8 @@
 package com.ltdev;
 
-import javax.microedition.khronos.opengles.GL11;
-
 import com.ltdev.math.*;
+
+import javax.microedition.khronos.opengles.GL11;
 
 /**
  * A class that contains all the information for an OpenGL light and automatically updates it.

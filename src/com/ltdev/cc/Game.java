@@ -166,7 +166,7 @@ public class Game
 		        {
 		            Vector2 position = new Vector2((j + 0.5f) * Tile.TILE_SIZE_F - 0.5f * worldSize.x(), -((i + 0.5f) * Tile.TILE_SIZE_F - 0.5f * worldSize.y()));
 		            Rectangle r = new Rectangle(new Vector2(Tile.TILE_SIZE_F, Tile.TILE_SIZE_F), position, true);
-		            r.isStatic = true;
+		            r.setStatic(true);
 		            shapes.add(r);
 		        }
 		    }

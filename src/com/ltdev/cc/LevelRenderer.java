@@ -3,12 +3,10 @@ package com.ltdev.cc;
 import android.content.Context;
 import android.view.MotionEvent;
 
-import com.ltdev.EntityManager;
 import com.ltdev.Finger;
 import com.ltdev.Stopwatch;
 import com.ltdev.cc.entity.*;
 import com.ltdev.cc.event.*;
-import com.ltdev.cc.physics.RaycastData;
 import com.ltdev.cc.ui.*;
 import com.ltdev.math.*;
 

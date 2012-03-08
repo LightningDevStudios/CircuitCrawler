@@ -49,9 +49,9 @@ public abstract class Shape
     protected float mass;
     
     /**
-     * Determines whether the shape can move or not
+     * Determines whether the shape can move or not.
      */
-    public boolean isStatic;
+    protected boolean isStatic;
     
     /**
      * The density of the shape. default is 1
@@ -161,6 +161,10 @@ public abstract class Shape
      * Public Methods *
      ******************/
     
+    /**
+     * Integrates the physics world by a small amount of time.
+     * @param frameTime The time the previous frame took to render.
+     */
     public void integrate(float frameTime)
     {
         //no friction for static objects
@@ -238,6 +242,10 @@ public abstract class Shape
         forces.add(f);
     }
     
+    /**
+     * Removes an existing force from the shape.
+     * @param f The force to remove.
+     */
     public void removeForce(IndivForce f)
     {
         forces.remove(f);
@@ -253,16 +261,16 @@ public abstract class Shape
     protected abstract void updateMass();
     
     /**
-     * Gets the axes to test for SAT
-     * @param s The other shape involved in the collision
-     * @return An array of unit vector2s representing axes to test
+     * Gets the axes to test for SAT.
+     * @param s The other shape involved in the collision.
+     * @return An array of unit vector2s representing axes to test.
      */
     public abstract Vector2[] getSATAxes(Shape s);
     
     /**
-     * Projects the shape onto an axis, returning the mins and maxes
-     * @param axis The axis to project on
-     * @return A two-float array: [0] is the min, [1] is the max
+     * Projects the shape onto an axis, returning the mins and maxes.
+     * @param axis The axis to project on.
+     * @return A two-float array: [0] is the min, [1] is the max.
      */
     public abstract float[] project(Vector2 axis);
     
@@ -424,6 +432,15 @@ public abstract class Shape
     }
     
     /**
+     * Gets a value indicating whether the Shape is static or not.
+     * @return A boolean determining whether the Shape is static or not.
+     */
+    public boolean isStatic()
+    {
+        return isStatic;
+    }
+    
+    /**
      * Overwrites the velocity vector.
      * @param v The new velocity vector.
      */
@@ -515,5 +532,14 @@ public abstract class Shape
     public void setSolid(boolean solid)
     {
         this.solid = solid;
+    }
+    
+    /**
+     * Sets a value indicating whether the Shape is solid or not.
+     * @param isStatic A value indicating whether the Shape is solid or not.
+     */
+    public void setStatic(boolean isStatic)
+    {
+        
     }
 }

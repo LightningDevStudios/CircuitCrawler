@@ -5,7 +5,6 @@ import android.graphics.Point;
 import com.ltdev.Stopwatch;
 import com.ltdev.Texture;
 import com.ltdev.TilesetHelper;
-import com.ltdev.cc.Tile;
 import com.ltdev.cc.event.InteractListener;
 import com.ltdev.cc.physics.primitives.Shape;
 import com.ltdev.math.*;

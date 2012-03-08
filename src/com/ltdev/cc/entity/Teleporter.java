@@ -1,12 +1,10 @@
 package com.ltdev.cc.entity;
 
-
-import javax.microedition.khronos.opengles.GL11;
-
-import com.ltdev.Stopwatch;
 import com.ltdev.cc.SoundPlayer;
 import com.ltdev.cc.physics.primitives.Circle;
 import com.ltdev.math.Vector2;
+
+import javax.microedition.khronos.opengles.GL11;
 
 public class Teleporter extends Entity
 {

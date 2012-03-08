@@ -193,6 +193,11 @@ public class Tile
 		return type;
 	}
     
+	/**
+	 * Sets the tile's type.
+	 * \todo update the tileset?
+	 * @param type The tile's new type
+	 */
 	public void setTileType(Tile.TileType type)
 	{
 	    this.type = type;

@@ -1,22 +1,19 @@
 package com.ltdev.cc.physics;
 
-import com.ltdev.cc.entity.Entity;
-import com.ltdev.cc.entity.Player;
 import com.ltdev.cc.entity.LaserShooter;
 import com.ltdev.cc.physics.primitives.*;
 import com.ltdev.math.Vector2;
 
-import java.util.Collection;
 import java.util.ArrayList;
 import java.util.TreeMap;
  
 public class CollisionDetector
 {
-    private Vector2 size;
-    private ArrayList<Shape> shapes;
-    
     public SpatialHashGrid spatialHash;
     public ArrayList<Contact> contacts;
+    
+    private Vector2 size;
+    private ArrayList<Shape> shapes;
     
     public CollisionDetector(Vector2 size, ArrayList<Shape> shapes)
     {
@@ -219,10 +216,10 @@ public class CollisionDetector
                 {
                     Vector2 intersect1 = null;
                     Vector2 intersect2 = null;
-                    intersect1 = PointOfIntersection(start, Vector2.scale(dir, 10000), verts[3], verts[0]);
+                    intersect1 = pointOfIntersection(start, Vector2.scale(dir, 10000), verts[3], verts[0]);
                     for (int j = 0; j < 3; j++)
                     {
-                        Vector2 tempIntersect = PointOfIntersection(start, Vector2.scale(dir, 10000), verts[j], verts[j + 1]);
+                        Vector2 tempIntersect = pointOfIntersection(start, Vector2.scale(dir, 10000), verts[j], verts[j + 1]);
                         if (tempIntersect != null)
                         {
                             if (intersect1 == null)
@@ -263,7 +260,7 @@ public class CollisionDetector
         return null;
     }
     
-    public Vector2 PointOfIntersection(Vector2 line1Start, Vector2 line1End, Vector2 line2Start, Vector2 line2End)
+    public Vector2 pointOfIntersection(Vector2 line1Start, Vector2 line1End, Vector2 line2Start, Vector2 line2End)
     {
         float s1x, s1y, s2x, s2y;
         s1x = line1End.x() - line1Start.x();     
@@ -303,8 +300,8 @@ public class CollisionDetector
 
         //TODO check a and b with "instanceof" once and store the Types.
         if (a instanceof Circle && b instanceof Circle)
-            return RadiusCheckCircles(c);
-        else if (!RadiusCheck(a, b))
+            return radiusCheckCircles(c);
+        else if (!radiusCheck(a, b))
                 return false;
         
         /*if (a instanceof Rectangle)
@@ -323,14 +320,14 @@ public class CollisionDetector
         //return false;
     }
 
-    public static boolean RadiusCheck(Shape a, Shape b)
+    public static boolean radiusCheck(Shape a, Shape b)
     {
         float diagonalA = Vector2.subtract(a.getPos(), a.getWorldVertices()[0]).length();
         float diagonalB = Vector2.subtract(b.getPos(), b.getWorldVertices()[0]).length();
         return Vector2.subtract(a.getPos(), b.getPos()).length() < (float)(diagonalA + diagonalB);
     }
 
-    public static boolean RadiusCheckCircles(Contact c)
+    public static boolean radiusCheckCircles(Contact c)
     {
         Circle a = (Circle)c.a;
         Circle b = (Circle)c.b;
@@ -397,7 +394,7 @@ public class CollisionDetector
         return true;
     }
 
-    public static boolean ContainsPoint(Shape shape, Vector2 v)
+    public static boolean containsPoint(Shape shape, Vector2 v)
     {
         if (shape instanceof Circle)
             return Vector2.subtract(shape.getPos(), v).length() < ((Circle)shape).getRadius(); 

@@ -8,7 +8,7 @@ import java.util.ArrayList;
 public class NodePath 
 {
 	private ArrayList<Node> nodeList;
-	private String ID;
+	private String id;
 	
 	public NodePath()
 	{
@@ -84,11 +84,11 @@ public class NodePath
 	
 	public void setID(String id)
 	{
-	    ID = id;
+	    this.id = id;
 	}
 	
 	public String getID()
 	{
-	    return ID;
+	    return id;
 	}
 }

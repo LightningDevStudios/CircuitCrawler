@@ -4,8 +4,6 @@ import android.content.Context;
 import android.media.AudioManager;
 import android.media.SoundPool;
 
-import com.ltdev.cc.R;
-
 import java.util.HashMap;
 
 /**

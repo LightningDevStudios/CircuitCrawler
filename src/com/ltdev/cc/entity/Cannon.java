@@ -1,12 +1,12 @@
 package com.ltdev.cc.entity;
 
-import java.util.ArrayList;
-
 import com.ltdev.EntityManager;
 import com.ltdev.Stopwatch;
 import com.ltdev.cc.Game;
 import com.ltdev.cc.physics.primitives.Rectangle;
 import com.ltdev.math.Vector2;
+
+import java.util.ArrayList;
 
 import javax.microedition.khronos.opengles.GL11;
 
@@ -24,7 +24,7 @@ public class Cannon extends Entity
         this.shotVelocity = shotVelocity;
         this.size = size;
         
-        shape.isStatic = true;
+        shape.setStatic(true);
         player = p;
         shells = new ArrayList<CannonShell>();
         
@@ -46,9 +46,9 @@ public class Cannon extends Entity
 		
 		time += Stopwatch.getFrameTime();
 		
-		if(time > 3000)
+		if (time > 3000)
 		{
-		    if(shells.size() > 2)
+		    if (shells.size() > 2)
 		    {
 		        EntityManager.removeEntity(shells.get(0));
 		        shells.remove(0);

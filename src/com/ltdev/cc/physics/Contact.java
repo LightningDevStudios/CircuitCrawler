@@ -28,10 +28,10 @@ public class Contact
         this.contactNormal = contactNormal;
     }
 
-    public void Resolve(float duration)
+    public void resolve(float duration)
     {
-        ResolveInterpenetration();
-        ResolveVelocity();
+        resolveInterpenetration();
+        resolveVelocity();
         
         if (a.getInteractListener() != null && b.getInteractListener() != null)
         {
@@ -40,9 +40,9 @@ public class Contact
         }
     }
 
-    private void ResolveInterpenetration()
+    private void resolveInterpenetration()
     {
-        if (penetration <= 0 || a.isStatic && b.isStatic)
+        if (penetration <= 0 || a.isStatic() && b.isStatic())
             return;
         
         if (!a.isSolid() || !b.isSolid())
@@ -50,15 +50,15 @@ public class Contact
         
         Vector2 moveVec = Vector2.scale(contactNormal, penetration);
 
-        if (!a.isStatic)
+        if (!a.isStatic())
             a.setPos(Vector2.add(a.getPos(), moveVec));
-        if (!b.isStatic)
+        if (!b.isStatic())
             b.setPos(Vector2.subtract(b.getPos(), moveVec));
     }
 
-    private void ResolveVelocity()
+    private void resolveVelocity()
     {
-        if (a.isStatic && b.isStatic)
+        if (a.isStatic() && b.isStatic())
             return;
         
         if (!a.isSolid() || !b.isSolid())
@@ -67,7 +67,7 @@ public class Contact
         Vector2 impulseA = Vector2.ZERO;
         Vector2 impulseB = Vector2.ZERO;
         
-        float sepV = GetSeperatingVelocity();
+        float sepV = getSeperatingVelocity();
         
         if (sepV >= 0)
             return;
@@ -75,9 +75,9 @@ public class Contact
         float newSepV = -sepV * restitution;
         float deltaV = newSepV - sepV;
         
-        if (a.isStatic)
+        if (a.isStatic())
             impulseB = Vector2.scale(contactNormal, -deltaV * b.getMass());
-        else if (b.isStatic)
+        else if (b.isStatic())
             impulseA = Vector2.scale(contactNormal, deltaV * a.getMass());
         else
         {   
@@ -89,7 +89,7 @@ public class Contact
         b.addImpulse(impulseB);
     }
 
-    private float GetSeperatingVelocity()
+    private float getSeperatingVelocity()
     {
         Vector2 relativeVelocity = Vector2.subtract(a.getVelocity(), b.getVelocity());
         if (contactNormal == null)

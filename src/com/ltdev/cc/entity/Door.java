@@ -20,7 +20,7 @@ public class Door extends Entity
 	public Door(float size, Vector2 position)
     {
         super(new Rectangle(new Vector2(size - 10, size), position, 0, true));
-        shape.isStatic = true;
+        shape.setStatic(true);
         enableColorMode(1.0f, 1.0f, 1.0f, 1.0f);
         colorInterpSpeed = 1.0f;
         

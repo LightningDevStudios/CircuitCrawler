@@ -1,8 +1,6 @@
 package com.ltdev.cc.entity;
 
-import com.ltdev.cc.Tile;
 import com.ltdev.cc.physics.primitives.Circle;
-import com.ltdev.cc.physics.primitives.Rectangle;
 import com.ltdev.math.Vector2;
 
 import javax.microedition.khronos.opengles.GL11;

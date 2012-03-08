@@ -58,14 +58,14 @@ public class EntityManager
 		{
 			ent.unload(gl);
 			entList.remove(ent);
-			physWorld.Remove(ent.getShape());
+			physWorld.remove(ent.getShape());
 		}
 		
 		for (Entity ent : addList)
 		{
 			ent.initialize(gl);
 			entList.add(ent);
-			physWorld.Add(ent.getShape());
+			physWorld.add(ent.getShape());
 		}
 		
 		trashList.clear();
