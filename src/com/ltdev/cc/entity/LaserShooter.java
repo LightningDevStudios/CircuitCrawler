@@ -1,7 +1,5 @@
 package com.ltdev.cc.entity;
 
-
-
 import com.ltdev.EntityManager;
 import com.ltdev.Stopwatch;
 import com.ltdev.cc.Game;
@@ -12,7 +10,11 @@ import com.ltdev.math.Vector2;
 
 import javax.microedition.khronos.opengles.GL11;
 
-
+/**
+ * A LaserShooter is an object that fires Lasers.
+ * @author Lightning Development Studios.
+ *
+ */
 public class LaserShooter extends Entity
 {
     private float shotsPerSecond, time, stupidity, beamWidth;
@@ -20,6 +22,18 @@ public class LaserShooter extends Entity
     private Player player;
     private World physWorld;
     
+    /**
+     * Initializes a new instance of the LaserShooter class.
+     * \todo Fill out the rest of the parameters.
+     * @param position The location of the LaserShooter.
+     * @param size The size of the LaserShooter.
+     * @param angle The angle of the LaserShooter.
+     * @param stupidity
+     * @param beamWidth
+     * @param shotsPerSecond
+     * @param player The player.
+     * @param physWorld The physics world.
+     */
     public LaserShooter(Vector2 position, float size, float angle, float stupidity, float beamWidth, float shotsPerSecond, Player player, World physWorld)
     {
         super(new Rectangle(new Vector2(size, size), position, angle, true));
@@ -37,7 +51,10 @@ public class LaserShooter extends Entity
         
         time = Stopwatch.getFrameTime();
     }
-       
+
+    /**
+     * Aligns the LaserShooter to face the player.
+     */
     public void facePlayer()
     {
         Vector2 distance = Vector2.subtract(shape.getPos(), player.getPos());
@@ -45,6 +62,7 @@ public class LaserShooter extends Entity
         shape.setAngle(targetAng);
     }
     
+    @Override
     public void update(GL11 gl)
     {
         super.update(gl);

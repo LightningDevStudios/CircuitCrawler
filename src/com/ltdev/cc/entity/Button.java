@@ -6,10 +6,18 @@ import com.ltdev.math.Vector2;
 
 import javax.microedition.khronos.opengles.GL11;
 
+/**
+ * A Button is an object that reacts to other objects being placed on top of it.
+ * @author Lightning Development Studios
+ */
 public class Button extends Entity
 {
 	private boolean active, prevActive;
 	
+	/**
+	 * Initializes a new instance of the Button class.
+	 * @param position The Button's position.
+	 */
 	public Button(Vector2 position)
 	{
 		super(new Circle(69, position, false));
@@ -25,21 +33,23 @@ public class Button extends Entity
 	    
 	    //update the texture when activated/deactivated.
 	    if (prevActive != active)
-	    {
-	        /*if (active)
-	            this.setTile(gl, 1, 0);
-	        else
-	            this.setTile(gl, 0, 0);*/
-	        
+	    {	        
 	        prevActive = active;
 	    }
 	}
 	
+	/**
+	 * Gets a value indicating whether the Button is activated or not.
+	 * @return A value indicating whether the Button is activated or not.
+	 */
 	public boolean isActive()
 	{
 		return active;
 	}
 	
+	/**
+	 * Activate the Button.
+	 */
 	public void activate()
 	{
 	    prevActive = active;
@@ -47,6 +57,9 @@ public class Button extends Entity
 		SoundPlayer.playSound(SoundPlayer.SOUND_TEST);
 	}
 	
+	/**
+	 * Deactivate the button.
+	 */
 	public void deactivate()
 	{
 	    prevActive = active;

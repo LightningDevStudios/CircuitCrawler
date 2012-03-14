@@ -19,10 +19,6 @@ public class PhysBallData extends HoldObjectData
 	{
 		physBallRef = new Ball(size, new Vector2(xPos, yPos));
 
-		//COLOR
-		if (color != null)
-			physBallRef.enableColorMode(color[0], color[1], color[2], color[3]);
-		
 		physBallRef.setTexture(tex);
 		
 		entData.add(physBallRef);

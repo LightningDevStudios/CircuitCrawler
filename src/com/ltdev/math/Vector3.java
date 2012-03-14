@@ -59,7 +59,7 @@ public final class Vector3
 	 ****************/
 
 	/**
-	 * Creates a new instance of the Vector3 class with all components equal to 0.
+	 * Initializes a new instance of the Vector3 class with all components equal to 0.
 	 */
 	public Vector3()
 	{
@@ -69,7 +69,7 @@ public final class Vector3
 	}
 	
 	/**
-	 * Creates a new instance of the Vector3 class.
+	 * Initializes a new instance of the Vector3 class.
 	 * @param x The X component of the vector.
 	 * @param y The Y component of the vector.
 	 * @param z The Z component of the vector.
@@ -82,7 +82,7 @@ public final class Vector3
 	}
 	
 	/**
-	 * Creates a new instance of the Vector3 class.
+	 * Initializes a new instance of the Vector3 class.
 	 * @param xy A vector containing the X and Y components of the vector.
 	 * @param z The Z component of the vector.
 	 */

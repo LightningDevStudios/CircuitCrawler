@@ -20,11 +20,7 @@ public class ButtonData extends StaticEntData
 	{
 		buttonRef = new Button(new Vector2(xPos, yPos));
 		buttonRef.setAngle(angle);
-		
-		//COLOR
-		if (color != null)
-			buttonRef.enableColorMode(color[0], color[1], color[2], color[3]);
-		
+
 		buttonRef.setTexture(tex);
 		
 		entData.add(buttonRef);

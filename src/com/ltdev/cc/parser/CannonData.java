@@ -31,10 +31,6 @@ public class CannonData extends StaticEntData
 	{
 		cannonRef = new Cannon(size, new Vector2(xPos, yPos), angle, speed, time, null);
 		
-		//COLOR
-		if (color != null)
-			cannonRef.enableColorMode(color[0], color[1], color[2], color[3]);
-		
 		cannonRef.setTexture(tex);
 		
 		entData.add(cannonRef);

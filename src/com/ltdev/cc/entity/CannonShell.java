@@ -5,10 +5,15 @@ import com.ltdev.math.Vector2;
 
 import javax.microedition.khronos.opengles.GL11;
 
+/**
+ * A CannonShell is the object that a Cannon fires.
+ * @author Lightning Development Studios
+ */
 public class CannonShell extends Entity
 {	
 	/**
-	 * @param position Position.
+	 * Initializes a new instance of the CannonShell class.
+	 * @param position The shell's position.
 	 * @param angle The shell's angle in radians.
 	 */
 	public CannonShell(Vector2 position, float angle)

@@ -3,6 +3,10 @@ package com.ltdev.cc.entity;
 import com.ltdev.cc.physics.primitives.Circle;
 import com.ltdev.math.Vector2;
 
+/**
+ * A Ball is a basic circle that can be held and thrown.
+ * @author Lightning Development Studios
+ */
 public class Ball extends HoldObject
 {
     /**

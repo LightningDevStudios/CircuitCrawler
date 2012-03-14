@@ -20,10 +20,6 @@ public class PlayerData extends CharacterData
 	{
 		playerRef = new Player(new Vector2(xPos, yPos), angle);
 
-		//COLOR
-		if (color != null)
-			playerRef.enableColorMode(color[0], color[1], color[2], color[3]);
-		
 		playerRef.setTexture(tex);
 		
 		entData.add(playerRef);

@@ -36,7 +36,7 @@ public final class Matrix3x2
      ****************/
     
     /**
-     * Creates a new instance of the Matrix3x2 class. All elements initialized to 0.
+     * Initializes a new instance of the Matrix3x2 class. All elements initialized to 0.
      */
     public Matrix3x2()
     {
@@ -45,7 +45,7 @@ public final class Matrix3x2
     }
     
     /**
-     * Creates a new instance of the Matrix3x2 class.
+     * Initializes a new instance of the Matrix3x2 class.
      * @param col0 The first column of the matrix.
      * @param col1 The second column of the matrix.
      */
@@ -56,7 +56,7 @@ public final class Matrix3x2
     }
     
     /**
-     * Creates a new instance of the Matrix3x2 class.
+     * Initializes a new instance of the Matrix3x2 class.
      * @param m11 Column 1, Row 1 of the matrix.
      * @param m12 Column 1, Row 2 of the matrix.
      * @param m13 Column 1, Row 3 of the matrix.

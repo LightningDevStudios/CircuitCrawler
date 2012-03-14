@@ -10,6 +10,10 @@ import java.util.ArrayList;
 
 import javax.microedition.khronos.opengles.GL11;
 
+/**
+ * A Cannon is an object that fires blocks at the player to push them.
+ * @author Lightning Development Studios
+ */
 public class Cannon extends Entity
 {
 	private float shotVelocity, stupidity, time;
@@ -17,6 +21,16 @@ public class Cannon extends Entity
 	private float size;
 	private ArrayList<CannonShell> shells;
 	
+	/**
+	 * Initializes a new instance of the Cannon class.
+	 * \todo Create comments for the last 3 variables.
+	 * @param size The Cannon's size.
+	 * @param position The Cannon's position.
+	 * @param angle The Cannon's angle.
+	 * @param stupidity
+	 * @param shotVelocity
+	 * @param p
+	 */
 	public Cannon(float size, Vector2 position, float angle, float stupidity, float shotVelocity, Player p)
     {
         super(new Rectangle(new Vector2(size, size), position, angle, true));
@@ -32,6 +46,9 @@ public class Cannon extends Entity
         this.tilesetY = 0;
     }
 	
+	/**
+	 * Force the Cannon to face the player.
+	 */
 	public void facePlayer()
 	{
 	    Vector2 distance = Vector2.subtract(shape.getPos(), player.getPos());
