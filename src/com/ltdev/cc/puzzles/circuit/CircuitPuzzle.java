@@ -6,14 +6,13 @@ import android.view.MotionEvent;
 
 import com.ltdev.Direction;
 import com.ltdev.Stopwatch;
-import com.ltdev.Texture;
-import com.ltdev.TextureLoader;
 import com.ltdev.cc.Game;
 import com.ltdev.cc.R;
 import com.ltdev.cc.event.PuzzleFailListener;
 import com.ltdev.cc.event.PuzzleInitializedListener;
 import com.ltdev.cc.event.PuzzleSuccessListener;
 import com.ltdev.cc.puzzle.IPuzzle;
+import com.ltdev.graphics.Texture;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
@@ -47,8 +46,7 @@ public class CircuitPuzzle implements IPuzzle
 		gl.glEnable(GL10.GL_DITHER);
 		gl.glHint(GL10.GL_PERSPECTIVE_CORRECTION_HINT, GL10.GL_NICEST);
 		
-		tileTex = new Texture(R.raw.circuitpuzzle, 128, 128, 8, 8, context, "circuitpuzzle");
-		TextureLoader.loadTexture((GL11)gl, tileTex);
+		tileTex = new Texture(R.raw.circuitpuzzle, 128, 128, 8, 8, context, (GL11)gl);
 		
 		initializePuzzle();
 		

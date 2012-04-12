@@ -2,10 +2,10 @@ package com.ltdev.cc.entity;
 
 import android.graphics.Point;
 
-import com.ltdev.Texture;
-import com.ltdev.TilesetHelper;
 import com.ltdev.cc.event.InteractListener;
 import com.ltdev.cc.physics.primitives.Shape;
+import com.ltdev.graphics.Texture;
+import com.ltdev.graphics.TilesetHelper;
 import com.ltdev.math.*;
 
 import java.nio.ByteBuffer;

@@ -1,7 +1,7 @@
 package com.ltdev.cc.ui;
 
-import com.ltdev.Texture;
 import com.ltdev.cc.Game;
+import com.ltdev.graphics.Texture;
 import com.ltdev.math.Vector2;
 
 import javax.microedition.khronos.opengles.GL11;

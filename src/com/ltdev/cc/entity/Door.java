@@ -6,8 +6,6 @@ import com.ltdev.math.Vector2;
 
 import javax.microedition.khronos.opengles.GL11;
 
-import javax.microedition.khronos.opengles.GL11;
-
 /**
  * A Door can be opened and closed via triggers as part of puzzles.
  * @author Lightning Development Studios

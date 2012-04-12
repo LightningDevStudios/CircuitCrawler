@@ -1,4 +1,4 @@
-package com.ltdev;
+package com.ltdev.graphics;
 
 import com.ltdev.math.*;
 

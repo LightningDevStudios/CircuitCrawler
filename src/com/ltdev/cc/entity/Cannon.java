@@ -2,8 +2,8 @@ package com.ltdev.cc.entity;
 
 import com.ltdev.EntityManager;
 import com.ltdev.Stopwatch;
-import com.ltdev.cc.Game;
 import com.ltdev.cc.physics.primitives.Rectangle;
+import com.ltdev.graphics.TextureManager;
 import com.ltdev.math.Vector2;
 
 import java.util.ArrayList;
@@ -27,9 +27,9 @@ public class Cannon extends Entity
 	 * @param size The Cannon's size.
 	 * @param position The Cannon's position.
 	 * @param angle The Cannon's angle.
-	 * @param stupidity
-	 * @param shotVelocity
-	 * @param p
+	 * @param stupidity A value that changes the cannon's accuracy.
+	 * @param shotVelocity The velocity that cannons are shot at.
+	 * @param p A reference to the player.
 	 */
 	public Cannon(float size, Vector2 position, float angle, float stupidity, float shotVelocity, Player p)
     {
@@ -72,7 +72,7 @@ public class Cannon extends Entity
 		    }
 		    
 		    CannonShell shell = new CannonShell(Vector2.add(getPos(), new Vector2((float)Math.cos(shape.getAngle()) * (size / 2 + 10), (float)Math.sin(shape.getAngle()) * (size / 2 + 10))), shape.getAngle());
-            shell.setTexture(Game.tilesetentities);      
+            shell.setTexture(TextureManager.getTexture("tilesetentities"));      
             EntityManager.addEntity(shell);
             
 		    shells.add(shell);

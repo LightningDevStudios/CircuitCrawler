@@ -2,10 +2,10 @@ package com.ltdev.cc.entity;
 
 import com.ltdev.EntityManager;
 import com.ltdev.Stopwatch;
-import com.ltdev.cc.Game;
 import com.ltdev.cc.physics.RaycastData;
 import com.ltdev.cc.physics.World;
 import com.ltdev.cc.physics.primitives.*;
+import com.ltdev.graphics.TextureManager;
 import com.ltdev.math.Vector2;
 
 import javax.microedition.khronos.opengles.GL11;
@@ -82,7 +82,7 @@ public class LaserShooter extends Entity
                 time = 0;
                 Vector2 laserPos = Vector2.add(getPos(), new Vector2(data.getDistance() / 2 * (float)Math.cos((float) (shape.getAngle() + Math.toRadians(rand))), data.getDistance() / 2 * (float)Math.sin((float) (shape.getAngle() + Math.toRadians(rand)))));
                 laser = new Laser(5, data.getDistance(), (float) (shape.getAngle() + Math.toRadians(rand)), laserPos);
-                laser.setTexture(Game.tilesetentities);
+                laser.setTexture(TextureManager.getTexture("tilesetentities"));
                 EntityManager.addEntity(laser);
             }
         }

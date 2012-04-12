@@ -3,6 +3,7 @@ package com.ltdev.cc;
 import android.content.Context;
 import android.view.MotionEvent;
 
+import com.ltdev.EntityManager;
 import com.ltdev.Finger;
 import com.ltdev.Stopwatch;
 import com.ltdev.cc.entity.*;
@@ -143,7 +144,7 @@ public class LevelRenderer implements com.ltdev.LevelSurfaceView.Renderer
 		}
 		
 		game.updateTriggers();
-		game.entManager.update(game.entities, game.world, gl);
+		EntityManager.update(game.entities, game.world, gl);
 		game.updateFingers();
 		
 		//TODO: game.update(), chain off to world.update()
@@ -395,7 +396,7 @@ public class LevelRenderer implements com.ltdev.LevelSurfaceView.Renderer
 		gl.glLoadMatrixf(projWorld.array(), 0);
 		gl.glMatrixMode(GL11.GL_MODELVIEW);
 		gl.glLoadIdentity();
-		gl.glMultMatrixf(Matrix4.translate(new Vector3(-game.camPosX, -game.camPosY, -Tile.TILE_SIZE_F * 4f)).array(), 0);
+		gl.glMultMatrixf(Matrix4.translate(new Vector3(-game.camPos.x, -game.camPos.y, -Tile.TILE_SIZE_F * 4f)).array(), 0);
 	}
 	
 	/**

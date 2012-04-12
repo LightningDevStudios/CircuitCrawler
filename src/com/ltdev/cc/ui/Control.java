@@ -2,9 +2,9 @@ package com.ltdev.cc.ui;
 
 import android.util.Log;
 
-import com.ltdev.Texture;
-import com.ltdev.TilesetHelper;
 import com.ltdev.cc.Game;
+import com.ltdev.graphics.Texture;
+import com.ltdev.graphics.TilesetHelper;
 import com.ltdev.math.Matrix4;
 import com.ltdev.math.Vector2;
 

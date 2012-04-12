@@ -2,6 +2,9 @@ package com.ltdev;
 
 import android.graphics.Point;
 
+import com.ltdev.graphics.Texture;
+import com.ltdev.graphics.TilesetHelper;
+
 public class Animation 
 {
 	private Texture tex;
