@@ -99,7 +99,7 @@ public class LevelRenderer implements com.ltdev.LevelSurfaceView.Renderer
 			ent.initialize(gl);
 		}
 		
-		for (Control ent : game.UIList)
+		for (Control ent : game.uiList)
 		{
 			ent.genHardwareBuffers(gl);
 		}
@@ -157,23 +157,15 @@ public class LevelRenderer implements com.ltdev.LevelSurfaceView.Renderer
 		
 		//HACK: for the love of GOD move this out of LevelRenderer
 		//Iterates through all entities
-		final int size = game.entities.size();
-		for (int i = 0; i < size; i++)
+		//final int size = game.entities.size();
+		/*for (int i = 0; i < size; i++)
 		{
 			
 			//final Entity ent = game.entities.get(i);
-			
-			/***************************
-			 * Performs Button Actions *
-			 ***************************/
-	
-			if (game.btnB.isPressed())
-			{
-			}
-			
+
 			//inside of ent for loop
 			//checks for whatever happens when B is pressed.
-			/*if (game.btnB.isPressed())
+			if (game.btnB.isPressed())
 			{
 				if (ent instanceof HoldObject)
 				{
@@ -202,8 +194,8 @@ public class LevelRenderer implements com.ltdev.LevelSurfaceView.Renderer
 					}
 					game.btnB.unpress();
 				}
-			}*/
-		}
+			}
+		}*/
 				
 		/**********************
 		 * Render all Entites *
@@ -260,7 +252,7 @@ public class LevelRenderer implements com.ltdev.LevelSurfaceView.Renderer
 		gl.glDisable(GL11.GL_DEPTH_TEST);
 		gl.glEnableClientState(GL11.GL_VERTEX_ARRAY);
 		
-		for (Control ent : game.UIList)
+		for (Control ent : game.uiList)
 		{
 		    gl.glPushMatrix();
 			ent.update();
@@ -324,9 +316,9 @@ public class LevelRenderer implements com.ltdev.LevelSurfaceView.Renderer
 					final int fingerIndex = e.getPointerId(e.getAction() >> MotionEvent.ACTION_POINTER_ID_SHIFT);
 					final Vector2 touchVec = new Vector2(e.getX(e.getPointerCount() - 1) - Game.screenW / 2, Game.screenH / 2 - e.getY(e.getPointerCount() - 1));
 					boolean onEnt = false;
-					for (int i = 0; i < game.UIList.size(); i++)
+					for (int i = 0; i < game.uiList.size(); i++)
 					{
-						final Control ent = game.UIList.get(i);
+						final Control ent = game.uiList.get(i);
 						if (touchVec.x() >= ent.getPos().x() - ent.getSize().x() / 2 && touchVec.x() <= ent.getPos().x() + ent.getSize().x() / 2 && touchVec.y() >= ent.getPos().y() - ent.getSize().y() / 2 && touchVec.y() <= ent.getPos().y() + ent.getSize().y() / 2)
 						{
 							final Finger newFinger = new Finger(touchVec, ent, e.getPointerId(fingerIndex));

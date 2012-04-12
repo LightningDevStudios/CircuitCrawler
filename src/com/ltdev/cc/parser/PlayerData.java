@@ -19,10 +19,6 @@ public class PlayerData extends CharacterData
 	public void createInst(ArrayList<Entity> entData)
 	{
 		playerRef = new Player(new Vector2(xPos, yPos), angle);
-
-		//COLOR
-		if (color != null)
-			playerRef.enableColorMode(color[0], color[1], color[2], color[3]);
 		
 		playerRef.setTexture(tex);
 		

@@ -72,19 +72,17 @@ public class MainMenu extends Activity
 		
 		//add views to ViewAnimator
 		animator.addView(levelList, 0);
-		final View tutorial = View.inflate(this, R.layout.tutorial, null);
-		animator.addView(tutorial, 1);
 		final View settings = View.inflate(this, R.layout.settings, null);
-		animator.addView(settings, 2);
+		animator.addView(settings, 1);
 		final View aboutYTF = View.inflate(this, R.layout.about_ytf, null);
-		animator.addView(aboutYTF, 3);
+		animator.addView(aboutYTF, 2);
 		final View aboutLDS = View.inflate(this, R.layout.about_lds, null);
-		animator.addView(aboutLDS, 4);
+		animator.addView(aboutLDS, 3);
 		final View credits = View.inflate(this, R.layout.credits, null);
-		animator.addView(credits, 5);
+		animator.addView(credits, 4);
 		final View ccLogo = View.inflate(this, R.layout.circuit_crawler_logo, null);
-		animator.addView(ccLogo, 6);
-		animator.setDisplayedChild(6);
+		animator.addView(ccLogo, 5);
+		animator.setDisplayedChild(5);
 		
 		//Boxes n' Shit
 		final CheckBox vibrationCheckbox = (CheckBox) findViewById(R.id.checkbox);

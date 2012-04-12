@@ -20,10 +20,6 @@ public class PhysBlockData extends HoldObjectData
 		physBlockRef = new Block(size, new Vector2(xPos, yPos));
 		physBlockRef.setAngle(angle);
 		
-		//COLOR
-		if (color != null)
-			physBlockRef.enableColorMode(color[0], color[1], color[2], color[3]);
-		
 		physBlockRef.setTexture(tex);
 		
 		entData.add(physBlockRef);

@@ -5,8 +5,8 @@ import com.ltdev.math.Vector2;
 
 public class GravityPoint extends GlobalForce
 {
-    public Vector2 point;
-    public float g;
+    private Vector2 point;
+    private float g;
 
     public GravityPoint(Vector2 point, float g)
     {
@@ -15,7 +15,7 @@ public class GravityPoint extends GlobalForce
     }
 
     @Override
-    public void UpdateForce(float frameTime)
+    public void updateForce(float frameTime)
     {
         for (Shape s : shapes)
         {

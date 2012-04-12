@@ -1,10 +1,10 @@
 package com.ltdev.cc.entity;
 
-import javax.microedition.khronos.opengles.GL11;
-
 import com.ltdev.Stopwatch;
 import com.ltdev.cc.physics.primitives.Rectangle;
 import com.ltdev.math.Vector2;
+
+import javax.microedition.khronos.opengles.GL11;
 
 public class Door extends Entity
 {
@@ -21,7 +21,6 @@ public class Door extends Entity
     {
         super(new Rectangle(new Vector2(size - 10, size), position, 0, true));
         shape.setStatic(true);
-        enableColorMode(1.0f, 1.0f, 1.0f, 1.0f);
         colorInterpSpeed = 1.0f;
         
         open = false;
@@ -50,7 +49,6 @@ public class Door extends Entity
 	{
 	    if (!open)
 	    {
-	        initColorInterp(0.0f, 0.0f, 0.0f, 0.0f);
 	        open = true;
 	    }
 	}
@@ -59,7 +57,6 @@ public class Door extends Entity
 	{	
 	    if (open)
         {
-	        initColorInterp(1.0f, 1.0f, 1.0f, 1.0f);
 	        open = false;
         }
 	}

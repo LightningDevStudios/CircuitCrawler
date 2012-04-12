@@ -5,9 +5,9 @@ import com.ltdev.math.Vector2;
 
 public class SpringPoint implements IndivForce
 {
-    public Vector2 point;
-    public float restLength;
-    public float k;
+    private Vector2 point;
+    private float restLength;
+    private float k;
 
     public SpringPoint(Vector2 point, float restLength, float k)
     {
@@ -16,7 +16,7 @@ public class SpringPoint implements IndivForce
         this.k = k;
     }
 
-    public void UpdateForce(float frameTime, Shape s)
+    public void updateForce(float frameTime, Shape s)
     {
         Vector2 v = Vector2.subtract(point, s.getPos());
         float mag = (v.length() - restLength) * k * frameTime;

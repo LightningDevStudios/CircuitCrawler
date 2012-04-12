@@ -2,7 +2,6 @@ package com.ltdev.cc.entity;
 
 import android.graphics.Point;
 
-import com.ltdev.Stopwatch;
 import com.ltdev.Texture;
 import com.ltdev.TilesetHelper;
 import com.ltdev.cc.event.InteractListener;
@@ -165,72 +164,6 @@ public abstract class Entity implements InteractListener
 	public void uninteract(Entity ent)
 	{
 	    
-	}
-		
-	/**********************
-	 * RenderMode methods *
-	 **********************/
-		
-	//COLOR
-	/**
-	 * \todo use Vector4s instead (or make a Color4 class).
-	 * @param r R component.
-	 * @param g G component.
-	 * @param b B component.
-	 * @param a A component.
-	 */
-	public void enableColorMode(float r, float g, float b, float a)
-	{
-		updateColor(r, g, b, a);
-	}
-	
-	public void enableColorMode(int r, int g, int b, int a)
-	{
-		enableColorMode((float) r / 255.0f, (float) g / 255.0f, (float) b / 255.0f, (float) a / 255.0f);
-	}
-	
-	public void updateColor(float r, float g, float b, float a)
-	{
-		colorVec = new Vector4(r, g, b, a);
-	}
-	
-	public void updateColor(int r, int g, int b, int a)
-	{
-		updateColor((float) r / 255.0f, (float) g / 255.0f, (float) b / 255.0f, (float) a / 255.0f);
-	}
-		
-	public void initColorInterp(float r, float g, float b, float a)
-	{
-		endColorVec = new Vector4(r, g, b, a);
-		isColorInterp = true;
-	}
-	 
-	public void colorInterp()
-	{
-		if (isColorInterp)
-		{
-			final float colorInterp = colorInterpSpeed / 1000 * Stopwatch.getFrameTime();
-			final Vector4 colorDiffVec = Vector4.abs(Vector4.subtract(endColorVec, colorVec));
-			if (colorDiffVec.x() < colorInterp && colorDiffVec.y() < colorInterp && colorDiffVec.z() < colorInterp && colorDiffVec.w() < colorInterp)
-			{
-				colorVec = endColorVec;
-				isColorInterp = false;
-			}
-			else
-			{
-				if (endColorVec.x() > colorVec.x())   colorVec = Vector4.add(colorVec, new Vector4(colorInterp, 0, 0, 0));
-				else					                    colorVec = Vector4.subtract(colorVec, new Vector4(colorInterp, 0, 0, 0));
-				
-				if (endColorVec.y() > colorVec.y())	colorVec = Vector4.add(colorVec, new Vector4(0, colorInterp, 0, 0));
-				else					                    colorVec = Vector4.subtract(colorVec, new Vector4(0, colorInterp, 0, 0));
-				
-				if (endColorVec.z() > colorVec.z())	colorVec = Vector4.add(colorVec, new Vector4(0, 0, colorInterp, 0));
-				else					                    colorVec = Vector4.subtract(colorVec, new Vector4(0, 0, colorInterp, 0));
-				
-				if (endColorVec.w() > colorVec.w())	colorVec = Vector4.add(colorVec, new Vector4(0, 0, 0, colorInterp));
-				else					                    colorVec = Vector4.subtract(colorVec, new Vector4(0, 0, 0, colorInterp));
-			}
-		}
 	}
 
     public void unload(GL11 gl)

@@ -173,7 +173,7 @@ public abstract class Shape
 
         //apply forces
         for (IndivForce f : forces)
-            f.UpdateForce(frameTime, this);
+            f.updateForce(frameTime, this);
                 
         //apply friction
         float speed = velocity.length();

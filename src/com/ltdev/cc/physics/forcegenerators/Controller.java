@@ -5,12 +5,12 @@ import com.ltdev.math.Vector2;
 
 public class Controller implements IndivForce
 {
-    public float vertForce;
-    public float horizForce;
-    public boolean up;
-    public boolean down;
-    public boolean left;
-    public boolean right;
+    private float vertForce;
+    private float horizForce;
+    private boolean up;
+    private boolean down;
+    private boolean left;
+    private boolean right;
 
     public Controller(float vertForce, float horizForce)
     {
@@ -22,7 +22,7 @@ public class Controller implements IndivForce
         right = false;
     }
 
-    public void UpdateForce(float frameTime, Shape s)
+    public void updateForce(float frameTime, Shape s)
     {
         if (up)
             s.addImpulse(Vector2.scale(new Vector2(0, vertForce), s.getMass() * frameTime));

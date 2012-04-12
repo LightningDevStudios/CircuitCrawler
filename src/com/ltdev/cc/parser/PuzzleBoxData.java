@@ -18,10 +18,6 @@ public class PuzzleBoxData extends StaticEntData
 	public void createInst(ArrayList<Entity> entData)
 	{
 		puzzleBoxRef = new PuzzleBox(size, new Vector2(xPos, yPos));
-
-		//COLOR
-		if (color != null)
-			puzzleBoxRef.enableColorMode(color[0], color[1], color[2], color[3]);
 		
 		puzzleBoxRef.setTexture(tex);
 		
