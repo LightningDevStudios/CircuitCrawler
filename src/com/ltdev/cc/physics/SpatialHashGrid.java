@@ -7,15 +7,27 @@ import com.ltdev.physics.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+ * A broadphase that hashes a collection of objects into buckets of neighboring objects to quickly look up objects near each other.
+ * @author Lightning Development Studios
+ */
 public class SpatialHashGrid
 {
     private float sceneWidth, sceneHeight;
-    public int cellsX, cellsY;
-    public float cellSizeX, cellSizeY;
+    private int cellsX, cellsY;
+    private float cellSizeX, cellSizeY;
 
     private ArrayList<Shape> elements;
     private HashMap<Integer, ArrayList<Shape>> buckets;
 
+    /**
+     * Initializes a new instance of the SpatialHashGrid class.
+     * @param elements A collection of objects to initialize the grid with.
+     * @param sceneWidth The maximum width of the grid.
+     * @param sceneHeight The maximum height of the grid.
+     * @param cellsX The number of cells to divide the grid in on the X axis.
+     * @param cellsY The number of cells to divide the grid in on the Y axis.
+     */
     public SpatialHashGrid(ArrayList<Shape> elements, float sceneWidth, float sceneHeight, int cellsX, int cellsY)
     {
         this.sceneHeight = sceneHeight;
@@ -34,7 +46,11 @@ public class SpatialHashGrid
             buckets.put(i, new ArrayList<Shape>());
     }
 
-    public void AddRange(ArrayList<Shape> elements)
+    /**
+     * Adds a collection of objects to the grid.
+     * @param elements The collection of objects to add.
+     */
+    public void addRange(ArrayList<Shape> elements)
     {
         this.elements.addAll(elements);
     }
@@ -49,7 +65,7 @@ public class SpatialHashGrid
         for (Shape item : elements)
         {
 
-            for (int i : GetBuckets(new AABB(item.getWorldVertices()).toBottomLeftCoords(sceneWidth, sceneHeight)))
+            for (int i : getBuckets(new AABB(item.getWorldVertices()).toBottomLeftCoords(sceneWidth, sceneHeight)))
             {
                 buckets.get(i).add(item);
             }
@@ -82,14 +98,14 @@ public class SpatialHashGrid
      * @param item An item contained in the grid.
      * @return All of the items near item.
      */
-    public ArrayList<Shape> GetNeighbors(Shape item)
+    public ArrayList<Shape> getNeighbors(Shape item)
     {
         ArrayList<Shape> neighbors = new ArrayList<Shape>();
 
         if (!elements.contains(item))
             return null;
         
-        for (int i : GetBuckets(new AABB(item.getWorldVertices()).toBottomLeftCoords(sceneWidth, sceneHeight)))
+        for (int i : getBuckets(new AABB(item.getWorldVertices()).toBottomLeftCoords(sceneWidth, sceneHeight)))
         {
             neighbors.addAll(buckets.get(i));
             neighbors.remove(item);
@@ -104,7 +120,7 @@ public class SpatialHashGrid
      * @param size The size of the area to check.
      * @return An ArrayList of items contained roughly in the specified area.
      */
-    public ArrayList<Shape> GetContainedItems(Vector2 point, Vector2 size)
+    public ArrayList<Shape> getContainedItems(Vector2 point, Vector2 size)
     {
         float x = point.x();
         float y = point.y();
@@ -117,7 +133,7 @@ public class SpatialHashGrid
         float top = y + size.y() / 2 + halfY;
         float bottom = y - size.y() / 2 + halfY;
         
-        return GetContainedItems(new AABB(left, right, top, bottom));
+        return getContainedItems(new AABB(left, right, top, bottom));
     }
 
     /**
@@ -128,9 +144,9 @@ public class SpatialHashGrid
      * @param box A shape to check for containment.
      * @return An ArrayList of items contained roughly in the specified area.
      */
-    public ArrayList<Shape> GetContainedItems(Shape box)
+    public ArrayList<Shape> getContainedItems(Shape box)
     {
-        return GetContainedItems(new AABB(box.getWorldVertices()).toBottomLeftCoords(sceneWidth, sceneHeight));
+        return getContainedItems(new AABB(box.getWorldVertices()).toBottomLeftCoords(sceneWidth, sceneHeight));
     }
 
     /**
@@ -138,17 +154,22 @@ public class SpatialHashGrid
      * @param boundingBox The bounding box.
      * @return An ArrayList of items contained roughly in the specified area.
      */
-    public ArrayList<Shape> GetContainedItems(AABB boundingBox)
+    public ArrayList<Shape> getContainedItems(AABB boundingBox)
     {
         ArrayList<Shape> items = new ArrayList<Shape>();
 
-        for (int i : GetBuckets(boundingBox))
-            items.addAll((buckets.get(i)));
+        for (int i : getBuckets(boundingBox))
+            items.addAll(buckets.get(i));
 
         return items;
     }
 
-    private ArrayList<Integer> GetBuckets(AABB bbox)
+    /**
+     * Gets the IDs of all the buckets that contain a bounding box.
+     * @param bbox The bounding box.
+     * @return All the bucket IDs that contain the bounding box.
+     */
+    private ArrayList<Integer> getBuckets(AABB bbox)
     {
         ArrayList<Integer> bucketIDs = new ArrayList<Integer>();
 
@@ -159,8 +180,8 @@ public class SpatialHashGrid
             || bbox.getTopBound() < 0)
             return bucketIDs;
 
-        int idBL = GetBucketID(bbox.getLeftBound(), bbox.getBottomBound());
-        int idTR = GetBucketID(bbox.getRightBound(), bbox.getTopBound());
+        int idBL = getBucketID(bbox.getLeftBound(), bbox.getBottomBound());
+        int idTR = getBucketID(bbox.getRightBound(), bbox.getTopBound());
         
         //Calculate columns/rows from bucket IDs.
         int colStart = idBL % cellsX;
@@ -180,51 +201,73 @@ public class SpatialHashGrid
         return bucketIDs;
     }
     
+    /**
+     * Gets the objects contained in the cell at (x, y).
+     * @param x The X coordinate of the cell.
+     * @param y The Y coordinate of the cell.
+     * @return A collection of objects near each other.
+     */
     public ArrayList<Shape> getBucketShapes(int x, int y)
     {
         return buckets.get(y * cellsX + x);
     }
 
-    private int GetBucketID(Vector2 v)
+    /**
+     * Converts 2d coordinates to bucket IDs.
+     * @param x The X coordinate.
+     * @param y The Y coordinate.
+     * @return The bucket ID that contains the point.
+     */
+    private int getBucketID(float x, float y)
     {
-        return GetBucketID(v.x(), v.y());
-    }
-
-    private int GetBucketID(float x, float y)
-    {
-        int idX = (int)Clamp((int)(x / cellSizeX), 0, cellsX - 1);
-        int idY = (int)Clamp((int)(y / cellSizeY), 0, cellsY - 1);
+        int idX = (int)clamp((int)(x / cellSizeX), 0, cellsX - 1);
+        int idY = (int)clamp((int)(y / cellSizeY), 0, cellsY - 1);
 
         return idY * cellsX + idX;
     }
 
-    private Vector2 GetBucketLocation(int id)
-    {
-        return new Vector2(((id % cellsX) * cellSizeX), ((id / cellsX) * cellSizeY));
-    }
-    
+    /**
+     * Adds an object to the grid.
+     * @param element The object to add.
+     */
     public void add(Shape element)
     {
         elements.add(element);
     }
 
+    /**
+     * Clears all objects from the grid.
+     */
     public void clear()
     {
         for (ArrayList<Shape> bucket : buckets.values())
             bucket.clear();
     }
 
+    /**
+     * Checks whether or not the object is part of the grid.
+     * @param item The item to check for containment.
+     * @return A value indicating whether the object is part of the grid or not.
+     */
     public boolean contains(Shape item)
     {
         return elements.contains(item);
     }
 
-    //TODO also include a Count property that gets the number of buckets.
+    /**
+     * Gets the number of objects in the grid.
+     * @return The number of objects in the grid.
+     */
     public int getSize()
     {
        return elements.size();
     }
 
+    /**
+     * Removes an object from the grid.
+     * @param item The item to remove.
+     * @return A value indicating whether the item was removed or not.
+     */
     public boolean remove(Shape item)
     {
         for (ArrayList<Shape> bucket : buckets.values())
@@ -233,9 +276,51 @@ public class SpatialHashGrid
         return elements.remove(item);
     }
     
-    private static float Clamp(float value, float min, float max)
+    /**
+     * Clamps a value between a minimum and a maximum.
+     * @param value The value to clamp.
+     * @param min The minimum the value can be.
+     * @param max The maximum the value can be.
+     * @return min, max, or value depending on what value is.
+     */
+    private static float clamp(float value, float min, float max)
     {
         return (value < min) ? min : ((value > max) ? max : value);
     }
+    
+    /**
+     * Gets the number of cells in the X direction.
+     * @return The number of cells in the X direction.
+     */
+    public int getCellsX()
+    {
+        return cellsX;
+    }
+    
+    /**
+     * Gets the number of cells in the Y direction.
+     * @return The number of cells in the Y direction.
+     */
+    public int getCellsY()
+    {
+        return cellsY;
+    }
 
+    /**
+     * Gets the size of one cell in the X direction.
+     * @return The X size of a cell.
+     */
+    public float getCellSizeX()
+    {
+        return cellSizeX;
+    }
+    
+    /**
+     * Gets the size of one cell in the Y direction.
+     * @return The Y size of a cell.
+     */
+    public float getCellSizeY()
+    {
+        return cellSizeY;
+    }
 }

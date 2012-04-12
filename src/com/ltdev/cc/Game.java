@@ -5,7 +5,6 @@ import android.util.Log;
 
 import com.ltdev.*;
 import com.ltdev.cc.Tile.TileType;
-import com.ltdev.cc.ai.Node;
 import com.ltdev.cc.entity.*;
 import com.ltdev.cc.event.*;
 import com.ltdev.cc.parser.Parser;
@@ -32,8 +31,7 @@ public class Game
     public static float screenW, screenH;
     
     //Texture data
-    //\TODO TextureManager class
-    public static Texture tilesetwire;
+    //TODO TextureManager class
     public static Texture text;
     public static Texture tilesetworld;
     public static Texture tilesetentities;
@@ -41,7 +39,7 @@ public class Game
 	
     private Tileset tileset;
 	public ArrayList<Entity> entities;
-	public ArrayList<Control> UIList;
+	public ArrayList<Control> uiList;
 	private ArrayList<Trigger> triggerList;
 	
 	public EntityManager entManager;
@@ -62,9 +60,8 @@ public class Game
 	
 	//Constructors
 	public Game(Context context, GL11 gl, int levelId)
-	{		
-		tilesetwire = new Texture(R.drawable.tilesetwire, 128, 128, 8, 8, context, "tilesetwire");
-		text = new Texture(R.drawable.text, 256, 256, 16, 8, context, "text");
+	{
+		text = new Texture(R.raw.text, 256, 256, 16, 8, context, "text");
 		tilesetworld = new Texture(R.raw.tilesetworld, 512, 256, 16, 8, context, "tilesetworld");
 		tilesetentities = new Texture(R.raw.tilesetentities, 256, 256, 8, 8, context, "tilesetentities");
 		baricons = new Texture(R.raw.baricons, 32, 16, 2, 1, context, "baricons");
@@ -77,7 +74,7 @@ public class Game
 		final Texture healthbarborder = new Texture(R.raw.healthbarborder, 256, 16, 1, 1, context, "healthbarborder");
 			
 		entities = new ArrayList<Entity>();
-		UIList = new ArrayList<Control>();
+		uiList = new ArrayList<Control>();
 		triggerList = new ArrayList<Trigger>();
 		fingerList = new ArrayList<Finger>();
 		entManager = new EntityManager();
@@ -89,8 +86,7 @@ public class Game
 		
 		tilesetworld.setMinFilter(GL11.GL_LINEAR);
 		tilesetworld.setMagFilter(GL11.GL_LINEAR);
-		
-		TextureLoader.loadTexture(gl, tilesetwire);
+
 		TextureLoader.loadTexture(gl, tilesetworld);
 		TextureLoader.loadTexture(gl, tilesetentities);
 		
@@ -138,12 +134,12 @@ public class Game
 		btnB.autoPadding(0.0f, 0.0f, 90.0f, 5.0f);
 		btnB.enableTextureMode(buttonb);
 		//btnB.setIntervalTime(Stopwatch.elapsedTimeMs());
-		UIList.add(btnB);
+		uiList.add(btnB);
 		
 		joypad = new UIJoypad(.45f, .45f, UIPosition.BOTTOMLEFT, player.getAngle(), joystickin);
 		joypad.autoPadding(0.0f, 5.0f, 5.0f, 0.0f);
 		joypad.enableTextureMode(joystickout);
-		UIList.add(joypad);
+		uiList.add(joypad);
 		
 		//TODO camera class
 		worldMinX = (-Tile.TILE_SIZE_F * (tileset[0].length / 2)) + (screenW / 2);
@@ -273,42 +269,7 @@ public class Game
 			}
 		}
 	}
-	
-	/**
-	 * rayfiring should not be here.
-	 */
-	public boolean pathIsClear(final Vector2 startVec, final Vector2 endVec)
-	{
-		/*final Vector2 pathVec = Vector2.subtract(endVec, startVec).normalize();
-		final Vector2 pathNormal = Vector2.getNormal(pathVec);
-		final float normProj = startVec.dot(pathNormal);
-		final float startProj = startVec.dot(pathVec);
-		final float endProj = endVec.dot(pathVec);
-		
-		for (final Entity ent : entList)
-		{
-			float entProj = ent.getPos().dot(pathVec);
-			if (ent.isSolid() && ent.willCollide() && Math.abs(ent.getPos().dot(pathNormal) - normProj) < ent.getHalfSize() * 1.5f && ((entProj > startProj && entProj < endProj) || (entProj < startProj && entProj > endProj)))
-				return false;
-		}
-		for (final Tile[] ta : tileset)
-		{
-			for (final Tile tile : ta)
-			{
-				float tileProj = tile.getPos().dot(pathVec);
-				if ((tile.isWall() || tile.isPit()) && Math.abs(tile.getPos().dot(pathNormal) - normProj) < tile.getHalfSize() * 1.5f && ((tileProj > startProj && tileProj < endProj) || (tileProj < startProj && tileProj > endProj)))
-					return false;
-			}
-		}*/
-		
-		return true;
-	}
-	
-	public boolean pathIsClear(final Node startNode, final Node endNode)
-	{
-		return pathIsClear(startNode.getPos(), endNode.getPos());
-	}
-	
+
 	public void updateTriggers()
 	{
 		for (Trigger t : triggerList)
@@ -351,11 +312,21 @@ public class Game
 		}
 	}
 	
+	/**
+	 * Draws the tileset.
+	 * @param gl The OpenGL context.
+	 */
 	public void renderTileset(GL11 gl)
 	{
 		tileset.draw(gl);
 	}
 	
+	/**
+	 * Checks whether the same instance of an object is contained in an ArrayList.
+	 * @param entList The entity list.
+	 * @param ent The entity to check for exact containment.
+	 * @return A value indicating whether the instance "ent" is part of the entity list.
+	 */
 	public static boolean arrayListContains(ArrayList<Entity> entList, Entity ent)
 	{
 		final int size = entList.size();

@@ -49,6 +49,7 @@ public class EntityManager
 	/**
 	 * Adds and removes all the queued Entities since the last call to update.
 	 * @param entList The {@code ArrayList<Entity>} to operate on.
+	 * @param physWorld The physics world.
 	 * @param gl An OpenGL context used to delete the VBOs.
 	 * \todo split the hardware buffer removal into another method, call that one first? Or will we later assume a GL11 instead of a GL10?
 	 */

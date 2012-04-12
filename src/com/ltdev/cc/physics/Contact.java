@@ -3,16 +3,25 @@ package com.ltdev.cc.physics;
 import com.ltdev.cc.physics.primitives.Shape;
 import com.ltdev.math.Vector2;
 
+/**
+ * Contains two shapes that are colliding and information about the collision.
+ * @author Lightning Development Studios
+ */
 public class Contact
 {
-    public Shape a;
-    public Shape b;
+    private Shape a;
+    private Shape b;
     
-    public float penetration;
-    public float restitution;
+    private float penetration;
+    private float restitution;
 
-    public Vector2 contactNormal;
+    private Vector2 contactNormal;
     
+    /**
+     * Initializes a new instance of the Contact class.
+     * @param a The first shape.
+     * @param b The second shape.
+     */
     public Contact(Shape a, Shape b)
     {
         this.a = a;
@@ -20,6 +29,13 @@ public class Contact
         restitution = 0.5f;
     }
 
+    /**
+     * Initializes a new instance of the Contact class.
+     * @param a The first shape.
+     * @param b The second shape.
+     * @param penetration The distance of penetration.
+     * @param contactNormal The contact normal.
+     */
     public Contact(Shape a, Shape b, float penetration, Vector2 contactNormal)
     {
         this(a, b);
@@ -28,6 +44,10 @@ public class Contact
         this.contactNormal = contactNormal;
     }
 
+    /**
+     * Resolves the collision and iteracts the two shapes with one another.
+     * @param duration The duration.
+     */
     public void resolve(float duration)
     {
         resolveInterpenetration();
@@ -40,6 +60,9 @@ public class Contact
         }
     }
 
+    /**
+     * Resolves the collision by moving the objects so they no longer collide.
+     */
     private void resolveInterpenetration()
     {
         if (penetration <= 0 || a.isStatic() && b.isStatic())
@@ -56,6 +79,9 @@ public class Contact
             b.setPos(Vector2.subtract(b.getPos(), moveVec));
     }
 
+    /**
+     * Resolves the new velocities of the objects post-collision.
+     */
     private void resolveVelocity()
     {
         if (a.isStatic() && b.isStatic())
@@ -89,11 +115,78 @@ public class Contact
         b.addImpulse(impulseB);
     }
 
+    /**
+     * Gets the contact's separating velocity.
+     * @return The separating velocity.
+     */
     private float getSeperatingVelocity()
     {
         Vector2 relativeVelocity = Vector2.subtract(a.getVelocity(), b.getVelocity());
         if (contactNormal == null)
             return 0;
         return Vector2.dot(relativeVelocity, contactNormal);
+    }
+    
+    /**
+     * Gets the first shape in the contact.
+     * @return Shape A.
+     */
+    public Shape getA()
+    {
+        return a;
+    }
+    
+    /**
+     * Gets the second shape in the contact.
+     * @return Shape B.
+     */
+    public Shape getB()
+    {
+        return b;
+    }
+    
+    /**
+     * Gets the penetration distance between the two shapes.
+     * @return The penetration distance between the two shapes.
+     */
+    public float getPenetration()
+    {
+        return penetration;
+    }
+    
+    /**
+     * Gets the collision's restitution.
+     * @return The collision's restitution.
+     */
+    public float getRestitution()
+    {
+        return restitution;
+    }
+    
+    /**
+     * Gets the contact normal.
+     * @return The contact normal.
+     */
+    public Vector2 getContactNormal()
+    {
+        return contactNormal;
+    }
+    
+    /**
+     * Sets a new penetration distance between the shapes.
+     * @param penetration The new penetration distance.
+     */
+    public void setPenetration(float penetration)
+    {
+        this.penetration = penetration;
+    }
+    
+    /**
+     * Sets a new contact normal vector.
+     * @param contactNormal The new contact normal vector.
+     */
+    public void setContactNormal(Vector2 contactNormal)
+    {
+        this.contactNormal = contactNormal;
     }
 }

@@ -14,7 +14,7 @@ public abstract class EntityData
 	protected boolean willCollide;
 	protected boolean textureModeEnabled, tilesetModeEnabled;
 	protected float size, xPos, yPos, xScl, yScl, angle;	
-	protected float[] color, gradient, texture;
+	protected float[] texture;
 	protected int tileX, tileY;
 	protected Texture tex;
 	
@@ -43,31 +43,11 @@ public abstract class EntityData
 		circular = Boolean.parseBoolean(entHM.get("circular"));
 		willCollide = Boolean.parseBoolean(entHM.get("willCollide"));
 		
-		//COLOR
-		if (entHM.get("color") != null)
-		{
-			String[] colorsStr = entHM.get("color").split(",");
-			color = new float[colorsStr.length];
-			for (int i = 0; i < colorsStr.length; i++)
-				color[i] = Float.parseFloat(colorsStr[i]);
-		}
-		
-		//GRADIENT
-		if (entHM.get("gradient") != null)
-		{
-			String[] gradientStr = entHM.get("gradient").split(",");
-			gradient = new float[gradientStr.length];
-			for (int i = 0; i < gradientStr.length; i++)
-				gradient[i] = Float.parseFloat(gradientStr[i]);
-		}
-		
 		//TEXTURE
 		if (entHM.get("texture") != null)
 		{
 			String texID = entHM.get("texID");
-			if (texID.equalsIgnoreCase("tilesetwire"))
-				tex = Game.tilesetwire;
-			else if (texID.equalsIgnoreCase("text"))
+			if (texID.equalsIgnoreCase("text"))
 				tex = Game.text;
 			else if (texID.equalsIgnoreCase("tilesetentities"))
 				tex = Game.tilesetentities;
@@ -85,9 +65,7 @@ public abstract class EntityData
 		{
 			//\TODO move textures to a different XML file, load dynamically
 			String texID = entHM.get("texID");
-			if (texID.equalsIgnoreCase("tilesetwire"))
-				tex = Game.tilesetwire;
-			else if (texID.equalsIgnoreCase("text"))
+			if (texID.equalsIgnoreCase("text"))
 				tex = Game.text;
 			else if (texID.equalsIgnoreCase("tilesetentities"))
 				tex = Game.tilesetentities;

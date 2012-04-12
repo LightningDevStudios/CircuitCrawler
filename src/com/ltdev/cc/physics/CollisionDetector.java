@@ -9,34 +9,50 @@ import java.util.TreeMap;
  
 public class CollisionDetector
 {
-    public SpatialHashGrid spatialHash;
-    public ArrayList<Contact> contacts;
+    private SpatialHashGrid spatialHash;
+    private ArrayList<Contact> contacts;
     
-    private Vector2 size;
-    private ArrayList<Shape> shapes;
+    //private Vector2 size;
+    //private ArrayList<Shape> shapes;
     
     public CollisionDetector(Vector2 size, ArrayList<Shape> shapes)
     {
-        this.size = size;
-        this.shapes = shapes;
+        //this.size = size;
+        //this.shapes = shapes;
        
         spatialHash = new SpatialHashGrid(shapes, size.x(), size.y(), 2, 2);
         contacts = new ArrayList<Contact>();
     }
 
-    public void update()
+    /**
+     * Updates the broadphase and resolves contacts.
+     * @param frameTime dt
+     */
+    public void update(float frameTime)
     {
         spatialHash.populate();
         updateCollisions();
+        
+        for (Contact c : contacts)
+            c.resolve(frameTime);
     }
 
+    /**
+     * Fires a ray through the world and returns when it hits something.
+     * @param start The position to start at.
+     * @param angle The angle, in radians, to fire the ray at.
+     * @return The object the ray hit, as well as other related data.
+     */
     public RaycastData rayCast(Vector2 start, float angle)
     {
         /***************
          * Broad Phase *
          ***************/
         
-        start = Vector2.add(start, new Vector2(spatialHash.cellsX * spatialHash.cellSizeX / 2, spatialHash.cellsY * spatialHash.cellSizeY / 2));
+        int cellsX = spatialHash.getCellsX(), cellsY = spatialHash.getCellsY();
+        float cellSizeX = spatialHash.getCellSizeX(), cellSizeY = spatialHash.getCellSizeY();
+        
+        start = Vector2.add(start, new Vector2(cellsX * cellSizeX / 2, cellsY * cellSizeY / 2));
         
         ArrayList<Shape> lineShapes = new ArrayList<Shape>();
         Vector2 dir = new Vector2((float)Math.cos(angle), (float)Math.sin(angle));
@@ -51,12 +67,12 @@ public class CollisionDetector
         ArrayList<Integer> xIgnoreValues = new ArrayList<Integer>();
         ArrayList<Integer> yIgnoreValues = new ArrayList<Integer>();
         
-        int startXIndex = (int)(start.x() / spatialHash.cellSizeX);
-        int startYIndex = (int)(start.y() / spatialHash.cellSizeY);
+        int startXIndex = (int)(start.x() / cellSizeX);
+        int startYIndex = (int)(start.y() / cellSizeY);
         
         if (xIsMax)
         {
-            for (int i = startXIndex + 1; i <= spatialHash.cellsX; i++)
+            for (int i = startXIndex + 1; i <= cellsX; i++)
                 xIgnoreValues.add(i);
         }
         else
@@ -67,7 +83,7 @@ public class CollisionDetector
         
         if (yIsMax)
         {
-            for (int i = startYIndex + 1; i <= spatialHash.cellsY; i++)
+            for (int i = startYIndex + 1; i <= cellsY; i++)
                 yIgnoreValues.add(i);
         }
         else
@@ -76,15 +92,15 @@ public class CollisionDetector
                 yIgnoreValues.add(i);
         }
         
-        for (int i = 0; i <= spatialHash.cellsX; i++)
+        for (int i = 0; i <= cellsX; i++)
         {
             if (xIgnoreValues.contains(i))
                 continue;
             
-            float xValue = i * spatialHash.cellSizeX;
+            float xValue = i * cellSizeX;
             float yValue = slope * xValue + yIntersect;
-            int yIndex = (int)(yValue / spatialHash.cellSizeY);
-            if (yIndex >= spatialHash.cellsY || (i != 0 && i < spatialHash.cellsX - 1 && xIgnoreValues.contains(i + 1)))
+            int yIndex = (int)(yValue / cellSizeY);
+            if (yIndex >= cellsY || (i != 0 && i < cellsX - 1 && xIgnoreValues.contains(i + 1)))
                 continue;
             
             ArrayList<Shape> hashShapes;
@@ -102,7 +118,7 @@ public class CollisionDetector
                 
             }
             
-            if (i < spatialHash.cellsX)
+            if (i < cellsX)
             {
                 hashShapes = spatialHash.getBucketShapes(i, yIndex);
                 if (hashShapes != null)
@@ -116,15 +132,15 @@ public class CollisionDetector
             }
         }       
         
-        for (int i = 0; i <= spatialHash.cellsY; i++)
+        for (int i = 0; i <= cellsY; i++)
         {
             if (yIgnoreValues.contains(i))
                 continue;
             
-            float yValue = i * spatialHash.cellSizeY;   
+            float yValue = i * cellSizeY;   
             float xValue = invSlope * yValue + xIntersect;
-            int xIndex = (int)(xValue / spatialHash.cellSizeX);
-            if (xIndex >= spatialHash.cellsX || (i != 0 && i < spatialHash.cellsY - 1 && yIgnoreValues.contains(i + 1)))
+            int xIndex = (int)(xValue / cellSizeX);
+            if (xIndex >= cellsX || (i != 0 && i < cellsY - 1 && yIgnoreValues.contains(i + 1)))
                 continue;
             
             ArrayList<Shape> hashShapes;
@@ -141,7 +157,7 @@ public class CollisionDetector
                 }
             }
             
-            if (i < spatialHash.cellsY)
+            if (i < cellsY)
             {
                 hashShapes = spatialHash.getBucketShapes(xIndex, i);
                 if (hashShapes != null)
@@ -159,7 +175,7 @@ public class CollisionDetector
          * Near Phase *
          **************/
         
-        start = Vector2.subtract(start, new Vector2(spatialHash.cellsX * spatialHash.cellSizeX / 2, spatialHash.cellsY * spatialHash.cellSizeY / 2));
+        start = Vector2.subtract(start, new Vector2(cellsX * cellSizeX / 2, cellsY * cellSizeY / 2));
         
         for (int i = lineShapes.size() - 1; i >= 0; i--)
         {
@@ -292,8 +308,8 @@ public class CollisionDetector
 
     public static boolean colliding(Contact c)
     {        
-        Shape a = c.a;
-        Shape b = c.b;
+        Shape a = c.getA();
+        Shape b = c.getB();
         
         if (a == b)
             return false;
@@ -315,7 +331,7 @@ public class CollisionDetector
         {
             return SATRectangleCircle(c, false);
         }*/
-        return SAT(c);
+        return sat(c);
     
         //return false;
     }
@@ -329,8 +345,8 @@ public class CollisionDetector
 
     public static boolean radiusCheckCircles(Contact c)
     {
-        Circle a = (Circle)c.a;
-        Circle b = (Circle)c.b;
+        Circle a = (Circle)c.getA();
+        Circle b = (Circle)c.getB();
         
         Vector2 contactNormal = Vector2.subtract(a.getPos(), b.getPos());
         float penetration = a.getRadius() + b.getRadius() - contactNormal.length();
@@ -340,20 +356,23 @@ public class CollisionDetector
 
         contactNormal = Vector2.normalize(contactNormal);
 
-        c.penetration = penetration;
-        c.contactNormal = contactNormal;
+        c.setPenetration(penetration);
+        c.setContactNormal(contactNormal);
         
         return true;
     }
     
-    public static boolean SAT(Contact c)
-    {      
+    public static boolean sat(Contact c)
+    {
+        Shape a = c.getA();
+        Shape b = c.getB();
+        
         float penetration = Float.MAX_VALUE;
         Vector2 contactNormal = null;
         
-        Vector2[] axesA = c.a.getSATAxes(c.b);
+        Vector2[] axesA = a.getSATAxes(b);
         int lengthA = axesA.length;
-        Vector2[] axesB = c.b.getSATAxes(c.a);
+        Vector2[] axesB = b.getSATAxes(a);
         int lengthB = axesB.length;
         Vector2[] axes = new Vector2[lengthA +  lengthB];
         
@@ -365,8 +384,8 @@ public class CollisionDetector
         
         for (int i = 0; i < axes.length; i++)
         {
-            float[] projA = c.a.project(axes[i]);
-            float[] projB = c.b.project(axes[i]);
+            float[] projA = a.project(axes[i]);
+            float[] projB = b.project(axes[i]);
             
             if (projA[1] >= projB[0] && projA[1] <= projB[1])
             {
@@ -388,8 +407,8 @@ public class CollisionDetector
                 return false;
         }
         
-        c.penetration = penetration;
-        c.contactNormal = contactNormal;
+        c.setPenetration(penetration);
+        c.setContactNormal(contactNormal);
         
         return true;
     }
