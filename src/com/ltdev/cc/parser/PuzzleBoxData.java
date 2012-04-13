@@ -40,7 +40,7 @@ public class PuzzleBoxData extends StaticEntData
 	public void createInst(ArrayList<Entity> entData)
 	{
 		puzzleBoxRef = new PuzzleBox(size, new Vector2(xPos, yPos));
-		
+
 		puzzleBoxRef.setTexture(tex);
 		
 		entData.add(puzzleBoxRef);

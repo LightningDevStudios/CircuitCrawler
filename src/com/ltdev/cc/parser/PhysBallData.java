@@ -40,7 +40,7 @@ public class PhysBallData extends HoldObjectData
 	public void createInst(ArrayList<Entity> entData)
 	{
 		physBallRef = new Ball(size, new Vector2(xPos, yPos));
-		
+
 		physBallRef.setTexture(tex);
 		
 		entData.add(physBallRef);

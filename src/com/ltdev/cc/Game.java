@@ -23,6 +23,7 @@
 package com.ltdev.cc;
 
 import android.content.Context;
+import android.graphics.PointF;
 import android.util.Log;
 
 import com.ltdev.*;
@@ -35,6 +36,8 @@ import com.ltdev.cc.physics.primitives.*;
 import com.ltdev.cc.trigger.*;
 import com.ltdev.cc.ui.*;
 import com.ltdev.cc.ui.Control.UIPosition;
+import com.ltdev.graphics.Texture;
+import com.ltdev.graphics.TextureManager;
 import com.ltdev.math.Vector2;
 import com.ltdev.physics.*;
 import com.ltdev.trigger.*;
@@ -51,27 +54,18 @@ public class Game
     public static boolean worldOutdated, windowOutdated;
     
     public static float screenW, screenH;
-    
-    //Texture data
-    //TODO TextureManager class
-    public static Texture text;
-    public static Texture tilesetworld;
-    public static Texture tilesetentities;
-    public static Texture baricons;
 	
     private Tileset tileset;
 	public ArrayList<Entity> entities;
 	public ArrayList<Control> uiList;
 	private ArrayList<Trigger> triggerList;
-	
-	public EntityManager entManager;
+
 	public World world;
 	
 	public ArrayList<Finger> fingerList;
 	
 	//Camera data
-	public float camPosX;
-	public float camPosY;
+	public PointF camPos;
 	
 	private float worldMinX, worldMinY, worldMaxX, worldMaxY;
 	
@@ -83,42 +77,28 @@ public class Game
 	//Constructors
 	public Game(Context context, GL11 gl, int levelId)
 	{
-		text = new Texture(R.raw.text, 256, 256, 16, 8, context, "text");
-		tilesetworld = new Texture(R.raw.tilesetworld, 512, 256, 16, 8, context, "tilesetworld");
-		tilesetentities = new Texture(R.raw.tilesetentities, 256, 256, 8, 8, context, "tilesetentities");
-		baricons = new Texture(R.raw.baricons, 32, 16, 2, 1, context, "baricons");
+		TextureManager.addTexture("text", new Texture(R.raw.text, 256, 256, 16, 8, context, gl));
+		TextureManager.addTexture("tilesetworld", new Texture(R.raw.tilesetworld, 512, 256, 16, 8, context, gl));
+		TextureManager.addTexture("tilesetentities", new Texture(R.raw.tilesetentities, 256, 256, 8, 8, context, gl));
+		TextureManager.addTexture("baricons", new Texture(R.raw.baricons, 32, 16, 2, 1, context, gl));
 		
-		final Texture joystickout = new Texture(R.raw.joystickout, 64, 64, 1, 1, context, "joystickout");
-		final Texture joystickin = new Texture(R.raw.joystickin, 32, 32, 1, 1, context, "joystickin");
-		final Texture buttona = new Texture(R.raw.buttona, 32, 32, 1, 1, context, "buttona");
-		final Texture buttonb = new Texture(R.raw.buttonb, 32, 32, 1, 1, context, "buttonb");
-		final Texture energybarborder = new Texture(R.raw.energybarborder, 128, 16, 1, 1, context, "energybarborder");
-		final Texture healthbarborder = new Texture(R.raw.healthbarborder, 256, 16, 1, 1, context, "healthbarborder");
+		TextureManager.addTexture("joystickout", new Texture(R.raw.joystickout, 64, 64, 1, 1, context, gl));
+		TextureManager.addTexture("joystickin", new Texture(R.raw.joystickin, 32, 32, 1, 1, context, gl));
+		TextureManager.addTexture("buttona", new Texture(R.raw.buttona, 32, 32, 1, 1, context, gl));
+		TextureManager.addTexture("buttonb", new Texture(R.raw.buttonb, 32, 32, 1, 1, context, gl));
 			
 		entities = new ArrayList<Entity>();
 		uiList = new ArrayList<Control>();
 		triggerList = new ArrayList<Trigger>();
 		fingerList = new ArrayList<Finger>();
-		entManager = new EntityManager();
 		        		
 		//StringRenderer sr = StringRenderer.getInstance();
 		//sr.loadTextTileset(text);
 				
 		SoundPlayer.initialize(context);
 		
-		tilesetworld.setMinFilter(GL11.GL_LINEAR);
-		tilesetworld.setMagFilter(GL11.GL_LINEAR);
-
-		TextureLoader.loadTexture(gl, tilesetworld);
-		TextureLoader.loadTexture(gl, tilesetentities);
-		
-		TextureLoader.loadTexture(gl, joystickout);
-		TextureLoader.loadTexture(gl, joystickin);
-		TextureLoader.loadTexture(gl, buttona);
-		TextureLoader.loadTexture(gl, buttonb);
-		TextureLoader.loadTexture(gl, baricons);
-		TextureLoader.loadTexture(gl, energybarborder);
-		TextureLoader.loadTexture(gl, healthbarborder);
+		TextureManager.getTexture("tilesetworld").setMinFilter(GL11.GL_LINEAR, gl);
+		TextureManager.getTexture("tilesetworld").setMagFilter(GL11.GL_LINEAR, gl);
 		 		
 		//Parser
 		Parser parser = new Parser(context, levelId);
@@ -146,7 +126,7 @@ public class Game
 		entities.addAll(parser.entList);
 		triggerList.addAll(parser.triggerList);
 		
-		this.tileset = new Tileset(tileset, tilesetworld);
+		this.tileset = new Tileset(tileset, TextureManager.getTexture("tilesetworld"));
 		this.tileset.initialize(gl);
 		
 		player = parser.player;
@@ -154,13 +134,13 @@ public class Game
 		
 		btnB = new UIButton(80.0f, 80.0f, UIPosition.BOTTOMRIGHT);
 		btnB.autoPadding(0.0f, 0.0f, 90.0f, 5.0f);
-		btnB.enableTextureMode(buttonb);
+		btnB.enableTextureMode(TextureManager.getTexture("buttonb"));
 		//btnB.setIntervalTime(Stopwatch.elapsedTimeMs());
 		uiList.add(btnB);
 		
-		joypad = new UIJoypad(.45f, .45f, UIPosition.BOTTOMLEFT, player.getAngle(), joystickin);
+		joypad = new UIJoypad(.45f, .45f, UIPosition.BOTTOMLEFT, player.getAngle(), TextureManager.getTexture("joystickin"));
 		joypad.autoPadding(0.0f, 5.0f, 5.0f, 0.0f);
-		joypad.enableTextureMode(joystickout);
+		joypad.enableTextureMode(TextureManager.getTexture("joystickout"));
 		uiList.add(joypad);
 		
 		//TODO camera class
@@ -193,11 +173,11 @@ public class Game
 	    world = new World(worldSize, shapes);
 	    
 	    SpikeWall s = new SpikeWall(70, Vector2.add(player.getPos(), new Vector2(72 * 3 + 40, 0)), Direction.LEFT);
-	    s.setTexture(tilesetentities);
+	    s.setTexture(TextureManager.getTexture("tilesetentities"));
 	    EntityManager.addEntity(s);
 
 	    Cannon c = new Cannon(40,  Vector2.add(player.getPos(), new Vector2(-72, 0)), 0, 20, 500000, player);
-	    c.setTexture(tilesetentities);
+	    c.setTexture(TextureManager.getTexture("tilesetentities"));
 	    EntityManager.addEntity(c);
 	   
 	    //LaserShooter LAZOR = new LaserShooter(Vector2.add(player.getPos(), new Vector2(-72, 0)), 40, 0, 20, 5, 1, player, world);
@@ -209,15 +189,16 @@ public class Game
 	
 	/**
 	 * \todo legit AABB stuff.
+	 * @return The entities that are actually visible.
 	 */
 	public ArrayList<Entity> getRenderedEnts()
 	{
 		//define current screen bounds
 		final float minX, maxX, minY, maxY;
-		minX = camPosX - (screenW / 2);
-		maxX = camPosX + (screenW / 2);
-		minY = camPosY - (screenW / 2);
-		maxY = camPosY + (screenW / 2);
+		minX = camPos.x - (screenW / 2);
+		maxX = camPos.x + (screenW / 2);
+		minY = camPos.y - (screenW / 2);
+		maxY = camPos.y + (screenW / 2);
 		
 		ArrayList<Entity> renderList = new ArrayList<Entity>();
 		for (Entity ent : entities)
@@ -232,30 +213,39 @@ public class Game
 		return renderList;
 	}
 	
+	/**
+	 * Updates the camera position.
+	 */
 	public void updateCameraPosition()
 	{
 		//move camera to follow player.
-		camPosX = player.getPos().x();
-		camPosY = player.getPos().y();
+		camPos.x = player.getPos().x();
+		camPos.y = player.getPos().y();
 		
 		
 		//camera can't go further than defined level bounds
-		if (camPosX < worldMinX)
-			camPosX = worldMinX;
+		if (camPos.x < worldMinX)
+			camPos.x = worldMinX;
 			
-		else if (camPosX > worldMaxX)
-			camPosX = worldMaxX;
+		else if (camPos.x > worldMaxX)
+			camPos.x = worldMaxX;
 		
-		if (camPosY < worldMinY)
-			camPosY = worldMinY;
+		if (camPos.y < worldMinY)
+			camPos.y = worldMinY;
 		
-		else if (camPosY > worldMaxY)
-			camPosY = worldMaxY;
+		else if (camPos.y > worldMaxY)
+			camPos.y = worldMaxY;
 	}
 	
+	/**
+	 * Finds the Tile nearest a specified entity.
+	 * @param ent The entity to check.
+	 * @param tileset The tileset that contains the entity.
+	 * @return The nearest Tile.
+	 */
 	public static Tile nearestTile(Entity ent, Tile[][] tileset)
 	{	
-		//\TODO Fix return null when offscreen
+		//TODO Fix return null when offscreen
 		final float tilesetHalfWidth = tileset[0].length * Tile.TILE_SIZE_F / 2;
 		final float tilesetHalfHeight = tileset.length * Tile.TILE_SIZE_F / 2;
 		
@@ -281,6 +271,9 @@ public class Game
 		}
 	}
 	
+	/**
+	 * Updates all the fingers on the screen.
+	 */
 	public void updateFingers()
 	{
 		if (player.userHasControl())
@@ -292,6 +285,9 @@ public class Game
 		}
 	}
 
+	/**
+	 * Updates all the triggers in the level.
+	 */
 	public void updateTriggers()
 	{
 		for (Trigger t : triggerList)

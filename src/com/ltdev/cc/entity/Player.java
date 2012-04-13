@@ -27,11 +27,20 @@ import com.ltdev.math.Vector2;
 
 import javax.microedition.khronos.opengles.GL11;
 
+/**
+ * An object that represents the player.
+ * @author Lightning Development Studios
+ */
 public class Player extends Entity
 {
 	private HoldObject hObj;
 	private boolean controlled;
 	
+	/**
+	 * Initializes a new instance of the Player class.
+	 * @param position The location of the Player.
+	 * @param angle The angle of the Player.
+	 */
 	public Player(Vector2 position, float angle)
 	{
 		super(new Circle(DEFAULT_SIZE, position, angle, true));

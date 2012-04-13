@@ -42,7 +42,7 @@ public class ButtonData extends StaticEntData
 	{
 		buttonRef = new Button(new Vector2(xPos, yPos));
 		buttonRef.setAngle(angle);
-		
+
 		buttonRef.setTexture(tex);
 		
 		entData.add(buttonRef);

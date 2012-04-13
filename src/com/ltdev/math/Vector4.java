@@ -79,7 +79,7 @@ public final class Vector4
 	private final float w;
 
 	/**
-	 * Creates a new instance of the Vector4 class with all components equal to 0.
+	 * Initializes a new instance of the Vector4 class with all components equal to 0.
 	 */
 	public Vector4()
 	{
@@ -90,7 +90,7 @@ public final class Vector4
 	}
 	
 	/**
-	 * Creates a new instance of the Vector4 class.
+	 * Initializes a new instance of the Vector4 class.
 	 * @param x The X component of the vector.
 	 * @param y The Y component of the vector.
 	 * @param z The Z component of the vector.
@@ -105,7 +105,7 @@ public final class Vector4
 	}
 	
 	/**
-     * Creates a new instance of the Vector4 class.
+     * Initializes a new instance of the Vector4 class.
      * @param xy A Vector2 containing the X and Y components of the vector.
      * @param z The Z component of the vector.
      * @param w The W component of the vector.
@@ -119,7 +119,7 @@ public final class Vector4
     }
 	
 	/**
-	 * Creates a new instance of the Vector4 class.
+	 * Initializes a new instance of the Vector4 class.
 	 * @param xyz A Vector3 containing the X, Y, and Z components of the vector.
 	 * @param w The W component of the vector.
 	 */

@@ -25,8 +25,8 @@ package com.ltdev.cc.puzzles.circuit;
 import android.graphics.Point;
 
 import com.ltdev.Direction;
-import com.ltdev.Texture;
-import com.ltdev.TilesetHelper;
+import com.ltdev.graphics.Texture;
+import com.ltdev.graphics.TilesetHelper;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;

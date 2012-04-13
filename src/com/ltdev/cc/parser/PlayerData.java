@@ -41,7 +41,7 @@ public class PlayerData extends CharacterData
 	public void createInst(ArrayList<Entity> entData)
 	{
 		playerRef = new Player(new Vector2(xPos, yPos), angle);
-		
+
 		playerRef.setTexture(tex);
 		
 		entData.add(playerRef);

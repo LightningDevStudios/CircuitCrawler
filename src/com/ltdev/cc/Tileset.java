@@ -22,7 +22,7 @@
 
 package com.ltdev.cc;
 
-import com.ltdev.Texture;
+import com.ltdev.graphics.Texture;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;

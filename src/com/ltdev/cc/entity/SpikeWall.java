@@ -34,6 +34,12 @@ public class SpikeWall extends Entity
     private boolean extended;
     private Vector2 targetPos, initialPos, endPos;
     
+    /**
+     * Initializes a new instance of the SpikeWall class.
+     * @param size The size of the SpikeWall.
+     * @param position The position of the SpikeWall.
+     * @param dir The direction the SpikeWall will move in.
+     */
 	public SpikeWall(float size, Vector2 position, Direction dir)
     {
         super(new Rectangle(new Vector2(size, size), position, 270, true));

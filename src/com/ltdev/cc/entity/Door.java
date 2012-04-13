@@ -28,17 +28,30 @@ import com.ltdev.math.Vector2;
 
 import javax.microedition.khronos.opengles.GL11;
 
+/**
+ * A Door can be opened and closed via triggers as part of puzzles.
+ * @author Lightning Development Studios
+ */
 public class Door extends Entity
 {
     private boolean open;
     private Vector2 targetPos;
     private Vector2 openedPosition, closedPosition;
     
+    /**
+     * Initializes a new instance of the Door class.
+     * @param position The door's position.
+     */
 	public Door(Vector2 position)
 	{
 	    this(72, position);
 	}
 	
+	/**
+	 * Initializes a new instance of the Door class.
+	 * @param size The door's size.
+	 * @param position The door's position.
+	 */
 	public Door(float size, Vector2 position)
     {
         super(new Rectangle(new Vector2(size - 10, size), position, 0, true));
@@ -67,6 +80,9 @@ public class Door extends Entity
 	    shape.setPos(targetPos);
 	}
 	
+	/**
+	 * Opens the door.
+	 */
 	public void open()
 	{
 	    if (!open)
@@ -75,6 +91,9 @@ public class Door extends Entity
 	    }
 	}
 	
+	/**
+	 * Closes the door.
+	 */
 	public void close()
 	{	
 	    if (open)

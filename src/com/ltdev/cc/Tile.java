@@ -24,7 +24,7 @@ package com.ltdev.cc;
 
 import android.graphics.Point;
 
-import com.ltdev.TilesetHelper;
+import com.ltdev.graphics.TilesetHelper;
 import com.ltdev.math.Vector2;
 
 import java.util.ArrayList;
@@ -68,7 +68,8 @@ public class Tile
 	 */
 	public Tile(Point tilesetPos, int tilesetLengthX, int tilesetLengthY, TileType type)
 	{
-		TilesetHelper.setInitialTileOffset(this, tilesetPos, tilesetLengthX, tilesetLengthY);
+	    pos = new Vector2((-(float)tilesetLengthY / 2.0f * Tile.TILE_SIZE_F) + (tilesetPos.x * Tile.TILE_SIZE_F) + (Tile.TILE_SIZE_F / 2), 
+                ((float)tilesetLengthX / 2.0f * Tile.TILE_SIZE_F) - (tilesetPos.y * Tile.TILE_SIZE_F) - (Tile.TILE_SIZE_F / 2));
 
 		this.tilesetPos = tilesetPos;
 		this.type = type;
@@ -281,14 +282,5 @@ public class Tile
                     borders |= 0x01 << i;
             }
         }
-    }
-    
-    /**
-     * Sets the tile's position.
-     * @param pos The tile's new position.
-     */
-    public void setPos(Vector2 pos)
-    {
-        this.pos = pos;
     }
 }

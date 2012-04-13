@@ -42,7 +42,7 @@ public class DoorData extends StaticEntData
 	{
 		doorRef = new Door(size, new Vector2(xPos, yPos));
 		doorRef.setAngle(angle);
-		
+
 		doorRef.setTexture(tex);
 		
 		entData.add(doorRef);

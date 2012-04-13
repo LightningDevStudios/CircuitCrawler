@@ -22,9 +22,9 @@
 
 package com.ltdev.cc.parser;
 
-import com.ltdev.Texture;
-import com.ltdev.cc.Game;
 import com.ltdev.cc.entity.Entity;
+import com.ltdev.graphics.Texture;
+import com.ltdev.graphics.TextureManager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -70,9 +70,9 @@ public abstract class EntityData
 		{
 			String texID = entHM.get("texID");
 			if (texID.equalsIgnoreCase("text"))
-				tex = Game.text;
+				tex = TextureManager.getTexture("text");
 			else if (texID.equalsIgnoreCase("tilesetentities"))
-				tex = Game.tilesetentities;
+				tex = TextureManager.getTexture("tilesetentities");
 			
 			String[] textureStr = entHM.get("coords").split(",");
 			texture = new float[textureStr.length];
@@ -88,11 +88,11 @@ public abstract class EntityData
 			//\TODO move textures to a different XML file, load dynamically
 			String texID = entHM.get("texID");
 			if (texID.equalsIgnoreCase("text"))
-				tex = Game.text;
+				tex = TextureManager.getTexture("text");
 			else if (texID.equalsIgnoreCase("tilesetentities"))
-				tex = Game.tilesetentities;
+				tex = TextureManager.getTexture("tilesetentities");
 			else if (texID.equalsIgnoreCase("baricons"))
-				tex = Game.baricons;
+				tex = TextureManager.getTexture("baricons");
 			
 			tileX = Integer.parseInt(entHM.get("x"));
 			tileY = Integer.parseInt(entHM.get("y"));

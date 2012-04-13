@@ -58,7 +58,7 @@ public final class Matrix4
     private final Vector4 col3;
     
 	/**
-	 * Creates a new instance of the Matrix4 class. All elements initialized to 0.
+	 * Initializes a new instance of the Matrix4 class. All elements initialized to 0.
 	 */
 	public Matrix4()
 	{
@@ -69,7 +69,7 @@ public final class Matrix4
 	}
 	
 	/**
-	 * Creates a new instance of the Matrix4 class.
+	 * Initializes a new instance of the Matrix4 class.
 	 * @param col0 The first column of the matrix.
 	 * @param col1 The second column of the matrix.
 	 * @param col2 The third column of the matrix.
@@ -84,7 +84,7 @@ public final class Matrix4
 	}
 		
 	/**
-	 * Creates a new instance of the Matrix4 class.
+	 * Initializes a new instance of the Matrix4 class.
 	 * @param m11 Column 1, Row 1 of the matrix.
 	 * @param m12 Column 1, Row 2 of the matrix.
 	 * @param m13 Column 1, Row 3 of the matrix.

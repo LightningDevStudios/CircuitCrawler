@@ -45,7 +45,7 @@ public final class Matrix2
     private final Vector2 col1;
     
     /**
-     * Creates a new instance of the Matrix2 class. All elements initialized to 0.
+     * Initializes a new instance of the Matrix2 class. All elements initialized to 0.
      */
     public Matrix2()
     {
@@ -54,7 +54,7 @@ public final class Matrix2
     }
     
     /**
-     * Creates a new instance of the Matrix2 class.
+     * Initializes a new instance of the Matrix2 class.
      * @param row0 The first column of the matrix.
      * @param row1 The second column of the matrix.
      */
@@ -65,7 +65,7 @@ public final class Matrix2
     }
     
     /**
-     * Creates a new instance of the Matrix2 class.
+     * Initializes a new instance of the Matrix2 class.
      * @param m11 Column 1, Row 1 of the matrix.
      * @param m12 Column 1, Row 2 of the matrix.
      * @param m21 Column 2, Row 1 of the matrix.

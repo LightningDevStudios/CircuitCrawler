@@ -37,7 +37,7 @@ public abstract class Cause
 	private boolean triggered;
 	
 	/**
-	 * Creates a new instance of the Cause class.
+	 * Initializes a new instance of the Cause class.
 	 */
 	public Cause()
 	{

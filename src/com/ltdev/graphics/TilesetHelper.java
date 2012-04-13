@@ -1,31 +1,6 @@
-/**
- * Copyright (c) 2010-2012 Lightning Development Studios <lightningdevelopmentstudios@gmail.com>
- * 
- * Permission is hereby granted, free of charge, to any person obtaining a copy of
- * this software and associated documentation files (the "Software"), to deal in
- * the Software without restriction, including without limitation the rights to
- * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
- * of the Software, and to permit persons to whom the Software is furnished to do
- * so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
- * 
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
- */
-
-package com.ltdev;
+package com.ltdev.graphics;
 
 import android.graphics.Point;
-
-import com.ltdev.cc.Tile;
-import com.ltdev.math.Vector2;
 
 /**
  * A class that helps with tilesets and texture coordinates.
@@ -350,6 +325,12 @@ public final class TilesetHelper
         return indices;
 	}
 	
+	/**
+	 * Gets texture vertices from a specified texture and point.
+	 * @param tex The texture to get coords from.
+	 * @param p The point.
+	 * @return A float array contianing texture coordinates.
+	 */
 	public static float[] getTextureVertices(Texture tex, Point p)
 	{
 		return getTextureVertices(p.x, p.y, 0, tex.getXTiles() - 1, 0, tex.getYTiles() - 1, tex.getOffsetX(), tex.getOffsetY());
@@ -383,6 +364,12 @@ public final class TilesetHelper
 			return null;
 	}
 	
+	/**
+	 * Gets the texture coordinates of a texture's tile.
+	 * @param tex The texture that contains the tile.
+	 * @param tileID The tile's ID.
+	 * @return A float array containing texture coordinates.
+	 */
 	public static float[] getTextureVertices(Texture tex, int tileID)
 	{
 		final int y = tileID / tex.getXTiles();
@@ -390,37 +377,39 @@ public final class TilesetHelper
 		
 		return getTextureVertices(x, y, 0, tex.getXTiles() - 1, 0, tex.getYTiles() - 1, tex.getOffsetX(), tex.getOffsetY());
 	}
-	
-	public static int getTilesetIndex(float[] vertices, int min, int max)
-	{
-		final float interval = 1.0f / (float)(max - min + 1);
-		
-		final int x = (int)(vertices[4] / interval);
-		final int y = (int)(vertices[1] / interval);
-		
-		return y * (max - min + 1) - x;
-	}
 
+	/**
+	 * Converts a tile ID to the X coordinate of the tile.
+	 * @param tileID The tile ID.
+	 * @param tex The texture that contains the tiles.
+	 * @return The X coordinate of the tile.
+	 */
 	public static int getTilesetX(int tileID, Texture tex)
 	{
 		return tileID - (tex.getXTiles() * (tileID / tex.getXTiles()));
 	}
 	
+	/**
+     * Converts a tile ID to the Y coordinate of the tile.
+     * @param tileID The tile ID.
+     * @param tex The texture that contains the tiles.
+     * @return The Y coordinate of the tile.
+     */
 	public static int getTilesetY(int tileID, Texture tex)
 	{
 		return tileID / tex.getXTiles();
 	}
 	
+	/**
+	 * Converts a tile coordinate to a tile ID.
+	 * @param x The X coordinate of the tile.
+	 * @param y The Y coordinate of the tile.
+	 * @param tex The Texture containing the tiles.
+	 * @return A tile ID.
+	 */
 	public static int getTilesetID(int x, int y, Texture tex)
 	{
 		return y * tex.getXTiles() + x;
-	}
-	
-	public static void setInitialTileOffset(Tile tile, Point p, int length, int width)
-	{
-	    tile.setPos(new Vector2((-(float)width / 2.0f * Tile.TILE_SIZE_F) + (p.x * Tile.TILE_SIZE_F) + (Tile.TILE_SIZE_F / 2), 
-	            ((float)length / 2.0f * Tile.TILE_SIZE_F) - (p.y * Tile.TILE_SIZE_F) - (Tile.TILE_SIZE_F / 2)));
-		
 	}
 }
 

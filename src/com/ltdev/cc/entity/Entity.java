@@ -24,10 +24,10 @@ package com.ltdev.cc.entity;
 
 import android.graphics.Point;
 
-import com.ltdev.Texture;
-import com.ltdev.TilesetHelper;
 import com.ltdev.cc.event.InteractListener;
 import com.ltdev.cc.physics.primitives.Shape;
+import com.ltdev.graphics.Texture;
+import com.ltdev.graphics.TilesetHelper;
 import com.ltdev.math.*;
 
 import java.nio.ByteBuffer;
@@ -37,6 +37,10 @@ import java.util.ArrayList;
 
 import javax.microedition.khronos.opengles.GL11;
 
+/**
+ * An Entity is the base of all non-tileset objects in Circuit Crawler.
+ * @author Lightning Development Studios
+ */
 public abstract class Entity implements InteractListener
 {
 	public static final float DEFAULT_SIZE = 32.0f;
@@ -57,6 +61,10 @@ public abstract class Entity implements InteractListener
 	private ArrayList<Entity> previousFrameColliders;
 	private ArrayList<Entity> currentFrameColliders;
 	
+	/**
+	 * Initializes a new instance of the Entity class.
+	 * @param shape The physics shape to represent the Entity with.
+	 */
 	public Entity(Shape shape)
 	{		
 		this.shape = shape;
@@ -68,6 +76,10 @@ public abstract class Entity implements InteractListener
 		this.currentFrameColliders = new ArrayList<Entity>();
 	}
 	
+	/**
+	 * Draws the entity.
+	 * @param gl The OpenGL context.
+	 */
 	public void draw(GL11 gl)
 	{
 	    //convert local space to world space.
@@ -150,7 +162,11 @@ public abstract class Entity implements InteractListener
 	 * Collision Methods *
 	 *********************/
 
-	//TODO: I don't even...
+	/**
+	 * \todo I don't even...
+	 * @param ent The entity to check for.
+	 * @return A value indicating whether this entity is facing ent.
+	 */
 	public boolean isFacing(Entity ent)
 	{
 		float angleBetween = (float)Math.toDegrees(Math.atan2(ent.getPos().y() - this.getPos().y() , ent.getPos().x() - this.getPos().x()));
@@ -188,6 +204,10 @@ public abstract class Entity implements InteractListener
 	    
 	}
 
+	/**
+	 * Unloads the OpenGL resources this entity uses.
+	 * @param gl The OpenGL context.
+	 */
     public void unload(GL11 gl)
     {
         int[] buffer = new int[1];

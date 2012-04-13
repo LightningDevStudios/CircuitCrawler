@@ -41,7 +41,7 @@ public class TeleporterData extends StaticEntData
 	public void createInst(ArrayList<Entity> entData)
 	{
 		teleporterRef = new Teleporter(size, new Vector2(xPos, yPos));
-		
+
 		teleporterRef.setTexture(tex);
 		
 		entData.add(teleporterRef);
