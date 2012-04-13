@@ -1,3 +1,25 @@
+/**
+ * Copyright (c) 2010-2012 Lightning Development Studios <lightningdevelopmentstudios@gmail.com>
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+ * of the Software, and to permit persons to whom the Software is furnished to do
+ * so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
 package com.ltdev.math;
 
 /**
@@ -7,10 +29,6 @@ package com.ltdev.math;
  */
 public final class Matrix4 
 {
-    /*************
-     * Constants *
-     *************/
-    
     /**
      * The identity matrix, where each row is it's respective unit vector.
      */
@@ -18,11 +36,7 @@ public final class Matrix4
                                                        0, 1, 0, 0,
                                                        0, 0, 1, 0,
                                                        0, 0, 0, 1);
-    
-    /***********
-     * Members *
-     ***********/
-    
+
     /**
      * The first row of the matrix.
      */
@@ -43,10 +57,6 @@ public final class Matrix4
      */
     private final Vector4 col3;
     
-	/****************
-	 * Constructors *
-	 ****************/
-	
 	/**
 	 * Creates a new instance of the Matrix4 class. All elements initialized to 0.
 	 */
@@ -102,11 +112,7 @@ public final class Matrix4
 		col2 = new Vector4(m31, m32, m33, m34);
 		col3 = new Vector4(m41, m42, m43, m44);
 	}
-	
-	/********************
-     * Instance methods *
-     ********************/
-	
+
 	/**
 	 * Gets the determinant of this matrix.
 	 * @return The determinant of the matrix.
@@ -140,11 +146,7 @@ public final class Matrix4
              + "| " + col0.z() + ", \t" + col1.z() + ", \t" + col2.z() + ", \t" + col3.z() + " \t|\n"
              + "| " + col0.w() + ", \t" + col1.w() + ", \t" + col2.w() + ", \t" + col3.w() + " \t|";
     }
-	
-	/******************
-	 * Static Methods *
-	 ******************/
-	
+
 	/**
 	 * Multiplies two matrices together.
 	 * @param left The left operand matrix.
@@ -361,10 +363,6 @@ public final class Matrix4
 	                       a, b, c, -1,
 	                       0, 0, d,  0);
 	}
-	
-	/**************************
-	 * Accessors and Mutators *
-	 **************************/
 	
 	/**
 	 * Gets the matrix element at column 1, row 1.

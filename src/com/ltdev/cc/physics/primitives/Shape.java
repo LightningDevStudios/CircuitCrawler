@@ -1,3 +1,26 @@
+/**
+ * Copyright (c) 2010-2012 Lightning Development Studios <lightningdevelopmentstudios@gmail.com>
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+ * of the Software, and to permit persons to whom the Software is furnished to do
+ * so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
+
 package com.ltdev.cc.physics.primitives;
 
 import com.ltdev.cc.event.InteractListener;
@@ -14,10 +37,6 @@ import java.util.ArrayList;
  */
 public abstract class Shape
 {
-    /***********
-     * Members *
-     ***********/
-    
     /**
      * Provides a callback for when this Shape collides with another one.
      */
@@ -103,10 +122,6 @@ public abstract class Shape
      */
     private boolean solid;
     
-    /****************
-     * Constructors *
-     ****************/
-    
     /**
      * Initializes a new, solid instance of the Shape class.
      */
@@ -156,10 +171,6 @@ public abstract class Shape
         rotMat = Matrix4.rotateZ(this.angle);
         rebuildModel();
     }
-    
-    /******************
-     * Public Methods *
-     ******************/
     
     /**
      * Integrates the physics world by a small amount of time.
@@ -251,10 +262,6 @@ public abstract class Shape
         forces.remove(f);
     }
     
-    /********************
-     * Abstract Methods *
-     ********************/
-    
     /**
      * Abstract method used to estimate mass.
      */
@@ -273,11 +280,7 @@ public abstract class Shape
      * @return A two-float array: [0] is the min, [1] is the max.
      */
     public abstract float[] project(Vector2 axis);
-    
-    /**************************
-     * Accessors and Mutators *
-     **************************/
-    
+
     /**
      * Resets the impulse vector to <0, 0>.
      */

@@ -1,3 +1,25 @@
+/**
+ * Copyright (c) 2010-2012 Lightning Development Studios <lightningdevelopmentstudios@gmail.com>
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+ * of the Software, and to permit persons to whom the Software is furnished to do
+ * so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
 package com.ltdev.math;
 
 /**
@@ -7,19 +29,11 @@ package com.ltdev.math;
  */
 public final class Matrix3x2
 {
-    /*************
-     * Constants *
-     *************/
-    
     /**
      * The identity matrix, where each row is it's respective unit vector.
      */
     public static final Matrix3x2 IDENTITY = new Matrix3x2(1, 0, 0,
                                                            0, 1, 0);
-    
-    /***********
-     * Members *
-     ***********/
     
     /**
      * The first row of the matrix.
@@ -30,11 +44,7 @@ public final class Matrix3x2
      * The second row of the matrix.
      */
     private final Vector3 col1;
-    
-    /****************
-     * Constructors *
-     ****************/
-    
+
     /**
      * Creates a new instance of the Matrix3x2 class. All elements initialized to 0.
      */
@@ -71,14 +81,6 @@ public final class Matrix3x2
         col1 = new Vector3(m21, m22, m23);
     }
     
-    /********************
-     * Instance methods *
-     ********************/
-    
-    /******************
-     * Static Methods *
-     ******************/
-    
     /**
      * Creates a translation matrix.
      * @param position The position to translate to.
@@ -114,11 +116,7 @@ public final class Matrix3x2
         return new Matrix3x2(scale, 0, 0,
                              0, scale, 0);
     }
-    
-    /**************************
-     * Accessors and Mutators *
-     **************************/
-    
+
     /**
      * Gets an array containing all the elements of the matrix.
      * @return A float[16] containing all the elements of the matrix in column-major order.
