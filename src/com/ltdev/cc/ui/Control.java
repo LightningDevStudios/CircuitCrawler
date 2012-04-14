@@ -86,9 +86,7 @@ public abstract class Control
             return value;
         }
     }
-    
-	//constants
-    
+
     /**
      * clamped between -1 and 1, turns UIPosition enum to relative coords.
      */
@@ -121,7 +119,7 @@ public abstract class Control
 	protected FloatBuffer textureBuffer;
 	protected FloatBuffer colorBuffer;
 	
-	protected int VBOVertPtr, VBOGradientPtr, VBOTexturePtr;
+	protected int vboVertPtr, vboGradientPtr, vboTexturePtr;
 	protected boolean needToUpdateTexVBO, needToUpdateGradientVBO, needToUpdateVertexVBO;
 	
 	private float topPad, leftPad, bottomPad, rightPad;
@@ -206,12 +204,12 @@ public abstract class Control
 		    gl.glColor4f(colorR, colorG, colorB, colorA);
 		}
 
-		gl.glBindBuffer(GL11.GL_ARRAY_BUFFER, VBOVertPtr);
+		gl.glBindBuffer(GL11.GL_ARRAY_BUFFER, vboVertPtr);
 		gl.glVertexPointer(2, GL11.GL_FLOAT, 0, 0);
 		
 		if (containsTexture || containsTileset)
 		{
-			gl.glBindBuffer(GL11.GL_ARRAY_BUFFER, VBOTexturePtr);
+			gl.glBindBuffer(GL11.GL_ARRAY_BUFFER, vboTexturePtr);
 			gl.glTexCoordPointer(2, GL11.GL_FLOAT, 0, 0);
 		}
 		
@@ -250,11 +248,7 @@ public abstract class Control
 		
 		return buffer;
 	}
-	
-	/*******************
-	 * Padding Methods *
-	 *******************/
-	
+
 	public void setPadding(float topPad, float leftPad, float bottomPad, float rightPad)
 	{
 		this.topPad = topPad;
@@ -345,34 +339,30 @@ public abstract class Control
 		this.texture = coords;
 		textureBuffer = setBuffer(textureBuffer, texture);
 	}
-	
-	/********************
-	 * Hardware Buffers *
-	 ********************/
-	
+
 	public void genHardwareBuffers(GL11 gl)
 	{		
 		int[] tempPtr = new int[1];
 		
 		//VERTEX
 		gl.glGenBuffers(1, tempPtr, 0);
-		VBOVertPtr = tempPtr[0];
+		vboVertPtr = tempPtr[0];
 		
-		gl.glBindBuffer(GL11.GL_ARRAY_BUFFER, VBOVertPtr);
+		gl.glBindBuffer(GL11.GL_ARRAY_BUFFER, vboVertPtr);
 		final int vertSize = vertexBuffer.capacity() * 4;
 		gl.glBufferData(GL11.GL_ARRAY_BUFFER, vertSize, vertexBuffer, GL11.GL_STATIC_DRAW); //\TODO choose static/draw settings..?
 		
 		if (renderMode.contains(RenderMode.GRADIENT))
 		{
 			gl.glGenBuffers(1, tempPtr, 0);
-			VBOGradientPtr = tempPtr[0];
+			vboGradientPtr = tempPtr[0];
 			needToUpdateGradientVBO = true;
 			updateGradientVBO(gl);
 		}
 		if (renderMode.contains(RenderMode.TEXTURE) || renderMode.contains(RenderMode.TILESET))
 		{
 			gl.glGenBuffers(1, tempPtr, 0);
-			VBOTexturePtr = tempPtr[0];
+			vboTexturePtr = tempPtr[0];
 			needToUpdateTexVBO = true;
 			updateTextureVBO(gl);
 		}
@@ -390,14 +380,14 @@ public abstract class Control
 	{
 		if (needToUpdateTexVBO)
 		{
-		    if (VBOTexturePtr == 0)
+		    if (vboTexturePtr == 0)
 		    {
 		        int[] values = new int[1];
 		        gl.glGenBuffers(1, values, 0);
-		        VBOTexturePtr = values[0];
+		        vboTexturePtr = values[0];
 		    }
 		    
-			gl.glBindBuffer(GL11.GL_ARRAY_BUFFER, VBOTexturePtr);
+			gl.glBindBuffer(GL11.GL_ARRAY_BUFFER, vboTexturePtr);
 			final int textureSize = textureBuffer.capacity() * 4;
 			gl.glBufferData(GL11.GL_ARRAY_BUFFER, textureSize, textureBuffer, GL11.GL_STATIC_DRAW);
 		}
@@ -409,7 +399,7 @@ public abstract class Control
 		if (needToUpdateGradientVBO)
 		{
 			GL11 gl11 = (GL11)gl;
-			gl11.glBindBuffer(GL11.GL_ARRAY_BUFFER, VBOGradientPtr);
+			gl11.glBindBuffer(GL11.GL_ARRAY_BUFFER, vboGradientPtr);
 			final int gradientSize = colorBuffer.capacity() * 4;
 			gl11.glBufferData(GL11.GL_ARRAY_BUFFER, gradientSize, colorBuffer, GL11.GL_STATIC_DRAW);
 		}
@@ -420,16 +410,12 @@ public abstract class Control
 	{
 		if (needToUpdateVertexVBO)
 		{
-			gl.glBindBuffer(GL11.GL_ARRAY_BUFFER, VBOVertPtr);
+			gl.glBindBuffer(GL11.GL_ARRAY_BUFFER, vboVertPtr);
 			final int vertSize = vertexBuffer.capacity() * 4;
 			gl.glBufferData(GL11.GL_ARRAY_BUFFER, vertSize, vertexBuffer, GL11.GL_STATIC_DRAW); //TODO choose static/draw settings..?
 		}
 		needToUpdateVertexVBO = false;
 	}
-	
-	/**********************
-	 * RenderMode methods *
-	 **********************/
 	
 	//BLANK
 	public void clearRenderModes()
@@ -577,11 +563,7 @@ public abstract class Control
 		if (renderMode.contains(RenderMode.TILESET))
 			renderMode.remove(RenderMode.TILESET);
 	}
-	
-	/**************************
-	 * Accessors and Mutators *
-	 **************************/
-	
+
 	public Vector2 getSize()
 	{
 	    return size;

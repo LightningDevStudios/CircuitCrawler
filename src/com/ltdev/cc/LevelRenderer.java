@@ -23,10 +23,9 @@
 package com.ltdev.cc;
 
 import android.content.Context;
+import android.graphics.PointF;
 import android.view.MotionEvent;
 
-import com.ltdev.EntityManager;
-import com.ltdev.Finger;
 import com.ltdev.Stopwatch;
 import com.ltdev.cc.entity.*;
 import com.ltdev.cc.event.*;
@@ -117,26 +116,8 @@ public class LevelRenderer implements com.ltdev.LevelSurfaceView.Renderer
 		projWorld = Matrix4.perspective(-0.75f, 0.75f, 0.75f / aspectRatio, -0.75f / aspectRatio, 1f, Tile.TILE_SIZE_F * 6);
 		projUI = Matrix4.ortho(-Game.screenW / 2 , Game.screenW / 2, Game.screenH / 2, -Game.screenH / 2, 0, 1);
 		
-		for (Entity ent : game.entities)
-		{
-			ent.initialize(gl);
-		}
-		
-		for (Control ent : game.uiList)
-		{
-			ent.genHardwareBuffers(gl);
-		}
-		
 		if (gameInitializedListener != null)
-			gameInitializedListener.onGameInitialized();
-		
-		for (Entity ent : game.entities)
-		{
-			if (ent instanceof PuzzleBox)
-			{
-				((PuzzleBox)ent).setPuzzleInitListener(puzzleActivatedListener);
-			}
-		}
+            gameInitializedListener.onGameInitialized();
 	}
 	
 	/**
@@ -166,17 +147,9 @@ public class LevelRenderer implements com.ltdev.LevelSurfaceView.Renderer
 		}
 		
 		game.updateTriggers();
-		EntityManager.update(game.entities, game.world, gl);
+		game.updateEntities(gl);
 		game.updateFingers();
-		
-		//TODO: game.update(), chain off to world.update()
-		game.world.integrate(Stopwatch.getFrameTime());
-		
-		//update all entites
-        for (Entity ent : game.entities)
-        {
-            ent.update(gl);
-        }
+		game.integratePhysics();
 		
 		//HACK: for the love of GOD move this out of LevelRenderer
 		//Iterates through all entities
@@ -261,10 +234,7 @@ public class LevelRenderer implements com.ltdev.LevelSurfaceView.Renderer
 		gl.glDisable(GL11.GL_TEXTURE_2D);
 		gl.glDisableClientState(GL11.GL_VERTEX_ARRAY);
         gl.glDisableClientState(GL11.GL_TEXTURE_COORD_ARRAY);
-        
-		
-		game.btnB.unpress();
-		
+
 		//moved this out here so that all entities / colEnts can be compared, not just the next ones
 		Game.worldOutdated = false;
 		game.updateCameraPosition();
@@ -275,7 +245,7 @@ public class LevelRenderer implements com.ltdev.LevelSurfaceView.Renderer
 		gl.glDisable(GL11.GL_DEPTH_TEST);
 		gl.glEnableClientState(GL11.GL_VERTEX_ARRAY);
 		
-		for (Control ent : game.uiList)
+		for (Control ent : game.getUIList())
 		{
 		    gl.glPushMatrix();
 			ent.update();
@@ -322,66 +292,7 @@ public class LevelRenderer implements com.ltdev.LevelSurfaceView.Renderer
 	 */
 	public void onTouchInput(MotionEvent e)
 	{
-		if (game.player.userHasControl())
-		{
-			Game.worldOutdated = true;
-			for (int i = 0; i < game.fingerList.size(); i++)
-			{
-				final Finger f = game.fingerList.get(i);
-				final Vector2 touchInput = new Vector2(e.getX(f.getPointerId()) - Game.screenW / 2, Game.screenH / 2 - e.getY(f.getPointerId()));
-				f.setPosition(touchInput);
-			}
-			
-			switch (e.getAction() & MotionEvent.ACTION_MASK)
-			{
-				case MotionEvent.ACTION_POINTER_DOWN:
-				case MotionEvent.ACTION_DOWN:
-					final int fingerIndex = e.getPointerId(e.getAction() >> MotionEvent.ACTION_POINTER_ID_SHIFT);
-					final Vector2 touchVec = new Vector2(e.getX(e.getPointerCount() - 1) - Game.screenW / 2, Game.screenH / 2 - e.getY(e.getPointerCount() - 1));
-					boolean onEnt = false;
-					for (int i = 0; i < game.uiList.size(); i++)
-					{
-						final Control ent = game.uiList.get(i);
-						if (touchVec.x() >= ent.getPos().x() - ent.getSize().x() / 2 && touchVec.x() <= ent.getPos().x() + ent.getSize().x() / 2 && touchVec.y() >= ent.getPos().y() - ent.getSize().y() / 2 && touchVec.y() <= ent.getPos().y() + ent.getSize().y() / 2)
-						{
-							final Finger newFinger = new Finger(touchVec, ent, e.getPointerId(fingerIndex));
-							newFinger.onStackPush();
-							game.fingerList.add(newFinger);
-							onEnt = true;
-							break;
-						}
-					}
-					if (!onEnt)
-					{
-						final Finger newFinger = new Finger(null, null, e.getPointerId(fingerIndex));
-						game.fingerList.add(newFinger);
-					}
-					
-					break;
-				case MotionEvent.ACTION_UP:
-					for (final Finger f : game.fingerList)
-					{
-						f.onStackPop();
-					}
-					game.fingerList.clear();
-					break;
-				case MotionEvent.ACTION_POINTER_UP:
-					if (!game.fingerList.isEmpty())
-					{
-						final int fIndex = e.getPointerId(e.getAction() >> MotionEvent.ACTION_POINTER_ID_SHIFT);
-						for (int i = 0; i < game.fingerList.size(); i++)
-						{
-							final Finger f = game.fingerList.get(i);
-							if (fIndex == f.getPointerId())
-								game.fingerList.remove(i).onStackPop();
-						}
-					}
-					break;
-            default:
-                break;
-			}
-		}
-		
+		game.handleTouchInput(e);		
 	}
 	
 	/**
@@ -414,11 +325,13 @@ public class LevelRenderer implements com.ltdev.LevelSurfaceView.Renderer
 	 */
 	public void viewWorld(GL11 gl)
 	{
+	    PointF camPos = game.getCameraPosition();
+	    
 		gl.glMatrixMode(GL11.GL_PROJECTION);
 		gl.glLoadMatrixf(projWorld.array(), 0);
 		gl.glMatrixMode(GL11.GL_MODELVIEW);
 		gl.glLoadIdentity();
-		gl.glMultMatrixf(Matrix4.translate(new Vector3(-game.camPos.x, -game.camPos.y, -Tile.TILE_SIZE_F * 4f)).array(), 0);
+		gl.glMultMatrixf(Matrix4.translate(new Vector3(-camPos.x, -camPos.y, -Tile.TILE_SIZE_F * 4f)).array(), 0);
 	}
 	
 	/**
@@ -496,6 +409,6 @@ public class LevelRenderer implements com.ltdev.LevelSurfaceView.Renderer
 	 */
 	public void clearTouchInput()
 	{
-		game.fingerList.clear();
+		game.clearFingers();
 	}
 }

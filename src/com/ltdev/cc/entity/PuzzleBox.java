@@ -35,7 +35,7 @@ public class PuzzleBox extends Entity
 		super(new Rectangle(new Vector2(size, size), position, true));
 	}
 	
-	public void setPuzzleInitListener(PuzzleActivatedListener listener)
+	public void setPuzzleActivatedListener(PuzzleActivatedListener listener)
 	{
 		this.listener = listener;
 	}

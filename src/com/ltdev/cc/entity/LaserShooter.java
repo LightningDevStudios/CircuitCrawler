@@ -45,14 +45,13 @@ public class LaserShooter extends Entity
     
     /**
      * Initializes a new instance of the LaserShooter class.
-     * \todo Fill out the rest of the parameters.
      * @param position The location of the LaserShooter.
      * @param size The size of the LaserShooter.
      * @param angle The angle of the LaserShooter.
-     * @param stupidity
-     * @param beamWidth
-     * @param shotsPerSecond
-     * @param player The player.
+     * @param stupidity A value that changes the cannon's accuracy.
+     * @param beamWidth The width of the laser beam.
+     * @param shotsPerSecond The number of times the lazer fires per second.
+     * @param player A reference to the player.
      * @param physWorld The physics world.
      */
     public LaserShooter(Vector2 position, float size, float angle, float stupidity, float beamWidth, float shotsPerSecond, Player player, World physWorld)

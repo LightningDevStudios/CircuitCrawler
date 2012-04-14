@@ -29,6 +29,10 @@ import com.ltdev.math.Vector2;
 import java.util.ArrayList;
 import java.util.TreeMap;
  
+/**
+ * A class that takes a collection of Shapes and calculates which ones are colliding.
+ * @author Lightning Development Studios
+ */
 public class CollisionDetector
 {
     private SpatialHashGrid spatialHash;
@@ -37,12 +41,17 @@ public class CollisionDetector
     //private Vector2 size;
     //private ArrayList<Shape> shapes;
     
+    /**
+     * Initializes a new instance of the CollisionDetector class.
+     * @param size The size of the physics world.
+     * @param shapes A list of shapes contained in the world.
+     */
     public CollisionDetector(Vector2 size, ArrayList<Shape> shapes)
     {
         //this.size = size;
         //this.shapes = shapes;
        
-        spatialHash = new SpatialHashGrid(shapes, size.x(), size.y(), 2, 2);
+        spatialHash = new SpatialHashGrid(shapes, size.x(), size.y(), 4, 4);
         contacts = new ArrayList<Contact>();
     }
 
@@ -298,6 +307,14 @@ public class CollisionDetector
         return null;
     }
     
+    /**
+     * Finds the point of intersection between two line segments.
+     * @param line1Start The starting location of the first line.
+     * @param line1End The ending location of the first line.
+     * @param line2Start The starting location of the second line.
+     * @param line2End The ending location of the second line.
+     * @return The location of the intersection point.
+     */
     public Vector2 pointOfIntersection(Vector2 line1Start, Vector2 line1End, Vector2 line2Start, Vector2 line2End)
     {
         float s1x, s1y, s2x, s2y;
@@ -317,6 +334,9 @@ public class CollisionDetector
         return null;
     }
     
+    /**
+     * Updates the broadphase then checks for collision pairs.
+     */
     public void updateCollisions()
     {        
         spatialHash.getCollisionPairs(contacts);
@@ -328,6 +348,11 @@ public class CollisionDetector
         }
     }
 
+    /**
+     * Runs a collision check to see if two shapes are colliding.
+     * @param c The Contact between the two shapes.
+     * @return A value indicating whether the two shapes are colliding.
+     */
     public static boolean colliding(Contact c)
     {        
         Shape a = c.getA();
@@ -358,6 +383,12 @@ public class CollisionDetector
         //return false;
     }
 
+    /**
+     * Runs a simple radius check to see if two shapes are colliding.
+     * @param a The first shape.
+     * @param b The second shape.
+     * @return A value indicating whether the two shapes are colliding.
+     */
     public static boolean radiusCheck(Shape a, Shape b)
     {
         float diagonalA = Vector2.subtract(a.getPos(), a.getWorldVertices()[0]).length();
@@ -365,6 +396,11 @@ public class CollisionDetector
         return Vector2.subtract(a.getPos(), b.getPos()).length() < (float)(diagonalA + diagonalB);
     }
 
+    /**
+     * Runs a radius check to see if two circles are colliding, calculates penetration and contact normal if they do.
+     * @param c The contact containing two circles.
+     * @return A value indicating whether the two shapes are colliding.
+     */
     public static boolean radiusCheckCircles(Contact c)
     {
         Circle a = (Circle)c.getA();
@@ -384,6 +420,11 @@ public class CollisionDetector
         return true;
     }
     
+    /**
+     * Runs a Separating Axis Theorem check to see if two shapes are colliding.
+     * @param c The contact between two shapes.
+     * @return A value indicating whether the two shapes are colliding.
+     */
     public static boolean sat(Contact c)
     {
         Shape a = c.getA();
@@ -435,6 +476,12 @@ public class CollisionDetector
         return true;
     }
 
+    /**
+     * Checks if a point is contained within a shape.
+     * @param shape The shape.
+     * @param v The point.
+     * @return A value indicating whether the point is contained in the shape.
+     */
     public static boolean containsPoint(Shape shape, Vector2 v)
     {
         if (shape instanceof Circle)

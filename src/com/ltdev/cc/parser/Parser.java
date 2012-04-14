@@ -59,8 +59,8 @@ public class Parser
 	public Tile[][] tileset;
 	public Player player;
 	
-	public XmlResourceParser xrp;  
-	public HashMap<String, String> dataHM;
+	private XmlResourceParser xrp;
+	private HashMap<String, String> dataHM;
 
 	public Parser(Context context, int res)
 	{
@@ -75,10 +75,6 @@ public class Parser
 		nodePathList = new ArrayList<NodePath>();
 	}
 
-/***********************
- General parsing methods
- **********************/
-	
 	public void parseLevel(GL11 gl) throws XmlPullParserException, IOException
 	{
 		while (xrp.getEventType() != END_DOCUMENT)
@@ -189,10 +185,7 @@ public class Parser
 		
 		return map;
 	}
-	
-/****************
- Parse An Object
-*****************/
+
 	public void parseObj(String tn) throws XmlPullParserException, IOException
 	{		
 		
@@ -226,9 +219,6 @@ public class Parser
 		}
 	}
 
-/***************
-Parse A Tileset
-***************/
 	public void parseTileset(GL11 gl) throws XmlPullParserException, IOException
 	{
 		int x, y, curX, curY;
@@ -271,11 +261,7 @@ Parse A Tileset
 			}
 		}
 	}
-	
-	/******************
-	 * Parse Triggers *
-	 ******************/
-	
+
 	/**
 	 * Parse a level file and store the associated data in this class.
 	 * \todo return a Level!
@@ -440,10 +426,7 @@ Parse A Tileset
 		}
 		return null;
 	}
-	
-	/*********************
-	Parse Nodes/Node Lists
-	**********************/
+
 	public void parseNodes() throws XmlPullParserException, IOException
 	{
 		xrp.next();
@@ -497,10 +480,6 @@ Parse A Tileset
 		xrp.next();
 		xrp.next();
 	}
-	
-	/*********************
-	 * TeleporterLinkers *
-	 *********************/
 
 	private void parseTeleporterLinker() throws XmlPullParserException, IOException //lol
 	{		

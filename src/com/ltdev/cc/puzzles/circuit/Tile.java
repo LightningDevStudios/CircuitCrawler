@@ -55,6 +55,13 @@ public class Tile
 	private FloatBuffer textureBuffer;
 	private ByteBuffer indexBuffer;
 	
+	/**
+	 * Initializes a new instance of the Tile class.
+	 * @param xPos The tile's X position.
+	 * @param yPos The tile's Y position.
+	 * @param tex The tile's texture.
+	 * @param type The tile's type.
+	 */
 	public Tile(float xPos, float yPos, Texture tex, TileType type)
 	{
 		selected = false;
@@ -92,6 +99,10 @@ public class Tile
 		indexBuffer.position(0);
 	}
 	
+	/**
+	 * Draws the tile.
+	 * @param gl The OpenGL context.
+	 */
 	public void draw(GL10 gl)
 	{
 		gl.glFrontFace(GL10.GL_CCW);

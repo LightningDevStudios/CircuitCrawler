@@ -25,6 +25,7 @@ package com.ltdev.cc;
 import android.content.Context;
 import android.graphics.PointF;
 import android.util.Log;
+import android.view.MotionEvent;
 
 import com.ltdev.*;
 import com.ltdev.cc.Tile.TileType;
@@ -56,29 +57,27 @@ public class Game
     public static float screenW, screenH;
 	
     private Tileset tileset;
-	public ArrayList<Entity> entities;
-	public ArrayList<Control> uiList;
+	private ArrayList<Entity> entities;
+	private ArrayList<Control> uiList;
 	private ArrayList<Trigger> triggerList;
 
-	public World world;
+	private World world;
 	
-	public ArrayList<Finger> fingerList;
+	private ArrayList<Finger> fingerList;
 	
 	//Camera data
-	public PointF camPos;
+	private PointF camPos;
 	
 	private float worldMinX, worldMinY, worldMaxX, worldMaxY;
 	
 	//Testing data
-	public UIButton btnB;	
-	public UIJoypad joypad;
-	public Player player;
+	private UIButton btnB;
+	private UIJoypad joypad;
+	private Player player;
 	
 	//Constructors
 	public Game(Context context, GL11 gl, int levelId)
-	{
-	    camPos = new PointF();
-	    
+	{	    
 		TextureManager.addTexture("text", new Texture(R.raw.text, 256, 256, 16, 8, context, gl));
 		TextureManager.addTexture("tilesetworld", new Texture(R.raw.tilesetworld, 512, 256, 16, 8, context, gl));
 		TextureManager.addTexture("tilesetentities", new Texture(R.raw.tilesetentities, 256, 256, 8, 8, context, gl));
@@ -134,6 +133,8 @@ public class Game
 		player = parser.player;
 		entities.add(player);
 		
+		camPos = new PointF(player.getPos().x(), player.getPos().y());
+		
 		btnB = new UIButton(80.0f, 80.0f, UIPosition.BOTTOMRIGHT);
 		btnB.autoPadding(0.0f, 0.0f, 90.0f, 5.0f);
 		btnB.enableTextureMode(TextureManager.getTexture("buttonb"));
@@ -187,6 +188,16 @@ public class Game
 	    //EntityManager.addEntity(LAZOR); 
 	    
 		updateCameraPosition();
+		
+		for (Entity ent : entities)
+        {
+            ent.initialize(gl);
+        }
+        
+        for (Control ent : uiList)
+        {
+            ent.genHardwareBuffers(gl);
+        }
 	}
 	
 	/**
@@ -262,6 +273,10 @@ public class Game
 		return null;
 	}
 	
+	/**
+	 * Sets the game over event listener.
+	 * @param listener The listener.
+	 */
 	public void setGameOverEvent(GameOverListener listener)
 	{
 		//triggerList.add(new Trigger(new CauseDoneScaling(player), new EffectEndGame(listener, false)));
@@ -333,6 +348,28 @@ public class Game
 	}
 	
 	/**
+	 * Updates the entity list and all the entities.
+	 * @param gl The OpenGL context.
+	 */
+	public void updateEntities(GL11 gl)
+	{
+	    EntityManager.update(entities, world, gl);
+	    
+	    for (Entity ent : entities)
+        {
+            ent.update(gl);
+        }
+	}
+	
+	/**
+	 * Integrate the physics world.
+	 */
+	public void integratePhysics()
+	{
+	    world.integrate(Stopwatch.getFrameTime());
+	}
+	
+	/**
 	 * Draws the tileset.
 	 * @param gl The OpenGL context.
 	 */
@@ -356,5 +393,113 @@ public class Game
 				return true;
 		}
 		return false;
+	}
+	
+	/**
+	 * Sets the puzzle activated listener for all PuzzleBoxes in the level.
+	 * @param listener The puzzle activated listener.
+	 */
+	public void setPuzzleActivatedListener(PuzzleActivatedListener listener)
+	{
+	    for (Entity ent : entities)
+        {
+            if (ent instanceof PuzzleBox)
+            {
+                ((PuzzleBox)ent).setPuzzleActivatedListener(listener);
+            }
+        }
+	}
+	
+	/**
+	 * Handle a touch input update.
+	 * @param e The Android touch input event.
+	 */
+	public void handleTouchInput(MotionEvent e)
+	{
+	    if (player.userHasControl())
+        {
+            Game.worldOutdated = true;
+            for (int i = 0; i < fingerList.size(); i++)
+            {
+                final Finger f = fingerList.get(i);
+                final Vector2 touchInput = new Vector2(e.getX(f.getPointerId()) - Game.screenW / 2, Game.screenH / 2 - e.getY(f.getPointerId()));
+                f.setPosition(touchInput);
+            }
+            
+            switch (e.getAction() & MotionEvent.ACTION_MASK)
+            {
+                case MotionEvent.ACTION_POINTER_DOWN:
+                case MotionEvent.ACTION_DOWN:
+                    final int fingerIndex = e.getPointerId(e.getAction() >> MotionEvent.ACTION_POINTER_ID_SHIFT);
+                    final Vector2 touchVec = new Vector2(e.getX(e.getPointerCount() - 1) - Game.screenW / 2, Game.screenH / 2 - e.getY(e.getPointerCount() - 1));
+                    boolean onEnt = false;
+                    for (int i = 0; i < uiList.size(); i++)
+                    {
+                        final Control ent = uiList.get(i);
+                        if (touchVec.x() >= ent.getPos().x() - ent.getSize().x() / 2 && touchVec.x() <= ent.getPos().x() + ent.getSize().x() / 2 && touchVec.y() >= ent.getPos().y() - ent.getSize().y() / 2 && touchVec.y() <= ent.getPos().y() + ent.getSize().y() / 2)
+                        {
+                            final Finger newFinger = new Finger(touchVec, ent, e.getPointerId(fingerIndex));
+                            newFinger.onStackPush();
+                            fingerList.add(newFinger);
+                            onEnt = true;
+                            break;
+                        }
+                    }
+                    if (!onEnt)
+                    {
+                        final Finger newFinger = new Finger(null, null, e.getPointerId(fingerIndex));
+                        fingerList.add(newFinger);
+                    }
+                    
+                    break;
+                case MotionEvent.ACTION_UP:
+                    for (final Finger f : fingerList)
+                    {
+                        f.onStackPop();
+                    }
+                    fingerList.clear();
+                    break;
+                case MotionEvent.ACTION_POINTER_UP:
+                    if (!fingerList.isEmpty())
+                    {
+                        final int fIndex = e.getPointerId(e.getAction() >> MotionEvent.ACTION_POINTER_ID_SHIFT);
+                        for (int i = 0; i < fingerList.size(); i++)
+                        {
+                            final Finger f = fingerList.get(i);
+                            if (fIndex == f.getPointerId())
+                                fingerList.remove(i).onStackPop();
+                        }
+                    }
+                    break;
+            default:
+                break;
+            }
+        }
+	}
+	
+	/**
+	 * Gets the location of the camera.
+	 * @return The camera's location.
+	 */
+	public PointF getCameraPosition()
+	{
+	    return camPos;
+	}
+	
+	/**
+	 * Clears all the fingers currently on the screen.
+	 */
+	public void clearFingers()
+	{
+	    fingerList.clear();
+	}
+	
+	/**
+	 * Gets all the UI controls.
+	 * @return The UI control list.
+	 */
+	public ArrayList<Control> getUIList()
+	{
+	    return uiList;
 	}
 }
