@@ -77,6 +77,8 @@ public class Game
 	//Constructors
 	public Game(Context context, GL11 gl, int levelId)
 	{
+	    camPos = new PointF();
+	    
 		TextureManager.addTexture("text", new Texture(R.raw.text, 256, 256, 16, 8, context, gl));
 		TextureManager.addTexture("tilesetworld", new Texture(R.raw.tilesetworld, 512, 256, 16, 8, context, gl));
 		TextureManager.addTexture("tilesetentities", new Texture(R.raw.tilesetentities, 256, 256, 8, 8, context, gl));
@@ -172,13 +174,13 @@ public class Game
                 
 	    world = new World(worldSize, shapes);
 	    
-	    SpikeWall s = new SpikeWall(70, Vector2.add(player.getPos(), new Vector2(72 * 3 + 40, 0)), Direction.LEFT);
+	    /*SpikeWall s = new SpikeWall(70, Vector2.add(player.getPos(), new Vector2(72 * 3 + 40, 0)), Direction.LEFT);
 	    s.setTexture(TextureManager.getTexture("tilesetentities"));
 	    EntityManager.addEntity(s);
 
 	    Cannon c = new Cannon(40,  Vector2.add(player.getPos(), new Vector2(-72, 0)), 0, 20, 500000, player);
 	    c.setTexture(TextureManager.getTexture("tilesetentities"));
-	    EntityManager.addEntity(c);
+	    EntityManager.addEntity(c);*/
 	   
 	    //LaserShooter LAZOR = new LaserShooter(Vector2.add(player.getPos(), new Vector2(-72, 0)), 40, 0, 20, 5, 1, player, world);
 	    //LAZOR.setTexture(tilesetentities);

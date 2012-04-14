@@ -34,18 +34,16 @@ import javax.microedition.khronos.opengles.GL11;
  * Created to prevent errors relating to modifying an ArrayList while iterating through it.
  * @author Lightning Development Studios
  */
-public class EntityManager
+public final class EntityManager
 {
-	private static ArrayList<Entity> trashList;
-	private static ArrayList<Entity> addList;
+	private static ArrayList<Entity> trashList = new ArrayList<Entity>();
+	private static ArrayList<Entity> addList = new ArrayList<Entity>();
 	
 	/**
-	 * Initializes a new instance of the EntityManager class.
+	 * Prevents initialization of EntityManager.
 	 */
-	public EntityManager()
+	private EntityManager()
 	{
-		trashList = new ArrayList<Entity>();
-		addList = new ArrayList<Entity>();
 	}
 	
 	/**
