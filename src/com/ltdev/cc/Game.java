@@ -147,10 +147,10 @@ public class Game
 		uiList.add(joypad);
 		
 		//TODO camera class
-		worldMinX = (-Tile.TILE_SIZE_F * (tileset[0].length / 2)) + (screenW / 2);
-		worldMinY = (-Tile.TILE_SIZE_F * (tileset.length / 2)) + (screenH / 2);
-		worldMaxX = (Tile.TILE_SIZE_F * (tileset[0].length / 2)) - (screenW / 2);
-		worldMaxY = (Tile.TILE_SIZE_F * (tileset.length / 2)) - (screenH / 2);
+		worldMinX = (-Tile.TILE_SIZE_F * ((float)tileset[0].length / 2f));
+		worldMinY = (-Tile.TILE_SIZE_F * ((float)tileset.length / 2f));
+		worldMaxX = (Tile.TILE_SIZE_F * ((float)tileset[0].length / 2f));
+		worldMaxY = (Tile.TILE_SIZE_F * ((float)tileset.length / 2f));
 		
 		Vector2 worldSize = new Vector2(Tile.TILE_SIZE_F * tileset[0].length, Tile.TILE_SIZE_F * tileset.length);
 		
