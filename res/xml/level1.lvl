@@ -109,6 +109,7 @@
       <angle>90</angle>
       <xScl>0.5</xScl>
       <yScl>1</yScl>
+      <dir>LEFT</dir>
       <renderMode>
         <tileset>
           <texID>tilesetentities</texID>
@@ -117,6 +118,25 @@
         </tileset>
       </renderMode>
     </Door>
+ 
+   <SpikeWall>
+      <id>wall0</id>
+      <size>60</size>
+      <xPos>-36</xPos>
+      <yPos>80</yPos>
+      <angle>90</angle>
+      <xScl>0.5</xScl>
+      <yScl>1</yScl>
+      <dir>LEFT</dir>
+      <renderMode>
+        <tileset>
+          <texID>tilesetentities</texID>
+          <x>3</x>
+          <y>1</y>
+        </tileset>
+      </renderMode>
+    </SpikeWall>
+    
     <PhysBlock>
       <id>physBlock0</id>
       <size>50</size>
@@ -166,7 +186,6 @@
           <y>2</y>
         </tileset>
       </renderMode>
-      <health>100</health>
     </Player>
   </Entities>
   <Triggers>
