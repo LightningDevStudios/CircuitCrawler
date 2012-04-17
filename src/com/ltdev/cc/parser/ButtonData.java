@@ -43,8 +43,6 @@ public class ButtonData extends EntityData
 		buttonRef = new Button(new Vector2(xPos, yPos));
 		buttonRef.setAngle(angle);
 
-		buttonRef.setTexture(tex);
-		
 		entData.add(buttonRef);
 		ent = buttonRef;
 	}

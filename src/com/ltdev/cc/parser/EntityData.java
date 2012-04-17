@@ -64,41 +64,6 @@ public abstract class EntityData
 		isSolid = Boolean.parseBoolean(entHM.get("isSolid"));
 		circular = Boolean.parseBoolean(entHM.get("circular"));
 		willCollide = Boolean.parseBoolean(entHM.get("willCollide"));
-		
-		//TEXTURE
-		if (entHM.get("texture") != null)
-		{
-			String texID = entHM.get("texID");
-			if (texID.equalsIgnoreCase("text"))
-				tex = TextureManager.getTexture("text");
-			else if (texID.equalsIgnoreCase("tilesetentities"))
-				tex = TextureManager.getTexture("tilesetentities");
-			
-			String[] textureStr = entHM.get("coords").split(",");
-			texture = new float[textureStr.length];
-			for (int i = 0; i < textureStr.length; i++)
-				texture[i] = Float.parseFloat(textureStr[i]);
-			
-			textureModeEnabled = true;
-		}
-		
-		//TILESET
-		if (entHM.get("tileset") != null)
-		{
-			//\TODO move textures to a different XML file, load dynamically
-			String texID = entHM.get("texID");
-			if (texID.equalsIgnoreCase("text"))
-				tex = TextureManager.getTexture("text");
-			else if (texID.equalsIgnoreCase("tilesetentities"))
-				tex = TextureManager.getTexture("tilesetentities");
-			else if (texID.equalsIgnoreCase("baricons"))
-				tex = TextureManager.getTexture("baricons");
-			
-			tileX = Integer.parseInt(entHM.get("x"));
-			tileY = Integer.parseInt(entHM.get("y"));
-			
-			tilesetModeEnabled = true;
-		}
 	}
 	
 	

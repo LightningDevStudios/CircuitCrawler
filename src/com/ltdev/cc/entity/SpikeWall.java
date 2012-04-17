@@ -25,6 +25,7 @@ package com.ltdev.cc.entity;
 import com.ltdev.Direction;
 import com.ltdev.Stopwatch;
 import com.ltdev.cc.physics.primitives.Rectangle;
+import com.ltdev.graphics.TextureManager;
 import com.ltdev.math.Vector2;
 
 import javax.microedition.khronos.opengles.GL11;
@@ -47,27 +48,23 @@ public class SpikeWall extends Entity
         
         extended = false;
         initialPos = position;
-        if (dir == Direction.LEFT)
+        switch (dir)
         {
-            endPos = new Vector2(position.x() - 72, position.y());
-            shape.setAngle(270);
-        }
-        else if (dir == Direction.RIGHT)
-        {
-            endPos = new Vector2(position.x() + 72, position.y());
-            shape.setAngle(90);
-        }
-        else if (dir == Direction.DOWN)
-        {
-            endPos = new Vector2(position.x(), position.y() - 72);
-            shape.setAngle(0);
-        }
-        else if (dir == Direction.UP)
-        {
-            endPos = new Vector2(position.x() + 72, position.y() + 72);
-            shape.setAngle(180);
+            case LEFT:
+                endPos = new Vector2(position.x() - 72, position.y());
+                shape.setAngle(270);
+            case RIGHT:
+                endPos = new Vector2(position.x() + 72, position.y());
+                shape.setAngle(90);
+            case DOWN:
+                endPos = new Vector2(position.x(), position.y() - 72);
+                shape.setAngle(0);
+            case UP:
+                endPos = new Vector2(position.x() + 72, position.y() + 72);
+                shape.setAngle(180);
         }
 
+        this.tex = TextureManager.getTexture("tilesetentities");
         this.tilesetX = 3;
         this.tilesetY = 1;
     }

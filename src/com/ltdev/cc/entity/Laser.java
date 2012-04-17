@@ -25,6 +25,7 @@ package com.ltdev.cc.entity;
 import com.ltdev.EntityManager;
 import com.ltdev.Stopwatch;
 import com.ltdev.cc.physics.primitives.*;
+import com.ltdev.graphics.TextureManager;
 import com.ltdev.math.Vector2;
 
 import javax.microedition.khronos.opengles.GL11;
@@ -47,6 +48,7 @@ public class Laser extends Entity
     public Laser(float beamWidth, float beamLength, float angle, Vector2 position)
     {
         super(new Rectangle(new Vector2(beamLength, beamWidth), position, (float)Math.toDegrees(angle), false));
+        this.tex = TextureManager.getTexture("tilesetentities");
         this.tilesetX = 1;
         this.tilesetY = 3;
         countdown = 100;

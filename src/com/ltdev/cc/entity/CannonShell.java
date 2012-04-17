@@ -23,6 +23,7 @@
 package com.ltdev.cc.entity;
 
 import com.ltdev.cc.physics.primitives.Circle;
+import com.ltdev.graphics.TextureManager;
 import com.ltdev.math.Vector2;
 
 import javax.microedition.khronos.opengles.GL11;
@@ -45,6 +46,7 @@ public class CannonShell extends Entity
 		shape.setKineticFriction(0);
         shape.setStaticFriction(0);
 		
+        this.tex = TextureManager.getTexture("tilesetentities");
 		this.tilesetX = 2;
 		this.tilesetY = 0;
 	}

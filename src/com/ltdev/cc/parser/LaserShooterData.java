@@ -57,8 +57,6 @@ public class LaserShooterData extends EntityData
     public void createInst(ArrayList<Entity> entData)
     {
         laserShooterRef = new LaserShooter(size, new Vector2(xPos, yPos), angle, stupidity, beamWidth, shotsPerSecond, null, null);
-       
-        laserShooterRef.setTexture(tex);
         
         entData.add(laserShooterRef);
         ent = laserShooterRef;

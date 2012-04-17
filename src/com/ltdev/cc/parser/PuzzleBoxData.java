@@ -41,8 +41,6 @@ public class PuzzleBoxData extends EntityData
 	{
 		puzzleBoxRef = new PuzzleBox(size, new Vector2(xPos, yPos));
 
-		puzzleBoxRef.setTexture(tex);
-		
 		entData.add(puzzleBoxRef);
 		ent = puzzleBoxRef;
 	}

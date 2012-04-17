@@ -52,15 +52,15 @@ public class SpikeWallData extends EntityData
             else if (dirName.equals("DOWN"))
                 dir = Direction.DOWN;
         }
+        else
+            dir = Direction.LEFT;
     }
     
     public void createInst(ArrayList<Entity> entData)
     {
         spikeWallRef = new SpikeWall(size, new Vector2(xPos, yPos), dir);
         spikeWallRef.setAngle(angle);
-
-        spikeWallRef.setTexture(tex);
-        
+     
         entData.add(spikeWallRef);
         ent = spikeWallRef;
     }

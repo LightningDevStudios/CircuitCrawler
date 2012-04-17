@@ -53,8 +53,6 @@ public class CannonData extends EntityData
 	{
 		cannonRef = new Cannon(size, new Vector2(xPos, yPos), angle, stupidity, shotVelocity, null);
 		
-		cannonRef.setTexture(tex);
-		
 		entData.add(cannonRef);
 		ent = cannonRef;
 	}

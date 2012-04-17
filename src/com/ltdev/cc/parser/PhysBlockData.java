@@ -42,8 +42,6 @@ public class PhysBlockData extends HoldObjectData
 		physBlockRef = new Block(size, new Vector2(xPos, yPos));
 		physBlockRef.setAngle(angle);
 
-		physBlockRef.setTexture(tex);
-		
 		entData.add(physBlockRef);
 		ent = physBlockRef;
 	}

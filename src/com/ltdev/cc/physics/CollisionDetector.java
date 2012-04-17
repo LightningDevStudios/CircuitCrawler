@@ -361,26 +361,12 @@ public class CollisionDetector
         if (a == b)
             return false;
 
-        //TODO check a and b with "instanceof" once and store the Types.
         if (a instanceof Circle && b instanceof Circle)
             return radiusCheckCircles(c);
         else if (!radiusCheck(a, b))
                 return false;
-        
-        /*if (a instanceof Rectangle)
-        {
-            if (b instanceof Circle)
-                return SATRectangleCircle(c, true);
-            else if (b instanceof Rectangle)
-                return SATRectangles(c);
-        }
-        else if (b instanceof Circle && b instanceof Rectangle)
-        {
-            return SATRectangleCircle(c, false);
-        }*/
+
         return sat(c);
-    
-        //return false;
     }
 
     /**

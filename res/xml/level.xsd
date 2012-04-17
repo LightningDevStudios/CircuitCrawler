@@ -69,38 +69,13 @@
 
   <xs:complexType name="EntityInfo">
     <xs:sequence>
-      <xs:element name="id" type="stringType" />
-			<xs:element name="size" type="floatType" />
-      <xs:element name="xPos" type="floatType" />
-      <xs:element name="yPos" type="floatType" />
-			<xs:element name="angle" type="floatType" minOccurs="0" />
-			<xs:element name="xScl" type="floatType" minOccurs="0" />
-			<xs:element name="yScl" type="floatType" minOccurs="0" />
-      <xs:element name="renderMode">
-        <xs:complexType>
-          <xs:sequence>
-            <xs:element name="color" type="stringType" minOccurs="0" />
-            <xs:element name="gradient" type="stringType" minOccurs="0" />
-            <xs:element name="texture" minOccurs="0">
-              <xs:complexType>
-                <xs:sequence>
-                  <xs:element name="texID" type="stringType"/>
-                  <xs:element name="coords" type="stringType" minOccurs="0" />
-                </xs:sequence>
-              </xs:complexType>
-            </xs:element>
-            <xs:element name="tileset" minOccurs="0" >
-              <xs:complexType>
-                <xs:sequence>
-                  <xs:element name="texID" type="stringType" />
-                  <xs:element name="x" type="intType" />
-                  <xs:element name="y" type="intType" />
-                </xs:sequence>
-              </xs:complexType>
-            </xs:element>
-          </xs:sequence>
-        </xs:complexType>
-      </xs:element>
+      	<xs:element name="id" type="stringType" />
+		<xs:element name="size" type="floatType" />
+      	<xs:element name="xPos" type="floatType" />
+      	<xs:element name="yPos" type="floatType" />
+		<xs:element name="angle" type="floatType" minOccurs="0" />
+		<xs:element name="xScl" type="floatType" minOccurs="0" />
+		<xs:element name="yScl" type="floatType" minOccurs="0" />
     </xs:sequence>
   </xs:complexType>
 
