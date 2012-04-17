@@ -23,8 +23,12 @@
 package com.ltdev.cc.entity;
 
 import com.ltdev.cc.SoundPlayer;
+import com.ltdev.cc.models.ButtonUpData;
 import com.ltdev.cc.physics.primitives.Circle;
+import com.ltdev.graphics.TextureManager;
 import com.ltdev.math.Vector2;
+
+import java.nio.*;
 
 import javax.microedition.khronos.opengles.GL11;
 
@@ -46,6 +50,60 @@ public class Button extends Entity
 		
 		this.tilesetX = 0;
 		this.tilesetY = 0;
+	}
+	
+	@Override
+	public void draw(GL11 gl)
+	{
+	    //convert local space to world space.
+        gl.glMultMatrixf(shape.getModel().array(), 0);
+        
+        //TODO temorary while we don't have the rest of the art
+        gl.glEnableClientState(GL11.GL_NORMAL_ARRAY);
+        //gl.glEnable(GL11.GL_LIGHTING);
+        //gl.glEnable(GL11.GL_LIGHT0);
+        
+        //bind the texture and set the color.
+        gl.glBindTexture(GL11.GL_TEXTURE_2D, tex.getTexture());
+        gl.glColor4f(colorVec.x(), colorVec.y(), colorVec.z(), colorVec.w());
+
+        //bind the VBO and set up the vertex and tex coord pointers.
+        gl.glBindBuffer(GL11.GL_ARRAY_BUFFER, vbo);
+        gl.glVertexPointer(3, GL11.GL_FLOAT, 32, 0);
+        gl.glTexCoordPointer(2, GL11.GL_FLOAT, 32, 12);
+        gl.glNormalPointer(GL11.GL_FLOAT, 32, 20);
+        gl.glBindBuffer(GL11.GL_ARRAY_BUFFER, 0);
+        
+        //TODO also temporary
+        //gl.glDisable(GL11.GL_LIGHT0);
+        //gl.glDisable(GL11.GL_LIGHTING);
+        gl.glDisableClientState(GL11.GL_NORMAL_ARRAY);
+
+        //draw the entity.
+        gl.glDrawArrays(GL11.GL_TRIANGLES, 0, ButtonUpData.vertices.length / 8);
+	}
+	
+	@Override
+	public void initialize(GL11 gl)
+	{
+	    //TODO make this hold only one instance of the model instead of one per model.
+	    ByteBuffer byteBuf = ByteBuffer.allocateDirect(ButtonUpData.vertices.length * 4);
+        byteBuf.order(ByteOrder.nativeOrder());
+        FloatBuffer buffer = byteBuf.asFloatBuffer();
+        buffer.put(ButtonUpData.vertices);
+        buffer.position(0);
+        
+        //generate a VBO.
+        int[] tempPtr = new int[1];
+        gl.glGenBuffers(1, tempPtr, 0);
+        vbo = tempPtr[0];
+        
+        //send data to GPU.
+        gl.glBindBuffer(GL11.GL_ARRAY_BUFFER, vbo);
+        gl.glBufferData(GL11.GL_ARRAY_BUFFER, ButtonUpData.vertices.length * 4, buffer, GL11.GL_STATIC_DRAW);
+        gl.glBindBuffer(GL11.GL_ARRAY_BUFFER, 0);
+        
+        this.tex = TextureManager.getTexture("buttonup");
 	}
 	
 	@Override

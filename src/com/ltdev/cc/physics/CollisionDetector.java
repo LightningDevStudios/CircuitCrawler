@@ -391,9 +391,21 @@ public class CollisionDetector
      */
     public static boolean radiusCheck(Shape a, Shape b)
     {
+        return radiusCheck(a, b, 0);
+    }
+    
+    /**
+     * Runs a simple radius check to see if two shapes are within a distance from each other, approximately.
+     * @param a The first shape.
+     * @param b The second shape.
+     * @param distance The distance to check between a and b.
+     * @return A value indicating whether the two shapes are within a distance from each other.
+     */
+    public static boolean radiusCheck(Shape a, Shape b, float distance)
+    {
         float diagonalA = Vector2.subtract(a.getPos(), a.getWorldVertices()[0]).length();
         float diagonalB = Vector2.subtract(b.getPos(), b.getWorldVertices()[0]).length();
-        return Vector2.subtract(a.getPos(), b.getPos()).length() < (float)(diagonalA + diagonalB);
+        return Vector2.subtract(a.getPos(), b.getPos()).length() < (float)(diagonalA + diagonalB + distance);
     }
 
     /**
