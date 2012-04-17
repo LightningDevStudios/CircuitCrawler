@@ -197,29 +197,9 @@ public class Parser
 		
 		while (!(xrp.getEventType() == END_TAG && xrp.getName().equalsIgnoreCase(tn))) 
 		{
-			if (xrp.getEventType() == START_TAG && xrp.getName().equalsIgnoreCase("renderMode"))
-			{
-				parseObj("renderMode");
-				xrp.next();
-			}
-			else if (xrp.getEventType() == START_TAG && xrp.getName().equalsIgnoreCase("tileset"))
-			{
-				dataHM.put("tileset", "0");
-				parseObj("tileset");
-				xrp.next();
-			}
-			else if (xrp.getEventType() == START_TAG && xrp.getName().equalsIgnoreCase("texture"))
-			{
-				dataHM.put("texture", "0");
-				parseObj("texture");
-				xrp.next();
-			}
-			else
-			{
-				parseTag(dataHM);			
-				xrp.next(); 
-				xrp.next();
-			}
+			parseTag(dataHM);			
+			xrp.next(); 
+			xrp.next();
 		}
 	}
 

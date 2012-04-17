@@ -42,8 +42,6 @@ public class PlayerData extends EntityData
 	{
 		playerRef = new Player(new Vector2(xPos, yPos), angle);
 
-		playerRef.setTexture(tex);
-		
 		entData.add(playerRef);
 		ent = playerRef;
 	}

@@ -25,6 +25,7 @@ package com.ltdev.cc.entity;
 import com.ltdev.Direction;
 import com.ltdev.Stopwatch;
 import com.ltdev.cc.physics.primitives.Rectangle;
+import com.ltdev.graphics.TextureManager;
 import com.ltdev.math.Vector2;
 
 import javax.microedition.khronos.opengles.GL11;
@@ -62,8 +63,20 @@ public class Door extends Entity
         open = false;
         targetPos = Vector2.ZERO;
         openedPosition = position;
-        closedPosition = new Vector2(openedPosition.x() - 72, openedPosition.y());
         
+        switch (dir)
+        {
+            case LEFT:
+                closedPosition = new Vector2(openedPosition.x() - size, openedPosition.y());
+            case RIGHT:
+                closedPosition = new Vector2(openedPosition.x() + size, openedPosition.y());
+            case DOWN:
+                closedPosition = new Vector2(openedPosition.x(), openedPosition.y() - size);
+            case UP:
+                closedPosition = new Vector2(openedPosition.x(), openedPosition.y() + size);
+        }
+        
+        tex = TextureManager.getTexture("tilesetentities");
         this.tilesetX = 2;
         this.tilesetY = 1;
     }

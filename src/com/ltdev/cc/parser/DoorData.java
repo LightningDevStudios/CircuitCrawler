@@ -41,15 +41,14 @@ public class DoorData extends EntityData
 		super(doorHM);
 		
 		String dirName = doorHM.get("dir");
+		dir = Direction.LEFT;
 		if (dirName != null)
 		{
-		    if (dirName == "LEFT")
-		        dir = Direction.LEFT;
-		    else if (dirName == "RIGHT")
+		    if (dirName.equals("RIGHT"))
 		        dir = Direction.RIGHT;
-		    else if (dirName == "UP")
+		    else if (dirName.equals("UP"))
                 dir = Direction.UP;
-		    else if (dirName == "DOWN")
+		    else if (dirName.equals("DOWN"))
                 dir = Direction.DOWN;
 		}
 	}
@@ -59,8 +58,6 @@ public class DoorData extends EntityData
 		doorRef = new Door(size, new Vector2(xPos, yPos), dir);
 		doorRef.setAngle(angle);
 
-		doorRef.setTexture(tex);
-		
 		entData.add(doorRef);
 		ent = doorRef;
 	}

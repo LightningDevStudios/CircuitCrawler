@@ -48,6 +48,7 @@ public class Button extends Entity
 	{
 		super(new Circle(69, position, false));
 		
+		this.tex = TextureManager.getTexture("tilesetentities");
 		this.tilesetX = 0;
 		this.tilesetY = 0;
 	}

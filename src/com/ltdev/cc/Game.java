@@ -191,7 +191,7 @@ public class Game
 	   
 	    //LaserShooter LAZOR = new LaserShooter(Vector2.add(player.getPos(), new Vector2(-72, 0)), 40, 0, 20, 5, 1, player, world);
 	    //LAZOR.setTexture(tilesetentities);
-	    //EntityManager.addEntity(LAZOR); 
+	    //EntityManager.addEntity(LAZOR);  
 	    
 		updateCameraPosition();
 		

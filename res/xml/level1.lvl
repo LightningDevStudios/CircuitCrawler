@@ -77,13 +77,6 @@
       <angle>90</angle>
       <xScl>1</xScl>
       <yScl>1</yScl>
-      <renderMode>
-        <tileset>
-          <texID>tilesetentities</texID>
-          <x>0</x>
-          <y>0</y>
-        </tileset>
-      </renderMode>
     </Button>
     <Button>
       <id>rightButton</id>
@@ -93,13 +86,6 @@
       <angle>90</angle>
       <xScl>1</xScl>
       <yScl>1</yScl>
-      <renderMode>
-        <tileset>
-          <texID>tilesetentities</texID>
-          <x>0</x>
-          <y>0</y>
-        </tileset>
-      </renderMode>
     </Button>
     <Door>
       <id>door0</id>
@@ -110,33 +96,7 @@
       <xScl>0.5</xScl>
       <yScl>1</yScl>
       <dir>LEFT</dir>
-      <renderMode>
-        <tileset>
-          <texID>tilesetentities</texID>
-          <x>2</x>
-          <y>1</y>
-        </tileset>
-      </renderMode>
     </Door>
- 
-   <SpikeWall>
-      <id>wall0</id>
-      <size>60</size>
-      <xPos>-36</xPos>
-      <yPos>80</yPos>
-      <angle>90</angle>
-      <xScl>0.5</xScl>
-      <yScl>1</yScl>
-      <dir>LEFT</dir>
-      <renderMode>
-        <tileset>
-          <texID>tilesetentities</texID>
-          <x>3</x>
-          <y>1</y>
-        </tileset>
-      </renderMode>
-    </SpikeWall>
-    
     <PhysBlock>
       <id>physBlock0</id>
       <size>50</size>
@@ -145,13 +105,6 @@
       <angle>90</angle>
       <xScl>1</xScl>
       <yScl>1</yScl>
-      <renderMode>
-        <tileset>
-          <texID>tilesetentities</texID>
-          <x>3</x>
-          <y>0</y>
-        </tileset>
-      </renderMode>
       <friction>0</friction>
     </PhysBlock>
     <PhysBall>
@@ -162,13 +115,6 @@
       <angle>90</angle>
       <xScl>1</xScl>
       <yScl>1</yScl>
-      <renderMode>
-        <tileset>
-          <texID>tilesetentities</texID>
-          <x>2</x>
-          <y>0</y>
-        </tileset>
-      </renderMode>
       <friction>0</friction>
     </PhysBall>
     <Player>
@@ -179,15 +125,9 @@
       <angle>90</angle>
       <xScl>1</xScl>
       <yScl>1</yScl>
-      <renderMode>
-        <tileset>
-          <texID>tilesetentities</texID>
-          <x>0</x>
-          <y>2</y>
-        </tileset>
-      </renderMode>
     </Player>
-  </Entities>
+ </Entities>
+ 
   <Triggers>
     <Cause id="rightCause" type="CauseButton">rightButton</Cause>
     <Cause id="leftCause" type="CauseButton">leftButton</Cause>

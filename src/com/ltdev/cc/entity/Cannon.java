@@ -64,6 +64,7 @@ public class Cannon extends Entity
         target = t;
         shells = new ArrayList<CannonShell>();
         
+        this.tex = TextureManager.getTexture("tilesetentities");
         this.tilesetX = 3;
         this.tilesetY = 0;
     }

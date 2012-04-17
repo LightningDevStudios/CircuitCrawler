@@ -66,6 +66,7 @@ public class LaserShooter extends Entity
         this.beamWidth = beamWidth;
         this.physWorld = physWorld;
         
+        this.tex = TextureManager.getTexture("tilesetentities");
         this.tilesetX = 3;
         this.tilesetY = 0;
         

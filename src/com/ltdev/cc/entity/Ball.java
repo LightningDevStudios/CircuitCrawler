@@ -23,6 +23,7 @@
 package com.ltdev.cc.entity;
 
 import com.ltdev.cc.physics.primitives.Circle;
+import com.ltdev.graphics.TextureManager;
 import com.ltdev.math.Vector2;
 
 /**
@@ -39,6 +40,7 @@ public class Ball extends HoldObject
 	public Ball(float size, Vector2 position)
 	{
 		super(new Circle(size, position, true));
+		this.tex = TextureManager.getTexture("tilesetentities");
 		this.tilesetX = 2;
 		this.tilesetY = 0;
 	}

@@ -42,8 +42,6 @@ public class TeleporterData extends EntityData
 	{
 		teleporterRef = new Teleporter(size, new Vector2(xPos, yPos));
 
-		teleporterRef.setTexture(tex);
-		
 		entData.add(teleporterRef);
 		ent = teleporterRef;
 	}

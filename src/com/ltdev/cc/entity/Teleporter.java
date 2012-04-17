@@ -24,6 +24,7 @@ package com.ltdev.cc.entity;
 
 import com.ltdev.cc.SoundPlayer;
 import com.ltdev.cc.physics.primitives.Circle;
+import com.ltdev.graphics.TextureManager;
 import com.ltdev.math.Vector2;
 
 import javax.microedition.khronos.opengles.GL11;
@@ -39,6 +40,7 @@ public class Teleporter extends Entity
         super(new Circle(size, position, false));
         active = true;
         
+        this.tex = TextureManager.getTexture("tilesetentities");
         this.tilesetX = 2;
         this.tilesetY = 2;
         
