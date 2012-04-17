@@ -68,12 +68,16 @@ public class Door extends Entity
         {
             case LEFT:
                 closedPosition = new Vector2(openedPosition.x() - size, openedPosition.y());
+                break;
             case RIGHT:
                 closedPosition = new Vector2(openedPosition.x() + size, openedPosition.y());
+                break;
             case DOWN:
                 closedPosition = new Vector2(openedPosition.x(), openedPosition.y() - size);
+                break;
             case UP:
                 closedPosition = new Vector2(openedPosition.x(), openedPosition.y() + size);
+                break;
         }
         
         tex = TextureManager.getTexture("tilesetentities");
