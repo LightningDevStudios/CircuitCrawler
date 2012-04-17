@@ -183,15 +183,19 @@ public class Game
 	    
 	    /*SpikeWall s = new SpikeWall(70, Vector2.add(player.getPos(), new Vector2(72 * 3 + 40, 0)), Direction.LEFT);
 	    s.setTexture(TextureManager.getTexture("tilesetentities"));
-	    EntityManager.addEntity(s);
+	    EntityManager.addEntity(s);*/
 
 	    Cannon c = new Cannon(40,  Vector2.add(player.getPos(), new Vector2(-72, 0)), 0, 20, 500000, player);
 	    c.setTexture(TextureManager.getTexture("tilesetentities"));
-	    EntityManager.addEntity(c);*/
+	    EntityManager.addEntity(c);
 	   
 	    //LaserShooter LAZOR = new LaserShooter(Vector2.add(player.getPos(), new Vector2(-72, 0)), 40, 0, 20, 5, 1, player, world);
 	    //LAZOR.setTexture(tilesetentities);
 	    //EntityManager.addEntity(LAZOR);  
+	    
+	    BreakableDoor door = new BreakableDoor(Vector2.add(player.getPos(), new Vector2(72, 0)), 5);
+	    door.setTexture(TextureManager.getTexture("tilesetentities"));
+	    EntityManager.addEntity(door); 
 	    
 		updateCameraPosition();
 		
