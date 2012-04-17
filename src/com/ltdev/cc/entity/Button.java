@@ -95,13 +95,15 @@ public class Button extends Entity
 	    super.interact(ent);
 	    
 		if (ent instanceof Player || ent instanceof HoldObject)
-			activate();
+		    if(!active)
+		        activate();
 	}
 	
 	@Override
 	public void uninteract(Entity ent)
 	{
 		if (ent instanceof Player || ent instanceof HoldObject)
-			deactivate();	
+		    if(active)
+		        deactivate();	
 	}
 }
