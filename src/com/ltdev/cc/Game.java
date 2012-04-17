@@ -147,10 +147,10 @@ public class Game
 		uiList.add(joypad);
 		
 		//TODO camera class
-		worldMinX = (-Tile.TILE_SIZE_F * ((float)tileset[0].length / 2f));
-		worldMinY = (-Tile.TILE_SIZE_F * ((float)tileset.length / 2f));
-		worldMaxX = (Tile.TILE_SIZE_F * ((float)tileset[0].length / 2f));
-		worldMaxY = (Tile.TILE_SIZE_F * ((float)tileset.length / 2f));
+		worldMinX = -Tile.TILE_SIZE_F * (float)tileset[0].length / 2f;
+		worldMinY = -Tile.TILE_SIZE_F * (float)tileset.length / 2f;
+		worldMaxX = Tile.TILE_SIZE_F * (float)tileset[0].length / 2f;
+		worldMaxY = Tile.TILE_SIZE_F * (float)tileset.length / 2f;
 		
 		Vector2 worldSize = new Vector2(Tile.TILE_SIZE_F * tileset[0].length, Tile.TILE_SIZE_F * tileset.length);
 		
@@ -519,35 +519,43 @@ public class Game
 	    return uiList;
 	}
 
-    public UIButton getBtnB() {
+    public UIButton getBtnB()
+    {
         return btnB;
     }
 
-    public void setBtnB(UIButton btnB) {
+    public void setBtnB(UIButton btnB)
+    {
         this.btnB = btnB;
     }
 
-    public World getWorld() {
+    public World getWorld()
+    {
         return world;
     }
 
-    public void setWorld(World world) {
+    public void setWorld(World world)
+    {
         this.world = world;
     }
 
-    public Player getPlayer() {
+    public Player getPlayer()
+    {
         return player;
     }
 
-    public void setPlayer(Player player) {
+    public void setPlayer(Player player)
+    {
         this.player = player;
     }
 
-    public ArrayList<Entity> getEntities() {
+    public ArrayList<Entity> getEntities()
+    {
         return entities;
     }
 
-    public void setEntities(ArrayList<Entity> entities) {
+    public void setEntities(ArrayList<Entity> entities)
+    {
         this.entities = entities;
     }
 }
