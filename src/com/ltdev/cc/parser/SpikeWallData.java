@@ -43,13 +43,13 @@ public class SpikeWallData extends EntityData
         String dirName = spikeWallHM.get("dir");
         if (dirName != null)
         {
-            if (dirName == "LEFT")
+            if (dirName.equals("LEFT"))
                 dir = Direction.LEFT;
-            else if (dirName == "RIGHT")
+            else if (dirName.equals("RIGHT"))
                 dir = Direction.RIGHT;
-            else if (dirName == "UP")
+            else if (dirName.equals("UP"))
                 dir = Direction.UP;
-            else if (dirName == "DOWN")
+            else if (dirName.equals("DOWN"))
                 dir = Direction.DOWN;
         }
     }
