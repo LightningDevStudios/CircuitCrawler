@@ -158,9 +158,9 @@ public class LevelRenderer implements com.ltdev.LevelSurfaceView.Renderer
 		    {
 		        if((game.getEntities().get(i) instanceof Ball) || (game.getEntities().get(i) instanceof Block))
 		        {	              
-        	        if (CollisionDetector.radiusCheck(game.getPlayer().getShape(), game.getEntities().get(i).getShape(), 60))
+        	        if (CollisionDetector.radiusCheck(game.getPlayer().getShape(), game.getEntities().get(i).getShape(), 100))
                     {
-        	            if (CollisionDetector.radiusCheck(game.getPlayer().getShape(), game.getEntities().get(i).getShape(), 10))
+        	            if (CollisionDetector.radiusCheck(game.getPlayer().getShape(), game.getEntities().get(i).getShape(), 1))
         	                game.getEntities().get(i).getShape().addImpulse(Vector2.scale(Vector2.subtract(game.getEntities().get(i).getShape().getPos(), game.getPlayer().getShape().getPos()), 800));
         	            else
         	                game.getEntities().get(i).getShape().addImpulse(Vector2.scale(Vector2.subtract(game.getEntities().get(i).getShape().getPos(), game.getPlayer().getShape().getPos()), -800));
