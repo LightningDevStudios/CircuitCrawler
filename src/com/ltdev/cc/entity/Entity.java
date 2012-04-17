@@ -147,10 +147,13 @@ public abstract class Entity implements InteractListener
         buffer.put(verts);
         buffer.position(0);
 	    
-        //generate a VBO.
-	    int[] tempPtr = new int[1];
-        gl.glGenBuffers(1, tempPtr, 0);
-        vbo = tempPtr[0];
+        //generate a VBO if one doesn't exist.
+        if (vbo == 0)
+        {
+    	    int[] tempPtr = new int[1];
+            gl.glGenBuffers(1, tempPtr, 0);
+            vbo = tempPtr[0];
+        }
         
         //send data to GPU.
         gl.glBindBuffer(GL11.GL_ARRAY_BUFFER, vbo);
@@ -210,10 +213,13 @@ public abstract class Entity implements InteractListener
 	 */
     public void unload(GL11 gl)
     {
-        int[] buffer = new int[1];
-        buffer[0] = vbo;
-        
-        gl.glDeleteBuffers(1, buffer, 0);
+        if (vbo != 0)
+        {
+            int[] buffer = new int[1];
+            buffer[0] = vbo;
+            
+            gl.glDeleteBuffers(1, buffer, 0);
+        }
     }
 	
 	/**************************
