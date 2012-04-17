@@ -26,6 +26,7 @@ import com.ltdev.Direction;
 import com.ltdev.EntityManager;
 import com.ltdev.Stopwatch;
 import com.ltdev.cc.physics.primitives.Rectangle;
+import com.ltdev.graphics.TextureManager;
 import com.ltdev.math.Vector2;
 import com.ltdev.math.Vector4;
 
@@ -41,6 +42,7 @@ public class BreakableDoor extends Entity
     private Vector2 targetPos;
     private Vector2 openedPosition, closedPosition;
     private int hitCount, hitsLeft;
+    private boolean bool;
     /**
      * Initializes a new instance of the Door class.
      * @param position The door's position.
@@ -62,14 +64,21 @@ public class BreakableDoor extends Entity
         colorInterpSpeed = 1.0f;
         hitCount = hitsLeft = maxHits;
         
-        this.tilesetX = 2;
-        this.tilesetY = 1;
+        tex = TextureManager.getTexture("tilesetentities");
+        tilesetX = 0;
+        tilesetY = 0;
     }
 
     @Override
     public void update(GL11 gl)
     {
         super.update(gl);
+        
+        if(bool)
+        {
+            initialize(gl);
+            bool = false;
+        }
     }
     
     /**
@@ -85,9 +94,8 @@ public class BreakableDoor extends Entity
         }
         else
         {
-            float percent = 1 / (float)hitCount;
-            Vector4 vec = new Vector4(percent, percent, percent, 1);
-            Vector4.subtract(this.colorVec, vec);
+            tilesetY++;
+            bool = true;
         }
     }
 }

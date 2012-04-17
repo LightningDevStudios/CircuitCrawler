@@ -110,8 +110,9 @@ public class World
         if (paused)
             return;
         
-        //if (frameTime > 1)
-            //return;
+        //Maximum integration rate.
+        if (frameTime > 0.05f) // 0.05 = 20FPS
+            frameTime = 0.05f;
 
         //Check for shapes
         if (shapes.size() < 1)
