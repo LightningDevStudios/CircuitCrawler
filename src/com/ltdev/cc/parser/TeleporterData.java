@@ -29,7 +29,7 @@ import com.ltdev.math.Vector2;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class TeleporterData extends StaticEntData
+public class TeleporterData extends EntityData
 {
 	private Teleporter teleporterRef;
 	

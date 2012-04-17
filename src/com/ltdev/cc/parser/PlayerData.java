@@ -29,7 +29,7 @@ import com.ltdev.math.Vector2;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class PlayerData extends CharacterData
+public class PlayerData extends EntityData
 {
 	private Player playerRef;
 	

@@ -51,10 +51,8 @@ public class Parser
 	public ArrayList<EntityData> parsedList;
 	public ArrayList<Entity> entList;
 	public ArrayList<Trigger> triggerList;
-	public ArrayList<Node> nodeList;
 	public ArrayList<CauseData> causeDataList;
 	public ArrayList<EffectData> effectDataList;
-	public ArrayList<NodePath> nodePathList;
 	
 	public Tile[][] tileset;
 	public Player player;
@@ -69,10 +67,8 @@ public class Parser
 		parsedList = new ArrayList<EntityData>();
 		entList = new ArrayList<Entity>();
 		triggerList = new ArrayList<Trigger>();
-		nodeList = new ArrayList<Node>();
 		causeDataList = new ArrayList<CauseData>();
 		effectDataList = new ArrayList<EffectData>();
-		nodePathList = new ArrayList<NodePath>();
 	}
 
 	public void parseLevel(GL11 gl) throws XmlPullParserException, IOException
@@ -87,10 +83,6 @@ public class Parser
 					parseTileset(gl);
 				else if (xrp.getName().equalsIgnoreCase("Triggers"))
 					parseTriggers();
-				else if (xrp.getName().equalsIgnoreCase("Nodes"))
-					parseNodes();
-				else if (xrp.getName().equalsIgnoreCase("NodeLinks"))
-					parseNodeLinks();
 				else if (xrp.getName().equalsIgnoreCase("TeleporterLinker"))
 					parseTeleporterLinker();
 					
@@ -154,7 +146,6 @@ public class Parser
 					pd.createInst(tempPlayerList);
 					player = (Player)tempPlayerList.get(0);
 				}
-				
 				else if (xrp.getName().equalsIgnoreCase("Cannon"))
 				{
 					parseObj("Cannon");
@@ -162,6 +153,20 @@ public class Parser
 					parsedList.add(cd);
 					cd.createInst(entList);
 				}
+				else if (xrp.getName().equalsIgnoreCase("LaserShooter"))
+                {
+                    parseObj("LaserShooter");
+                    LaserShooterData lsd = new LaserShooterData(dataHM);
+                    parsedList.add(lsd);
+                    lsd.createInst(entList);
+                }
+				else if (xrp.getName().equalsIgnoreCase("SpikeWall"))
+                {
+                    parseObj("SpikeWall");
+                    SpikeWallData swd = new SpikeWallData(dataHM);
+                    parsedList.add(swd);
+                    swd.createInst(entList);
+                }
 			}
 		}
 	}
@@ -188,7 +193,6 @@ public class Parser
 
 	public void parseObj(String tn) throws XmlPullParserException, IOException
 	{		
-		
 		xrp.next();
 		
 		while (!(xrp.getEventType() == END_TAG && xrp.getName().equalsIgnoreCase(tn))) 
@@ -425,60 +429,6 @@ public class Parser
 			}
 		}
 		return null;
-	}
-
-	public void parseNodes() throws XmlPullParserException, IOException
-	{
-		xrp.next();
-		String[] nodes = (xrp.getText()).split(";");
-		
-		for (String node : nodes)
-		{
-			String[] temp = node.split(",");
-			nodeList.add(new Node(Float.parseFloat(temp[0]), Float.parseFloat(temp[1])));
-		}
-		
-		xrp.next();
-		xrp.next();
-	}
-	
-	public void parseNodeLinks() throws XmlPullParserException, IOException
-	{
-		xrp.next();
-		String[] nodeLinks = (xrp.getText()).split(";");
-		
-		for (String nodeLink : nodeLinks)
-		{
-			String[] temp = nodeLink.split(",");
-			if (temp.length == 2)
-				nodeList.get(Integer.parseInt(temp[0])).addNodeLink(nodeList.get(Integer.parseInt(temp[1])));
-			else if (temp.length == 3)
-				nodeList.get(Integer.parseInt(temp[0])).addNodeLink(nodeList.get(Integer.parseInt(temp[1])), Boolean.parseBoolean(temp[3]));
-		}
-		
-		xrp.next();
-		xrp.next();
-	}
-	
-	public void parseNodePaths() throws XmlPullParserException, IOException
-	{
-		xrp.next();
-		String[] nodePaths = (xrp.getText()).split(";");
-		
-		for (String nodePath : nodePaths)
-		{
-			NodePath np = new NodePath();
-			String[] values = nodePath.split(",");
-			np.setID(values[0]);
-			for (int i = 1; i < values.length; i++)
-			{
-				np.add(nodeList.get(Integer.parseInt(values[i])));
-			}
-			nodePathList.add(np);
-		}
-		
-		xrp.next();
-		xrp.next();
 	}
 
 	private void parseTeleporterLinker() throws XmlPullParserException, IOException //lol

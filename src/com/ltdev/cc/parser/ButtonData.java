@@ -29,7 +29,7 @@ import com.ltdev.math.Vector2;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class ButtonData extends StaticEntData
+public class ButtonData extends EntityData
 {
 	private Button buttonRef;
 	

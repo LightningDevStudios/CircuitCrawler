@@ -24,7 +24,7 @@ package com.ltdev.cc.parser;
 
 import java.util.HashMap;
 
-public class HoldObjectData extends PhysEntData
+public class HoldObjectData extends EntityData
 {
 	public HoldObjectData(HashMap<String, String> holdObjectHM)
 	{

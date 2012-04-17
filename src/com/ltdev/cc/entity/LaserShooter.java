@@ -54,7 +54,7 @@ public class LaserShooter extends Entity
      * @param player A reference to the player.
      * @param physWorld The physics world.
      */
-    public LaserShooter(Vector2 position, float size, float angle, float stupidity, float beamWidth, float shotsPerSecond, Player player, World physWorld)
+    public LaserShooter(float size, Vector2 position, float angle, float stupidity, float beamWidth, float shotsPerSecond, Player player, World physWorld)
     {
         super(new Rectangle(new Vector2(size, size), position, angle, true));
         
@@ -106,5 +106,10 @@ public class LaserShooter extends Entity
                 EntityManager.addEntity(laser);
             }
         }
+    }
+    
+    public void setWorld(World physWorld)
+    {
+        this.physWorld = physWorld;
     }
 }

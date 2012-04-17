@@ -29,21 +29,21 @@ import com.ltdev.math.Vector2;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class CannonData extends StaticEntData
+public class CannonData extends EntityData
 {
-	private float speed;
-	private int time;
+	private float stupidity;
+	private float shotVelocity;
 	private Cannon cannonRef;
 	
 	public CannonData(HashMap<String, String> cannonHM)
 	{
 		super(cannonHM);
 		
-		if (cannonHM.get("speed") != null)
-			speed = Float.parseFloat(cannonHM.get("speed"));
+		if (cannonHM.get("stupidity") != null)
+			stupidity = Float.parseFloat(cannonHM.get("stupidity"));
 		
-		if (cannonHM.get("time") != null)
-			time = Integer.parseInt(cannonHM.get("time"));
+		if (cannonHM.get("shotVelocity") != null)
+			shotVelocity = Integer.parseInt(cannonHM.get("shotVelocity"));
 	}
 	
 	/**
@@ -51,7 +51,7 @@ public class CannonData extends StaticEntData
 	 */
 	public void createInst(ArrayList<Entity> entData)
 	{
-		cannonRef = new Cannon(size, new Vector2(xPos, yPos), angle, speed, time, null);
+		cannonRef = new Cannon(size, new Vector2(xPos, yPos), angle, stupidity, shotVelocity, null);
 		
 		cannonRef.setTexture(tex);
 		

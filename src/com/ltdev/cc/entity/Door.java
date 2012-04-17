@@ -22,6 +22,7 @@
 
 package com.ltdev.cc.entity;
 
+import com.ltdev.Direction;
 import com.ltdev.Stopwatch;
 import com.ltdev.cc.physics.primitives.Rectangle;
 import com.ltdev.math.Vector2;
@@ -42,9 +43,9 @@ public class Door extends Entity
      * Initializes a new instance of the Door class.
      * @param position The door's position.
      */
-	public Door(Vector2 position)
+	public Door(Vector2 position, Direction dir)
 	{
-	    this(72, position);
+	    this(72, position, dir);
 	}
 	
 	/**
@@ -52,7 +53,7 @@ public class Door extends Entity
 	 * @param size The door's size.
 	 * @param position The door's position.
 	 */
-	public Door(float size, Vector2 position)
+	public Door(float size, Vector2 position, Direction dir)
     {
         super(new Rectangle(new Vector2(size - 10, size), position, 0, true));
         shape.setStatic(true);

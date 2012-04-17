@@ -22,12 +22,46 @@
 
 package com.ltdev.cc.parser;
 
+import com.ltdev.Direction;
+import com.ltdev.cc.entity.SpikeWall;
+import com.ltdev.cc.entity.Entity;
+import com.ltdev.math.Vector2;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 
-public class StaticEntData extends EntityData
+public class SpikeWallData extends EntityData
 {
-	public StaticEntData(HashMap<String, String> staticEntHM)
-	{
-		super(staticEntHM);
-	}
+    private Direction dir;
+    
+    private SpikeWall spikeWallRef;
+    
+    public SpikeWallData(HashMap<String, String> spikeWallHM)
+    {
+        super(spikeWallHM);
+        
+        String dirName = spikeWallHM.get("dir");
+        if (dirName != null)
+        {
+            if (dirName == "LEFT")
+                dir = Direction.LEFT;
+            else if (dirName == "RIGHT")
+                dir = Direction.RIGHT;
+            else if (dirName == "UP")
+                dir = Direction.UP;
+            else if (dirName == "DOWN")
+                dir = Direction.DOWN;
+        }
+    }
+    
+    public void createInst(ArrayList<Entity> entData)
+    {
+        spikeWallRef = new SpikeWall(size, new Vector2(xPos, yPos), dir);
+        spikeWallRef.setAngle(angle);
+
+        spikeWallRef.setTexture(tex);
+        
+        entData.add(spikeWallRef);
+        ent = spikeWallRef;
+    }
 }

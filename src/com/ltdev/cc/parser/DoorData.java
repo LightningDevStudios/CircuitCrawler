@@ -22,6 +22,7 @@
 
 package com.ltdev.cc.parser;
 
+import com.ltdev.Direction;
 import com.ltdev.cc.entity.Door;
 import com.ltdev.cc.entity.Entity;
 import com.ltdev.math.Vector2;
@@ -29,18 +30,33 @@ import com.ltdev.math.Vector2;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class DoorData extends StaticEntData
+public class DoorData extends EntityData
 {
+    private Direction dir;
+    
 	private Door doorRef;
 	
 	public DoorData(HashMap<String, String> doorHM)
 	{
 		super(doorHM);
+		
+		String dirName = doorHM.get("dir");
+		if (dirName != null)
+		{
+		    if (dirName == "LEFT")
+		        dir = Direction.LEFT;
+		    else if (dirName == "RIGHT")
+		        dir = Direction.RIGHT;
+		    else if (dirName == "UP")
+                dir = Direction.UP;
+		    else if (dirName == "DOWN")
+                dir = Direction.DOWN;
+		}
 	}
 	
 	public void createInst(ArrayList<Entity> entData)
 	{
-		doorRef = new Door(size, new Vector2(xPos, yPos));
+		doorRef = new Door(size, new Vector2(xPos, yPos), dir);
 		doorRef.setAngle(angle);
 
 		doorRef.setTexture(tex);

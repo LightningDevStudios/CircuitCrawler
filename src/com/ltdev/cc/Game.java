@@ -175,6 +175,12 @@ public class Game
                 
 	    world = new World(worldSize, shapes);
 	    
+	    for (Entity ent : entities)
+	    {
+	        if (ent instanceof LaserShooter)
+	            ((LaserShooter)ent).setWorld(world);
+	    }
+	    
 	    /*SpikeWall s = new SpikeWall(70, Vector2.add(player.getPos(), new Vector2(72 * 3 + 40, 0)), Direction.LEFT);
 	    s.setTexture(TextureManager.getTexture("tilesetentities"));
 	    EntityManager.addEntity(s);
