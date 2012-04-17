@@ -80,17 +80,17 @@ public class Button extends Entity
         gl.glDisableClientState(GL11.GL_NORMAL_ARRAY);
 
         //draw the entity.
-        gl.glDrawArrays(GL11.GL_TRIANGLES, 0, ButtonUpData.vertices.length / 8);
+        gl.glDrawArrays(GL11.GL_TRIANGLES, 0, ButtonUpData.VERTEX_FLOAT_COUNT);
 	}
 	
 	@Override
 	public void initialize(GL11 gl)
 	{
 	    //TODO make this hold only one instance of the model instead of one per model.
-	    ByteBuffer byteBuf = ByteBuffer.allocateDirect(ButtonUpData.vertices.length * 4);
+	    ByteBuffer byteBuf = ByteBuffer.allocateDirect(ButtonUpData.VERTEX_BYTE_COUNT);
         byteBuf.order(ByteOrder.nativeOrder());
         FloatBuffer buffer = byteBuf.asFloatBuffer();
-        buffer.put(ButtonUpData.vertices);
+        buffer.put(ButtonUpData.VERTICES);
         buffer.position(0);
         
         //generate a VBO.
@@ -100,7 +100,7 @@ public class Button extends Entity
         
         //send data to GPU.
         gl.glBindBuffer(GL11.GL_ARRAY_BUFFER, vbo);
-        gl.glBufferData(GL11.GL_ARRAY_BUFFER, ButtonUpData.vertices.length * 4, buffer, GL11.GL_STATIC_DRAW);
+        gl.glBufferData(GL11.GL_ARRAY_BUFFER, ButtonUpData.VERTEX_BYTE_COUNT, buffer, GL11.GL_STATIC_DRAW);
         gl.glBindBuffer(GL11.GL_ARRAY_BUFFER, 0);
         
         this.tex = TextureManager.getTexture("buttonup");

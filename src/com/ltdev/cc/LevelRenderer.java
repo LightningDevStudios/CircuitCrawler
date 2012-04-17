@@ -27,11 +27,9 @@ import android.graphics.PointF;
 import android.view.MotionEvent;
 
 import com.ltdev.Stopwatch;
-import com.ltdev.Vibrator;
 import com.ltdev.cc.entity.*;
 import com.ltdev.cc.event.*;
 import com.ltdev.cc.physics.CollisionDetector;
-import com.ltdev.cc.physics.RaycastData;
 import com.ltdev.cc.ui.*;
 import com.ltdev.math.*;
 
