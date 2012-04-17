@@ -438,7 +438,7 @@ public class Game
                         final Control ent = uiList.get(i);
                         if (touchVec.x() >= ent.getPos().x() - ent.getSize().x() / 2 && touchVec.x() <= ent.getPos().x() + ent.getSize().x() / 2 && touchVec.y() >= ent.getPos().y() - ent.getSize().y() / 2 && touchVec.y() <= ent.getPos().y() + ent.getSize().y() / 2)
                         {
-                            final Finger newFinger = new Finger(touchVec, ent, e.getPointerId(fingerIndex));
+                            final Finger newFinger = new Finger(touchVec, ent, fingerIndex);
                             newFinger.onStackPush();
                             fingerList.add(newFinger);
                             onEnt = true;
@@ -447,7 +447,7 @@ public class Game
                     }
                     if (!onEnt)
                     {
-                        final Finger newFinger = new Finger(null, null, e.getPointerId(fingerIndex));
+                        final Finger newFinger = new Finger(null, null, fingerIndex);
                         fingerList.add(newFinger);
                     }
                     

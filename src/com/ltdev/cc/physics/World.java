@@ -110,8 +110,8 @@ public class World
         if (paused)
             return;
         
-        if (frameTime > 1)
-            return;
+        //if (frameTime > 1)
+            //return;
 
         //Check for shapes
         if (shapes.size() < 1)
