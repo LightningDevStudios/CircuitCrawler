@@ -74,8 +74,6 @@ public abstract class Entity implements InteractListener
 		
 		this.previousFrameColliders = new ArrayList<Entity>();
 		this.currentFrameColliders = new ArrayList<Entity>();
-		
-		System.out.println("TROL SAUCE. WHY YOU NO TROL WTH SAUCE");
 	}
 	
 	/**
