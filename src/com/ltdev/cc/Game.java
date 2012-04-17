@@ -193,7 +193,7 @@ public class Game
 	    //LAZOR.setTexture(tilesetentities);
 	    //EntityManager.addEntity(LAZOR);  
 	    
-	    BreakableDoor door = new BreakableDoor(Vector2.add(player.getPos(), new Vector2(72, 0)), 5);
+	    BreakableDoor door = new BreakableDoor(Vector2.add(player.getPos(), new Vector2(72, 0)), 3);
 	    door.setTexture(TextureManager.getTexture("tilesetentities"));
 	    EntityManager.addEntity(door); 
 	    
