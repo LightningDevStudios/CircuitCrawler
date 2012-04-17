@@ -82,7 +82,7 @@ public class Game
 		TextureManager.addTexture("tilesetworld", new Texture(R.raw.tilesetworld, 512, 256, 16, 8, context, gl));
 		TextureManager.addTexture("tilesetentities", new Texture(R.raw.tilesetentities, 256, 256, 8, 8, context, gl));
 		TextureManager.addTexture("baricons", new Texture(R.raw.baricons, 32, 16, 2, 1, context, gl));
-		
+		TextureManager.addTexture("buttonup", new Texture(R.raw.buttonup, 64, 64, 1, 1, context, gl));
 		TextureManager.addTexture("joystickout", new Texture(R.raw.joystickout, 64, 64, 1, 1, context, gl));
 		TextureManager.addTexture("joystickin", new Texture(R.raw.joystickin, 32, 32, 1, 1, context, gl));
 		TextureManager.addTexture("buttona", new Texture(R.raw.buttona, 32, 32, 1, 1, context, gl));
@@ -124,14 +124,14 @@ public class Game
 		//retreive data from parser
 		Tile[][] tileset = parser.tileset;
 		
-		getEntities().addAll(parser.entList);
+		entities.addAll(parser.entList);
 		triggerList.addAll(parser.triggerList);
 		
 		this.tileset = new Tileset(tileset, TextureManager.getTexture("tilesetworld"));
 		this.tileset.initialize(gl);
 		
 		setPlayer(parser.player);
-		getEntities().add(getPlayer());
+		entities.add(getPlayer());
 		
 		camPos = new PointF(getPlayer().getPos().x(), getPlayer().getPos().y());
 		
@@ -155,7 +155,7 @@ public class Game
 		Vector2 worldSize = new Vector2(Tile.TILE_SIZE_F * tileset[0].length, Tile.TILE_SIZE_F * tileset.length);
 		
 		ArrayList<Shape> shapes = new ArrayList<Shape>();
-        for (Entity ent : getEntities())
+        for (Entity ent : entities)
             shapes.add(ent.getShape());
 		
         //TODO optimize into larger rectangles
@@ -189,7 +189,7 @@ public class Game
 	    
 		updateCameraPosition();
 		
-		for (Entity ent : getEntities())
+		for (Entity ent : entities)
         {
             ent.initialize(gl);
         }
@@ -214,7 +214,7 @@ public class Game
 		maxY = camPos.y + (screenW / 2);
 		
 		ArrayList<Entity> renderList = new ArrayList<Entity>();
-		for (Entity ent : getEntities())
+		for (Entity ent : entities)
 		{
 			AABB bbox = new AABB(ent.getShape().getWorldVertices());
 			
@@ -354,9 +354,9 @@ public class Game
 	 */
 	public void updateEntities(GL11 gl)
 	{
-	    EntityManager.update(getEntities(), getWorld(), gl);
+	    EntityManager.update(entities, getWorld(), gl);
 	    
-	    for (Entity ent : getEntities())
+	    for (Entity ent : entities)
         {
             ent.update(gl);
         }
@@ -402,7 +402,7 @@ public class Game
 	 */
 	public void setPuzzleActivatedListener(PuzzleActivatedListener listener)
 	{
-	    for (Entity ent : getEntities())
+	    for (Entity ent : entities)
         {
             if (ent instanceof PuzzleBox)
             {

@@ -153,48 +153,6 @@ public class LevelRenderer implements com.ltdev.LevelSurfaceView.Renderer
 		game.updateEntities(gl);
 		game.updateFingers();
 		game.integratePhysics();
-		
-		//HACK: for the love of GOD move this out of LevelRenderer
-		//Iterates through all entities
-		//final int size = game.entities.size();
-		/*for (int i = 0; i < size; i++)
-		{
-			
-			//final Entity ent = game.entities.get(i);
-
-			//inside of ent for loop
-			//checks for whatever happens when B is pressed.
-			if (game.btnB.isPressed())
-			{
-				if (ent instanceof HoldObject)
-				{
-					if (!game.player.isHoldingObject()) //not holding anything and is close enough
-					{
-						if (CollisionDetector.radiusCheck(game.player.getShape(), ent.getShape()) && game.player.isFacing(ent))
-						{
-							game.player.holdObject((HoldObject)ent);
-							Vibrator.vibrate(context, 100);
-							game.btnB.unpress();
-						}
-					}
-					else //holding object, button pressed
-					{
-						game.player.dropObject();
-						Vibrator.vibrate(context, 100);
-						game.btnB.unpress();
-					}
-				}
-				else if (ent instanceof PuzzleBox)
-				{
-					if (CollisionDetector.radiusCheck(game.player.getShape(), ent.getShape()) && game.player.isFacing(ent))
-					{
-						((PuzzleBox)ent).run();
-						Vibrator.vibrate(context, 100);
-					}
-					game.btnB.unpress();
-				}
-			}
-		}*/
 				
 		if (game.getBtnB().isPressed())
         {
@@ -225,7 +183,7 @@ public class LevelRenderer implements com.ltdev.LevelSurfaceView.Renderer
         gl.glEnable(GL11.GL_LIGHTING);
         gl.glEnable(GL11.GL_LIGHT0);
 		
-        Vector2 angVec = Vector2.fromPolar(lightAngle, 100);
+        Vector2 angVec = Vector2.fromPolar(lightAngle, 200);
         lightPos = new Vector4(angVec.x(), angVec.y(), 3, 1);
         lightAngle += lightAngleSpeed * Stopwatch.getFrameTime() / 1000;
         lightAngle %= (float)Math.PI * 2;
@@ -240,8 +198,8 @@ public class LevelRenderer implements com.ltdev.LevelSurfaceView.Renderer
         game.renderTileset(gl);
         
         
-        gl.glDisable(GL11.GL_LIGHT0);
-        gl.glDisable(GL11.GL_LIGHTING);
+        //gl.glDisable(GL11.GL_LIGHT0);
+        //gl.glDisable(GL11.GL_LIGHTING);
         gl.glDisableClientState(GL11.GL_NORMAL_ARRAY);
         
 		for (Entity ent : game.getRenderedEnts())
