@@ -39,7 +39,7 @@ import javax.microedition.khronos.opengles.GL11;
 public class Cannon extends Entity
 {
 	private float shotVelocity, stupidity, time;
-	private Player player;
+	private Entity target;
 	private float size;
 	private ArrayList<CannonShell> shells;
 	
@@ -51,9 +51,9 @@ public class Cannon extends Entity
 	 * @param angle The Cannon's angle.
 	 * @param stupidity A value that changes the cannon's accuracy.
 	 * @param shotVelocity The velocity that cannons are shot at.
-	 * @param p A reference to the player.
+	 * @param p A reference to the target entity.
 	 */
-	public Cannon(float size, Vector2 position, float angle, float stupidity, float shotVelocity, Player p)
+	public Cannon(float size, Vector2 position, float angle, float stupidity, float shotVelocity, Entity t)
     {
         super(new Rectangle(new Vector2(size, size), position, angle, true));
         
@@ -61,7 +61,7 @@ public class Cannon extends Entity
         this.size = size;
         
         shape.setStatic(true);
-        player = p;
+        target = t;
         shells = new ArrayList<CannonShell>();
         
         this.tilesetX = 3;
@@ -73,7 +73,7 @@ public class Cannon extends Entity
 	 */
 	public void facePlayer()
 	{
-	    Vector2 distance = Vector2.subtract(shape.getPos(), player.getPos());
+	    Vector2 distance = Vector2.subtract(shape.getPos(), target.getPos());
 	    shape.setAngle(distance.angleDeg() + 180 + (float)(Math.random() * 2 - 1) * stupidity);
 	}
 

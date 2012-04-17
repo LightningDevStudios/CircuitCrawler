@@ -22,6 +22,7 @@
 
 package com.ltdev.cc.entity;
 
+import com.ltdev.EntityManager;
 import com.ltdev.cc.physics.primitives.Circle;
 import com.ltdev.math.Vector2;
 
@@ -52,7 +53,17 @@ public class CannonShell extends Entity
 	@Override
 	public void interact(Entity ent)
     {
+	    if(ent instanceof Player)
+	    {
+	        Player.kill();
+	    }
 	    
+	    if(ent instanceof BreakableDoor)
+	    {
+	        ((BreakableDoor)ent).damageDoor();
+	    }
+	    
+	    EntityManager.removeEntity(this);
     }	
 	
 	@Override
