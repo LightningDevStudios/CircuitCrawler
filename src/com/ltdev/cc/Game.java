@@ -88,7 +88,7 @@ public class Game
 		TextureManager.addTexture("buttona", new Texture(R.raw.buttona, 32, 32, 1, 1, context, gl));
 		TextureManager.addTexture("buttonb", new Texture(R.raw.buttonb, 32, 32, 1, 1, context, gl));
 			
-		entities = new ArrayList<Entity>();
+		setEntities(new ArrayList<Entity>());
 		uiList = new ArrayList<Control>();
 		triggerList = new ArrayList<Trigger>();
 		fingerList = new ArrayList<Finger>();
@@ -124,24 +124,24 @@ public class Game
 		//retreive data from parser
 		Tile[][] tileset = parser.tileset;
 		
-		entities.addAll(parser.entList);
+		getEntities().addAll(parser.entList);
 		triggerList.addAll(parser.triggerList);
 		
 		this.tileset = new Tileset(tileset, TextureManager.getTexture("tilesetworld"));
 		this.tileset.initialize(gl);
 		
-		player = parser.player;
-		entities.add(player);
+		setPlayer(parser.player);
+		getEntities().add(getPlayer());
 		
-		camPos = new PointF(player.getPos().x(), player.getPos().y());
+		camPos = new PointF(getPlayer().getPos().x(), getPlayer().getPos().y());
 		
-		btnB = new UIButton(80.0f, 80.0f, UIPosition.BOTTOMRIGHT);
-		btnB.autoPadding(0.0f, 0.0f, 90.0f, 5.0f);
-		btnB.enableTextureMode(TextureManager.getTexture("buttonb"));
+		setBtnB(new UIButton(80.0f, 80.0f, UIPosition.BOTTOMRIGHT));
+		getBtnB().autoPadding(0.0f, 0.0f, 90.0f, 5.0f);
+		getBtnB().enableTextureMode(TextureManager.getTexture("buttonb"));
 		//btnB.setIntervalTime(Stopwatch.elapsedTimeMs());
-		uiList.add(btnB);
+		uiList.add(getBtnB());
 		
-		joypad = new UIJoypad(.45f, .45f, UIPosition.BOTTOMLEFT, player.getAngle(), TextureManager.getTexture("joystickin"));
+		joypad = new UIJoypad(.45f, .45f, UIPosition.BOTTOMLEFT, getPlayer().getAngle(), TextureManager.getTexture("joystickin"));
 		joypad.autoPadding(0.0f, 5.0f, 5.0f, 0.0f);
 		joypad.enableTextureMode(TextureManager.getTexture("joystickout"));
 		uiList.add(joypad);
@@ -155,7 +155,7 @@ public class Game
 		Vector2 worldSize = new Vector2(Tile.TILE_SIZE_F * tileset[0].length, Tile.TILE_SIZE_F * tileset.length);
 		
 		ArrayList<Shape> shapes = new ArrayList<Shape>();
-        for (Entity ent : entities)
+        for (Entity ent : getEntities())
             shapes.add(ent.getShape());
 		
         //TODO optimize into larger rectangles
@@ -173,7 +173,7 @@ public class Game
 		    }
 		}		
                 
-	    world = new World(worldSize, shapes);
+	    setWorld(new World(worldSize, shapes));
 	    
 	    /*SpikeWall s = new SpikeWall(70, Vector2.add(player.getPos(), new Vector2(72 * 3 + 40, 0)), Direction.LEFT);
 	    s.setTexture(TextureManager.getTexture("tilesetentities"));
@@ -189,7 +189,7 @@ public class Game
 	    
 		updateCameraPosition();
 		
-		for (Entity ent : entities)
+		for (Entity ent : getEntities())
         {
             ent.initialize(gl);
         }
@@ -214,7 +214,7 @@ public class Game
 		maxY = camPos.y + (screenW / 2);
 		
 		ArrayList<Entity> renderList = new ArrayList<Entity>();
-		for (Entity ent : entities)
+		for (Entity ent : getEntities())
 		{
 			AABB bbox = new AABB(ent.getShape().getWorldVertices());
 			
@@ -232,8 +232,8 @@ public class Game
 	public void updateCameraPosition()
 	{
 		//move camera to follow player.
-		camPos.x = player.getPos().x();
-		camPos.y = player.getPos().y();
+		camPos.x = getPlayer().getPos().x();
+		camPos.y = getPlayer().getPos().y();
 		
 		
 		//camera can't go further than defined level bounds
@@ -293,7 +293,7 @@ public class Game
 	 */
 	public void updateFingers()
 	{
-		if (player.userHasControl())
+		if (getPlayer().userHasControl())
 		{
 			for (Finger f : fingerList)
 			{
@@ -317,20 +317,21 @@ public class Game
 	public void updatePlayerPos()
 	{
 		//move player
-		if (player.userHasControl())
+		if (getPlayer().userHasControl())
 		{
-			player.setAngle((float)Math.toDegrees(joypad.getInputAngle()));
+			getPlayer().setAngle((float)Math.toDegrees(joypad.getInputAngle()));
 			//player.setPos(Vector2.add(player.getPos(), Vector2.scale(joypad.getInputVec(), /*Stopwatch.getFrameTime() **/ (1000 / 1000))));
-			player.addImpulse(Vector2.scale(joypad.getInputVec(), player.getShape().getMass() * 5));
+			getPlayer().addImpulse(Vector2.scale(joypad.getInputVec(), getPlayer().getShape().getMass() * 5));
 		}
 		joypad.clearInputVec();
 		
-		//move heldObject if neccessary
-		if (player.isHoldingObject())
-			player.updateHeldObjectPosition();
 		
-		int indx = (int)((player.getPos().x() + tileset.getWidth() * Tile.TILE_SIZE_F / 2) / Tile.TILE_SIZE_F);
-		int indy = (int)((-player.getPos().y() + tileset.getHeight() * Tile.TILE_SIZE_F /  2) / Tile.TILE_SIZE_F);
+		//move heldObject if neccessary
+		if (getPlayer().isHoldingObject())
+			getPlayer().updateHeldObjectPosition();
+		
+		int indx = (int)((getPlayer().getPos().x() + tileset.getWidth() * Tile.TILE_SIZE_F / 2) / Tile.TILE_SIZE_F);
+		int indy = (int)((-getPlayer().getPos().y() + tileset.getHeight() * Tile.TILE_SIZE_F /  2) / Tile.TILE_SIZE_F);
 		
 		Tile t = tileset.getTileAt(indx, indy);
 		
@@ -340,10 +341,10 @@ public class Game
     		    Player.kill();
 
     		else if (t.getTileType() == Tile.TileType.SlipperyTile)
-    		    player.getShape().setKineticFriction(0);
+    		    getPlayer().getShape().setKineticFriction(0);
     		
     		else
-    		    player.getShape().setKineticFriction(5);
+    		    getPlayer().getShape().setKineticFriction(5);
 		}
 	}
 	
@@ -353,9 +354,9 @@ public class Game
 	 */
 	public void updateEntities(GL11 gl)
 	{
-	    EntityManager.update(entities, world, gl);
+	    EntityManager.update(getEntities(), getWorld(), gl);
 	    
-	    for (Entity ent : entities)
+	    for (Entity ent : getEntities())
         {
             ent.update(gl);
         }
@@ -366,7 +367,7 @@ public class Game
 	 */
 	public void integratePhysics()
 	{
-	    world.integrate(Stopwatch.getFrameTime());
+	    getWorld().integrate(Stopwatch.getFrameTime());
 	}
 	
 	/**
@@ -401,7 +402,7 @@ public class Game
 	 */
 	public void setPuzzleActivatedListener(PuzzleActivatedListener listener)
 	{
-	    for (Entity ent : entities)
+	    for (Entity ent : getEntities())
         {
             if (ent instanceof PuzzleBox)
             {
@@ -416,13 +417,18 @@ public class Game
 	 */
 	public void handleTouchInput(MotionEvent e)
 	{
-	    if (player.userHasControl())
+	    if (getPlayer().userHasControl())
         {
             Game.worldOutdated = true;
             for (int i = 0; i < fingerList.size(); i++)
             {
                 final Finger f = fingerList.get(i);
-                final Vector2 touchInput = new Vector2(e.getX(f.getPointerId()) - Game.screenW / 2, Game.screenH / 2 - e.getY(f.getPointerId()));
+                Vector2 touchInput = Vector2.ZERO;
+                try
+                {
+                    touchInput = new Vector2(e.getX(f.getPointerId()) - Game.screenW / 2, Game.screenH / 2 - e.getY(f.getPointerId()));
+                }
+                catch (Exception ex) {}
                 f.setPosition(touchInput);
             }
             
@@ -502,4 +508,36 @@ public class Game
 	{
 	    return uiList;
 	}
+
+    public UIButton getBtnB() {
+        return btnB;
+    }
+
+    public void setBtnB(UIButton btnB) {
+        this.btnB = btnB;
+    }
+
+    public World getWorld() {
+        return world;
+    }
+
+    public void setWorld(World world) {
+        this.world = world;
+    }
+
+    public Player getPlayer() {
+        return player;
+    }
+
+    public void setPlayer(Player player) {
+        this.player = player;
+    }
+
+    public ArrayList<Entity> getEntities() {
+        return entities;
+    }
+
+    public void setEntities(ArrayList<Entity> entities) {
+        this.entities = entities;
+    }
 }

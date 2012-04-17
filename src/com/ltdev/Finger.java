@@ -85,6 +85,7 @@ public class Finger
 		if (ent instanceof UIButton)
 		{
 			ent.disableColorMode();
+			((UIButton)ent).unpress();
 		}
 		else if (ent instanceof UIJoypad)
 		{
