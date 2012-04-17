@@ -543,6 +543,6 @@ public abstract class Shape
      */
     public void setStatic(boolean isStatic)
     {
-        
+        this.isStatic = isStatic;
     }
 }

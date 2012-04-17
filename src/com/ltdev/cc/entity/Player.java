@@ -47,6 +47,8 @@ public class Player extends Entity
 		controlled = true;
 		shape.setStaticFriction(2);
 		shape.setKineticFriction(200);
+		
+		System.out.println("LOLZOR! YOU MADE A PLAYER!");
 	}
 	
 	
@@ -103,6 +105,7 @@ public class Player extends Entity
 	public static void kill()
 	{
 	    System.out.println("LOLZ PLAYERZ ARE DETH");
+	    System.out.println("NOOS YOU DIES. TIEM TO REASTRAT");
 	}
 	
 	public void disableUserControl()

@@ -46,7 +46,7 @@ public abstract class Entity implements InteractListener
 	public static final float DEFAULT_SIZE = 32.0f;
 	
 	//behavior data
-	protected boolean isColorInterp;
+
 	
 	protected Shape shape;
 	
@@ -74,6 +74,8 @@ public abstract class Entity implements InteractListener
 		
 		this.previousFrameColliders = new ArrayList<Entity>();
 		this.currentFrameColliders = new ArrayList<Entity>();
+		
+		System.out.println("TROL SAUCE. WHY YOU NO TROL WTH SAUCE");
 	}
 	
 	/**
