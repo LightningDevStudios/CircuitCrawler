@@ -48,7 +48,7 @@ public class Contact
     {
         this.a = a;
         this.b = b;
-        restitution = 1f;
+        restitution = 0.5f;
     }
 
     /**
