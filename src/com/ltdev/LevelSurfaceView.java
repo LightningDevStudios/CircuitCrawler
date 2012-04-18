@@ -24,7 +24,11 @@ package com.ltdev;
 
 import android.content.Context;
 import android.opengl.GLSurfaceView;
+import android.view.GestureDetector;
 import android.view.MotionEvent;
+import android.view.View;
+import android.view.GestureDetector.SimpleOnGestureListener;
+import android.view.View.OnTouchListener;
 
 import com.ltdev.cc.event.*;
 
@@ -36,6 +40,8 @@ public class LevelSurfaceView extends GLSurfaceView
 {
 	private Renderer renderer;
 	private Object syncObj;
+	private GestureDetector gestureDetector;
+
 	
 	/**
 	 * Initializes a new instance of the Graphics class.
@@ -48,6 +54,8 @@ public class LevelSurfaceView extends GLSurfaceView
 		super(context);
 		this.syncObj = syncObj;
 		renderer = r;
+		
+		gestureDetector = new GestureDetector(new MyGestureDetector(this));
 		
 		this.setEGLConfigChooser(true);
 		this.setDebugFlags(DEBUG_CHECK_GL_ERROR);
@@ -63,6 +71,7 @@ public class LevelSurfaceView extends GLSurfaceView
 		{
 			public void run()
 			{
+			    //gestureDetector.onTouchEvent(event);
 				renderer.onTouchInput(event);
 			}
 		});
@@ -150,5 +159,28 @@ public class LevelSurfaceView extends GLSurfaceView
 		 * Called when a puzzle event returns unsuccessfully.
 		 */
 		void onPuzzleFailed();
+
+        boolean onDoubleTap(MotionEvent e);
 	}
+	
+	public Renderer getRenderer()
+	{
+	    return renderer;
+	}
+}
+
+class MyGestureDetector extends SimpleOnGestureListener
+{   
+    private LevelSurfaceView v;
+    
+    public MyGestureDetector(LevelSurfaceView v)
+    {
+        this.v = v;
+    }
+    
+    @Override
+    public boolean onDoubleTap(MotionEvent e)
+    {
+        return v.getRenderer().onDoubleTap(e);
+    }
 }
