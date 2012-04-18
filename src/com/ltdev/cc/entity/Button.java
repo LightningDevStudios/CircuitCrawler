@@ -79,9 +79,9 @@ public class Button extends Entity
         //gl.glDisable(GL11.GL_LIGHT0);
         //gl.glDisable(GL11.GL_LIGHTING);
         gl.glDisableClientState(GL11.GL_NORMAL_ARRAY);
-
+        
         //draw the entity.
-        gl.glDrawArrays(GL11.GL_TRIANGLES, 0, ButtonUpData.VERTEX_FLOAT_COUNT);
+        gl.glDrawArrays(GL11.GL_TRIANGLES, 0, ButtonUpData.VERTEX_COUNT);
 	}
 	
 	@Override
@@ -154,7 +154,7 @@ public class Button extends Entity
 	    super.interact(ent);
 	    
 		if (ent instanceof Player || ent instanceof HoldObject)
-		    if(!active)
+		    if (!active)
 		        activate();
 	}
 	
@@ -162,7 +162,7 @@ public class Button extends Entity
 	public void uninteract(Entity ent)
 	{
 		if (ent instanceof Player || ent instanceof HoldObject)
-		    if(active)
+		    if (active)
 		        deactivate();	
 	}
 }

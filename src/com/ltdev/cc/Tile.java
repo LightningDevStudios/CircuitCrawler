@@ -47,8 +47,8 @@ public class Tile
         SlipperyTile 
     }
     
-	public static final int TILE_SIZE = 72;
-	public static final float TILE_SIZE_F = 72.0f;
+	public static final int SIZE = 72;
+	public static final float SIZE_F = 72.0f;
 	
 	private Point tilesetPos;
 	
@@ -68,8 +68,8 @@ public class Tile
 	 */
 	public Tile(Point tilesetPos, int tilesetLengthX, int tilesetLengthY, TileType type)
 	{
-	    pos = new Vector2((-(float)tilesetLengthY / 2.0f * Tile.TILE_SIZE_F) + (tilesetPos.x * Tile.TILE_SIZE_F) + (Tile.TILE_SIZE_F / 2), 
-                ((float)tilesetLengthX / 2.0f * Tile.TILE_SIZE_F) - (tilesetPos.y * Tile.TILE_SIZE_F) - (Tile.TILE_SIZE_F / 2));
+	    pos = new Vector2((-(float)tilesetLengthY / 2.0f * Tile.SIZE_F) + (tilesetPos.x * Tile.SIZE_F) + (Tile.SIZE_F / 2), 
+                ((float)tilesetLengthX / 2.0f * Tile.SIZE_F) - (tilesetPos.y * Tile.SIZE_F) - (Tile.SIZE_F / 2));
 
 		this.tilesetPos = tilesetPos;
 		this.type = type;
@@ -82,7 +82,7 @@ public class Tile
 	public float[] getVertexData()
 	{
 	    //calculate vertices
-	    float s = TILE_SIZE / 2;
+	    float s = SIZE / 2;
 	    
 	    float[] vertices = null;
         float[] texCoords = null;
@@ -114,12 +114,12 @@ public class Tile
                 };
 	            break;
 	        case WALL:
-	            vertices = TilesetHelper.getTileVertices(this.borders, s, TILE_SIZE_F);
+	            vertices = TilesetHelper.getTileVertices(this.borders, s, SIZE_F);
 	            texCoords = TilesetHelper.getWallTexCoords(this.borders);
 	            normals = TilesetHelper.getTileNormals(this.borders);
 	            break;
 	        case PIT:
-	            vertices = TilesetHelper.getTileVertices(this.borders, s, -TILE_SIZE_F);
+	            vertices = TilesetHelper.getTileVertices(this.borders, s, -SIZE_F);
 	            texCoords = TilesetHelper.getPitTexCoords(this.borders);
 	            normals = TilesetHelper.getTileNormals(this.borders);
 	            break;

@@ -25,6 +25,7 @@ package com.ltdev;
 import com.ltdev.cc.Game;
 import com.ltdev.cc.ui.*;
 import com.ltdev.math.Vector2;
+import com.ltdev.math.Vector4;
 
 /**
  * A class that makes handling multiple finger input simpler by wrapping data around the original action ID.
@@ -57,7 +58,7 @@ public class Finger
 		if (ent instanceof UIButton)
 		{
 			final UIButton button = (UIButton)ent;
-			button.enableColorMode(1.0f, 0.0f, 0.0f, 1.0f);
+			button.setColor(new Vector4(1, 0, 0, 1));
 			button.press();
 		}
 	}
@@ -84,7 +85,7 @@ public class Finger
 	{
 		if (ent instanceof UIButton)
 		{
-			ent.disableColorMode();
+		    ent.setColor(new Vector4(1, 1, 1, 1));
 			((UIButton)ent).unpress();
 		}
 		else if (ent instanceof UIJoypad)

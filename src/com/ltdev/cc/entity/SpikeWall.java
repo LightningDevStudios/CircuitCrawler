@@ -66,6 +66,10 @@ public class SpikeWall extends Entity
                 endPos = new Vector2(position.x() + 72, position.y() + 72);
                 shape.setAngle(180);
                 break;
+            default:
+                endPos = position;
+                shape.setAngle(0);
+                break;
         }
 
         this.tex = TextureManager.getTexture("tilesetentities");

@@ -351,13 +351,25 @@ public final class TilesetHelper
 	 * Gets texture vertices from a specified texture and point.
 	 * @param tex The texture to get coords from.
 	 * @param p The point.
-	 * @return A float array contianing texture coordinates.
+	 * @return A float array containing texture coordinates.
 	 */
 	public static float[] getTextureVertices(Texture tex, Point p)
 	{
 		return getTextureVertices(p.x, p.y, 0, tex.getXTiles() - 1, 0, tex.getYTiles() - 1, tex.getOffsetX(), tex.getOffsetY());
 	}
 	
+	/**
+	 * Gets texture vertices from a specified tileset and tile.
+	 * @param x The tile's X coordinate.
+	 * @param y The tile's Y coordinate.
+	 * @param minX The minimum tile coordinate on the X axis (usually 0).
+	 * @param maxX The maximum tile coordinate on the X axis.
+	 * @param minY The minimum tile coordinate on the Y axis (usually 0). 
+	 * @param maxY The maximum tile coordinate on the Y axis.
+	 * @param offsetX The amount to offset texture coordinates by in the X axis to hide inaccuracies in nearest filtering.
+	 * @param offsetY The amount to offset texture coordinates by in the Y axis to hide inaccuracies in nearest filtering.
+	 * @return A float array containing texture coordinates.
+	 */
 	public static float[] getTextureVertices(int x, int y, int minX, int maxX, int minY, int maxY, float offsetX, float offsetY)
 	{
 		if (x >= minX && x <= maxX && y >= minY && y <= maxY)

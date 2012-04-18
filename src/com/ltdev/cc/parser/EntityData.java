@@ -24,7 +24,6 @@ package com.ltdev.cc.parser;
 
 import com.ltdev.cc.entity.Entity;
 import com.ltdev.graphics.Texture;
-import com.ltdev.graphics.TextureManager;
 
 import java.util.ArrayList;
 import java.util.HashMap;

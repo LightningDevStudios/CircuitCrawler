@@ -27,8 +27,6 @@ import android.content.res.XmlResourceParser;
 import android.util.Log;
 
 import com.ltdev.cc.Tile;
-import com.ltdev.cc.ai.Node;
-import com.ltdev.cc.ai.NodePath;
 import com.ltdev.cc.entity.*;
 import com.ltdev.cc.trigger.*;
 import com.ltdev.trigger.*;

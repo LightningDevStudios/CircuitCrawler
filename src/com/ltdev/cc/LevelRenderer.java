@@ -97,11 +97,13 @@ public class LevelRenderer implements com.ltdev.LevelSurfaceView.Renderer
 	    gl.glViewport(0, 0, (int)Game.screenW, (int)Game.screenH);
 		gl.glShadeModel(GL11.GL_SMOOTH);
 		gl.glEnable(GL11.GL_DEPTH_TEST);
-		//gl.glDepthRangef(0.01f, 1f);
 		gl.glDepthFunc(GL11.GL_LEQUAL);
 		gl.glDepthMask(true);
 		gl.glEnable(GL11.GL_BLEND);
 		gl.glBlendFunc(GL11.GL_ONE, GL11.GL_ONE_MINUS_SRC_ALPHA);
+		gl.glEnable(GL11.GL_TEXTURE_2D);
+        gl.glEnableClientState(GL11.GL_VERTEX_ARRAY);
+        gl.glEnableClientState(GL11.GL_TEXTURE_COORD_ARRAY);
 
 		gl.glClearColor(0.39f, 0.58f, 0.93f, 1.0f);
 		
@@ -114,7 +116,7 @@ public class LevelRenderer implements com.ltdev.LevelSurfaceView.Renderer
 		float aspectRatio = Game.screenW / Game.screenH;
 		
 		//projWorld = Matrix4.ortho(game.camPosX - (Game.screenW / 2), game.camPosX + (Game.screenW / 2), game.camPosY + (Game.screenH / 2), game.camPosY - (Game.screenH / 2), 0, 1);
-		projWorld = Matrix4.perspective(-0.75f, 0.75f, 0.75f / aspectRatio, -0.75f / aspectRatio, 1f, Tile.TILE_SIZE_F * 6);
+		projWorld = Matrix4.perspective(-0.75f, 0.75f, 0.75f / aspectRatio, -0.75f / aspectRatio, 1f, Tile.SIZE_F * 6);
 		projUI = Matrix4.ortho(-Game.screenW / 2 , Game.screenW / 2, Game.screenH / 2, -Game.screenH / 2, 0, 1);
 		
 		if (gameInitializedListener != null)
@@ -154,9 +156,9 @@ public class LevelRenderer implements com.ltdev.LevelSurfaceView.Renderer
 				
 		if (game.getBtnB().isPressed())
         {
-		    for(int i = 0; i < game.getEntities().size(); i++)
+		    for (int i = 0; i < game.getEntities().size(); i++)
 		    {
-		        if((game.getEntities().get(i) instanceof Ball) || (game.getEntities().get(i) instanceof Block))
+		        if ((game.getEntities().get(i) instanceof Ball) || (game.getEntities().get(i) instanceof Block))
 		        {	              
         	        if (CollisionDetector.radiusCheck(game.getPlayer().getShape(), game.getEntities().get(i).getShape(), 60))
                     {
@@ -173,9 +175,6 @@ public class LevelRenderer implements com.ltdev.LevelSurfaceView.Renderer
 		 * Render all Entites *
 		 **********************/
 		
-		gl.glEnable(GL11.GL_TEXTURE_2D);
-		gl.glEnableClientState(GL11.GL_VERTEX_ARRAY);
-        gl.glEnableClientState(GL11.GL_TEXTURE_COORD_ARRAY);
         gl.glEnableClientState(GL11.GL_NORMAL_ARRAY);
         
         gl.glEnable(GL11.GL_LIGHTING);
@@ -195,9 +194,6 @@ public class LevelRenderer implements com.ltdev.LevelSurfaceView.Renderer
         
         game.renderTileset(gl);
         
-        
-        //gl.glDisable(GL11.GL_LIGHT0);
-        //gl.glDisable(GL11.GL_LIGHTING);
         gl.glDisableClientState(GL11.GL_NORMAL_ARRAY);
         
 		for (Entity ent : game.getRenderedEnts())
@@ -206,10 +202,6 @@ public class LevelRenderer implements com.ltdev.LevelSurfaceView.Renderer
 			ent.draw(gl);
 			gl.glPopMatrix();
 		}
-		
-		gl.glDisable(GL11.GL_TEXTURE_2D);
-		gl.glDisableClientState(GL11.GL_VERTEX_ARRAY);
-        gl.glDisableClientState(GL11.GL_TEXTURE_COORD_ARRAY);
 
 		//moved this out here so that all entities / colEnts can be compared, not just the next ones
 		Game.worldOutdated = false;
@@ -219,7 +211,8 @@ public class LevelRenderer implements com.ltdev.LevelSurfaceView.Renderer
 		viewHUD(gl);
 		
 		gl.glDisable(GL11.GL_DEPTH_TEST);
-		gl.glEnableClientState(GL11.GL_VERTEX_ARRAY);
+		gl.glDisable(GL11.GL_LIGHT0);
+        gl.glDisable(GL11.GL_LIGHTING);
 		
 		for (Control ent : game.getUIList())
 		{
@@ -232,7 +225,8 @@ public class LevelRenderer implements com.ltdev.LevelSurfaceView.Renderer
 			gl.glPopMatrix();
 		}
 		
-		gl.glDisableClientState(GL11.GL_VERTEX_ARRAY);
+		gl.glEnable(GL11.GL_LIGHT0);
+        gl.glEnable(GL11.GL_LIGHTING);
 		gl.glEnable(GL11.GL_DEPTH_TEST);
 		
 		viewWorld(gl);
@@ -307,7 +301,7 @@ public class LevelRenderer implements com.ltdev.LevelSurfaceView.Renderer
 		gl.glLoadMatrixf(projWorld.array(), 0);
 		gl.glMatrixMode(GL11.GL_MODELVIEW);
 		gl.glLoadIdentity();
-		gl.glMultMatrixf(Matrix4.translate(new Vector3(-camPos.x, -camPos.y, -Tile.TILE_SIZE_F * 4f)).array(), 0);
+		gl.glMultMatrixf(Matrix4.translate(new Vector3(-camPos.x, -camPos.y, -Tile.SIZE_F * 4f)).array(), 0);
 	}
 	
 	/**

@@ -22,13 +22,10 @@
 
 package com.ltdev.cc.entity;
 
-import com.ltdev.Direction;
 import com.ltdev.EntityManager;
-import com.ltdev.Stopwatch;
 import com.ltdev.cc.physics.primitives.Rectangle;
 import com.ltdev.graphics.TextureManager;
 import com.ltdev.math.Vector2;
-import com.ltdev.math.Vector4;
 
 import javax.microedition.khronos.opengles.GL11;
 
@@ -38,14 +35,12 @@ import javax.microedition.khronos.opengles.GL11;
  */
 public class BreakableDoor extends Entity
 {
-    private boolean open;
-    private Vector2 targetPos;
-    private Vector2 openedPosition, closedPosition;
-    private int hitCount, hitsLeft;
-    private boolean bool;
+    private int hitsLeft;
+    private boolean needVBOUpdate;
     /**
      * Initializes a new instance of the Door class.
      * @param position The door's position.
+     * @param maxHits The number of hits it takes to open the door.
      */
     public BreakableDoor(Vector2 position, int maxHits)
     {
@@ -56,13 +51,14 @@ public class BreakableDoor extends Entity
      * Initializes a new instance of the Door class.
      * @param size The door's size.
      * @param position The door's position.
+     * @param maxHits The number of hits it takes to open the door.
      */
     public BreakableDoor(float size, Vector2 position, int maxHits)
     {
         super(new Rectangle(new Vector2(size - 10, size), position, 0, true));
         shape.setStatic(true);
         colorInterpSpeed = 1.0f;
-        hitCount = hitsLeft = maxHits;
+        hitsLeft = maxHits;
         
         tex = TextureManager.getTexture("tilesetentities");
         tilesetX = 0;
@@ -74,10 +70,10 @@ public class BreakableDoor extends Entity
     {
         super.update(gl);
         
-        if(bool)
+        if (needVBOUpdate)
         {
             initialize(gl);
-            bool = false;
+            needVBOUpdate = false;
         }
     }
     
@@ -88,14 +84,14 @@ public class BreakableDoor extends Entity
     {
         hitsLeft--;
             
-        if(hitsLeft < 1)
+        if (hitsLeft < 1)
         {
             EntityManager.removeEntity(this);
         }
         else
         {
             tilesetY++;
-            bool = true;
+            needVBOUpdate = true;
         }
     }
 }

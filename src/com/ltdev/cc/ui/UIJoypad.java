@@ -45,7 +45,7 @@ public class UIJoypad extends Control
 		this.inputAngle = inputAngle;
 		active = false;
 		fingerCircle = new UIImage(halfSize.x(), halfSize.y(), 0, 0);
-		fingerCircle.enableTextureMode(joystickin);
+		fingerCircle.setTexture(joystickin);
 	}
 	
 	public UIJoypad(float xSize, float ySize, float xRelative, float yRelative, float inputAngle)

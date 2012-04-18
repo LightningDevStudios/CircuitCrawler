@@ -51,9 +51,9 @@ public class Cannon extends Entity
 	 * @param angle The Cannon's angle.
 	 * @param stupidity A value that changes the cannon's accuracy.
 	 * @param shotVelocity The velocity that cannons are shot at.
-	 * @param p A reference to the target entity.
+	 * @param target A reference to the target entity.
 	 */
-	public Cannon(float size, Vector2 position, float angle, float stupidity, float shotVelocity, Entity t)
+	public Cannon(float size, Vector2 position, float angle, float stupidity, float shotVelocity, Entity target)
     {
         super(new Rectangle(new Vector2(size, size), position, angle, true));
         
@@ -61,7 +61,7 @@ public class Cannon extends Entity
         this.size = size;
         
         shape.setStatic(true);
-        target = t;
+        this.target = target;
         shells = new ArrayList<CannonShell>();
         
         this.tex = TextureManager.getTexture("tilesetentities");

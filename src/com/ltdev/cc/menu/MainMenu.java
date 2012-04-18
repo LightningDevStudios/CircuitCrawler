@@ -94,36 +94,23 @@ public class MainMenu extends Activity
 		
 		//add views to ViewAnimator
 		animator.addView(levelList, 0);
-		final View settings = View.inflate(this, R.layout.settings, null);
-		animator.addView(settings, 1);
-		final View aboutYTF = View.inflate(this, R.layout.about_ytf, null);
-		animator.addView(aboutYTF, 2);
-		final View aboutLDS = View.inflate(this, R.layout.about_lds, null);
-		animator.addView(aboutLDS, 3);
-		final View credits = View.inflate(this, R.layout.credits, null);
-		animator.addView(credits, 4);
-		final View ccLogo = View.inflate(this, R.layout.circuit_crawler_logo, null);
-		animator.addView(ccLogo, 5);
+		animator.addView(View.inflate(this, R.layout.settings, null), 1);
+		animator.addView(View.inflate(this, R.layout.about_ytf, null), 2);
+		animator.addView(View.inflate(this, R.layout.about_lds, null), 3);
+		animator.addView(View.inflate(this, R.layout.credits, null), 4);
+		animator.addView(View.inflate(this, R.layout.circuit_crawler_logo, null), 5);
 		animator.setDisplayedChild(5);
 		
 		//Boxes n' Shit
 		final CheckBox vibrationCheckbox = (CheckBox) findViewById(R.id.checkbox);
 		final CheckBox volumeCheckbox = (CheckBox) findViewById(R.id.volumeCheckbox);
 		final CheckBox enableMusic = (CheckBox) findViewById(R.id.EnableMusic);
-		//final SeekBar volumeControl = (SeekBar)findViewById(R.id.volume);
 		final SeekBar musicVolumeControl = (SeekBar)findViewById(R.id.volume);
 		final TextView musicVolumeSeekBarText = (TextView)findViewById(R.id.volumeText);
 		final Button ldsButton = (Button)findViewById(R.id.LDS_Button);
 		final Button ytfButton = (Button)findViewById(R.id.YTF_Button);
-		//final Button reset = (Button)findViewById(R.id.reset);
-		//final TextView seekBarValue = (TextView)findViewById(R.id.volumeText);
 		final SeekBar effectVolumeControl = (SeekBar)findViewById(R.id.effectVolume);
 		final TextView effectVolumeSeekBarText = (TextView)findViewById(R.id.effectVolumeText);
-		//final TextView ResetText = (TextView)findViewById(R.id.ResetText);
-		//final AlertDialog.Builder alert = new AlertDialog.Builder(this);
-		//final CheckBox enableShaders = (CheckBox) findViewById(R.id.enableShaders);
-		//final SeekBar mSeekBar = (SeekBar)findViewById(R.id.seek);
-		
 		
 		//Internal Storage Data stuff
 		try
@@ -255,9 +242,6 @@ public class MainMenu extends Activity
 		    e.printStackTrace();
 		}
 		
-		//ProgressDialog pd = ProgressDialog.show(this, "Loading", "...Please wait.", true, false);
-		//pd.hide();
-		
 		//Defaults, settings, and other stuff
 		musicVolumeControl.setMax(100);
 		final int volume = (int)(SoundPlayer.getMusicVolume() * 100);
@@ -269,80 +253,6 @@ public class MainMenu extends Activity
 		vibrationCheckbox.setChecked(Vibrator.getEnableState());
 		volumeCheckbox.setChecked(SoundPlayer.getSoundEnabled());
 		enableMusic.setChecked(SoundPlayer.getMusicEnabled());
-		//godMode.setVisibility(View.INVISIBLE);
-		//noclip.setVisibility(View.INVISIBLE);
-		//mSeekBar.setMax(100);
-		//mSeekBar.setProgress(1);
-
-		
-		/*******************
-		 *  Action Classes *
-		 *******************/
-		
-		
-		/******************************************************************************************************************************/
-		
-		//Anti Aliasing
-       /* mSeekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener()
-        {
-        	public void onProgressChanged(SeekBar seekBar, int progress, boolean fromTouch)	
-        	{	
-        		antiTextbar.setText("Anti Aliasing: " + String.valueOf(progress) + "%");
-        	}
-            public void onStartTrackingTouch(SeekBar seekBar)	{	}
-            public void onStopTrackingTouch(SeekBar seekBar)	{	}	
-        });*/
-		/******************************************************************************************************************************/
-		
-		//Cheat Button
-		/*
-        cheatButton.setOnClickListener(new View.OnClickListener()
-		{
-			public void onClick(View v) 
-			{
-				alert.setTitle("Cheat");
-				alert.setMessage("Input Code");
-
-				// Set an EditText view to get user input 
-				alert.setView(input);
-
-				alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() 
-				{
-					public void onClick(DialogInterface dialog, int whichButton) 
-					{
-						Editable value = input.getText();
-						if(value.toString().compareTo("PASSW0rd;") == 0) // DONT LOOK AT THIS! //lol UMADBRO? - Devin //IMAD
-						{
-							godMode.setVisibility(View.VISIBLE);
-							noclip.setVisibility(View.VISIBLE);
-							cheatText.setVisibility(View.VISIBLE);
-							cheatText.setText("Correct!");
-						}
-						else if(Run.onLastLevel)
-						{
-							godMode.setVisibility(View.VISIBLE);
-							noclip.setVisibility(View.VISIBLE);
-							cheatText.setVisibility(View.VISIBLE);
-							cheatText.setText("Unlocked!");
-						}
-						else
-						{
-							cheatText.setVisibility(View.VISIBLE);
-							cheatText.setText("Wrong!");
-						}
-					}
-				});
-
-				alert.setNegativeButton("Cancel",
-						new DialogInterface.OnClickListener() {
-							public void onClick(DialogInterface dialog, int whichButton) {
-								dialog.cancel();
-							}
-						});
-				alert.show();
-			}
-		});      */
-        /******************************************************************************************************************************/
         
         //Music Volume Slider
         musicVolumeControl.setOnSeekBarChangeListener(new OnSeekBarChangeListener()
@@ -370,6 +280,7 @@ public class MainMenu extends Activity
             public void onStartTrackingTouch(SeekBar volumeControl){}
             public void onStopTrackingTouch(SeekBar volumeControl){}
         });
+        
         /******************************************************************************************************************************/
         
         //Music Volume Slider
@@ -427,27 +338,6 @@ public class MainMenu extends Activity
 		});
 		/******************************************************************************************************************************/
 		
-		/******************************************************************************************************************************/
-
-		/******************************************************************************************************************************/
-		
-		//Enable Shaders CheckBox
-		/*enableShaders.setOnCheckedChangeListener(new OnCheckedChangeListener()
-		{
-		    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
-		    {
-		        if ( isChecked )
-		        {
-		        	vibrator(100);
-		        }
-		        else
-		        {
-		        	vibrator(100);
-		        }
-		    }
-		});*/
-		/******************************************************************************************************************************/
-		
 		//Enable Music CheckBox
 		enableMusic.setOnCheckedChangeListener(new OnCheckedChangeListener()
 		{
@@ -473,6 +363,7 @@ public class MainMenu extends Activity
         		}
 		    }
 		});
+		
 		/******************************************************************************************************************************/
 		
 		//Enable Sound Effects CheckBox
@@ -500,6 +391,7 @@ public class MainMenu extends Activity
         		}
 		    }
 		});
+		
 		/******************************************************************************************************************************/  
 		
 		//LDS Button
@@ -513,27 +405,6 @@ public class MainMenu extends Activity
 		});
 		
 		/******************************************************************************************************************************/  
-		/*
-		//Reset Button
-		reset.setOnClickListener(new View.OnClickListener()
-		{
-			public void onClick(View v) 
-			{
-				ResetText.setText("Settings Reset");
-				File dir = getFilesDir();
-				if(dir.isDirectory())
-				{
-					String[] files = dir.list();
-					for(int i = 0; i < files.length; i++)
-					{
-						String str = files[i];
-						File file = new File(dir, str);
-						boolean deleted = file.delete();
-					}
-				}
-			}
-		});*/
-		/******************************************************************************************************************************/	
 		
 		//YTF Button
 		ytfButton.setOnClickListener(new View.OnClickListener()
@@ -562,36 +433,31 @@ public class MainMenu extends Activity
 						animator.setDisplayedChild(0);
 					break;
 				case 1:
-					//Run Tutorial Level
+					//Settings
 					if (animator.getDisplayedChild() != 1)
 						animator.setDisplayedChild(1);
 					break;
 				case 2:
-					//Settings
-					if (animator.getDisplayedChild() != 2)
-						animator.setDisplayedChild(2);
-					break;
-				case 3:
 					//Donate Button
 					Intent browserIntent = new Intent("android.intent.action.VIEW", Uri.parse("https://www.networkforgood.org/donation/ExpressDonation.aspx?ORGID2=912125886"));
 					startActivity(browserIntent);
 					break;
-				case 4:
+				case 3:
 					//About YTF
+					if (animator.getDisplayedChild() != 2)
+						animator.setDisplayedChild(2);
+					break;
+				case 4:
+					//About LDS
 					if (animator.getDisplayedChild() != 3)
 						animator.setDisplayedChild(3);
 					break;
 				case 5:
-					//About LDS
+					//Credits
 					if (animator.getDisplayedChild() != 4)
 						animator.setDisplayedChild(4);
 					break;
 				case 6:
-					//Credits
-					if (animator.getDisplayedChild() != 5)
-						animator.setDisplayedChild(5);
-					break;
-				case 7:
 					//Quit
 					finish();
                 default:
@@ -621,8 +487,8 @@ public class MainMenu extends Activity
 	@Override
 	public void onBackPressed()
 	{
-		if (animator.getDisplayedChild() != 6)
-			animator.setDisplayedChild(6);
+		if (animator.getDisplayedChild() != 5)
+			animator.setDisplayedChild(5);
 		else
 			finish();
 	}

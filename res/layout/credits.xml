@@ -4,45 +4,45 @@
 	android:id="@+id/About" 
 	android:layout_width="fill_parent"
 	android:layout_height ="fill_parent">
-	
-<LinearLayout android:layout_height="wrap_content" android:id="@+id/LinearLayout01" android:layout_width="fill_parent" android:orientation="vertical"><TextView android:paddingTop="30dp" android:id="@+id/TextView01" android:layout_width="fill_parent" android:textSize="30sp" android:text="Credits\n" android:layout_height="wrap_content" android:paddingLeft="10dp" android:textStyle="bold" android:paddingRight="10dp" android:gravity="center_vertical|center_horizontal" android:paddingBottom="5dp"></TextView>
-<TextView android:paddingTop="20dp" android:id="@+id/TextView02" android:layout_width="fill_parent" android:textSize="16sp" android:text="AI" android:layout_height="wrap_content" android:paddingLeft="10dp" android:textStyle="bold" android:paddingRight="10dp" android:gravity="center_vertical|center_horizontal" android:paddingBottom="20dp"></TextView>
-<TextView android:paddingTop="0dp" android:id="@+id/TextView03" android:layout_width="fill_parent" android:textSize="16sp" android:text="Devin Reed" android:layout_height="wrap_content" android:paddingLeft="10dp" android:paddingRight="10dp" android:gravity="center_vertical|center_horizontal" android:paddingBottom="5dp"></TextView>
-<TextView android:paddingTop="20dp" android:id="@+id/TextView04" android:layout_width="fill_parent" android:textSize="16sp" android:text="Art" android:layout_height="wrap_content" android:paddingLeft="10dp" android:textStyle="bold" android:paddingRight="10dp" android:gravity="center_vertical|center_horizontal" android:paddingBottom="20dp"></TextView>
-<TextView android:paddingTop="0dp" android:id="@+id/TextView05" android:layout_width="fill_parent" android:textSize="16sp" android:text="Lauren Burke" android:layout_height="wrap_content" android:paddingLeft="10dp" android:paddingRight="10dp" android:gravity="center_vertical|center_horizontal" android:paddingBottom="5dp"></TextView>
-<TextView android:paddingTop="0dp" android:id="@+id/TextView06" android:layout_width="fill_parent" android:textSize="16sp" android:text="Robert Rouhani" android:layout_height="wrap_content" android:paddingLeft="10dp" android:paddingRight="10dp" android:gravity="center_vertical|center_horizontal" android:paddingBottom="5dp"></TextView>
-<TextView android:paddingTop="20dp" android:id="@+id/TextView07" android:layout_width="fill_parent" android:textSize="16sp" android:text="Graphics Code" android:layout_height="wrap_content" android:paddingLeft="10dp" android:textStyle="bold" android:paddingRight="10dp" android:gravity="center_vertical|center_horizontal" android:paddingBottom="20dp"></TextView>
-<TextView android:paddingTop="0dp" android:id="@+id/TextView08" android:layout_width="fill_parent" android:textSize="16sp" android:text="Robert Rouhani" android:layout_height="wrap_content" android:paddingLeft="10dp" android:paddingRight="10dp" android:gravity="center_vertical|center_horizontal" android:paddingBottom="5dp"></TextView>
-<TextView android:paddingTop="20dp" android:id="@+id/TextView07" android:layout_width="fill_parent" android:textSize="16sp" android:text="Level Design" android:layout_height="wrap_content" android:paddingLeft="10dp" android:textStyle="bold" android:paddingRight="10dp" android:gravity="center_vertical|center_horizontal" android:paddingBottom="20dp"></TextView>
-<TextView android:paddingTop="0dp" android:id="@+id/TextView08" android:layout_width="fill_parent" android:textSize="16sp" android:text="Zayd Simjee" android:layout_height="wrap_content" android:paddingLeft="10dp" android:paddingRight="10dp" android:gravity="center_vertical|center_horizontal" android:paddingBottom="5dp"></TextView>
-<TextView android:paddingTop="0dp" android:id="@+id/TextView09" android:layout_width="fill_parent" android:textSize="16sp" android:text="Devin Reed" android:layout_height="wrap_content" android:paddingLeft="10dp" android:paddingRight="10dp" android:gravity="center_vertical|center_horizontal" android:paddingBottom="5dp"></TextView>
-<TextView android:paddingTop="0dp" android:id="@+id/TextView10" android:layout_width="fill_parent" android:textSize="16sp" android:text="Matt Masarik" android:layout_height="wrap_content" android:paddingLeft="10dp" android:paddingRight="10dp" android:gravity="center_vertical|center_horizontal" android:paddingBottom="5dp"></TextView>
-<TextView android:paddingTop="0dp" android:id="@+id/TextView10" android:layout_width="fill_parent" android:textSize="16sp" android:text="Robert Rouhani" android:layout_height="wrap_content" android:paddingLeft="10dp" android:paddingRight="10dp" android:gravity="center_vertical|center_horizontal" android:paddingBottom="5dp"></TextView>
-<TextView android:paddingTop="20dp" android:id="@+id/TextView14" android:layout_width="fill_parent" android:textSize="16sp" android:text="Menus" android:layout_height="wrap_content" android:paddingLeft="10dp" android:textStyle="bold" android:paddingRight="10dp" android:gravity="center_vertical|center_horizontal" android:paddingBottom="20dp"></TextView>
-<TextView android:paddingTop="0dp" android:id="@+id/TextView15" android:layout_width="fill_parent" android:textSize="16sp" android:text="Robert Rouhani" android:layout_height="wrap_content" android:paddingLeft="10dp" android:paddingRight="10dp" android:gravity="center_vertical|center_horizontal" android:paddingBottom="5dp"></TextView>
-<TextView android:paddingTop="0dp" android:id="@+id/TextView16" android:layout_width="fill_parent" android:textSize="16sp" android:text="Devin Reed" android:layout_height="wrap_content" android:paddingLeft="10dp" android:paddingRight="10dp" android:gravity="center_vertical|center_horizontal" android:paddingBottom="5dp"></TextView>
-<TextView android:paddingTop="0dp" android:id="@+id/TextView17" android:layout_width="fill_parent" android:textSize="16sp" android:text="Matt Masarik" android:layout_height="wrap_content" android:paddingLeft="10dp" android:paddingRight="10dp" android:gravity="center_vertical|center_horizontal" android:paddingBottom="5dp"></TextView>
-<TextView android:paddingTop="20dp" android:id="@+id/TextView18" android:layout_width="fill_parent" android:textSize="16sp" android:text="Music" android:layout_height="wrap_content" android:paddingLeft="10dp" android:textStyle="bold" android:paddingRight="10dp" android:gravity="center_vertical|center_horizontal" android:paddingBottom="20dp"></TextView>
-<TextView android:paddingTop="0dp" android:id="@+id/TextView19" android:layout_width="fill_parent" android:textSize="16sp" android:text="Jack Heffron (Zeadron Del Gomez)" android:layout_height="wrap_content" android:paddingLeft="10dp" android:paddingRight="10dp" android:gravity="center_vertical|center_horizontal" android:paddingBottom="5dp"></TextView>
-<TextView android:paddingTop="20dp" android:id="@+id/TextView20" android:layout_width="fill_parent" android:textSize="16sp" android:text="Parsing and XML Formatting" android:layout_height="wrap_content" android:paddingLeft="10dp" android:textStyle="bold" android:paddingRight="10dp" android:gravity="center_vertical|center_horizontal" android:paddingBottom="20dp"></TextView>
-<TextView android:paddingTop="0dp" android:id="@+id/TextView21" android:layout_width="fill_parent" android:textSize="16sp" android:text="Zayd Simjee" android:layout_height="wrap_content" android:paddingLeft="10dp" android:paddingRight="10dp" android:gravity="center_vertical|center_horizontal" android:paddingBottom="5dp"></TextView>
-<TextView android:paddingTop="0dp" android:id="@+id/TextView22" android:layout_width="fill_parent" android:textSize="16sp" android:text="Robert Rouhani" android:layout_height="wrap_content" android:paddingLeft="10dp" android:paddingRight="10dp" android:gravity="center_vertical|center_horizontal" android:paddingBottom="5dp"></TextView>
-<TextView android:paddingTop="20dp" android:id="@+id/TextView23" android:layout_width="fill_parent" android:textSize="16sp" android:text="Physics Engine" android:layout_height="wrap_content" android:paddingLeft="10dp" android:textStyle="bold" android:paddingRight="10dp" android:gravity="center_vertical|center_horizontal" android:paddingBottom="20dp"></TextView>
-<TextView android:paddingTop="0dp" android:id="@+id/TextView24" android:layout_width="fill_parent" android:textSize="16sp" android:text="Devin Reed" android:layout_height="wrap_content" android:paddingLeft="10dp" android:paddingRight="10dp" android:gravity="center_vertical|center_horizontal" android:paddingBottom="5dp"></TextView>
-<TextView android:paddingTop="0dp" android:id="@+id/TextView24" android:layout_width="fill_parent" android:textSize="16sp" android:text="Matt Masarik" android:layout_height="wrap_content" android:paddingLeft="10dp" android:paddingRight="10dp" android:gravity="center_vertical|center_horizontal" android:paddingBottom="5dp"></TextView>
-<TextView android:paddingTop="20dp" android:id="@+id/TextView25" android:layout_width="fill_parent" android:textSize="16sp" android:text="PR" android:layout_height="wrap_content" android:paddingLeft="10dp" android:textStyle="bold" android:paddingRight="10dp" android:gravity="center_vertical|center_horizontal" android:paddingBottom="20dp"></TextView>
-<TextView android:paddingTop="0dp" android:id="@+id/TextView26" android:layout_width="fill_parent" android:textSize="16sp" android:text="Michael Yorita" android:layout_height="wrap_content" android:paddingLeft="10dp" android:paddingRight="10dp" android:gravity="center_vertical|center_horizontal" android:paddingBottom="5dp"></TextView>
-<TextView android:paddingTop="20dp" android:id="@+id/TextView27" android:layout_width="fill_parent" android:textSize="16sp" android:text="Sound Effects (thanks to SFXR)" android:layout_height="wrap_content" android:paddingLeft="10dp" android:textStyle="bold" android:paddingRight="10dp" android:gravity="center_vertical|center_horizontal" android:paddingBottom="20dp"></TextView>
-<TextView android:paddingTop="0dp" android:id="@+id/TextView28" android:layout_width="fill_parent" android:textSize="16sp" android:text="Robert Rouhani" android:layout_height="wrap_content" android:paddingLeft="10dp" android:paddingRight="10dp" android:gravity="center_vertical|center_horizontal" android:paddingBottom="5dp"></TextView>
-<TextView android:paddingTop="0dp" android:id="@+id/TextView29" android:layout_width="fill_parent" android:textSize="16sp" android:text="Devin Reed" android:layout_height="wrap_content" android:paddingLeft="10dp" android:paddingRight="10dp" android:gravity="center_vertical|center_horizontal" android:paddingBottom="5dp"></TextView>
-<TextView android:paddingTop="20dp" android:id="@+id/TextView34" android:layout_width="fill_parent" android:textSize="16sp" android:text="Sound Implementation" android:layout_height="wrap_content" android:paddingLeft="10dp" android:textStyle="bold" android:paddingRight="10dp" android:gravity="center_vertical|center_horizontal" android:paddingBottom="20dp"></TextView>
-<TextView android:paddingTop="0dp" android:id="@+id/TextView35" android:layout_width="fill_parent" android:textSize="16sp" android:text="Matt Masarik" android:layout_height="wrap_content" android:paddingLeft="10dp" android:paddingRight="10dp" android:gravity="center_vertical|center_horizontal" android:paddingBottom="5dp"></TextView>
-<TextView android:paddingTop="20dp" android:id="@+id/TextView30" android:layout_width="fill_parent" android:textSize="16sp" android:text="Teleporters, Cannons, and other fun features" android:layout_height="wrap_content" android:paddingLeft="10dp" android:textStyle="bold" android:paddingRight="10dp" android:gravity="center_vertical|center_horizontal" android:paddingBottom="20dp"></TextView>
-<TextView android:paddingTop="0dp" android:id="@+id/TextView31" android:layout_width="fill_parent" android:textSize="16sp" android:text="Matt Masarik" android:layout_height="wrap_content" android:paddingLeft="10dp" android:paddingRight="10dp" android:gravity="center_vertical|center_horizontal" android:paddingBottom="5dp"></TextView>
-<TextView android:paddingTop="20dp" android:id="@+id/TextView12" android:layout_width="fill_parent" android:textSize="16sp" android:text="Tools Development" android:layout_height="wrap_content" android:paddingLeft="10dp" android:textStyle="bold" android:paddingRight="10dp" android:gravity="center_vertical|center_horizontal" android:paddingBottom="20dp"></TextView>
-<TextView android:paddingTop="0dp" android:id="@+id/TextView13" android:layout_width="fill_parent" android:textSize="16sp" android:text="Robert Rouhani" android:layout_height="wrap_content" android:paddingLeft="10dp" android:paddingRight="10dp" android:gravity="center_vertical|center_horizontal" android:paddingBottom="5dp"></TextView>
-<TextView android:paddingTop="20dp" android:id="@+id/TextView32" android:layout_width="fill_parent" android:textSize="16sp" android:text="User Interface" android:layout_height="wrap_content" android:paddingLeft="10dp" android:textStyle="bold" android:paddingRight="10dp" android:gravity="center_vertical|center_horizontal" android:paddingBottom="20dp"></TextView>
-<TextView android:paddingTop="0dp" android:id="@+id/TextView33" android:layout_width="fill_parent" android:textSize="16sp" android:text="Robert Rouhani" android:layout_height="wrap_content" android:paddingLeft="10dp" android:paddingRight="10dp" android:gravity="center_vertical|center_horizontal" android:paddingBottom="5dp"></TextView>
-<TextView android:paddingTop="30dp" android:id="@+id/TextView36" android:layout_width="fill_parent" android:textSize="16sp" android:text="And a special thanks to all of our family and friends. Without them, this would not have been possible!" android:layout_height="wrap_content" android:paddingLeft="10dp" android:paddingRight="10dp" android:gravity="center_vertical|center_horizontal" android:paddingBottom="20dp"></TextView>
-</LinearLayout>
+	<LinearLayout
+	    android:layout_height="wrap_content"
+	    android:id="@+id/CreditsLayout"
+	    android:layout_width="fill_parent"
+	    android:orientation="vertical">
+	    <TextView style="@style/CreditsHeader" android:text="@string/credits_title" />
+		<TextView style="@style/CreditsCategory" android:text="@string/credits_art" />
+		<TextView style="@style/CreditsName" android:text="@string/names_robert" />
+		<TextView style="@style/CreditsCategory" android:text="@string/credits_graphics" />
+		<TextView style="@style/CreditsName" android:text="@string/names_robert" />
+		<TextView style="@style/CreditsCategory" android:text="@string/credits_level_design" />
+		<TextView style="@style/CreditsName" android:text="@string/names_devin" />
+		<TextView style="@style/CreditsName" android:text="@string/names_matt" />
+		<TextView style="@style/CreditsName" android:text="@string/names_robert" />
+		<TextView style="@style/CreditsCategory" android:text="Menus" />
+		<TextView style="@style/CreditsName" android:text="@string/names_robert" />
+		<TextView style="@style/CreditsName" android:text="@string/names_devin" />
+		<TextView style="@style/CreditsName" android:text="@string/names_matt" />
+		<TextView style="@style/CreditsCategory" android:text="@string/credits_music" />
+		<TextView style="@style/CreditsName" android:text="@string/names_jack" />
+		<TextView style="@style/CreditsCategory" android:text="Parsing and XML Formatting" />
+		<TextView style="@style/CreditsName" android:text="Zayd Simjee" />
+		<TextView style="@style/CreditsName" android:text="@string/names_robert" />
+		<TextView style="@style/CreditsCategory" android:text="@string/credits_physics" />
+		<TextView style="@style/CreditsName" android:text="@string/names_devin" />
+		<TextView style="@style/CreditsName" android:text="@string/names_matt" />
+		<TextView style="@style/CreditsCategory" android:text="PR" />
+		<TextView style="@style/CreditsName" android:text="Michael Yorita" />
+		<TextView style="@style/CreditsCategory" android:text="@string/credits_sound" />
+		<TextView style="@style/CreditsName" android:text="@string/names_robert" />
+		<TextView style="@style/CreditsName" android:text="@string/names_devin" />
+		<TextView style="@style/CreditsCategory" android:text="Sound Implementation" />
+		<TextView style="@style/CreditsName" android:text="@string/names_matt" />
+		<TextView style="@style/CreditsCategory" android:text="Teleporters, Cannons, and other fun features" />
+		<TextView style="@style/CreditsName" android:text="@string/names_matt" />
+		<TextView style="@style/CreditsCategory" android:text="@string/credits_tools" />
+		<TextView style="@style/CreditsName" android:text="@string/names_robert" />
+		<TextView style="@style/CreditsCategory" android:text="User Interface" />
+		<TextView style="@style/CreditsName" android:text="@string/names_robert" />
+		<TextView style="@style/CreditsFooter" android:text="@string/credits_special_thanks" />
+	</LinearLayout>
 </ScrollView>

@@ -43,6 +43,7 @@ public class Door extends Entity
     /**
      * Initializes a new instance of the Door class.
      * @param position The door's position.
+     * @param dir The direction the door opens in.
      */
 	public Door(Vector2 position, Direction dir)
 	{
@@ -53,6 +54,7 @@ public class Door extends Entity
 	 * Initializes a new instance of the Door class.
 	 * @param size The door's size.
 	 * @param position The door's position.
+	 * @param dir The direction the door opens in.
 	 */
 	public Door(float size, Vector2 position, Direction dir)
     {
@@ -77,6 +79,9 @@ public class Door extends Entity
                 break;
             case UP:
                 closedPosition = new Vector2(openedPosition.x(), openedPosition.y() + size);
+                break;
+            default:
+                closedPosition = openedPosition;
                 break;
         }
         

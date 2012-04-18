@@ -55,12 +55,12 @@ public class CannonShell extends Entity
 	@Override
 	public void interact(Entity ent)
     {
-	    if(ent instanceof Player)
+	    if (ent instanceof Player)
 	    {
 	        Player.kill();
 	    }
 	    
-	    if(ent instanceof BreakableDoor)
+	    if (ent instanceof BreakableDoor)
 	    {
 	        ((BreakableDoor)ent).damageDoor();
 	    }

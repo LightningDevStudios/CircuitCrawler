@@ -22,8 +22,8 @@
 
 package com.ltdev.cc.parser;
 
-import com.ltdev.cc.entity.LaserShooter;
 import com.ltdev.cc.entity.Entity;
+import com.ltdev.cc.entity.LaserShooter;
 import com.ltdev.math.Vector2;
 
 import java.util.ArrayList;

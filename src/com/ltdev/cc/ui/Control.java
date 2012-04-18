@@ -29,6 +29,7 @@ import com.ltdev.graphics.Texture;
 import com.ltdev.graphics.TilesetHelper;
 import com.ltdev.math.Matrix4;
 import com.ltdev.math.Vector2;
+import com.ltdev.math.Vector4;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -44,20 +45,7 @@ import javax.microedition.khronos.opengles.GL11;
  * \todo allow relative sizing to scale for different monitors
  */
 public abstract class Control
-{
-    /**
-     * An enum of different modes that a UI Control can render with.
-     * \todo get rid of this!
-     * @author Lightning Developemnt Studios
-     */
-    public enum RenderMode
-    {
-        COLOR,
-        GRADIENT,
-        TEXTURE,
-        TILESET
-    }
-    
+{    
     /**
      * An enum of different relative positions that a UI Control can be located at.
      * @author Lightning Development Studios
@@ -106,9 +94,7 @@ public abstract class Control
 	
 	//graphics data
 	protected Vector2 size, pos, relativePos, halfSize;
-	//protected float xSize, ySize, xPos, yPos, xRelative, yRelative, halfXSize, halfYSize;
 	protected UIPosition position;
-	protected EnumSet<RenderMode> renderMode;
 	protected Texture tex;
 	
 	protected float[] vertices;
@@ -123,7 +109,7 @@ public abstract class Control
 	protected boolean needToUpdateTexVBO, needToUpdateGradientVBO, needToUpdateVertexVBO;
 	
 	private float topPad, leftPad, bottomPad, rightPad;
-    private float colorR, colorG, colorB, colorA;
+    private Vector4 colorVec;
 	
 	//constructors
 	public Control(float xSize, float ySize, UIPosition position)
@@ -153,6 +139,7 @@ public abstract class Control
 		this.rightPad = rightPad;
 		
 		this.halfSize = Vector2.scale(size, 0.5f);
+		this.colorVec = new Vector4(1, 1, 1, 1);
 		
 		float x = halfSize.x();
 		float y = halfSize.y();
@@ -165,68 +152,37 @@ public abstract class Control
 			-x, -y
 		};
 		
+		float[] initTexcoords =
+	    {
+	        1, 1,
+	        1, 0,
+	        0, 1,
+	        0, 0
+	    };
+		
 		this.pos = new Vector2(0, 0);
 		rebuildModelMatrix();
 		
 		this.vertices = initVerts;
+		this.texture = initTexcoords;
 		this.vertexBuffer = setBuffer(vertexBuffer, vertices);
+		this.textureBuffer = setBuffer(textureBuffer, texture);
 		needToUpdateVertexVBO = true;
-		
-		renderMode = EnumSet.allOf(RenderMode.class);
-		renderMode.clear();
+		needToUpdateTexVBO = true;
 	}
 	
 	public void draw(GL11 gl)
 	{
 	    gl.glMultMatrixf(model.array(), 0);
-	    
-		final boolean containsColor = renderMode.contains(RenderMode.COLOR);
-		//final boolean containsGradient = renderMode.contains(RenderMode.GRADIENT);
-		final boolean containsTexture = renderMode.contains(RenderMode.TEXTURE);
-		final boolean containsTileset = renderMode.contains(RenderMode.TILESET);
-		
-		//Enable texturing and bind the current texture pointer (texturePtr) to GL_TEXTURE_2D
-		if (containsTexture || containsTileset)
-		{
-			gl.glEnable(GL11.GL_TEXTURE_2D);
-			gl.glBindTexture(GL11.GL_TEXTURE_2D, tex.getTexture());
-		}
-				
-		//Enable settings for this polygon
-		if (containsTexture || containsTileset)
-		{
-		    gl.glEnableClientState(GL11.GL_TEXTURE_COORD_ARRAY);
-		}
-		
-		//Sets color
-		if (containsColor)
-		{
-		    gl.glColor4f(colorR, colorG, colorB, colorA);
-		}
+		gl.glBindTexture(GL11.GL_TEXTURE_2D, tex.getTexture());
+		gl.glColor4f(colorVec.x(), colorVec.y(), colorVec.z(), colorVec.w());
 
 		gl.glBindBuffer(GL11.GL_ARRAY_BUFFER, vboVertPtr);
 		gl.glVertexPointer(2, GL11.GL_FLOAT, 0, 0);
-		
-		if (containsTexture || containsTileset)
-		{
-			gl.glBindBuffer(GL11.GL_ARRAY_BUFFER, vboTexturePtr);
-			gl.glTexCoordPointer(2, GL11.GL_FLOAT, 0, 0);
-		}
-		
+		gl.glBindBuffer(GL11.GL_ARRAY_BUFFER, vboTexturePtr);
+		gl.glTexCoordPointer(2, GL11.GL_FLOAT, 0, 0);
+
 		gl.glDrawArrays(GL11.GL_TRIANGLE_STRIP, 0, 4);
-				
-		//Disable texturing for next polygon
-		if (containsTexture || containsTileset)
-		{
-			gl.glDisableClientState(GL11.GL_TEXTURE_COORD_ARRAY);
-			gl.glDisable(GL11.GL_TEXTURE_2D);
-		}
-		
-		//Reset color for next polygon.
-		if (containsColor)
-		{
-		    gl.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-		}
 	}
 	
 	public void update()
@@ -351,29 +307,13 @@ public abstract class Control
 		gl.glBindBuffer(GL11.GL_ARRAY_BUFFER, vboVertPtr);
 		final int vertSize = vertexBuffer.capacity() * 4;
 		gl.glBufferData(GL11.GL_ARRAY_BUFFER, vertSize, vertexBuffer, GL11.GL_STATIC_DRAW); //\TODO choose static/draw settings..?
-		
-		if (renderMode.contains(RenderMode.GRADIENT))
-		{
-			gl.glGenBuffers(1, tempPtr, 0);
-			vboGradientPtr = tempPtr[0];
-			needToUpdateGradientVBO = true;
-			updateGradientVBO(gl);
-		}
-		if (renderMode.contains(RenderMode.TEXTURE) || renderMode.contains(RenderMode.TILESET))
-		{
-			gl.glGenBuffers(1, tempPtr, 0);
-			vboTexturePtr = tempPtr[0];
-			needToUpdateTexVBO = true;
-			updateTextureVBO(gl);
-		}
+
+		gl.glGenBuffers(1, tempPtr, 0);
+		vboTexturePtr = tempPtr[0];
+		needToUpdateTexVBO = true;
+		updateTextureVBO(gl);
 		
 		gl.glBindBuffer(GL11.GL_ARRAY_BUFFER, 0);
-		
-		final int error = gl.glGetError();
-		if (error != GL11.GL_NO_ERROR)
-		{
-			Log.e("LDS_Game", "Buffers generate GL_ERROR: " + error);
-		}
 	}
 	
 	public void updateTextureVBO(GL11 gl)
@@ -416,153 +356,6 @@ public abstract class Control
 		}
 		needToUpdateVertexVBO = false;
 	}
-	
-	//BLANK
-	public void clearRenderModes()
-	{
-		renderMode.clear();
-	}
-	
-	//COLOR
-	public void enableColorMode(float r, float g, float b, float a)
-	{
-		if (!renderMode.contains(RenderMode.COLOR))
-			renderMode.add(RenderMode.COLOR);
-		updateColor(r, g, b, a);
-	}
-	
-	public void enableColorMode(int r, int b, int g, int a)
-	{
-		enableColorMode((float) r / 255.0f, (float) b / 255.0f, (float) g / 255.0f, (float) a / 255.0f);
-	}
-	
-	public void updateColor(float r, float g, float b, float a)
-	{
-			colorR = r;
-			colorG = g;
-			colorB = b;
-			colorA = a;
-	}
-	
-	public void updateColor(int r, int g, int b, int a)
-	{
-		updateColor((float) r / 255.0f, (float) g / 255.0f, (float) b / 255.0f, (float) a / 255.0f);
-	}
-	
-	public void disableColorMode()
-	{
-		if (renderMode.contains(RenderMode.COLOR))
-			renderMode.remove(RenderMode.COLOR);
-	}
-	
-	//GRADIENT
-	public void enableGradientMode(float[] color)
-	{
-		if (!renderMode.contains(RenderMode.GRADIENT))
-			renderMode.add(RenderMode.GRADIENT);
-		updateGradient(color);
-	}
-	
-	public void updateGradient(float[] color)
-	{
-			this.color = color;
-			this.colorBuffer = setBuffer(colorBuffer, color);
-			needToUpdateGradientVBO = true;
-	}
-	
-	public void disableGradientMode()
-	{
-		if (renderMode.contains(RenderMode.GRADIENT))
-			renderMode.remove(RenderMode.GRADIENT);
-	}
-	
-	//TEXTURE
-	public void enableTextureMode(Texture tex)
-	{
-		if (!renderMode.contains(RenderMode.TEXTURE))
-			renderMode.add(RenderMode.TEXTURE);
-		updateTexture(tex);
-	}
-	
-	public void enableTextureMode(Texture tex, float[] texture)
-	{
-		if (!renderMode.contains(RenderMode.TEXTURE))
-			renderMode.add(RenderMode.TEXTURE);
-		updateTexture(tex, texture);
-	}
-		
-	public void updateTexture(Texture tex)
-	{
-		float[] initTexture = 
-		{
-		    1.0f, 0.0f,
-			1.0f, 1.0f,
-			0.0f, 0.0f,
-			0.0f, 1.0f
-		};
-		
-		updateTexture(tex, initTexture);
-	}
-	
-	public void updateTexture(Texture tex, float[] texture)
-	{
-			this.tex = tex;
-			this.texture = texture;
-			this.textureBuffer = setBuffer(textureBuffer, texture);
-			needToUpdateTexVBO = true;
-	}
-	
-	public void disableTextureMode()
-	{
-		if (renderMode.contains(RenderMode.TEXTURE))
-			renderMode.remove(RenderMode.TEXTURE);
-	}
-	
-	//TILESET
-	public void enableTilesetMode(Texture tex, int x, int y)
-	{
-		if (!renderMode.contains(RenderMode.TILESET))
-			renderMode.add(RenderMode.TILESET);
-		updateTileset(tex, x, y);
-	}
-	
-	public void enableTilesetMode(Texture tex, int tileID)
-	{
-		if (!renderMode.contains(RenderMode.TILESET))
-			renderMode.add(RenderMode.TILESET);
-		updateTileset(tex, tileID);
-	}
-		
-	public void updateTileset(Texture tex, int x, int y)
-	{
-		updateTileset(tex, TilesetHelper.getTilesetID(x, y, tex));	
-	}
-	
-	public void updateTileset(Texture tex, int tileID)
-	{
-		this.tex = tex;
-		texture = TilesetHelper.getTextureVertices(tex, tileID);
-		rotateTilesetCoords();
-		needToUpdateTexVBO = true;
-	}
-	
-	public void updateTileset(int x, int y)
-	{
-		if (tex != null)
-			updateTileset(tex, x, y);
-	}
-	
-	public void updateTileset(int tileID)
-	{
-		if (tex != null)
-			updateTileset(tex, tileID);
-	}
-	
-	public void disableTilesetMode()
-	{
-		if (renderMode.contains(RenderMode.TILESET))
-			renderMode.remove(RenderMode.TILESET);
-	}
 
 	public Vector2 getSize()
 	{
@@ -574,24 +367,9 @@ public abstract class Control
 	    return pos;
 	}
 	
-	public float getColorR()
+	public Vector4 getColor()
 	{
-	    return colorR;
-	}
-	
-	public float getColorG()
-	{
-	    return colorG;
-	}
-	
-	public float getColorB()
-	{
-	    return colorB;
-	}
-	
-	public float getColorA()
-	{
-	    return colorA;
+	    return colorVec;
 	}
 	
 	public Texture getTexture()
@@ -617,11 +395,6 @@ public abstract class Control
 	public float[] getTextureCoords()
 	{
 	    return texture;
-	}
-	
-	public EnumSet<RenderMode> getRenderMode()
-	{
-	    return renderMode;
 	}
 	
 	public void setSize(Vector2 size)
@@ -653,6 +426,16 @@ public abstract class Control
 	public void setRightPad(float rightPad)
 	{
 	    this.rightPad = rightPad;
+	}
+	
+	public void setColor(Vector4 color)
+	{
+	    this.colorVec = color;
+	}
+	
+	public void setTexture(Texture tex)
+	{
+	    this.tex = tex;
 	}
 	
 	public void rebuildModelMatrix()

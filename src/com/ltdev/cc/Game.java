@@ -130,29 +130,29 @@ public class Game
 		this.tileset = new Tileset(tileset, TextureManager.getTexture("tilesetworld"));
 		this.tileset.initialize(gl);
 		
-		setPlayer(parser.player);
-		entities.add(getPlayer());
+		this.player = parser.player;
+		entities.add(player);
 		
-		camPos = new PointF(getPlayer().getPos().x(), getPlayer().getPos().y());
+		camPos = new PointF(player.getPos().x(), player.getPos().y());
 		
-		setBtnB(new UIButton(80.0f, 80.0f, UIPosition.BOTTOMRIGHT));
-		getBtnB().autoPadding(0.0f, 0.0f, 90.0f, 5.0f);
-		getBtnB().enableTextureMode(TextureManager.getTexture("buttonb"));
+		this.btnB = new UIButton(80.0f, 80.0f, UIPosition.BOTTOMRIGHT);
+		btnB.autoPadding(0.0f, 0.0f, 90.0f, 5.0f);
+		btnB.setTexture(TextureManager.getTexture("buttonb"));
 		//btnB.setIntervalTime(Stopwatch.elapsedTimeMs());
-		uiList.add(getBtnB());
+		uiList.add(btnB);
 		
-		joypad = new UIJoypad(.45f, .45f, UIPosition.BOTTOMLEFT, getPlayer().getAngle(), TextureManager.getTexture("joystickin"));
+		joypad = new UIJoypad(.45f, .45f, UIPosition.BOTTOMLEFT, player.getAngle(), TextureManager.getTexture("joystickin"));
 		joypad.autoPadding(0.0f, 5.0f, 5.0f, 0.0f);
-		joypad.enableTextureMode(TextureManager.getTexture("joystickout"));
+		joypad.setTexture(TextureManager.getTexture("joystickout"));
 		uiList.add(joypad);
 		
 		//TODO camera class
-		worldMinX = -Tile.TILE_SIZE_F * (float)tileset[0].length / 2f;
-		worldMinY = -Tile.TILE_SIZE_F * (float)tileset.length / 2f;
-		worldMaxX = Tile.TILE_SIZE_F * (float)tileset[0].length / 2f;
-		worldMaxY = Tile.TILE_SIZE_F * (float)tileset.length / 2f;
+		worldMinX = -Tile.SIZE_F * (float)tileset[0].length / 2f;
+		worldMinY = -Tile.SIZE_F * (float)tileset.length / 2f;
+		worldMaxX = Tile.SIZE_F * (float)tileset[0].length / 2f;
+		worldMaxY = Tile.SIZE_F * (float)tileset.length / 2f;
 		
-		Vector2 worldSize = new Vector2(Tile.TILE_SIZE_F * tileset[0].length, Tile.TILE_SIZE_F * tileset.length);
+		Vector2 worldSize = new Vector2(Tile.SIZE_F * tileset[0].length, Tile.SIZE_F * tileset.length);
 		
 		ArrayList<Shape> shapes = new ArrayList<Shape>();
         for (Entity ent : entities)
@@ -165,8 +165,8 @@ public class Game
 		    {
 		        if (tileset[i][j].getTileType() == TileType.WALL)
 		        {
-		            Vector2 position = new Vector2((j + 0.5f) * Tile.TILE_SIZE_F - 0.5f * worldSize.x(), -((i + 0.5f) * Tile.TILE_SIZE_F - 0.5f * worldSize.y()));
-		            Rectangle r = new Rectangle(new Vector2(Tile.TILE_SIZE_F, Tile.TILE_SIZE_F), position, true);
+		            Vector2 position = new Vector2((j + 0.5f) * Tile.SIZE_F - 0.5f * worldSize.x(), -((i + 0.5f) * Tile.SIZE_F - 0.5f * worldSize.y()));
+		            Rectangle r = new Rectangle(new Vector2(Tile.SIZE_F, Tile.SIZE_F), position, true);
 		            r.setStatic(true);
 		            shapes.add(r);
 		        }
@@ -242,8 +242,8 @@ public class Game
 	public void updateCameraPosition()
 	{
 		//move camera to follow player.
-		camPos.x = getPlayer().getPos().x();
-		camPos.y = getPlayer().getPos().y();
+		camPos.x = player.getPos().x();
+		camPos.y = player.getPos().y();
 		
 		
 		//camera can't go further than defined level bounds
@@ -269,11 +269,11 @@ public class Game
 	public static Tile nearestTile(Entity ent, Tile[][] tileset)
 	{	
 		//TODO Fix return null when offscreen
-		final float tilesetHalfWidth = tileset[0].length * Tile.TILE_SIZE_F / 2;
-		final float tilesetHalfHeight = tileset.length * Tile.TILE_SIZE_F / 2;
+		final float tilesetHalfWidth = tileset[0].length * Tile.SIZE_F / 2;
+		final float tilesetHalfHeight = tileset.length * Tile.SIZE_F / 2;
 		
-		final int x = (int)(ent.getPos().x() + tilesetHalfWidth) / Tile.TILE_SIZE;
-		final int y = (int)(Math.abs(ent.getPos().y() - tilesetHalfHeight)) / Tile.TILE_SIZE;
+		final int x = (int)(ent.getPos().x() + tilesetHalfWidth) / Tile.SIZE;
+		final int y = (int)(Math.abs(ent.getPos().y() - tilesetHalfHeight)) / Tile.SIZE;
 		
 		if (x < tileset[0].length && x >= 0 && y < tileset.length && y >= 0)
 		{
@@ -303,7 +303,7 @@ public class Game
 	 */
 	public void updateFingers()
 	{
-		if (getPlayer().userHasControl())
+		if (player.userHasControl())
 		{
 			for (Finger f : fingerList)
 			{
@@ -327,21 +327,21 @@ public class Game
 	public void updatePlayerPos()
 	{
 		//move player
-		if (getPlayer().userHasControl())
+		if (player.userHasControl())
 		{
-			getPlayer().setAngle((float)Math.toDegrees(joypad.getInputAngle()));
+		    player.setAngle((float)Math.toDegrees(joypad.getInputAngle()));
 			//player.setPos(Vector2.add(player.getPos(), Vector2.scale(joypad.getInputVec(), /*Stopwatch.getFrameTime() **/ (1000 / 1000))));
-			getPlayer().addImpulse(Vector2.scale(joypad.getInputVec(), getPlayer().getShape().getMass() * 5));
+		    player.addImpulse(Vector2.scale(joypad.getInputVec(), player.getShape().getMass() * 5));
 		}
 		joypad.clearInputVec();
 		
 		
 		//move heldObject if neccessary
-		if (getPlayer().isHoldingObject())
-			getPlayer().updateHeldObjectPosition();
+		if (player.isHoldingObject())
+		    player.updateHeldObjectPosition();
 		
-		int indx = (int)((getPlayer().getPos().x() + tileset.getWidth() * Tile.TILE_SIZE_F / 2) / Tile.TILE_SIZE_F);
-		int indy = (int)((-getPlayer().getPos().y() + tileset.getHeight() * Tile.TILE_SIZE_F /  2) / Tile.TILE_SIZE_F);
+		int indx = (int)((player.getPos().x() + tileset.getWidth() * Tile.SIZE_F / 2) / Tile.SIZE_F);
+		int indy = (int)((-player.getPos().y() + tileset.getHeight() * Tile.SIZE_F /  2) / Tile.SIZE_F);
 		
 		Tile t = tileset.getTileAt(indx, indy);
 		
@@ -351,10 +351,10 @@ public class Game
     		    Player.kill();
 
     		else if (t.getTileType() == Tile.TileType.SlipperyTile)
-    		    getPlayer().getShape().setKineticFriction(0);
+    		    player.getShape().setKineticFriction(0);
     		
     		else
-    		    getPlayer().getShape().setKineticFriction(5);
+    		    player.getShape().setKineticFriction(5);
 		}
 	}
 	
@@ -364,7 +364,7 @@ public class Game
 	 */
 	public void updateEntities(GL11 gl)
 	{
-	    EntityManager.update(entities, getWorld(), gl);
+	    EntityManager.update(entities, world, gl);
 	    
 	    for (Entity ent : entities)
         {
@@ -377,7 +377,7 @@ public class Game
 	 */
 	public void integratePhysics()
 	{
-	    getWorld().integrate(Stopwatch.getFrameTime());
+	    world.integrate(Stopwatch.getFrameTime());
 	}
 	
 	/**
@@ -427,34 +427,33 @@ public class Game
 	 */
 	public void handleTouchInput(MotionEvent e)
 	{
-	    if (getPlayer().userHasControl())
+	    if (player.userHasControl())
         {
             Game.worldOutdated = true;
-            for (int i = 0; i < fingerList.size(); i++)
+            for (int i = fingerList.size() - 1; i >= 0; i--)
             {
                 final Finger f = fingerList.get(i);
                 Vector2 touchInput = Vector2.ZERO;
-                try
-                {
-                    touchInput = new Vector2(e.getX(f.getPointerId()) - Game.screenW / 2, Game.screenH / 2 - e.getY(f.getPointerId()));
-                }
-                catch (Exception ex) {}
+                touchInput = new Vector2(e.getX(f.getPointerId()) - Game.screenW / 2, Game.screenH / 2 - e.getY(f.getPointerId()));
                 f.setPosition(touchInput);
             }
             
-            switch (e.getAction() & MotionEvent.ACTION_MASK)
+            final int action = e.getAction() & MotionEvent.ACTION_MASK;
+            final int pointerIndex = (e.getAction() & MotionEvent.ACTION_POINTER_ID_MASK) >> MotionEvent.ACTION_POINTER_ID_SHIFT;
+		    final int pointerID = e.getPointerId(pointerIndex);
+            
+            switch (action)
             {
                 case MotionEvent.ACTION_POINTER_DOWN:
                 case MotionEvent.ACTION_DOWN:
-                    final int fingerIndex = e.getPointerId(e.getAction() >> MotionEvent.ACTION_POINTER_ID_SHIFT);
-                    final Vector2 touchVec = new Vector2(e.getX(e.getPointerCount() - 1) - Game.screenW / 2, Game.screenH / 2 - e.getY(e.getPointerCount() - 1));
+                    final Vector2 touchVec = new Vector2(e.getX(pointerID) - Game.screenW / 2, Game.screenH / 2 - e.getY(pointerID));
                     boolean onEnt = false;
                     for (int i = 0; i < uiList.size(); i++)
                     {
                         final Control ent = uiList.get(i);
                         if (touchVec.x() >= ent.getPos().x() - ent.getSize().x() / 2 && touchVec.x() <= ent.getPos().x() + ent.getSize().x() / 2 && touchVec.y() >= ent.getPos().y() - ent.getSize().y() / 2 && touchVec.y() <= ent.getPos().y() + ent.getSize().y() / 2)
                         {
-                            final Finger newFinger = new Finger(touchVec, ent, fingerIndex);
+                            final Finger newFinger = new Finger(touchVec, ent, pointerID);
                             newFinger.onStackPush();
                             fingerList.add(newFinger);
                             onEnt = true;
@@ -463,13 +462,13 @@ public class Game
                     }
                     if (!onEnt)
                     {
-                        final Finger newFinger = new Finger(null, null, fingerIndex);
+                        Finger newFinger = new Finger(null, null, pointerID);
                         fingerList.add(newFinger);
                     }
                     
                     break;
                 case MotionEvent.ACTION_UP:
-                    for (final Finger f : fingerList)
+                    for (Finger f : fingerList)
                     {
                         f.onStackPop();
                     }
@@ -478,11 +477,10 @@ public class Game
                 case MotionEvent.ACTION_POINTER_UP:
                     if (!fingerList.isEmpty())
                     {
-                        final int fIndex = e.getPointerId(e.getAction() >> MotionEvent.ACTION_POINTER_ID_SHIFT);
                         for (int i = 0; i < fingerList.size(); i++)
                         {
                             final Finger f = fingerList.get(i);
-                            if (fIndex == f.getPointerId())
+                            if (pointerID == f.getPointerId())
                                 fingerList.remove(i).onStackPop();
                         }
                     }

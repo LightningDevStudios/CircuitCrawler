@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Circuit Crawler</string>
+    
 	<string-array name="menu_items">
-	<item>Start</item>
-		<item>Tutorial</item>
+		<item>Start</item>
 		<item>Settings</item>
 		<item>Additional Donation</item>
 		<item>About The Youth for Technology Foundation</item>
@@ -11,8 +11,36 @@
 		<item>Credits</item>
 		<item>Quit</item>
 	</string-array>
-	<string-array name="levels">
-		<item>Level 1</item>
-		<item>Level 2</item>
-	</string-array>
+	
+	<string name="settings_enable_vibration">Enable Vibration</string>
+	<string name="settings_enable_sound_effects">Enable Sound Effects</string>
+	<string name="settings_enable_music">Enable Music</string>
+	<string name="settings_effect_volume">\nEffect Volume: 0%</string>
+	<string name="settings_music_volume">\nMusic Volume: 0%</string>
+	
+	<string name="names_robert">Robert Rouhani</string>
+	<string name="names_devin">Devin Reed</string>
+	<string name="names_matt">Matt Masarik</string>
+	<string name="names_jay">Jay Brandt</string>
+	<string name="names_jack">Jack Heffron (Zeadron Del Gomez)</string>
+	
+	<string name="credits_title">Credits</string>
+	<string name="credits_art">Art</string>
+	<string name="credits_graphics">Graphics</string>
+	<string name="credits_physics">Physics</string>
+	<string name="credits_level_design">Level Design</string>
+	<string name="credits_music">Music</string>
+	<string name="credits_sound">Sound Effects</string>
+	<string name="credits_tools">Tools Development</string>
+	<string name="credits_special_thanks">And a special thanks to all of our family and friends. Without them, this would not have been possible!</string>
+	
+	<string name="contentdesc_ldslogo">Lightning Development Studios logo</string>
+	<string name="contentdesc_ytflogo">Youth for Technology Foundation logo</string>
+	<string name="contentdesc_cclogo">Circuit Crawler logo</string>
+	
+	<string name="ldsinfo">Lightning Development Studios is a group of five high school students at Sage Hill School in Newport Coast, California. We are all learning Java, and for most of us, Circuit Crawler is our first game design project. Our goal is to use this game to support the Youth For Technology Foundation, as well as increase awareness about it. 100% of the profits from Circuit Crawler will go to YTF. Expect more from us in the future!</string>
+	<string name="ldsbuttontext">More about LDS</string>
+	
+	<string name="ytfinfo">YTF is a non-profit organization dedicated to bringing technological literacy to underprivleged communities, both in developing countries and in the United States. With a special focus on youth, YTF helps bring the modern, digital world to communities around the world, and inspire innovation among the members of these communities.</string>
+	<string name="ytfbuttontext">More about YTF</string>
 </resources>
