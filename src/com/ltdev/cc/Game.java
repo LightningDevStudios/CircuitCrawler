@@ -75,9 +75,12 @@ public class Game
 	private UIJoypad joypad;
 	private Player player;
 	
+	private boolean gameOver;
+	
 	//Constructors
 	public Game(Context context, GL11 gl, int levelId)
 	{	    
+	    gameOver = false;
 		TextureManager.addTexture("text", new Texture(R.raw.text, 256, 256, 16, 8, context, gl));
 		TextureManager.addTexture("tilesetworld", new Texture(R.raw.tilesetworld, 512, 256, 16, 8, context, gl));
 		TextureManager.addTexture("tilesetentities", new Texture(R.raw.tilesetentities, 256, 256, 8, 8, context, gl));
@@ -348,7 +351,7 @@ public class Game
 		if (t != null)
 		{
     		if (t.getTileType() == Tile.TileType.PIT)
-    		    Player.kill();
+    		    player.kill();
 
     		else if (t.getTileType() == Tile.TileType.SlipperyTile)
     		    player.getShape().setKineticFriction(0);
@@ -370,6 +373,11 @@ public class Game
         {
             ent.update(gl);
         }
+	    
+	    if(player.isdead())
+	    {
+	        setGameOver(true);
+	    }
 	}
 	
 	/**
@@ -555,5 +563,13 @@ public class Game
     public void setEntities(ArrayList<Entity> entities)
     {
         this.entities = entities;
+    }
+
+    public boolean isGameOver() {
+        return gameOver;
+    }
+
+    public void setGameOver(boolean gameOver) {
+        this.gameOver = gameOver;
     }
 }

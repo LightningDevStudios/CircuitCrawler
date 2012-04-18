@@ -36,6 +36,7 @@ public class Player extends Entity
 {
 	private HoldObject hObj;
 	private boolean controlled;
+	private boolean isDead;
 	
 	/**
 	 * Initializes a new instance of the Player class.
@@ -105,10 +106,11 @@ public class Player extends Entity
         super.update(gl); 
     }
 	
-	public static void kill()
+	public void kill()
 	{
 	    System.out.println("LOLZ PLAYERZ ARE DETH");
 	    System.out.println("NOOS YOU DIES. TIEM TO REASTRAT");
+	    isDead = true;
 	}
 	
 	public void disableUserControl()
@@ -116,6 +118,11 @@ public class Player extends Entity
 		if (hObj != null)
 			dropObject();
 		controlled = false;
+	}
+	
+	public boolean isdead()
+	{
+	    return isDead;
 	}
 	
 	public boolean userHasControl()
