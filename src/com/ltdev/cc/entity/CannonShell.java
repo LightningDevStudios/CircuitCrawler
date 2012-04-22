@@ -57,7 +57,7 @@ public class CannonShell extends Entity
     {
 	    if (ent instanceof Player)
 	    {
-	        Player.kill();
+	        ((Player)ent).kill();
 	    }
 	    
 	    if (ent instanceof BreakableDoor)

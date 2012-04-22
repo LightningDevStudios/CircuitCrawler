@@ -28,6 +28,7 @@ import android.content.Intent;
 import android.content.res.AssetFileDescriptor;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.GestureDetector;
@@ -43,6 +44,7 @@ import android.view.View.OnTouchListener;
 
 import com.ltdev.LevelSurfaceView;
 import com.ltdev.cc.event.*;
+import com.ltdev.cc.menu.GameOver;
 import com.ltdev.cc.puzzle.PuzzleActivity;
 
 import java.io.IOException;
@@ -164,7 +166,10 @@ public class LevelActivity extends Activity implements GameOverListener, GameIni
 		}
 		else
 		{
-			setResult(100 + levelIndex);
+			//setResult(100 + levelIndex);
+		    Intent gameOverIntent = new Intent(this, GameOver.class);
+            startActivity(gameOverIntent); 
+		    setResult(0);
 			finish();
 		}
 	}
