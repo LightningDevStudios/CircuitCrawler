@@ -40,7 +40,6 @@ public class LevelSurfaceView extends GLSurfaceView
 {
 	private Renderer renderer;
 	private Object syncObj;
-	private GestureDetector gestureDetector;
 
 	
 	/**
@@ -54,8 +53,6 @@ public class LevelSurfaceView extends GLSurfaceView
 		super(context);
 		this.syncObj = syncObj;
 		renderer = r;
-		
-		gestureDetector = new GestureDetector(new MyGestureDetector(this));
 		
 		this.setEGLConfigChooser(true);
 		this.setDebugFlags(DEBUG_CHECK_GL_ERROR);
@@ -159,28 +156,10 @@ public class LevelSurfaceView extends GLSurfaceView
 		 * Called when a puzzle event returns unsuccessfully.
 		 */
 		void onPuzzleFailed();
-
-        boolean onDoubleTap(MotionEvent e);
 	}
 	
 	public Renderer getRenderer()
 	{
 	    return renderer;
 	}
-}
-
-class MyGestureDetector extends SimpleOnGestureListener
-{   
-    private LevelSurfaceView v;
-    
-    public MyGestureDetector(LevelSurfaceView v)
-    {
-        this.v = v;
-    }
-    
-    @Override
-    public boolean onDoubleTap(MotionEvent e)
-    {
-        return v.getRenderer().onDoubleTap(e);
-    }
 }

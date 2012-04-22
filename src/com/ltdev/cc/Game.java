@@ -308,7 +308,7 @@ public class Game
     		    player.getShape().setKineticFriction(0);
     		
     		else
-    		    player.getShape().setKineticFriction(5);
+    		    player.getShape().setKineticFriction(2);
 		}
 	}
 	
@@ -385,27 +385,14 @@ public class Game
         {
             Game.worldOutdated = true;
             
-            Vector2 impulse = Vector2.scale(new Vector2(e.getX() - screenW / 2, screenH / 2 - e.getY()), 800);
-            player.addImpulse(impulse);
+            if (player.getShape().getVelocity().length() < 200)
+            {
+                Vector2 impulse = Vector2.scale(new Vector2(e.getX() - screenW / 2, screenH / 2 - e.getY()), 100);
+                player.addImpulse(impulse);
+            }
             //player.setAngle(impulse.angleRad());
         }
 	}
-	
-	public boolean onDoubleTap(MotionEvent e) 
-    {
-        for (Entity ent : entities)
-        {
-            if (ent instanceof HoldObject)
-            {
-                if (CollisionDetector.radiusCheck(player.getShape(), ent.getShape(), 1000))
-                {
-                    ent.getShape().addImpulse(Vector2.scaleTo(Vector2.subtract(player.getPos(), ent.getPos()), 10000));
-                }
-            }
-        }
-        
-        return true;
-    }
 	
 	/**
 	 * Gets the location of the camera.

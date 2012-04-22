@@ -45,8 +45,6 @@ public class Player extends Entity
 	{
 		super(new Circle(DEFAULT_SIZE, position, angle, true));
 		controlled = true;
-		shape.setStaticFriction(2);
-		shape.setKineticFriction(256);
 		
 		tex = TextureManager.getTexture("tilesetentities");
 		tilesetX = 0;
