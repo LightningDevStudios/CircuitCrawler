@@ -67,6 +67,8 @@ public class Game
 	
 	private Player player;
 	
+	private long touchInputTimer;
+	
 	//Constructors
 	public Game(Context context, GL11 gl, int levelId)
 	{	    
@@ -82,7 +84,8 @@ public class Game
 			
 		setEntities(new ArrayList<Entity>());
 		triggerList = new ArrayList<Trigger>();
-		        		
+		
+		touchInputTimer = 0;
 		//StringRenderer sr = StringRenderer.getInstance();
 		//sr.loadTextTileset(text);
 				
@@ -308,7 +311,7 @@ public class Game
     		    player.getShape().setKineticFriction(0);
     		
     		else
-    		    player.getShape().setKineticFriction(5);
+    		    player.getShape().setKineticFriction(2);
 		}
 	}
 	
@@ -385,27 +388,36 @@ public class Game
         {
             Game.worldOutdated = true;
             
-            Vector2 impulse = Vector2.scale(new Vector2(e.getX() - screenW / 2, screenH / 2 - e.getY()), 800);
-            player.addImpulse(impulse);
-            //player.setAngle(impulse.angleRad());
-        }
-	}
-	
-	public boolean onDoubleTap(MotionEvent e) 
-    {
-        for (Entity ent : entities)
-        {
-            if (ent instanceof HoldObject)
+            Vector2 impulse = Vector2.scale(new Vector2(e.getX() - screenW / 2, screenH / 2 - e.getY()), 100);
+            if (player.getShape().getVelocity().length() < 200)
+                player.addImpulse(impulse);
+            player.setAngle(impulse.angleRad());
+            touchInputTimer += Stopwatch.getFrameTime();
+            
+            switch (e.getAction() & MotionEvent.ACTION_MASK)
             {
-                if (CollisionDetector.radiusCheck(player.getShape(), ent.getShape(), 1000))
-                {
-                    ent.getShape().addImpulse(Vector2.scaleTo(Vector2.subtract(player.getPos(), ent.getPos()), 10000));
-                }
+                case MotionEvent.ACTION_DOWN:
+                    touchInputTimer = 0;
+                    break;
+                case MotionEvent.ACTION_UP:
+                    if (touchInputTimer < 200)
+                    {
+                        for (Entity ent : entities)
+                        {
+                            if (ent instanceof HoldObject)
+                            {
+                                if (CollisionDetector.radiusCheck(player.getShape(), ent.getShape(), 500))
+                                {
+                                    ent.getShape().addImpulse(Vector2.scaleTo(Vector2.subtract(player.getPos(), ent.getPos()), 150000));
+                                }
+                            }
+                        }
+                    }
+                    touchInputTimer = 0;
+                    break;
             }
         }
-        
-        return true;
-    }
+	}
 	
 	/**
 	 * Gets the location of the camera.

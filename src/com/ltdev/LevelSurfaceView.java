@@ -40,8 +40,6 @@ public class LevelSurfaceView extends GLSurfaceView
 {
 	private Renderer renderer;
 	private Object syncObj;
-	private GestureDetector gestureDetector;
-
 	
 	/**
 	 * Initializes a new instance of the Graphics class.
@@ -55,8 +53,6 @@ public class LevelSurfaceView extends GLSurfaceView
 		this.syncObj = syncObj;
 		renderer = r;
 		
-		gestureDetector = new GestureDetector(new MyGestureDetector(this));
-		
 		this.setEGLConfigChooser(true);
 		this.setDebugFlags(DEBUG_CHECK_GL_ERROR);
 		
@@ -66,12 +62,11 @@ public class LevelSurfaceView extends GLSurfaceView
 	@Override
 	public boolean onTouchEvent(final MotionEvent event)
 	{
-		//grab touch input, pass it through to the generic renderer (in this case, com.ltdev.GameRenderer
+		//grab touch input, pass it through to the generic renderer (in this case, com.ltdev.cc.LevelRenderer
 		queueEvent(new Runnable() 
 		{
 			public void run()
 			{
-			    //gestureDetector.onTouchEvent(event);
 				renderer.onTouchInput(event);
 			}
 		});
@@ -159,28 +154,10 @@ public class LevelSurfaceView extends GLSurfaceView
 		 * Called when a puzzle event returns unsuccessfully.
 		 */
 		void onPuzzleFailed();
-
-        boolean onDoubleTap(MotionEvent e);
 	}
 	
 	public Renderer getRenderer()
 	{
 	    return renderer;
 	}
-}
-
-class MyGestureDetector extends SimpleOnGestureListener
-{   
-    private LevelSurfaceView v;
-    
-    public MyGestureDetector(LevelSurfaceView v)
-    {
-        this.v = v;
-    }
-    
-    @Override
-    public boolean onDoubleTap(MotionEvent e)
-    {
-        return v.getRenderer().onDoubleTap(e);
-    }
 }

@@ -224,11 +224,6 @@ public class LevelRenderer implements com.ltdev.LevelSurfaceView.Renderer
 		game.handleTouchInput(e);
 	}
 	
-	public boolean onDoubleTap(MotionEvent e)
-	{
-	    return game.onDoubleTap(e);
-	}
-	
 	/**
 	 * Update the projection matrix with camera position.
 	 * @param gl The active OpenGL context.
