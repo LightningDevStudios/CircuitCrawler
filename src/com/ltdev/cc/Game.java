@@ -68,6 +68,8 @@ public class Game
 	private Player player;
 	
 	private long touchInputTimer;
+	private boolean pulling;
+	private Vector2 joystick;
 	
 	//Constructors
 	public Game(Context context, GL11 gl, int levelId)
@@ -86,6 +88,7 @@ public class Game
 		triggerList = new ArrayList<Trigger>();
 		
 		touchInputTimer = 0;
+		joystick = Vector2.ZERO;
 		//StringRenderer sr = StringRenderer.getInstance();
 		//sr.loadTextTileset(text);
 				
@@ -388,15 +391,30 @@ public class Game
         {
             Game.worldOutdated = true;
             
-            Vector2 impulse = Vector2.scale(new Vector2(e.getX() - screenW / 2, screenH / 2 - e.getY()), 100);
+            Vector2 impulse = Vector2.scale(new Vector2(e.getX() - screenW / 2 - joystick.x(), screenH / 2 - e.getY() - joystick.y()), 100);
             if (player.getShape().getVelocity().length() < 200)
                 player.addImpulse(impulse);
             player.setAngle(impulse.angleRad());
             touchInputTimer += Stopwatch.getFrameTime();
             
+            if (pulling)
+            {
+                for (Entity ent : entities)
+                {
+                    if (ent instanceof HoldObject && ((HoldObject)ent).isPullable())
+                    {
+                        if (CollisionDetector.radiusCheck(player.getShape(), ent.getShape(), 500))
+                        {
+                            ent.getShape().addImpulse(Vector2.scaleTo(Vector2.subtract(player.getPos(), ent.getPos()), 10000));
+                        }
+                    }
+                }
+            }
+            
             switch (e.getAction() & MotionEvent.ACTION_MASK)
             {
                 case MotionEvent.ACTION_DOWN:
+                    joystick = new Vector2(e.getX() - screenW / 2, screenH / 2 - e.getY());
                     touchInputTimer = 0;
                     break;
                 case MotionEvent.ACTION_UP:
@@ -413,6 +431,15 @@ public class Game
                             }
                         }
                     }
+                    touchInputTimer = 0;
+                    joystick = Vector2.ZERO;
+                    break;
+                case MotionEvent.ACTION_POINTER_DOWN:
+                    touchInputTimer = 0;
+                    pulling = true;
+                    break;
+                case MotionEvent.ACTION_POINTER_UP:
+                    pulling = false;
                     touchInputTimer = 0;
                     break;
             }

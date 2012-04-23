@@ -54,9 +54,6 @@ public class Teleporter extends Entity
 	    
 		if (active && tpLink != null)
 		{
-			if (ent instanceof HoldObject && ((HoldObject)ent).isHeld())
-				return;
-			
 			Vector2 newPos = tpLink.getLinkedPos(this);
 			if (newPos != null)
 			{
