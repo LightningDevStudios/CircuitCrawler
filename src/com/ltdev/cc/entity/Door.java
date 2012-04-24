@@ -75,9 +75,11 @@ public class Door extends Entity
                 closedPosition = new Vector2(openedPosition.x() + size, openedPosition.y());
                 break;
             case DOWN:
+                setAngle(90);
                 closedPosition = new Vector2(openedPosition.x(), openedPosition.y() - size);
                 break;
             case UP:
+                setAngle(90);
                 closedPosition = new Vector2(openedPosition.x(), openedPosition.y() + size);
                 break;
             default:
