@@ -18,7 +18,6 @@
 	<xs:simpleType name="booleanType">
 		<xs:restriction base="xs:boolean" />
 	</xs:simpleType>
-
   <xs:simpleType name="tileStateType">
     <xs:restriction base="xs:token">
       <xs:enumeration value="FLOOR" />
@@ -75,7 +74,6 @@
 	</xs:simpleType>
 
 	<!-- COMPLEX TYPES, used to prevent rewriting elements into everything! -->
-
   <xs:complexType name="EntityInfo">
     <xs:sequence>
       	<xs:element name="id" type="stringType" />
@@ -96,7 +94,7 @@
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
-
+  
 	<xs:complexType name="ButtonInfo">
 		<xs:complexContent>
 			<xs:extension base="EntityInfo" />
