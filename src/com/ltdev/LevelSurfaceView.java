@@ -24,7 +24,11 @@ package com.ltdev;
 
 import android.content.Context;
 import android.opengl.GLSurfaceView;
+import android.view.GestureDetector;
 import android.view.MotionEvent;
+import android.view.View;
+import android.view.GestureDetector.SimpleOnGestureListener;
+import android.view.View.OnTouchListener;
 
 import com.ltdev.cc.event.*;
 
@@ -58,7 +62,7 @@ public class LevelSurfaceView extends GLSurfaceView
 	@Override
 	public boolean onTouchEvent(final MotionEvent event)
 	{
-		//grab touch input, pass it through to the generic renderer (in this case, com.ltdev.GameRenderer
+		//grab touch input, pass it through to the generic renderer (in this case, com.ltdev.cc.LevelRenderer
 		queueEvent(new Runnable() 
 		{
 			public void run()
@@ -150,5 +154,10 @@ public class LevelSurfaceView extends GLSurfaceView
 		 * Called when a puzzle event returns unsuccessfully.
 		 */
 		void onPuzzleFailed();
+	}
+	
+	public Renderer getRenderer()
+	{
+	    return renderer;
 	}
 }

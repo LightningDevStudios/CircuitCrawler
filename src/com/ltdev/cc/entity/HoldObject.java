@@ -26,26 +26,32 @@ import com.ltdev.cc.physics.primitives.Shape;
 
 public abstract class HoldObject extends Entity
 {
-	private boolean held;
-	
+    private boolean pullable;
+    
 	public HoldObject(Shape shape)
 	{
 	    super(shape);
-		held = false;
+	    pullable = true;
 	}
 	
-	public boolean isHeld()
-	{
-		return held;
-	}
-	
-	public void hold()
-	{
-		held = true;
-	}
-	
-	public void drop()
-	{
-		held = false;
-	}
+	@Override
+    public void interact(Entity ent)
+    {
+        super.interact(ent);
+        
+        if (ent instanceof Player)
+            pullable = false;
+    }
+    
+    @Override
+    public void uninteract(Entity ent)
+    {
+        if (ent instanceof Player)
+            pullable = true;
+    }
+    
+    public boolean isPullable()
+    {
+        return pullable;
+    }
 }

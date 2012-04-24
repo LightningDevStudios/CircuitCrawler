@@ -204,8 +204,8 @@ public abstract class Shape
         if (totalImpulse.length() > 0)
             velocity = Vector2.add(velocity, Vector2.scale(totalImpulse, 1 / mass));
         
-        if (velocity.length() > 200)
-            velocity = Vector2.scaleTo(velocity, 200);
+        if (velocity.length() > 300)
+            velocity = Vector2.scaleTo(velocity, 300);
         
         setPos(Vector2.add(position, Vector2.scale(velocity, frameTime)));
 

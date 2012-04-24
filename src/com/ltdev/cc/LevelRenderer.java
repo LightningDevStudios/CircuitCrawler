@@ -30,7 +30,6 @@ import com.ltdev.Stopwatch;
 import com.ltdev.cc.entity.*;
 import com.ltdev.cc.event.*;
 import com.ltdev.cc.physics.CollisionDetector;
-import com.ltdev.cc.ui.*;
 import com.ltdev.math.*;
 
 import javax.microedition.khronos.egl.EGLConfig;
@@ -151,25 +150,7 @@ public class LevelRenderer implements com.ltdev.LevelSurfaceView.Renderer
 		
 		game.updateTriggers();
 		game.updateEntities(gl);
-		game.updateFingers();
 		game.integratePhysics();
-				
-		if (game.getBtnB().isPressed())
-        {
-		    for (int i = 0; i < game.getEntities().size(); i++)
-		    {
-		        if ((game.getEntities().get(i) instanceof Ball) || (game.getEntities().get(i) instanceof Block))
-		        {	              
-        	        if (CollisionDetector.radiusCheck(game.getPlayer().getShape(), game.getEntities().get(i).getShape(), 100))
-                    {
-        	            if (CollisionDetector.radiusCheck(game.getPlayer().getShape(), game.getEntities().get(i).getShape(), 1))
-        	                game.getEntities().get(i).getShape().addImpulse(Vector2.scale(Vector2.subtract(game.getEntities().get(i).getShape().getPos(), game.getPlayer().getShape().getPos()), 800));
-        	            else
-        	                game.getEntities().get(i).getShape().addImpulse(Vector2.scale(Vector2.subtract(game.getEntities().get(i).getShape().getPos(), game.getPlayer().getShape().getPos()), -800));
-                    }
-		        }
-		    } 
-        }
 		 
 		/**********************
 		 * Render all Entites *
@@ -207,28 +188,6 @@ public class LevelRenderer implements com.ltdev.LevelSurfaceView.Renderer
 		Game.worldOutdated = false;
 		game.updateCameraPosition();
 		
-		//Render UI, in the UI perspective
-		viewHUD(gl);
-		
-		gl.glDisable(GL11.GL_DEPTH_TEST);
-		gl.glDisable(GL11.GL_LIGHT0);
-        gl.glDisable(GL11.GL_LIGHTING);
-		
-		for (Control ent : game.getUIList())
-		{
-		    gl.glPushMatrix();
-			ent.update();
-			ent.updateVertexVBO(gl);
-			ent.updateGradientVBO(gl);
-			ent.updateTextureVBO(gl);
-			ent.draw(gl);
-			gl.glPopMatrix();
-		}
-		
-		gl.glEnable(GL11.GL_LIGHT0);
-        gl.glEnable(GL11.GL_LIGHTING);
-		gl.glEnable(GL11.GL_DEPTH_TEST);
-		
 		viewWorld(gl);
 				
 		//poll for touch input
@@ -262,7 +221,7 @@ public class LevelRenderer implements com.ltdev.LevelSurfaceView.Renderer
 	 */
 	public void onTouchInput(MotionEvent e)
 	{
-		game.handleTouchInput(e);		
+		game.handleTouchInput(e);
 	}
 	
 	/**
@@ -275,18 +234,6 @@ public class LevelRenderer implements com.ltdev.LevelSurfaceView.Renderer
 	    //projWorld = Matrix4.ortho(game.camPosX - (Game.screenW / 2), game.camPosX + (Game.screenW / 2), game.camPosY + (Game.screenH / 2),  game.camPosY - (Game.screenH / 2), 0, 1);
 		viewWorld(gl);
 		//game.updateRenderedTileset();
-	}
-	
-	/**
-	 * Loads the UI projection matrix.
-	 * @param gl The active OpenGL context.
-	 */
-	public void viewHUD(GL11 gl)
-	{
-		gl.glMatrixMode(GL11.GL_PROJECTION);
-		gl.glLoadMatrixf(projUI.array(), 0);
-		gl.glMatrixMode(GL11.GL_MODELVIEW);
-		gl.glLoadIdentity();
 	}
 	
 	/**
@@ -372,13 +319,5 @@ public class LevelRenderer implements com.ltdev.LevelSurfaceView.Renderer
 	public void gameOver()
 	{
 		gameOverListener.onGameOver(charlieSheen);
-	}
-	
-	/**
-	 * Remove all Fingers currently touching the screen.
-	 */
-	public void clearTouchInput()
-	{
-		game.clearFingers();
 	}
 }

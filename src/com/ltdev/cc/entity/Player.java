@@ -34,7 +34,6 @@ import javax.microedition.khronos.opengles.GL11;
  */
 public class Player extends Entity
 {
-	private HoldObject hObj;
 	private boolean controlled;
 	
 	/**
@@ -46,8 +45,6 @@ public class Player extends Entity
 	{
 		super(new Circle(DEFAULT_SIZE, position, angle, true));
 		controlled = true;
-		shape.setStaticFriction(2);
-		shape.setKineticFriction(256);
 		
 		tex = TextureManager.getTexture("tilesetentities");
 		tilesetX = 0;
@@ -59,40 +56,6 @@ public class Player extends Entity
 	public void interact(Entity ent)
 	{
 	    super.interact(ent);
-	}
-	
-	public void holdObject(HoldObject hObj)
-	{
-		this.hObj = hObj;
-		hObj.hold();
-		updateHeldObjectPosition();
-	}
-	
-	public void dropObject()
-	{
-		hObj.drop();
-		hObj = new Block(0, new Vector2(0, 0));
-		hObj = null;
-	}
-	
-	/**
-	 * \todo actually push the object with physics.
-	 */
-	public void throwObject()
-	{
-		dropObject();
-	}
-
-	/**
-	 * \todo do this with physics.
-	 */
-	public void updateHeldObjectPosition()
-	{
-		/*float heldDistance = hObj.halfSize * hObj.getXScl() + this.halfSize + 10.0f;
-		Vector2 directionVec = new Vector2(angle);
-		directionVec.scale(heldDistance).add(posVec);
-		hObj.setPos(directionVec);
-		hObj.setAngle(angle);*/
 	}
 	
 	/**
@@ -113,24 +76,12 @@ public class Player extends Entity
 	
 	public void disableUserControl()
 	{
-		if (hObj != null)
-			dropObject();
 		controlled = false;
 	}
 	
 	public boolean userHasControl()
 	{
 		return controlled;
-	}
-	
-	public HoldObject getHeldObject()
-	{
-		return hObj;
-	}
-	
-	public boolean isHoldingObject()
-	{
-	    return hObj != null;
 	}
 
     public void addImpulse(Vector2 f)

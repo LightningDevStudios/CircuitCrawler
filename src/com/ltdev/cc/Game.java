@@ -35,8 +35,6 @@ import com.ltdev.cc.parser.Parser;
 import com.ltdev.cc.physics.*;
 import com.ltdev.cc.physics.primitives.*;
 import com.ltdev.cc.trigger.*;
-import com.ltdev.cc.ui.*;
-import com.ltdev.cc.ui.Control.UIPosition;
 import com.ltdev.graphics.Texture;
 import com.ltdev.graphics.TextureManager;
 import com.ltdev.math.Vector2;
@@ -58,22 +56,20 @@ public class Game
 	
     private Tileset tileset;
 	private ArrayList<Entity> entities;
-	private ArrayList<Control> uiList;
 	private ArrayList<Trigger> triggerList;
 
 	private World world;
-	
-	private ArrayList<Finger> fingerList;
 	
 	//Camera data
 	private PointF camPos;
 	
 	private float worldMinX, worldMinY, worldMaxX, worldMaxY;
 	
-	//Testing data
-	private UIButton btnB;
-	private UIJoypad joypad;
 	private Player player;
+	
+	private long touchInputTimer;
+	private boolean pulling;
+	private Vector2 joystick;
 	
 	//Constructors
 	public Game(Context context, GL11 gl, int levelId)
@@ -90,10 +86,10 @@ public class Game
 		TextureManager.addTexture("buttonb", new Texture(R.raw.buttonb, 32, 32, 1, 1, context, gl));
 			
 		setEntities(new ArrayList<Entity>());
-		uiList = new ArrayList<Control>();
 		triggerList = new ArrayList<Trigger>();
-		fingerList = new ArrayList<Finger>();
-		        		
+		
+		touchInputTimer = 0;
+		joystick = Vector2.ZERO;
 		//StringRenderer sr = StringRenderer.getInstance();
 		//sr.loadTextTileset(text);
 				
@@ -136,17 +132,6 @@ public class Game
 		
 		camPos = new PointF(player.getPos().x(), player.getPos().y());
 		
-		this.btnB = new UIButton(80.0f, 80.0f, UIPosition.BOTTOMRIGHT);
-		btnB.autoPadding(0.0f, 0.0f, 90.0f, 5.0f);
-		btnB.setTexture(TextureManager.getTexture("buttonb"));
-		//btnB.setIntervalTime(Stopwatch.elapsedTimeMs());
-		uiList.add(btnB);
-		
-		joypad = new UIJoypad(.45f, .45f, UIPosition.BOTTOMLEFT, player.getAngle(), TextureManager.getTexture("joystickin"));
-		joypad.autoPadding(0.0f, 5.0f, 5.0f, 0.0f);
-		joypad.setTexture(TextureManager.getTexture("joystickout"));
-		uiList.add(joypad);
-		
 		//TODO camera class
 		worldMinX = -Tile.SIZE_F * (float)tileset[0].length / 2f;
 		worldMinY = -Tile.SIZE_F * (float)tileset.length / 2f;
@@ -186,7 +171,7 @@ public class Game
 	    s.setTexture(TextureManager.getTexture("tilesetentities"));
 	    EntityManager.addEntity(s);*/
 
-	    Cannon c = new Cannon(40,  Vector2.add(player.getPos(), new Vector2(-72, 0)), 0, 20, 500000, player);
+	    /*Cannon c = new Cannon(40,  Vector2.add(player.getPos(), new Vector2(-72, 0)), 0, 20, 500000, player);
 	    c.setTexture(TextureManager.getTexture("tilesetentities"));
 	    EntityManager.addEntity(c);
 	   
@@ -196,18 +181,13 @@ public class Game
 	    
 	    BreakableDoor door = new BreakableDoor(Vector2.add(player.getPos(), new Vector2(72, 0)), 3);
 	    door.setTexture(TextureManager.getTexture("tilesetentities"));
-	    EntityManager.addEntity(door); 
+	    EntityManager.addEntity(door); */
 	    
 		updateCameraPosition();
 		
 		for (Entity ent : entities)
         {
             ent.initialize(gl);
-        }
-        
-        for (Control ent : uiList)
-        {
-            ent.genHardwareBuffers(gl);
         }
 	}
 	
@@ -298,20 +278,6 @@ public class Game
 				((EffectEndGame)t.getEffect()).setListener(listener);
 		}
 	}
-	
-	/**
-	 * Updates all the fingers on the screen.
-	 */
-	public void updateFingers()
-	{
-		if (player.userHasControl())
-		{
-			for (Finger f : fingerList)
-			{
-				f.update();
-			}
-		}
-	}
 
 	/**
 	 * Updates all the triggers in the level.
@@ -330,16 +296,10 @@ public class Game
 		//move player
 		if (player.userHasControl())
 		{
-		    player.setAngle((float)Math.toDegrees(joypad.getInputAngle()));
+		    //player.setAngle((float)Math.toDegrees(joypad.getInputAngle()));
 			//player.setPos(Vector2.add(player.getPos(), Vector2.scale(joypad.getInputVec(), /*Stopwatch.getFrameTime() **/ (1000 / 1000))));
-		    player.addImpulse(Vector2.scale(joypad.getInputVec(), player.getShape().getMass() * 5));
+		    //player.addImpulse(Vector2.scale(joypad.getInputVec(), player.getShape().getMass() * 5));
 		}
-		joypad.clearInputVec();
-		
-		
-		//move heldObject if neccessary
-		if (player.isHoldingObject())
-		    player.updateHeldObjectPosition();
 		
 		int indx = (int)((player.getPos().x() + tileset.getWidth() * Tile.SIZE_F / 2) / Tile.SIZE_F);
 		int indy = (int)((-player.getPos().y() + tileset.getHeight() * Tile.SIZE_F /  2) / Tile.SIZE_F);
@@ -355,7 +315,7 @@ public class Game
     		    player.getShape().setKineticFriction(0);
     		
     		else
-    		    player.getShape().setKineticFriction(5);
+    		    player.getShape().setKineticFriction(2);
 		}
 	}
 	
@@ -431,63 +391,58 @@ public class Game
 	    if (player.userHasControl())
         {
             Game.worldOutdated = true;
-            for (int i = fingerList.size() - 1; i >= 0; i--)
+            
+            Vector2 impulse = Vector2.scale(new Vector2(e.getX() - screenW / 2 - joystick.x(), screenH / 2 - e.getY() - joystick.y()), 100);
+            if (player.getShape().getVelocity().length() < 200)
+                player.addImpulse(impulse);
+            player.setAngle(impulse.angleRad());
+            touchInputTimer += Stopwatch.getFrameTime();
+            
+            if (pulling)
             {
-                final Finger f = fingerList.get(i);
-                Vector2 touchInput = Vector2.ZERO;
-                touchInput = new Vector2(e.getX(f.getPointerId()) - Game.screenW / 2, Game.screenH / 2 - e.getY(f.getPointerId()));
-                f.setPosition(touchInput);
+                for (Entity ent : entities)
+                {
+                    if (ent instanceof HoldObject && ((HoldObject)ent).isPullable())
+                    {
+                        if (CollisionDetector.radiusCheck(player.getShape(), ent.getShape(), 500))
+                        {
+                            ent.getShape().addImpulse(Vector2.scaleTo(Vector2.subtract(player.getPos(), ent.getPos()), 10000));
+                        }
+                    }
+                }
             }
             
-            final int action = e.getAction() & MotionEvent.ACTION_MASK;
-            final int pointerIndex = (e.getAction() & MotionEvent.ACTION_POINTER_ID_MASK) >> MotionEvent.ACTION_POINTER_ID_SHIFT;
-		    final int pointerID = e.getPointerId(pointerIndex);
-            
-            switch (action)
+            switch (e.getAction() & MotionEvent.ACTION_MASK)
             {
-                case MotionEvent.ACTION_POINTER_DOWN:
                 case MotionEvent.ACTION_DOWN:
-                    final Vector2 touchVec = new Vector2(e.getX(pointerID) - Game.screenW / 2, Game.screenH / 2 - e.getY(pointerID));
-                    boolean onEnt = false;
-                    for (int i = 0; i < uiList.size(); i++)
-                    {
-                        final Control ent = uiList.get(i);
-                        if (touchVec.x() >= ent.getPos().x() - ent.getSize().x() / 2 && touchVec.x() <= ent.getPos().x() + ent.getSize().x() / 2 && touchVec.y() >= ent.getPos().y() - ent.getSize().y() / 2 && touchVec.y() <= ent.getPos().y() + ent.getSize().y() / 2)
-                        {
-                            final Finger newFinger = new Finger(touchVec, ent, pointerID);
-                            newFinger.onStackPush();
-                            fingerList.add(newFinger);
-                            onEnt = true;
-                            break;
-                        }
-                    }
-                    if (!onEnt)
-                    {
-                        Finger newFinger = new Finger(null, null, pointerID);
-                        fingerList.add(newFinger);
-                    }
-                    
+                    joystick = new Vector2(e.getX() - screenW / 2, screenH / 2 - e.getY());
+                    touchInputTimer = 0;
                     break;
                 case MotionEvent.ACTION_UP:
-                    for (Finger f : fingerList)
+                    if (touchInputTimer < 200)
                     {
-                        f.onStackPop();
-                    }
-                    fingerList.clear();
-                    break;
-                case MotionEvent.ACTION_POINTER_UP:
-                    if (!fingerList.isEmpty())
-                    {
-                        for (int i = 0; i < fingerList.size(); i++)
+                        for (Entity ent : entities)
                         {
-                            final Finger f = fingerList.get(i);
-                            if (pointerID == f.getPointerId())
-                                fingerList.remove(i).onStackPop();
+                            if (ent instanceof HoldObject)
+                            {
+                                if (CollisionDetector.radiusCheck(player.getShape(), ent.getShape(), 500))
+                                {
+                                    ent.getShape().addImpulse(Vector2.scaleTo(Vector2.subtract(player.getPos(), ent.getPos()), 150000));
+                                }
+                            }
                         }
                     }
+                    touchInputTimer = 0;
+                    joystick = Vector2.ZERO;
                     break;
-            default:
-                break;
+                case MotionEvent.ACTION_POINTER_DOWN:
+                    touchInputTimer = 0;
+                    pulling = true;
+                    break;
+                case MotionEvent.ACTION_POINTER_UP:
+                    pulling = false;
+                    touchInputTimer = 0;
+                    break;
             }
         }
 	}
@@ -500,33 +455,6 @@ public class Game
 	{
 	    return camPos;
 	}
-	
-	/**
-	 * Clears all the fingers currently on the screen.
-	 */
-	public void clearFingers()
-	{
-	    fingerList.clear();
-	}
-	
-	/**
-	 * Gets all the UI controls.
-	 * @return The UI control list.
-	 */
-	public ArrayList<Control> getUIList()
-	{
-	    return uiList;
-	}
-
-    public UIButton getBtnB()
-    {
-        return btnB;
-    }
-
-    public void setBtnB(UIButton btnB)
-    {
-        this.btnB = btnB;
-    }
 
     public World getWorld()
     {

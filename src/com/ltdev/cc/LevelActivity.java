@@ -30,9 +30,16 @@ import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.view.GestureDetector;
+import android.view.GestureDetector.OnGestureListener;
+import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
 
 import com.ltdev.LevelSurfaceView;
 import com.ltdev.cc.event.*;
@@ -53,13 +60,13 @@ public class LevelActivity extends Activity implements GameOverListener, GameIni
 	private MediaPlayer mp;
 	private ProgressDialog pd;
 	
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
 		
 		pd = ProgressDialog.show(this, "", "Loading...");
-		
 		mp = new MediaPlayer();
 		
 		levelIndex = getIntent().getExtras().getInt("levelIndex", -1);
@@ -162,12 +169,13 @@ public class LevelActivity extends Activity implements GameOverListener, GameIni
 		}
 	}
 	
+	
+	
 	/**
 	 * Callback for when a puzzle is started.
 	 */
 	public void onPuzzleActivated()
 	{
-		levelRenderer.clearTouchInput();
 		//glSurface.onPause();
 		Intent i = new Intent(LevelActivity.this, PuzzleActivity.class);
 		i.putExtra("PUZZLE_RENDERER", "circuit.CircuitPuzzle");
@@ -214,6 +222,7 @@ public class LevelActivity extends Activity implements GameOverListener, GameIni
 	        e.printStackTrace();
 	    }
 	}
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu)
 	{
@@ -261,7 +270,7 @@ public class LevelActivity extends Activity implements GameOverListener, GameIni
 	@Override
 	public void onBackPressed()
 	{
-		//mp.reset();
+		
 	}
 	
 	@Override
@@ -289,3 +298,6 @@ public class LevelActivity extends Activity implements GameOverListener, GameIni
 		mp.release();
 	}
 }
+
+
+
