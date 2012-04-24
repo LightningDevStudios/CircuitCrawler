@@ -395,22 +395,13 @@ public class Game
             Vector2 impulse = Vector2.scale(new Vector2(e.getX() - screenW / 2 - joystick.x(), screenH / 2 - e.getY() - joystick.y()), 100);
             if (player.getShape().getVelocity().length() < 200)
                 player.addImpulse(impulse);
-            player.setAngle(impulse.angleRad());
+            player.setAngle(impulse.angleDeg());
             touchInputTimer += Stopwatch.getFrameTime();
             
             if (pulling)
-            {
                 for (Entity ent : entities)
-                {
-                    if (ent instanceof HoldObject && ((HoldObject)ent).isPullable())
-                    {
-                        if (CollisionDetector.radiusCheck(player.getShape(), ent.getShape(), 500))
-                        {
+                    if (ent instanceof HoldObject && ((HoldObject)ent).isPullable() && CollisionDetector.radiusCheck(player.getShape(), ent.getShape(), 500))
                             ent.getShape().addImpulse(Vector2.scaleTo(Vector2.subtract(player.getPos(), ent.getPos()), 10000));
-                        }
-                    }
-                }
-            }
             
             switch (e.getAction() & MotionEvent.ACTION_MASK)
             {
@@ -420,18 +411,9 @@ public class Game
                     break;
                 case MotionEvent.ACTION_UP:
                     if (touchInputTimer < 200)
-                    {
                         for (Entity ent : entities)
-                        {
-                            if (ent instanceof HoldObject)
-                            {
-                                if (CollisionDetector.radiusCheck(player.getShape(), ent.getShape(), 500))
-                                {
+                            if (ent instanceof HoldObject && CollisionDetector.radiusCheck(player.getShape(), ent.getShape(), 500))
                                     ent.getShape().addImpulse(Vector2.scaleTo(Vector2.subtract(player.getPos(), ent.getPos()), 150000));
-                                }
-                            }
-                        }
-                    }
                     touchInputTimer = 0;
                     joystick = Vector2.ZERO;
                     break;
