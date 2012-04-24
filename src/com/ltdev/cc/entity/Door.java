@@ -24,6 +24,8 @@ package com.ltdev.cc.entity;
 
 import com.ltdev.Direction;
 import com.ltdev.Stopwatch;
+import com.ltdev.cc.models.ButtonUpData;
+import com.ltdev.cc.models.DoorData;
 import com.ltdev.cc.physics.primitives.Rectangle;
 import com.ltdev.graphics.TextureManager;
 import com.ltdev.math.Vector2;
@@ -58,7 +60,7 @@ public class Door extends Entity
 	 */
 	public Door(float size, Vector2 position, Direction dir)
     {
-        super(new Rectangle(new Vector2(size - 10, size), position, 0, true));
+        super(new Rectangle(new Vector2(size, size / 2), position, 0, true));
         shape.setStatic(true);
         colorInterpSpeed = 1.0f;
         
@@ -93,6 +95,37 @@ public class Door extends Entity
     }
 
 	@Override
+    public void draw(GL11 gl)
+    {
+        //convert local space to world space.
+        gl.glMultMatrixf(shape.getModel().array(), 0);
+        
+        //TODO temorary while we don't have the rest of the art
+        gl.glEnableClientState(GL11.GL_NORMAL_ARRAY);
+        //gl.glEnable(GL11.GL_LIGHTING);
+        //gl.glEnable(GL11.GL_LIGHT0);
+        
+        //bind the texture and set the color.
+        gl.glBindTexture(GL11.GL_TEXTURE_2D, tex.getTexture());
+        gl.glColor4f(colorVec.x(), colorVec.y(), colorVec.z(), colorVec.w());
+
+        //bind the VBO and set up the vertex and tex coord pointers.
+        gl.glBindBuffer(GL11.GL_ARRAY_BUFFER, vbo);
+        gl.glVertexPointer(3, GL11.GL_FLOAT, 32, 0);
+        gl.glTexCoordPointer(2, GL11.GL_FLOAT, 32, 12);
+        gl.glNormalPointer(GL11.GL_FLOAT, 32, 20);
+        gl.glBindBuffer(GL11.GL_ARRAY_BUFFER, 0);
+        
+        //draw the entity.
+        gl.glDrawArrays(GL11.GL_TRIANGLES, 0, DoorData.VERTEX_COUNT);
+        
+        //TODO also temporary
+        //gl.glDisable(GL11.GL_LIGHT0);
+        //gl.glDisable(GL11.GL_LIGHTING);
+        gl.glDisableClientState(GL11.GL_NORMAL_ARRAY);
+    }
+	
+	@Override
 	public void update(GL11 gl)
 	{
 	    super.update(gl);
@@ -103,6 +136,14 @@ public class Door extends Entity
 	    else
             targetPos = Vector2.add(shape.getPos(), Vector2.scale(Vector2.subtract(openedPosition, shape.getPos()), frameTime));
 	    shape.setPos(targetPos);
+	    shape.setAngle(0);
+	}
+	
+	@Override
+	public void initialize(GL11 gl)
+	{
+	    vbo = DoorData.getBufferId(gl);        
+        this.tex = TextureManager.getTexture("door");
 	}
 	
 	/**

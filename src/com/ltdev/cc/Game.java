@@ -78,11 +78,15 @@ public class Game
 		TextureManager.addTexture("tilesetworld", new Texture(R.raw.tilesetworld, 512, 256, 16, 8, context, gl));
 		TextureManager.addTexture("tilesetentities", new Texture(R.raw.tilesetentities, 256, 256, 8, 8, context, gl));
 		TextureManager.addTexture("baricons", new Texture(R.raw.baricons, 32, 16, 2, 1, context, gl));
-		TextureManager.addTexture("buttonup", new Texture(R.raw.buttonup, 64, 64, 1, 1, context, gl));
+		TextureManager.addTexture("button", new Texture(R.raw.button, 128, 128, 1, 1, context, gl));
+		TextureManager.addTexture("door", new Texture(R.raw.door, 128, 128, 1, 1, context, gl));
 		TextureManager.addTexture("joystickout", new Texture(R.raw.joystickout, 64, 64, 1, 1, context, gl));
 		TextureManager.addTexture("joystickin", new Texture(R.raw.joystickin, 32, 32, 1, 1, context, gl));
 		TextureManager.addTexture("buttona", new Texture(R.raw.buttona, 32, 32, 1, 1, context, gl));
 		TextureManager.addTexture("buttonb", new Texture(R.raw.buttonb, 32, 32, 1, 1, context, gl));
+		TextureManager.addTexture("block", new Texture(R.raw.block, 32, 32, 1, 1, context, gl));
+		TextureManager.addTexture("ball", new Texture(R.raw.ball, 32, 32, 1, 1, context, gl));
+		TextureManager.addTexture("spikewall", new Texture(R.raw.spikewall, 8, 8, 1, 1, context, gl));
 			
 		setEntities(new ArrayList<Entity>());
 		triggerList = new ArrayList<Trigger>();
@@ -94,8 +98,8 @@ public class Game
 				
 		SoundPlayer.initialize(context);
 		
-		TextureManager.getTexture("tilesetworld").setMinFilter(GL11.GL_LINEAR, gl);
-		TextureManager.getTexture("tilesetworld").setMagFilter(GL11.GL_LINEAR, gl);
+		//TextureManager.getTexture("tilesetworld").setMinFilter(GL11.GL_LINEAR, gl);
+		//TextureManager.getTexture("tilesetworld").setMagFilter(GL11.GL_LINEAR, gl);
 		 		
 		//Parser
 		Parser parser = new Parser(context, levelId);
@@ -310,7 +314,7 @@ public class Game
     		if (t.getTileType() == Tile.TileType.PIT)
     		    Player.kill();
 
-    		else if (t.getTileType() == Tile.TileType.SlipperyTile)
+    		else if (t.getTileType() == Tile.TileType.SLIP)
     		    player.getShape().setKineticFriction(0);
     		
     		else
@@ -391,7 +395,7 @@ public class Game
         {
             Game.worldOutdated = true;
             
-            Vector2 impulse = Vector2.scale(new Vector2(e.getX() - screenW / 2 - joystick.x(), screenH / 2 - e.getY() - joystick.y()), 100);
+            Vector2 impulse = Vector2.scale(new Vector2(e.getX() - screenW / 2 - joystick.x(), screenH / 2 - e.getY() - joystick.y()), 3.5f * Stopwatch.getFrameTime());
             if (player.getShape().getVelocity().length() < 200)
                 player.addImpulse(impulse);
             player.setAngle(impulse.angleDeg());
@@ -399,8 +403,8 @@ public class Game
             
             if (pulling)
                 for (Entity ent : entities)
-                    if (ent instanceof HoldObject && ((HoldObject)ent).isPullable() && CollisionDetector.radiusCheck(player.getShape(), ent.getShape(), 500))
-                            ent.getShape().addImpulse(Vector2.scaleTo(Vector2.subtract(player.getPos(), ent.getPos()), 10000));
+                    if (ent instanceof HoldObject && ((HoldObject)ent).isPullable() && CollisionDetector.radiusCheck(player.getShape(), ent.getShape(), 150))
+                            ent.getShape().addImpulse(Vector2.scaleTo(Vector2.subtract(player.getPos(), ent.getPos()), 300f * Stopwatch.getFrameTime()));
             
             switch (e.getAction() & MotionEvent.ACTION_MASK)
             {
@@ -411,8 +415,8 @@ public class Game
                 case MotionEvent.ACTION_UP:
                     if (touchInputTimer < 200)
                         for (Entity ent : entities)
-                            if (ent instanceof HoldObject && CollisionDetector.radiusCheck(player.getShape(), ent.getShape(), 500))
-                                    ent.getShape().addImpulse(Vector2.scaleTo(Vector2.subtract(player.getPos(), ent.getPos()), 150000));
+                            if (ent instanceof HoldObject && CollisionDetector.radiusCheck(player.getShape(), ent.getShape(), 150))
+                                    ent.getShape().addImpulse(Vector2.scaleTo(Vector2.subtract(player.getPos(), ent.getPos()), 1000f * Stopwatch.getFrameTime()));
                     touchInputTimer = 0;
                     joystick = Vector2.ZERO;
                     break;
@@ -423,6 +427,8 @@ public class Game
                 case MotionEvent.ACTION_POINTER_UP:
                     pulling = false;
                     touchInputTimer = 0;
+                    break;
+                default:
                     break;
             }
         }

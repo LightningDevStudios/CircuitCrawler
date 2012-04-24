@@ -23,6 +23,7 @@
 package com.ltdev.cc.entity;
 
 import com.ltdev.cc.SoundPlayer;
+import com.ltdev.cc.models.ButtonDownData;
 import com.ltdev.cc.models.ButtonUpData;
 import com.ltdev.cc.physics.primitives.Circle;
 import com.ltdev.graphics.TextureManager;
@@ -38,7 +39,8 @@ import javax.microedition.khronos.opengles.GL11;
  */
 public class Button extends Entity
 {
-	private boolean active, prevActive;
+	private boolean active, previousActive;
+	private int vtexCount;
 	
 	/**
 	 * Initializes a new instance of the Button class.
@@ -75,36 +77,21 @@ public class Button extends Entity
         gl.glNormalPointer(GL11.GL_FLOAT, 32, 20);
         gl.glBindBuffer(GL11.GL_ARRAY_BUFFER, 0);
         
+        //draw the entity.
+        gl.glDrawArrays(GL11.GL_TRIANGLES, 0, vtexCount);
+        
         //TODO also temporary
         //gl.glDisable(GL11.GL_LIGHT0);
         //gl.glDisable(GL11.GL_LIGHTING);
         gl.glDisableClientState(GL11.GL_NORMAL_ARRAY);
-        
-        //draw the entity.
-        gl.glDrawArrays(GL11.GL_TRIANGLES, 0, ButtonUpData.VERTEX_COUNT);
 	}
 	
 	@Override
 	public void initialize(GL11 gl)
 	{
-	    //TODO make this hold only one instance of the model instead of one per model.
-	    ByteBuffer byteBuf = ByteBuffer.allocateDirect(ButtonUpData.VERTEX_BYTE_COUNT);
-        byteBuf.order(ByteOrder.nativeOrder());
-        FloatBuffer buffer = byteBuf.asFloatBuffer();
-        buffer.put(ButtonUpData.VERTICES);
-        buffer.position(0);
-        
-        //generate a VBO.
-        int[] tempPtr = new int[1];
-        gl.glGenBuffers(1, tempPtr, 0);
-        vbo = tempPtr[0];
-        
-        //send data to GPU.
-        gl.glBindBuffer(GL11.GL_ARRAY_BUFFER, vbo);
-        gl.glBufferData(GL11.GL_ARRAY_BUFFER, ButtonUpData.VERTEX_BYTE_COUNT, buffer, GL11.GL_STATIC_DRAW);
-        gl.glBindBuffer(GL11.GL_ARRAY_BUFFER, 0);
-        
-        this.tex = TextureManager.getTexture("buttonup");
+	    vbo = ButtonUpData.getBufferId(gl);        
+        this.tex = TextureManager.getTexture("button");
+        vtexCount = ButtonUpData.VERTEX_COUNT;
 	}
 	
 	@Override
@@ -113,9 +100,21 @@ public class Button extends Entity
 	    super.update(gl);
 	    
 	    //update the texture when activated/deactivated.
-	    if (prevActive != active)
-	    {	        
-	        prevActive = active;
+	    if (previousActive != active)
+	    {
+	        if (active)
+	        {
+	            vbo = ButtonDownData.getBufferId(gl);
+	            vtexCount = ButtonDownData.VERTEX_COUNT;
+	        }
+	        else
+	        {
+	            vbo = ButtonUpData.getBufferId(gl);
+                vtexCount = ButtonUpData.VERTEX_COUNT;
+	        }
+	            
+	        
+	        previousActive = active;
 	    }
 	}
 	
@@ -133,7 +132,6 @@ public class Button extends Entity
 	 */
 	public void activate()
 	{
-	    prevActive = active;
 		active = true;
 		SoundPlayer.playSound(SoundPlayer.SOUND_TEST);
 	}
@@ -143,7 +141,6 @@ public class Button extends Entity
 	 */
 	public void deactivate()
 	{
-	    prevActive = active;
 		active = false;
 		SoundPlayer.playSound(SoundPlayer.SOUND_TEST);
 	}

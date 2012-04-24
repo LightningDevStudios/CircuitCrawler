@@ -44,7 +44,7 @@ public class Tile
         FLOOR,
         WALL,
         PIT,
-        SlipperyTile 
+        SLIP 
     }
     
 	public static final int SIZE = 72;

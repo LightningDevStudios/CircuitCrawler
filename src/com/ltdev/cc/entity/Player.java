@@ -46,6 +46,8 @@ public class Player extends Entity
 		super(new Circle(DEFAULT_SIZE, position, angle, true));
 		controlled = true;
 		
+		//shape.setKineticFriction(1.5f);
+		
 		tex = TextureManager.getTexture("tilesetentities");
 		tilesetX = 0;
 		tilesetY = 0;
