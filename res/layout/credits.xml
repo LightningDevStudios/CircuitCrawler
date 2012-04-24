@@ -27,22 +27,24 @@
 		<TextView style="@style/CreditsCategory" android:text="Parsing and XML Formatting" />
 		<TextView style="@style/CreditsName" android:text="Zayd Simjee" />
 		<TextView style="@style/CreditsName" android:text="@string/names_robert" />
+		<TextView style="@style/CreditsName" android:text="@string/names_devin" />
 		<TextView style="@style/CreditsCategory" android:text="@string/credits_physics" />
 		<TextView style="@style/CreditsName" android:text="@string/names_devin" />
 		<TextView style="@style/CreditsName" android:text="@string/names_matt" />
-		<TextView style="@style/CreditsCategory" android:text="PR" />
-		<TextView style="@style/CreditsName" android:text="Michael Yorita" />
-		<TextView style="@style/CreditsCategory" android:text="@string/credits_sound" />
 		<TextView style="@style/CreditsName" android:text="@string/names_robert" />
+		<TextView style="@style/CreditsCategory" android:text="@string/credits_sound" />
 		<TextView style="@style/CreditsName" android:text="@string/names_devin" />
+		<TextView style="@style/CreditsName" android:text="@string/names_robert" />
 		<TextView style="@style/CreditsCategory" android:text="Sound Implementation" />
+		<TextView style="@style/CreditsName" android:text="@string/names_jay" />
+		<TextView style="@style/CreditsCategory" android:text="Lasers, Cannons, and other fun features" />
 		<TextView style="@style/CreditsName" android:text="@string/names_matt" />
-		<TextView style="@style/CreditsCategory" android:text="Teleporters, Cannons, and other fun features" />
-		<TextView style="@style/CreditsName" android:text="@string/names_matt" />
+		<TextView style="@style/CreditsName" android:text="@string/names_jay" />
+		<TextView style="@style/CreditsName" android:text="@string/names_devin" />
 		<TextView style="@style/CreditsCategory" android:text="@string/credits_tools" />
 		<TextView style="@style/CreditsName" android:text="@string/names_robert" />
-		<TextView style="@style/CreditsCategory" android:text="User Interface" />
-		<TextView style="@style/CreditsName" android:text="@string/names_robert" />
+		<TextView style="@style/CreditsName" android:text="@string/names_devin" />
+		<TextView style="@style/CreditsName" android:text="@string/names_matt" />
 		<TextView style="@style/CreditsFooter" android:text="@string/credits_special_thanks" />
 	</LinearLayout>
 </ScrollView>

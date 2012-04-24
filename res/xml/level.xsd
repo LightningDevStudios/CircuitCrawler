@@ -24,7 +24,7 @@
       <xs:enumeration value="FLOOR" />
       <xs:enumeration value="WALL" />
       <xs:enumeration value="PIT" />
-      <xs:enumeration value="SlipperyTile" />
+      <xs:enumeration value="SLIP" />
     </xs:restriction>
   </xs:simpleType>
   
@@ -70,13 +70,22 @@
   <xs:complexType name="EntityInfo">
     <xs:sequence>
       	<xs:element name="id" type="stringType" />
-		<xs:element name="size" type="floatType" />
       	<xs:element name="xPos" type="floatType" />
       	<xs:element name="yPos" type="floatType" />
 		<xs:element name="angle" type="floatType" minOccurs="0" />
 		<xs:element name="xScl" type="floatType" minOccurs="0" />
 		<xs:element name="yScl" type="floatType" minOccurs="0" />
     </xs:sequence>
+  </xs:complexType>
+  
+   <xs:complexType name="BreakableDoorInfo">
+    <xs:complexContent>
+      <xs:extension base="EntityInfo">
+        <xs:sequence>
+          <xs:element name="maxHits" type="intType" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
   </xs:complexType>
 
   <xs:complexType name="ButtonInfo">
@@ -118,7 +127,7 @@
     </xs:complexContent>
   </xs:complexType>
 
-  <xs:complexType name="PhysBlockInfo">
+  <xs:complexType name="BlockInfo">
     <xs:complexContent>
       <xs:extension base="EntityInfo">
         <xs:sequence>
@@ -128,7 +137,7 @@
     </xs:complexContent>
   </xs:complexType>
 
-  <xs:complexType name="PhysBallInfo">
+  <xs:complexType name="BallInfo">
     <xs:complexContent>
       <xs:extension base="EntityInfo">
         <xs:sequence>
@@ -194,11 +203,12 @@
           <xs:complexType>
             <xs:sequence>
 				<xs:element name="Teleporter" type="TeleporterInfo" minOccurs="0" maxOccurs="unbounded" />
+				<xs:element name="BreakableDoor" type="BreakableDoorInfo" minOccurs="0" maxOccurs="unbounded" />
 				<xs:element name="Button" type="ButtonInfo" minOccurs="0" maxOccurs="unbounded" />
 				<xs:element name="Cannon" type="CannonInfo" minOccurs="0" maxOccurs="unbounded" />
               	<xs:element name="Door" type="DoorInfo" minOccurs="0" maxOccurs="unbounded" />
-              	<xs:element name="PhysBlock" type="PhysBlockInfo" minOccurs="0" maxOccurs="unbounded" />
-              	<xs:element name="PhysBall" type="PhysBallInfo" minOccurs="0" maxOccurs="unbounded" />
+              	<xs:element name="Block" type="BlockInfo" minOccurs="0" maxOccurs="unbounded" />
+              	<xs:element name="Ball" type="BallInfo" minOccurs="0" maxOccurs="unbounded" />
               	<xs:element name="PuzzleBox" type="PuzzleBoxInfo" minOccurs="0" maxOccurs="unbounded" />
 				<xs:element name="SpikeWall" type="SpikeWallInfo" minOccurs="0" maxOccurs="unbounded" />
 				<xs:element name="LaserShooter" type="LaserShooterInfo" minOccurs="0" maxOccurs="unbounded" />
