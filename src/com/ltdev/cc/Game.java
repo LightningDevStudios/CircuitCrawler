@@ -82,7 +82,8 @@ public class Game
 		TextureManager.addTexture("tilesetworld", new Texture(R.raw.tilesetworld, 512, 256, 16, 8, context, gl));
 		TextureManager.addTexture("tilesetentities", new Texture(R.raw.tilesetentities, 256, 256, 8, 8, context, gl));
 		TextureManager.addTexture("baricons", new Texture(R.raw.baricons, 32, 16, 2, 1, context, gl));
-		TextureManager.addTexture("buttonup", new Texture(R.raw.buttonup, 64, 64, 1, 1, context, gl));
+		TextureManager.addTexture("button", new Texture(R.raw.button, 128, 128, 1, 1, context, gl));
+		TextureManager.addTexture("door", new Texture(R.raw.door, 128, 128, 1, 1, context, gl));
 		TextureManager.addTexture("joystickout", new Texture(R.raw.joystickout, 64, 64, 1, 1, context, gl));
 		TextureManager.addTexture("joystickin", new Texture(R.raw.joystickin, 32, 32, 1, 1, context, gl));
 		TextureManager.addTexture("buttona", new Texture(R.raw.buttona, 32, 32, 1, 1, context, gl));
@@ -350,7 +351,7 @@ public class Game
     		if (t.getTileType() == Tile.TileType.PIT)
     		    Player.kill();
 
-    		else if (t.getTileType() == Tile.TileType.SlipperyTile)
+    		else if (t.getTileType() == Tile.TileType.SLIP)
     		    player.getShape().setKineticFriction(0);
     		
     		else
