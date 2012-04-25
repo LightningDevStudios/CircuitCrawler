@@ -122,7 +122,7 @@ public abstract class Entity implements InteractListener
     	    currentFrameColliders.clear();
 	    }
 	    
-	    if (zLocation < -500)
+	    if (zLocation < -32 * 8)
 	    {
 	        if (this instanceof Player)
 	            ((Player)this).kill();

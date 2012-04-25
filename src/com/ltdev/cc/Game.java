@@ -333,7 +333,7 @@ public class Game
     	        {
     	            if (tile.getTileType() == Tile.TileType.PIT)
     	            {
-    	                float z = ((float)Stopwatch.getFrameTime() / 1000) * -600;
+    	                float z = ((float)Stopwatch.getFrameTime() / 1000) * -32 * 8;
     	                entities.get(i).zLocation += z;
     	                System.out.println(entities.get(i).zLocation);
     	                //TODO: player control n shit, offset to method
