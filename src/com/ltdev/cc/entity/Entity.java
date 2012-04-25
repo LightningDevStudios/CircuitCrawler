@@ -125,7 +125,7 @@ public abstract class Entity implements InteractListener
 	    if (zLocation < -500)
 	    {
 	        if (this instanceof Player)
-	            Player.kill();
+	            ((Player)this).kill();
 	        else
 	            EntityManager.removeEntity(this);
 	    }
