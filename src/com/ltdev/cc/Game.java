@@ -298,14 +298,7 @@ public class Game
 	 */
 	public void updatePlayerPos()
 	{
-		//move player
-		if (player.userHasControl())
-		{
-		    //player.setAngle((float)Math.toDegrees(joypad.getInputAngle()));
-			//player.setPos(Vector2.add(player.getPos(), Vector2.scale(joypad.getInputVec(), /*Stopwatch.getFrameTime() **/ (1000 / 1000))));
-		    //player.addImpulse(Vector2.scale(joypad.getInputVec(), player.getShape().getMass() * 5));
-		}
-		
+
 		int indx = (int)((player.getPos().x() + tileset.getWidth() * Tile.SIZE_F / 2) / Tile.SIZE_F);
 		int indy = (int)((-player.getPos().y() + tileset.getHeight() * Tile.SIZE_F /  2) / Tile.SIZE_F);
 		
