@@ -321,25 +321,21 @@ public class Game
 		
 		for(int i = 0; i < entities.size(); i++)
 		{
-		    if (entities.get(i) instanceof Player)
-		    {
-    		    int x = (int)((entities.get(i).getPos().x() + tileset.getWidth() * Tile.SIZE_F / 2) / Tile.SIZE_F);
-    	        int y = (int)((-entities.get(i).getPos().y() + tileset.getHeight() * Tile.SIZE_F /  2) / Tile.SIZE_F);
-    	        
-    	        Tile tile = tileset.getTileAt(x, y);
-    	        
-    	        if (tile != null)
-    	        {
-    	            if (tile.getTileType() == Tile.TileType.PIT)
-    	            {
-    	                float z = ((float)Stopwatch.getFrameTime() / 1000) * -600;
-    	                entities.get(i).zLocation += z;
-    	                System.out.println(entities.get(i).zLocation);
-    	                //TODO: player control n shit, offset to method
-    	                //entities.get(i).getShape().setModel(Matrix4.multiply(entities.get(i).getShape().getModel(), Matrix4.translate(new Vector3(0, 0, z))));
-    	            }
-    	        }
-		    }
+		    int x = (int)((entities.get(i).getPos().x() + tileset.getWidth() * Tile.SIZE_F / 2) / Tile.SIZE_F);
+	        int y = (int)((-entities.get(i).getPos().y() + tileset.getHeight() * Tile.SIZE_F /  2) / Tile.SIZE_F);
+	        
+	        Tile tile = tileset.getTileAt(x, y);
+	        
+	        if (tile != null)
+	        {
+	            if (tile.getTileType() == Tile.TileType.PIT)
+	            {
+	                if (entities.get(i) instanceof HoldObject || entities.get(i) instanceof Player)
+	                {
+    	                entities.get(i).fall();
+	                }
+	            }
+	        }
 		}
 	}
 	

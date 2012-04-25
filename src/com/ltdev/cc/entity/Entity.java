@@ -25,6 +25,7 @@ package com.ltdev.cc.entity;
 import android.graphics.Point;
 
 import com.ltdev.EntityManager;
+import com.ltdev.Stopwatch;
 import com.ltdev.cc.event.InteractListener;
 import com.ltdev.cc.physics.primitives.Shape;
 import com.ltdev.graphics.Texture;
@@ -46,9 +47,8 @@ public abstract class Entity implements InteractListener
 {
 	public static final float DEFAULT_SIZE = 32.0f;
 	
-	//behavior data
-
 	public float zLocation;
+	private boolean falling;
 	
 	protected Shape shape;
 	
@@ -122,7 +122,12 @@ public abstract class Entity implements InteractListener
     	    currentFrameColliders.clear();
 	    }
 	    
-	    if (zLocation < -500)
+	    if (falling)
+	    {
+	        zLocation -= ((float)Stopwatch.getFrameTime() / 1000) * 100;
+	    }
+	    
+	    if (zLocation < -300)
 	    {
 	        if (this instanceof Player)
 	            ((Player)this).kill();
@@ -237,6 +242,11 @@ public abstract class Entity implements InteractListener
 	/**************************
 	 * Accessors and Mutators *
 	 **************************/
+    
+    public void fall()
+    {
+        falling = true;
+    }
 	
     /**
      * Gets the current entity.

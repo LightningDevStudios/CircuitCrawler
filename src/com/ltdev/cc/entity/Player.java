@@ -75,6 +75,13 @@ public class Player extends Entity
 	    isDead = true;
 	}
 	
+	@Override
+	public void fall()
+	{
+	    super.fall();
+	    controlled = false;
+	}
+	
 	public void disableUserControl()
 	{
 		controlled = false;
