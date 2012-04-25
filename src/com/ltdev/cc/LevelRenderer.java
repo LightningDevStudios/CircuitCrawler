@@ -29,7 +29,7 @@ import android.view.MotionEvent;
 import com.ltdev.Stopwatch;
 import com.ltdev.cc.entity.*;
 import com.ltdev.cc.event.*;
-import com.ltdev.cc.physics.CollisionDetector;
+import com.ltdev.cc.models.*;
 import com.ltdev.math.*;
 
 import javax.microedition.khronos.egl.EGLConfig;
@@ -320,4 +320,17 @@ public class LevelRenderer implements com.ltdev.LevelSurfaceView.Renderer
 	{
 		gameOverListener.onGameOver(charlieSheen);
 	}
+
+	/**
+	 * Called when the surface is destroyed.
+	 */
+    public void onUnload()
+    {
+        BallData.unload(null);
+        BlockData.unload(null);
+        ButtonDownData.unload(null);
+        ButtonUpData.unload(null);
+        DoorData.unload(null);
+        SpikeWallData.unload(null);
+    }
 }

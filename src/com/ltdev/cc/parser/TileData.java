@@ -47,6 +47,8 @@ public class TileData
             tState = TileType.WALL;
         else if (state.equalsIgnoreCase("pit"))
             tState = TileType.PIT;
+        else if (state.equalsIgnoreCase("slip"))
+            tState = TileType.SLIP;
 				
 		tile = new Tile(new Point(tilePosX, tilePosY), tilesetY, tilesetX, tState);
 	}

@@ -30,16 +30,9 @@ import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
-import android.view.GestureDetector;
-import android.view.GestureDetector.OnGestureListener;
-import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.View.OnTouchListener;
 
 import com.ltdev.LevelSurfaceView;
 import com.ltdev.cc.event.*;
@@ -246,24 +239,26 @@ public class LevelActivity extends Activity implements GameOverListener, GameIni
 		{
 			case R.id.restart:
 				//restart game
+			    glSurface.unload();
 				setResult(100 + levelIndex);
 				finish();
 				return true;
 			case R.id.main_menu:
 				//return to main menu
 				//mp.stop();
+			    glSurface.unload();
 				setResult(0);
 				finish();
 				return true;
 			case R.id.quit:
 				//mp.stop();
+			    glSurface.unload();
 				setResult(3);
 				finish();
 				return true;
 			default:
 				//mp.start();
 				return super.onOptionsItemSelected(item);
-		
 		}
 	}
 	
@@ -285,6 +280,7 @@ public class LevelActivity extends Activity implements GameOverListener, GameIni
 	protected void onPause()
 	{
 		super.onPause();
+		glSurface.unload();
 		glSurface.onPause();
 	    pd.dismiss();
 		mp.pause();
@@ -296,6 +292,7 @@ public class LevelActivity extends Activity implements GameOverListener, GameIni
 		super.onDestroy();
 		mp.stop();
 		mp.release();
+		glSurface.unload();
 	}
 }
 

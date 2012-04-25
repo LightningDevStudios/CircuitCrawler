@@ -34,6 +34,7 @@ import javax.microedition.khronos.opengles.GL11;
 public class SpikeWall extends Entity
 {	
     private boolean extended;
+    private int vertVbo, indVbo;
     private Vector2 targetPos, initialPos, endPos;
     
     /**
@@ -131,7 +132,8 @@ public class SpikeWall extends Entity
 	@Override
     public void initialize(GL11 gl)
     {
-        vbo = SpikeWallData.getBufferId(gl);        
+	    vertVbo = SpikeWallData.getVertexBufferId(gl);   
+        indVbo = SpikeWallData.getIndexBufferId(gl);       
         this.tex = TextureManager.getTexture("spikewall");
     }
 	

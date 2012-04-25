@@ -100,10 +100,10 @@ public class Tile
                 };
 	            texCoords = new float[]
                 {
-                    0, 0,
-                    0, 64f / 256f - 1f / 512f,
+                    1f / 1024f, 1f / 512f,
+                    1f / 1024f, 64f / 256f - 1f / 512f,
                     64f / 512f - 1f / 1024f, 64.0f / 256.0f - 1f / 512f,
-                    64f / 512f - 1f / 1024f, 0
+                    64f / 512f - 1f / 1024f, 1f / 512f
                 };
 	            normals = new float[]
                 {
@@ -123,6 +123,29 @@ public class Tile
 	            texCoords = TilesetHelper.getPitTexCoords(this.borders);
 	            normals = TilesetHelper.getTileNormals(this.borders);
 	            break;
+	        case SLIP:
+	            vertices = new float[]
+                {
+                    -s,  s, 0,
+                    -s, -s, 0,
+                     s, -s, 0,
+                     s,  s, 0
+                };
+	            texCoords = new float[]
+                {
+                    64f / 512f + 1f / 1024f, 1f / 512f,
+                    64f / 512f + 1f / 1024f, 64f / 256f - 1f / 512f,
+                    128f / 512f - 1f / 1024f, 64.0f / 256.0f - 1f / 512f,
+                    128f / 512f - 1f / 1024f, 1f / 512f
+                };
+	            normals = new float[]
+                {
+                    0, 0, 1,
+                    0, 0, 1,
+                    0, 0, 1,
+                    0, 0, 1
+                };
+	            break;
 	        default:
 	            //by default use the same vertices as the floor.
 	            vertices = new float[]
@@ -134,10 +157,10 @@ public class Tile
 	            };
 	            texCoords = new float[]
                 {
-                    0, 0,
-                    0, 64f / 256f - 1f / 512f,
+	                1f / 1024f, 1f / 512f,
+	                1f / 1024f, 64f / 256f - 1f / 512f,
                     64f / 512f - 1f / 1024f, 64.0f / 256.0f - 1f / 512f,
-                    64f / 512f - 1f / 1024f, 0
+                    64f / 512f - 1f / 1024f, 1f / 512f
                 };
 	            normals = new float[]
                 {

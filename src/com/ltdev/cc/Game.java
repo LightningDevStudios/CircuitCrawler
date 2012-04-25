@@ -87,6 +87,7 @@ public class Game
 		TextureManager.addTexture("block", new Texture(R.raw.block, 32, 32, 1, 1, context, gl));
 		TextureManager.addTexture("ball", new Texture(R.raw.ball, 32, 32, 1, 1, context, gl));
 		TextureManager.addTexture("spikewall", new Texture(R.raw.spikewall, 8, 8, 1, 1, context, gl));
+		TextureManager.addTexture("player", new Texture(R.raw.player, 32, 32, 1, 1, context, gl));
 			
 		setEntities(new ArrayList<Entity>());
 		triggerList = new ArrayList<Trigger>();

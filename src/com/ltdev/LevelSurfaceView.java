@@ -24,11 +24,7 @@ package com.ltdev;
 
 import android.content.Context;
 import android.opengl.GLSurfaceView;
-import android.view.GestureDetector;
 import android.view.MotionEvent;
-import android.view.View;
-import android.view.GestureDetector.SimpleOnGestureListener;
-import android.view.View.OnTouchListener;
 
 import com.ltdev.cc.event.*;
 
@@ -54,7 +50,7 @@ public class LevelSurfaceView extends GLSurfaceView
 		renderer = r;
 		
 		this.setEGLConfigChooser(true);
-		this.setDebugFlags(DEBUG_CHECK_GL_ERROR);
+		//this.setDebugFlags(DEBUG_CHECK_GL_ERROR);
 		
 		setRenderer(r);
 	}
@@ -115,6 +111,20 @@ public class LevelSurfaceView extends GLSurfaceView
 	}
 	
 	/**
+	 * Unload the renderer.
+	 */
+	public void unload()
+	{
+	    queueEvent(new Runnable()
+	    {
+	        public void run()
+	        {
+	            renderer.onUnload();
+	        }
+	    });
+	}
+	
+	/**
 	 * A sub-interface of GLSurfaceView.Renderer for Circuit Crawler.
 	 * Handles touch input and puzzle activity hooks.
 	 * @author Lightning Development Studios
@@ -154,10 +164,10 @@ public class LevelSurfaceView extends GLSurfaceView
 		 * Called when a puzzle event returns unsuccessfully.
 		 */
 		void onPuzzleFailed();
-	}
-	
-	public Renderer getRenderer()
-	{
-	    return renderer;
+		
+		/**
+		 * Called when the surface is destroyed.
+		 */
+		void onUnload();
 	}
 }

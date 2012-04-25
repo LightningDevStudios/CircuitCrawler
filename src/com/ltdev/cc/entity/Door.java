@@ -24,7 +24,6 @@ package com.ltdev.cc.entity;
 
 import com.ltdev.Direction;
 import com.ltdev.Stopwatch;
-import com.ltdev.cc.models.ButtonUpData;
 import com.ltdev.cc.models.DoorData;
 import com.ltdev.cc.physics.primitives.Rectangle;
 import com.ltdev.graphics.TextureManager;
@@ -39,6 +38,7 @@ import javax.microedition.khronos.opengles.GL11;
 public class Door extends Entity
 {
     private boolean open;
+    private int vertVbo, indVbo;
     private Vector2 targetPos;
     private Vector2 openedPosition, closedPosition;
     
@@ -97,7 +97,7 @@ public class Door extends Entity
 	@Override
     public void draw(GL11 gl)
     {
-        //convert local space to world space.
+	    //convert local space to world space.
         gl.glMultMatrixf(shape.getModel().array(), 0);
         
         //TODO temorary while we don't have the rest of the art
@@ -107,17 +107,18 @@ public class Door extends Entity
         
         //bind the texture and set the color.
         gl.glBindTexture(GL11.GL_TEXTURE_2D, tex.getTexture());
-        gl.glColor4f(colorVec.x(), colorVec.y(), colorVec.z(), colorVec.w());
 
         //bind the VBO and set up the vertex and tex coord pointers.
-        gl.glBindBuffer(GL11.GL_ARRAY_BUFFER, vbo);
+        gl.glBindBuffer(GL11.GL_ARRAY_BUFFER, vertVbo);
         gl.glVertexPointer(3, GL11.GL_FLOAT, 32, 0);
         gl.glTexCoordPointer(2, GL11.GL_FLOAT, 32, 12);
         gl.glNormalPointer(GL11.GL_FLOAT, 32, 20);
         gl.glBindBuffer(GL11.GL_ARRAY_BUFFER, 0);
         
         //draw the entity.
-        gl.glDrawArrays(GL11.GL_TRIANGLES, 0, DoorData.VERTEX_COUNT);
+        gl.glBindBuffer(GL11.GL_ELEMENT_ARRAY_BUFFER, indVbo);
+        gl.glDrawElements(GL11.GL_TRIANGLES, DoorData.INDEX_COUNT, GL11.GL_UNSIGNED_SHORT, 0);
+        gl.glBindBuffer(GL11.GL_ELEMENT_ARRAY_BUFFER, 0);
         
         //TODO also temporary
         //gl.glDisable(GL11.GL_LIGHT0);
@@ -142,7 +143,8 @@ public class Door extends Entity
 	@Override
 	public void initialize(GL11 gl)
 	{
-	    vbo = DoorData.getBufferId(gl);        
+	    vertVbo = DoorData.getVertexBufferId(gl);   
+        indVbo = DoorData.getIndexBufferId(gl);     
         this.tex = TextureManager.getTexture("door");
 	}
 	

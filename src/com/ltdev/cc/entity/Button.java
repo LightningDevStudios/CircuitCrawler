@@ -29,8 +29,6 @@ import com.ltdev.cc.physics.primitives.Circle;
 import com.ltdev.graphics.TextureManager;
 import com.ltdev.math.Vector2;
 
-import java.nio.*;
-
 import javax.microedition.khronos.opengles.GL11;
 
 /**
@@ -40,7 +38,9 @@ import javax.microedition.khronos.opengles.GL11;
 public class Button extends Entity
 {
 	private boolean active, previousActive;
-	private int vtexCount;
+	private int indCount;
+	
+	private int vertVbo, indVbo;
 	
 	/**
 	 * Initializes a new instance of the Button class.
@@ -71,14 +71,17 @@ public class Button extends Entity
         gl.glColor4f(colorVec.x(), colorVec.y(), colorVec.z(), colorVec.w());
 
         //bind the VBO and set up the vertex and tex coord pointers.
-        gl.glBindBuffer(GL11.GL_ARRAY_BUFFER, vbo);
+        gl.glBindBuffer(GL11.GL_ARRAY_BUFFER, vertVbo);
         gl.glVertexPointer(3, GL11.GL_FLOAT, 32, 0);
         gl.glTexCoordPointer(2, GL11.GL_FLOAT, 32, 12);
         gl.glNormalPointer(GL11.GL_FLOAT, 32, 20);
         gl.glBindBuffer(GL11.GL_ARRAY_BUFFER, 0);
         
         //draw the entity.
-        gl.glDrawArrays(GL11.GL_TRIANGLES, 0, vtexCount);
+        gl.glBindBuffer(GL11.GL_ELEMENT_ARRAY_BUFFER, indVbo);
+        gl.glDrawElements(GL11.GL_TRIANGLES, indCount, GL11.GL_UNSIGNED_SHORT, 0);
+        gl.glBindBuffer(GL11.GL_ELEMENT_ARRAY_BUFFER, 0);
+        //gl.glDrawArrays(GL11.GL_TRIANGLES, 0, BlockData.VERTEX_COUNT);
         
         //TODO also temporary
         //gl.glDisable(GL11.GL_LIGHT0);
@@ -89,9 +92,10 @@ public class Button extends Entity
 	@Override
 	public void initialize(GL11 gl)
 	{
-	    vbo = ButtonUpData.getBufferId(gl);        
+	    vertVbo = ButtonUpData.getVertexBufferId(gl);   
+        indVbo = ButtonUpData.getIndexBufferId(gl);
         this.tex = TextureManager.getTexture("button");
-        vtexCount = ButtonUpData.VERTEX_COUNT;
+        indCount = ButtonUpData.INDEX_COUNT;
 	}
 	
 	@Override
@@ -104,13 +108,15 @@ public class Button extends Entity
 	    {
 	        if (active)
 	        {
-	            vbo = ButtonDownData.getBufferId(gl);
-	            vtexCount = ButtonDownData.VERTEX_COUNT;
+	            vertVbo = ButtonDownData.getVertexBufferId(gl);   
+	            indVbo = ButtonDownData.getIndexBufferId(gl);
+	            indCount = ButtonDownData.INDEX_COUNT;
 	        }
 	        else
 	        {
-	            vbo = ButtonUpData.getBufferId(gl);
-                vtexCount = ButtonUpData.VERTEX_COUNT;
+	            vertVbo = ButtonUpData.getVertexBufferId(gl);   
+	            indVbo = ButtonUpData.getIndexBufferId(gl);
+	            indCount = ButtonUpData.INDEX_COUNT;
 	        }
 	            
 	        
