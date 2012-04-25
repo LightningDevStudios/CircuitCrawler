@@ -70,10 +70,12 @@ public class Game
 	private long touchInputTimer;
 	private boolean pulling;
 	private Vector2 joystick;
+	private boolean gameOver;
 	
 	//Constructors
 	public Game(Context context, GL11 gl, int levelId)
 	{	    
+	    gameOver = false;
 		TextureManager.addTexture("text", new Texture(R.raw.text, 256, 256, 16, 8, context, gl));
 		TextureManager.addTexture("tilesetworld", new Texture(R.raw.tilesetworld, 512, 256, 16, 8, context, gl));
 		TextureManager.addTexture("tilesetentities", new Texture(R.raw.tilesetentities, 256, 256, 8, 8, context, gl));
@@ -312,7 +314,7 @@ public class Game
 		if (t != null)
 		{
     		if (t.getTileType() == Tile.TileType.PIT)
-    		    Player.kill();
+    		    player.kill();
 
     		else if (t.getTileType() == Tile.TileType.SLIP)
     		    player.getShape().setKineticFriction(0);
@@ -334,6 +336,11 @@ public class Game
         {
             ent.update(gl);
         }
+	    
+	    if(player.isdead())
+	    {
+	        setGameOver(true);
+	    }
 	}
 	
 	/**
@@ -394,7 +401,7 @@ public class Game
 	    if (player.userHasControl())
         {
             Game.worldOutdated = true;
-            
+
             Vector2 impulse = Vector2.scale(new Vector2(e.getX() - screenW / 2 - joystick.x(), screenH / 2 - e.getY() - joystick.y()), 3.5f * Stopwatch.getFrameTime());
             if (player.getShape().getVelocity().length() < 200)
                 player.addImpulse(impulse);
@@ -471,5 +478,13 @@ public class Game
     public void setEntities(ArrayList<Entity> entities)
     {
         this.entities = entities;
+    }
+
+    public boolean isGameOver() {
+        return gameOver;
+    }
+
+    public void setGameOver(boolean gameOver) {
+        this.gameOver = gameOver;
     }
 }

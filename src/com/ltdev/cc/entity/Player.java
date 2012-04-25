@@ -35,6 +35,7 @@ import javax.microedition.khronos.opengles.GL11;
 public class Player extends Entity
 {
 	private boolean controlled;
+	private boolean isDead;
 	
 	/**
 	 * Initializes a new instance of the Player class.
@@ -44,10 +45,7 @@ public class Player extends Entity
 	public Player(Vector2 position, float angle)
 	{
 		super(new Circle(DEFAULT_SIZE, position, angle, true));
-		controlled = true;
-		
-		//shape.setKineticFriction(1.5f);
-		
+		controlled = true;		
 		tex = TextureManager.getTexture("tilesetentities");
 		tilesetX = 0;
 		tilesetY = 0;
@@ -70,15 +68,21 @@ public class Player extends Entity
         super.update(gl); 
     }
 	
-	public static void kill()
+	public void kill()
 	{
 	    System.out.println("LOLZ PLAYERZ ARE DETH");
 	    System.out.println("NOOS YOU DIES. TIEM TO REASTRAT");
+	    isDead = true;
 	}
 	
 	public void disableUserControl()
 	{
 		controlled = false;
+	}
+	
+	public boolean isdead()
+	{
+	    return isDead;
 	}
 	
 	public boolean userHasControl()

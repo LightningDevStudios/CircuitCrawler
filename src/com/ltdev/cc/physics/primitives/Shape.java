@@ -23,6 +23,7 @@
 
 package com.ltdev.cc.physics.primitives;
 
+import com.ltdev.cc.entity.Player;
 import com.ltdev.cc.event.InteractListener;
 import com.ltdev.cc.physics.forcegenerators.IndivForce;
 import com.ltdev.math.Matrix4;
@@ -178,6 +179,9 @@ public abstract class Shape
      */
     public void integrate(float frameTime)
     {
+        if (onInteract.getEntity() instanceof Player)
+            System.out.println("lol");
+            
         //no friction for static objects
         if (isStatic || !solid)
             return;

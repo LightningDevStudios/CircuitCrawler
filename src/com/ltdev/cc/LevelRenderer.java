@@ -202,6 +202,11 @@ public class LevelRenderer implements com.ltdev.LevelSurfaceView.Renderer
 			Log.d("LDS_Game", "FPS: " + (1000.0f / (Stopwatch.elapsedTimeMs() - game.frameInterval)));
 			frameCount = 0;
 		}*/
+		
+		if(game.isGameOver())
+		{
+		    gameOver();
+		}
 	}
 	
 	/**
