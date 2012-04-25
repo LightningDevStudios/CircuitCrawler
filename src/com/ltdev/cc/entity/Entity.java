@@ -24,6 +24,8 @@ package com.ltdev.cc.entity;
 
 import android.graphics.Point;
 
+import com.ltdev.EntityManager;
+import com.ltdev.Stopwatch;
 import com.ltdev.cc.event.InteractListener;
 import com.ltdev.cc.physics.primitives.Shape;
 import com.ltdev.graphics.Texture;
@@ -45,8 +47,8 @@ public abstract class Entity implements InteractListener
 {
 	public static final float DEFAULT_SIZE = 32.0f;
 	
-	//behavior data
-
+	public float zLocation;
+	private boolean falling;
 	
 	protected Shape shape;
 	
@@ -67,6 +69,7 @@ public abstract class Entity implements InteractListener
 	 */
 	public Entity(Shape shape)
 	{		
+	    zLocation = 0;
 		this.shape = shape;
 		this.shape.setInteractListener(this);
 		this.colorVec = new Vector4(1, 1, 1, 1);
@@ -84,6 +87,7 @@ public abstract class Entity implements InteractListener
 	{
 	    //convert local space to world space.
 		gl.glMultMatrixf(shape.getModel().array(), 0);
+		gl.glMultMatrixf(Matrix4.translate(new Vector3(0, 0, zLocation)).array(), 0);
 		
 		//bind the texture and set the color.
 		gl.glBindTexture(GL11.GL_TEXTURE_2D, tex.getTexture());
@@ -116,6 +120,19 @@ public abstract class Entity implements InteractListener
     	    
     	    previousFrameColliders = (ArrayList<Entity>)currentFrameColliders.clone();
     	    currentFrameColliders.clear();
+	    }
+	    
+	    if (falling)
+	    {
+	        zLocation -= ((float)Stopwatch.getFrameTime() / 1000) * 100;
+	    }
+	    
+	    if (zLocation < -300)
+	    {
+	        if (this instanceof Player)
+	            ((Player)this).kill();
+	        else
+	            EntityManager.removeEntity(this);
 	    }
 	}
 
@@ -225,6 +242,11 @@ public abstract class Entity implements InteractListener
 	/**************************
 	 * Accessors and Mutators *
 	 **************************/
+    
+    public void fall()
+    {
+        falling = true;
+    }
 	
     /**
      * Gets the current entity.

@@ -115,7 +115,7 @@ public class LevelRenderer implements com.ltdev.LevelSurfaceView.Renderer
 		float aspectRatio = Game.screenW / Game.screenH;
 		
 		//projWorld = Matrix4.ortho(game.camPosX - (Game.screenW / 2), game.camPosX + (Game.screenW / 2), game.camPosY + (Game.screenH / 2), game.camPosY - (Game.screenH / 2), 0, 1);
-		projWorld = Matrix4.perspective(-0.75f, 0.75f, 0.75f / aspectRatio, -0.75f / aspectRatio, 1f, Tile.SIZE_F * 6);
+		projWorld = Matrix4.perspective(-0.75f, 0.75f, 0.75f / aspectRatio, -0.75f / aspectRatio, 1f, Tile.SIZE_F * 8);
 		projUI = Matrix4.ortho(-Game.screenW / 2 , Game.screenW / 2, Game.screenH / 2, -Game.screenH / 2, 0, 1);
 		
 		if (gameInitializedListener != null)
@@ -142,11 +142,12 @@ public class LevelRenderer implements com.ltdev.LevelSurfaceView.Renderer
 
 		//Triggered when the perspective needs to be redrawn
 		if (Game.windowOutdated)
-		{
-			game.updatePlayerPos();
+		{		
 			updateCamPosition(gl);
 			Game.windowOutdated = false;
 		}
+		
+		game.updatePlayerPos();
 		
 		game.updateTriggers();
 		game.updateEntities(gl);
@@ -202,6 +203,11 @@ public class LevelRenderer implements com.ltdev.LevelSurfaceView.Renderer
 			Log.d("LDS_Game", "FPS: " + (1000.0f / (Stopwatch.elapsedTimeMs() - game.frameInterval)));
 			frameCount = 0;
 		}*/
+		
+		if(game.isGameOver())
+		{
+		    gameOver();
+		}
 	}
 	
 	/**

@@ -143,6 +143,6 @@ public class SpikeWall extends Entity
 	    super.interact(ent);
 	    
 	    if (ent instanceof Player)
-	        Player.kill();
+	        ((Player)ent).kill();
 	}
 }

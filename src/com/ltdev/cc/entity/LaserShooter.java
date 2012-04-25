@@ -109,6 +109,11 @@ public class LaserShooter extends Entity
         }
     }
     
+    public void setPlayer(Player p)
+    {
+        player = p;
+    }
+    
     public void setWorld(World physWorld)
     {
         this.physWorld = physWorld;

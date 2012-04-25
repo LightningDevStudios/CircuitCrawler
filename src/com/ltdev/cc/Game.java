@@ -37,7 +37,9 @@ import com.ltdev.cc.physics.primitives.*;
 import com.ltdev.cc.trigger.*;
 import com.ltdev.graphics.Texture;
 import com.ltdev.graphics.TextureManager;
+import com.ltdev.math.Matrix4;
 import com.ltdev.math.Vector2;
+import com.ltdev.math.Vector3;
 import com.ltdev.physics.*;
 import com.ltdev.trigger.*;
 
@@ -66,14 +68,16 @@ public class Game
 	private float worldMinX, worldMinY, worldMaxX, worldMaxY;
 	
 	private Player player;
-	
+
 	private long touchInputTimer;
 	private boolean pulling;
 	private Vector2 joystick;
+	private boolean gameOver;
 	
 	//Constructors
 	public Game(Context context, GL11 gl, int levelId)
 	{	    
+	    gameOver = false;
 		TextureManager.addTexture("text", new Texture(R.raw.text, 256, 256, 16, 8, context, gl));
 		TextureManager.addTexture("tilesetworld", new Texture(R.raw.tilesetworld, 512, 256, 16, 8, context, gl));
 		TextureManager.addTexture("tilesetentities", new Texture(R.raw.tilesetentities, 256, 256, 8, 8, context, gl));
@@ -168,7 +172,12 @@ public class Game
 	    for (Entity ent : entities)
 	    {
 	        if (ent instanceof LaserShooter)
+	        {
+	            ((LaserShooter)ent).setPlayer(player);
 	            ((LaserShooter)ent).setWorld(world);
+	        }
+	        else if (ent instanceof Cannon)
+	            ((Cannon)ent).setTarget(player);
 	    }
 	    
 	    /*SpikeWall s = new SpikeWall(70, Vector2.add(player.getPos(), new Vector2(72 * 3 + 40, 0)), Direction.LEFT);
@@ -297,14 +306,7 @@ public class Game
 	 */
 	public void updatePlayerPos()
 	{
-		//move player
-		if (player.userHasControl())
-		{
-		    //player.setAngle((float)Math.toDegrees(joypad.getInputAngle()));
-			//player.setPos(Vector2.add(player.getPos(), Vector2.scale(joypad.getInputVec(), /*Stopwatch.getFrameTime() **/ (1000 / 1000))));
-		    //player.addImpulse(Vector2.scale(joypad.getInputVec(), player.getShape().getMass() * 5));
-		}
-		
+		/*
 		int indx = (int)((player.getPos().x() + tileset.getWidth() * Tile.SIZE_F / 2) / Tile.SIZE_F);
 		int indy = (int)((-player.getPos().y() + tileset.getHeight() * Tile.SIZE_F /  2) / Tile.SIZE_F);
 		
@@ -313,13 +315,33 @@ public class Game
 		if (t != null)
 		{
     		if (t.getTileType() == Tile.TileType.PIT)
-    		    Player.kill();
+    		    player.kill();
 
     		else if (t.getTileType() == Tile.TileType.SLIP)
     		    player.getShape().setKineticFriction(0);
     		
     		else
     		    player.getShape().setKineticFriction(2);
+		}
+		*/
+		
+		for(int i = 0; i < entities.size(); i++)
+		{
+		    int x = (int)((entities.get(i).getPos().x() + tileset.getWidth() * Tile.SIZE_F / 2) / Tile.SIZE_F);
+	        int y = (int)((-entities.get(i).getPos().y() + tileset.getHeight() * Tile.SIZE_F /  2) / Tile.SIZE_F);
+	        
+	        Tile tile = tileset.getTileAt(x, y);
+	        
+	        if (tile != null)
+	        {
+	            if (tile.getTileType() == Tile.TileType.PIT)
+	            {
+	                if (entities.get(i) instanceof HoldObject || entities.get(i) instanceof Player)
+	                {
+    	                entities.get(i).fall();
+	                }
+	            }
+	        }
 		}
 	}
 	
@@ -335,6 +357,11 @@ public class Game
         {
             ent.update(gl);
         }
+	    
+	    if(player.isdead())
+	    {
+	        setGameOver(true);
+	    }
 	}
 	
 	/**
@@ -395,7 +422,7 @@ public class Game
 	    if (player.userHasControl())
         {
             Game.worldOutdated = true;
-            
+
             Vector2 impulse = Vector2.scale(new Vector2(e.getX() - screenW / 2 - joystick.x(), screenH / 2 - e.getY() - joystick.y()), 3.5f * Stopwatch.getFrameTime());
             if (player.getShape().getVelocity().length() < 200)
                 player.addImpulse(impulse);
@@ -472,5 +499,13 @@ public class Game
     public void setEntities(ArrayList<Entity> entities)
     {
         this.entities = entities;
+    }
+
+    public boolean isGameOver() {
+        return gameOver;
+    }
+
+    public void setGameOver(boolean gameOver) {
+        this.gameOver = gameOver;
     }
 }
