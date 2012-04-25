@@ -399,7 +399,7 @@ public class MainMenu extends Activity
 		{
 			public void onClick(View v) 
 			{
-				Intent browserIntent = new Intent("android.intent.action.VIEW", Uri.parse("http://lightningdevelopment.wordpress.com"));
+				Intent browserIntent = new Intent("android.intent.action.VIEW", Uri.parse("http://lightningdev.blogspot.com"));
 				startActivity(browserIntent);
 			}
 		});

@@ -18,15 +18,23 @@
 	<xs:simpleType name="booleanType">
 		<xs:restriction base="xs:boolean" />
 	</xs:simpleType>
-
-	<xs:simpleType name="tileStateType">
-		<xs:restriction base="xs:token">
-			<xs:enumeration value="FLOOR" />
-			<xs:enumeration value="WALL" />
-			<xs:enumeration value="PIT" />
-			<xs:enumeration value="SLIP" />
-		</xs:restriction>
-	</xs:simpleType>
+  <xs:simpleType name="tileStateType">
+    <xs:restriction base="xs:token">
+      <xs:enumeration value="FLOOR" />
+      <xs:enumeration value="WALL" />
+      <xs:enumeration value="PIT" />
+      <xs:enumeration value="SLIP" />
+    </xs:restriction>
+  </xs:simpleType>
+  
+  <xs:simpleType name="directionType">
+    <xs:restriction base="xs:token">
+      <xs:enumeration value="LEFT" />
+      <xs:enumeration value="RIGHT" />
+      <xs:enumeration value="UP" />
+      <xs:enumeration value="DOWN" />
+    </xs:restriction>
+  </xs:simpleType>
 
 	<xs:simpleType name="directionType">
 		<xs:restriction base="xs:token">
@@ -66,17 +74,27 @@
 	</xs:simpleType>
 
 	<!-- COMPLEX TYPES, used to prevent rewriting elements into everything! -->
-
-	<xs:complexType name="EntityInfo">
-		<xs:sequence>
-			<xs:element name="id" type="stringType" />
-			<xs:element name="size" type="floatType" />
-			<xs:element name="x" type="floatType" />
-			<xs:element name="y" type="floatType" />
-			<xs:element name="angle" type="floatType" minOccurs="0" />
-		</xs:sequence>
-	</xs:complexType>
-
+  <xs:complexType name="EntityInfo">
+    <xs:sequence>
+      	<xs:element name="id" type="stringType" />
+      	<xs:element name="xPos" type="floatType" />
+      	<xs:element name="yPos" type="floatType" />
+		<xs:element name="angle" type="floatType" minOccurs="0" />
+		<xs:element name="xScl" type="floatType" minOccurs="0" />
+		<xs:element name="yScl" type="floatType" minOccurs="0" />
+    </xs:sequence>
+  </xs:complexType>
+  
+   <xs:complexType name="BreakableDoorInfo">
+    <xs:complexContent>
+      <xs:extension base="EntityInfo">
+        <xs:sequence>
+          <xs:element name="maxHits" type="intType" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  
 	<xs:complexType name="ButtonInfo">
 		<xs:complexContent>
 			<xs:extension base="EntityInfo" />
@@ -116,25 +134,25 @@
 		</xs:complexContent>
 	</xs:complexType>
 
-	<xs:complexType name="PhysBlockInfo">
-		<xs:complexContent>
-			<xs:extension base="EntityInfo">
-				<xs:sequence>
-					<xs:element name="friction" type="floatType" />
-				</xs:sequence>
-			</xs:extension>
-		</xs:complexContent>
-	</xs:complexType>
+  <xs:complexType name="BlockInfo">
+    <xs:complexContent>
+      <xs:extension base="EntityInfo">
+        <xs:sequence>
+          <xs:element name="friction" type="floatType" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
 
-	<xs:complexType name="PhysBallInfo">
-		<xs:complexContent>
-			<xs:extension base="EntityInfo">
-				<xs:sequence>
-					<xs:element name="friction" type="floatType" />
-				</xs:sequence>
-			</xs:extension>
-		</xs:complexContent>
-	</xs:complexType>
+  <xs:complexType name="BallInfo">
+    <xs:complexContent>
+      <xs:extension base="EntityInfo">
+        <xs:sequence>
+          <xs:element name="friction" type="floatType" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
 
 	<xs:complexType name="PlayerInfo">
 		<xs:complexContent>
@@ -170,39 +188,47 @@
 	
   <!-- LEVEL XSD -->
 
-	<xs:element name="Level">
-		<xs:complexType>
-			<xs:sequence> 
-				<xs:element name="Tileset">
-					<xs:complexType>
-						<xs:sequence>
-							<xs:element name="Tile" type="TileInfo" maxOccurs="unbounded" />
-						</xs:sequence>
-						<xs:attribute name="x" type="xs:integer" use="required"/>
-						<xs:attribute name="y" type="xs:integer" use="required"/>
-					</xs:complexType>
-				</xs:element>
-				<xs:element name="Entities">
-					<xs:complexType>
-						<xs:sequence>
-							<xs:element name="Teleporter" type="TeleporterInfo" minOccurs="0" maxOccurs="unbounded" />
-							<xs:element name="Button" type="ButtonInfo" minOccurs="0" maxOccurs="unbounded" />
-							<xs:element name="Cannon" type="CannonInfo" minOccurs="0" maxOccurs="unbounded" />
-							<xs:element name="Door" type="DoorInfo" minOccurs="0" maxOccurs="unbounded" />
-							<xs:element name="PhysBlock" type="PhysBlockInfo" minOccurs="0" maxOccurs="unbounded" />
-							<xs:element name="PhysBall" type="PhysBallInfo" minOccurs="0" maxOccurs="unbounded" />
-							<xs:element name="PuzzleBox" type="PuzzleBoxInfo" minOccurs="0" maxOccurs="unbounded" />
-							<xs:element name="SpikeWall" type="SpikeWallInfo" minOccurs="0" maxOccurs="unbounded" />
-							<xs:element name="LaserShooter" type="LaserShooterInfo" minOccurs="0" maxOccurs="unbounded" />
-							<xs:element name="Player" type="PlayerInfo" minOccurs="1" maxOccurs="1" />
-						</xs:sequence>
-					</xs:complexType>
-				</xs:element>
-				<xs:element name="Triggers">
-					<xs:complexType>
-						<xs:sequence>
-							<xs:element name="Cause" minOccurs="0" maxOccurs="unbounded">
-								<xs:complexType>
+   <xs:element name="Level">
+    <xs:complexType>
+      <xs:sequence> 
+				
+        <xs:element name="Tileset">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="Tile" type="TileInfo" maxOccurs="unbounded" />
+            </xs:sequence>
+            <xs:attribute name="x" type="xs:integer" use="required"/>
+            <xs:attribute name="y" type="xs:integer" use="required"/>
+          </xs:complexType>
+        </xs:element>
+
+				<xs:element name="Nodes" type="stringType" />
+				<xs:element name="NodeLinks" type="stringType" />
+				<xs:element name="NodePaths" type="stringType" />
+				
+        <xs:element name="Entities">
+          <xs:complexType>
+            <xs:sequence>
+				<xs:element name="Teleporter" type="TeleporterInfo" minOccurs="0" maxOccurs="unbounded" />
+				<xs:element name="BreakableDoor" type="BreakableDoorInfo" minOccurs="0" maxOccurs="unbounded" />
+				<xs:element name="Button" type="ButtonInfo" minOccurs="0" maxOccurs="unbounded" />
+				<xs:element name="Cannon" type="CannonInfo" minOccurs="0" maxOccurs="unbounded" />
+              	<xs:element name="Door" type="DoorInfo" minOccurs="0" maxOccurs="unbounded" />
+              	<xs:element name="Block" type="BlockInfo" minOccurs="0" maxOccurs="unbounded" />
+              	<xs:element name="Ball" type="BallInfo" minOccurs="0" maxOccurs="unbounded" />
+              	<xs:element name="PuzzleBox" type="PuzzleBoxInfo" minOccurs="0" maxOccurs="unbounded" />
+				<xs:element name="SpikeWall" type="SpikeWallInfo" minOccurs="0" maxOccurs="unbounded" />
+				<xs:element name="LaserShooter" type="LaserShooterInfo" minOccurs="0" maxOccurs="unbounded" />
+				<xs:element name="Player" type="PlayerInfo" minOccurs="1" maxOccurs="1" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        
+        <xs:element name="Triggers">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="Cause" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
 									<xs:simpleContent>
 										<xs:extension base="xs:string">
 											<xs:attribute name="id" type="stringType" use="required" />
