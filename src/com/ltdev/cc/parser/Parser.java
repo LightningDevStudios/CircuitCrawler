@@ -48,8 +48,6 @@ public class Parser
     public static final int START_TAG = 2;
     public static final int END_TAG = 3;
     
-    public int totalLights;
-    
 	public ArrayList<EntityData> parsedList;
 	public ArrayList<Entity> entList;
 	public ArrayList<Trigger> triggerList;
@@ -73,8 +71,6 @@ public class Parser
 		causeDataList = new ArrayList<CauseData>();
 		effectDataList = new ArrayList<EffectData>();
 		lightInfoList = new ArrayList<LightInfo>();
-		
-		totalLights = 0;
 	}
 
 	public void parseLevel(GL11 gl) throws XmlPullParserException, IOException
@@ -92,7 +88,7 @@ public class Parser
 				else if (xrp.getName().equalsIgnoreCase("TeleporterLinker"))
 					parseTeleporterLinker();
 				else if (xrp.getName().equalsIgnoreCase("Light"))
-				    parseLight();
+				    parseLights();
 			}
 			
 			xrp.next();
@@ -429,17 +425,54 @@ public class Parser
 		xrp.next();
 	}
 	
-	public void parseLight() throws XmlPullParserException, IOException
-    {
-        LightInfo li = new LightInfo(totalLights);
-        totalLights++;
-        li.setAmbient(stringToVec4(xrp.getAttributeValue(0)));
-        li.setDiffuse(stringToVec4(xrp.getAttributeValue(1)));
-        li.setPosition(stringToVec4(xrp.getAttributeValue(2)));
-        li.setConstantAttenuation(Float.parseFloat(xrp.getAttributeValue(3)));
-        li.setLinearAttenuation(Float.parseFloat(xrp.getAttributeValue(4)));
-        li.setQuadraticAttenuation(Float.parseFloat(xrp.getAttributeValue(5)));
-        lightInfoList.add(li);
+	public void parseLights() throws XmlPullParserException, IOException
+    {	    
+	    while (!((xrp.getEventType() == END_TAG && xrp.getName().equals("Lights"))))
+        {
+            xrp.next();
+            
+            if (xrp.getEventType() == START_TAG)
+            {
+                dataHM = new HashMap<String, String>();
+                if (xrp.getName().equalsIgnoreCase("Light"))
+                {
+                   parseObj("Light");
+                   if (dataHM.get("index") != null)
+                   {
+                       LightInfo li = new LightInfo(Integer.parseInt(dataHM.get("index")));
+                       
+                       if (dataHM.get("ambient") != null)
+                       {
+                           String[] amb = dataHM.get("ambient").split(",");
+                           li.setAmbient(new Vector4(Float.parseFloat(amb[0]), Float.parseFloat(amb[1]), Float.parseFloat(amb[2]), Float.parseFloat(amb[3])));
+                       }
+                       
+                       if (dataHM.get("diffuse") != null)
+                       {
+                           String[] amb = dataHM.get("diffuse").split(",");
+                           li.setDiffuse(new Vector4(Float.parseFloat(amb[0]), Float.parseFloat(amb[1]), Float.parseFloat(amb[2]), Float.parseFloat(amb[3])));
+                       }
+                       
+                       if (dataHM.get("position") != null)
+                       {
+                           String[] amb = dataHM.get("position").split(",");
+                           li.setPosition(new Vector4(Float.parseFloat(amb[0]), Float.parseFloat(amb[1]), Float.parseFloat(amb[2]), Float.parseFloat(amb[3])));
+                       }
+                       
+                       if (dataHM.get("constAtten") != null)
+                           li.setConstantAttenuation(Float.parseFloat(dataHM.get("constAtten")));
+                       
+                       if (dataHM.get("linAtten") != null)
+                           li.setLinearAttenuation(Float.parseFloat(dataHM.get("linAtten")));
+                       
+                       if (dataHM.get("quadAtten") != null)
+                           li.setQuadraticAttenuation(Float.parseFloat(dataHM.get("quadAtten")));
+                       
+                       lightInfoList.add(li);
+                   }
+                }
+            }
+        }
     }
 	
 	public Vector4 stringToVec4(String str)

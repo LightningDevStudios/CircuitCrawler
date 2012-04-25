@@ -148,14 +148,14 @@
   </Tileset>
   <Entities>
     <BreakableDoor>
-      <id>183c5f87-1152-4059-8b51-a056a466f7a9</id>
+      <id>b66ed863-60ec-4bbc-a077-21dba6af3b31</id>
       <xPos>-36</xPos>
       <yPos>-108</yPos>
       <angle>0</angle>
       <maxHits>3</maxHits>
     </BreakableDoor>
     <Cannon>
-      <id>61f47428-f4c6-4947-8327-513426ccabdb</id>
+      <id>da2db624-7a0b-4a3f-882e-9ed158cf599e</id>
       <xPos>-286.030762</xPos>
       <yPos>70.59021</yPos>
       <angle>0</angle>
@@ -163,77 +163,88 @@
       <shotVelocity>5000000</shotVelocity>
     </Cannon>
     <SpikeWall>
-      <id>9e441600-3d60-4b07-a3aa-4ba9ab27f620</id>
+      <id>c13079b9-90bd-4135-b4ab-ac7fa545ab3f</id>
       <xPos>-108</xPos>
       <yPos>-396</yPos>
       <angle>180</angle>
       <dir>UP</dir>
     </SpikeWall>
     <SpikeWall>
-      <id>6ea3d2d6-8e76-4f3c-b3c6-e0b5460c2008</id>
+      <id>4f9e484d-edc1-42c1-9fea-566bfe9baa05</id>
       <xPos>108</xPos>
       <yPos>-396</yPos>
       <angle>180</angle>
       <dir>UP</dir>
     </SpikeWall>
     <SpikeWall>
-      <id>7a648b67-7aa8-4024-9664-d6d592e49368</id>
+      <id>e7af35cd-56e0-49da-876d-e13bb843dae8</id>
       <xPos>180</xPos>
       <yPos>-396</yPos>
       <angle>180</angle>
       <dir>UP</dir>
     </SpikeWall>
     <SpikeWall>
-      <id>2de46e8a-27dd-4fab-a245-cd26c3c7df65</id>
+      <id>3d3dde91-94cb-46f2-bc7b-342e8b58b2de</id>
       <xPos>252</xPos>
       <yPos>-396</yPos>
       <angle>180</angle>
       <dir>UP</dir>
     </SpikeWall>
     <SpikeWall>
-      <id>d0a087a4-ce6d-495f-9644-2627b33dcea9</id>
+      <id>e6cdf26a-2801-4b05-b9dc-2d043411c90a</id>
       <xPos>396</xPos>
       <yPos>-36</yPos>
       <angle>270</angle>
       <dir>LEFT</dir>
     </SpikeWall>
-    <LaserShooter>
-      <id>9dba4197-394e-4eca-a9ea-1bec237dd2cc</id>
-      <xPos>73.30908</xPos>
-      <yPos>289.723083</yPos>
-      <angle>90</angle>
-      <stupidity>15</stupidity>
-      <beamWidth>5</beamWidth>
-      <shotsPerSecond>1</shotsPerSecond>
-    </LaserShooter>
-    <LaserShooter>
-      <id>b627e6fd-c383-4d53-9ba5-5f87dd0f6827</id>
-      <xPos>152.257339</xPos>
-      <yPos>179.759445</yPos>
-      <angle>90</angle>
-      <stupidity>15</stupidity>
-      <beamWidth>5</beamWidth>
-      <shotsPerSecond>1</shotsPerSecond>
-    </LaserShooter>
-    <LaserShooter>
-      <id>0d56b749-b3a5-4af4-8d88-9d0928c254ee</id>
-      <xPos>74.71887</xPos>
-      <yPos>74.62937</yPos>
-      <angle>90</angle>
-      <stupidity>15</stupidity>
-      <beamWidth>5</beamWidth>
-      <shotsPerSecond>1</shotsPerSecond>
-    </LaserShooter>
     <Player>
-      <id>fc84348c-7086-4e3f-8234-5d6c68c88f77</id>
+      <id>f90e52fa-1cf6-479c-801f-5ffee2f6e6df</id>
       <xPos>-239.50769</xPos>
       <yPos>291.7259</yPos>
       <angle>0</angle>
     </Player>
   </Entities>
   <Triggers>
-    <Cause id="c3833ab5-4bb7-49e4-8e0a-fdf2c81137a3" type="CauseLocation">fc84348c-7086-4e3f-8234-5d6c68c88f77,360,200,432,290</Cause>
-    <Effect id="a6505233-2a0a-4ad3-b8e8-962db39e4272" type="EffectEndGame">True</Effect>
-    <Trigger cause="c3833ab5-4bb7-49e4-8e0a-fdf2c81137a3" effect="a6505233-2a0a-4ad3-b8e8-962db39e4272" />
+    <Cause id="1d7ac4b4-3cbc-44d6-8e73-9273d30ec4c3" type="CauseLocation">f90e52fa-1cf6-479c-801f-5ffee2f6e6df,360,200,432,290</Cause>
+    <Effect id="74b88b97-9d62-4a25-9d16-38c565588277" type="EffectEndGame">True</Effect>
+    <Trigger cause="1d7ac4b4-3cbc-44d6-8e73-9273d30ec4c3" effect="74b88b97-9d62-4a25-9d16-38c565588277" />
   </Triggers>
+  <Lights>
+    <Light>
+      <index>7</index>
+      <ambient>0.1,0.1,0.1,1</ambient>
+      <diffuse>1,1,1,1</diffuse>
+      <position>-208.6489,246.5119,36,1</position>
+      <constAtten>1</constAtten>
+      <linAtten>0.00033333333</linAtten>
+      <quadAtten>2.5E-05</quadAtten>
+    </Light>
+    <Light>
+      <index>6</index>
+      <ambient>0.1,0.1,0.1,1</ambient>
+      <diffuse>1,1,1,1</diffuse>
+      <position>-238.2545,-232.0112,36,1</position>
+      <constAtten>1</constAtten>
+      <linAtten>0.00033333333</linAtten>
+      <quadAtten>2.5E-05</quadAtten>
+    </Light>
+    <Light>
+      <index>5</index>
+      <ambient>0.1,0.1,0.1,1</ambient>
+      <diffuse>1,1,1,1</diffuse>
+      <position>221.3371,259.8042,36,1</position>
+      <constAtten>1</constAtten>
+      <linAtten>0.00033333333</linAtten>
+      <quadAtten>2.5E-05</quadAtten>
+    </Light>
+    <Light>
+      <index>4</index>
+      <ambient>0.1,0.1,0.1,1</ambient>
+      <diffuse>1,1,1,1</diffuse>
+      <position>321.4322,-328.6826,36,1</position>
+      <constAtten>1</constAtten>
+      <linAtten>0.00033333333</linAtten>
+      <quadAtten>2.5E-05</quadAtten>
+    </Light>
+  </Lights>
 </Level>
