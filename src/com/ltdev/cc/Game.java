@@ -37,7 +37,9 @@ import com.ltdev.cc.physics.primitives.*;
 import com.ltdev.cc.trigger.*;
 import com.ltdev.graphics.Texture;
 import com.ltdev.graphics.TextureManager;
+import com.ltdev.math.Matrix4;
 import com.ltdev.math.Vector2;
+import com.ltdev.math.Vector3;
 import com.ltdev.physics.*;
 import com.ltdev.trigger.*;
 
@@ -66,7 +68,7 @@ public class Game
 	private float worldMinX, worldMinY, worldMaxX, worldMaxY;
 	
 	private Player player;
-	
+
 	private long touchInputTimer;
 	private boolean pulling;
 	private Vector2 joystick;
@@ -298,7 +300,7 @@ public class Game
 	 */
 	public void updatePlayerPos()
 	{
-
+		/*
 		int indx = (int)((player.getPos().x() + tileset.getWidth() * Tile.SIZE_F / 2) / Tile.SIZE_F);
 		int indy = (int)((-player.getPos().y() + tileset.getHeight() * Tile.SIZE_F /  2) / Tile.SIZE_F);
 		
@@ -314,6 +316,30 @@ public class Game
     		
     		else
     		    player.getShape().setKineticFriction(2);
+		}
+		*/
+		
+		for(int i = 0; i < entities.size(); i++)
+		{
+		    if (entities.get(i) instanceof Player)
+		    {
+    		    int x = (int)((entities.get(i).getPos().x() + tileset.getWidth() * Tile.SIZE_F / 2) / Tile.SIZE_F);
+    	        int y = (int)((-entities.get(i).getPos().y() + tileset.getHeight() * Tile.SIZE_F /  2) / Tile.SIZE_F);
+    	        
+    	        Tile tile = tileset.getTileAt(x, y);
+    	        
+    	        if (tile != null)
+    	        {
+    	            if (tile.getTileType() == Tile.TileType.PIT)
+    	            {
+    	                float z = ((float)Stopwatch.getFrameTime() / 1000) * -600;
+    	                entities.get(i).zLocation += z;
+    	                System.out.println(entities.get(i).zLocation);
+    	                //TODO: player control n shit, offset to method
+    	                //entities.get(i).getShape().setModel(Matrix4.multiply(entities.get(i).getShape().getModel(), Matrix4.translate(new Vector3(0, 0, z))));
+    	            }
+    	        }
+		    }
 		}
 	}
 	

@@ -96,7 +96,7 @@ public abstract class Shape
     /**
      * The shape's model matrix.
      */
-    protected Matrix4 model;
+    private Matrix4 model;
     
     /**
      * The shape's position in world coords.
@@ -221,7 +221,7 @@ public abstract class Shape
      */
     public void rebuildModel()
     {
-        model = Matrix4.multiply(rotMat, transMat);
+        setModel(Matrix4.multiply(rotMat, transMat));
     }
     
     /**
@@ -229,13 +229,13 @@ public abstract class Shape
      */
     public void transformVertices()
     {
-        if (vertices == null || model == null)
+        if (vertices == null || getModel() == null)
             return;
 
         worldVertices = new Vector2[vertices.length / 2];
         for (int i = 0; i < worldVertices.length; i++)
         {
-            worldVertices[i] = Vector4.transform(new Vector4(vertices[i * 2], vertices[i * 2 + 1], 0, 1), model).xy();
+            worldVertices[i] = Vector4.transform(new Vector4(vertices[i * 2], vertices[i * 2 + 1], 0, 1), getModel()).xy();
         }
     }
     
@@ -548,5 +548,9 @@ public abstract class Shape
     public void setStatic(boolean isStatic)
     {
         this.isStatic = isStatic;
+    }
+
+    public void setModel(Matrix4 model) {
+        this.model = model;
     }
 }
