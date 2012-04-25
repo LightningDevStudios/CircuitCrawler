@@ -163,67 +163,63 @@ public class LightInfo
     
     /**
      * Sets the light's ambient vector.
-     * @param gl The OpenGL context.
      * @param ambient The new ambient vector.
      */
-    public void setAmbient(GL11 gl, Vector4 ambient)
+    public void setAmbient(Vector4 ambient)
     {
         this.ambient = ambient;
-        gl.glLightfv(GL11.GL_LIGHT0 + index, GL11.GL_AMBIENT, ambient.array(), 0);
+        
     }
     
     /**
      * Sets the light's diffuse vector.
-     * @param gl The OpenGL context.
      * @param diffuse The new diffuse vector.
      */
-    public void setDiffuse(GL11 gl, Vector4 diffuse)
+    public void setDiffuse(Vector4 diffuse)
     {
         this.diffuse = diffuse;
-        gl.glLightfv(GL11.GL_LIGHT0 + index, GL11.GL_DIFFUSE, diffuse.array(), 0);
     }
     
     /**
      * Sets the light's position vector.
-     * @param gl The OpenGL context.
      * @param position The new position vector.
      */
-    public void setPosition(GL11 gl, Vector4 position)
+    public void setPosition(Vector4 position)
     {
         this.position = position;
-        gl.glLightfv(GL11.GL_LIGHT0 + index, GL11.GL_POSITION, position.array(), 0);
     }
     
     /**
      * Sets the light's constant falloff.
-     * @param gl The OpenGL context.
-     * @param constantAttenuation The new constant attenuation.
      */
-    public void setConstantAttenuation(GL11 gl, float constantAttenuation)
+    public void setConstantAttenuation(float constantAttenuation)
     {
         this.constantAttenuation = constantAttenuation;
-        gl.glLightf(GL11.GL_LIGHT0 + index, GL11.GL_CONSTANT_ATTENUATION, constantAttenuation);
     }
     
     /**
      * Sets the light's linear falloff.
-     * @param gl The OpenGL context.
-     * @param linearAttenuation The new linear attenuation.
      */
-    public void setLinearAttenuation(GL11 gl, float linearAttenuation)
+    public void setLinearAttenuation(float linearAttenuation)
     {
         this.linearAttenuation = linearAttenuation;
-        gl.glLightf(GL11.GL_LIGHT0 + index, GL11.GL_LINEAR_ATTENUATION, linearAttenuation);
     }
     
     /**
      * Sets the light's quadratic falloff.
-     * @param gl The OpenGL context.
-     * @param quadraticAttenuation The new quadratic attenuation.
      */
-    public void setQuadraticAttenuation(GL11 gl, float quadraticAttenuation)
+    public void setQuadraticAttenuation(float quadraticAttenuation)
     {
         this.quadraticAttenuation = quadraticAttenuation;
-        gl.glLightf(GL11.GL_LIGHT0 + index, GL11.GL_QUADRATIC_ATTENUATION, quadraticAttenuation);
+    }
+    
+    public void updateGraphics(GL11 gl)
+    {
+        gl.glLightfv(GL11.GL_LIGHT0 + index, GL11.GL_AMBIENT, ambient.array(), 0);
+        gl.glLightfv(GL11.GL_LIGHT0 + index, GL11.GL_DIFFUSE, diffuse.array(), 0);
+        gl.glLightfv(GL11.GL_LIGHT0 + index, GL11.GL_POSITION, position.array(), 0);
+        gl.glLightf(GL11.GL_LIGHT0 + index, GL11.GL_CONSTANT_ATTENUATION, constantAttenuation);
+        gl.glLightf(GL11.GL_LIGHT0 + index, GL11.GL_LINEAR_ATTENUATION, linearAttenuation);
+        gl.glLightf(GL11.GL_LIGHT0 + index, GL11.GL_LINEAR_ATTENUATION, linearAttenuation);
     }
 }

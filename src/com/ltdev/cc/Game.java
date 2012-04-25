@@ -171,7 +171,12 @@ public class Game
 	    for (Entity ent : entities)
 	    {
 	        if (ent instanceof LaserShooter)
+	        {
+	            ((LaserShooter)ent).setPlayer(player);
 	            ((LaserShooter)ent).setWorld(world);
+	        }
+	        else if (ent instanceof Cannon)
+	            ((Cannon)ent).setTarget(player);
 	    }
 	    
 	    /*SpikeWall s = new SpikeWall(70, Vector2.add(player.getPos(), new Vector2(72 * 3 + 40, 0)), Direction.LEFT);

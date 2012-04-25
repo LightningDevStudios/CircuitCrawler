@@ -104,4 +104,9 @@ public class Cannon extends Entity
 		    time = 0;
 		}
 	}
+	
+	public void setTarget(Entity target)
+	{
+	    this.target = target;
+	}
 }
